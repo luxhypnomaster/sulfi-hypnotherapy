@@ -245,7 +245,15 @@ void main() {
     tester.platformDispatcher.textScaleFactorTestValue = 1.6;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(Scrollable).last, const Offset(0, -500));
+    final vertical = find.byWidgetPredicate(
+      (widget) =>
+          widget is Scrollable && widget.axisDirection == AxisDirection.down,
+    );
+    await tester.drag(vertical, const Offset(0, -500));
+    expect(
+      tester.state<ScrollableState>(vertical).position.pixels,
+      greaterThan(0),
+    );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

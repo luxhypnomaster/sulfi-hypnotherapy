@@ -6,9 +6,15 @@ import '../services/preview_player.dart';
 import 'design.dart';
 
 class PreviewBar extends StatelessWidget {
-  const PreviewBar({super.key, required this.player, required this.library});
+  const PreviewBar({
+    super.key,
+    required this.player,
+    required this.library,
+    this.idleAsset,
+  });
   final PreviewPlayer player;
   final LibraryService library;
+  final AudioAsset? idleAsset;
   Future<void> _action(
     BuildContext context,
     Future<void> Function() action,
@@ -34,7 +40,7 @@ class PreviewBar extends StatelessWidget {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: player,
     builder: (context, _) {
-      final a = player.current;
+      final a = player.current ?? idleAsset;
       if (a == null) {
         return player.error == null
             ? const SizedBox.shrink()
@@ -46,7 +52,10 @@ class PreviewBar extends StatelessWidget {
                 ),
               );
       }
-      final position = player.position.inMilliseconds.clamp(0, a.durationMs);
+      final loaded = player.current != null;
+      final position = loaded
+          ? player.position.inMilliseconds.clamp(0, a.durationMs)
+          : 0;
       return Padding(
         padding: const EdgeInsets.all(10),
         child: NeonPanel(
@@ -56,6 +65,11 @@ class PreviewBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (player.error != null)
+                Text(
+                  player.error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               Row(
                 children: [
                   const Icon(Icons.graphic_eq, color: neonPink),
@@ -69,7 +83,9 @@ class PreviewBar extends StatelessWidget {
                   ),
                   IconButton(
                     tooltip: 'Остановить прослушивание',
-                    onPressed: () => _action(context, player.stop),
+                    onPressed: loaded
+                        ? () => _action(context, player.stop)
+                        : null,
                     icon: const Icon(Icons.stop_circle_outlined),
                   ),
                 ],
@@ -84,7 +100,11 @@ class PreviewBar extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    tooltip: player.playing ? 'Пауза' : 'Продолжить',
+                    tooltip: player.playing
+                        ? 'Пауза'
+                        : loaded
+                        ? 'Продолжить'
+                        : 'Прослушать трек',
                     onPressed: () => _action(
                       context,
                       () => player.toggle(a, library.fileFor(a)),
@@ -99,11 +119,14 @@ class PreviewBar extends StatelessWidget {
                           formatDuration(v.round()),
                       value: position.toDouble(),
                       max: a.durationMs.toDouble(),
-                      onChanged: (value) => _action(
-                        context,
-                        () =>
-                            player.seek(Duration(milliseconds: value.round())),
-                      ),
+                      onChanged: !loaded
+                          ? null
+                          : (value) => _action(
+                              context,
+                              () => player.seek(
+                                Duration(milliseconds: value.round()),
+                              ),
+                            ),
                     ),
                   ),
                   Text(

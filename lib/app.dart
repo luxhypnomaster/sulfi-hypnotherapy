@@ -28,7 +28,8 @@ ThemeData sulfiTheme() {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+      fillColor: const Color(0xFF22101B),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(minimumSize: const Size(48, 52)),

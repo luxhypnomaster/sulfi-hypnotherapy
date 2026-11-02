@@ -108,6 +108,58 @@ void main() {
     },
   );
   workspaceTest(
+    'small phone keeps start and navigation visible and returns from clock through structure',
+    (tester) async {
+      for (var i = 0; i < 6; i++) {
+        final asset = sampleAsset(id: 'navigation$i', title: 'Трек ${i + 1}');
+        await audio.save(asset);
+        await c.addAudio(asset);
+      }
+      await c.reload();
+      await open(
+        tester,
+        SulfiApp(library: library, player: player, controller: c),
+      );
+      tester.view.physicalSize = const Size(360, 720);
+      await tester.pumpAndSettle();
+      for (final label in [
+        'Начать сессию',
+        'Библиотека',
+        'Шаблоны',
+        'История',
+      ]) {
+        expect(find.text(label).hitTestable(), findsOneWidget);
+      }
+      expect(
+        find.byKey(const Key('active-template')).hitTestable(),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Структура сессии'));
+      await tester.pumpAndSettle();
+      expect(find.byType(StructureScreen), findsOneWidget);
+      await tester.tap(find.byKey(Key('pause-${c.draft.plan.steps.first.id}')));
+      await tester.pumpAndSettle();
+      expect(find.byType(PauseEditor), findsOneWidget);
+      expect(
+        player.current,
+        isNull,
+      ); // Opening the mini-player never autoplays.
+      await tester.tap(find.byTooltip('Прослушать трек'));
+      await tester.pumpAndSettle();
+      expect(player.current?.id, 'navigation0');
+      await tester.tap(find.byTooltip('Закрыть редактор паузы'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PauseEditor), findsNothing);
+      expect(player.current, isNull);
+      await tester.tap(find.byTooltip('Назад').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Начать сессию').hitTestable(), findsOneWidget);
+      expect(repository.savedRuns, isEmpty);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+  workspaceTest(
     'structure imports a selection from real library UI with zero initial delay',
     (tester) async {
       await open(tester, StructureScreen(controller: c, player: player));
@@ -291,6 +343,13 @@ void main() {
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
+      await tester.pumpWidget(
+        SulfiApp(library: library, player: player, controller: c),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Библиотека').hitTestable(), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
     },
   );
   workspaceTest('optional workspace visual artifacts', (tester) async {
@@ -316,6 +375,12 @@ void main() {
         if (context.mounted) {
           await precacheImage(
             const AssetImage('assets/art/pocket_watch.png'),
+            context,
+          );
+        }
+        if (context.mounted) {
+          await precacheImage(
+            const AssetImage('assets/art/leather_board.png'),
             context,
           );
         }
@@ -364,16 +429,16 @@ void main() {
       SulfiApp(library: library, player: player, controller: c),
     );
     await capture('home-v2');
-    await open(tester, StructureScreen(controller: c, player: player));
+    tester.view.physicalSize = const Size(360, 720);
+    await tester.pumpAndSettle();
+    await capture('home-small');
+    tester.view.physicalSize = const Size(432, 960);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Структура сессии'));
+    await tester.pumpAndSettle();
     await capture('structure-v2');
-    await open(
-      tester,
-      PauseEditor(
-        controller: c,
-        player: player,
-        stepId: c.draft.plan.steps[1].id,
-      ),
-    );
+    await tester.tap(find.byKey(Key('pause-${c.draft.plan.steps[1].id}')));
+    await tester.pumpAndSettle();
     await manual(tester, '6', '30');
     await capture('pause-v2');
     await tester.pumpWidget(const SizedBox.shrink());

@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../models/audio_asset.dart';
@@ -33,30 +31,39 @@ class LeatherScaffold extends StatelessWidget {
   final Widget? bottom;
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(title), actions: actions),
-    body: DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: RadialGradient(
-          center: Alignment.topRight,
-          radius: 1.5,
-          colors: [Color(0xFF3C0624), ink],
-        ),
-      ),
-      child: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 900),
-            child: CustomPaint(
-              painter: const _LeatherPainter(),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(6, 28, 6, 8),
-                child: Column(
+    body: SafeArea(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: LeatherBoard(
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Expanded(child: child),
-                    ?bottom,
+                    if (Navigator.canPop(context))
+                      IconButton(
+                        tooltip: 'Назад',
+                        onPressed: () => Navigator.maybePop(context),
+                        icon: const Icon(Icons.arrow_back),
+                        color: neonPink,
+                      ),
+                    Expanded(
+                      child: Text(
+                        title.toUpperCase(),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              fontStyle: FontStyle.italic,
+                              letterSpacing: .5,
+                            ),
+                      ),
+                    ),
+                    ...?actions,
                   ],
                 ),
-              ),
+                Expanded(child: child),
+                ?bottom,
+              ],
             ),
           ),
         ),
@@ -81,12 +88,12 @@ class NeonPanel extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: padding,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(11),
       border: Border.all(color: color.withValues(alpha: .6)),
       gradient: const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF300C21), Color(0xFF100A0E)],
+        colors: [Color(0xDD300C21), Color(0xD910070C)],
       ),
       boxShadow: glow
           ? [BoxShadow(color: color.withValues(alpha: .22), blurRadius: 16)]
@@ -96,107 +103,23 @@ class NeonPanel extends StatelessWidget {
   );
 }
 
+/// Decorative materials only. All labels, rows and controls remain real widgets.
 class LeatherBoard extends StatelessWidget {
   const LeatherBoard({super.key, required this.child});
   final Widget child;
   @override
-  Widget build(BuildContext context) => CustomPaint(
-    painter: const _LeatherPainter(),
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/art/leather_board.png'),
+        fit: BoxFit.fill,
+      ),
+    ),
     child: Padding(
-      padding: const EdgeInsets.fromLTRB(14, 34, 14, 24),
+      padding: const EdgeInsets.fromLTRB(20, 42, 22, 22),
       child: child,
     ),
   );
-}
-
-class _LeatherPainter extends CustomPainter {
-  const _LeatherPainter();
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = RRect.fromRectAndRadius(
-      Offset.zero & size,
-      const Radius.circular(24),
-    );
-    canvas.drawRRect(
-      rect,
-      Paint()
-        ..shader = const LinearGradient(
-          colors: [Color(0xFF25131C), Color(0xFF100B0F), Color(0xFF21101B)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ).createShader(Offset.zero & size),
-    );
-    canvas.save();
-    canvas.clipRRect(rect);
-    final noise = math.Random(17);
-    final grain = Paint()
-      ..color = const Color(0xFFAE7290).withValues(alpha: .065);
-    for (var i = 0; i < 1000; i++) {
-      final p = Offset(
-        noise.nextDouble() * size.width,
-        noise.nextDouble() * size.height,
-      );
-      canvas.drawCircle(p, .4 + noise.nextDouble() * .4, grain);
-    }
-    canvas.restore();
-    canvas.drawRRect(
-      rect.deflate(2),
-      Paint()
-        ..color = neonPink.withValues(alpha: .55)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.2,
-    );
-    final seam = Paint()
-      ..color = const Color(0xFF8A4D57)
-      ..strokeWidth = 1;
-    for (double x = 16; x < size.width - 16; x += 8) {
-      canvas.drawLine(Offset(x, 10), Offset(x + 4, 10), seam);
-      canvas.drawLine(
-        Offset(x, size.height - 10),
-        Offset(x + 4, size.height - 10),
-        seam,
-      );
-    }
-    for (double y = 20; y < size.height - 20; y += 8) {
-      canvas.drawLine(Offset(9, y), Offset(9, y + 4), seam);
-      canvas.drawLine(
-        Offset(size.width - 9, y),
-        Offset(size.width - 9, y + 4),
-        seam,
-      );
-    }
-    final clip = RRect.fromRectAndRadius(
-      Rect.fromCenter(
-        center: Offset(size.width / 2, 12),
-        width: 142,
-        height: 24,
-      ),
-      const Radius.circular(6),
-    );
-    canvas.drawRRect(
-      clip,
-      Paint()
-        ..shader = const LinearGradient(
-          colors: [
-            Color(0xFF5C371E),
-            Color(0xFFE9C983),
-            Color(0xFF765029),
-            Color(0xFFE2BC71),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ).createShader(clip.outerRect),
-    );
-    canvas.drawRRect(
-      clip.deflate(3),
-      Paint()
-        ..color = const Color(0xFF684325)
-        ..style = PaintingStyle.stroke,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_LeatherPainter oldDelegate) => false;
 }
 
 class NeonButton extends StatelessWidget {
@@ -216,38 +139,81 @@ class NeonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = FilledButton.styleFrom(
-      minimumSize: Size(48, compact ? 48 : 54),
-      padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 18, vertical: 12),
-      textStyle: stacked
-          ? Theme.of(context).textTheme.labelLarge
-                ?.copyWith(fontSize: 13, fontWeight: FontWeight.w600)
-          : null,
-      backgroundColor: primary ? neonLime : const Color(0xFF4B0B32),
+      minimumSize: Size(48, compact ? 48 : 56),
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 6 : 18,
+        vertical: compact ? 7 : 12,
+      ),
+      textStyle: compact
+          ? Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontSize: stacked ? 11 : 12,
+              height: 1.15,
+              fontWeight: FontWeight.w600,
+            )
+          : Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              fontStyle: FontStyle.italic,
+            ),
+      backgroundColor: Colors.transparent,
+      disabledBackgroundColor: const Color(0xFF291F27),
+      shadowColor: Colors.transparent,
       foregroundColor: primary ? ink : const Color(0xFFFFE9F5),
       side: BorderSide(
         color: primary ? neonLime : neonPink.withValues(alpha: .8),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
     );
+    Widget decorate(Widget button) => DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(13),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: onPressed == null
+              ? [const Color(0xFF291F27), const Color(0xFF1A1218)]
+              : primary
+              ? [const Color(0xFFF4FF7C), neonLime, const Color(0xFFBDE100)]
+              : [
+                  const Color(0xFF67123D),
+                  const Color(0xFF280A1A),
+                  const Color(0xFF16090F),
+                ],
+        ),
+        boxShadow: onPressed == null
+            ? null
+            : [
+                BoxShadow(
+                  color: (primary ? neonLime : neonPink).withValues(alpha: .22),
+                  blurRadius: 10,
+                ),
+              ],
+      ),
+      child: button,
+    );
     if (stacked) {
-      return FilledButton(
-        onPressed: onPressed,
-        style: style,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 20),
-            const SizedBox(height: 6),
-            Text(label, textAlign: TextAlign.center),
-          ],
+      return decorate(
+        FilledButton(
+          onPressed: onPressed,
+          style: style,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 20),
+              const SizedBox(height: 3),
+              Text(label, textAlign: TextAlign.center),
+            ],
+          ),
         ),
       );
     }
-    return FilledButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: compact ? 19 : 23),
-      label: Text(label, textAlign: TextAlign.center),
-      style: style,
+    return decorate(
+      FilledButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: compact ? 19 : 23),
+        label: Text(label, textAlign: TextAlign.center),
+        style: style,
+      ),
     );
   }
 }

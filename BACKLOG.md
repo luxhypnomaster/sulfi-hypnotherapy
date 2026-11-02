@@ -1,5 +1,11 @@
 # Build plan
 
+## Visual correction 0.2.1+3
+- [x] Bring main / structure / pocket watch composition closer to the approved references with real controls.
+- [x] Keep start and the single navigation row visible on a 360×720 phone; verify round-trip navigation and preview teardown.
+- [x] Replace procedural flat panel with clean decorative leather artwork; compact technical editor controls.
+- [ ] Owner device review of the revised layout, touch targets and haptics.
+
 ## Milestone 0 — bootstrap
 - [x] Initialize Flutter application and Android target; configure Russian locale and theme.
 - [x] Choose and check current compatible packages; establish SQLite v1 and private app-controlled audio storage. Flutter 3.47.9 / Dart 3.13.7; dependencies pinned with lockfile.

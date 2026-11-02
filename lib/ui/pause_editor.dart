@@ -129,15 +129,6 @@ class _PauseEditorState extends State<PauseEditor> {
       if (!didPop) unawaited(_close());
     },
     child: Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          tooltip: 'Закрыть редактор паузы',
-          onPressed: _close,
-          icon: const Icon(Icons.close),
-        ),
-        title: const Text('Настройка паузы'),
-      ),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -155,21 +146,76 @@ class _PauseEditorState extends State<PauseEditor> {
                         .fold(0, (n, s) => n + s.estimatedMs) +
                     delta;
                 final previous = _neighbor(true), next = _neighbor(false);
-                final textScale = MediaQuery.textScalerOf(context).scale(1);
-                return ListView(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
-                      child: Text(
-                        'Пауза перед проигрыванием трека.\nПроведите пальцем по боковым колёсикам.',
+                final enlargedText =
+                    MediaQuery.textScalerOf(context).scale(1) > 1.3;
+                final contextPanel = NeonPanel(
+                  color: antiqueGold,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 5,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Шаблон: ${c.baseTemplate?.name ?? c.draft.baseTemplateName ?? 'Текущая конфигурация'}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 10, color: neonLime),
                       ),
-                    ),
+                      Text(
+                        'Раздел: ${plan.groupName(_original.groupId)}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 10, color: neonPink),
+                      ),
+                      Text(
+                        'Перед треком ${plan.steps.indexWhere((s) => s.id == widget.stepId) + 1}: ${c.asset(_original.audioAssetId)?.title ?? _original.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+                final totals = NeonPanel(
+                  glow: true,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _stat(
+                          'Трек',
+                          _original.durationMs == null
+                              ? 'Без срока'
+                              : formatDuration(_original.durationMs!),
+                        ),
+                      ),
+                      Expanded(child: _stat('Раздел', formatDuration(groupMs))),
+                      Expanded(
+                        child: _stat(
+                          plan.estimated ? '≈ Всего' : 'Всего',
+                          formatDuration(plan.totalMs + delta),
+                          color: neonLime,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 18),
+                  children: [
                     LayoutBuilder(
-                      builder: (context, constraints) {
-                        final width = constraints.maxWidth;
+                      builder: (context, box) {
+                        final w = box.maxWidth;
                         return SizedBox(
-                          height: width * 1.25,
+                          height: w * 1.25,
                           child: Stack(
                             children: [
                               Positioned.fill(
@@ -181,10 +227,41 @@ class _PauseEditorState extends State<PauseEditor> {
                                 ),
                               ),
                               Positioned(
-                                left: width * .22,
-                                top: width * .59,
-                                width: width * .56,
-                                height: width * .17,
+                                left: 0,
+                                top: 0,
+                                child: IconButton.filledTonal(
+                                  tooltip: 'Закрыть редактор паузы',
+                                  onPressed: _close,
+                                  icon: const Icon(Icons.close),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: const Color(0xFF500C30),
+                                    foregroundColor: Colors.white,
+                                    side: const BorderSide(color: neonPink),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 7,
+                                top: 52,
+                                width: w * .35,
+                                child: const Text(
+                                  'НАСТРОЙКА\nПАУЗЫ',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w800,
+                                    fontStyle: FontStyle.italic,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: w * .24,
+                                top: w * .53,
+                                width: w * .52,
+                                height: w * .17,
                                 child: Center(
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
@@ -194,7 +271,7 @@ class _PauseEditorState extends State<PauseEditor> {
                                       child: Text(
                                         _model.label,
                                         style: const TextStyle(
-                                          fontSize: 51,
+                                          fontSize: 47,
                                           fontWeight: FontWeight.w500,
                                           fontFeatures: [
                                             FontFeature.tabularFigures(),
@@ -213,10 +290,10 @@ class _PauseEditorState extends State<PauseEditor> {
                                 ),
                               ),
                               Positioned(
-                                left: width * .085,
-                                top: width * .355,
-                                width: width * .25,
-                                height: width * .34,
+                                left: w * .085,
+                                top: w * .355,
+                                width: w * .25,
+                                height: w * .34,
                                 child: MechanicalWheel(
                                   label: 'Минуты',
                                   value: '${_model.minutes}',
@@ -224,134 +301,142 @@ class _PauseEditorState extends State<PauseEditor> {
                                 ),
                               ),
                               Positioned(
-                                right: width * .085,
-                                top: width * .355,
-                                width: width * .25,
-                                height: width * .34,
+                                right: w * .085,
+                                top: w * .355,
+                                width: w * .25,
+                                height: w * .34,
                                 child: MechanicalWheel(
                                   label: 'Секунды',
                                   value: '${_model.seconds}',
                                   onDetent: _model.turnSeconds,
                                 ),
                               ),
-                              if (textScale <= 1.4)
+                              if (!enlargedText) ...[
                                 Positioned(
-                                  left: width * .28,
-                                  top: width * .79,
-                                  width: width * .44,
-                                  child: const Center(
-                                    child: Text(
-                                      'минуты : секунды',
-                                      style: TextStyle(
-                                        color: antiqueGold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
+                                  left: w * .23,
+                                  top: w * .715,
+                                  width: w * .54,
+                                  child: contextPanel,
                                 ),
+                                Positioned(
+                                  left: w * .07,
+                                  right: w * .07,
+                                  top: w * .925,
+                                  child: totals,
+                                ),
+                              ],
                             ],
                           ),
                         );
                       },
                     ),
-                    Center(
-                      child: TextButton.icon(
-                        onPressed: _saving ? null : _manual,
-                        icon: const Icon(Icons.edit_outlined),
-                        label: const Text('Ввести минуты и секунды'),
-                      ),
-                    ),
-                    NeonPanel(
-                      color: antiqueGold,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Шаблон: ${c.baseTemplate?.name ?? c.draft.baseTemplateName ?? 'Текущая конфигурация'}',
-                            style: const TextStyle(color: antiqueGold),
-                          ),
-                          const SizedBox(height: 6),
-                          Text('Раздел: ${plan.groupName(_original.groupId)}'),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Перед треком ${plan.steps.indexWhere((s) => s.id == widget.stepId) + 1}: ${c.asset(_original.audioAssetId)?.title ?? _original.title}',
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          const Divider(),
-                          Wrap(
-                            spacing: 18,
-                            runSpacing: 8,
-                            children: [
-                              Text(
-                                'Трек: ${_original.durationMs == null ? 'до остановки' : formatDuration(_original.durationMs!)}',
-                              ),
-                              Text('Раздел: ${formatDuration(groupMs)}'),
-                              Text(
-                                '${plan.estimated ? 'Оценка' : 'Всего'}: ${formatDuration(plan.totalMs + delta)}',
-                                style: const TextStyle(
-                                  color: neonLime,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
+                    if (enlargedText) ...[
+                      contextPanel,
+                      const SizedBox(height: 8),
+                      totals,
+                    ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
                             'Изменение: ${delta < 0 ? '−' : '+'}${formatDuration(delta.abs())}',
                             key: const Key('pause-delta'),
-                            style: const TextStyle(color: neonLime),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: neonLime,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'Ввести минуты и секунды',
+                          onPressed: _saving ? null : _manual,
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            size: 18,
+                            color: antiqueGold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: NeonButton(
+                              label: 'Обнулить',
+                              icon: Icons.restart_alt,
+                              onPressed: _saving ? null : _model.reset,
+                              compact: true,
+                              stacked: true,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Tooltip(
+                              message: previous == null
+                                  ? 'Предыдущего аудио нет'
+                                  : 'Прослушать предыдущий трек: ${previous.title}',
+                              child: NeonButton(
+                                label: 'Предыдущий\nтрек',
+                                icon: Icons.skip_previous,
+                                onPressed: previous == null
+                                    ? null
+                                    : () => _preview(previous),
+                                compact: true,
+                                stacked: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Tooltip(
+                              message: next == null
+                                  ? 'Следующего аудио нет'
+                                  : 'Прослушать следующий трек: ${next.title}',
+                              child: NeonButton(
+                                label: 'Следующий\nтрек',
+                                icon: Icons.skip_next,
+                                onPressed: next == null
+                                    ? null
+                                    : () => _preview(next),
+                                compact: true,
+                                stacked: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: NeonButton(
+                              label: _saving ? 'Сохранение…' : 'Применить',
+                              icon: Icons.check,
+                              onPressed: _saving ? null : _apply,
+                              primary: true,
+                              compact: true,
+                              stacked: true,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        NeonButton(
-                          label: 'Обнулить',
-                          icon: Icons.restart_alt,
-                          onPressed: _saving ? null : _model.reset,
-                          compact: true,
-                        ),
-                        NeonButton(
-                          label: _saving ? 'Сохранение…' : 'Применить',
-                          icon: Icons.check,
-                          onPressed: _saving ? null : _apply,
-                          primary: true,
-                          compact: true,
-                        ),
-                        NeonButton(
-                          label: previous == null
-                              ? 'Предыдущего аудио нет'
-                              : 'Прослушать предыдущий трек',
-                          icon: Icons.skip_previous,
-                          onPressed: previous == null
-                              ? null
-                              : () => _preview(previous),
-                          compact: true,
-                        ),
-                        NeonButton(
-                          label: next == null
-                              ? 'Следующего аудио нет'
-                              : 'Прослушать следующий трек',
-                          icon: Icons.skip_next,
-                          onPressed: next == null ? null : () => _preview(next),
-                          compact: true,
-                        ),
-                      ],
+                    const SizedBox(height: 8),
+                    PreviewBar(
+                      player: widget.player,
+                      library: c.library,
+                      idleAsset: c.asset(next?.audioAssetId),
                     ),
-                    if (previous != null || next != null)
+                    if (next != null)
                       Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          'До паузы: ${previous?.title ?? 'нет'}\nПосле паузы: ${next?.title ?? 'нет аудио'}',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          'После этой паузы: ${next.title}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: antiqueGold,
+                          ),
                         ),
                       ),
-                    PreviewBar(player: widget.player, library: c.library),
                   ],
                 );
               },
@@ -360,6 +445,26 @@ class _PauseEditorState extends State<PauseEditor> {
         ),
       ),
     ),
+  );
+
+  Widget _stat(
+    String label,
+    String value, {
+    Color color = const Color(0xFFFFE9F5),
+  }) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: const TextStyle(fontSize: 10)),
+      Text(
+        value,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
+      ),
+    ],
   );
 }
 

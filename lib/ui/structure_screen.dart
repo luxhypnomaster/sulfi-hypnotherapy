@@ -228,35 +228,63 @@ class _StructureScreenState extends State<StructureScreen> {
     builder: (context, _) {
       final plan = c.draft.plan;
       final header = Padding(
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextButton.icon(
+              style: TextButton.styleFrom(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+              ),
               onPressed: _busy ? null : _choose,
-              icon: const Icon(Icons.layers_outlined),
+              icon: const Icon(Icons.layers_outlined, size: 21),
               label: Text(
                 '${c.baseTemplate?.name ?? c.draft.baseTemplateName ?? 'Текущая конфигурация'}${c.draft.modified ? ' · Изменён' : ''}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: neonLime,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-            Wrap(
-              spacing: 14,
-              runSpacing: 5,
-              children: [
-                Text('Блоков: ${plan.steps.length}'),
-                Text('Паузы: ${formatDuration(plan.delayMs)}'),
-                Text('Аудио: ${formatDuration(plan.audioMs)}'),
-                Text('Работа: ${formatDuration(plan.workMs)}'),
-                Text(
-                  '${plan.estimated ? 'Оценка' : 'Итого'}: ${formatDuration(plan.totalMs)}',
-                  style: const TextStyle(
-                    color: neonLime,
-                    fontWeight: FontWeight.bold,
+            NeonPanel(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    'Блоков: ${plan.steps.length}',
+                    style: const TextStyle(fontSize: 11),
                   ),
-                ),
-              ],
+                  Text(
+                    'Паузы: ${formatDuration(plan.delayMs)}',
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                  Text(
+                    'Аудио: ${formatDuration(plan.audioMs)}',
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                  if (plan.workMs > 0)
+                    Text(
+                      'Работа: ${formatDuration(plan.workMs)}',
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  Text(
+                    '${plan.estimated ? '≈' : 'Σ'} ${formatDuration(plan.totalMs)}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: neonLime,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 7),
             Row(
               children: [
                 Expanded(
@@ -267,7 +295,7 @@ class _StructureScreenState extends State<StructureScreen> {
                     compact: true,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Expanded(
                   child: NeonButton(
                     label: 'Добавить блок',
@@ -276,21 +304,31 @@ class _StructureScreenState extends State<StructureScreen> {
                     compact: true,
                   ),
                 ),
+                IconButton(
+                  tooltip: 'Как изменить паузу и порядок',
+                  onPressed: () => showDialog<void>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Настройка структуры'),
+                      content: Text(
+                        'Нажмите на зелёное время перед треком — откроются часы. Порядок меняется перетаскиванием за ручку или командами «Выше» / «Ниже» в меню трека.${plan.exitStepId == null ? '\n\nАудиовыход пока не выбран. Его можно назначить в меню структуры. Без него при завершении доступна текстовая ориентация.' : ''}',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Понятно'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.info_outline,
+                    size: 20,
+                    color: antiqueGold,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Пауза перед треком — нажмите на время. Порядок — потяните за ручку или используйте меню.',
-              style: TextStyle(fontSize: 12),
-            ),
-            if (plan.exitStepId == null)
-              const Padding(
-                padding: EdgeInsets.only(top: 6),
-                child: Text(
-                  'Аудиовыход не выбран · доступна текстовая ориентация',
-                  style: TextStyle(color: antiqueGold, fontSize: 12),
-                ),
-              ),
           ],
         ),
       );
@@ -351,7 +389,7 @@ class _StructureScreenState extends State<StructureScreen> {
           ),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+              padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -362,98 +400,102 @@ class _StructureScreenState extends State<StructureScreen> {
                         color: Theme.of(context).colorScheme.error,
                       ),
                     ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: NeonButton(
-                          label: 'Выбрать другой шаблон',
-                          stacked: true,
-                          icon: Icons.layers_outlined,
-                          onPressed: _busy ? null : _choose,
-                          compact: true,
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: NeonButton(
+                            label: 'Выбрать другой шаблон',
+                            stacked: true,
+                            icon: Icons.layers_outlined,
+                            onPressed: _busy ? null : _choose,
+                            compact: true,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: NeonButton(
-                          label: 'Библиотека',
-                          stacked: true,
-                          icon: Icons.library_music_outlined,
-                          onPressed: _busy ? null : _add,
-                          compact: true,
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: NeonButton(
+                            label: 'Библиотека',
+                            stacked: true,
+                            icon: Icons.library_music_outlined,
+                            onPressed: _busy ? null : _add,
+                            compact: true,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      const Expanded(
-                        child: NeonButton(
-                          label: 'Записать свой аудиомодуль',
-                          stacked: true,
-                          icon: Icons.mic_none,
-                          onPressed: null,
-                          compact: true,
+                        const SizedBox(width: 6),
+                        const Expanded(
+                          child: NeonButton(
+                            label: 'Записать свой аудиомодуль',
+                            stacked: true,
+                            icon: Icons.mic_none,
+                            onPressed: null,
+                            compact: true,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: NeonButton(
-                          label: 'Вернуть из шаблона',
-                          stacked: true,
-                          icon: Icons.restore,
-                          onPressed: _busy || c.baseTemplate == null
-                              ? null
-                              : () => _run(() async {
-                                  if (await confirmAction(
-                                    context,
-                                    'Вернуть настройки шаблона?',
-                                    'Текущие дорожки и паузы будут заменены. Тема и заметки сохранятся.',
-                                    confirm: 'Вернуть',
-                                  )) {
-                                    await c.restore();
-                                  }
-                                }),
-                          compact: true,
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: NeonButton(
+                            label: 'Вернуть из шаблона',
+                            stacked: false,
+                            icon: Icons.restore,
+                            onPressed: _busy || c.baseTemplate == null
+                                ? null
+                                : () => _run(() async {
+                                    if (await confirmAction(
+                                      context,
+                                      'Вернуть настройки шаблона?',
+                                      'Текущие дорожки и паузы будут заменены. Тема и заметки сохранятся.',
+                                      confirm: 'Вернуть',
+                                    )) {
+                                      await c.restore();
+                                    }
+                                  }),
+                            compact: true,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: NeonButton(
-                          label: 'Сохранить как шаблон',
-                          stacked: true,
-                          icon: Icons.save_outlined,
-                          onPressed: _busy
-                              ? null
-                              : () => _run(() async {
-                                  await saveTemplateDialog(context, c);
-                                }),
-                          compact: true,
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: NeonButton(
+                            label: 'Сохранить как шаблон',
+                            stacked: false,
+                            icon: Icons.save_outlined,
+                            onPressed: _busy
+                                ? null
+                                : () => _run(() async {
+                                    await saveTemplateDialog(context, c);
+                                  }),
+                            compact: true,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: NeonButton(
-                          label: 'Применить и вернуться',
-                          stacked: true,
-                          icon: Icons.check,
-                          onPressed: _busy
-                              ? null
-                              : () => _run(() async {
-                                  await c.flush();
-                                  if (c.saveError != null) {
-                                    throw StateError('unsaved');
-                                  }
-                                  if (context.mounted) Navigator.pop(context);
-                                }),
-                          primary: true,
-                          compact: true,
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: NeonButton(
+                            label: 'Применить и вернуться',
+                            stacked: false,
+                            icon: Icons.check,
+                            onPressed: _busy
+                                ? null
+                                : () => _run(() async {
+                                    await c.flush();
+                                    if (c.saveError != null) {
+                                      throw StateError('unsaved');
+                                    }
+                                    if (context.mounted) Navigator.pop(context);
+                                  }),
+                            primary: true,
+                            compact: true,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -493,7 +535,7 @@ class _StructureScreenState extends State<StructureScreen> {
                     )
                   : ReorderableListView.builder(
                       header: header,
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+                      padding: const EdgeInsets.only(bottom: 12),
                       buildDefaultDragHandles: false,
                       itemCount: plan.steps.length,
                       onReorderItem: (from, to) {
@@ -516,8 +558,8 @@ class _StructureScreenState extends State<StructureScreen> {
                             if (first)
                               Padding(
                                 padding: const EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 5,
+                                  top: 5,
+                                  bottom: 2,
                                 ),
                                 child: NeonPanel(
                                   padding: EdgeInsets.zero,
@@ -529,8 +571,8 @@ class _StructureScreenState extends State<StructureScreen> {
                                     }),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 10,
+                                        horizontal: 8,
+                                        vertical: 5,
                                       ),
                                       child: Row(
                                         children: [
@@ -545,6 +587,7 @@ class _StructureScreenState extends State<StructureScreen> {
                                               plan.groupName(s.groupId),
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w700,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -562,6 +605,7 @@ class _StructureScreenState extends State<StructureScreen> {
                                             ),
                                             style: const TextStyle(
                                               color: neonLime,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ],
@@ -595,6 +639,9 @@ class _StructureScreenState extends State<StructureScreen> {
     final missing = s.kind == StepKind.audio && a == null;
     final menu = PopupMenuButton<String>(
       tooltip: 'Действия блока ${index + 1}',
+      constraints: const BoxConstraints(),
+      padding: EdgeInsets.zero,
+      iconSize: 20,
       enabled: !_busy,
       onSelected: (action) => _menu(action, s),
       itemBuilder: (_) => [
@@ -619,10 +666,10 @@ class _StructureScreenState extends State<StructureScreen> {
       index: index,
       enabled: !_busy,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
         child: Column(
           children: [
-            const Icon(Icons.drag_indicator, size: 20),
+            const Icon(Icons.drag_indicator, size: 14),
             Text('${index + 1}', style: const TextStyle(fontSize: 12)),
           ],
         ),
@@ -635,18 +682,21 @@ class _StructureScreenState extends State<StructureScreen> {
         onPressed: _busy ? null : () => _pause(s),
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 7),
-          minimumSize: const Size(63, 48),
+          minimumSize: const Size(54, 48),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           foregroundColor: neonLime,
           side: const BorderSide(color: Color(0xFF737B11)),
         ),
         child: Text(
           '${(s.delayBeforeSeconds ~/ 60).toString().padLeft(2, '0')}:${(s.delayBeforeSeconds % 60).toString().padLeft(2, '0')}',
-          style: const TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 12),
         ),
       ),
     );
     final play = IconButton(
       tooltip: 'Прослушать $title',
+      constraints: const BoxConstraints(minWidth: 36, minHeight: 48),
+      padding: EdgeInsets.zero,
       onPressed: s.kind == StepKind.audio && !missing && !_busy
           ? () => _preview(s)
           : null,
@@ -662,10 +712,11 @@ class _StructureScreenState extends State<StructureScreen> {
       children: [
         Text(
           title,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontWeight: FontWeight.w600,
+            fontSize: 12,
             color: missing ? Colors.redAccent : null,
           ),
         ),
@@ -688,17 +739,16 @@ class _StructureScreenState extends State<StructureScreen> {
       style: const TextStyle(fontSize: 12, color: Color(0xFFCDBECA)),
     );
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 1),
       child: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF100A0F),
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(4),
           border: Border.all(color: const Color(0xFF4B263B)),
         ),
         child: LayoutBuilder(
           builder: (context, box) {
-            if (box.maxWidth < 370 ||
-                MediaQuery.textScalerOf(context).scale(1) > 1.3) {
+            if (MediaQuery.textScalerOf(context).scale(1) > 1.3) {
               return Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: Column(
@@ -725,9 +775,18 @@ class _StructureScreenState extends State<StructureScreen> {
                 handle,
                 pause,
                 play,
-                Expanded(child: name),
-                const SizedBox(width: 6),
-                duration,
+                Expanded(
+                  child: box.maxWidth < 350
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [name, duration],
+                        )
+                      : name,
+                ),
+                if (box.maxWidth >= 350) ...[
+                  const SizedBox(width: 6),
+                  duration,
+                ],
                 menu,
               ],
             );
