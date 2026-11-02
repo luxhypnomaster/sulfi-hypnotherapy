@@ -1,0 +1,41 @@
+name: APK for an owner-published release
+# Creating a tag alone does NOT publish a release or trigger this workflow.
+# The owner must first approve main and explicitly publish the GitHub Release.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.tag_name }}
+          persist-credentials: false
+      - name: Verify stable ancestry and version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: python3 tool/verify_release.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter analyze --fatal-infos
+      - run: flutter test --reporter expanded
+      - run: flutter build apk --debug
+      - name: Attach explicitly labeled test APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          cp build/app/outputs/flutter-apk/app-debug.apk "sulfi-${RELEASE_TAG}-debug.apk"
+          sha256sum "sulfi-${RELEASE_TAG}-debug.apk" > "sulfi-${RELEASE_TAG}-debug.apk.sha256"
+          gh release upload "$RELEASE_TAG" "sulfi-${RELEASE_TAG}-debug.apk" "sulfi-${RELEASE_TAG}-debug.apk.sha256"

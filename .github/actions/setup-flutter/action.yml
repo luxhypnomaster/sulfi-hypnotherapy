@@ -1,0 +1,30 @@
+name: Pinned Flutter and Android SDKs
+description: Install the same SDK revision used for local verification.
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: flutter/flutter
+        ref: '3.47.9'
+        path: .tooling/flutter
+        persist-credentials: false
+    - shell: bash
+      run: |
+        test "$(git -C .tooling/flutter rev-parse HEAD)" = c197ca5199e9ee5661e865596c9c07294dfab51c
+        git -C .tooling/flutter switch --create stable
+    - shell: bash
+      run: echo "$GITHUB_WORKSPACE/.tooling/flutter/bin" >> "$GITHUB_PATH"
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.pub-cache
+          .tooling/flutter/bin/cache
+        key: flutter-3.47.9-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+    - shell: bash
+      run: flutter config --no-analytics
+    - uses: android-actions/setup-android@v3
+      with:
+        packages: platform-tools
+    - shell: bash
+      run: sdkmanager 'platforms;android-35' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358'
