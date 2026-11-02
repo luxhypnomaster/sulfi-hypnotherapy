@@ -10,22 +10,22 @@
 - [x] Implement duration/category/format/size display, foreground preview, rename, category edit, confirmed delete and local reset.
 - [x] Automated tests: rejected/canceled/empty/missing/decoder-failed import, persistence, deletion, reset and UI flows. Picker/decoder/player are injected in tests.
 - [ ] Complete real-Android acceptance for native picker, three actual formats, decoder corruption/missing-file errors, audio focus and phone storage behavior (docs/ANDROID_TEST_PLAN.md).
-- [ ] Before adding templates: prevent deletion of referenced assets or request explicit template repair; never leave broken references silently.
+- [x] Prevent deleting audio referenced by current draft, templates or an active run; show dependencies. History snapshots keep their metadata independently.
 
 ## Milestone 2 — session constructor
-- [ ] Support three block types: AUDIO, SILENCE, RECORD_MIC.
-- [ ] Reorder/duplicate/remove; edit silence/record durations; validate timeline.
-- [ ] Save/load templates; calculate estimated duration.
+- [x] Persist distinct AUDIO / SILENCE / FREE_WORK / RECORD_MIC models. AUDIO/SILENCE/FREE_WORK are editable/executable; mic execution is a separate pending stage.
+- [x] Reorder/duplicate/remove/replace; edit delays and timed work; validate timeline. Recording controls remain disabled.
+- [x] Save/load/version/copy/rename/delete templates; maintain an independent autosaved draft and duration estimates.
 
 ## Milestone 3 — player engine
-- [ ] Sequential execution and transitions without gaps or double-starts.
+- [x] Foreground sequential execution, per-block pre-delay and serialized transitions. Logical tests prevent duplicate/skipped transitions; audible gap measurements remain for device acceptance.
 - [ ] Background playback, lock-screen handling, pause/resume/next.
-- [ ] One-tap Finish and exit; select an exit audio asset for template.
+- [x] Foreground Finish and exit, explicit exit-track choice, safe text fallback and truthful early-finish status.
 
 ## Milestone 4 — session records
 - [ ] Pre-session topic recording with permission, consent and playback/delete.
 - [ ] Microphone recording blocks, clear recording indicator, playback/delete.
-- [ ] Session history with local-only data; handle interruptions and recordings carefully.
+- [x] Local immutable execution snapshots, actual events/checkpoints, interruption on background/process death, rename/notes/repeat/create template. Voice-recording links still pending.
 
 ## Milestone 5 — Android testing and package
 - [ ] Real-device manual validation with screen locked, earbuds, interruptions and denied permissions.
@@ -45,8 +45,19 @@
 - [ ] Test update migration of imported audio, templates and recordings before publishing releases.
 - [ ] Plan encrypted local backup/export for personal session records before broad distribution.
 
+## Iteration 0.2 — completed working slice
+- [x] Import full CODEX_TASK_RU.md 2.0 and the approved references; document later owner clarifications in docs/DECISIONS_V2.md.
+- [x] Additive migration SQLite v1 → v2, independent entities and immutable run snapshots; preserve private audio.
+- [x] New home clipboard, full-screen structure, three-section library, templates and history screens.
+- [x] Golden pause editor opened by the time badge; defaults 00:00, independent minute/second wheels, 5-second detents, haptics, manual input, cancel/apply.
+- [x] Foreground audio/timed work engine, exact pause semantics, events/checkpoints and safe exit.
+- [ ] Physical Android acceptance: actual audio, tactile feel, screen-reader actions, rotation/large font, missing files and update migration.
+
 ## Next working slice
-- [ ] Implement template editor with stable block IDs, AUDIO / SILENCE / RECORD_MIC, reorder/duplicate/remove, duration validation and SQLite migrations that preserve audio.
-- [ ] Require explicit exit-track selection or show a grounding-text warning before saving a template.
-- [ ] Then implement the session engine, foreground media service, audio interruption policy, microphone permission/indication and always-available Finish and exit. Do not extend foreground-preview claims to background sessions.
-- [ ] Store topic recordings separately; insert into playback only with explicit consent. No mic permission requested by the current slice.
+- [ ] Implement standalone recorder: permission, visible recording, pause/resume, preview, title/description, save/delete; no fake active mic buttons.
+- [ ] Keep new library recordings, optional topic recordings and in-session recordings separate, with explicit ownership/consent and IDs.
+- [ ] Add tested RECORD_MIC execution and proper interruption/cleanup handling.
+- [ ] Implement Android foreground media service, media session, notification, background/lock-screen playback and recording policies, Bluetooth and calls.
+- [ ] Configure a persistent signing plan and verify upgrading the installed debug app without data loss; see docs/UPGRADING.md. No key/app ID changes made here.
+- [ ] Build encrypted local backup/export before broad distribution; Git/APK do not back up personal data.
+- [ ] Complete native/device scenarios K1–K10; K5 and background/recording acceptance are not claimed complete.

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../models/audio_asset.dart';
+import 'app_database.dart';
 
 abstract interface class LibraryRepository {
   Future<List<AudioAsset>> list();
@@ -17,25 +18,7 @@ class SqliteLibraryRepository implements LibraryRepository {
     String path, {
     DatabaseFactory? factory,
   }) async {
-    final db = await (factory ?? databaseFactory).openDatabase(
-      path,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onConfigure: (db) => db.execute('PRAGMA secure_delete = ON'),
-        onCreate: (db, version) => db.execute('''
-          CREATE TABLE audio_assets (
-            id TEXT PRIMARY KEY,
-            title TEXT NOT NULL,
-            filePath TEXT NOT NULL UNIQUE,
-            durationMs INTEGER NOT NULL CHECK(durationMs > 0),
-            format TEXT NOT NULL,
-            createdAt TEXT NOT NULL,
-            category TEXT NOT NULL,
-            fileSizeBytes INTEGER NOT NULL CHECK(fileSizeBytes > 0)
-          )
-        '''),
-      ),
-    );
+    final db = await openAppDatabase(path, factory: factory);
     return SqliteLibraryRepository(db);
   }
 

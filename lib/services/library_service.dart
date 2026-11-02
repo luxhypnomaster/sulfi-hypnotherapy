@@ -24,6 +24,8 @@ class LibraryService {
     required this.pick,
     required this.probe,
     this.releaseSelection,
+    this.references,
+    this.resetRelatedData,
   });
 
   final LibraryRepository repository;
@@ -31,6 +33,8 @@ class LibraryService {
   final AudioPicker pick;
   final DurationProbe probe;
   final Future<void> Function()? releaseSelection;
+  final Future<List<String>> Function(String assetId)? references;
+  final Future<void> Function()? resetRelatedData;
 
   File fileFor(AudioAsset asset) {
     if (p.basename(asset.filePath) != asset.filePath) {
@@ -142,6 +146,12 @@ class LibraryService {
   }
 
   Future<void> delete(AudioAsset asset) async {
+    final usedBy = await references?.call(asset.id) ?? [];
+    if (usedBy.isNotEmpty) {
+      throw LibraryException(
+        'Аудио используется: ${usedBy.join(', ')}. Сначала замените или удалите эти блоки.',
+      );
+    }
     // Delete bytes first: if that fails, the visible entry remains retryable.
     // If the DB operation fails, a missing file is shown explicitly in preview.
     await discard(asset);
@@ -149,6 +159,7 @@ class LibraryService {
   }
 
   Future<void> reset() async {
+    await resetRelatedData?.call();
     for (final asset in await repository.list()) {
       await delete(asset);
     }

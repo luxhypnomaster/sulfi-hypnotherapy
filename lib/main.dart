@@ -10,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
 import 'data/library_repository.dart';
+import 'data/session_repository.dart';
+import 'services/session_controller.dart';
 import 'services/library_service.dart';
 import 'services/preview_player.dart';
 
@@ -28,6 +30,7 @@ class _BootstrapState extends State<_Bootstrap> {
   LibraryService? _library;
   LocalPreviewPlayer? _player;
   SqliteLibraryRepository? _repository;
+  SessionController? _controller;
   bool _failed = false;
 
   @override
@@ -45,6 +48,7 @@ class _BootstrapState extends State<_Bootstrap> {
         p.join(root.path, 'library.sqlite'),
       );
       _repository = repository;
+      final sessions = SqliteSessionRepository(repository.database);
       final library = LibraryService(
         repository: repository,
         directory: Directory(p.join(root.path, 'audio')),
@@ -76,15 +80,25 @@ class _BootstrapState extends State<_Bootstrap> {
           }
         },
         releaseSelection: FilePicker.clearTemporaryFiles,
+        references: sessions.references,
+        resetRelatedData: sessions.reset,
       );
       await library.initialize();
       await FilePicker.clearTemporaryFiles();
       final player = LocalPreviewPlayer();
       _player = player;
       await player.initialize();
+      final controller = SessionController(
+        repository: sessions,
+        library: library,
+      );
+      _controller = controller;
+      await controller.initialize();
       if (mounted) setState(() => _library = library);
     } catch (_) {
       await _player?.close();
+      _controller?.dispose();
+      _controller = null;
       await _repository?.database.close();
       _player = null;
       _repository = null;
@@ -94,6 +108,7 @@ class _BootstrapState extends State<_Bootstrap> {
 
   @override
   void dispose() {
+    _controller?.dispose();
     unawaited(_player?.close());
     unawaited(_repository?.database.close());
     super.dispose();
@@ -102,7 +117,11 @@ class _BootstrapState extends State<_Bootstrap> {
   @override
   Widget build(BuildContext context) {
     if (_library case final LibraryService library) {
-      return SulfiApp(library: library, player: _player!);
+      return SulfiApp(
+        library: library,
+        player: _player!,
+        controller: _controller!,
+      );
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,

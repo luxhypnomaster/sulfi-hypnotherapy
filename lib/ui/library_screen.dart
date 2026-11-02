@@ -6,12 +6,21 @@ import '../models/audio_asset.dart';
 import '../services/library_service.dart';
 import '../services/preview_player.dart';
 import 'asset_editor.dart';
+import 'design.dart';
+import 'preview_bar.dart';
 
 class LibraryScreen extends StatefulWidget {
-  const LibraryScreen({super.key, required this.library, required this.player});
+  const LibraryScreen({
+    super.key,
+    required this.library,
+    required this.player,
+    this.allowSelection = false,
+    this.onReset,
+  });
   final LibraryService library;
   final PreviewPlayer player;
-
+  final bool allowSelection;
+  final Future<void> Function()? onReset;
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
 }
@@ -19,53 +28,47 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenState extends State<LibraryScreen>
     with WidgetsBindingObserver {
   List<AudioAsset> _assets = [];
-  bool _busy = true;
-  bool _asking = false;
+  bool _busy = true, _asking = false;
   String? _loadError;
   String _query = '';
-  int _tab = 0;
-
+  bool _searchAll = true;
+  LibrarySection _section = LibrarySection.general;
+  AudioCategory? _category;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    widget.player.addListener(_playerChanged);
     unawaited(_load());
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    widget.player.removeListener(_playerChanged);
-    unawaited(widget.player.stop());
+    unawaited(Future.microtask(widget.player.stop));
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // This slice provides foreground preview only. Never promise background
-    // session playback until the foreground-service milestone is implemented.
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       unawaited(widget.player.stop());
     }
   }
 
-  void _playerChanged() {
-    if (mounted) setState(() {});
-  }
-
-  void _message(String message) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+  void _message(String text) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+    }
   }
 
   Future<void> _load() async {
-    setState(() {
-      _busy = true;
-      _loadError = null;
-    });
+    if (mounted) {
+      setState(() {
+        _busy = true;
+        _loadError = null;
+      });
+    }
     try {
       final items = await widget.library.repository.list();
       if (mounted) setState(() => _assets = items);
@@ -81,28 +84,28 @@ class _LibraryScreenState extends State<LibraryScreen>
     }
   }
 
-  Future<void> _run(Future<void> Function() action) async {
+  Future<T?> _ask<T>(Future<T?> Function() f) async {
+    setState(() => _asking = true);
+    try {
+      return await f();
+    } finally {
+      if (mounted) setState(() => _asking = false);
+    }
+  }
+
+  Future<void> _run(Future<void> Function() f) async {
     if (_busy) return;
     setState(() => _busy = true);
     try {
-      await action();
-    } catch (error) {
+      await f();
+    } catch (e) {
       _message(
-        error is LibraryException
-            ? error.message
+        e is LibraryException
+            ? e.message
             : 'Не удалось выполнить действие. Повторите попытку.',
       );
     } finally {
       if (mounted) await _load();
-    }
-  }
-
-  Future<T?> _ask<T>(Future<T?> Function() show) async {
-    setState(() => _asking = true);
-    try {
-      return await show();
-    } finally {
-      if (mounted) setState(() => _asking = false);
     }
   }
 
@@ -117,461 +120,362 @@ class _LibraryScreenState extends State<LibraryScreen>
       if (edited == null) return;
       await widget.library.save(edited);
       saved = true;
+      _section = edited.section;
     } finally {
       if (!saved) await widget.library.discard(draft);
     }
   });
-
   Future<void> _edit(AudioAsset asset) => _run(() async {
+    await widget.player.stop();
     final edited = await _ask(() => editAsset(context, asset));
-    if (edited != null) await widget.library.save(edited);
-  });
-
-  Future<bool> _confirm(String title, String message, String button) async =>
-      await _ask(
-        () => showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Отмена'),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(button),
-              ),
-            ],
-          ),
-        ),
-      ) ??
-      false;
-
-  Future<void> _delete(AudioAsset asset) => _run(() async {
-    if (!await _confirm(
-      'Удалить аудио?',
-      '«${asset.title}» будет удалено из приложения. Исходный файл останется на месте.',
-      'Удалить',
-    )) {
-      return;
+    if (edited != null) {
+      await widget.library.save(edited);
+      _section = edited.section;
     }
+  });
+  Future<void> _delete(AudioAsset asset) => _run(() async {
+    final confirmed = await _ask(
+      () => confirmAction(
+        context,
+        'Удалить аудио?',
+        '«${asset.title}» будет удалено из приложения. История сохранит сведения о треке, но прослушать удалённый файл будет нельзя. Исходный файл останется на месте.',
+        confirm: 'Удалить',
+      ),
+    );
+    if (confirmed != true) return;
     if (widget.player.current?.id == asset.id) await widget.player.stop();
     await widget.library.delete(asset);
   });
-
   Future<void> _reset() => _run(() async {
-    if (!await _confirm(
-      'Удалить все данные?',
-      'Все импортированные аудио и их названия будут удалены из приложения. Это действие нельзя отменить. Исходные файлы останутся на месте.',
-      'Удалить всё',
-    )) {
-      return;
-    }
+    final confirmed = await _ask(
+      () => confirmAction(
+        context,
+        'Удалить все данные?',
+        'Библиотека, шаблоны, текущая конфигурация и история будут удалены с этого устройства. Исходные файлы останутся на месте.',
+        confirm: 'Удалить всё',
+      ),
+    );
+    if (confirmed != true) return;
     await widget.player.stop();
-    await widget.library.reset();
+    if (widget.onReset != null) {
+      await widget.onReset!();
+    } else {
+      await widget.library.reset();
+    }
   });
-
-  Future<void> _preview(AudioAsset asset) => _run(() async {
-    await widget.player.toggle(asset, widget.library.fileFor(asset));
-  });
-
+  Future<void> _preview(AudioAsset a) =>
+      _run(() => widget.player.toggle(a, widget.library.fileFor(a)));
+  void _privacy() => showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (context) => SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Ваше пространство',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Все аудио и заметки хранятся на этом устройстве. Нет облака, аналитики и передачи записей. Сохраняйте исходные файлы отдельно: удаление приложения удаляет его данные.',
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Инструмент саморегуляции не заменяет медицинскую помощь. Не используйте за рулём. Предпрослушивание останавливается при уходе в фон.',
+            ),
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                unawaited(_reset());
+              },
+              icon: const Icon(Icons.delete_outline),
+              label: const Text('Удалить все данные приложения'),
+            ),
+            const SizedBox(height: 12),
+            const Text('Sulfi · 0.2.0', textAlign: TextAlign.center),
+          ],
+        ),
+      ),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return PopScope(
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) unawaited(widget.player.stop());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'СУЛЬФИ',
-            style: TextStyle(letterSpacing: 4, fontWeight: FontWeight.w800),
-          ),
-          actions: [
-            IconButton(
-              tooltip: 'О приложении и данных',
-              icon: const Icon(Icons.shield_outlined),
-              onPressed: _busy
-                  ? null
-                  : () => showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      builder: (_) => SafeArea(
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Ваше пространство',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall,
-                              ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                'Аудио хранится только на этом устройстве. Приложение не отправляет записи в интернет и не использует микрофон на этом этапе.',
-                              ),
-                              const SizedBox(height: 12),
-                              const Text(
-                                'Это инструмент саморегуляции, а не медицинская помощь. Не слушайте записи за рулём. Выбирайте безопасное место, где можно спокойно остановиться.',
-                              ),
-                              const SizedBox(height: 12),
-                              const Text(
-                                'Удаление приложения удалит библиотеку. Сохраняйте исходные файлы отдельно. Обновление поверх установленного приложения сохраняет данные.',
-                              ),
-                              const SizedBox(height: 20),
-                              OutlinedButton.icon(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  unawaited(_reset());
-                                },
-                                icon: const Icon(Icons.delete_outline),
-                                label: const Text(
-                                  'Удалить все данные приложения',
+    final q = _query.toLowerCase().trim();
+    final visible = _assets
+        .where(
+          (a) =>
+              ((q.isNotEmpty && _searchAll) || a.section == _section) &&
+              (_category == null || a.category == _category) &&
+              '${a.title} ${a.description} ${a.category.label} ${a.tags.join(' ')}'
+                  .toLowerCase()
+                  .contains(q),
+        )
+        .toList();
+    return LeatherScaffold(
+      title: widget.allowSelection ? 'Выбрать аудио' : 'Библиотека',
+      actions: [
+        IconButton(
+          tooltip: 'О приложении и данных',
+          onPressed: _busy ? null : _privacy,
+          icon: const Icon(Icons.shield_outlined),
+        ),
+      ],
+      bottom: PreviewBar(player: widget.player, library: widget.library),
+      child: ListenableBuilder(
+        listenable: widget.player,
+        builder: (context, _) => CustomScrollView(
+          slivers: [
+            if (_busy && !_asking)
+              const SliverToBoxAdapter(
+                child: LinearProgressIndicator(minHeight: 2),
+              ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Ваши записи. Ваш темп.',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '${_assets.length} аудио · ${formatDuration(_assets.fold(0, (n, a) => n + a.durationMs))} · только на устройстве',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 14),
+                    NeonButton(
+                      label: 'Добавить аудио',
+                      icon: Icons.add,
+                      onPressed: _busy || _loadError != null ? null : _import,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'MP3, M4A, WAV · копия внутри приложения',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(height: 16),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: LibrarySection.values
+                            .map(
+                              (s) => Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: ChoiceChip(
+                                  label: Text(switch (s) {
+                                    LibrarySection.general => 'Общие',
+                                    LibrarySection.suggestions => 'Установки',
+                                    LibrarySection.personal => 'Мои',
+                                  }),
+                                  selected: _section == s,
+                                  onSelected: (_) => setState(() {
+                                    _section = s;
+                                    _searchAll = false;
+                                  }),
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              const Text(
-                                'Версия 0.1.0 · этап 1',
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Найти аудио',
+                        hintText: 'Название, описание, метки',
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          tooltip: _searchAll
+                              ? 'Поиск по всей библиотеке'
+                              : 'Поиск в выбранном разделе',
+                          onPressed: () =>
+                              setState(() => _searchAll = !_searchAll),
+                          icon: Icon(
+                            _searchAll
+                                ? Icons.manage_search
+                                : Icons.folder_open,
                           ),
                         ),
                       ),
+                      onChanged: (s) => setState(() => _query = s),
                     ),
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                children: [
-                  if (_busy && !_asking)
-                    const LinearProgressIndicator(minHeight: 2),
-                  Expanded(
-                    child: switch (_tab) {
-                      0 => _library(context),
-                      1 => const _FuturePage(
-                        icon: Icons.view_timeline_outlined,
-                        title: 'Из аудио — в сессию',
-                        description: 'Сначала соберите библиотеку. На следующем этапе здесь появится конструктор: аудио, тишина и запись с микрофона с настраиваемой длительностью.',
+                    const SizedBox(height: 8),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Все категории'),
+                            selected: _category == null,
+                            onSelected: (_) => setState(() => _category = null),
+                          ),
+                          ...AudioCategory.values.map(
+                            (c) => Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: ChoiceChip(
+                                label: CategoryLabel(c),
+                                selected: _category == c,
+                                onSelected: (_) =>
+                                    setState(() => _category = c),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      _ => const _FuturePage(
-                        icon: Icons.self_improvement_outlined,
-                        title: 'Время для себя',
-                        description: 'Проигрывание сессий и история появятся после конструктора. Сейчас можно прослушивать отдельные записи в библиотеке.',
-                      ),
-                    },
-                  ),
-                  if (widget.player.error case final String error)
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(error, style: TextStyle(color: colors.error)),
                     ),
-                  if (widget.player.current case final AudioAsset current)
-                    _previewBar(context, current),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _tab,
-          onDestinationSelected: (index) => setState(() => _tab = index),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.library_music_outlined),
-              selectedIcon: Icon(Icons.library_music),
-              label: 'Библиотека',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.view_timeline_outlined),
-              label: 'Шаблоны',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.self_improvement_outlined),
-              label: 'Сессии',
-            ),
+            if (_loadError != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Text(_loadError!),
+                      TextButton(
+                        onPressed: _load,
+                        child: const Text('Повторить'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else if (visible.isEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.graphic_eq, size: 48, color: neonPink),
+                      const SizedBox(height: 12),
+                      Text(
+                        _assets.isEmpty
+                            ? 'Начните с одной записи'
+                            : 'Записи не найдены. Измените поиск.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _assets.isEmpty
+                            ? 'Добавьте готовое аудио с устройства. Название, описание и категорию можно изменить перед сохранением.'
+                            : 'В этом разделе пока нет подходящих аудио.',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                sliver: SliverList.separated(
+                  itemCount: visible.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (context, i) => _card(visible[i]),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _library(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final visible = _assets
-        .where(
-          (asset) => '${asset.title} ${asset.category.label}'
-              .toLowerCase()
-              .contains(_query.toLowerCase()),
-        )
-        .toList();
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Голос, который\nпомогает замедлиться',
-                  style: Theme.of(context).textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Ваши записи. Ваш темп.\nСоберите личную аудиобиблиотеку Сульфи.',
-                ),
-                const SizedBox(height: 24),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.offline_bolt_outlined,
-                          color: colors.secondary,
-                          size: 28,
+  Widget _card(AudioAsset a) {
+    final playing = widget.player.current?.id == a.id && widget.player.playing;
+    return NeonPanel(
+      padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton.filledTonal(
+                tooltip: playing ? 'Пауза' : 'Прослушать ${a.title}',
+                onPressed: _busy ? null : () => _preview(a),
+                icon: Icon(playing ? Icons.pause : Icons.play_arrow),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InkWell(
+                  onTap: () => showDialog<void>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(a.title),
+                      content: SingleChildScrollView(
+                        child: Text(
+                          '${a.description.isEmpty ? 'Без описания' : a.description}\n\n${a.section.label} · ${a.category.label}\n${formatDuration(a.durationMs)} · ${a.format.toUpperCase()}\n${a.tags.join(', ')}',
                         ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(
-                            '${_assets.length} аудио · ${formatDuration(_assets.fold(0, (sum, item) => sum + item.durationMs))}\nТолько на вашем устройстве',
-                          ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Закрыть'),
                         ),
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                FilledButton.icon(
-                  onPressed: _busy || _loadError != null ? null : _import,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Добавить аудио'),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'MP3, M4A, WAV · копия внутри приложения',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12),
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  'Аудиобиблиотека',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                if (_assets.isNotEmpty) ...[
-                  const SizedBox(height: 14),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Найти по названию или категории',
-                      prefixIcon: Icon(Icons.search),
-                    ),
-                    onChanged: (value) => setState(() => _query = value),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-        if (_loadError != null)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Text(_loadError!),
-                  TextButton(
-                    onPressed: _busy ? null : _load,
-                    child: const Text('Повторить'),
-                  ),
-                ],
-              ),
-            ),
-          )
-        else if (_assets.isEmpty && !_busy)
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(32, 8, 32, 40),
-              child: Column(
-                children: [
-                  Icon(Icons.graphic_eq, size: 56, color: Color(0xFFE28BC8)),
-                  SizedBox(height: 16),
-                  Text(
-                    'Начните с одной записи',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Добавьте готовое аудио с устройства. Название и категорию можно изменить перед сохранением.',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          )
-        else if (visible.isEmpty && !_busy)
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Text('Записи не найдены. Измените поиск.'),
-            ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-            sliver: SliverList.separated(
-              itemCount: visible.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (context, index) =>
-                  _assetCard(context, visible[index]),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _assetCard(BuildContext context, AudioAsset asset) {
-    final active =
-        widget.player.current?.id == asset.id && widget.player.playing;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        child: Row(
-          children: [
-            IconButton.filledTonal(
-              tooltip: active ? 'Пауза' : 'Прослушать ${asset.title}',
-              onPressed: _busy ? null : () => _preview(asset),
-              icon: Icon(active ? Icons.pause : Icons.play_arrow),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    asset.title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    '${asset.category.label} · ${formatDuration(asset.durationMs)}',
-                  ),
-                  Text(
-                    '${asset.format.toUpperCase()} · ${(asset.fileSizeBytes / 1024 / 1024).toStringAsFixed(1)} МБ',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-            PopupMenuButton<String>(
-              tooltip: 'Действия с аудио',
-              enabled: !_busy,
-              onSelected: (action) =>
-                  action == 'edit' ? _edit(asset) : _delete(asset),
-              itemBuilder: (_) => const [
-                PopupMenuItem(
-                  value: 'edit',
-                  child: Text('Изменить название и категорию'),
-                ),
-                PopupMenuItem(value: 'delete', child: Text('Удалить')),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _previewBar(BuildContext context, AudioAsset current) {
-    final position = widget.player.position.inMilliseconds.clamp(
-      0,
-      current.durationMs,
-    );
-    return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerHigh,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LinearProgressIndicator(
-            value: position / current.durationMs,
-            minHeight: 2,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
-            child: Row(
-              children: [
-                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        current.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        a.title,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
+                      const SizedBox(height: 4),
+                      CategoryLabel(a.category),
+                      if (a.description.isNotEmpty)
+                        Text(
+                          a.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      const SizedBox(height: 4),
                       Text(
-                        '${formatDuration(position)} / ${formatDuration(current.durationMs)} · предпрослушивание',
+                        '${formatDuration(a.durationMs)} · ${a.format.toUpperCase()} · ${(a.fileSizeBytes / 1024 / 1024).toStringAsFixed(1)} МБ',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),
                 ),
-                IconButton(
-                  tooltip: widget.player.playing ? 'Пауза' : 'Продолжить',
-                  onPressed: _busy ? null : () => _preview(current),
-                  icon: Icon(
-                    widget.player.playing ? Icons.pause : Icons.play_arrow,
+              ),
+              PopupMenuButton<String>(
+                tooltip: 'Действия с аудио',
+                enabled: !_busy,
+                onSelected: (s) => s == 'edit' ? _edit(a) : _delete(a),
+                itemBuilder: (_) => const [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Text('Изменить название и категорию'),
                   ),
-                ),
-                IconButton(
-                  tooltip: 'Остановить прослушивание',
-                  onPressed: _busy ? null : () => _run(widget.player.stop),
-                  icon: const Icon(Icons.stop),
-                ),
-              ],
-            ),
+                  PopupMenuItem(value: 'delete', child: Text('Удалить')),
+                ],
+              ),
+            ],
           ),
+          if (widget.allowSelection)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: _busy ? null : () => Navigator.pop(context, a),
+                icon: const Icon(Icons.playlist_add),
+                label: const Text('Добавить в сессию'),
+              ),
+            ),
         ],
       ),
     );
   }
-}
-
-class _FuturePage extends StatelessWidget {
-  const _FuturePage({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-  final IconData icon;
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-    padding: const EdgeInsets.all(28),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 32),
-        Icon(icon, size: 64, color: Theme.of(context).colorScheme.secondary),
-        const SizedBox(height: 24),
-        Text(title, style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 16),
-        Text(description),
-      ],
-    ),
-  );
 }

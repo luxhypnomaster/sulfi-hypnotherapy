@@ -6,6 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/app.dart';
+import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
+import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'support/fakes.dart';
 
@@ -25,22 +28,29 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(SulfiApp(library: library, player: player));
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ru'),
+        supportedLocales: const [Locale('ru')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: sulfiTheme(),
+        home: LibraryScreen(library: library, player: player),
+      ),
+    );
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Russian empty library and honest milestone tabs', (
+  testWidgets('Russian empty library and three library sections', (
     tester,
   ) async {
     await open(tester);
     expect(find.text('Начните с одной записи'), findsOneWidget);
     expect(find.text('Добавить аудио'), findsOneWidget);
-    await tester.tap(find.text('Шаблоны'));
+    await tester.tap(find.text('Установки'));
     await tester.pumpAndSettle();
-    expect(find.text('Из аудио — в сессию'), findsOneWidget);
-    await tester.tap(find.text('Сессии'));
+    await tester.tap(find.text('Мои'));
     await tester.pumpAndSettle();
-    expect(find.text('Время для себя'), findsOneWidget);
+    expect(find.text('Начните с одной записи'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -67,7 +77,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(repository.items.values.single.title, 'Моё введение');
     expect(find.text('Моё введение'), findsOneWidget);
-    expect(find.text('WAV · 0.0 МБ'), findsOneWidget);
+    expect(find.text('1:05 · WAV · 0.0 МБ'), findsOneWidget);
     expect(library.discarded, isFalse);
   });
 
@@ -199,15 +209,43 @@ void main() {
     expect(repository.items, isEmpty);
   });
 
+  testWidgets(
+    'search finds descriptions and tags across sections then filters selected section',
+    (tester) async {
+      await repository.save(
+        sampleAsset().edited(
+          'Личный модуль',
+          AudioCategory.preparation,
+          description: 'Спокойствие и внимание',
+          section: LibrarySection.personal,
+          tags: ['границы'],
+        ),
+      );
+      await open(tester);
+      await tester.enterText(find.byType(TextField), 'границы');
+      await tester.pumpAndSettle();
+      expect(find.text('Личный модуль'), findsOneWidget);
+      await tester.tap(find.text('Установки'));
+      await tester.pumpAndSettle();
+      expect(find.text('Личный модуль'), findsNothing);
+      await tester.tap(find.text('Мои'));
+      await tester.pumpAndSettle();
+      expect(find.text('Личный модуль'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), 'Спокойствие');
+      await tester.pumpAndSettle();
+      expect(find.text('Личный модуль'), findsOneWidget);
+    },
+  );
+
   testWidgets('layout supports narrow screens and enlarged text', (
     tester,
   ) async {
     await open(tester);
-    tester.view.physicalSize = const Size(320, 800);
+    tester.view.physicalSize = const Size(320, 480);
     tester.platformDispatcher.textScaleFactorTestValue = 1.6;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+    await tester.drag(find.byType(Scrollable).last, const Offset(0, -500));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

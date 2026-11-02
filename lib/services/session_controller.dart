@@ -1,0 +1,341 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
+import '../data/session_repository.dart';
+import '../models/audio_asset.dart';
+import '../models/session_plan.dart';
+import 'library_service.dart';
+
+class SessionController extends ChangeNotifier {
+  SessionController({required this.repository, required this.library});
+  final SessionRepository repository;
+  final LibraryService library;
+  CurrentSessionDraft draft = CurrentSessionDraft(
+    plan: SessionPlan(steps: const []),
+    updatedAt: DateTime.now().toUtc(),
+  );
+  List<SessionTemplate> templates = [];
+  List<AudioAsset> assets = [];
+  List<SessionRun> runs = [];
+  int nextNumber = 1;
+  bool saving = false;
+  String? saveError;
+  bool _disposed = false;
+  Future<void> _tail = Future.value();
+  AudioAsset? asset(String? id) => assets.where((a) => a.id == id).firstOrNull;
+  SessionTemplate? get baseTemplate =>
+      templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
+
+  Future<void> initialize() async {
+    await repository.interruptUnfinished();
+    await reload();
+  }
+
+  Future<void> reload() async {
+    await flush();
+    assets = await library.repository.list();
+    templates = await repository.templates();
+    runs = await repository.history();
+    nextNumber = await repository.nextNumber();
+    final stored = await repository.loadDraft();
+    if (stored != null) {
+      draft = stored;
+    } else {
+      final base = templates.where((t) => t.isDefault).firstOrNull;
+      var usable = base != null;
+      if (base != null) {
+        for (final s in base.plan.steps) {
+          if (s.kind == StepKind.audio) {
+            final a = asset(s.audioAssetId);
+            if (a == null || !await library.fileFor(a).exists()) usable = false;
+          }
+        }
+      }
+      draft = usable && base != null
+          ? CurrentSessionDraft.fromTemplate(base)
+          : CurrentSessionDraft(
+              plan: SessionPlan(steps: const []),
+              updatedAt: DateTime.now().toUtc(),
+            );
+      await repository.saveDraft(draft);
+    }
+    _notify();
+  }
+
+  void _notify() {
+    if (!_disposed) notifyListeners();
+  }
+
+  Future<void> flush() => _tail;
+  Future<void> _edit(CurrentSessionDraft Function(CurrentSessionDraft) change) {
+    final result = _tail.then((_) async {
+      saving = true;
+      saveError = null;
+      _notify();
+      try {
+        final next = change(draft);
+        _validate(next.plan);
+        await repository.saveDraft(next);
+        draft = next;
+      } catch (_) {
+        saveError = 'Изменения не сохранены. Повторите действие.';
+        rethrow;
+      } finally {
+        saving = false;
+        _notify();
+      }
+    });
+    _tail = result.catchError((Object _) {});
+    return result;
+  }
+
+  void _validate(SessionPlan plan) {
+    if (plan.steps.map((s) => s.id).toSet().length != plan.steps.length) {
+      throw const LibraryException('Повторяется ID блока.');
+    }
+    for (final s in plan.steps) {
+      if (s.delayBeforeSeconds < 0 ||
+          s.delayBeforeSeconds > 5995 ||
+          s.delayBeforeSeconds % 5 != 0) {
+        throw const LibraryException(
+          'Пауза должна быть от 00:00 до 99:55 с шагом 5 секунд.',
+        );
+      }
+      if (s.durationMs != null && s.durationMs! < 0) {
+        throw const LibraryException('Неверная длительность.');
+      }
+      if (s.kind == StepKind.audio && s.audioAssetId == null) {
+        throw const LibraryException('Не выбран аудиофайл.');
+      }
+    }
+  }
+
+  Future<void> setText({String? topic, String? notes}) =>
+      _edit((d) => d.copyWith(topicText: topic, notes: notes));
+  Future<void> addAudio(AudioAsset a, {String? afterId, String? groupId}) =>
+      _edit((d) {
+        final list = [...d.plan.steps];
+        final index = afterId == null
+            ? list.length
+            : list.indexWhere((s) => s.id == afterId) + 1;
+        list.insert(
+          index,
+          SessionStep(
+            id: newId(),
+            kind: StepKind.audio,
+            title: a.title,
+            audioAssetId: a.id,
+            description: a.description,
+            durationMs: a.durationMs,
+            groupId: groupId,
+          ),
+        );
+        return d.copyWith(plan: d.plan.copyWith(steps: list));
+      });
+  Future<void> addBlock(StepKind kind, int? durationMs, {String? groupId}) =>
+      _edit(
+        (d) => d.copyWith(
+          plan: d.plan.copyWith(
+            steps: [
+              ...d.plan.steps,
+              SessionStep(
+                id: newId(),
+                kind: kind,
+                title: kind.label,
+                durationMs: durationMs,
+                groupId: groupId,
+              ),
+            ],
+          ),
+        ),
+      );
+  Future<void> updateStep(SessionStep step) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(
+        steps: d.plan.steps.map((s) => s.id == step.id ? step : s).toList(),
+      ),
+    ),
+  );
+  Future<void> setDelay(String id, int seconds) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(
+        steps: d.plan.steps
+            .map(
+              (s) => s.id == id ? s.copyWith(delayBeforeSeconds: seconds) : s,
+            )
+            .toList(),
+      ),
+    ),
+  );
+  Future<void> remove(String id) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(
+        steps: d.plan.steps.where((s) => s.id != id).toList(),
+        clearExit: d.plan.exitStepId == id,
+      ),
+    ),
+  );
+  Future<void> duplicate(String id) => _edit((d) {
+    final list = [...d.plan.steps];
+    final index = list.indexWhere((s) => s.id == id);
+    if (index >= 0) list.insert(index + 1, list[index].copyWith(id: newId()));
+    return d.copyWith(plan: d.plan.copyWith(steps: list));
+  });
+  Future<void> reorder(int oldIndex, int newIndex) => _edit((d) {
+    final list = [...d.plan.steps];
+    if (newIndex > oldIndex) newIndex--;
+    list.insert(newIndex, list.removeAt(oldIndex));
+    return d.copyWith(plan: d.plan.copyWith(steps: list));
+  });
+  Future<void> setGroup(String id, String? groupId) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(
+        steps: d.plan.steps
+            .map(
+              (s) => s.id == id
+                  ? s.copyWith(groupId: groupId, ungroup: groupId == null)
+                  : s,
+            )
+            .toList(),
+      ),
+    ),
+  );
+  Future<void> addGroup(String name) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(
+        groups: [
+          ...d.plan.groups,
+          StageGroup(id: newId(), name: name.trim()),
+        ],
+      ),
+    ),
+  );
+  Future<void> setExit(String? stepId) => _edit(
+    (d) => d.copyWith(
+      plan: d.plan.copyWith(exitStepId: stepId, clearExit: stepId == null),
+    ),
+  );
+  Future<SessionTemplate> saveAsTemplate(
+    String name,
+    String description, {
+    SessionPlan? plan,
+  }) async {
+    await flush();
+    if (name.trim().isEmpty) {
+      throw const LibraryException('Введите название шаблона.');
+    }
+    final now = DateTime.now().toUtc();
+    final template = SessionTemplate(
+      id: newId(),
+      name: name.trim(),
+      description: description.trim(),
+      plan: SessionPlan.fromMap((plan ?? draft.plan).toMap()),
+      createdAt: now,
+      updatedAt: now,
+    );
+    await repository.saveTemplate(template);
+    templates = await repository.templates();
+    _notify();
+    return template;
+  }
+
+  Future<void> loadTemplate(SessionTemplate t) => _edit(
+    (d) => CurrentSessionDraft.fromTemplate(
+      t,
+      topicText: d.topicText,
+      notes: d.notes,
+    ),
+  );
+
+  Future<void> overwriteBase() async {
+    await flush();
+    final old = baseTemplate;
+    if (old == null) {
+      throw const LibraryException('Исходный шаблон недоступен.');
+    }
+    final updated = SessionTemplate(
+      id: old.id,
+      name: old.name,
+      description: old.description,
+      plan: draft.plan,
+      createdAt: old.createdAt,
+      updatedAt: DateTime.now().toUtc(),
+      version: old.version + 1,
+      isDefault: old.isDefault,
+    );
+    await repository.saveTemplate(updated);
+    templates = await repository.templates();
+    await loadTemplate(updated);
+  }
+
+  Future<void> restore() async {
+    final t = baseTemplate;
+    if (t == null) {
+      throw const LibraryException(
+        'Исходный шаблон недоступен. Сохраните текущую конфигурацию как новый.',
+      );
+    }
+    await loadTemplate(t);
+  }
+
+  Future<void> useRun(SessionRun run) => _edit(
+    (d) => CurrentSessionDraft(
+      plan: SessionPlan.fromMap(run.snapshot.plan.toMap()),
+      updatedAt: DateTime.now().toUtc(),
+      topicText: run.snapshot.topicText,
+      notes: run.notes,
+    ),
+  );
+  Future<void> clearPlan() => _edit(
+    (d) => CurrentSessionDraft(
+      plan: SessionPlan(steps: const []),
+      updatedAt: DateTime.now().toUtc(),
+      topicText: d.topicText,
+      notes: d.notes,
+    ),
+  );
+  Future<CurrentSessionDraft> snapshotForStart() async {
+    await flush();
+    if (saveError != null) {
+      throw const LibraryException(
+        'Есть несохранённые изменения. Повторите сохранение перед запуском.',
+      );
+    }
+    if (draft.plan.steps.isEmpty) {
+      throw const LibraryException('Добавьте хотя бы один блок в структуру.');
+    }
+    final frozen = <SessionStep>[];
+    for (final s in draft.plan.steps) {
+      if (s.kind == StepKind.voiceRecording) {
+        throw const LibraryException(
+          'Запись во время сессии будет доступна на следующем этапе. Замените этот блок тишиной или самостоятельной работой.',
+        );
+      }
+      if (s.kind == StepKind.audio) {
+        final a = asset(s.audioAssetId);
+        if (a == null || !await library.fileFor(a).exists()) {
+          throw LibraryException(
+            'Файл «${s.title}» недоступен. Замените его в структуре.',
+          );
+        }
+        frozen.add(
+          s.copyWith(
+            title: a.title,
+            description: a.description,
+            durationMs: a.durationMs,
+          ),
+        );
+      } else {
+        frozen.add(s);
+      }
+    }
+    return draft.copyWith(plan: draft.plan.copyWith(steps: frozen));
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+}

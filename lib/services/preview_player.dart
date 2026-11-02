@@ -15,6 +15,7 @@ abstract class PreviewPlayer extends ChangeNotifier {
   String? get error;
   Future<void> toggle(AudioAsset asset, File file);
   Future<void> stop();
+  Future<void> seek(Duration position);
   Future<void> close();
 }
 
@@ -125,6 +126,12 @@ class LocalPreviewPlayer extends PreviewPlayer {
     if (_closed) return;
     _generation++;
     await _player.pause();
+  }
+
+  @override
+  Future<void> seek(Duration position) async {
+    if (_closed || _current == null) return;
+    await _player.seek(position);
   }
 
   @override

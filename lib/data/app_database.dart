@@ -1,0 +1,62 @@
+import 'package:sqflite/sqflite.dart';
+
+Future<Database> openAppDatabase(
+  String path, {
+  DatabaseFactory? factory,
+}) => (factory ?? databaseFactory).openDatabase(
+  path,
+  options: OpenDatabaseOptions(
+    version: 2,
+    onConfigure: (db) async {
+      await db.execute('PRAGMA foreign_keys = ON');
+      await db.execute('PRAGMA secure_delete = ON');
+    },
+    onCreate: (db, version) async {
+      await db.execute('''CREATE TABLE audio_assets (
+        id TEXT PRIMARY KEY,title TEXT NOT NULL,filePath TEXT NOT NULL UNIQUE,
+        durationMs INTEGER NOT NULL CHECK(durationMs > 0),format TEXT NOT NULL,
+        createdAt TEXT NOT NULL,category TEXT NOT NULL,
+        fileSizeBytes INTEGER NOT NULL CHECK(fileSizeBytes > 0),
+        description TEXT NOT NULL DEFAULT '',section TEXT NOT NULL DEFAULT 'general',
+        tags TEXT NOT NULL DEFAULT '[]',source TEXT NOT NULL DEFAULT 'imported'
+      )''');
+      await _createSessionTables(db);
+    },
+    onUpgrade: (db, oldVersion, newVersion) async {
+      if (oldVersion < 2) {
+        // Additive migration: no rename/delete of audio metadata or media files.
+        await db.execute(
+          "ALTER TABLE audio_assets ADD COLUMN description TEXT NOT NULL DEFAULT ''",
+        );
+        await db.execute(
+          "ALTER TABLE audio_assets ADD COLUMN section TEXT NOT NULL DEFAULT 'general'",
+        );
+        await db.execute(
+          "ALTER TABLE audio_assets ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'",
+        );
+        await db.execute(
+          "ALTER TABLE audio_assets ADD COLUMN source TEXT NOT NULL DEFAULT 'imported'",
+        );
+        await _createSessionTables(db);
+      }
+    },
+  ),
+);
+Future<void> _createSessionTables(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE session_templates (id TEXT PRIMARY KEY,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE current_draft (id INTEGER PRIMARY KEY CHECK(id=1),payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE session_runs (id TEXT PRIMARY KEY,displayNumber INTEGER NOT NULL UNIQUE,status TEXT NOT NULL,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE run_events (id INTEGER PRIMARY KEY AUTOINCREMENT,runId TEXT NOT NULL REFERENCES session_runs(id) ON DELETE CASCADE,payload TEXT NOT NULL)',
+  );
+  await db.execute('CREATE INDEX run_events_run ON run_events(runId,id)');
+  await db.execute(
+    'CREATE TABLE app_counters (name TEXT PRIMARY KEY,value INTEGER NOT NULL)',
+  );
+}
