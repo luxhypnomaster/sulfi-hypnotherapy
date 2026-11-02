@@ -6,9 +6,13 @@ runs:
     - uses: actions/checkout@v4
       with:
         repository: flutter/flutter
-        ref: c197ca5199e9ee5661e865596c9c07294dfab51c
+        ref: '3.47.9'
         path: .tooling/flutter
         persist-credentials: false
+    - shell: bash
+      run: |
+        test "$(git -C .tooling/flutter rev-parse HEAD)" = c197ca5199e9ee5661e865596c9c07294dfab51c
+        git -C .tooling/flutter switch --create stable
     - shell: bash
       run: echo "$GITHUB_WORKSPACE/.tooling/flutter/bin" >> "$GITHUB_PATH"
     - uses: actions/cache@v4
