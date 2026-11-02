@@ -442,6 +442,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   );
 
   Widget _structureCard() {
+    final previewCount = MediaQuery.sizeOf(context).height >= 840 ? 5 : 3;
     final steps = c.draft.plan.steps;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -493,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             'Пауза → трек',
             style: TextStyle(fontSize: 10, color: antiqueGold),
           ),
-          for (var i = 0; i < steps.length && i < 3; i++)
+          for (var i = 0; i < steps.length && i < previewCount; i++)
             Row(
               children: [
                 Semantics(
