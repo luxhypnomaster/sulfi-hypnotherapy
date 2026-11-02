@@ -228,7 +228,7 @@ class _RunDetailsState extends State<_RunDetails> {
             Text(r.name, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 12),
             Text(
-              '${r.status.label}\nНачало: ${formatLocalDate(r.startedAt)}\nОкончание: ${r.endedAt == null ? '—' : formatLocalDate(r.endedAt!)}\nФактическая длительность: ${formatDuration(r.elapsedMs)}',
+              '${r.status.label}\nНачало: ${formatLocalDate(r.startedAt)}\n${r.endEstimated ? 'Последнее сохранение (точное время остановки неизвестно)' : 'Окончание'}: ${r.endedAt == null ? '—' : formatLocalDate(r.endedAt!)}\n${r.endEstimated ? 'Сохранённая' : 'Фактическая'} длительность: ${formatDuration(r.elapsedMs)}',
             ),
             const SizedBox(height: 12),
             Text(
@@ -269,6 +269,7 @@ class _RunDetailsState extends State<_RunDetails> {
         .where((e) => e['stepIndex'] == index)
         .map((e) => e['eventType']);
     if (kinds.contains('block_completed')) return 'Выполнен';
+    if (kinds.contains('work_completed_early')) return 'Завершён пользователем';
     if (kinds.contains('block_skipped')) return 'Пропущен пользователем';
     if (kinds.contains('block_started')) return 'Начат · не завершён';
     if (kinds.contains('delay_started')) {
@@ -283,6 +284,7 @@ String _eventLabel(String event) => switch (event) {
   'delay_started' => 'Пауза перед блоком',
   'block_started' => 'Блок начат',
   'block_completed' => 'Блок завершён',
+  'work_completed_early' => 'Самостоятельная работа завершена пользователем',
   'block_skipped' => 'Блок пропущен',
   'paused' => 'Пауза',
   'resumed' => 'Продолжение',

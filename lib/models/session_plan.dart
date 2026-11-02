@@ -275,12 +275,15 @@ class SessionRun {
     this.playheadMs = 0,
     this.elapsedMs = 0,
     this.userNotes,
+    this.lastCheckpointAt,
+    this.endEstimated = false,
   });
   final String id, name, phase;
   final int displayNumber, stepIndex, playheadMs, elapsedMs;
   final CurrentSessionDraft snapshot;
   final DateTime startedAt;
-  final DateTime? endedAt;
+  final DateTime? endedAt, lastCheckpointAt;
+  final bool endEstimated;
   final RunStatus status;
   final String? userNotes;
   String get notes => userNotes ?? snapshot.notes;
@@ -292,6 +295,7 @@ class SessionRun {
     int? playheadMs,
     int? elapsedMs,
     DateTime? endedAt,
+    bool? endEstimated,
   }) => SessionRun(
     id: id,
     displayNumber: displayNumber,
@@ -305,6 +309,8 @@ class SessionRun {
     elapsedMs: elapsedMs ?? this.elapsedMs,
     endedAt: endedAt ?? this.endedAt,
     userNotes: userNotes,
+    lastCheckpointAt: lastCheckpointAt,
+    endEstimated: endEstimated ?? this.endEstimated,
   );
   Map<String, Object?> toMap() => {
     'id': id,
@@ -319,6 +325,8 @@ class SessionRun {
     'playheadMs': playheadMs,
     'elapsedMs': elapsedMs,
     'userNotes': userNotes,
+    'lastCheckpointAt': lastCheckpointAt?.toUtc().toIso8601String(),
+    'endEstimated': endEstimated,
   };
   factory SessionRun.fromMap(Map<String, dynamic> m) => SessionRun(
     id: m['id'] as String,
@@ -337,6 +345,10 @@ class SessionRun {
     playheadMs: m['playheadMs'] as int,
     elapsedMs: m['elapsedMs'] as int,
     userNotes: m['userNotes'] as String?,
+    lastCheckpointAt: m['lastCheckpointAt'] == null
+        ? null
+        : DateTime.parse(m['lastCheckpointAt'] as String),
+    endEstimated: m['endEstimated'] as bool? ?? false,
   );
 }
 

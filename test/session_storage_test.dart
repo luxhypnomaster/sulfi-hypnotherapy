@@ -233,10 +233,13 @@ void main() {
       run.checkpoint(phase: 'audio', playheadMs: 12345, elapsedMs: 14000),
       event: 'paused',
     );
+    final before = (await sessions.history()).single;
     await sessions.interruptUnfinished();
     final stored = (await sessions.history()).single;
     expect(stored.status, RunStatus.interrupted);
     expect(stored.playheadMs, 12345);
+    expect(stored.endEstimated, isTrue);
+    expect(stored.endedAt, before.lastCheckpointAt);
     expect(
       (await sessions.events(run.id)).last['eventType'],
       'process_interrupted',

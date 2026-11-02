@@ -114,6 +114,7 @@ class SqliteSessionRepository implements SessionRepository {
           snapshot: CurrentSessionDraft.fromMap(snapshot.toMap()),
           startedAt: now,
           status: RunStatus.running,
+          lastCheckpointAt: now,
         );
         await tx.insert('app_counters', {
           'name': 'session',
@@ -161,10 +162,12 @@ class SqliteSessionRepository implements SessionRepository {
         'playheadMs',
         'elapsedMs',
         'endedAt',
+        'endEstimated',
       ]) {
         existing[key] = update[key];
       }
       // Checkpoints never rewrite the original plan, its metadata or user notes.
+      existing['lastCheckpointAt'] = DateTime.now().toUtc().toIso8601String();
       await tx.update(
         'session_runs',
         {'status': run.status.name, 'payload': jsonEncode(existing)},
@@ -226,7 +229,8 @@ class SqliteSessionRepository implements SessionRepository {
         await checkpoint(
           run.checkpoint(
             status: RunStatus.interrupted,
-            endedAt: DateTime.now().toUtc(),
+            endedAt: run.lastCheckpointAt ?? run.startedAt,
+            endEstimated: true,
           ),
           event: 'process_interrupted',
         );

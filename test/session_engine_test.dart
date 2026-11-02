@@ -218,6 +218,11 @@ void main() {
       expect(engine.active, isTrue);
       await engine.next();
       expect(engine.run!.status, RunStatus.completed);
+      expect(
+        (await repository.events(engine.run!.id))
+            .any((e) => e['eventType'] == 'work_completed_early'),
+        isTrue,
+      );
     },
   );
   test('explicit exit skips its pre-delay, plays exit once and records early finish', () async {

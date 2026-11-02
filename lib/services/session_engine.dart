@@ -234,7 +234,11 @@ class SessionEngine extends ChangeNotifier {
   });
   Future<void> next() => _enqueue(() async {
     if (!active) return;
-    await _persist('block_skipped');
+    await _persist(
+      run!.phase == 'work' && step?.kind == StepKind.freeWork
+          ? 'work_completed_early'
+          : 'block_skipped',
+    );
     if (paused) {
       _phaseStart = _now();
       _runStart = _now();
