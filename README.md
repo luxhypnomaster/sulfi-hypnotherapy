@@ -1,35 +1,80 @@
 # Сульфи — гипнотерапевт
 
-Android-first offline audio session builder for guided self-hypnosis and personal self-regulation.
+Локальное Android-приложение для аудиосаморегуляции на Flutter. Реализован первый срез **0.1.0+1**: импорт и личная аудиобиблиотека. Это ещё не законченная v0.1 и не медицинское приложение.
 
-**Status:** project kickoff specification, not a completed app.
+## Что работает
 
-## Mission
+- Русский интерфейс: тёмная тема, библиотека, поиск по названию и категории, сведения о локальных данных.
+- Системный выбор одного MP3, M4A или WAV; копирование в закрытое хранилище, проверка аудиодекодером и определение длительности. Поддержка конкретных кодеков зависит от Android.
+- Редактирование названия и категории до сохранения, последующее переименование, отображение формата, размера и длительности.
+- Предпрослушивание: воспроизведение, пауза, продолжение, остановка, прогресс; повтор после окончания.
+- SQLite: библиотека сохраняется после перезапуска. Исходный файл после импорта больше не нужен приложению.
+- Удаление отдельного аудио с подтверждением; полный локальный сброс из окна «О приложении и данных». Внешние оригиналы не удаляются.
+- Обработка отмены выбора/редактирования, неверного формата, пустого/повреждённого/недоступного файла и ошибок хранилища. Незавершённые импорты убираются при следующем запуске.
 
-The user imports an existing voice recording (including the custom Sulfi voice from Suno), assembles it into a repeatable session using audio, silence and microphone recording blocks, saves templates and plays a session with reliable background audio and an accessible exit procedure.
+Вкладки «Шаблоны» и «Сессии» объясняют следующий этап. Конструктора, выполнения сессий, записи микрофона и истории пока нет. Заложены отдельные типы AUDIO / SILENCE / RECORD_MIC; запись темы впоследствии должна храниться отдельно и попадать в последовательность только по явному выбору пользователя.
 
-## Version 0.1 scope
+**Сейчас это предпрослушивание в открытом приложении:** при уходе в фон/блокировке экрана оно останавливается; при аудиопрерывании/отключении наушников предусмотрена пауза без автоматического продолжения. Фоновый плеер, медиасервис и «Завершить и выйти» относятся к следующему срезу. Их работа не заявляется.
 
-- Import local MP3, M4A and WAV audio files (with validation and clear errors)
-- Maintain an editable local audio library (title, duration, type/category)
-- Compose a sequence of blocks: AUDIO, SILENCE, RECORD_MIC
-- Reorder, duplicate, remove and configure blocks
-- Persist reusable session templates and a named session with a date/topic
-- Optional pre-session recorded topic/message as a recording, and optional microphone recording block *during* a session; alternative: silent work block
-- Playback with block progress, total estimated time, pause/resume, next, and user-initiated end-of-session transition to an exit module
-- Local-only storage; no login, cloud sync, analytics, payments or GPT in v0.1
-- Foreground audio and recording behavior verified on Android device
+## Разработка и запуск
 
-## Recommended stack (confirm currently maintained packages)
+Конфигурация: Flutter **3.47.9 stable**, Dart **3.13.7**, полный **JDK 21** (нужен javac, одного JRE недостаточно), Android SDK **35 и 36**, Build Tools **36.0.0**, NDK **28.2.13676358**. SDK 35 нужен аудиоплагину, приложение собирается с compile/target SDK 36. Минимальная версия Android — **7.0 / API 24**. Зависимости закреплены в pubspec.yaml и pubspec.lock. Для Flutter используйте официальную установку или точную ревизию `c197ca5199e9ee5661e865596c9c07294dfab51c`.
 
-Flutter (Dart), Android primary target. Evaluate `just_audio`, `audio_service`, `record`, `file_picker`, `path_provider`, a simple persistent data layer (e.g. SQLite) and current Android permissions / foreground service requirements. Do not use the stack names as a substitute for verifying current SDK/package APIs.
+```sh
+git clone https://github.com/luxhypnomaster/sulfi-hypnotherapy.git
+cd sulfi-hypnotherapy
+git switch develop
+flutter config --no-analytics
+flutter doctor -v
+sdkmanager 'platforms;android-35' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358'
+flutter pub get --enforce-lockfile
+dart format --output=none --set-exit-if-changed lib test
+flutter analyze --fatal-infos
+flutter test --reporter expanded
+flutter build apk --debug
+flutter devices
+flutter run
+```
 
-## Setup
+На телефоне включите отладку по USB и подтвердите подключение. `flutter run` предложит устройство, если их несколько. APK для ручной установки: `build/app/outputs/flutter-apk/app-debug.apk`. Для подключённого телефона: `adb install -r build/app/outputs/flutter-apk/app-debug.apk`.
 
-This folder is a product-and-engineering handoff. A coding agent should initialize a fresh Flutter project in the repository and then implement functionality in slices, checking build and tests after each slice.
+Если SDK установлен не в стандартном месте: `flutter config --android-sdk /путь/к/android-sdk`. Для первой загрузки инструментов, Gradle и пакетов нужен интернет; само установленное приложение работает локально. В проксируемой среде Java/Gradle нужно отдельно настроить HTTP/HTTPS-прокси через локальный GRADLE_OPTS или пользовательский gradle.properties; адреса и секреты среды не включаются в проект.
 
-Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), [BACKLOG.md](BACKLOG.md) before implementing.
+## Проверки первого этапа
 
-## Versioning and rollback
+- Реально выполнены `flutter pub get`, `flutter analyze`, `flutter test`: **28 тестов проходят**.
+- Тесты проверяют реальные временные файлы и SQLite, повторное открытие БД, сохранность копии после удаления оригинала, ошибки импорта, очистку, отмену, редактирование, подтверждение удаления, предпрослушивание и жизненный цикл экрана.
+- Декодер/системный picker/нативный плеер в автоматических тестах подменены. Эти тесты не доказывают работу Android-кодеков, аудиофокуса, Bluetooth или OEM-прошивок.
+- Сборка Android и визуальные артефакты: фактический результат записан в [docs/VERIFICATION.md](docs/VERIFICATION.md).
+- Физического Android-телефона в среде нет. Перед признанием этапа проверенным на устройстве выполните [ручной план](docs/ANDROID_TEST_PLAN.md).
 
-Read [VERSIONING.md](VERSIONING.md) for the `main` / `develop` / feature-branch policy, tagged releases, APK retention and data-safe rollback expectations.
+![Экран библиотеки — визуальный рендер Flutter-теста, не снимок с телефона](docs/screenshots/library-empty.png)
+
+## Данные и приватность
+
+База `library.sqlite` и каталог `audio/` находятся в `getApplicationSupportDirectory()` внутри sandbox приложения. В базе хранятся относительные имена файлов, стабильные ID, названия, категории, длительности, даты и размеры. Схема SQLite — версия 1; при следующих изменениях нужны сохраняющие данные миграции, а не пересоздание базы. Импорт сохраняет запись только после успешной проверки файла и подтверждения названия. Файлы, оставшиеся после незавершённого импорта/удаления, очищаются при запуске. Временный кэш picker очищается после выбора и при запуске.
+
+API, GPT, Suno API, синтеза речи, телеметрии, аккаунтов и загрузки записей в сеть нет. Используются готовые записи пользователя; голос Сульфи не создаётся заново. Приложение не запрашивает микрофон и широкие разрешения на хранилище. INTERNET есть только в debug/profile-манифестах для инструментов Flutter; основной манифест его не запрашивает. Android cloud backup и перенос данных системой исключены в правилах приложения. Отдельного шифрования базы/аудио пока нет; защита — sandbox и средства Android. Удаление локальное, без обещания физического стирания флеш-памяти.
+
+Исходные аудио нужно хранить отдельно. Удаление приложения удаляет его библиотеку; GitHub и APK не являются резервной копией. Экспорт зашифрованной резервной копии отложен в BACKLOG.md. Обновление поверх приложения с тем же applicationId `ru.sulfi.sulfi_hypnotherapy` и тем же ключом подписи должно сохранять данные; это ещё требует проверки на телефоне. Debug APK из разных сред могут иметь разные ключи: не удаляйте приложение ради обхода ошибки подписи, если там есть нужные данные.
+
+## Ветки, CI и релизы
+
+Разработка ведётся в `develop`. `main` не меняется без согласования. См. [VERSIONING.md](VERSIONING.md), [BACKLOG.md](BACKLOG.md) и [CHANGELOG.md](CHANGELOG.md).
+
+CI запускает форматирование, анализ, тесты и debug-сборку на PR в develop/main и на push в develop; APK сохраняется как временный Actions artifact. SDK в CI берётся из той же фиксированной ревизии Flutter, что проверялась локально.
+
+Отдельный workflow запускается **только после явной публикации владельцем GitHub Release**, проверяет принадлежность коммита main и соответствие тега версии pubspec.yaml, затем повторяет проверки и прикладывает APK с суффиксом `-debug` и SHA-256. Один push тега релиз не публикует. Пока не настроен постоянный ключ подписи, такой APK — только тестовая сборка, не выпуск для распространения. Release-вариант не подписывается автоматически отладочным ключом. Сейчас ни тег, ни релиз не создаются.
+
+Откат — исправленная сборка с увеличенным Android versionCode; установка старого APK поверх нового не гарантируется. Перед официальным выпуском нужны проверка на телефоне, стабильная подпись и согласие владельца.
+
+## Структура изменений
+
+- `lib/models/` — аудиозапись, категории и отдельные типы блоков будущей сессии.
+- `lib/data/` — SQLite-репозиторий, схема v1.
+- `lib/services/` — импорт, внутренние файлы и адаптер предпрослушивания.
+- `lib/ui/`, `lib/app.dart`, `lib/main.dart` — экран библиотеки, редактор, тема, инициализация.
+- `android/` — Android target, manifest и запрет системного резервирования.
+- `test/` — проверки файлов/БД и интерфейса; только синтетические временные данные.
+- `.github/`, `tool/verify_release.py` — CI и ограничения релизной сборки.
+- `docs/` — ручная проверка и фактические результаты.

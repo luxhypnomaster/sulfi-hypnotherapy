@@ -1,14 +1,16 @@
 # Build plan
 
 ## Milestone 0 — bootstrap
-- [ ] Initialize Flutter application and Android target; configure Russian locale and theme.
-- [ ] Choose and check current compatible packages; establish local database and app-controlled media storage.
-- [ ] Add lint/tests/CI (GitHub Actions on PR). Run `flutter analyze` and `flutter test`.
+- [x] Initialize Flutter application and Android target; configure Russian locale and theme.
+- [x] Choose and check current compatible packages; establish SQLite v1 and private app-controlled audio storage. Flutter 3.47.9 / Dart 3.13.7; dependencies pinned with lockfile.
+- [x] Add lint/tests/CI (GitHub Actions on PR/push develop). `flutter analyze` and 28 tests pass locally; see docs/VERIFICATION.md for Android build/CI results.
 
 ## Milestone 1 — working audio library
-- [ ] Import MP3/M4A/WAV from Android picker; copy into internal storage.
-- [ ] Read/display duration and category; preview, rename, delete asset.
-- [ ] Test invalid audio, canceled picker, missing files.
+- [x] Implement MP3/M4A/WAV import through Android system picker with private copy and decoder validation; device acceptance pending below.
+- [x] Implement duration/category/format/size display, foreground preview, rename, category edit, confirmed delete and local reset.
+- [x] Automated tests: rejected/canceled/empty/missing/decoder-failed import, persistence, deletion, reset and UI flows. Picker/decoder/player are injected in tests.
+- [ ] Complete real-Android acceptance for native picker, three actual formats, decoder corruption/missing-file errors, audio focus and phone storage behavior (docs/ANDROID_TEST_PLAN.md).
+- [ ] Before adding templates: prevent deletion of referenced assets or request explicit template repair; never leave broken references silently.
 
 ## Milestone 2 — session constructor
 - [ ] Support three block types: AUDIO, SILENCE, RECORD_MIC.
@@ -35,9 +37,16 @@
 - [ ] Cloud backup and sync (explicitly not in current release).
 
 ## Version control & release process (from day one)
-- [ ] Create `develop` from stable `main` after adding starter files.
-- [ ] Initialize `CHANGELOG.md`, version metadata and release tags as outlined in VERSIONING.md.
-- [ ] Add GitHub Actions checks for PRs after Flutter bootstrap.
-- [ ] Add tested APK build as a GitHub Release asset on approved stable tags.
+- [x] Use existing `develop` from starter `main`; preserve `main` unchanged.
+- [x] Initialize CHANGELOG.md and pubspec version 0.1.0+1. No release tag created.
+- [x] Add GitHub Actions checks and debug APK artifacts on PR/push develop.
+- [x] Prepare owner-published-release workflow: stable-main ancestry/version guard, repeated checks, explicitly labeled debug APK + checksum. No release published; workflow cannot publish one itself.
+- [ ] Configure stable production signing and verify approved release workflow before distribution. Debug builds from different environments may have different keys.
 - [ ] Test update migration of imported audio, templates and recordings before publishing releases.
 - [ ] Plan encrypted local backup/export for personal session records before broad distribution.
+
+## Next working slice
+- [ ] Implement template editor with stable block IDs, AUDIO / SILENCE / RECORD_MIC, reorder/duplicate/remove, duration validation and SQLite migrations that preserve audio.
+- [ ] Require explicit exit-track selection or show a grounding-text warning before saving a template.
+- [ ] Then implement the session engine, foreground media service, audio interruption policy, microphone permission/indication and always-available Finish and exit. Do not extend foreground-preview claims to background sessions.
+- [ ] Store topic recordings separately; insert into playback only with explicit consent. No mic permission requested by the current slice.
