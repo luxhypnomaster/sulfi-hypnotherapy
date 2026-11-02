@@ -119,6 +119,11 @@ class SessionController extends ChangeNotifier {
         final index = afterId == null
             ? list.length
             : list.indexWhere((s) => s.id == afterId) + 1;
+        final group = groupId == null
+            ? d.plan.availableGroups
+                  .where((g) => g.category == a.category)
+                  .firstOrNull
+            : d.plan.availableGroups.where((g) => g.id == groupId).firstOrNull;
         list.insert(
           index,
           SessionStep(
@@ -128,15 +133,32 @@ class SessionController extends ChangeNotifier {
             audioAssetId: a.id,
             description: a.description,
             durationMs: a.durationMs,
-            groupId: groupId,
+            groupId: group?.id ?? groupId,
           ),
         );
-        return d.copyWith(plan: d.plan.copyWith(steps: list));
-      });
-  Future<void> addBlock(StepKind kind, int? durationMs, {String? groupId}) =>
-      _edit(
-        (d) => d.copyWith(
+        return d.copyWith(
           plan: d.plan.copyWith(
+            steps: list,
+            groups: _registerGroup(d.plan, group),
+          ),
+        );
+      });
+  List<StageGroup> _registerGroup(SessionPlan plan, StageGroup? group) => [
+    ...plan.groups,
+    if (group != null && !plan.groups.any((g) => g.id == group.id)) group,
+  ];
+  Future<void> addBlock(StepKind kind, int? durationMs, {String? groupId}) =>
+      _edit((d) {
+        final group = d.plan.availableGroups
+            .where(
+              (g) => groupId == null
+                  ? g.category == AudioCategory.work
+                  : g.id == groupId,
+            )
+            .firstOrNull;
+        return d.copyWith(
+          plan: d.plan.copyWith(
+            groups: _registerGroup(d.plan, group),
             steps: [
               ...d.plan.steps,
               SessionStep(
@@ -144,12 +166,12 @@ class SessionController extends ChangeNotifier {
                 kind: kind,
                 title: kind.label,
                 durationMs: durationMs,
-                groupId: groupId,
+                groupId: group?.id ?? groupId,
               ),
             ],
           ),
-        ),
-      );
+        );
+      });
   Future<void> updateStep(SessionStep step) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
@@ -188,9 +210,13 @@ class SessionController extends ChangeNotifier {
     list.insert(newIndex, list.removeAt(oldIndex));
     return d.copyWith(plan: d.plan.copyWith(steps: list));
   });
-  Future<void> setGroup(String id, String? groupId) => _edit(
-    (d) => d.copyWith(
+  Future<void> setGroup(String id, String? groupId) => _edit((d) {
+    final group = d.plan.availableGroups
+        .where((g) => g.id == groupId)
+        .firstOrNull;
+    return d.copyWith(
       plan: d.plan.copyWith(
+        groups: _registerGroup(d.plan, group),
         steps: d.plan.steps
             .map(
               (s) => s.id == id
@@ -199,18 +225,23 @@ class SessionController extends ChangeNotifier {
             )
             .toList(),
       ),
-    ),
-  );
-  Future<void> addGroup(String name) => _edit(
-    (d) => d.copyWith(
-      plan: d.plan.copyWith(
-        groups: [
-          ...d.plan.groups,
-          StageGroup(id: newId(), name: name.trim()),
-        ],
-      ),
-    ),
-  );
+    );
+  });
+  Future<void> addGroup(String name, {String description = ''}) => _edit((d) {
+    final existing = d.plan.availableGroups
+        .where((g) => g.name.toLowerCase() == name.trim().toLowerCase())
+        .firstOrNull;
+    final group =
+        existing ??
+        StageGroup(
+          id: newId(),
+          name: name.trim(),
+          description: description.trim(),
+        );
+    return d.copyWith(
+      plan: d.plan.copyWith(groups: _registerGroup(d.plan, group)),
+    );
+  });
   Future<void> setExit(String? stepId) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(exitStepId: stepId, clearExit: stepId == null),

@@ -131,11 +131,12 @@ class NeonButton extends StatelessWidget {
     this.primary = false,
     this.compact = false,
     this.stacked = false,
+    this.fitLabel = false,
   });
   final String label;
   final IconData icon;
   final VoidCallback? onPressed;
-  final bool primary, compact, stacked;
+  final bool primary, compact, stacked, fitLabel;
   @override
   Widget build(BuildContext context) {
     final style = FilledButton.styleFrom(
@@ -211,7 +212,9 @@ class NeonButton extends StatelessWidget {
       FilledButton.icon(
         onPressed: onPressed,
         icon: Icon(icon, size: compact ? 19 : 23),
-        label: Text(label, textAlign: TextAlign.center),
+        label: fitLabel
+            ? FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1))
+            : Text(label, textAlign: TextAlign.center),
         style: style,
       ),
     );

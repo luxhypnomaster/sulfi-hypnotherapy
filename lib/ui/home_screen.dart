@@ -508,6 +508,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         minWidth: 48,
                       ),
                       alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: neonLime.withValues(alpha: .4),
+                          ),
+                        ),
+                      ),
                       child: Text(
                         formatPause(steps[i].delayBeforeSeconds),
                         style: const TextStyle(
@@ -537,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         Text(
                           steps[i].durationMs == null
                               ? 'До остановки'
-                              : formatDuration(steps[i].durationMs!),
+                              : 'Трек: ${formatDuration(steps[i].durationMs!)}',
                           style: const TextStyle(
                             fontSize: 10,
                             color: Color(0xFFBDA5B5),
@@ -587,8 +594,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             unawaited(c.setText(topic: text).catchError((Object _) {})),
       ),
       const SizedBox(height: 7),
+      const Text(
+        'Длительность сессии',
+        style: TextStyle(fontSize: 11, color: antiqueGold),
+      ),
       Text(
-        'Итого: ${c.draft.plan.estimated ? '≈ ' : ''}${formatDuration(c.draft.plan.totalMs)}',
+        c.draft.plan.steps.isEmpty
+            ? 'Треки не добавлены'
+            : '${c.draft.plan.estimated ? '≈ ' : ''}${formatDurationWords(c.draft.plan.totalMs)}',
         style: const TextStyle(
           color: neonLime,
           fontSize: 15,

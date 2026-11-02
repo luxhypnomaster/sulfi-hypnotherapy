@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
@@ -6,6 +7,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
+import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
 import 'package:sulfi_hypnotherapy/services/library_service.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 
@@ -51,6 +53,81 @@ void main() {
     await controller.addAudio(a);
   }
 
+  test('default section metadata and zero delays survive reopening independently of the template', () async {
+    await addSample();
+    await controller.addBlock(StepKind.silence, 10000);
+    final t = await controller.saveAsTemplate('Разделы', '');
+    await controller.loadTemplate(t);
+    expect(controller.draft.modified, isFalse);
+    await controller.reload();
+    expect(
+      controller.draft.plan.groups.every((g) => g.description.isNotEmpty),
+      isTrue,
+    );
+    expect(
+      controller.draft.plan.steps.every((s) => s.delayBeforeSeconds == 0),
+      isTrue,
+    );
+    expect(controller.draft.modified, isFalse);
+    final first = controller.draft.plan.steps.first.id;
+    await controller.setDelay(first, 30);
+    expect(
+      (await sessions.templates()).single.plan.steps.first.delayBeforeSeconds,
+      0,
+    );
+  });
+  test('displaying default sections preserves legacy group fingerprints and saved plans', () async {
+    final legacy = <String, dynamic>{
+      'steps': <Object>[],
+      'groups': [
+        {'id': 'old', 'name': 'Подготовка'},
+      ],
+      'exitStepId': null,
+    };
+    final plan = SessionPlan.fromMap(legacy);
+    expect(plan.fingerprint, jsonEncode(legacy));
+    final names = plan.availableGroups.map((g) => g.name);
+    expect(names.where((name) => name == 'Подготовка'), hasLength(1));
+    expect(plan.availableGroups.first.description, isNotEmpty);
+    expect(plan.fingerprint, jsonEncode(legacy));
+    expect(plan.groups.single.description, isEmpty);
+    expect(plan.availableGroups, hasLength(defaultStageGroups.length));
+  });
+  test(
+    'new audio chooses its stage by category without sorting playback order',
+    () async {
+      final categories = [
+        AudioCategory.exit,
+        AudioCategory.preparation,
+        AudioCategory.induction,
+        AudioCategory.work,
+        AudioCategory.integration,
+        AudioCategory.deepener,
+      ];
+      for (final category in categories) {
+        final a = sampleAsset(id: category.name)
+            .edited(category.label, category);
+        await audio.save(a);
+        await controller.addAudio(a);
+      }
+      await controller.reload();
+      expect(
+        controller.draft.plan.steps.map((s) => s.title),
+        categories.map((c) => c.label),
+      );
+      expect(
+        controller.draft.plan.steps.map(
+          (s) => controller.draft.plan.groupName(s.groupId),
+        ),
+        categories.map((c) => c.label),
+      );
+      expect(
+        controller.draft.plan.steps.every((s) => s.delayBeforeSeconds == 0),
+        isTrue,
+      );
+      expect(controller.draft.plan.groups, hasLength(6));
+    },
+  );
   test(
     'draft autosave does not reserve session numbers or create history',
     () async {

@@ -1,5 +1,12 @@
 # Build plan
 
+## Owner remarks 0.2.2+4
+- [x] Built-in stage list with descriptions, visible empty stages, per-section insertion and category routing without sorting execution.
+- [x] Explicit zero pre-delay for new tracks; distinguish track duration and overall session duration, with an empty-state label.
+- [x] Fixed, non-scrolling clock page; vertical-only wheels, haptic detents, visible controls and compact real preview at small sizes.
+- [x] Preserve legacy group fingerprints and separate snapshots; cover the changes with storage and UI regression checks.
+- [ ] Confirm stage naming on owner review (six separate stages implemented; four broader groups remain an alternative in the earlier specification).
+
 ## Visual correction 0.2.1+3
 - [x] Bring main / structure / pocket watch composition closer to the approved references with real controls.
 - [x] Keep start and the single navigation row visible on a 360×720 phone; verify round-trip navigation and preview teardown.

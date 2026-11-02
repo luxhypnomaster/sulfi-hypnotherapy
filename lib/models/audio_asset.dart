@@ -118,3 +118,11 @@ String formatDuration(int milliseconds) {
 
 String formatPause(int seconds) =>
     '${(seconds ~/ 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
+
+/// Explicit units for the session card; pause digits keep their separate MM:SS UI.
+String formatDurationWords(int milliseconds) {
+  final seconds = milliseconds ~/ 1000;
+  final hours = seconds ~/ 3600;
+  final minutes = seconds ~/ 60 % 60;
+  return '${hours > 0 ? '$hours ч ' : ''}$minutes мин ${(seconds % 60).toString().padLeft(2, '0')} с';
+}

@@ -8,6 +8,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/app.dart';
 import 'package:sulfi_hypnotherapy/services/pause_edit_model.dart';
+import 'package:sulfi_hypnotherapy/models/session_plan.dart';
+import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/pause_editor.dart';
 import 'package:sulfi_hypnotherapy/ui/structure_screen.dart';
@@ -160,6 +162,151 @@ void main() {
     },
   );
   workspaceTest(
+    'default sections are described and section add assigns a zero pause',
+    (tester) async {
+      final fingerprint = c.draft.plan.fingerprint;
+      await open(tester, StructureScreen(controller: c, player: player));
+      for (final group in defaultStageGroups) {
+        expect(find.text(group.name), findsOneWidget);
+        expect(find.text(group.description), findsOneWidget);
+      }
+      expect(c.draft.plan.fingerprint, fingerprint);
+      await tester.tap(find.byTooltip('Добавить трек: Подготовка'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Добавить в сессию'));
+      await tester.tap(find.text('Добавить в сессию'));
+      await tester.pumpAndSettle();
+      final step = c.draft.plan.steps.single;
+      expect(c.draft.plan.groupName(step.groupId), 'Подготовка');
+      expect(step.delayBeforeSeconds, 0);
+      expect(find.byKey(Key('pause-${step.id}')).hitTestable(), findsOneWidget);
+      expect(repository.savedRuns, isEmpty);
+    },
+  );
+  workspaceTest(
+    'session card distinguishes empty plan and duration with explicit units',
+    (tester) async {
+      await open(
+        tester,
+        SulfiApp(library: library, player: player, controller: c),
+      );
+      expect(find.text('Длительность сессии'), findsOneWidget);
+      expect(find.text('Треки не добавлены'), findsOneWidget);
+      await c.addAudio(sampleAsset());
+      await tester.pumpAndSettle();
+      expect(find.text('1 мин 05 с'), findsOneWidget);
+      expect(find.text('Треки не добавлены'), findsNothing);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+  workspaceTest(
+    'clock stays on one screen and only vertical wheel drags change local time',
+    (tester) async {
+      await c.addAudio(sampleAsset());
+      final id = c.draft.plan.steps.single.id;
+      await open(
+        tester,
+        PauseEditor(controller: c, stepId: id, player: player),
+      );
+      for (final scale in [1.0, 1.6]) {
+        tester.view.physicalSize = const Size(320, 600);
+        tester.view.padding = const FakeViewPadding(top: 24, bottom: 24);
+        tester.platformDispatcher.textScaleFactorTestValue = scale;
+        await tester.pumpAndSettle();
+        expect(
+          find.descendant(
+            of: find.byType(PauseEditor),
+            matching: find.byType(Scrollable),
+          ),
+          findsNothing,
+        );
+        expect(find.text('Применить').hitTestable(), findsOneWidget);
+        expect(find.text('Обнулить').hitTestable(), findsOneWidget);
+        expect(find.byTooltip('Прослушать трек').hitTestable(), findsOneWidget);
+        final initial = tester.getCenter(
+          find.byKey(const Key('pause-time-input')),
+        );
+        await tester.dragFrom(const Offset(4, 220), const Offset(0, -90));
+        await tester.pumpAndSettle();
+        expect(
+          tester.getCenter(find.byKey(const Key('pause-time-input'))),
+          initial,
+        );
+        await tester.drag(
+          find.byKey(const Key('wheel-Минуты')),
+          const Offset(80, 0),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('00:00'), findsOneWidget);
+        await tester.drag(
+          find.byKey(const Key('wheel-Минуты')),
+          const Offset(0, -70),
+        );
+        await tester.pumpAndSettle();
+        final minutes = tester
+            .widget<Text>(
+              find.descendant(
+                of: find.byKey(const Key('pause-time-input')),
+                matching: find.byType(Text),
+              ),
+            )
+            .data!;
+        expect(minutes, isNot('00:00'));
+        expect(minutes.endsWith(':00'), isTrue);
+        await tester.drag(
+          find.byKey(const Key('wheel-Секунды')),
+          const Offset(0, -70),
+        );
+        await tester.pumpAndSettle();
+        final both = tester
+            .widget<Text>(
+              find.descendant(
+                of: find.byKey(const Key('pause-time-input')),
+                matching: find.byType(Text),
+              ),
+            )
+            .data!;
+        expect(both.split(':').first, minutes.split(':').first);
+        expect(both.endsWith(':00'), isFalse);
+        expect(c.draft.plan.steps.single.delayBeforeSeconds, 0);
+        await tester.tap(find.text('Обнулить'));
+        await tester.pumpAndSettle();
+        expect(find.text('00:00'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      }
+      tester.platformDispatcher.clearTextScaleFactorTestValue();
+      tester.view.resetPadding();
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+  workspaceTest(
+    'clock neighbor buttons preview the adjacent files without starting a session',
+    (tester) async {
+      for (var i = 0; i < 2; i++) {
+        final a = sampleAsset(id: 'neighbor$i', title: 'Трек $i');
+        await audio.save(a);
+        await c.addAudio(a);
+      }
+      await c.reload();
+      await open(
+        tester,
+        PauseEditor(
+          controller: c,
+          stepId: c.draft.plan.steps[1].id,
+          player: player,
+        ),
+      );
+      await tester.tap(find.text('До паузы'));
+      await tester.pumpAndSettle();
+      expect(player.current?.id, 'neighbor0');
+      await tester.tap(find.text('После паузы'));
+      await tester.pumpAndSettle();
+      expect(player.current?.id, 'neighbor1');
+      expect(repository.savedRuns, isEmpty);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+  workspaceTest(
     'structure imports a selection from real library UI with zero initial delay',
     (tester) async {
       await open(tester, StructureScreen(controller: c, player: player));
@@ -261,6 +408,13 @@ void main() {
           ),
         ),
       );
+      await tester.drag(
+        find.byKey(const Key('wheel-Тест')),
+        const Offset(80, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(count, 0);
+      expect(clicks, isEmpty);
       await tester.drag(
         find.byKey(const Key('wheel-Тест')),
         const Offset(0, -100),
@@ -399,7 +553,8 @@ void main() {
       });
     }
 
-    await c.addGroup('Подготовка');
+    await open(tester, StructureScreen(controller: c, player: player));
+    await capture('sections-empty');
     final labels = [
       'Подготовка к сессии',
       'Погружение',
@@ -409,12 +564,15 @@ void main() {
       'Выход',
     ];
     for (var i = 0; i < labels.length; i++) {
-      final a = sampleAsset(id: 'visual$i', title: labels[i]);
+      final a = sampleAsset(id: 'visual$i', title: labels[i]).edited(
+        labels[i],
+        AudioCategory.values[i],
+        description: 'Описание аудиотрека для предварительного прослушивания.',
+      );
       await audio.save(a);
       await c.addAudio(a);
     }
     await c.reload();
-    await c.setGroup(c.draft.plan.steps.first.id, c.draft.plan.groups.first.id);
     final template = await c.saveAsTemplate(
       'Моя последовательность',
       'Подготовка, погружение, самостоятельная работа и выход.',
@@ -441,6 +599,14 @@ void main() {
     await tester.pumpAndSettle();
     await manual(tester, '6', '30');
     await capture('pause-v2');
+    tester.view.physicalSize = const Size(360, 720);
+    await tester.pumpAndSettle();
+    await capture('pause-small');
+    tester.view.physicalSize = const Size(320, 600);
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    await tester.pumpAndSettle();
+    await capture('pause-large-text');
+    tester.platformDispatcher.clearTextScaleFactorTestValue();
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
   });

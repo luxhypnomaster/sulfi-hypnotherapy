@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'audio_asset.dart';
+
 String newId() {
   final random = Random.secure();
   return List.generate(
@@ -20,13 +22,71 @@ enum StepKind {
 }
 
 class StageGroup {
-  const StageGroup({required this.id, required this.name});
-  final String id;
-  final String name;
-  Map<String, Object?> toMap() => {'id': id, 'name': name};
-  factory StageGroup.fromMap(Map<String, dynamic> m) =>
-      StageGroup(id: m['id'] as String, name: m['name'] as String);
+  const StageGroup({
+    required this.id,
+    required this.name,
+    this.description = '',
+    this.category,
+  });
+  final String id, name, description;
+  final AudioCategory? category;
+  // Omit absent additions to preserve existing template fingerprints byte for byte.
+  Map<String, Object?> toMap() => {
+    'id': id,
+    'name': name,
+    if (description.isNotEmpty) 'description': description,
+    if (category != null) 'category': category!.name,
+  };
+  factory StageGroup.fromMap(Map<String, dynamic> m) => StageGroup(
+    id: m['id'] as String,
+    name: m['name'] as String,
+    description: m['description'] as String? ?? '',
+    category: m['category'] == null
+        ? null
+        : AudioCategory.values.byName(m['category'] as String),
+  );
 }
+
+const defaultStageGroups = [
+  StageGroup(
+    id: 'stage-preparation',
+    name: 'Подготовка',
+    category: AudioCategory.preparation,
+    description:
+        'Предварительные объяснения и инструкции перед началом сессии.',
+  ),
+  StageGroup(
+    id: 'stage-induction',
+    name: 'Погружение',
+    category: AudioCategory.induction,
+    description: 'Настройка внимания и переход к состоянию самогипноза.',
+  ),
+  StageGroup(
+    id: 'stage-deepener',
+    name: 'Углубление',
+    category: AudioCategory.deepener,
+    description: 'Углубление расслабления и сосредоточенности.',
+  ),
+  StageGroup(
+    id: 'stage-work',
+    name: 'Терапевтическое задание',
+    category: AudioCategory.work,
+    description: 'Основная работа по выбранной теме: инструкции, установки и самостоятельное задание.',
+  ),
+  StageGroup(
+    id: 'stage-integration',
+    name: 'Интеграция',
+    category: AudioCategory.integration,
+    description: 'Осмысление опыта и закрепление выбранных изменений.',
+  ),
+  StageGroup(
+    id: 'stage-exit',
+    name: 'Выход',
+    category: AudioCategory.exit,
+    description:
+        'Завершение сессии и возвращение внимания к окружающей обстановке.',
+  ),
+];
 
 class SessionStep {
   const SessionStep({
@@ -113,8 +173,37 @@ class SessionPlan {
       .where((s) => s.kind != StepKind.audio)
       .fold(0, (sum, s) => sum + (s.durationMs ?? 0));
   bool get estimated => steps.any((s) => s.durationMs == null);
+  // Built-in empty sections are a view catalog, not a mutation of saved plans.
+  List<StageGroup> get availableGroups {
+    final result = <StageGroup>[];
+    final matched = <String>{};
+    for (final builtin in defaultStageGroups) {
+      final stored = groups
+          .where((g) => g.id == builtin.id || g.name == builtin.name)
+          .firstOrNull;
+      if (stored == null) {
+        result.add(builtin);
+      } else {
+        matched.add(stored.id);
+        result.add(
+          StageGroup(
+            id: stored.id,
+            name: stored.name,
+            description: stored.description.isEmpty
+                ? builtin.description
+                : stored.description,
+            category: stored.category ?? builtin.category,
+          ),
+        );
+      }
+    }
+    result.addAll(groups.where((g) => !matched.contains(g.id)));
+    return List.unmodifiable(result);
+  }
+
   String groupName(String? id) =>
-      groups.where((g) => g.id == id).firstOrNull?.name ?? 'Без раздела';
+      availableGroups.where((g) => g.id == id).firstOrNull?.name ??
+      'Без раздела';
   SessionPlan copyWith({
     List<SessionStep>? steps,
     List<StageGroup>? groups,

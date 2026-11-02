@@ -11,10 +11,12 @@ class PreviewBar extends StatelessWidget {
     required this.player,
     required this.library,
     this.idleAsset,
+    this.compact = false,
   });
   final PreviewPlayer player;
   final LibraryService library;
   final AudioAsset? idleAsset;
+  final bool compact;
   Future<void> _action(
     BuildContext context,
     Future<void> Function() action,
@@ -56,6 +58,114 @@ class PreviewBar extends StatelessWidget {
       final position = loaded
           ? player.position.inMilliseconds.clamp(0, a.durationMs)
           : 0;
+      if (compact) {
+        return NeonPanel(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          glow: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => showDialog<void>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(a.title),
+                          content: Text(
+                            '${a.description.isEmpty ? 'Описание не добавлено.' : a.description}\n\nДлительность: ${formatDuration(a.durationMs)}',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Закрыть'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            a.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            player.error ??
+                                (a.description.isEmpty
+                                    ? 'Предпрослушивание трека'
+                                    : a.description),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: player.error == null
+                                  ? const Color(0xFFC8ADBD)
+                                  : Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Остановить прослушивание',
+                    onPressed: loaded
+                        ? () => _action(context, player.stop)
+                        : null,
+                    icon: const Icon(Icons.stop_circle_outlined, size: 22),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    tooltip: player.playing
+                        ? 'Пауза'
+                        : loaded
+                        ? 'Продолжить'
+                        : 'Прослушать трек',
+                    onPressed: () => _action(
+                      context,
+                      () => player.toggle(a, library.fileFor(a)),
+                    ),
+                    icon: Icon(
+                      player.playing ? Icons.pause_circle : Icons.play_circle,
+                      color: neonPink,
+                    ),
+                  ),
+                  Expanded(
+                    child: Slider(
+                      semanticFormatterCallback: (v) =>
+                          formatDuration(v.round()),
+                      value: position.toDouble(),
+                      max: a.durationMs.toDouble(),
+                      onChanged: loaded
+                          ? (value) => _action(
+                              context,
+                              () => player.seek(
+                                Duration(milliseconds: value.round()),
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                  Text(
+                    '${formatDuration(position)} / ${formatDuration(a.durationMs)}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }
       return Padding(
         padding: const EdgeInsets.all(10),
         child: NeonPanel(

@@ -42,36 +42,44 @@ class _StructureScreenState extends State<StructureScreen> {
     if (mounted) setState(() => _busy = false);
   }
 
-  Future<void> _add({SessionStep? replace}) => _run(() async {
-    await c.flush();
-    await widget.player.stop();
-    if (!mounted) return;
-    final a = await Navigator.push<AudioAsset>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => LibraryScreen(
-          library: c.library,
-          player: widget.player,
-          allowSelection: true,
-        ),
-      ),
-    );
-    await c.reload();
-    if (a != null) {
-      if (replace == null) {
-        await c.addAudio(a);
-      } else {
-        await c.updateStep(
-          replace.copyWith(
-            audioAssetId: a.id,
-            title: a.title,
-            description: a.description,
-            durationMs: a.durationMs,
+  Future<void> _add({SessionStep? replace, StageGroup? targetGroup}) =>
+      _run(() async {
+        await c.flush();
+        await widget.player.stop();
+        if (!mounted) return;
+        final a = await Navigator.push<AudioAsset>(
+          context,
+          MaterialPageRoute(
+            builder: (_) => LibraryScreen(
+              library: c.library,
+              player: widget.player,
+              allowSelection: true,
+            ),
           ),
         );
-      }
-    }
-  });
+        await c.reload();
+        if (a != null) {
+          if (replace == null) {
+            final sameGroup = c.draft.plan.steps.where(
+              (s) => s.groupId == targetGroup?.id,
+            );
+            await c.addAudio(
+              a,
+              groupId: targetGroup?.id,
+              afterId: targetGroup == null ? null : sameGroup.lastOrNull?.id,
+            );
+          } else {
+            await c.updateStep(
+              replace.copyWith(
+                audioAssetId: a.id,
+                title: a.title,
+                description: a.description,
+                durationMs: a.durationMs,
+              ),
+            );
+          }
+        }
+      });
   Future<void> _pause(SessionStep step) async {
     await widget.player.stop();
     if (!mounted) return;
@@ -151,10 +159,20 @@ class _StructureScreenState extends State<StructureScreen> {
             onPressed: () => Navigator.pop(context, (id: null)),
             child: const Text('Без раздела'),
           ),
-          for (final g in c.draft.plan.groups)
+          for (final g in c.draft.plan.availableGroups)
             SimpleDialogOption(
               onPressed: () => Navigator.pop(context, (id: g.id)),
-              child: Text(g.name),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(g.name),
+                  if (g.description.isNotEmpty)
+                    Text(
+                      g.description,
+                      style: const TextStyle(fontSize: 12, color: antiqueGold),
+                    ),
+                ],
+              ),
             ),
         ],
       ),
@@ -227,6 +245,13 @@ class _StructureScreenState extends State<StructureScreen> {
     listenable: c,
     builder: (context, _) {
       final plan = c.draft.plan;
+      final emptySections = Column(
+        children: [
+          for (final group in plan.availableGroups)
+            if (!plan.steps.any((s) => s.groupId == group.id))
+              _sectionHeader(group),
+        ],
+      );
       final header = Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 6),
         child: Column(
@@ -284,7 +309,13 @@ class _StructureScreenState extends State<StructureScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 7),
+            const Padding(
+              padding: EdgeInsets.only(top: 7),
+              child: Text(
+                'Пауза перед треком → трек → длительность',
+                style: TextStyle(fontSize: 10, color: antiqueGold),
+              ),
+            ),
             Row(
               children: [
                 Expanded(
@@ -346,7 +377,12 @@ class _StructureScreenState extends State<StructureScreen> {
                       title: 'Новый раздел',
                       nameLabel: 'Название раздела',
                     );
-                    if (result != null) await c.addGroup(result.name);
+                    if (result != null) {
+                      await c.addGroup(
+                        result.name,
+                        description: result.description,
+                      );
+                    }
                   }),
                 );
               }
@@ -510,31 +546,18 @@ class _StructureScreenState extends State<StructureScreen> {
                       children: [
                         header,
                         const Padding(
-                          padding: EdgeInsets.all(24),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.queue_music,
-                                size: 48,
-                                color: neonPink,
-                              ),
-                              SizedBox(height: 12),
-                              Text(
-                                'Соберите свою последовательность',
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Добавьте аудио из библиотеки или блок тишины. Все новые паузы — 00:00.',
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            'Разделы сессии. Нажмите + рядом с нужным разделом, чтобы добавить трек.',
+                            style: TextStyle(fontSize: 12),
                           ),
                         ),
+                        emptySections,
                       ],
                     )
                   : ReorderableListView.builder(
                       header: header,
+                      footer: emptySections,
                       padding: const EdgeInsets.only(bottom: 12),
                       buildDefaultDragHandles: false,
                       itemCount: plan.steps.length,
@@ -556,63 +579,10 @@ class _StructureScreenState extends State<StructureScreen> {
                           key: ValueKey(s.id),
                           children: [
                             if (first)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 5,
-                                  bottom: 2,
-                                ),
-                                child: NeonPanel(
-                                  padding: EdgeInsets.zero,
-                                  child: InkWell(
-                                    onTap: () => setState(() {
-                                      if (!_collapsed.add(s.groupId)) {
-                                        _collapsed.remove(s.groupId);
-                                      }
-                                    }),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 5,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            _collapsed.contains(s.groupId)
-                                                ? Icons.chevron_right
-                                                : Icons.expand_more,
-                                            color: neonPink,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              plan.groupName(s.groupId),
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            formatDuration(
-                                              plan.steps
-                                                  .where(
-                                                    (x) =>
-                                                        x.groupId == s.groupId,
-                                                  )
-                                                  .fold(
-                                                    0,
-                                                    (n, x) => n + x.estimatedMs,
-                                                  ),
-                                            ),
-                                            style: const TextStyle(
-                                              color: neonLime,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              _sectionHeader(
+                                plan.availableGroups
+                                    .where((g) => g.id == s.groupId)
+                                    .firstOrNull,
                               ),
                             if (!_collapsed.contains(s.groupId))
                               _step(s, index),
@@ -633,6 +603,84 @@ class _StructureScreenState extends State<StructureScreen> {
       );
     },
   );
+  Widget _sectionHeader(StageGroup? group) {
+    final steps = c.draft.plan.steps.where((s) => s.groupId == group?.id);
+    final color = group?.category == null
+        ? neonPink
+        : categoryColor(group!.category!);
+    final collapsed = _collapsed.contains(group?.id);
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 2),
+      child: NeonPanel(
+        color: color,
+        padding: EdgeInsets.zero,
+        child: InkWell(
+          onTap: () => setState(() {
+            if (!_collapsed.add(group?.id)) _collapsed.remove(group?.id);
+          }),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5, right: 3, bottom: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      collapsed ? Icons.chevron_right : Icons.expand_more,
+                      color: color,
+                      size: 20,
+                    ),
+                    Expanded(
+                      child: Text(
+                        group?.name ?? 'Без раздела',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      steps.isEmpty
+                          ? 'Нет треков'
+                          : '${steps.length} · ${formatDuration(steps.fold(0, (n, s) => n + s.estimatedMs))}',
+                      style: const TextStyle(fontSize: 10, color: neonLime),
+                    ),
+                    if (group != null)
+                      IconButton(
+                        tooltip: 'Добавить трек: ${group.name}',
+                        onPressed: _busy
+                            ? null
+                            : () => _add(targetGroup: group),
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          size: 21,
+                          color: color,
+                        ),
+                      ),
+                  ],
+                ),
+                if (!collapsed && (group?.description.isNotEmpty ?? false))
+                  Padding(
+                    padding: const EdgeInsets.only(left: 23, right: 5),
+                    child: Text(
+                      group!.description,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFFC8ADBD),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _step(SessionStep s, int index) {
     final a = c.asset(s.audioAssetId);
     final title = a?.title ?? s.title;
