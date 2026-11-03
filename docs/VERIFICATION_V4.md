@@ -138,7 +138,7 @@ PASS означает проверку указанным методом в Linu
 | G06 | PASS | v4_models_recording_test: независимые копии, сериализация, SQL round trip |
 | G07 | PASS | local_dates unit tests; неизвестный legacy timezone явно отмечен |
 | G08 | NOT TESTED | Подтверждён URL владельца, externalApplication подключён; внешнее открытие на телефоне не проверено. |
-| G09 | NOT TESTED | mailto/copy fallback реализованы; email отсутствует, приложение почты не проверено. |
+| G09 | NOT TESTED | mailto/copy fallback реализованы; email владельца `luxhypnomaster@gmail.com` настроен, приложение почты на телефоне не проверено. |
 | G10 | PASS | UI-код и Flutter widget-тесты; физический Android отдельно |
 | G11 | PASS | UI-код и Flutter widget-тесты; физический Android отдельно |
 | G12 | PASS | v4_models_recording_test: независимые копии, сериализация, SQL round trip |
@@ -148,7 +148,7 @@ PASS означает проверку указанным методом в Linu
 
 - Flutter-рендеры после изменений: `docs/screenshots/v4/{main,structure,recorder,history}.png` (412×915, тестовые данные; не фото Android).
 - Требуют физической проверки нативный диктофон, permission/codec/storage failures, звуковой preview, screen off/foreground service/уведомления, 2+ минуты тишины и 5–15 минут работы, звонки, Bluetooth, battery policy, TalkBack, launcher masks и установка поверх старой версии.
-- Telegram владельца `https://t.me/LuchikLuxxx` подтверждён. Email не предоставлен; отсутствие обработано, выдуманных контактов нет.
+- Telegram владельца `https://t.me/LuchikLuxxx` и email `luxhypnomaster@gmail.com` подтверждены и настроены по умолчанию. Оба контакта можно переопределить при сборке.
 - Stable signing key и шифрованный экспорт данных ещё не настроены. Удаление старой установки ради нового debug APK недопустимо без отдельной резервной копии: данные могут быть потеряны. ApplicationId не изменён.
 - Модели поддерживают tags/recommendedPhaseIds каталожных модулей, но отдельного UI редактирования рекомендаций пока нет. Любой модуль доступен любой фазе.
 - Авторские MP3, дефолтные терапевтические шаблоны, запись речи внутри сеанса, облако и платежи не добавлялись.

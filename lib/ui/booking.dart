@@ -7,7 +7,10 @@ class BookingConfig {
     'BOOKING_TELEGRAM_URL',
     defaultValue: 'https://t.me/LuchikLuxxx',
   );
-  static const email = String.fromEnvironment('BOOKING_EMAIL');
+  static const email = String.fromEnvironment(
+    'BOOKING_EMAIL',
+    defaultValue: 'luxhypnomaster@gmail.com',
+  );
   static const enabled = bool.fromEnvironment(
     'BOOKING_ENABLED',
     defaultValue: true,
