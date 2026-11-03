@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:sulfi_hypnotherapy/services/recorder_service.dart';
 
 class FakeCapture implements CaptureBackend {
-  bool granted = true, fail = false;
+  bool granted = true, fail = false, failPause = false;
   String? path;
-  int starts = 0, pauses = 0, resumes = 0, cancels = 0;
+  int starts = 0, pauses = 0, resumes = 0, cancels = 0, stops = 0;
   @override
   Future<bool> permission() async => granted;
   @override
@@ -18,6 +18,7 @@ class FakeCapture implements CaptureBackend {
 
   @override
   Future<void> pause() async {
+    if (failPause) throw StateError('pause failed');
     pauses++;
   }
 
@@ -27,7 +28,11 @@ class FakeCapture implements CaptureBackend {
   }
 
   @override
-  Future<String?> stop() async => path;
+  Future<String?> stop() async {
+    stops++;
+    return path;
+  }
+
   @override
   Future<void> cancel() async {
     cancels++;

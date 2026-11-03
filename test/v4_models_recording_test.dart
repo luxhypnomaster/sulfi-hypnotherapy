@@ -417,6 +417,20 @@ void main() {
         expect(repo.items, isEmpty);
       });
       test(
+        'failed native pause stops microphone without claiming saved audio',
+        () async {
+          await r.start();
+          native.failPause = true;
+          await r.pause();
+          expect(native.stops, 1);
+          expect(r.capturing, isFalse);
+          expect(r.state, CaptureState.error);
+          expect(r.error, isNotNull);
+          expect(repo.items, isEmpty);
+          expect(await File(r.path!).exists(), isTrue);
+        },
+      );
+      test(
         'interruption finishes capture rather than continuing hidden recording',
         () async {
           await r.start();

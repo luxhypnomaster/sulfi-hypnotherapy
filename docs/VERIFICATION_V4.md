@@ -21,7 +21,7 @@
 | `ui/modular_structure_screen.dart`, `modules_screen.dart`, `module_assignment.dart` | Реальный конструктор фаз/модулей/треков, порядок, повторные вставки, локальная правка и восстановление каталожной версии, импорт/запись с модулем |
 | `ui/home_screen.dart`, `history_screen.dart`, `pause_editor.dart`, `templates_screen.dart` | Главная и навигация V4, компактная история с полным планом, повтор без автозапуска, часы и расчёты |
 | `ui/booking.dart`, Android resources | Подтверждённый Telegram, конфигурируемая почта, launcher «Сульфи» и supplied adaptive icons |
-| `test/v4_models_recording_test.dart`, `v4_ui_test.dart`, `session_engine_test.dart` | Миграция, модульные копии, запись с injected backend, ошибки/повтор save, early Exit (включая ведущую тишину фазы), MediaHandler, 30 треков и рендеры |
+| `test/v4_models_recording_test.dart`, `v4_ui_test.dart`, `session_engine_test.dart` | Миграция, модульные копии, запись с injected backend, ошибки/повтор save, остановка нативного захвата при ошибке паузы, early Exit (включая ведущую тишину фазы), MediaHandler, 30 треков и рендеры |
 
 Старый `ui/structure_screen.dart` сохранён для регрессионных тестов прежнего поведения; production-переходы открывают `ModularStructureScreen`. Тип `voiceRecording` в старых планах сохраняется, но запуск отклоняется с пояснением: запись речи внутри сеанса и голосовая тема отложены V4. Библиотечные категории сохранены для совместимости и не ограничивают новые фазы.
 
@@ -43,7 +43,7 @@
 | `flutter pub get --enforce-lockfile` | PASS |
 | `dart format --output=none --set-exit-if-changed lib test` | PASS |
 | `flutter analyze --fatal-infos` | PASS, No issues found |
-| `flutter test --reporter expanded` | PASS, 98 тестовых случаев (включая условные тесты рендеров) |
+| `flutter test --reporter expanded` | PASS, 99 тестовых случаев (включая условные тесты рендеров) |
 | Отдельный запуск V4 рендеров с dart-define | PASS, 4 PNG |
 | Локальный `flutter build apk --debug` | FAIL, загрузка Gradle plugin, см. ниже |
 | APK через GitHub Actions | Итог и ссылка на артефакт фиксируются в PR и сообщении владельцу после CI |

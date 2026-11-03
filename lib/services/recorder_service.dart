@@ -88,6 +88,20 @@ class RecorderService extends ChangeNotifier {
     try {
       await f();
     } catch (e) {
+      // A failed pause/resume must never leave a hidden native capture running.
+      if (capturing || state == CaptureState.requestingPermission) {
+        try {
+          path = await backend.stop() ?? path;
+        } catch (_) {
+          try {
+            await backend.cancel();
+          } catch (_) {
+            // Keep the original error; close() also releases the backend.
+          }
+        }
+      }
+      await _levels?.cancel();
+      _levels = null;
       _watch.stop();
       _timer?.cancel();
       level = 0;
