@@ -7,8 +7,7 @@ import 'library_service.dart';
 import 'session_controller.dart';
 import 'session_transport.dart';
 
-// Foreground execution only in this slice. Background/recording need a separate
-// Android service implementation and device acceptance; never imply recovery.
+// Execution state is independent of widgets; Android media service owns this engine.
 class SessionEngine extends ChangeNotifier {
   SessionEngine({
     required this.controller,
@@ -46,22 +45,23 @@ class SessionEngine extends ChangeNotifier {
       _runStart = 0,
       _runBase = 0,
       _lastSave = 0;
-  int _extendedMs = 0;
+  int _extendedMs = 0, _exitEndIndex = -1;
+  bool get _running =>
+      run?.status == RunStatus.running || run?.status == RunStatus.exitingEarly;
   SessionStep? get step {
     final r = run;
     if (r == null || r.stepIndex >= r.snapshot.plan.steps.length) return null;
     return r.snapshot.plan.steps[r.stepIndex];
   }
 
+  bool get exiting => _exiting;
   bool get active => run?.active ?? false;
   bool get paused => run?.status == RunStatus.paused;
   bool get busy => _busy;
-  int get elapsedMs =>
-      _runBase + ((run?.status == RunStatus.running) ? _now() - _runStart : 0);
+  int get elapsedMs => _runBase + ((_running) ? _now() - _runStart : 0);
   int get phasePositionMs => run?.phase == 'audio'
       ? transport.position.inMilliseconds
-      : _phaseBase +
-            ((run?.status == RunStatus.running) ? _now() - _phaseStart : 0);
+      : _phaseBase + ((_running) ? _now() - _phaseStart : 0);
   int? get phaseDurationMs {
     final s = step;
     if (s == null) return null;
@@ -117,7 +117,7 @@ class SessionEngine extends ChangeNotifier {
     final r = run!;
     if (index >= r.snapshot.plan.steps.length) {
       await _finish(
-        _exiting ? RunStatus.interrupted : RunStatus.completed,
+        _exiting ? RunStatus.completedEarlyWithExit : RunStatus.completed,
         _exiting ? 'exit_completed' : 'completed',
       );
       return;
@@ -186,7 +186,9 @@ class SessionEngine extends ChangeNotifier {
           } else {
             await _persist('block_completed');
             await _beginStep(
-              _exiting ? run!.snapshot.plan.steps.length : run!.stepIndex + 1,
+              _exiting && run!.stepIndex >= _exitEndIndex
+                  ? run!.snapshot.plan.steps.length
+                  : run!.stepIndex + 1,
             );
           }
         }).catchError((Object _) {}),
@@ -228,7 +230,9 @@ class SessionEngine extends ChangeNotifier {
     if (!paused) return;
     _phaseStart = _now();
     _runStart = _now();
-    run = run!.checkpoint(status: RunStatus.running);
+    run = run!.checkpoint(
+      status: _exiting ? RunStatus.exitingEarly : RunStatus.running,
+    );
     if (run!.phase == 'audio' && !transport.completed) await transport.play();
     await _persist('resumed');
   });
@@ -242,10 +246,14 @@ class SessionEngine extends ChangeNotifier {
     if (paused) {
       _phaseStart = _now();
       _runStart = _now();
-      run = run!.checkpoint(status: RunStatus.running);
+      run = run!.checkpoint(
+        status: _exiting ? RunStatus.exitingEarly : RunStatus.running,
+      );
     }
     await _beginStep(
-      _exiting ? run!.snapshot.plan.steps.length : run!.stepIndex + 1,
+      _exiting && run!.stepIndex >= _exitEndIndex
+          ? run!.snapshot.plan.steps.length
+          : run!.stepIndex + 1,
     );
   });
   Future<void> extend() => _enqueue(() async {
@@ -264,9 +272,49 @@ class SessionEngine extends ChangeNotifier {
       if (!active) return;
       await _persist('exit_requested');
       final plan = run!.snapshot.plan;
-      final index = plan.steps.indexWhere(
-        (s) => s.id == plan.exitStepId && s.kind == StepKind.audio,
-      );
+      var index = -1;
+      if (plan.phases != null) {
+        final exitPhases = plan.phases!
+            .where((p) => p.enabled && p.typeId == 'exit')
+            .map((p) => p.id)
+            .toSet();
+        for (var i = run!.stepIndex + 1; i < plan.steps.length; i++) {
+          if (exitPhases.contains(plan.steps[i].groupId) &&
+              plan.steps[i].kind == StepKind.audio) {
+            index = i;
+            break;
+          }
+        }
+      } else {
+        index = plan.steps.indexWhere(
+          (s) => s.id == plan.exitStepId && s.kind == StepKind.audio,
+        );
+        if (index <= run!.stepIndex) index = -1;
+      }
+      final phaseExitFound = index >= 0;
+      if (index < 0 && plan.exitStepId != null) {
+        index = plan.steps.indexWhere(
+          (s) => s.id == plan.exitStepId && s.kind == StepKind.audio,
+        );
+        if (index <= run!.stepIndex) index = -1;
+      }
+      _exitEndIndex = index;
+      if (index >= 0 && phaseExitFound && plan.phases != null) {
+        while (_exitEndIndex + 1 < plan.steps.length &&
+            plan.steps[_exitEndIndex + 1].groupId ==
+                plan.steps[index].groupId) {
+          _exitEndIndex++;
+        }
+      }
+      if (index >= 0) {
+        final skipped = [
+          ...run!.skippedStepIds,
+          for (var i = run!.stepIndex; i < plan.steps.length; i++)
+            if (i < index || i > _exitEndIndex) plan.steps[i].id,
+        ];
+        run = run!.checkpoint(skippedStepIds: skipped);
+        await _persist('items_skipped_for_exit');
+      }
       if (index < 0) {
         await _finish(RunStatus.interrupted, 'exit_without_audio');
         return;
@@ -279,8 +327,11 @@ class SessionEngine extends ChangeNotifier {
       }
       if (paused) {
         _runStart = _now();
-        run = run!.checkpoint(status: RunStatus.running);
+        run = run!.checkpoint(
+          status: _exiting ? RunStatus.exitingEarly : RunStatus.running,
+        );
       }
+      run = run!.checkpoint(status: RunStatus.exitingEarly);
       await _beginStep(index);
       // An explicit safe exit starts immediately, without the planned pre-delay.
       await _beginContent();

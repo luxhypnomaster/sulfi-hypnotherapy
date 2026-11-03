@@ -11,6 +11,8 @@ import 'package:sulfi_hypnotherapy/services/library_service.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 import 'package:sulfi_hypnotherapy/services/session_engine.dart';
 import 'package:sulfi_hypnotherapy/services/session_transport.dart';
+import 'package:sulfi_hypnotherapy/services/session_audio_handler.dart';
+import 'package:audio_service/audio_service.dart';
 
 import 'support/fakes.dart';
 
@@ -101,6 +103,67 @@ void main() {
     await engine.flush();
   }
 
+  test(
+    'early exit plays the entire subsequent exit phase and stores skipped IDs',
+    () async {
+      final work = await c.createPhase('work');
+      final exit = await c.createPhase('exit');
+      final later = await c.createPhase('integration');
+      final recipe = SessionStep(
+        id: 'r',
+        kind: StepKind.audio,
+        title: 'A',
+        audioAssetId: sampleAsset().id,
+        durationMs: 65000,
+      );
+      await c.addLoose(work, recipe);
+      await c.addLoose(exit, recipe);
+      await c.addLoose(exit, recipe);
+      await c.addLoose(later, recipe);
+      await engine.start();
+      await tick();
+      await engine.exit();
+      expect(engine.run!.status, RunStatus.exitingEarly);
+      expect(engine.run!.stepIndex, 1);
+      transport.completed = true;
+      await tick();
+      expect(engine.run!.stepIndex, 2);
+      expect(engine.active, isTrue);
+      await tick();
+      transport.completed = true;
+      await tick();
+      expect(engine.run!.status, RunStatus.completedEarlyWithExit);
+      final stored = (await repository.history()).single;
+      expect(stored.skippedStepIds, hasLength(2));
+      expect(stored.snapshot.plan.allSteps, hasLength(4));
+    },
+  );
+  test(
+    'media panel pause and play control silence without starting another run',
+    () async {
+      await c.addBlock(StepKind.silence, 120000);
+      await engine.start();
+      await tick();
+      now = 10000;
+      await tick();
+      final handler = SessionAudioHandler(c)..engine = engine;
+      await handler.pause();
+      expect(engine.paused, isTrue);
+      expect(
+        handler.playbackState.value.processingState,
+        AudioProcessingState.ready,
+      );
+      expect(handler.playbackState.value.playing, isFalse);
+      now = 70000;
+      expect(engine.phasePositionMs, 10000);
+      await handler.play();
+      expect(engine.active, isTrue);
+      expect(handler.playbackState.value.playing, isTrue);
+      now = 71000;
+      expect(engine.phasePositionMs, 11000);
+      expect(await repository.history(), hasLength(1));
+    },
+  );
   test('first pre-delay runs before any audio and session numbering starts only on explicit start', () async {
     await c.addAudio(sampleAsset());
     await c.setDelay(c.draft.plan.steps.single.id, 5);
@@ -238,7 +301,7 @@ void main() {
     expect(transport.plays, 1);
     transport.completed = true;
     await tick();
-    expect(engine.run!.status, RunStatus.interrupted);
+    expect(engine.run!.status, RunStatus.completedEarlyWithExit);
     final events = await repository.events(engine.run!.id);
     expect(events.any((e) => e['eventType'] == 'exit_requested'), isTrue);
     expect(events.last['eventType'], 'exit_completed');

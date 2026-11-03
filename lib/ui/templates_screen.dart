@@ -8,7 +8,7 @@ import '../services/preview_player.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
 import 'session_actions.dart';
-import 'structure_screen.dart';
+import 'modular_structure_screen.dart';
 
 class TemplatesScreen extends StatefulWidget {
   const TemplatesScreen({
@@ -47,7 +47,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             context,
             MaterialPageRoute(
               builder: (_) =>
-                  StructureScreen(controller: c, player: widget.player),
+                  ModularStructureScreen(controller: c, player: widget.player),
             ),
           );
         } else {
@@ -71,7 +71,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     await Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => StructureScreen(controller: c, player: widget.player),
+        builder: (_) =>
+            ModularStructureScreen(controller: c, player: widget.player),
       ),
     );
   });
@@ -246,7 +247,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                                   ),
                                 ),
                               Text(
-                                '${t.plan.steps.length} блоков · ${t.plan.estimated ? '≈ ' : ''}${formatDuration(t.plan.totalMs)} · версия ${t.version}',
+                                '${t.plan.steps.where((s) => s.kind == StepKind.audio).length} треков · ${t.plan.steps.where((s) => s.kind != StepKind.audio).length} интервалов · ${t.plan.estimated ? '≈ ' : ''}${formatDuration(t.plan.totalMs)} · версия ${t.version}',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               if (t.isDefault)
@@ -254,11 +255,11 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                                   'Базовый шаблон',
                                   style: TextStyle(color: neonLime),
                                 ),
-                              if (t.plan.exitStepId == null)
+                              if (!t.plan.hasExitAudio)
                                 const Padding(
                                   padding: EdgeInsets.only(top: 4),
                                   child: Text(
-                                    'Без аудиовыхода',
+                                    'Завершающий трек не настроен',
                                     style: TextStyle(
                                       color: antiqueGold,
                                       fontSize: 12,

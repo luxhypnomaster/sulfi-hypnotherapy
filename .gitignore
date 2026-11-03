@@ -42,3 +42,6 @@ recordings/
 user_data/
 *.apk
 *.aab
+
+# Reference screenshots may contain personal session information.
+docs/v4/assets/current/
