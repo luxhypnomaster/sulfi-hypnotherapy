@@ -275,14 +275,14 @@ class SessionController extends ChangeNotifier {
   Future<void> updateStep(SessionStep step) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps.map((s) => s.id == step.id ? step : s).toList(),
+        steps: d.plan.allSteps.map((s) => s.id == step.id ? step : s).toList(),
       ),
     ),
   );
   Future<void> setDelay(String id, int seconds) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps
+        steps: d.plan.allSteps
             .map(
               (s) => s.id == id ? s.copyWith(delayBeforeSeconds: seconds) : s,
             )
@@ -293,7 +293,7 @@ class SessionController extends ChangeNotifier {
   Future<void> remove(String id) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps.where((s) => s.id != id).toList(),
+        steps: d.plan.allSteps.where((s) => s.id != id).toList(),
         clearExit: d.plan.exitStepId == id,
       ),
     ),

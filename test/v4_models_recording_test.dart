@@ -546,4 +546,40 @@ void main() {
       expect(first.modified, isFalse);
     },
   );
+  test('editing an active item retains disabled tracks and allows enabling them again', () async {
+    final audio = MemoryRepository();
+    final repo = MemorySessionRepository();
+    final c = SessionController(
+      repository: repo,
+      library: MemoryLibrary(audio),
+    );
+    await c.initialize();
+    final phase = await c.createPhase('work');
+    for (var i = 0; i < 3; i++) {
+      await c.addLoose(
+        phase,
+        SessionStep(
+          id: 'item$i',
+          kind: StepKind.silence,
+          title: 'Интервал $i',
+          durationMs: 1000,
+        ),
+      );
+    }
+    final ids = c.draft.plan.allSteps.map((s) => s.id).toList();
+    await c.updateStep(c.draft.plan.allSteps[1].copyWith(enabled: false));
+    await c.setDelay(ids[0], 30);
+    await c.updateStep(c.draft.plan.allSteps[0].copyWith(title: 'Изменён'));
+    expect(c.draft.plan.allSteps, hasLength(3));
+    expect(c.draft.plan.steps, hasLength(2));
+    await c.reload();
+    await c.updateStep(c.draft.plan.allSteps[1].copyWith(enabled: true));
+    expect(c.draft.plan.steps, hasLength(3));
+    expect(c.draft.plan.steps.first.delayBeforeSeconds, 30);
+    await c.updateStep(c.draft.plan.allSteps[1].copyWith(enabled: false));
+    await c.remove(ids[2]);
+    expect(c.draft.plan.allSteps.map((s) => s.id), [ids[0], ids[1]]);
+    expect(c.draft.plan.allSteps[1].enabled, isFalse);
+    c.dispose();
+  });
 }

@@ -21,7 +21,7 @@
 | `ui/modular_structure_screen.dart`, `modules_screen.dart`, `module_assignment.dart` | Реальный конструктор фаз/модулей/треков, порядок, повторные вставки, локальная правка и восстановление каталожной версии, импорт/запись с модулем |
 | `ui/home_screen.dart`, `history_screen.dart`, `pause_editor.dart`, `templates_screen.dart` | Главная и навигация V4, компактная история с полным планом, повтор без автозапуска, часы и расчёты |
 | `ui/booking.dart`, Android resources | Подтверждённый Telegram, конфигурируемая почта, launcher «Сульфи» и supplied adaptive icons |
-| `test/v4_models_recording_test.dart`, `v4_ui_test.dart`, `session_engine_test.dart` | Миграция, модульные копии, запись с injected backend, ошибки/повтор save, остановка нативного захвата при ошибке паузы, early Exit (включая ведущую тишину фазы), MediaHandler, 30 треков и рендеры |
+| `test/v4_models_recording_test.dart`, `v4_ui_test.dart`, `session_engine_test.dart` | Миграция, модульные копии, запись с injected backend, сохранение disabled при редактировании/удалении соседей, ошибки/повтор save, остановка нативного захвата при ошибке паузы, early Exit (включая ведущую тишину фазы), MediaHandler, 30 треков и рендеры |
 
 Старый `ui/structure_screen.dart` сохранён для регрессионных тестов прежнего поведения; production-переходы открывают `ModularStructureScreen`. Тип `voiceRecording` в старых планах сохраняется, но запуск отклоняется с пояснением: запись речи внутри сеанса и голосовая тема отложены V4. Библиотечные категории сохранены для совместимости и не ограничивают новые фазы.
 
@@ -43,7 +43,7 @@
 | `flutter pub get --enforce-lockfile` | PASS |
 | `dart format --output=none --set-exit-if-changed lib test` | PASS |
 | `flutter analyze --fatal-infos` | PASS, No issues found |
-| `flutter test --reporter expanded` | PASS, 99 тестовых случаев (включая условные тесты рендеров) |
+| `flutter test --reporter expanded` | PASS, 100 тестовых случаев (включая условные тесты рендеров) |
 | Отдельный запуск V4 рендеров с dart-define | PASS, 4 PNG |
 | Локальный `flutter build apk --debug` | FAIL, загрузка Gradle plugin, см. ниже |
 | APK через GitHub Actions | Итог и ссылка на артефакт фиксируются в PR и сообщении владельцу после CI |
@@ -51,7 +51,7 @@
 
 Тесты диктофона используют внедрённый `CaptureBackend` и decoder, записывают настоящие тестовые файлы, но не подтверждают нативный микрофон/кодек и слышимость. Engine-тесты используют управляемое время и транспорт; handler-тест доказывает связь системных команд с engine, а не работу Android OS. Не считать количество тестов количеством принятых пунктов V4.
 
-Локальная `flutter build apk --debug` была запущена: FAIL при загрузке `org.gradle.kotlin.kotlin-dsl:6.4.2` из Gradle Plugin Repository, до компиляции приложения. Итоговый Android build проверяется также в GitHub Actions.
+Локальная `flutter build apk --debug` была запущена: FAIL при загрузке `org.gradle.kotlin.kotlin-dsl:6.4.2` из Gradle Plugin Repository, до компиляции приложения. Повтор с proxy также ограничен диском среды; генерируемый Gradle cache очищен без изменения проекта. Android build в GitHub Actions для 0426456 завершился PASS. После дополнительного исправления disabled-элементов итог и APK последнего коммита публикуются в PR.
 
 ## Матрица приёмки
 
