@@ -139,6 +139,44 @@ void main() {
     },
   );
   test(
+    'early exit retains leading silence in the selected Exit phase',
+    () async {
+      final work = await c.createPhase('work');
+      final exit = await c.createPhase('exit');
+      final audio = SessionStep(
+        id: 'a',
+        kind: StepKind.audio,
+        title: 'Аудио',
+        audioAssetId: sampleAsset().id,
+        durationMs: 65000,
+      );
+      await c.addLoose(work, audio);
+      await c.addLoose(
+        exit,
+        SessionStep(
+          id: 'silence',
+          kind: StepKind.silence,
+          title: 'Подготовка к выходу',
+          durationMs: 5000,
+        ),
+      );
+      await c.addLoose(exit, audio);
+      await engine.start();
+      await tick();
+      await engine.exit();
+      expect(engine.run!.stepIndex, 1);
+      expect(engine.run!.phase, 'work');
+      now += 5000;
+      await tick();
+      expect(engine.run!.stepIndex, 2);
+      await tick();
+      transport.completed = true;
+      await tick();
+      expect(engine.run!.status, RunStatus.completedEarlyWithExit);
+      expect(engine.run!.skippedStepIds, hasLength(1));
+    },
+  );
+  test(
     'media panel pause and play control silence without starting another run',
     () async {
       await c.addBlock(StepKind.silence, 120000);

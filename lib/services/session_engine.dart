@@ -282,6 +282,11 @@ class SessionEngine extends ChangeNotifier {
           if (exitPhases.contains(plan.steps[i].groupId) &&
               plan.steps[i].kind == StepKind.audio) {
             index = i;
+            // Keep leading intervals in the selected Exit phase too.
+            while (index > run!.stepIndex + 1 &&
+                plan.steps[index - 1].groupId == plan.steps[i].groupId) {
+              index--;
+            }
             break;
           }
         }
@@ -320,7 +325,8 @@ class SessionEngine extends ChangeNotifier {
         return;
       }
       final a = controller.asset(plan.steps[index].audioAssetId);
-      if (a == null || !await controller.library.fileFor(a).exists()) {
+      if (plan.steps[index].kind == StepKind.audio &&
+          (a == null || !await controller.library.fileFor(a).exists())) {
         error = 'Аудиовыход недоступен. Почувствуйте опору, осмотритесь и спокойно откройте глаза.';
         await _finish(RunStatus.interrupted, 'exit_file_missing');
         return;
