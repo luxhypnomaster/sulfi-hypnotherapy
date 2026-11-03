@@ -1,3 +1,22 @@
+# V4 — 0.4.0+5 (feature branch, не релиз)
+
+- [x] SQLite v3 и идемпотентная миграция с архивом исходных JSON, без удаления media.
+- [x] Фазы, каталог модулей и независимые экземпляры; полный снимок запуска, disabled и pre-delay.
+- [x] Назначение модулей при импорте/записи, создание/редактирование/архивация каталога.
+- [x] Полноширинная главная, модульный конструктор, часы, компактная история и повтор полного плана.
+- [x] Нативный диктофон record/AAC, реальные временные файлы, независимые finish/save и обработка ошибок.
+- [x] Android audio_service/MediaSession, интервалы вне экранных виджетов, focus/noisy, checkpoint и корректный ранний выход.
+- [x] Telegram владельца, конфигурируемая почта, спираль/adaptive launcher, label «Сульфи».
+- [x] Автотесты модели, файлового lifecycle диктофона, миграции, истории, media handler и прокрутки; рендеры экранов.
+- [ ] Физический Android: нативный микрофон/decoder, permission, слышимый preview, хранение при сбоях.
+- [ ] Физический Android: экран off, длинные интервалы, уведомления, Bluetooth, звонки, ограничения батареи.
+- [ ] Физический Android: обновление старой установки без потери данных, launcher masks, внешние контакты.
+- [x] Контакты владельца подтверждены: Telegram и `luxhypnomaster@gmail.com`.
+- [ ] Постоянный ключ подписи и зашифрованная резервная копия отдельным этапом.
+- [ ] Проверка владельцем художественной близости к референсам; поставленная готовая спираль отличается от нарисованной.
+
+Предыдущие этапы ниже — исторические; противоречащие им требования заменены V4. Подробная приёмка: [docs/VERIFICATION_V4.md](docs/VERIFICATION_V4.md).
+
 # Build plan
 
 ## Owner remarks 0.2.2+4
@@ -5,7 +24,7 @@
 - [x] Explicit zero pre-delay for new tracks; distinguish track duration and overall session duration, with an empty-state label.
 - [x] Fixed, non-scrolling clock page; vertical-only wheels, haptic detents, visible controls and compact real preview at small sizes.
 - [x] Preserve legacy group fingerprints and separate snapshots; cover the changes with storage and UI regression checks.
-- [ ] Confirm stage naming on owner review (six separate stages implemented; four broader groups remain an alternative in the earlier specification).
+- [x] Superseded by final V4: ten approved phase types; legacy groups preserved by migration.
 
 ## Visual correction 0.2.1+3
 - [x] Bring main / structure / pocket watch composition closer to the approved references with real controls.

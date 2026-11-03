@@ -11,6 +11,11 @@ import 'package:path_provider/path_provider.dart';
 import 'app.dart';
 import 'data/library_repository.dart';
 import 'data/session_repository.dart';
+import 'data/module_catalog.dart';
+import 'services/session_audio_handler.dart';
+
+import 'package:audio_service/audio_service.dart';
+
 import 'services/session_controller.dart';
 import 'services/library_service.dart';
 import 'services/preview_player.dart';
@@ -49,6 +54,7 @@ class _BootstrapState extends State<_Bootstrap> {
       );
       _repository = repository;
       final sessions = SqliteSessionRepository(repository.database);
+      final modules = ModuleCatalog(repository.database);
       final library = LibraryService(
         repository: repository,
         directory: Directory(p.join(root.path, 'audio')),
@@ -80,8 +86,14 @@ class _BootstrapState extends State<_Bootstrap> {
           }
         },
         releaseSelection: FilePicker.clearTemporaryFiles,
-        references: sessions.references,
-        resetRelatedData: sessions.reset,
+        references: (id) async => [
+          ...await sessions.references(id),
+          ...await modules.references(id),
+        ],
+        resetRelatedData: () async {
+          await modules.clear();
+          await sessions.reset();
+        },
       );
       await library.initialize();
       await FilePicker.clearTemporaryFiles();
@@ -91,9 +103,19 @@ class _BootstrapState extends State<_Bootstrap> {
       final controller = SessionController(
         repository: sessions,
         library: library,
+        modules: modules,
       );
       _controller = controller;
       await controller.initialize();
+      sessionAudioHandler = await AudioService.init<SessionAudioHandler>(
+        builder: () => SessionAudioHandler(controller),
+        config: const AudioServiceConfig(
+          androidNotificationChannelId: 'ru.sulfi.sessions',
+          androidNotificationChannelName: 'Сессия самогипноза',
+          androidNotificationOngoing: false,
+          androidStopForegroundOnPause: false,
+        ),
+      );
       if (mounted) setState(() => _library = library);
     } catch (_) {
       await _player?.close();

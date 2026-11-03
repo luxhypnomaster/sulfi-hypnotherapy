@@ -27,7 +27,7 @@ class PauseEditor extends StatefulWidget {
 }
 
 class _PauseEditorState extends State<PauseEditor> {
-  late final _original = widget.controller.draft.plan.steps.firstWhere(
+  late final _original = widget.controller.draft.plan.allSteps.firstWhere(
     (s) => s.id == widget.stepId,
   );
   late final _model = PauseEditModel(_original.delayBeforeSeconds);
@@ -92,15 +92,24 @@ class _PauseEditorState extends State<PauseEditor> {
   }
 
   SessionStep? _neighbor(bool previous) {
-    final steps = widget.controller.draft.plan.steps;
+    final steps = widget.controller.draft.plan.allSteps;
+    final effective = widget.controller.draft.plan.steps
+        .map((s) => s.id)
+        .toSet();
     final index = steps.indexWhere((s) => s.id == widget.stepId);
     if (previous) {
       for (var i = index - 1; i >= 0; i--) {
-        if (steps[i].kind == StepKind.audio) return steps[i];
+        if (steps[i].kind == StepKind.audio &&
+            effective.contains(steps[i].id)) {
+          return steps[i];
+        }
       }
     } else {
       for (var i = index; i < steps.length; i++) {
-        if (steps[i].kind == StepKind.audio) return steps[i];
+        if (steps[i].kind == StepKind.audio &&
+            effective.contains(steps[i].id)) {
+          return steps[i];
+        }
       }
     }
     return null;
@@ -139,8 +148,10 @@ class _PauseEditorState extends State<PauseEditor> {
               builder: (context, _) {
                 final c = widget.controller;
                 final plan = c.draft.plan;
-                final delta =
-                    (_model.totalSeconds - _original.delayBeforeSeconds) * 1000;
+                final delta = plan.steps.any((s) => s.id == widget.stepId)
+                    ? (_model.totalSeconds - _original.delayBeforeSeconds) *
+                          1000
+                    : 0;
                 final groupMs =
                     plan.steps
                         .where((s) => s.groupId == _original.groupId)
@@ -163,13 +174,13 @@ class _PauseEditorState extends State<PauseEditor> {
                         style: const TextStyle(fontSize: 10, color: neonLime),
                       ),
                       Text(
-                        'Раздел: ${plan.groupName(_original.groupId)}',
+                        'Фаза: ${plan.groupName(_original.groupId)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 10, color: neonPink),
                       ),
                       Text(
-                        'Перед треком ${plan.steps.indexWhere((s) => s.id == widget.stepId) + 1}: ${c.asset(_original.audioAssetId)?.title ?? _original.title}',
+                        'Перед треком ${plan.allSteps.indexWhere((s) => s.id == widget.stepId) + 1}: ${c.asset(_original.audioAssetId)?.title ?? _original.title}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -196,7 +207,7 @@ class _PauseEditorState extends State<PauseEditor> {
                               : formatDuration(_original.durationMs!),
                         ),
                       ),
-                      Expanded(child: _stat('Раздел', formatDuration(groupMs))),
+                      Expanded(child: _stat('Фаза', formatDuration(groupMs))),
                       Expanded(
                         child: _stat(
                           plan.estimated ? '≈ Всего' : 'Всего',
@@ -221,7 +232,10 @@ class _PauseEditorState extends State<PauseEditor> {
                           Text(
                             'Шаблон: ${c.baseTemplate?.name ?? c.draft.baseTemplateName ?? 'Не выбран'}',
                           ),
-                          Text('Раздел: ${plan.groupName(_original.groupId)}'),
+                          Text('Фаза: ${plan.groupName(_original.groupId)}'),
+                          Text(
+                            'Модуль: ${plan.phases?.expand((p) => p.children).where((c) => c.items.any((s) => s.id == widget.stepId)).firstOrNull?.title ?? 'Отдельный трек'}',
+                          ),
                           Text(
                             'Перед треком: ${c.asset(_original.audioAssetId)?.title ?? _original.title}',
                           ),

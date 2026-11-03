@@ -1,12 +1,16 @@
 import 'package:sqflite/sqflite.dart';
 
+import 'dart:convert';
+
+import 'v4_migration.dart';
+
 Future<Database> openAppDatabase(
   String path, {
   DatabaseFactory? factory,
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 2,
+    version: 3,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -21,6 +25,7 @@ Future<Database> openAppDatabase(
         tags TEXT NOT NULL DEFAULT '[]',source TEXT NOT NULL DEFAULT 'imported'
       )''');
       await _createSessionTables(db);
+      await _createV4Tables(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -38,6 +43,32 @@ Future<Database> openAppDatabase(
           "ALTER TABLE audio_assets ADD COLUMN source TEXT NOT NULL DEFAULT 'imported'",
         );
         await _createSessionTables(db);
+      }
+      if (oldVersion < 3) {
+        await _createV4Tables(db);
+        for (final table in [
+          'session_templates',
+          'current_draft',
+          'session_runs',
+        ]) {
+          for (final row in await db.query(table)) {
+            final original = row['payload'] as String;
+            await db.insert('legacy_v2_documents', {
+              'kind': table,
+              'documentId': row['id'].toString(),
+              'payload': original,
+            }, conflictAlgorithm: ConflictAlgorithm.ignore);
+            final updated = migratePlanDocument(
+              Map<String, dynamic>.from(jsonDecode(original)),
+            );
+            await db.update(
+              table,
+              {'payload': jsonEncode(updated)},
+              where: 'id=?',
+              whereArgs: [row['id']],
+            );
+          }
+        }
       }
     },
   ),
@@ -58,5 +89,14 @@ Future<void> _createSessionTables(DatabaseExecutor db) async {
   await db.execute('CREATE INDEX run_events_run ON run_events(runId,id)');
   await db.execute(
     'CREATE TABLE app_counters (name TEXT PRIMARY KEY,value INTEGER NOT NULL)',
+  );
+}
+
+Future<void> _createV4Tables(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS module_definitions(id TEXT PRIMARY KEY,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS legacy_v2_documents(kind TEXT NOT NULL,documentId TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(kind,documentId))',
   );
 }

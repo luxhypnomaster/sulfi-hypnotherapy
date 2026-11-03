@@ -30,14 +30,6 @@ class _RunScreenState extends State<RunScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      unawaited(e.interrupt().catchError((Object _) {}));
-    }
-  }
-
   Future<void> _back() async {
     if (e.active) {
       if (!await confirmAction(
@@ -107,7 +99,7 @@ class _RunScreenState extends State<RunScreen> with WidgetsBindingObserver {
                           const SizedBox(height: 18),
                           Text(
                             !e.active
-                                ? 'Сессия остановлена'
+                                ? r.status.label
                                 : r.phase == 'delay'
                                 ? 'Пауза перед треком'
                                 : s?.title ?? '',
@@ -189,18 +181,20 @@ class _RunScreenState extends State<RunScreen> with WidgetsBindingObserver {
                               ? null
                               : () => showActionError(context, e.next),
                           icon: const Icon(Icons.skip_next),
-                          label: const Text('Следующий блок'),
+                          label: const Text('Следующий элемент'),
                         ),
                       const SizedBox(height: 28),
                       NeonButton(
-                        label: 'Завершить и выйти',
+                        label: e.exiting ? 'Идёт выход' : 'Перейти к выходу',
                         icon: Icons.exit_to_app,
-                        onPressed: () => showActionError(context, e.exit),
+                        onPressed: e.exiting
+                            ? null
+                            : () => showActionError(context, e.exit),
                         primary: true,
                       ),
                       const SizedBox(height: 14),
                       const Text(
-                        'Сессия работает в открытом приложении. При блокировке экрана или уходе в фон она будет прервана.',
+                        'Фоновый медиасервис включён. Работа на вашем устройстве требует проверки.',
                         textAlign: TextAlign.center,
                       ),
                     ] else ...[
