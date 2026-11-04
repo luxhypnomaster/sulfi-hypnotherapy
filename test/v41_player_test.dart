@@ -26,7 +26,11 @@ class Fixture {
   final SessionEngine engine;
   final TestTransport transport;
   final ValueNotifier<int> clock;
-  static Future<Fixture> create({int workTracks = 24, bool exit = true}) async {
+  static Future<Fixture> create({
+    int workTracks = 24,
+    bool exit = true,
+    bool unknownWork = false,
+  }) async {
     final dir = await Directory.systemTemp.createTemp('sulfi_v41_ui');
     final audio = MemoryRepository();
     final library = LibraryService(
@@ -71,6 +75,19 @@ class Fixture {
       await c.addModule(phase, module('exit', 'Личный выход', 1));
     }
     await c.setText(topic: 'Тестовая сессия');
+    if (unknownWork) {
+      await c.clearPlan();
+      final phase = await c.createPhase('work');
+      await c.addLoose(
+        phase,
+        const SessionStep(
+          id: 'unknown',
+          kind: StepKind.freeWork,
+          title: 'Работа без ограничения',
+          durationMs: null,
+        ),
+      );
+    }
     final transport = TestTransport();
     final clock = ValueNotifier<int>(0);
     final engine = SessionEngine(
@@ -113,11 +130,16 @@ void main() {
     Fixture f, {
     Size size = const Size(412, 915),
     double scale = 1,
+    bool systemBars = false,
   }) async {
     t.view.physicalSize = size;
     t.view.devicePixelRatio = 1;
     addTearDown(t.view.resetPhysicalSize);
     addTearDown(t.view.resetDevicePixelRatio);
+    if (systemBars) {
+      t.view.padding = const FakeViewPadding(top: 24, bottom: 24);
+      addTearDown(t.view.resetPadding);
+    }
     if (!fontsReady) {
       const supplied = String.fromEnvironment('SULFI_TEST_FONT');
       final sdk = File(Platform.resolvedExecutable)
@@ -273,7 +295,7 @@ void main() {
   ]) {
     testWidgets('P32: safe layout ${config.$1} scale ${config.$2}', (t) async {
       final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
-      await open(t, f, size: config.$1, scale: config.$2);
+      await open(t, f, size: config.$1, scale: config.$2, systemBars: true);
       expect(
         find.byKey(const Key('finish-session')).hitTestable(),
         findsOneWidget,
@@ -373,6 +395,30 @@ void main() {
       await settleEngine(t, f);
       expect(f.engine.run!.status, RunStatus.completed);
       expect(find.byKey(const Key('watch-play-pause')), findsNothing);
+      await close(t, f);
+    },
+  );
+  testWidgets(
+    'P27: indefinite work disables fake extension while allowing manual finish',
+    (t) async {
+      final f = (await t.runAsync(
+        () => Fixture.create(exit: false, unknownWork: true),
+      ))!;
+      await open(t, f);
+      expect(f.engine.forecast.progress, isNull);
+      expect(find.byKey(const Key('track-seek')), findsNothing);
+      await t.tap(find.byTooltip('Подробности сессии'));
+      await t.pumpAndSettle();
+      final plus = t.widget<TextButton>(
+        find.ancestor(
+          of: find.text('+5 минут'),
+          matching: find.byType(TextButton),
+        ),
+      );
+      expect(plus.onPressed, isNull);
+      await t.tap(find.text('Завершить работу'));
+      await settleEngine(t, f);
+      expect(f.engine.run!.status, RunStatus.completed);
       await close(t, f);
     },
   );

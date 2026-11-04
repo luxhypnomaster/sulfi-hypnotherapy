@@ -289,6 +289,12 @@ void main() {
     expect(engine.forecast.remainingMs, isNull);
     expect(engine.forecast.progress, isNull);
     expect(engine.forecast.liquidFraction, isNull);
+    await engine.extend();
+    expect(
+      (await repository.events(engine.run!.id))
+          .where((x) => x['eventType'] == 'extended_5min'),
+      isEmpty,
+    );
   });
   test('v41 backward navigation increases remaining forecast without changing actual elapsed', () async {
     for (var i = 0; i < 3; i++) {

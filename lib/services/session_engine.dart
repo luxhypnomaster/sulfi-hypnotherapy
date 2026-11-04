@@ -392,10 +392,13 @@ class SessionEngine extends ChangeNotifier {
   }
 
   Future<void> extend() => _enqueue(() async {
-    if (!active || run!.phase != 'work' || step?.kind != StepKind.freeWork) {
+    if (!active ||
+        run!.phase != 'work' ||
+        step?.kind != StepKind.freeWork ||
+        step?.durationMs == null) {
       return;
     }
-    if (step!.durationMs != null) _extendedMs += 300000;
+    _extendedMs += 300000;
     await _persist('extended_5min');
   });
   Future<void> finishWork() {

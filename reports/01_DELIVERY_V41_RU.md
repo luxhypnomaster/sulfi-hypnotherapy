@@ -30,7 +30,7 @@ Linux x64, Flutter 3.47.9 stable / Dart 3.13.7, JDK 21, Android SDK 35/36, build
 - `ui/run_screen.dart`: утверждённые колба/часы, фуксия «Время трансформации», дата/номер/тема из run, глобальные счётчики, один Play/Pause, seek и правильные интервальные состояния; закреплённые 3 пары переходов и один финальный action. На шкале все фазы/названия модулей, все треки только текущей фазы, авто-scroll и статусы с текстом/иконками. Нет Professional tap.
 - `ui/player_art.dart`, `assets/player/approved.png`: золотые орнаменты и eye берутся через source rectangles/clipping из единственного утверждённого PNG; демонстрационные UI-надписи/нарисованные кнопки не используются. Жидкость и фон циферблата нарисованы динамически; поверх настоящие Flutter controls. Новые графические концепции не генерировались. При малом экране орнамент часов сокращается ради доступных контролов.
 - `ui/history_screen.dart`: понятные названия seek/navigation/skip и оценка последнего запуска элемента, а не любого прежнего completion.
-- Сохранены FreeWork «+5 минут» / «Завершить работу» через сведения ⓘ. Это контекстные команды из V4, не дополнительные постоянные кнопки основного экрана. Технические сведения о тестовой среде вынесены из пользовательского плеера в отчёт.
+- Сохранены FreeWork «+5 минут» / «Завершить работу» через сведения ⓘ. Это контекстные команды из V4, не дополнительные постоянные кнопки основного экрана. Для неопределённой работы +5 disabled: нельзя журналировать несуществующее продление, ручное завершение доступно. Технические сведения о тестовой среде вынесены из пользовательского плеера в отчёт.
 - Завершение: confirmation предлагает только доступный exit, interruption и cancel. Перед изменением основного дерева закрывается диалог целиком; это устраняет найденную в тесте ошибку Flutter semantics geometry при collapse/exit. Штатное завершение, досрочный выход и прерывание остаются разными статусами.
 
 ### Политика переходов и времени
@@ -41,7 +41,7 @@ Next/previous track выбирает ближайшее аудиопримене
 
 ## D. Реальные проверки
 
-Точные логи в `/workspace/scratch/v41-{pub,analyze,tests,render-last}.log`; итоговые CI и APK прикрепляются в PR и сообщении владельцу после сборки.
+Точные логи в `/workspace/scratch/v41-pub.log`, `v41-analyze-final.log`, `v41-tests-final.log`, `v41-render-final4.log`; итоговые CI и APK прикрепляются в PR и сообщении владельцу после сборки.
 
 | Проверка | Результат / границы |
 |---|---|
@@ -49,7 +49,7 @@ Next/previous track выбирает ближайшее аудиопримене
 | pub get --enforce-lockfile | PASS |
 | dart format --output=none --set-exit-if-changed lib test | PASS, 48 файлов без изменений после format |
 | flutter analyze --fatal-infos | PASS: No issues found |
-| flutter test --reporter expanded | PASS: 119 тестов; 100 прежних и 19 новых случаев, включая условный render gate |
+| flutter test --reporter expanded | PASS: 120 тестов; 100 прежних и 20 новых случаев, включая условный render gate |
 | Отдельный Flutter render | Реальные PNG, не фотография референса |
 | flutter build apk --debug | Выполняется GitHub Actions; ссылка/результат в PR после завершения |
 | Миграция / сохранность | Автотесты SQL fixtures + byte comparisons; БД телефона недоступна |
@@ -92,7 +92,7 @@ Capture/transport в тестах внедряются: это проверка 
 | P29 | PASS | Widget Exit/cancel/stop и no-Exit вариант, engine проверяет доступность файла. |
 | P30 | PASS | Engine + widget: completed / completedEarlyWithExit / interrupted, разные events. |
 | P31 | NOT TESTED | Service-backed архитектура сохранена; блокировка/фон на физическом Android недоступны. |
-| P32 | NOT TESTED | Linux widget 320×600/1.6 и 800×360 PASS; Android system bars/notch/TalkBack/gesture regions ещё не проверены. |
+| P32 | NOT TESTED | Linux widget 320×600/1.6 и 800×360 с padding 24dp сверху/снизу PASS; реальные Android notch/TalkBack/gesture regions ещё не проверены. |
 | P33 | PASS | Production UI из SessionRun/frozenPlan, нет импортированных demo templates/track names. PNG используется только для орнамента. |
 | P34 | NOT TESTED | Порядок/время проверены injected transport; настоящие MP3 + lock screen/intervals на телефоне не проверены. |
 | P35 | PASS | Completed IDs сохраняются в SQLite и сбрасываются для replay; прошлые actual events остаются, snapshot полный. |

@@ -94,6 +94,7 @@ class _RunScreenState extends State<RunScreen> {
             'Фаза: ${entry?.phase.title ?? '—'}\n'
             'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}\n'
             'Элемент: ${e.step?.title ?? '—'}\n'
+            '${e.step?.kind == StepKind.freeWork && e.step?.durationMs == null ? 'Длительность не задана: работа завершается вручную.\n' : ''}'
             'План при старте: ${formatDuration(e.run!.snapshot.plan.totalMs)}\n'
             'Выполнено: ${e.run!.completedStepIds.length} · пропущено: ${e.run!.skippedStepIds.length}',
           ),
@@ -103,10 +104,12 @@ class _RunScreenState extends State<RunScreen> {
               e.run!.phase == 'work' &&
               e.step?.kind == StepKind.freeWork) ...[
             TextButton(
-              onPressed: () async {
-                await showActionError(context, e.extend);
-                if (ctx.mounted) Navigator.pop(ctx);
-              },
+              onPressed: e.step?.durationMs == null
+                  ? null
+                  : () async {
+                      await showActionError(context, e.extend);
+                      if (ctx.mounted) Navigator.pop(ctx);
+                    },
               child: const Text('+5 минут'),
             ),
             TextButton(
@@ -170,52 +173,15 @@ class _RunScreenState extends State<RunScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Сессия №${run.displayNumber} · $title',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            tooltip: 'Подробности сессии',
-                            onPressed: _details,
-                            icon: const Icon(
-                              Icons.info_outline,
-                              color: neonPink,
-                            ),
-                          ),
-                        ],
+                      _header(
+                        run,
+                        f,
+                        title,
+                        landscape: landscape,
+                        compact:
+                            box.maxHeight < 660 &&
+                            MediaQuery.textScalerOf(context).scale(1) > 1.3,
                       ),
-                      if (!landscape)
-                        const Text(
-                          'Время трансформации',
-                          style: TextStyle(
-                            color: neonPink,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      Text(
-                        historicalDateLabel(
-                          run.startedAt,
-                          run.startedUtcOffsetMinutes,
-                          legacyLabel: run.name,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: antiqueGold,
-                        ),
-                      ),
-                      _totals(f),
                       const SizedBox(height: 4),
                       Expanded(
                         child: LayoutBuilder(
@@ -323,6 +289,84 @@ class _RunScreenState extends State<RunScreen> {
       },
     ),
   );
+
+  Widget _header(
+    SessionRun run,
+    SessionForecast f,
+    String title, {
+    required bool landscape,
+    required bool compact,
+  }) {
+    final heading = Row(
+      children: [
+        Expanded(
+          child: Text(
+            'Сессия №${run.displayNumber} · $title',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+          ),
+        ),
+        IconButton(
+          tooltip: 'Подробности сессии',
+          onPressed: _details,
+          icon: const Icon(Icons.info_outline, color: neonPink),
+        ),
+      ],
+    );
+    final date = Text(
+      historicalDateLabel(
+        run.startedAt,
+        run.startedUtcOffsetMinutes,
+        legacyLabel: run.name,
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(fontSize: 11, color: antiqueGold),
+    );
+    final slogan = Text(
+      'Время трансформации',
+      maxLines: landscape || compact ? 1 : null,
+      style: TextStyle(
+        color: neonPink,
+        fontSize: landscape ? 14 : 20,
+        fontWeight: FontWeight.w800,
+      ),
+    );
+    if (landscape) {
+      return Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [heading, slogan, date],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(child: _totals(f)),
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        heading,
+        if (compact)
+          SizedBox(
+            height: 28,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: slogan,
+            ),
+          )
+        else
+          slogan,
+        date,
+        _totals(f),
+      ],
+    );
+  }
 
   Widget _totals(SessionForecast f) => Container(
     key: const Key('session-totals'),
@@ -556,8 +600,8 @@ class _RunScreenState extends State<RunScreen> {
       final duration = e.phaseDurationMs;
       final position = e.phasePositionMs.clamp(0, duration ?? 0x7fffffff);
       final compact =
-          box.maxHeight < 220 ||
-          box.maxWidth < 180 ||
+          box.maxHeight < 250 ||
+          box.maxWidth < 184 ||
           MediaQuery.textScalerOf(context).scale(1) > 1.3;
       final title = Text(
         label,
