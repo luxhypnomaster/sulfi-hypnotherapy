@@ -13,6 +13,7 @@ import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/pause_editor.dart';
 import 'package:sulfi_hypnotherapy/ui/structure_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/modular_structure_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/templates_screen.dart';
 
 import 'support/fakes.dart';
@@ -95,17 +96,18 @@ void main() {
   workspaceTest(
     'home has one navigation row and opening it does not create a history record',
     (tester) async {
-      await tester.pumpWidget(
+      await open(
+        tester,
         SulfiApp(library: library, player: player, controller: c),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Sulfi'), findsOneWidget);
+      expect(find.text('Сульфи'), findsOneWidget);
       expect(find.text('Ваш внутренний\nнавигатор'), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);
       expect(find.text('История'), findsOneWidget);
       expect(repository.savedRuns, isEmpty);
       expect(await repository.nextNumber(), 1);
-      await tester.pumpWidget(const SizedBox.shrink());
+      await open(tester, const SizedBox.shrink());
       await tester.pumpAndSettle();
     },
   );
@@ -125,7 +127,7 @@ void main() {
       tester.view.physicalSize = const Size(360, 720);
       await tester.pumpAndSettle();
       for (final label in [
-        'Начать сессию',
+        'НАЧАТЬ ТРАНСФОРМАЦИЮ',
         'Библиотека',
         'Шаблоны',
         'История',
@@ -138,7 +140,11 @@ void main() {
       );
       await tester.tap(find.text('Структура сессии'));
       await tester.pumpAndSettle();
-      expect(find.byType(StructureScreen), findsOneWidget);
+      expect(find.byType(ModularStructureScreen), findsOneWidget);
+      await tester.ensureVisible(
+        find.byKey(Key('pause-${c.draft.plan.steps.first.id}')),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('pause-${c.draft.plan.steps.first.id}')));
       await tester.pumpAndSettle();
       expect(find.byType(PauseEditor), findsOneWidget);
@@ -155,7 +161,7 @@ void main() {
       expect(player.current, isNull);
       await tester.tap(find.byTooltip('Назад').last);
       await tester.pumpAndSettle();
-      expect(find.text('Начать сессию').hitTestable(), findsOneWidget);
+      expect(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ').hitTestable(), findsOneWidget);
       expect(repository.savedRuns, isEmpty);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
@@ -173,8 +179,7 @@ void main() {
       expect(c.draft.plan.fingerprint, fingerprint);
       await tester.tap(find.byTooltip('Добавить трек: Подготовка'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Добавить в сессию'));
-      await tester.tap(find.text('Добавить в сессию'));
+      await tester.tap(find.byKey(ValueKey('pick-${sampleAsset().id}')));
       await tester.pumpAndSettle();
       final step = c.draft.plan.steps.single;
       expect(c.draft.plan.groupName(step.groupId), 'Подготовка');
@@ -190,11 +195,11 @@ void main() {
         tester,
         SulfiApp(library: library, player: player, controller: c),
       );
-      expect(find.text('Длительность сессии'), findsOneWidget);
-      expect(find.text('Треки не добавлены'), findsOneWidget);
+      expect(find.textContaining('0 треков'), findsOneWidget);
+      expect(find.textContaining('Добавьте фазу'), findsOneWidget);
       await c.addAudio(sampleAsset());
       await tester.pumpAndSettle();
-      expect(find.text('1 мин 05 с'), findsOneWidget);
+      expect(find.textContaining('1 мин 05 с'), findsOneWidget);
       expect(find.text('Треки не добавлены'), findsNothing);
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -312,8 +317,7 @@ void main() {
       await open(tester, StructureScreen(controller: c, player: player));
       await tester.tap(find.text('Добавить трек'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Добавить в сессию'));
-      await tester.tap(find.text('Добавить в сессию'));
+      await tester.tap(find.byKey(ValueKey('pick-${sampleAsset().id}')));
       await tester.pumpAndSettle();
       expect(c.draft.plan.steps, hasLength(1));
       expect(c.draft.plan.steps.single.delayBeforeSeconds, 0);
@@ -472,7 +476,7 @@ void main() {
       tester,
       TemplatesScreen(controller: c, player: player, selecting: true),
     );
-    await tester.tap(find.text('Выбрать'));
+    await tester.tap(find.byKey(ValueKey('template-${template.id}')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Отмена'));
     await tester.pumpAndSettle();
