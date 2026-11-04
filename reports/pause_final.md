@@ -1,7 +1,7 @@
 # Окончательная настройка паузы — 04.11.2026
 
 Ветка `fix/pause-final-flywheels`, исходная точка `6f33380` — существующая версия
-0.4.3+8. Новая тестовая сборка 0.4.4+9. main/develop не изменяются, релиз не создан.
+0.4.3+8. Новая тестовая сборка 0.4.4+9. Код/APK: `e3027ad`. [PR №6](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/6). main/develop не изменяются, релиз не создан.
 Это отдельная задача; после доставки работа останавливается для приёмки.
 
 ## Аудит и выполненное исправление
@@ -76,7 +76,10 @@ README_FIRST_RU.txt. Исходные файлы не редактировали
 - `flutter test --reporter expanded` — **185 PASS**, включая **21 новый тест**.
 - Отдельный запуск с `SULFI_PAUSE_ARTIFACT_DIR=/workspace/artifacts/pause-final`
   сохранил рабочие скриншоты и кадры видео. `ffprobe` подтвердил кодек/размер/длительность.
-- Сборка APK и доставка: результат будет добавлен после завершения сборки.
+- Локально `flutter build apk --debug --no-pub --target-platform android-arm,android-arm64` — **PASS**.
+- [GitHub Actions 41890986608](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41890986608) — **SUCCESS**: format, analyze, все 185 Flutter-тестов, прежние Node-тесты и универсальный debug APK.
+- aapt подтвердил applicationId `ru.sulfi.sulfi_hypnotherapy`, versionName 0.4.4 / versionCode 9. apksigner и ZIP CRC — PASS. SHA-256 обоих графических исходников внутри APK совпали с архивом.
+- `adb devices -l` — устройств нет. Физическая установка/управление не выполнялись.
 
 | Пункты ТЗ | Результат / свидетельство |
 | --- | --- |
@@ -116,6 +119,62 @@ README_FIRST_RU.txt. Исходные файлы не редактировали
 - `docs/pause-final/actual-00-00.png` — рабочий скриншот.
 - `README.md`, `BACKLOG.md`, `CHANGELOG.md`, `reports/pause_final.md` — версия, приёмка и этот отчёт.
 
-`git diff --stat` относительно исходной точки будет записан после фиксации файлов.
+
 Других исходников/экранов, схемы БД, движка, диктофона, дневника или библиотеки в
 изменениях этой задачи нет. Ветка продолжает предыдущую разработку без её переписывания.
+
+
+## Сборка и доставка для приёмки
+
+- **[APK 0.4.4+9 для Android-телефонов](https://drive.google.com/file/d/1EhKGnWSU8NkEf29KFHhCQ_lo--cma6QW/view)** — ZIP с одним APK, 86951736 байт. В архиве `sulfi-0.4.4+9-arm-debug.apk`, 146172319 байт. Flutter engine для ARMv7/ARM64; x86_64 Flutter engine в локальную сборку не включён из-за лимита диска. В APK есть некоторые сопутствующие JNI-библиотеки x86_64, но это не поддержка запуска Flutter на x86_64.
+- **[Рабочий скриншот](https://drive.google.com/file/d/1gKk9D80--AqMNxmeym567AED_Q8Wu8Fx/view)** — PNG 1080×1920, 2763228 байт.
+- **[Демонстрация маховиков](https://drive.google.com/file/d/1PjMh4kyENXJSc0CLYgUx9rb5XfYMgAp6/view)** — MP4, 11 секунд, 676419 байт.
+- Загрузка и обратное чтение metadata всех трёх файлов подтверждены: размеры совпадают, shared=false, только owner. Это закрытые файлы в папке владельца «Сульфи».
+- [Универсальный APK в CI](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41890986608/artifacts/13354382562), артефакт до 18.11.2026. У CI собственный debug certificate; его нельзя считать совпадающим с локальным.
+
+Локальный APK подписан **тем же сертификатом, что предыдущая сборка 0.4.3+8 на Диске** — это проверено сравнением SHA-256 сертификатов, вместе с неизменным applicationId и увеличенным versionCode. Реальная установка поверх предыдущей версии ещё не проверена. При отказе Android обновляться не удалять старое приложение ради обхода подписи: это удаляет личные данные.
+
+SHA-256 APK: `1a661b9a0774a528f42ef402cbc4c794fa779ca7dcc3c9b3a60117be7cb7c60a`.
+SHA-256 ZIP: `dde97ae724a6024cb95f7ebe04aa331e4c7ac710a926bf911602ed304706d759`.
+Локальные копии и BUILD.json: `/workspace/artifacts/pause-final/`.
+
+Первая локальная универсальная попытка упёрлась в заполнение диска на stripDebugDebugSymbols; целевая сборка ARMv7/ARM64 завершилась успешно. Для Gradle использованы штатные proxy/CA среды с сохранённой TLS-проверкой и воспроизводимые кеши в RAM. Очищались только промежуточные build-файлы и кадры, уже закодированные в MP4. Старый APK/архив, исходные пользовательские ресурсы и аудиоданные сохранены.
+
+## Короткая приёмка на телефоне
+
+1. Установить APK поверх предыдущей версии, проверить наличие своей библиотеки, шаблонов и истории.
+2. Открыть сохранённую паузу: должно показываться её время. Вести вверх/вниз по всей поверхности обоих маховиков, проверить направление и перенос через 59 секунд. Горизонтальный жест/тап стрелки время не меняет.
+3. Обнулить → Отмена и системный возврат: прежнее значение остаётся. Обнулить → Применить: после повторного открытия 00:00. Применить ненулевое время: оно восстанавливается в нужной паузе.
+4. Повторить в модуле и структуре сессии; переставить/удалить соседнюю паузу, проверить исходные длительности.
+5. Проверить крупный шрифт/вырез/системную панель: все три действия доступны без прокрутки. Проверить TalkBack, затем отключить системную вибрацию и убедиться, что тактильные деления отключились.
+
+После доставки этой одной задачи работа остановлена для приёмки. Следующие подсистемы не начаты.
+
+## Полный diff --stat относительно исходной версии
+
+<!-- pause-diffstat -->
+```text
+ BACKLOG.md                               |  11 +
+ CHANGELOG.md                             |   8 +
+ README.md                                |   8 +-
+ assets/pause/FONT_LICENSE.txt            | 130 ++++++
+ assets/pause/LiberationSerif-Regular.ttf | Bin 0 -> 393692 bytes
+ assets/pause/approved.png                | Bin 0 -> 2763501 bytes
+ assets/pause/sigil.png                   | Bin 0 -> 186163 bytes
+ docs/pause-final/README_FIRST_RU.txt     |  14 +
+ docs/pause-final/TASK_RU.md              | 107 +++++
+ docs/pause-final/actual-00-00.png        | Bin 0 -> 2763228 bytes
+ lib/services/pause_edit_model.dart       |  53 +--
+ lib/services/session_controller.dart     |   6 +-
+ lib/ui/mechanical_wheel.dart             | 285 +++++++++----
+ lib/ui/pause_clock_art.dart              | 558 ++++++++++++++++++++-----
+ lib/ui/pause_editor.dart                 | 568 +------------------------
+ lib/ui/pause_time_picker.dart            | 130 ++----
+ pubspec.yaml                             |   7 +-
+ reports/pause_final.md                   | 180 ++++++++
+ test/pause_final_test.dart               | 688 +++++++++++++++++++++++++++++++
+ test/session_storage_test.dart           |   7 +-
+ test/workspace_screen_test.dart          |  52 ++-
+ 21 files changed, 1908 insertions(+), 904 deletions(-)
+```
+<!-- /pause-diffstat -->
