@@ -53,29 +53,33 @@ void main() {
     String minutes,
     String seconds,
   ) async {
-    await tester.tap(find.byKey(const Key('pause-time-input')));
+    await tester.drag(
+      find.byKey(const Key('wheel-Минуты')),
+      Offset(0, -int.parse(minutes) * 14.0),
+    );
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextFormField).at(0), minutes);
-    await tester.enterText(find.byType(TextFormField).at(1), seconds);
-    await tester.tap(find.text('Установить'));
+    await tester.drag(
+      find.byKey(const Key('wheel-Секунды')),
+      Offset(0, -int.parse(seconds) * 14.0),
+    );
     await tester.pumpAndSettle();
   }
 
   test(
-    'minute and second wheels are independent, wrap seconds and clamp minutes',
+    'second wheel carries minutes; minute wheel preserves seconds and clamps',
     () {
-      final m = PauseEditModel(6 * 60 + 55);
+      final m = PauseEditModel(6 * 60 + 59);
       m.turnSeconds(1);
-      expect(m.label, '06:00');
+      expect(m.label, '07:00');
       m.turnSeconds(-1);
-      expect(m.label, '06:55');
+      expect(m.label, '06:59');
       m.turnMinutes(1);
-      expect(m.label, '07:55');
+      expect(m.label, '07:59');
       m.turnMinutes(-99);
-      expect(m.label, '00:55');
+      expect(m.label, '00:59');
       expect(m.turnMinutes(-1), isFalse);
       m.manual(6, 32);
-      expect(m.label, '06:30');
+      expect(m.label, '06:32');
       m.reset();
       expect(m.label, '00:00');
       m.dispose();
@@ -152,10 +156,8 @@ void main() {
         player.current,
         isNull,
       ); // Opening the mini-player never autoplays.
-      await tester.tap(find.byTooltip('Прослушать трек'));
-      await tester.pumpAndSettle();
-      expect(player.current?.id, 'navigation0');
-      await tester.tap(find.byTooltip('Закрыть редактор паузы'));
+      expect(find.byTooltip('Прослушать трек'), findsNothing);
+      await tester.tap(find.byTooltip('Назад без сохранения'));
       await tester.pumpAndSettle();
       expect(find.byType(PauseEditor), findsNothing);
       expect(player.current, isNull);
@@ -227,7 +229,7 @@ void main() {
         );
         expect(find.text('Применить').hitTestable(), findsOneWidget);
         expect(find.text('Обнулить').hitTestable(), findsOneWidget);
-        expect(find.byTooltip('Прослушать трек').hitTestable(), findsOneWidget);
+        expect(find.text('Отмена').hitTestable(), findsOneWidget);
         final initial = tester.getCenter(
           find.byKey(const Key('pause-time-input')),
         );
@@ -285,7 +287,7 @@ void main() {
     },
   );
   workspaceTest(
-    'clock neighbor buttons preview the adjacent files without starting a session',
+    'approved clock has three actions and stops preview without starting a session',
     (tester) async {
       for (var i = 0; i < 2; i++) {
         final a = sampleAsset(id: 'neighbor$i', title: 'Трек $i');
@@ -301,12 +303,10 @@ void main() {
           player: player,
         ),
       );
-      await tester.tap(find.text('До паузы'));
-      await tester.pumpAndSettle();
-      expect(player.current?.id, 'neighbor0');
-      await tester.tap(find.text('После паузы'));
-      await tester.pumpAndSettle();
-      expect(player.current?.id, 'neighbor1');
+      expect(find.text('До паузы'), findsNothing);
+      expect(find.text('После паузы'), findsNothing);
+      expect(find.byType(TextButton), findsNWidgets(3));
+      expect(player.current, isNull);
       expect(repository.savedRuns, isEmpty);
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -326,7 +326,7 @@ void main() {
     },
   );
   workspaceTest(
-    'pause editor keeps manual changes local until Apply and protects original template',
+    'pause editor keeps wheel changes local until Apply and protects original template',
     (tester) async {
       await c.addAudio(sampleAsset());
       final template = await c.saveAsTemplate('Источник', 'Описание');
@@ -370,9 +370,7 @@ void main() {
     await tester.tap(find.byKey(Key('pause-$id')));
     await tester.pumpAndSettle();
     await manual(tester, '2', '25');
-    await tester.tap(find.byTooltip('Закрыть редактор паузы'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Не сохранять'));
+    await tester.tap(find.byTooltip('Назад без сохранения'));
     await tester.pumpAndSettle();
     expect(c.draft.plan.steps.single.delayBeforeSeconds, 0);
     expect(find.byType(PauseEditor), findsNothing);

@@ -2,11 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../models/audio_asset.dart';
-import 'design.dart';
+import '../services/pause_edit_model.dart';
 import 'pause_clock_art.dart';
 
-/// A duration value editor. Applying it never alters a pre-track delay.
+/// The same clock used for a Pause item in both module and session editors.
+/// No writes occur here; the owning editor receives seconds only on Apply.
 class PauseTimePicker extends StatefulWidget {
   const PauseTimePicker({
     super.key,
@@ -14,118 +14,34 @@ class PauseTimePicker extends StatefulWidget {
     this.manualEnd = false,
   });
   final int initialSeconds;
+  // Kept for source compatibility with existing legacy indefinite work items.
+  // Applying a duration explicitly converts that legacy item into a timed one.
   final bool manualEnd;
   @override
   State<PauseTimePicker> createState() => _PauseTimePickerState();
 }
 
 class _PauseTimePickerState extends State<PauseTimePicker> {
-  late int minutes = widget.initialSeconds ~/ 60;
-  late int seconds = widget.initialSeconds % 60;
-  late bool manualEnd = widget.manualEnd;
-  bool _turn(bool minute, int delta) {
-    setState(() {
-      manualEnd = false;
-      if (minute) {
-        minutes = (minutes + delta).clamp(0, 999);
-      } else {
-        seconds = (seconds + delta) % 60;
-      }
-    });
-    return true;
+  bool _closing = false;
+  late final _model = PauseEditModel(
+    widget.initialSeconds,
+    maxSeconds: math.max(5995, widget.initialSeconds),
+  );
+  @override
+  void dispose() {
+    _model.dispose();
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Настройка паузы')),
-    body: SafeArea(
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Поворачивайте минуты и секунды вверх или вниз. 00:00 — пропустить паузу.',
-            ),
-          ),
-          if (widget.manualEnd)
-            SwitchListTile(
-              title: const Text('До завершения вручную'),
-              value: manualEnd,
-              onChanged: (v) => setState(() => manualEnd = v),
-            ),
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, box) {
-                final w = math.min(box.maxWidth, box.maxHeight / 1.4);
-                return Center(
-                  child: SizedBox(
-                    width: w,
-                    height: w * 1.4,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: ApprovedPauseClock(
-                            minutes: minutes,
-                            seconds: seconds,
-                            onMinutes: (d) => _turn(true, d),
-                            onSeconds: (d) => _turn(false, d),
-                          ),
-                        ),
-                        Text(
-                          manualEnd
-                              ? 'Вручную'
-                              : formatPause(minutes * 60 + seconds),
-                          key: const Key('pause-duration-value'),
-                          style: const TextStyle(
-                            fontSize: 30,
-                            color: Color(0xFFFFE8A0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => setState(() {
-                      minutes = 0;
-                      seconds = 0;
-                      manualEnd = false;
-                    }),
-                    child: const Text('Обнулить'),
-                  ),
-                ),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Отмена'),
-                  ),
-                ),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () => Navigator.pop(
-                      context,
-                      manualEnd ? -1 : minutes * 60 + seconds,
-                    ),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: neonLime,
-                      foregroundColor: ink,
-                    ),
-                    child: const Text('Применить'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
+  Widget build(BuildContext context) => ApprovedPauseClock(
+    model: _model,
+    saving: _closing,
+    onCancel: () => Navigator.maybePop(context),
+    onApply: () {
+      if (_closing) return;
+      setState(() => _closing = true);
+      Navigator.pop(context, _model.totalSeconds);
+    },
   );
 }

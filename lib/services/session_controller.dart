@@ -107,11 +107,9 @@ class SessionController extends ChangeNotifier {
       throw const LibraryException('Повторяется ID элемента.');
     }
     for (final s in plan.allSteps) {
-      if (s.delayBeforeSeconds < 0 ||
-          s.delayBeforeSeconds > 5995 ||
-          s.delayBeforeSeconds % 5 != 0) {
+      if (s.delayBeforeSeconds < 0 || s.delayBeforeSeconds > 5995) {
         throw const LibraryException(
-          'Пауза должна быть от 00:00 до 99:55 с шагом 5 секунд.',
+          'Пауза должна быть от 00:00 до 99:55 с шагом 1 секунда.',
         );
       }
       if (s.durationMs != null && s.durationMs! < 0) {
