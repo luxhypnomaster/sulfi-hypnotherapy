@@ -10,6 +10,7 @@ abstract interface class SessionTransport {
   Future<void> load(String path);
   Future<void> play();
   Future<void> pause();
+  Future<void> seek(Duration position);
   Future<void> stop();
   Future<void> close();
 }
@@ -60,6 +61,8 @@ class JustAudioSessionTransport implements SessionTransport {
 
   @override
   Future<void> pause() => _player.pause();
+  @override
+  Future<void> seek(Duration position) => _player.seek(position);
   @override
   Future<void> stop() => _player.stop();
   @override
