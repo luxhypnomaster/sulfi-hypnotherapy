@@ -9,6 +9,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
+import 'data/diary_repository.dart';
+import 'services/diary_api.dart';
+import 'services/diary_controller.dart';
 import 'data/library_repository.dart';
 import 'data/session_repository.dart';
 import 'data/module_catalog.dart';
@@ -100,10 +103,22 @@ class _BootstrapState extends State<_Bootstrap> {
       final player = LocalPreviewPlayer();
       _player = player;
       await player.initialize();
+      const diaryUrl = String.fromEnvironment('SULFI_DIARY_API');
+      const authorWorkspace = bool.fromEnvironment('SULFI_AUTHOR_WORKSPACE');
+      final diary = DiaryController(
+        DiaryRepository(repository.database),
+        api: diaryUrl.isEmpty ? null : DiaryApi(Uri.parse(diaryUrl)),
+        authorRepository: authorWorkspace
+            ? DiaryAuthorRepository(repository.database)
+            : null,
+      );
+      await diary.load();
+      if (diary.api != null) unawaited(diary.sync());
       final controller = SessionController(
         repository: sessions,
         library: library,
         modules: modules,
+        diary: diary,
       );
       _controller = controller;
       await controller.initialize();

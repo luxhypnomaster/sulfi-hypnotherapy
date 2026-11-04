@@ -13,8 +13,11 @@ enum AudioCategory {
   preparation('Подготовка'),
   induction('Погружение'),
   deepener('Углубление'),
+  safePlace('Безопасное место'),
   work('Терапевтическое задание'),
   integration('Интеграция'),
+  progression('Прогрессия'),
+  suggestions('Установки'),
   exit('Выход'),
   freeform('Другое');
 
@@ -51,6 +54,13 @@ class AudioAsset {
   final LibrarySection section;
   final List<String> tags;
   final String source;
+
+  /// Origin is independent of content category and legacy presentation section.
+  bool get isPersonal =>
+      source == 'recorded' || section == LibrarySection.personal;
+  bool get isSuggestion =>
+      category == AudioCategory.suggestions ||
+      section == LibrarySection.suggestions;
 
   AudioAsset edited(
     String title,

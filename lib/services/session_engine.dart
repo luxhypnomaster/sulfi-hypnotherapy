@@ -401,12 +401,25 @@ class SessionEngine extends ChangeNotifier {
     _extendedMs += 300000;
     await _persist('extended_5min');
   });
+  bool get canFinishPause =>
+      active &&
+      run!.phase == 'work' &&
+      (step?.kind == StepKind.silence || step?.kind == StepKind.freeWork);
   Future<void> finishWork() {
-    if (!active ||
-        busy ||
-        run!.phase != 'work' ||
-        step?.kind != StepKind.freeWork) {
+    if (!active || busy || run!.phase != 'work' || !canFinishPause) {
       return Future.value();
+    }
+    if (step?.kind == StepKind.silence) {
+      return _enqueue(() async {
+        if (!canFinishPause) return;
+        _markComplete();
+        await _persist('pause_completed_early');
+        await _beginStep(
+          _exiting && run!.stepIndex >= _exitEndIndex
+              ? run!.snapshot.plan.steps.length
+              : run!.stepIndex + 1,
+        );
+      });
     }
     return next();
   }

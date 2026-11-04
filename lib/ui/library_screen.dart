@@ -22,11 +22,13 @@ class LibraryScreen extends StatefulWidget {
     this.allowSelection = false,
     this.controller,
     this.onReset,
+    this.onSelected,
   });
   final LibraryService library;
   final SessionController? controller;
   final PreviewPlayer player;
   final bool allowSelection;
+  final Future<void> Function(AudioAsset)? onSelected;
   final Future<void> Function()? onReset;
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
@@ -41,6 +43,7 @@ class _LibraryScreenState extends State<LibraryScreen>
   bool _searchAll = true;
   LibrarySection _section = LibrarySection.general;
   AudioCategory? _category;
+  String _origin = 'all';
   @override
   void initState() {
     super.initState();
@@ -220,25 +223,207 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Сульфи · 0.4.1+6', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.2+7', textAlign: TextAlign.center),
           ],
         ),
       ),
     ),
   );
+  Widget _picker() {
+    final q = _query.toLowerCase().trim();
+    final items = _assets
+        .where(
+          (a) =>
+              (_origin == 'all' ||
+                  (_origin == 'personal' ? a.isPersonal : !a.isPersonal)) &&
+              (_category == null ||
+                  (_category == AudioCategory.suggestions
+                      ? a.isSuggestion
+                      : (_category == AudioCategory.suggestions
+                            ? a.isSuggestion
+                            : a.category == _category))) &&
+              '${a.title} ${a.description} ${a.tags.join(' ')}'
+                  .toLowerCase()
+                  .contains(q),
+        )
+        .toList();
+    return LeatherScaffold(
+      title: 'Выбрать аудио',
+      actions: [
+        IconButton(
+          tooltip: 'Импорт аудио',
+          onPressed: _busy ? null : _import,
+          icon: const Icon(Icons.file_upload_outlined),
+        ),
+      ],
+      child: Column(
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+              isDense: true,
+              labelText: 'Найти аудио',
+              prefixIcon: Icon(Icons.search),
+            ),
+            onChanged: (v) => setState(() => _query = v),
+          ),
+          Row(
+            children: [
+              for (final origin in [
+                ('all', 'Все'),
+                ('general', 'Общие'),
+                ('personal', 'Мои'),
+              ])
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => setState(() => _origin = origin.$1),
+                    child: Text(
+                      origin.$2,
+                      style: TextStyle(
+                        color: _origin == origin.$1 ? neonLime : null,
+                      ),
+                    ),
+                  ),
+                ),
+              Expanded(
+                flex: 2,
+                child: DropdownButton<AudioCategory>(
+                  isExpanded: true,
+                  value: _category,
+                  hint: const Text('Категории', style: TextStyle(fontSize: 12)),
+                  items: [
+                    const DropdownMenuItem(
+                      value: null,
+                      child: Text('Все категории'),
+                    ),
+                    for (final c in AudioCategory.values)
+                      DropdownMenuItem(
+                        value: c,
+                        child: Text(
+                          c.label,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                  ],
+                  onChanged: (v) => setState(() => _category = v),
+                ),
+              ),
+            ],
+          ),
+          if (_busy) const LinearProgressIndicator(minHeight: 2),
+          if (_loadError != null)
+            TextButton(onPressed: _load, child: Text(_loadError!)),
+          Expanded(
+            child: items.isEmpty
+                ? const Center(child: Text('Записи не найдены'))
+                : ListenableBuilder(
+                    listenable: widget.player,
+                    builder: (context, _) => ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, i) {
+                        final a = items[i];
+                        return InkWell(
+                          key: ValueKey('pick-${a.id}'),
+                          onTap: () async {
+                            if (widget.onSelected == null) {
+                              Navigator.pop(context, a);
+                              return;
+                            }
+                            try {
+                              await widget.onSelected!(a);
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Добавлено'),
+                                    duration: Duration(milliseconds: 650),
+                                  ),
+                                );
+                              }
+                            } catch (_) {
+                              _message(
+                                'Не удалось добавить трек. Повторите попытку.',
+                              );
+                            }
+                          },
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(minHeight: 52),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        a.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                      Text(
+                                        a.category.label,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: categoryColor(a.category),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  formatDuration(a.durationMs),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                IconButton(
+                                  tooltip: 'Прослушать: ${a.title}',
+                                  onPressed: () => _preview(a),
+                                  icon: const Icon(Icons.play_circle_outline),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+          ),
+          if (widget.player.current != null)
+            PreviewBar(
+              player: widget.player,
+              library: widget.library,
+              compact: true,
+            ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final q = _query.toLowerCase().trim();
     final visible = _assets
         .where(
           (a) =>
-              ((q.isNotEmpty && _searchAll) || a.section == _section) &&
-              (_category == null || a.category == _category) &&
+              ((q.isNotEmpty && _searchAll) ||
+                  (_section == LibrarySection.personal
+                      ? a.isPersonal
+                      : _section == LibrarySection.suggestions
+                      ? a.isSuggestion
+                      : !a.isPersonal)) &&
+              (_category == null ||
+                  (_category == AudioCategory.suggestions
+                      ? a.isSuggestion
+                      : a.category == _category)) &&
               '${a.title} ${a.description} ${a.category.label} ${a.tags.join(' ')}'
                   .toLowerCase()
                   .contains(q),
         )
         .toList();
+    if (widget.allowSelection) return _picker();
     return LeatherScaffold(
       title: widget.allowSelection ? 'Выбрать аудио' : 'Библиотека',
       actions: [

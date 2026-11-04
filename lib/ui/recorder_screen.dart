@@ -229,7 +229,7 @@ class _RecorderScreenState extends State<RecorderScreen>
             child: Column(
               children: [
                 SizedBox(
-                  height: 85,
+                  height: 32,
                   child: ExcludeSemantics(
                     child: Image.asset(
                       'assets/art/sulfi_header.png',
@@ -251,13 +251,14 @@ class _RecorderScreenState extends State<RecorderScreen>
                               'Параметры трека',
                               style: TextStyle(
                                 color: neonLime,
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             TextFormField(
                               controller: _title,
                               decoration: const InputDecoration(
+                                isDense: true,
                                 labelText: 'Название трека *',
                               ),
                               validator: (v) => (v ?? '').trim().isEmpty
@@ -267,14 +268,16 @@ class _RecorderScreenState extends State<RecorderScreen>
                             TextFormField(
                               controller: _description,
                               decoration: const InputDecoration(
+                                isDense: true,
                                 labelText: 'Описание',
                               ),
-                              maxLines: 2,
+                              maxLines: 1,
                             ),
                             DropdownButtonFormField<AudioCategory>(
                               initialValue: _category,
                               isExpanded: true,
                               decoration: const InputDecoration(
+                                isDense: true,
                                 labelText: 'Категория · Мои аудиозаписи',
                               ),
                               items: AudioCategory.values
@@ -287,23 +290,33 @@ class _RecorderScreenState extends State<RecorderScreen>
                                   .toList(),
                               onChanged: (v) => setState(() => _category = v!),
                             ),
-                            TextFormField(
-                              controller: _tags,
-                              decoration: const InputDecoration(
-                                labelText: 'Теги',
-                                hintText: 'Например: мой голос, расслабление',
+                            ExpansionTile(
+                              title: const Text(
+                                'Теги и модуль',
+                                style: TextStyle(fontSize: 12),
                               ),
+                              tilePadding: EdgeInsets.zero,
+                              children: [
+                                TextFormField(
+                                  controller: _tags,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Теги',
+                                    hintText:
+                                        'Например: мой голос, расслабление',
+                                  ),
+                                ),
+                                ModuleAssignment(
+                                  catalog: widget.controller.modules,
+                                  choice: _choice,
+                                ),
+                              ],
                             ),
-                            ModuleAssignment(
-                              catalog: widget.controller.modules,
-                              choice: _choice,
-                            ),
-                            const SizedBox(height: 18),
+                            const SizedBox(height: 4),
                             const Text(
                               'Запись',
                               style: TextStyle(
                                 color: neonLime,
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -312,7 +325,7 @@ class _RecorderScreenState extends State<RecorderScreen>
                                 tooltip: paused
                                     ? 'Продолжить запись'
                                     : 'Начать запись',
-                                iconSize: 88,
+                                iconSize: 62,
                                 onPressed: r.busy
                                     ? null
                                     : paused
@@ -324,8 +337,8 @@ class _RecorderScreenState extends State<RecorderScreen>
                                     : null,
                                 icon: Image.asset(
                                   'assets/brand/spiral.png',
-                                  width: 96,
-                                  height: 96,
+                                  width: 64,
+                                  height: 64,
                                 ),
                               ),
                             ),
@@ -337,7 +350,10 @@ class _RecorderScreenState extends State<RecorderScreen>
                             ),
                             Center(
                               child: Text(
-                                formatDuration(r.duration.inMilliseconds),
+                                r.duration.inMilliseconds > 0 &&
+                                        r.duration.inSeconds == 0
+                                    ? '< 1 секунды'
+                                    : formatDuration(r.duration.inMilliseconds),
                                 style: const TextStyle(fontSize: 28),
                               ),
                             ),

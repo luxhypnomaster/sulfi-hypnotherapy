@@ -158,6 +158,14 @@ void main() {
       await (FontLoader(
         'Roboto',
       )..addFont(Future.value(ByteData.sublistView(data!)))).load();
+      final iconBytes = await t.runAsync(
+        () => File(
+          '${sdk.path}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+        ).readAsBytes(),
+      );
+      await (FontLoader(
+        'MaterialIcons',
+      )..addFont(Future.value(ByteData.sublistView(iconBytes!)))).load();
       fontsReady = true;
     }
     await t.runAsync(PlayerArt.load);
@@ -203,7 +211,7 @@ void main() {
         const Color(0xffff168f),
       );
       expect(find.byKey(const Key('watch-play-pause')), findsOneWidget);
-      expect(find.text('Завершить сессию'), findsOneWidget);
+      expect(find.text('Закончить сеанс'), findsOneWidget);
       for (final unit in NavigationUnit.values) {
         for (final direction in ['previous', 'next']) {
           expect(
@@ -273,15 +281,15 @@ void main() {
     (t) async {
       final f = (await t.runAsync(() => Fixture.create(exit: false)))!;
       await open(t, f);
-      await t.tap(find.text('Завершить сессию'));
+      await t.tap(find.text('Закончить сеанс'));
       await t.runAsync(
         () => Future<void>.delayed(const Duration(milliseconds: 30)),
       );
       await t.pumpAndSettle();
       expect(find.text('Перейти к выходу'), findsNothing);
-      expect(find.text('Прервать сейчас'), findsOneWidget);
+      expect(find.text('Закончить сейчас'), findsOneWidget);
       expect(find.text('Отмена'), findsOneWidget);
-      await t.tap(find.text('Прервать сейчас'));
+      await t.tap(find.text('Закончить сейчас'));
       await settleEngine(t, f);
       expect(f.engine.run!.status, RunStatus.interrupted);
       expect(find.byKey(const Key('watch-play-pause')), findsNothing);
@@ -309,17 +317,58 @@ void main() {
     });
   }
   testWidgets(
-    'P17 P19: slider gesture seeks real transport while staying paused',
+    'P17 P19 L06: circular rim gesture seeks real transport while staying paused',
     (t) async {
       final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
       await open(t, f);
       final plays = f.transport.plays;
-      await t.drag(find.byKey(const Key('track-seek')), const Offset(35, 0));
+      final ring = t.getRect(find.byKey(const Key('track-seek')));
+      await t.tapAt(
+        ring.topLeft +
+            Offset(ring.width * (221.5 + 164) / 470, ring.height * 318.5 / 595),
+      );
       await settleEngine(t, f);
       expect(f.transport.position.inMilliseconds, greaterThan(0));
       expect(f.transport.position.inMilliseconds, lessThanOrEqualTo(65000));
       expect(f.transport.plays, plays);
       expect(f.engine.paused, isTrue);
+      expect(f.transport.position.inMilliseconds, closeTo(16250, 100));
+      final center =
+          ring.topLeft +
+          Offset(ring.width * 221.5 / 470, ring.height * 318.5 / 595);
+      final radius = ring.width * 164 / 470;
+      final drag = await t.startGesture(center + Offset(radius, 0));
+      await drag.moveTo(center + Offset(radius * .707, radius * .707));
+      await t.pump();
+      await drag.moveTo(center + Offset(0, radius));
+      await drag.up();
+      await settleEngine(t, f);
+      expect(f.transport.position.inMilliseconds, closeTo(32500, 100));
+      expect(f.transport.plays, plays);
+      await close(t, f);
+    },
+  );
+  testWidgets(
+    'L05: on-watch previous/next and PlayPause control the same run',
+    (t) async {
+      final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
+      await open(t, f);
+      final run = f.engine.run!.id, first = f.engine.step!.id;
+      await t.tap(find.byKey(const Key('watch-next')));
+      await settleEngine(t, f);
+      expect(f.engine.step!.id, isNot(first));
+      expect(f.engine.paused, isTrue);
+      await t.tap(find.byKey(const Key('watch-previous')));
+      await settleEngine(t, f);
+      expect(f.engine.step!.id, first);
+      await t.tap(find.byKey(const Key('watch-play-pause')));
+      await settleEngine(t, f);
+      expect(f.engine.paused, isFalse);
+      expect(f.transport.plays, greaterThan(0));
+      await t.tap(find.byKey(const Key('watch-play-pause')));
+      await settleEngine(t, f);
+      expect(f.engine.paused, isTrue);
+      expect(f.engine.run!.id, run);
       await close(t, f);
     },
   );
@@ -329,7 +378,7 @@ void main() {
       final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
       await open(t, f);
       Future<void> dialog() async {
-        await t.tap(find.text('Завершить сессию'));
+        await t.tap(find.text('Закончить сеанс'));
         await t.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 20)),
         );
@@ -391,7 +440,7 @@ void main() {
       expect(f.engine.run!.snapshot.plan.fingerprint, frozen);
       await t.tap(find.byTooltip('Подробности сессии'));
       await t.pumpAndSettle();
-      await t.tap(find.text('Завершить работу'));
+      await t.tap(find.text('Завершить паузу'));
       await settleEngine(t, f);
       expect(f.engine.run!.status, RunStatus.completed);
       expect(find.byKey(const Key('watch-play-pause')), findsNothing);
@@ -416,7 +465,7 @@ void main() {
         ),
       );
       expect(plus.onPressed, isNull);
-      await t.tap(find.text('Завершить работу'));
+      await t.tap(find.text('Завершить паузу'));
       await settleEngine(t, f);
       expect(f.engine.run!.status, RunStatus.completed);
       await close(t, f);

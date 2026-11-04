@@ -7,6 +7,7 @@ import '../services/session_controller.dart';
 import '../services/preview_player.dart';
 import 'library_screen.dart';
 import 'design.dart';
+import 'pause_time_picker.dart';
 
 class ModulesScreen extends StatefulWidget {
   const ModulesScreen({
@@ -130,7 +131,7 @@ class _ModuleEditorState extends State<_ModuleEditor> {
   }
 
   Future<void> _add() async {
-    final a = await Navigator.push<AudioAsset>(
+    await Navigator.push<void>(
       context,
       MaterialPageRoute(
         builder: (_) => LibraryScreen(
@@ -138,57 +139,49 @@ class _ModuleEditorState extends State<_ModuleEditor> {
           player: widget.player,
           controller: widget.controller,
           allowSelection: true,
+          onSelected: (a) => _save([
+            ...m.items,
+            SessionStep(
+              id: newId(),
+              kind: StepKind.audio,
+              title: a.title,
+              audioAssetId: a.id,
+              durationMs: a.durationMs,
+              description: a.description,
+            ),
+          ]),
         ),
       ),
     );
-    if (a != null) {
-      await _save([
-        ...m.items,
-        SessionStep(
-          id: newId(),
-          kind: StepKind.audio,
-          title: a.title,
-          audioAssetId: a.id,
-          durationMs: a.durationMs,
-          description: a.description,
-        ),
-      ]);
-    }
   }
 
-  Future<void> _interval() async {
-    final kind = await showDialog<StepKind>(
-      context: context,
-      builder: (context) => SimpleDialog(
-        title: const Text('Интервал модуля'),
-        children: [
-          for (final k in [StepKind.silence, StepKind.freeWork])
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, k),
-              child: Text(k.label),
-            ),
-        ],
-      ),
-    );
-    if (kind == null || !mounted) return;
-    final value = await askDetails(
+  Future<void> _interval([SessionStep? item]) async {
+    final seconds = await Navigator.push<int>(
       context,
-      title: 'Длительность интервала',
-      name: '60',
-      nameLabel: 'Секунды (0 — до ручного завершения)',
-    );
-    if (value == null) return;
-    final n = int.tryParse(value.name);
-    if (n == null || n < 0) return;
-    await _save([
-      ...m.items,
-      SessionStep(
-        id: newId(),
-        kind: kind,
-        title: kind.label,
-        durationMs: n == 0 ? null : n * 1000,
+      MaterialPageRoute(
+        builder: (_) => PauseTimePicker(
+          initialSeconds: (item?.durationMs ?? 0) ~/ 1000,
+          manualEnd: item != null && item.durationMs == null,
+        ),
       ),
-    ]);
+    );
+    if (seconds == null) return;
+    final step =
+        item?.copyWith(
+          durationMs: seconds < 0 ? null : seconds * 1000,
+          indefinite: seconds < 0,
+        ) ??
+        SessionStep(
+          id: newId(),
+          kind: StepKind.silence,
+          title: 'Пауза',
+          durationMs: seconds * 1000,
+        );
+    await _save(
+      item == null
+          ? [...m.items, step]
+          : m.items.map((v) => v.id == item.id ? step : v).toList(),
+    );
   }
 
   @override
@@ -249,33 +242,69 @@ class _ModuleEditorState extends State<_ModuleEditor> {
     ],
     child: Column(
       children: [
-        Text(m.description),
-        TextButton.icon(
-          onPressed: _add,
-          icon: const Icon(Icons.add),
-          label: const Text('Добавить трек из библиотеки'),
-        ),
-        TextButton.icon(
-          onPressed: _interval,
-          icon: const Icon(Icons.hourglass_empty),
-          label: const Text('Добавить интервал'),
+        if (m.description.isNotEmpty)
+          Text(
+            m.description,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 12),
+          ),
+        Row(
+          children: [
+            Expanded(
+              child: TextButton.icon(
+                onPressed: _add,
+                icon: const Icon(Icons.add),
+                label: const Text('Добавить трек'),
+              ),
+            ),
+            Expanded(
+              child: TextButton.icon(
+                onPressed: () => _interval(),
+                icon: const Icon(Icons.hourglass_empty),
+                label: const Text('Добавить паузу'),
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: ReorderableListView.builder(
+            buildDefaultDragHandles: false,
             itemCount: m.items.length,
             onReorderItem: (from, to) {
               final list = [...m.items];
               list.insert(to, list.removeAt(from));
               _save(list);
             },
-            itemBuilder: (context, i) => ListTile(
+            itemBuilder: (context, i) => ReorderableDelayedDragStartListener(
               key: ValueKey(m.items[i].id),
-              title: Text(m.items[i].title),
-              subtitle: Text(formatDuration(m.items[i].durationMs ?? 0)),
-              trailing: IconButton(
-                tooltip: 'Удалить ссылку из модуля',
-                icon: const Icon(Icons.remove_circle_outline),
-                onPressed: () => _save([...m.items]..removeAt(i)),
+              index: i,
+              child: ListTile(
+                dense: true,
+                minTileHeight: 52,
+                minVerticalPadding: 0,
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.drag_indicator),
+                onTap: m.items[i].kind == StepKind.audio
+                    ? null
+                    : () => _interval(m.items[i]),
+                title: Text(
+                  m.items[i].kind == StepKind.audio
+                      ? m.items[i].title
+                      : 'Пауза',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  m.items[i].durationMs == null
+                      ? 'До завершения вручную'
+                      : formatDuration(m.items[i].durationMs!),
+                ),
+                trailing: IconButton(
+                  tooltip: 'Удалить ссылку из модуля',
+                  icon: const Icon(Icons.remove_circle_outline),
+                  onPressed: () => _save([...m.items]..removeAt(i)),
+                ),
               ),
             ),
           ),

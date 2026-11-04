@@ -63,7 +63,12 @@ void main() {
       }
       await t.tap(find.text('Добавить фазу'));
       await t.pumpAndSettle();
-      await t.tap(find.text('Проработка'));
+      await t.tap(
+        find.descendant(
+          of: find.byType(SimpleDialog),
+          matching: find.text('Проработка'),
+        ),
+      );
       await t.pumpAndSettle();
       expect(c.draft.plan.phases, hasLength(1));
       await c.createPhase('work');

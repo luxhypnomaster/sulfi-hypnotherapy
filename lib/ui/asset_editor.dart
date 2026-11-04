@@ -31,7 +31,9 @@ class _AssetEditorState extends State<_AssetEditor> {
     text: widget.asset.description,
   );
   late final _tags = TextEditingController(text: widget.asset.tags.join(', '));
-  late LibrarySection _section = widget.asset.section;
+  late LibrarySection _section = widget.asset.source == 'recorded'
+      ? LibrarySection.personal
+      : widget.asset.section;
   late AudioCategory _category = widget.asset.category;
 
   @override
@@ -70,21 +72,24 @@ class _AssetEditorState extends State<_AssetEditor> {
                     : null,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<LibrarySection>(
-                initialValue: _section,
-                decoration: const InputDecoration(
-                  labelText: 'Раздел библиотеки',
+              if (widget.asset.source == 'recorded')
+                const Text('Мои аудиозаписи · записано на устройстве')
+              else
+                DropdownButtonFormField<LibrarySection>(
+                  initialValue: _section,
+                  decoration: const InputDecoration(
+                    labelText: 'Раздел библиотеки',
+                  ),
+                  isExpanded: true,
+                  items: LibrarySection.values
+                      .map(
+                        (s) => DropdownMenuItem(value: s, child: Text(s.label)),
+                      )
+                      .toList(),
+                  onChanged: (s) {
+                    if (s != null) setState(() => _section = s);
+                  },
                 ),
-                isExpanded: true,
-                items: LibrarySection.values
-                    .map(
-                      (s) => DropdownMenuItem(value: s, child: Text(s.label)),
-                    )
-                    .toList(),
-                onChanged: (s) {
-                  if (s != null) setState(() => _section = s);
-                },
-              ),
               const SizedBox(height: 12),
               DropdownButtonFormField<AudioCategory>(
                 initialValue: _category,

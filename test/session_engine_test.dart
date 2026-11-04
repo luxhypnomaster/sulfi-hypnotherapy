@@ -66,6 +66,30 @@ void main() {
     await engine.flush();
   }
 
+  test('v42 P05: legacy indefinite Silence can complete manually without changing snapshot', () async {
+    final phase = await c.createPhase('work');
+    await c.addLoose(
+      phase,
+      const SessionStep(
+        id: 'legacy',
+        kind: StepKind.silence,
+        title: 'Старая тишина',
+        durationMs: null,
+      ),
+    );
+    await engine.start();
+    await tick();
+    final fingerprint = engine.run!.snapshot.plan.fingerprint;
+    now = 50000;
+    await tick();
+    expect(engine.canFinishPause, true);
+    expect(engine.forecast.totalMs, isNull);
+    await engine.finishWork();
+    expect(engine.run!.status, RunStatus.completed);
+    expect(engine.run!.completedStepIds, hasLength(1));
+    expect(engine.run!.skippedStepIds, isEmpty);
+    expect(engine.run!.snapshot.plan.fingerprint, fingerprint);
+  });
   test('v41 forecast includes pre-delay, silence, work and audio without double counting', () async {
     final phase = await c.createPhase('work');
     await c.addLoose(

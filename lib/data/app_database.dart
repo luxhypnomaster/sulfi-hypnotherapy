@@ -10,7 +10,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 3,
+    version: 4,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -26,6 +26,7 @@ Future<Database> openAppDatabase(
       )''');
       await _createSessionTables(db);
       await _createV4Tables(db);
+      await _createDiaryTables(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -70,6 +71,7 @@ Future<Database> openAppDatabase(
           }
         }
       }
+      if (oldVersion < 4) await _createDiaryTables(db);
     },
   ),
 );
@@ -98,5 +100,17 @@ Future<void> _createV4Tables(DatabaseExecutor db) async {
   );
   await db.execute(
     'CREATE TABLE IF NOT EXISTS legacy_v2_documents(kind TEXT NOT NULL,documentId TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(kind,documentId))',
+  );
+}
+
+Future<void> _createDiaryTables(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS diary_public(id TEXT PRIMARY KEY,version INTEGER NOT NULL,publishedAt TEXT NOT NULL,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS diary_author(id TEXT PRIMARY KEY,updatedAt TEXT NOT NULL,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS diary_sync(id INTEGER PRIMARY KEY CHECK(id=1),revision TEXT NOT NULL)',
   );
 }

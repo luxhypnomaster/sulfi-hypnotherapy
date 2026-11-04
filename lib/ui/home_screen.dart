@@ -20,6 +20,7 @@ import '../models/local_dates.dart';
 import '../services/session_audio_handler.dart';
 import 'booking.dart';
 import 'templates_screen.dart';
+import 'diary_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -167,10 +168,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     try {
       if (sessionAudioHandler == null) await engine.start();
       if (!mounted) return;
-      await Navigator.push<void>(
+      final finishedId = await Navigator.push<String>(
         context,
         MaterialPageRoute(builder: (_) => RunScreen(engine: engine)),
       );
+      await c.reload();
+      if (finishedId != null && mounted) {
+        await Navigator.push<SessionRun>(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                HistoryScreen(controller: c, selectedRunId: finishedId),
+          ),
+        );
+      }
     } finally {
       if (sessionAudioHandler?.engine != engine) await engine.close();
       _engine = null;
@@ -290,13 +301,66 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      if (c.diary != null)
+                        ListenableBuilder(
+                          listenable: c.diary!,
+                          builder: (context, _) {
+                            final latest = c.diary!.published.firstOrNull;
+                            return InkWell(
+                              key: const Key('home-diary'),
+                              onTap: () => Navigator.push<void>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => latest == null
+                                      ? DiaryScreen(diary: c.diary!)
+                                      : DiaryReader(entry: latest),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.auto_stories_outlined,
+                                    color: neonPink,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      latest?.message ?? 'Дневник Сульфи',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: neonPink,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    tooltip: 'Оглавление дневника',
+                                    onPressed: () => Navigator.push<void>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            DiaryScreen(diary: c.diary!),
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.chevron_right,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       Wrap(
                         alignment: WrapAlignment.spaceBetween,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         spacing: 10,
                         children: [
                           Text(
-                            '№${c.nextNumber} · до старта',
+                            'Сессия №${c.nextNumber}',
                             style: const TextStyle(
                               color: neonLime,
                               fontSize: 12,
@@ -312,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           c.draft.topicText.isEmpty
                               ? 'Тема / запрос и заметка'
                               : c.draft.topicText,
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

@@ -179,8 +179,7 @@ void main() {
       expect(c.draft.plan.fingerprint, fingerprint);
       await tester.tap(find.byTooltip('Добавить трек: Подготовка'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Добавить в сессию'));
-      await tester.tap(find.text('Добавить в сессию'));
+      await tester.tap(find.byKey(ValueKey('pick-${sampleAsset().id}')));
       await tester.pumpAndSettle();
       final step = c.draft.plan.steps.single;
       expect(c.draft.plan.groupName(step.groupId), 'Подготовка');
@@ -318,8 +317,7 @@ void main() {
       await open(tester, StructureScreen(controller: c, player: player));
       await tester.tap(find.text('Добавить трек'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Добавить в сессию'));
-      await tester.tap(find.text('Добавить в сессию'));
+      await tester.tap(find.byKey(ValueKey('pick-${sampleAsset().id}')));
       await tester.pumpAndSettle();
       expect(c.draft.plan.steps, hasLength(1));
       expect(c.draft.plan.steps.single.delayBeforeSeconds, 0);
@@ -478,7 +476,7 @@ void main() {
       tester,
       TemplatesScreen(controller: c, player: player, selecting: true),
     );
-    await tester.tap(find.text('Выбрать'));
+    await tester.tap(find.byKey(ValueKey('template-${template.id}')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Отмена'));
     await tester.pumpAndSettle();

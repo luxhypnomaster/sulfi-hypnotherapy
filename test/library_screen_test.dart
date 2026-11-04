@@ -46,7 +46,7 @@ void main() {
     await open(tester);
     expect(find.text('Начните с одной записи'), findsOneWidget);
     expect(find.text('Добавить аудио'), findsOneWidget);
-    await tester.tap(find.text('Установки'));
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Установки').first);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Мои'));
     await tester.pumpAndSettle();
@@ -225,7 +225,7 @@ void main() {
       await tester.enterText(find.byType(TextField), 'границы');
       await tester.pumpAndSettle();
       expect(find.text('Личный модуль'), findsOneWidget);
-      await tester.tap(find.text('Установки'));
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Установки').first);
       await tester.pumpAndSettle();
       expect(find.text('Личный модуль'), findsNothing);
       await tester.tap(find.text('Мои'));

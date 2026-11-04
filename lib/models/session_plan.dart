@@ -14,8 +14,8 @@ String newId() {
 
 enum StepKind {
   audio('Аудио'),
-  silence('Тишина'),
-  freeWork('Самостоятельная работа'),
+  silence('Пауза'),
+  freeWork('Пауза'),
   voiceRecording('Запись речи');
 
   const StepKind(this.label);

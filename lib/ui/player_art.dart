@@ -61,6 +61,7 @@ class _ArtPainter extends CustomPainter {
         shape,
         Path()
           ..addRect(const Rect.fromLTWH(0, 0, 190, 145))
+          ..addRect(const Rect.fromLTWH(0, 120, 65, 500))
           ..addRect(const Rect.fromLTWH(0, 1440, 185, 77)),
       );
       canvas.clipPath(ornamentalClip);
@@ -97,6 +98,19 @@ class _ArtPainter extends CustomPainter {
             end: Alignment.centerRight,
           ).createShader(const Rect.fromLTWH(0, 0, 190, 1480)),
       );
+      for (var i = 0; i < 28; i++) {
+        final y = 1460.0 - i * 44;
+        if (y > top) {
+          canvas.drawCircle(
+            Offset(74.0 + (i * 17 % 25), y),
+            1.6 + i % 3,
+            Paint()
+              ..color = const Color(0xFFFFE044).withValues(alpha: .7)
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 1.2,
+          );
+        }
+      }
       canvas.drawLine(
         Offset(0, top),
         Offset(190, top),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'diary_controller.dart';
+
 import 'package:flutter/foundation.dart';
 
 import '../data/session_repository.dart';
@@ -14,8 +16,10 @@ class SessionController extends ChangeNotifier {
     required this.repository,
     required this.library,
     ModuleCatalog? modules,
+    this.diary,
   }) : modules = modules ?? ModuleCatalog();
   final ModuleCatalog modules;
+  final DiaryController? diary;
   final SessionRepository repository;
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(

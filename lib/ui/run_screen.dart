@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,35 @@ class _RunScreenState extends State<RunScreen> {
   final Map<String, GlobalKey> _rowKeys = {};
   String? _lastItem;
   double? _scrubMs;
+  bool _historyQueued = false;
+  @override
+  void initState() {
+    super.initState();
+    e.addListener(_checkEnd);
+  }
+
+  void _checkEnd() {
+    if (e.active ||
+        _historyQueued ||
+        _ending ||
+        !mounted ||
+        !Navigator.canPop(context) ||
+        ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+    _historyQueued = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await e.flush();
+      if (!mounted) return;
+      setState(() => _allowPop = true);
+      Navigator.pop(context, e.run!.id);
+    });
+  }
+
   bool _allowPop = false, _ending = false;
   @override
   void dispose() {
+    e.removeListener(_checkEnd);
     _scroll.dispose();
     super.dispose();
   }
@@ -44,7 +71,7 @@ class _RunScreenState extends State<RunScreen> {
       final route = DialogRoute<String>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Завершить сессию?'),
+          title: const Text('Закончить сеанс?'),
           content: Text(
             exit
                 ? 'Можно перейти к выходу или остановить сессию сейчас. Фактические события останутся в истории.'
@@ -62,7 +89,7 @@ class _RunScreenState extends State<RunScreen> {
               ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, 'stop'),
-              child: const Text('Прервать сейчас'),
+              child: const Text('Закончить сейчас'),
             ),
           ],
         ),
@@ -73,6 +100,7 @@ class _RunScreenState extends State<RunScreen> {
       await showActionError(context, action == 'exit' ? e.exit : e.interrupt);
     } finally {
       _ending = false;
+      _checkEnd();
     }
   }
 
@@ -81,43 +109,29 @@ class _RunScreenState extends State<RunScreen> {
     Navigator.pop(context);
   }
 
-  Future<void> _details() => showDialog<void>(
-    context: context,
-    builder: (ctx) {
-      final entry = e.currentEntry;
-      return AlertDialog(
+  Future<void> _details() async {
+    final entry = e.currentEntry;
+    final route = DialogRoute<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
         title: const Text('Сессия'),
         content: SingleChildScrollView(
           child: Text(
-            '№${e.run!.displayNumber} · ${e.run!.status.label}\n'
-            'Шаблон: ${e.run!.snapshot.baseTemplateName ?? 'Без шаблона'}\n'
-            'Фаза: ${entry?.phase.title ?? '—'}\n'
-            'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}\n'
-            'Элемент: ${e.step?.title ?? '—'}\n'
-            '${e.step?.kind == StepKind.freeWork && e.step?.durationMs == null ? 'Длительность не задана: работа завершается вручную.\n' : ''}'
-            'План при старте: ${formatDuration(e.run!.snapshot.plan.totalMs)}\n'
-            'Выполнено: ${e.run!.completedStepIds.length} · пропущено: ${e.run!.skippedStepIds.length}',
+            '№${e.run!.displayNumber} · ${e.run!.status.label}\nШаблон: ${e.run!.snapshot.baseTemplateName ?? 'Без шаблона'}\nФаза: ${entry?.phase.title ?? '—'}\nМодуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}\nЭлемент: ${e.step?.title ?? '—'}\n${e.step?.durationMs == null ? 'Длительность не задана: пауза завершается вручную.\n' : ''}План при старте: ${formatDuration(e.run!.snapshot.plan.totalMs)}\nВыполнено: ${e.run!.completedStepIds.length} · пропущено: ${e.run!.skippedStepIds.length}',
           ),
         ),
         actions: [
-          if (e.active &&
-              e.run!.phase == 'work' &&
-              e.step?.kind == StepKind.freeWork) ...[
+          if (e.canFinishPause) ...[
+            if (e.step?.kind == StepKind.freeWork)
+              TextButton(
+                onPressed: e.step?.durationMs == null
+                    ? null
+                    : () => Navigator.pop(ctx, 'extend'),
+                child: const Text('+5 минут'),
+              ),
             TextButton(
-              onPressed: e.step?.durationMs == null
-                  ? null
-                  : () async {
-                      await showActionError(context, e.extend);
-                      if (ctx.mounted) Navigator.pop(ctx);
-                    },
-              child: const Text('+5 минут'),
-            ),
-            TextButton(
-              onPressed: () async {
-                await showActionError(context, e.finishWork);
-                if (ctx.mounted) Navigator.pop(ctx);
-              },
-              child: const Text('Завершить работу'),
+              onPressed: () => Navigator.pop(ctx, 'finish'),
+              child: const Text('Завершить паузу'),
             ),
           ],
           TextButton(
@@ -125,9 +139,18 @@ class _RunScreenState extends State<RunScreen> {
             child: const Text('Закрыть'),
           ),
         ],
-      );
-    },
-  );
+      ),
+    );
+    final action = await Navigator.of(context).push(route);
+    await route.completed;
+    _checkEnd();
+    if (!mounted || action == null) return;
+    await showActionError(
+      context,
+      action == 'extend' ? e.extend : e.finishWork,
+    );
+  }
+
   void _scrollToCurrent() {
     final id = e.step?.id;
     if (_lastItem == id) return;
@@ -191,7 +214,7 @@ class _RunScreenState extends State<RunScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
-                                  flex: landscape ? 5 : 5,
+                                  flex: landscape ? 5 : 6,
                                   child: _scale(),
                                 ),
                                 const SizedBox(width: 5),
@@ -213,7 +236,7 @@ class _RunScreenState extends State<RunScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      if (!landscape) Expanded(child: _watch()),
+                                      if (!landscape) Flexible(child: _watch()),
                                       if (!landscape && body.maxHeight >= 380)
                                         _info(compact: compact),
                                       if (!landscape) const SizedBox(height: 6),
@@ -251,7 +274,7 @@ class _RunScreenState extends State<RunScreen> {
                                           ),
                                           label: Text(
                                             e.active
-                                                ? 'Завершить сессию'
+                                                ? 'Закончить сеанс'
                                                 : 'На главную',
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
@@ -500,8 +523,7 @@ class _RunScreenState extends State<RunScreen> {
               Expanded(
                 child: Text(
                   title,
-                  maxLines: isPhase ? 3 : 2,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: null,
                   style: TextStyle(
                     fontSize: isPhase ? 13 : 12,
                     color: color,
@@ -515,198 +537,268 @@ class _RunScreenState extends State<RunScreen> {
       );
     }
 
-    return Stack(
-      children: [
-        Positioned(
-          top: 0,
-          bottom: 0,
-          left: 0,
-          width: 32,
-          child: Semantics(
-            label: e.forecast.liquidFraction == null
-                ? 'Уровень: время уточняется'
-                : 'Остаток раствора ${(e.forecast.liquidFraction! * 100).round()} процентов',
-            child: PlayerArt(
-              flask: true,
-              liquid: e.forecast.liquidFraction ?? 1,
+    return LayoutBuilder(
+      builder: (context, box) {
+        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(64.0, 120.0);
+        return Stack(
+          children: [
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: flaskWidth,
+              child: Semantics(
+                label: e.forecast.liquidFraction == null
+                    ? 'Уровень: время уточняется'
+                    : 'Остаток раствора ${(e.forecast.liquidFraction! * 100).round()} процентов',
+                child: PlayerArt(
+                  flask: true,
+                  liquid: e.forecast.liquidFraction ?? 1,
+                ),
+              ),
             ),
-          ),
-        ),
-        Positioned.fill(
-          left: 30,
-          child: SingleChildScrollView(
-            controller: _scroll,
-            key: const Key('phase-scale'),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (final phase in timeline.phases) ...[
-                  row(
-                    'Фаза ${timeline.phases.indexOf(phase) + 1}. ${phase.title}',
-                    timeline.entries
-                        .where((x) => x.phase.id == phase.id)
-                        .toList(),
-                    isPhase: true,
-                    active: e.active && current?.phase.id == phase.id,
-                  ),
-                  for (final child in phase.children.where(
-                    (c) =>
-                        c.enabled &&
-                        timeline.entries.any((x) => x.child.id == c.id),
-                  )) ...[
-                    if (child.isModule)
+            Positioned.fill(
+              left: flaskWidth * .95,
+              child: SingleChildScrollView(
+                controller: _scroll,
+                key: const Key('phase-scale'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final phase in timeline.phases) ...[
                       row(
-                        'Модуль: ${child.title}',
+                        'Фаза ${timeline.phases.indexOf(phase) + 1}. ${phase.title}',
                         timeline.entries
-                            .where((x) => x.child.id == child.id)
+                            .where((x) => x.phase.id == phase.id)
                             .toList(),
-                        isPhase: false,
+                        isPhase: true,
+                        active: e.active && current?.phase.id == phase.id,
                       ),
-                    if (e.active && current?.phase.id == phase.id)
-                      for (final entry in timeline.entries.where(
-                        (x) => x.child.id == child.id,
-                      ))
-                        row(
-                          '${entry.step.kind == StepKind.audio ? '' : '${entry.step.kind.label}: '}${entry.step.title}',
-                          [entry],
-                          isPhase: false,
-                          key: _rowKeys.putIfAbsent(
-                            entry.step.id,
-                            GlobalKey.new,
+                      for (final child in phase.children.where(
+                        (c) =>
+                            c.enabled &&
+                            timeline.entries.any((x) => x.child.id == c.id),
+                      )) ...[
+                        if (child.isModule)
+                          row(
+                            'Модуль: ${child.title}',
+                            timeline.entries
+                                .where((x) => x.child.id == child.id)
+                                .toList(),
+                            isPhase: false,
                           ),
-                          active: current?.step.id == entry.step.id,
-                        ),
+                        if (e.active && current?.phase.id == phase.id)
+                          for (final entry in timeline.entries.where(
+                            (x) => x.child.id == child.id,
+                          ))
+                            row(
+                              '${entry.step.kind == StepKind.audio ? '' : '${entry.step.kind.label}: '}${entry.step.title}',
+                              [entry],
+                              isPhase: false,
+                              key: _rowKeys.putIfAbsent(
+                                entry.step.id,
+                                GlobalKey.new,
+                              ),
+                              active: current?.step.id == entry.step.id,
+                            ),
+                      ],
+                    ],
                   ],
-                ],
-              ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
   Widget _watch() => LayoutBuilder(
     builder: (context, box) {
-      final step = e.step;
-      final type = e.run!.phase == 'delay'
-          ? 'Пауза перед элементом'
-          : step?.kind.label ?? '';
-      final label = !e.active
-          ? e.run!.status.label
-          : e.run!.phase == 'delay'
-          ? type
-          : step?.title ?? type;
-      final duration = e.phaseDurationMs;
-      final position = e.phasePositionMs.clamp(0, duration ?? 0x7fffffff);
-      final compact =
-          box.maxHeight < 250 ||
-          box.maxWidth < 184 ||
-          MediaQuery.textScalerOf(context).scale(1) > 1.3;
-      final title = Text(
-        label,
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 11, color: antiqueGold),
-      );
-      final time = Text(
-        '${formatDuration(position)} / ${duration == null ? '≈' : formatDuration(duration)}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 12,
-          fontFeatures: [FontFeature.tabularFigures()],
-        ),
-      );
-      final play = SizedBox(
-        width: 48,
-        height: 48,
-        child: IconButton.filled(
-          key: const Key('watch-play-pause'),
-          tooltip: e.paused ? 'Продолжить сессию' : 'Пауза сессии',
-          style: IconButton.styleFrom(
-            backgroundColor: const Color(0xff3a0026),
-            foregroundColor: neonPink,
-            side: const BorderSide(color: neonPink),
+      if (!e.active) {
+        return Center(
+          child: Text(
+            e.run!.status.label,
+            style: const TextStyle(color: antiqueGold),
           ),
-          icon: Icon(e.paused ? Icons.play_arrow : Icons.pause, size: 28),
-          onPressed: e.busy
-              ? null
-              : () => showActionError(context, e.paused ? e.resume : e.pause),
-        ),
-      );
-      final seek = SizedBox(
-        height: 44,
-        child: e.canSeek
-            ? Slider(
-                key: const Key('track-seek'),
-                min: 0,
-                max: duration!.toDouble(),
-                value: (_scrubMs ?? position.toDouble()).clamp(
-                  0,
-                  duration.toDouble(),
-                ),
-                semanticFormatterCallback: (v) => formatDuration(v.round()),
-                onChanged: e.busy ? null : (v) => setState(() => _scrubMs = v),
-                onChangeEnd: (v) async {
-                  await showActionError(
-                    context,
-                    () => e.seek(Duration(milliseconds: v.round())),
-                  );
-                  if (mounted) setState(() => _scrubMs = null);
-                },
-              )
-            : Center(
-                child: Text(
-                  '$type · без перемотки',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 10),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-      );
-      if (compact) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (e.active)
-              Row(
-                children: [
-                  play,
-                  const SizedBox(width: 4),
-                  Expanded(child: Column(children: [title, time])),
-                ],
-              )
-            else
-              title,
-            if (e.active) seek,
-          ],
         );
       }
-      return Center(
-        child: AspectRatio(
-          aspectRatio: 470 / 595,
-          child: LayoutBuilder(
-            builder: (context, inner) => Stack(
-              children: [
-                const Positioned.fill(child: PlayerArt(flask: false)),
-                Positioned.fill(
-                  left: inner.maxWidth * .15,
-                  right: inner.maxWidth * .17,
-                  top: inner.maxHeight * .43,
-                  bottom: inner.maxHeight * .02,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      title,
-                      if (e.active) ...[time, play, seek],
-                    ],
+      final duration = e.phaseDurationMs;
+      final position = (_scrubMs ?? e.phasePositionMs.toDouble()).clamp(
+        0.0,
+        (duration ?? 0x7fffffff).toDouble(),
+      );
+      final fraction = duration == null || duration == 0
+          ? 0.0
+          : position / duration;
+      final label = e.run!.phase == 'delay'
+          ? 'Пауза перед треком'
+          : e.step?.kind == StepKind.audio
+          ? e.step!.title
+          : 'Пауза';
+      final width = math.min(
+        box.maxWidth,
+        math.max(144.0, box.maxHeight * 470 / 595),
+      );
+      final height = math.min(box.maxHeight, width * 595 / 470);
+      Future<void> commit() async {
+        final value = _scrubMs;
+        if (value == null || !e.canSeek || e.busy) return;
+        await showActionError(
+          context,
+          () => e.seek(Duration(milliseconds: value.round())),
+        );
+        if (mounted) setState(() => _scrubMs = null);
+      }
+
+      bool update(Offset point) {
+        if (!e.canSeek || e.busy || duration == null) return false;
+        final delta = point - Offset(width * 221.5 / 470, height * 318.5 / 595);
+        final radius = width * 164 / 470;
+        if (delta.distance < radius * .73 || delta.distance > radius * 1.2) {
+          return false;
+        }
+        final angle =
+            (math.atan2(delta.dy, delta.dx) + math.pi / 2) % (math.pi * 2);
+        setState(() => _scrubMs = angle / (math.pi * 2) * duration);
+        return true;
+      }
+
+      Widget track(bool forward) => IconButton(
+        key: Key(forward ? 'watch-next' : 'watch-previous'),
+        tooltip: forward
+            ? 'Следующий трек на часах'
+            : 'Предыдущий трек на часах',
+        onPressed:
+            !e.active ||
+                e.busy ||
+                e.navigationTarget(NavigationUnit.track, forward) == null
+            ? null
+            : () => showActionError(
+                context,
+                () => e.navigate(NavigationUnit.track, forward),
+              ),
+        icon: Icon(
+          forward ? Icons.skip_next : Icons.skip_previous,
+          color: neonPink,
+          size: 22,
+        ),
+      );
+      return Align(
+        alignment: Alignment.topCenter,
+        heightFactor: 1,
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: Stack(
+            children: [
+              const Positioned.fill(child: PlayerArt(flask: false)),
+              Positioned.fill(
+                child: Semantics(
+                  label: 'Круговая перемотка трека',
+                  value: formatDuration(position.round()),
+                  increasedValue: formatDuration(
+                    math.min(duration ?? 0, position.round() + 5000),
+                  ),
+                  decreasedValue: formatDuration(
+                    math.max(0, position.round() - 5000),
+                  ),
+                  onIncrease: e.canSeek
+                      ? () => e.seek(
+                          Duration(milliseconds: (position + 5000).round()),
+                        )
+                      : null,
+                  onDecrease: e.canSeek
+                      ? () => e.seek(
+                          Duration(
+                            milliseconds: math.max(0, position - 5000).round(),
+                          ),
+                        )
+                      : null,
+                  child: GestureDetector(
+                    key: e.canSeek
+                        ? const Key('track-seek')
+                        : const Key('interval-ring'),
+                    behavior: HitTestBehavior.translucent,
+                    onTapUp: (d) {
+                      if (update(d.localPosition)) unawaited(commit());
+                    },
+                    onPanStart: (d) => update(d.localPosition),
+                    onPanUpdate: (d) => update(d.localPosition),
+                    onPanEnd: (_) => unawaited(commit()),
+                    child: CustomPaint(
+                      painter: WatchProgress(fraction, e.canSeek),
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              if (height >= 100)
+                Positioned(
+                  left: width * .12,
+                  right: width * .17,
+                  top: height * .48,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '${formatDuration(position.round())} / ${duration == null ? '≈' : formatDuration(duration)}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ),
+                ),
+              Positioned(
+                left: width * .1,
+                right: width * .16,
+                top: (height * .57).clamp(0.0, math.max(0.0, height - 48)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(child: track(false)),
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: IconButton.filled(
+                        key: const Key('watch-play-pause'),
+                        tooltip: e.paused
+                            ? 'Продолжить сессию'
+                            : 'Пауза сессии',
+                        style: IconButton.styleFrom(
+                          backgroundColor: const Color(0xFF3A0026),
+                          foregroundColor: neonPink,
+                          side: const BorderSide(color: neonPink),
+                        ),
+                        onPressed: !e.active || e.busy
+                            ? null
+                            : () => showActionError(
+                                context,
+                                e.paused ? e.resume : e.pause,
+                              ),
+                        icon: Icon(
+                          e.paused ? Icons.play_arrow : Icons.pause,
+                          size: 26,
+                        ),
+                      ),
+                    ),
+                    Expanded(child: track(true)),
+                  ],
+                ),
+              ),
+              if (height >= 160)
+                Positioned(
+                  left: width * .18,
+                  right: width * .23,
+                  top: height * .77,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 10, color: antiqueGold),
+                  ),
+                ),
+            ],
           ),
         ),
       );
@@ -848,4 +940,45 @@ class _RunScreenState extends State<RunScreen> {
         ),
     ],
   );
+}
+
+class WatchProgress extends CustomPainter {
+  WatchProgress(this.fraction, this.seekable);
+  final double fraction;
+  final bool seekable;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width * 221.5 / 470, size.height * 318.5 / 595);
+    final radius = size.width * 164 / 470;
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..color = neonPink.withValues(alpha: .22)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      math.pi * 2 * fraction.clamp(0, 1),
+      false,
+      Paint()
+        ..color = seekable ? neonPink : antiqueGold
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3
+        ..strokeCap = StrokeCap.round,
+    );
+    final angle = fraction * math.pi * 2 - math.pi / 2;
+    canvas.drawCircle(
+      center + Offset(math.cos(angle), math.sin(angle)) * radius,
+      4,
+      Paint()..color = neonPink,
+    );
+  }
+
+  @override
+  bool shouldRepaint(WatchProgress old) =>
+      fraction != old.fraction || seekable != old.seekable;
 }

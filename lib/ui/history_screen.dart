@@ -10,7 +10,12 @@ import 'design.dart';
 import 'session_actions.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key, required this.controller});
+  const HistoryScreen({
+    super.key,
+    required this.controller,
+    this.selectedRunId,
+  });
+  final String? selectedRunId;
   final SessionController controller;
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -112,7 +117,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       horizontal: 8,
                       vertical: 2,
                     ),
+                    color: r.id == widget.selectedRunId ? neonLime : neonPink,
                     child: ListTile(
+                      key: ValueKey('history-${r.id}'),
                       contentPadding: EdgeInsets.zero,
                       title: Text(
                         '№${r.displayNumber} · ${historicalDateLabel(r.startedAt, r.startedUtcOffsetMinutes, legacyLabel: r.name)}',

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/audio_asset.dart';
 
 const neonPink = Color(0xFFFF168F);
-const neonLime = Color(0xFFDFFF00);
+const neonLime = Color(0xFFA6FF2E);
 const antiqueGold = Color(0xFFD6A452);
 const ink = Color(0xFF0A0509);
 
@@ -11,6 +11,9 @@ Color categoryColor(AudioCategory category) => switch (category) {
   AudioCategory.preparation => const Color(0xFFF5EFE9),
   AudioCategory.induction => const Color(0xFFFF6172),
   AudioCategory.deepener => const Color(0xFFFFA349),
+  AudioCategory.safePlace => const Color(0xFFEEC960),
+  AudioCategory.progression => const Color(0xFF82C5FF),
+  AudioCategory.suggestions => const Color(0xFFDA91FF),
   AudioCategory.work => const Color(0xFFFFE66A),
   AudioCategory.integration => const Color(0xFFA9EC75),
   AudioCategory.exit => const Color(0xFF7ADFE8),
@@ -174,7 +177,7 @@ class NeonButton extends StatelessWidget {
           colors: onPressed == null
               ? [const Color(0xFF291F27), const Color(0xFF1A1218)]
               : primary
-              ? [const Color(0xFFF4FF7C), neonLime, const Color(0xFFBDE100)]
+              ? [const Color(0xFFC4FF82), neonLime, const Color(0xFF7DE51D)]
               : [
                   const Color(0xFF67123D),
                   const Color(0xFF280A1A),
