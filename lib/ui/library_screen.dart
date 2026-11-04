@@ -220,7 +220,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Sulfi · 0.2.0', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.1+6', textAlign: TextAlign.center),
           ],
         ),
       ),

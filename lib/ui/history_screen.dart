@@ -247,13 +247,14 @@ class _RunDetailsState extends State<_RunDetails> {
   String _stepStatus(List<Map<String, dynamic>> events, int index) {
     final kinds = events
         .where((e) => e['stepIndex'] == index)
-        .map((e) => e['eventType']);
-    if (kinds.contains('block_completed')) return 'Выполнен';
-    if (kinds.contains('work_completed_early')) return 'Завершён пользователем';
-    if (kinds.contains('block_skipped')) return 'Пропущен пользователем';
-    if (kinds.contains('block_started')) return 'Начат · не завершён';
-    if (kinds.contains('delay_started')) {
-      return 'Началось ожидание перед элементом';
+        .map((e) => e['eventType'])
+        .toList();
+    for (final kind in kinds.reversed) {
+      if (kind == 'block_completed') return 'Выполнен';
+      if (kind == 'work_completed_early') return 'Завершён пользователем';
+      if (kind == 'block_skipped') return 'Пропущен пользователем';
+      if (kind == 'block_started') return 'Начат · не завершён';
+      if (kind == 'delay_started') return 'Началось ожидание перед элементом';
     }
     return 'Не запускался';
   }
@@ -268,6 +269,19 @@ String _eventLabel(String event) => switch (event) {
   'block_skipped' => 'Элемент пропущен',
   'paused' => 'Пауза',
   'resumed' => 'Продолжение',
+  'seek' => 'Перемотка текущего аудио',
+  'seek_from' => 'Позиция перед перемоткой',
+  'navigation_next_track' => 'Переход к следующему треку',
+  'navigation_previous_track' => 'Переход к предыдущему треку',
+  'navigation_next_module' => 'Переход к следующему модулю',
+  'navigation_previous_module' => 'Переход к предыдущему модулю',
+  'navigation_next_phase' => 'Переход к следующей фазе',
+  'navigation_previous_phase' => 'Переход к предыдущей фазе',
+  'exit_cancelled_by_navigation' =>
+    'Возврат из выхода к плану по команде пользователя',
+  'items_skipped_for_exit' => 'Зафиксированы пропуски при переходе к выходу',
+  _ when event.startsWith('navigation_') && event.endsWith('_from') =>
+    'Позиция перед переходом',
   'extended_5min' => 'Самостоятельная работа продлена на 5 минут',
   'exit_requested' => 'Запрошен выход',
   'exit_completed' => 'Выход воспроизведён · досрочное завершение',
