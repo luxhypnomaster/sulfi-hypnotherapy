@@ -415,6 +415,12 @@ void main() {
     expect(saved.body, contains('Длинный текст'));
     await capture('diary-author');
     await show(DiaryReader(key: UniqueKey(), entry: saved, preview: true));
+    final textHeight = t
+        .getSize(find.byKey(const ValueKey('diary-page-0')))
+        .height;
+    final viewportHeight = t.getSize(find.byType(SingleChildScrollView)).height;
+    expect(textHeight, lessThanOrEqualTo(viewportHeight + .5));
+    expect(textHeight, greaterThan(viewportHeight - 80));
     await capture('diary-first');
     await t.tap(find.byTooltip('Следующая страница'));
     await t.pumpAndSettle();

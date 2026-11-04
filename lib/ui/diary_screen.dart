@@ -275,6 +275,10 @@ class _DiaryReaderState extends State<DiaryReader> {
         child: LayoutBuilder(
           builder: (context, box) {
             const style = TextStyle(
+              inherit: false,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.normal,
+              letterSpacing: 0,
               fontSize: 16,
               height: 1.4,
               color: Color(0xFF302519),
