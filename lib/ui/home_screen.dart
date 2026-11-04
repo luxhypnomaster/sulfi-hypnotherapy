@@ -12,11 +12,15 @@ import 'design.dart';
 import 'history_screen.dart';
 import 'library_screen.dart';
 import 'pause_editor.dart';
-import 'preview_bar.dart';
 import 'run_screen.dart';
 import 'session_actions.dart';
-import 'structure_screen.dart';
+import 'modular_structure_screen.dart';
+import '../models/modular_plan.dart';
+import '../models/local_dates.dart';
+import '../services/session_audio_handler.dart';
+import 'booking.dart';
 import 'templates_screen.dart';
+import 'diary_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -65,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       unawaited(widget.player.stop());
-      if (_engine?.active ?? false) {
+      if (sessionAudioHandler == null && (_engine?.active ?? false)) {
         unawaited(_engine!.interrupt().catchError((Object _) {}));
       }
     }
@@ -85,7 +89,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     await Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => StructureScreen(controller: c, player: widget.player),
+        builder: (_) =>
+            ModularStructureScreen(controller: c, player: widget.player),
       ),
     );
     await c.reload();
@@ -100,8 +105,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       MaterialPageRoute(
         builder: (_) => LibraryScreen(
           library: c.library,
+          controller: c,
           player: widget.player,
-          allowSelection: true,
+          allowSelection: false,
           onReset: () async {
             await c.library.reset();
             await c.reload();
@@ -129,12 +135,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Future<void> _history() => _run(() async {
     await widget.player.stop();
     if (!mounted) return;
-    final repeat = await Navigator.push<SessionRun>(
+    await Navigator.push<SessionRun>(
       context,
       MaterialPageRoute(builder: (_) => HistoryScreen(controller: c)),
     );
     await c.reload();
-    if (repeat != null && mounted) await _structure();
+    // Repeat only replaces the draft; return to the main screen without autoplay.
   });
   Future<void> _notes() => _run(() async {
     final details = await askDetails(
@@ -151,20 +157,33 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   });
   Future<void> _start() => _run(() async {
     await widget.player.stop();
-    final engine = SessionEngine(
-      controller: c,
-      transport: widget.transportFactory?.call() ?? JustAudioSessionTransport(),
-    );
+    final engine = sessionAudioHandler != null
+        ? await sessionAudioHandler!.startSession()
+        : SessionEngine(
+            controller: c,
+            transport:
+                widget.transportFactory?.call() ?? JustAudioSessionTransport(),
+          );
     _engine = engine;
     try {
-      await engine.start();
+      if (sessionAudioHandler == null) await engine.start();
       if (!mounted) return;
-      await Navigator.push<void>(
+      final finishedId = await Navigator.push<String>(
         context,
         MaterialPageRoute(builder: (_) => RunScreen(engine: engine)),
       );
+      await c.reload();
+      if (finishedId != null && mounted) {
+        await Navigator.push<SessionRun>(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                HistoryScreen(controller: c, selectedRunId: finishedId),
+          ),
+        );
+      }
     } finally {
-      await engine.close();
+      if (sessionAudioHandler?.engine != engine) await engine.close();
       _engine = null;
       await c.reload();
     }
@@ -184,507 +203,415 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
     builder: (context, _) {
-      final plan = c.draft.plan;
-      final heroHeight = (MediaQuery.sizeOf(context).height * .18).clamp(
-        112.0,
-        180.0,
-      );
+      final plan = modularize(c.draft.plan);
+      final phases = plan.phases!
+          .where(
+            (p) =>
+                p.enabled &&
+                p.children.any(
+                  (child) => child.enabled && child.items.any((s) => s.enabled),
+                ),
+          )
+          .toList();
       return Scaffold(
         bottomNavigationBar: SafeArea(
           top: false,
-          child: Center(
-            heightFactor: 1,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 900),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 6, 14, 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                NeonButton(
+                  label: 'НАЧАТЬ ТРАНСФОРМАЦИЮ',
+                  fitLabel: true,
+                  icon: Icons.play_circle_filled,
+                  onPressed: _busy || plan.steps.isEmpty || c.saving
+                      ? null
+                      : _start,
+                  primary: true,
+                  compact: true,
+                ),
+                const SizedBox(height: 5),
+                Row(
                   children: [
-                    NeonButton(
-                      label: 'Начать сессию',
-                      icon: Icons.play_circle_filled,
-                      onPressed: _busy || plan.steps.isEmpty || c.saving
-                          ? null
-                          : _start,
-                      primary: true,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      plan.steps.isEmpty
-                          ? 'Добавьте первый трек через «Библиотеку».'
-                          : 'Оставьте приложение открытым: в фоне сессия прервётся.',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFFC8ADBD),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _navigation(),
+                    _nav(BookingConfig.label, null, () => showBooking(context)),
+                    _nav('Библиотека', Icons.headphones_outlined, _library),
+                    _nav('Шаблоны', Icons.layers_outlined, _templates),
+                    _nav('История', Icons.history, _history),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
         ),
         body: SafeArea(
           bottom: false,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 900),
-              child: LayoutBuilder(
-                builder: (context, viewport) => ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  children: [
-                    SizedBox(
-                      height: heroHeight,
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: ExcludeSemantics(
-                              child: Image.asset(
-                                'assets/art/sulfi_header.png',
-                                fit: BoxFit.cover,
-                                alignment: Alignment.centerRight,
-                              ),
-                            ),
+          child: Column(
+            children: [
+              if (MediaQuery.sizeOf(context).height >= 650 &&
+                  MediaQuery.textScalerOf(context).scale(1) <= 1.3)
+                SizedBox(
+                  height: (MediaQuery.sizeOf(context).height * .16).clamp(
+                    95.0,
+                    160.0,
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: ExcludeSemantics(
+                          child: Image.asset(
+                            'assets/art/sulfi_header.png',
+                            fit: BoxFit.cover,
+                            alignment: Alignment.centerRight,
                           ),
-                          Positioned(
-                            left: 22,
-                            top: 20,
-                            width: 150,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'САМОГИПНОЗ',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    letterSpacing: 2,
-                                  ),
-                                ),
-                                const Text(
-                                  'Sulfi',
-                                  style: TextStyle(
-                                    fontSize: 38,
-                                    fontWeight: FontWeight.w800,
-                                    fontStyle: FontStyle.italic,
-                                    color: neonPink,
-                                    shadows: [
-                                      Shadow(color: neonPink, blurRadius: 12),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  'Ваш внутренний\nнавигатор',
-                                  style: TextStyle(fontSize: 12, height: 1.3),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: (viewport.maxHeight - heroHeight).clamp(
-                          0.0,
-                          double.infinity,
                         ),
                       ),
-                      child: LeatherBoard(
+                      const Positioned(
+                        left: 16,
+                        top: 15,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                LayoutBuilder(
-                                  builder: (context, box) {
-                                    if (box.maxWidth < 300 ||
-                                        MediaQuery.textScalerOf(context)
-                                                .scale(1) >
-                                            1.3) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          _structureCard(),
-                                          const Divider(color: antiqueGold),
-                                          _sessionCard(),
-                                        ],
-                                      );
-                                    }
-                                    return Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 6,
-                                          child: _structureCard(),
-                                        ),
-                                        Container(
-                                          width: 1,
-                                          height: 205,
-                                          margin: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          color: antiqueGold.withValues(
-                                            alpha: .4,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 5,
-                                          child: _sessionCard(),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ],
+                            Text(
+                              'САМОГИПНОЗ',
+                              style: TextStyle(fontSize: 10, letterSpacing: 2),
                             ),
-                            const SizedBox(height: 12),
-                            InkWell(
-                              key: const Key('active-template'),
-                              onTap: _busy ? null : _templates,
-                              borderRadius: BorderRadius.circular(11),
-                              child: NeonPanel(
-                                glow: true,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.layers_outlined,
-                                      color: neonPink,
-                                      size: 31,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            c.draft.modified
-                                                ? 'АКТИВНЫЙ ШАБЛОН · ИЗМЕНЁН'
-                                                : 'АКТИВНЫЙ ШАБЛОН',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              letterSpacing: .7,
-                                              color: Color(0xFFCE9BB7),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 3),
-                                          Text(
-                                            c.baseTemplate?.name ??
-                                                c.draft.baseTemplateName ??
-                                                'Текущая конфигурация',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.w800,
-                                              color: neonLime,
-                                            ),
-                                          ),
-                                          if (c
-                                                  .baseTemplate
-                                                  ?.description
-                                                  .isNotEmpty ??
-                                              false)
-                                            Text(
-                                              c.baseTemplate!.description,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
-                                      color: neonPink,
-                                    ),
-                                  ],
-                                ),
+                            Text(
+                              'Сульфи',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800,
+                                fontStyle: FontStyle.italic,
+                                color: neonPink,
                               ),
                             ),
-                            if (c.saveError != null)
-                              Text(
-                                c.saveError!,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                              ),
+                            Text(
+                              'Ваш внутренний\nнавигатор',
+                              style: TextStyle(fontSize: 11),
+                            ),
                           ],
                         ),
-                      ),
-                    ),
-                    PreviewBar(player: widget.player, library: c.library),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    },
-  );
-
-  Widget _structureCard() {
-    final previewCount = MediaQuery.sizeOf(context).height >= 840 ? 5 : 3;
-    final steps = c.draft.plan.steps;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        InkWell(
-          onTap: _busy ? null : () => _run(_structure),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Структура сессии',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        '${steps.length} блоков · развернуть',
-                        style: const TextStyle(fontSize: 10, color: neonPink),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.open_in_full, size: 16, color: neonPink),
-              ],
-            ),
-          ),
-        ),
-        if (steps.isEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: Text(
-              'Добавьте аудио и соберите последовательность.',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          TextButton.icon(
-            onPressed: _busy ? null : () => _run(_structure),
-            icon: const Icon(Icons.add),
-            label: const Text('Собрать'),
-          ),
-        ] else ...[
-          const Text(
-            'Пауза → трек',
-            style: TextStyle(fontSize: 10, color: antiqueGold),
-          ),
-          for (var i = 0; i < steps.length && i < previewCount; i++)
-            Row(
-              children: [
-                Semantics(
-                  button: true,
-                  label: 'Пауза перед блоком ${i + 1}',
-                  child: InkWell(
-                    onTap: _busy ? null : () => _pause(steps[i]),
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        minHeight: 48,
-                        minWidth: 48,
-                      ),
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: neonLime.withValues(alpha: .4),
+              Expanded(
+                child: LeatherBoard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (c.diary != null)
+                        ListenableBuilder(
+                          listenable: c.diary!,
+                          builder: (context, _) {
+                            final latest = c.diary!.published.firstOrNull;
+                            return InkWell(
+                              key: const Key('home-diary'),
+                              onTap: () => Navigator.push<void>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => latest == null
+                                      ? DiaryScreen(diary: c.diary!)
+                                      : DiaryReader(entry: latest),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.auto_stories_outlined,
+                                    color: neonPink,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      latest?.message ?? 'Дневник Сульфи',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: neonPink,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    tooltip: 'Оглавление дневника',
+                                    onPressed: () => Navigator.push<void>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            DiaryScreen(diary: c.diary!),
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.chevron_right,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 10,
+                        children: [
+                          Text(
+                            'Сессия №${c.nextNumber}',
+                            style: const TextStyle(
+                              color: neonLime,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
+                          const _LiveClock(),
+                        ],
                       ),
-                      child: Text(
-                        formatPause(steps[i].delayBeforeSeconds),
-                        style: const TextStyle(
-                          color: neonLime,
-                          fontSize: 12,
-                          fontFeatures: [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: _busy ? null : () => _run(_structure),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${i + 1}. ${c.asset(steps[i].audioAssetId)?.title ?? steps[i].title}',
-                          maxLines: 1,
+                      TextButton.icon(
+                        onPressed: _busy ? null : _notes,
+                        icon: const Icon(Icons.edit_note, size: 20),
+                        label: Text(
+                          c.draft.topicText.isEmpty
+                              ? 'Тема / запрос и заметка'
+                              : c.draft.topicText,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              onPressed: _busy ? null : () => _run(_structure),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Структура сессии',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w800,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'Открыть конструктор',
+                            onPressed: _busy ? null : () => _run(_structure),
+                            icon: const Icon(
+                              Icons.open_in_full,
+                              color: neonPink,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${phases.length} фаз · ${phases.expand((p) => p.children).where((c) => c.enabled && c.isModule).length} модулей · ${plan.steps.where((s) => s.kind == StepKind.audio).length} треков · ${plan.steps.where((s) => s.kind != StepKind.audio).length} интервалов · ${formatDurationWords(plan.totalMs)}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: antiqueGold,
+                        ),
+                      ),
+                      Expanded(
+                        child: phases.isEmpty
+                            ? Center(
+                                child: TextButton(
+                                  onPressed: _busy
+                                      ? null
+                                      : () => _run(_structure),
+                                  child: const Text(
+                                    'Добавьте фазу и свои аудиотреки\nОткрыть конструктор',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: phases.length,
+                                itemBuilder: (context, i) {
+                                  final p = phases[i];
+                                  return ExpansionTile(
+                                    tilePadding: EdgeInsets.zero,
+                                    key: PageStorageKey("home-${p.id}"),
+                                    initiallyExpanded: true,
+                                    title: Text(
+                                      'Фаза: ${p.title}',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    children: [
+                                      for (final child in p.children.where(
+                                        (c) => c.enabled,
+                                      ))
+                                        if (child.isModule)
+                                          ExpansionTile(
+                                            key: PageStorageKey(
+                                              'home-module-${child.id}',
+                                            ),
+                                            initiallyExpanded: true,
+                                            tilePadding: const EdgeInsets.only(
+                                              left: 8,
+                                            ),
+                                            title: Text(
+                                              'Модуль: ${child.title}',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            children: [
+                                              for (final step
+                                                  in child.items.where(
+                                                    (s) => s.enabled,
+                                                  ))
+                                                _track(step),
+                                            ],
+                                          )
+                                        else
+                                          for (final step in child.items.where(
+                                            (s) => s.enabled,
+                                          ))
+                                            _track(step),
+                                    ],
+                                  );
+                                },
+                              ),
+                      ),
+                      InkWell(
+                        key: const Key('active-template'),
+                        onTap: _busy ? null : _templates,
+                        child: NeonPanel(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Image.asset('assets/brand/spiral.png', width: 28),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      c.baseTemplate?.name ??
+                                          c.draft.baseTemplateName ??
+                                          'Черновик без шаблона',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        color: neonLime,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      c.baseTemplate == null
+                                          ? 'Выбрать или сохранить шаблон'
+                                          : c.draft.modified
+                                          ? 'Изменён'
+                                          : 'Исходные настройки',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: neonPink,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.chevron_right, color: neonPink),
+                            ],
                           ),
                         ),
+                      ),
+                      if (c.saveError != null)
                         Text(
-                          steps[i].durationMs == null
-                              ? 'До остановки'
-                              : 'Трек: ${formatDuration(steps[i].durationMs!)}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Color(0xFFBDA5B5),
+                          c.saveError!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-        ],
-      ],
-    );
-  }
-
-  Widget _sessionCard() => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Text(
-        'Сессия №${c.nextNumber}',
-        style: const TextStyle(
-          fontSize: 14,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w700,
-          color: neonLime,
+              ),
+            ],
+          ),
         ),
-      ),
-      const SizedBox(height: 5),
-      const _LiveClock(),
-      const SizedBox(height: 10),
-      TextField(
-        controller: _topic,
-        focusNode: _topicFocus,
-        minLines: 1,
-        maxLines: 2,
-        maxLength: 200,
-        style: const TextStyle(fontSize: 12),
-        decoration: const InputDecoration(
-          labelText: 'Тема/запрос',
-          labelStyle: TextStyle(fontSize: 12),
-          counterText: '',
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        ),
-        onChanged: (text) =>
-            unawaited(c.setText(topic: text).catchError((Object _) {})),
-      ),
-      const SizedBox(height: 7),
-      const Text(
-        'Длительность сессии',
-        style: TextStyle(fontSize: 11, color: antiqueGold),
-      ),
-      Text(
-        c.draft.plan.steps.isEmpty
-            ? 'Треки не добавлены'
-            : '${c.draft.plan.estimated ? '≈ ' : ''}${formatDurationWords(c.draft.plan.totalMs)}',
-        style: const TextStyle(
-          color: neonLime,
-          fontSize: 15,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      TextButton.icon(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          alignment: Alignment.centerLeft,
-        ),
-        onPressed: _busy ? null : _notes,
-        icon: const Icon(Icons.note_alt_outlined, size: 17),
-        label: const Text('Заметка', style: TextStyle(fontSize: 12)),
-      ),
-      if (c.draft.notes.isNotEmpty)
-        Text(
-          c.draft.notes,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 11, color: Color(0xFFC8ADBD)),
-        ),
-    ],
-  );
-
-  Widget _navigation() => LayoutBuilder(
-    builder: (context, box) {
-      final buttons = [
-        _nav('Библиотека', Icons.headphones_outlined, _library),
-        _nav('Записать', Icons.mic_none, null),
-        _nav('Шаблоны', Icons.layers_outlined, _templates),
-        _nav('История', Icons.history, _history),
-      ];
-      if (box.maxWidth < 300 ||
-          MediaQuery.textScalerOf(context).scale(1) > 1.3) {
-        return Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          children: [
-            for (final button in buttons)
-              SizedBox(width: (box.maxWidth - 6) / 2, child: button),
-          ],
-        );
-      }
-      return Row(
-        children: [
-          for (var i = 0; i < buttons.length; i++) ...[
-            if (i > 0) const SizedBox(width: 6),
-            Expanded(child: buttons[i]),
-          ],
-        ],
       );
     },
   );
-  Widget _nav(String label, IconData icon, VoidCallback? callback) => Tooltip(
-    message: callback == null
-        ? 'Записать свой аудиомодуль · следующий этап'
-        : label,
-    child: OutlinedButton(
-      onPressed: _busy ? null : callback,
-      style: OutlinedButton.styleFrom(
-        backgroundColor: const Color(0xFF210E1A),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-        side: BorderSide(
-          color: callback == null
-              ? const Color(0xFF604254)
-              : neonPink.withValues(alpha: .6),
+  Widget _track(SessionStep s) => Row(
+    children: [
+      TextButton(
+        onPressed: _busy ? null : () => _pause(s),
+        child: Text(
+          formatPause(s.delayBeforeSeconds),
+          style: const TextStyle(color: neonLime, fontSize: 12),
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
       ),
+      Expanded(
+        child: InkWell(
+          onTap: _busy ? null : () => _run(_structure),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                s.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
+              if (s.description.isNotEmpty)
+                Text(
+                  s.description,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 10, color: antiqueGold),
+                ),
+            ],
+          ),
+        ),
+      ),
+      Text(
+        s.durationMs == null ? '≈' : formatDuration(s.durationMs!),
+        style: const TextStyle(fontSize: 11),
+      ),
+      IconButton(
+        tooltip: 'Прослушать ${s.title}',
+        icon: const Icon(Icons.play_circle_outline, color: neonPink),
+        onPressed: s.kind != StepKind.audio
+            ? null
+            : () => _run(() async {
+                final a = c.asset(s.audioAssetId);
+                if (a != null) {
+                  await widget.player.toggle(a, c.library.fileFor(a));
+                }
+              }),
+      ),
+    ],
+  );
+  Widget _nav(String label, IconData? icon, VoidCallback callback) => Expanded(
+    child: TextButton(
+      onPressed: _busy ? null : callback,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 25,
-            color: callback == null ? const Color(0xFF98798A) : neonPink,
-          ),
-          const SizedBox(height: 5),
+          icon == null
+              ? Image.asset('assets/brand/spiral.png', width: 30, height: 30)
+              : Icon(icon, color: neonPink),
+          const SizedBox(height: 3),
           Text(
             label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 11, color: Color(0xFFEAD8E2)),
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),
@@ -718,7 +645,7 @@ class _LiveClockState extends State<_LiveClock> {
   Widget build(BuildContext context) {
     final d = DateTime.now();
     return Text(
-      '${formatLocalDate(d)}:${d.second.toString().padLeft(2, '0')}',
+      localDateLabel(d),
       style: const TextStyle(
         fontSize: 12,
         fontFeatures: [FontFeature.tabularFigures()],
