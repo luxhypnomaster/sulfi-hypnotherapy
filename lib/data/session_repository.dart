@@ -146,6 +146,7 @@ class SqliteSessionRepository implements SessionRepository {
         'playheadMs': run.playheadMs,
         'elapsedMs': run.elapsedMs,
         'skippedStepIds': run.skippedStepIds,
+        'completedStepIds': run.completedStepIds,
       }),
     });
   }
@@ -173,6 +174,7 @@ class SqliteSessionRepository implements SessionRepository {
         'endedAt',
         'endEstimated',
         'skippedStepIds',
+        'completedStepIds',
       ]) {
         existing[key] = update[key];
       }

@@ -90,7 +90,12 @@ class SessionAudioHandler extends BaseAudioHandler with SeekHandler {
                 MediaControl.stop,
               ]
             : [],
-        systemActions: {MediaAction.play, MediaAction.pause, MediaAction.stop},
+        systemActions: {
+          MediaAction.play,
+          MediaAction.pause,
+          MediaAction.stop,
+          if (e.canSeek) MediaAction.seek,
+        },
         processingState: e.active
             ? AudioProcessingState.ready
             : AudioProcessingState.idle,
@@ -123,6 +128,13 @@ class SessionAudioHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> pause() async {
     await engine?.pause();
+    _publish();
+  }
+
+  @override
+  Future<void> seek(Duration position) async {
+    await engine?.seek(position);
+    _publishedAt = 0;
     _publish();
   }
 

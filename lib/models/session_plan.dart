@@ -431,7 +431,7 @@ enum RunStatus {
 }
 
 class SessionRun {
-  const SessionRun({
+  SessionRun({
     required this.id,
     required this.displayNumber,
     required this.name,
@@ -447,8 +447,10 @@ class SessionRun {
     this.lastCheckpointAt,
     this.endEstimated = false,
     this.startedUtcOffsetMinutes,
-    this.skippedStepIds = const [],
-  });
+    List<String> skippedStepIds = const [],
+    List<String> completedStepIds = const [],
+  }) : skippedStepIds = List.unmodifiable(skippedStepIds),
+       completedStepIds = List.unmodifiable(completedStepIds);
   final String id, name, phase;
   final int displayNumber, stepIndex, playheadMs, elapsedMs;
   final CurrentSessionDraft snapshot;
@@ -457,6 +459,7 @@ class SessionRun {
   final bool endEstimated;
   final int? startedUtcOffsetMinutes;
   final List<String> skippedStepIds;
+  final List<String> completedStepIds;
   final RunStatus status;
   final String? userNotes;
   String get notes => userNotes ?? snapshot.notes;
@@ -473,10 +476,12 @@ class SessionRun {
     DateTime? endedAt,
     bool? endEstimated,
     List<String>? skippedStepIds,
+    List<String>? completedStepIds,
   }) => SessionRun(
     id: id,
     startedUtcOffsetMinutes: startedUtcOffsetMinutes,
     skippedStepIds: skippedStepIds ?? this.skippedStepIds,
+    completedStepIds: completedStepIds ?? this.completedStepIds,
     displayNumber: displayNumber,
     name: name,
     snapshot: snapshot,
@@ -496,6 +501,7 @@ class SessionRun {
     'displayNumber': displayNumber,
     'startedUtcOffsetMinutes': startedUtcOffsetMinutes,
     'skippedStepIds': skippedStepIds,
+    'completedStepIds': completedStepIds,
     'name': name,
     'snapshot': snapshot.toMap(),
     'startedAt': startedAt.toUtc().toIso8601String(),
@@ -514,6 +520,7 @@ class SessionRun {
     displayNumber: m['displayNumber'] as int,
     startedUtcOffsetMinutes: m['startedUtcOffsetMinutes'] as int?,
     skippedStepIds: List<String>.from(m['skippedStepIds'] ?? []),
+    completedStepIds: List<String>.from(m['completedStepIds'] ?? []),
     name: m['name'] as String,
     snapshot: CurrentSessionDraft.fromMap(
       Map<String, dynamic>.from(m['snapshot'] as Map),
