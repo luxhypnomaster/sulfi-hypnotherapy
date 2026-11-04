@@ -1,3 +1,8 @@
+import '../services/session_controller.dart';
+import 'recorder_screen.dart';
+import 'modules_screen.dart';
+import 'module_assignment.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -15,9 +20,11 @@ class LibraryScreen extends StatefulWidget {
     required this.library,
     required this.player,
     this.allowSelection = false,
+    this.controller,
     this.onReset,
   });
   final LibraryService library;
+  final SessionController? controller;
   final PreviewPlayer player;
   final bool allowSelection;
   final Future<void> Function()? onReset;
@@ -116,10 +123,25 @@ class _LibraryScreenState extends State<LibraryScreen>
     var saved = false;
     try {
       if (!mounted) return;
-      final edited = await _ask(() => editAsset(context, draft));
+      final choice = ModuleChoice();
+      final edited = await _ask(
+        () => editAsset(
+          context,
+          draft,
+          catalog: widget.controller?.modules,
+          choice: choice,
+        ),
+      );
       if (edited == null) return;
       await widget.library.save(edited);
       saved = true;
+      if (widget.controller != null) {
+        try {
+          await attachAudioToModule(widget.controller!.modules, choice, edited);
+        } catch (_) {
+          _message("Трек сохранён, но связь с модулем не сохранена.");
+        }
+      }
       _section = edited.section;
     } finally {
       if (!saved) await widget.library.discard(draft);
@@ -198,7 +220,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Sulfi · 0.2.0', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.1+6', textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -220,6 +242,43 @@ class _LibraryScreenState extends State<LibraryScreen>
     return LeatherScaffold(
       title: widget.allowSelection ? 'Выбрать аудио' : 'Библиотека',
       actions: [
+        if (widget.controller != null)
+          IconButton(
+            tooltip: 'Каталог модулей',
+            icon: const Icon(Icons.layers_outlined),
+            onPressed: () async {
+              await Navigator.push<void>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ModulesScreen(
+                    controller: widget.controller!,
+                    player: widget.player,
+                  ),
+                ),
+              );
+              await _load();
+            },
+          ),
+        if (widget.controller != null)
+          IconButton(
+            tooltip: 'Записать свой трек',
+            icon: const Icon(Icons.mic_none),
+            onPressed: () async {
+              await widget.player.stop();
+              if (!context.mounted) return;
+              await Navigator.push<AudioAsset>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RecorderScreen(
+                    controller: widget.controller!,
+                    player: widget.player,
+                  ),
+                ),
+              );
+              await _load();
+            },
+          ),
+
         IconButton(
           tooltip: 'О приложении и данных',
           onPressed: _busy ? null : _privacy,

@@ -42,3 +42,8 @@ recordings/
 user_data/
 *.apk
 *.aab
+
+# Reference screenshots may contain personal session information.
+docs/v4/assets/current/
+
+docs/v41/BASELINE_V4/assets/current/
