@@ -4,6 +4,8 @@ import '../data/diary_repository.dart';
 import '../models/diary_entry.dart';
 import 'diary_api.dart';
 import 'diary_identity.dart';
+import 'diary_media_store.dart';
+import 'diary_audio.dart';
 
 class DiaryController extends ChangeNotifier {
   DiaryController(
@@ -11,6 +13,9 @@ class DiaryController extends ChangeNotifier {
     this.api,
     this.authorRepository,
     this.identity,
+    this.mediaStore,
+    this.audioFactory,
+    this.allowDebugAuthor = false,
     this.authorEmail = 'luxhypnomaster@gmail.com',
   });
   final DiaryRepository repository;
@@ -18,6 +23,60 @@ class DiaryController extends ChangeNotifier {
   final DiaryApi? api;
   final DiaryIdentity? identity;
   final String authorEmail;
+  final DiaryMediaStore? mediaStore;
+  final DiaryAudio Function()? audioFactory;
+  final bool allowDebugAuthor;
+  bool debugAuthor = false;
+  bool hasCache = false;
+  void enterDebugAuthor() {
+    if (!kDebugMode || !allowDebugAuthor) return;
+    debugAuthor = true;
+    _localAuthor = true;
+    notifyListeners();
+  }
+
+  DiaryEntry? get currentEntry => published.firstOrNull;
+  Future<void> deleteEntry(DiaryEntry entry) async {
+    if (!authorWorkspace) {
+      throw const DiaryApiException('Авторский режим недоступен');
+    }
+    if (published.any((e) => e.id == entry.id) ||
+        entry.status == DiaryStatus.published) {
+      final session = await _cloudSession();
+      await api!.deleteEntry(entry, session);
+      await sync();
+      if (published.any((e) => e.id == entry.id)) {
+        throw const DiaryApiException(
+          'Удаление ещё не подтверждено синхронизацией',
+        );
+      }
+    }
+    await authorRepository!.remove(entry.id);
+    await load();
+  }
+
+  Future<void> reorderEntries(List<DiaryEntry> entries) async {
+    if (!authorWorkspace) {
+      throw const DiaryApiException('Авторский режим недоступен');
+    }
+    if (entries.any((e) => published.any((p) => p.id == e.id))) {
+      final session = await _cloudSession();
+      await api!.reorderEntries(
+        entries,
+        session,
+        expectedRevision: await repository.revision(),
+      );
+      await sync();
+      if (error != null) {
+        throw const DiaryApiException(
+          'Порядок не подтверждён. Обновите дневник.',
+        );
+      }
+    }
+    await authorRepository!.reorder(entries);
+    await load();
+  }
+
   DiaryAuthorSession? _session;
   bool _localAuthor = false;
   int _authGeneration = 0;
@@ -31,14 +90,19 @@ class DiaryController extends ChangeNotifier {
   String? error;
   Future<void> load() async {
     published = await repository.published();
+    hasCache = await repository.revision() != null;
     final work = authorWorkspace
         ? await authorRepository!.entries()
         : <DiaryEntry>[];
     drafts = authorWorkspace ? work : [];
+    if (repository.invalidIds.isNotEmpty ||
+        (authorWorkspace && authorRepository!.invalidIds.isNotEmpty)) {
+      error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
+    }
     notifyListeners();
   }
 
-  Future<void> sync() async {
+  Future<void> sync({bool retrySnapshot = true}) async {
     if (syncing) return;
     if (api == null) {
       error = 'Облачный дневник ещё не настроен. Сохранённые публикации доступны офлайн.';
@@ -58,6 +122,11 @@ class DiaryController extends ChangeNotifier {
       do {
         final result = await api!.feed(since: since, page: page);
         if (revision != null && result.revision != revision) {
+          if (retrySnapshot) {
+            syncing = false;
+            await sync(retrySnapshot: false);
+            return;
+          }
           throw const DiaryApiException(
             'Лента изменилась. Повторите обновление.',
           );
@@ -72,8 +141,8 @@ class DiaryController extends ChangeNotifier {
       } while (page != null);
       await repository.cache(entries, removed, revision);
       await load();
-    } catch (_) {
-      error = 'Не удалось обновить дневник. Сохранённые публикации доступны офлайн.';
+    } catch (e) {
+      error = e is DiaryApiException ? e.message : 'Не удалось обновить дневник. Последний сохранённый каталог не изменён.';
     } finally {
       syncing = false;
       notifyListeners();
@@ -84,6 +153,9 @@ class DiaryController extends ChangeNotifier {
     if (!authorWorkspace) {
       throw const DiaryApiException('Авторский режим недоступен');
     }
+    DiaryEntry.fromMap(
+      entry.toMap(),
+    ); // Validate before writing; failed drafts never poison stored JSON.
     await authorRepository!.save(entry);
     await load();
   }
@@ -139,6 +211,7 @@ class DiaryController extends ChangeNotifier {
     ++_authGeneration;
     _session = null;
     _localAuthor = false;
+    debugAuthor = false;
     if (identity != null) drafts = [];
     error = null;
     notifyListeners();
@@ -146,7 +219,7 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {
-    if (!authorWorkspace || api == null) {
+    if (debugAuthor || !authorWorkspace || api == null) {
       throw const DiaryApiException(
         'Облачный сервер ещё не подключён. Черновик сохранён на телефоне.',
       );

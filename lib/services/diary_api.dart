@@ -3,8 +3,18 @@ import 'dart:io';
 
 import '../models/diary_entry.dart';
 
+enum DiaryFailure {
+  authorization,
+  conflict,
+  notFound,
+  network,
+  invalidData,
+  blocked,
+}
+
 class DiaryApiException implements Exception {
-  const DiaryApiException(this.message);
+  const DiaryApiException(this.message, [this.kind = DiaryFailure.network]);
+  final DiaryFailure kind;
   final String message;
   @override
   String toString() => message;
@@ -78,17 +88,34 @@ class DiaryApi {
       if (session != null) 'Authorization': 'Bearer ${session._token}',
     }, body == null ? null : jsonEncode(body));
     if (response.status == 401 || response.status == 403) {
-      throw const DiaryApiException('Нет авторских прав. Войдите заново.');
+      throw const DiaryApiException(
+        'Нет авторских прав. Войдите заново.',
+        DiaryFailure.authorization,
+      );
     }
     if (response.status == 409 || response.status == 412) {
       throw const DiaryApiException(
         'Запись изменена на сервере. Обновите её перед публикацией.',
+        DiaryFailure.conflict,
+      );
+    }
+    if (response.status == 404) {
+      throw const DiaryApiException(
+        'Запись не найдена (404)',
+        DiaryFailure.notFound,
       );
     }
     if (response.status < 200 || response.status >= 300) {
       throw const DiaryApiException('Сервер дневника недоступен');
     }
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    try {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (_) {
+      throw const DiaryApiException(
+        'Сервер вернул неверные данные дневника. Сохранённый каталог не изменён.',
+        DiaryFailure.invalidData,
+      );
+    }
   }
 
   Future<DiaryPage> feed({String? since, String? page}) async {
@@ -101,7 +128,10 @@ class DiaryApi {
         .map((v) => DiaryEntry.fromMap(v as Map<String, dynamic>))
         .toList();
     if (entries.any(
-      (e) => e.status != DiaryStatus.published || e.publishedAt == null,
+      (e) =>
+          e.status != DiaryStatus.published ||
+          e.publishedAt == null ||
+          e.blocks.any((b) => b.media?.localPath != null),
     )) {
       throw const DiaryApiException('Сервер вернул непубличную запись');
     }
@@ -111,6 +141,43 @@ class DiaryApi {
       revision: m['revision'] as String,
       nextPage: m['nextPage'] as String?,
     );
+  }
+
+  Future<void> deleteEntry(DiaryEntry entry, DiaryAuthorSession session) async {
+    final result = await _json(
+      'DELETE',
+      'author/entries/${Uri.encodeComponent(entry.id)}',
+      session: session,
+      body: {
+        'expectedVersion': entry.version,
+        'operationId': 'delete-${entry.id}-${entry.version}',
+      },
+    );
+    if (result['deletedId'] != entry.id) {
+      throw const DiaryApiException('Сервер не подтвердил удаление');
+    }
+  }
+
+  Future<void> reorderEntries(
+    List<DiaryEntry> entries,
+    DiaryAuthorSession session, {
+    required String? expectedRevision,
+  }) async {
+    final result = await _json(
+      'PUT',
+      'author/order',
+      session: session,
+      body: {
+        'expectedRevision': expectedRevision,
+        'ids': entries.map((e) => e.id).toList(),
+        'operationId': 'order-${DateTime.now().microsecondsSinceEpoch}',
+      },
+    );
+    if (result['ids'] is! List ||
+        (result['ids'] as List).join('|') !=
+            entries.map((e) => e.id).join('|')) {
+      throw const DiaryApiException('Сервер не подтвердил порядок');
+    }
   }
 
   Future<DiaryAuthorSession> authenticate(String token) async {
@@ -134,11 +201,18 @@ class DiaryApi {
     DiaryAuthorSession session, {
     required bool published,
   }) async {
+    if (entry.multimedia || entry.title.isNotEmpty) {
+      throw const DiaryApiException(
+        'Сервер мультимедийного дневника ещё не подтверждён. Черновик сохранён на телефоне.',
+        DiaryFailure.blocked,
+      );
+    }
     final m = await _json(
       'PUT',
       'author/entries/${Uri.encodeComponent(entry.id)}',
       session: session,
       body: {
+        'operationId': 'publish-${entry.id}-${entry.version}-$published',
         'expectedVersion': entry.version,
         'entry': entry.toMap(),
         'publish': published,
@@ -160,11 +234,21 @@ class DiaryApi {
     DiaryEntry entry,
     DiaryAuthorSession session,
   ) async {
+    if (entry.multimedia || entry.title.isNotEmpty) {
+      throw const DiaryApiException(
+        'Сервер мультимедийного дневника ещё не подтверждён. Черновик сохранён на телефоне.',
+        DiaryFailure.blocked,
+      );
+    }
     final m = await _json(
       'PUT',
       'author/entries/${Uri.encodeComponent(entry.id)}',
       session: session,
-      body: {'expectedVersion': entry.version, 'entry': entry.toMap()},
+      body: {
+        'operationId': 'draft-${entry.id}-${entry.version}',
+        'expectedVersion': entry.version,
+        'entry': entry.toMap(),
+      },
     );
     final result = DiaryEntry.fromMap(m['entry'] as Map<String, dynamic>);
     if (result.id != entry.id ||

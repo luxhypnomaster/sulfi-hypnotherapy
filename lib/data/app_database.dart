@@ -10,7 +10,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 4,
+    version: 5,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -71,7 +71,7 @@ Future<Database> openAppDatabase(
           }
         }
       }
-      if (oldVersion < 4) await _createDiaryTables(db);
+      if (oldVersion < 5) await _createDiaryTables(db);
     },
   ),
 );
@@ -104,6 +104,9 @@ Future<void> _createV4Tables(DatabaseExecutor db) async {
 }
 
 Future<void> _createDiaryTables(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS diary_removed(id TEXT PRIMARY KEY,version INTEGER NOT NULL,revision TEXT NOT NULL)',
+  );
   await db.execute(
     'CREATE TABLE IF NOT EXISTS diary_public(id TEXT PRIMARY KEY,version INTEGER NOT NULL,publishedAt TEXT NOT NULL,payload TEXT NOT NULL)',
   );

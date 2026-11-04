@@ -1,7 +1,7 @@
 name: sulfi_hypnotherapy
 description: Локальная аудиобиблиотека «Сульфи — гипнотерапевт».
 publish_to: 'none'
-version: 0.4.4+9
+version: 0.4.5+10
 
 environment:
   sdk: ^3.13.7
@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  crypto: 3.0.8
   audio_service: 0.18.19
   record: 7.1.2
   url_launcher: 6.3.3

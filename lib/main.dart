@@ -3,6 +3,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
+import 'services/diary_media_store.dart';
+import 'services/diary_audio.dart';
+import 'models/diary_entry.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as p;
@@ -110,6 +116,25 @@ class _BootstrapState extends State<_Bootstrap> {
         'SULFI_GOOGLE_WEB_CLIENT_ID',
       );
       final diaryBase = diaryUrl.isEmpty ? null : Uri.parse(diaryUrl);
+      final diaryMedia = DiaryMediaStore(
+        Directory(p.join(root.path, 'diary_media')),
+        pick: (type) async {
+          final selected = await FilePicker.pickFile(
+            type: FileType.custom,
+            allowedExtensions: type == DiaryBlockType.image
+                ? ['jpg', 'jpeg', 'png', 'webp']
+                : ['mp3', 'm4a', 'wav'],
+          );
+          if (selected == null) return null;
+          if (selected.path == null) {
+            throw const FormatException(
+              'Файл недоступен. Сохраните его на телефон и повторите.',
+            );
+          }
+          return (name: selected.name, path: selected.path!);
+        },
+        probe: library.probe,
+      );
       final diary = DiaryController(
         DiaryRepository(repository.database),
         api: diaryBase == null
@@ -122,8 +147,34 @@ class _BootstrapState extends State<_Bootstrap> {
               ),
         authorRepository: DiaryAuthorRepository(repository.database),
         identity: GoogleDiaryIdentity(serverClientId: googleClientId),
+        mediaStore: diaryMedia,
+        allowDebugAuthor: kDebugMode,
+        audioFactory: () {
+          final audio = DiaryAudio(
+            transport: NativeDiaryAudio(),
+            store: diaryMedia,
+            sessionActive: () => sessionAudioHandler?.engine?.active ?? false,
+            beforePlay: player.stop,
+          );
+          unawaited(audio.initializeFocus());
+          return audio;
+        },
       );
       await diary.load();
+      // Startup only: include private drafts even while logged out. Never run
+      // collection during imports/Undo, and never touch the personal audio dir.
+      final allDiaryEntries = [
+        ...await diary.authorRepository!.entries(),
+        ...await diary.repository.published(),
+      ];
+      if (diary.authorRepository!.invalidIds.isEmpty &&
+          diary.repository.invalidIds.isEmpty) {
+        await diaryMedia.collect({
+          for (final e in allDiaryEntries)
+            for (final b in e.blocks)
+              if (b.media?.localPath case final String path) path,
+        });
+      }
       if (diary.api != null) unawaited(diary.sync());
       final controller = SessionController(
         repository: sessions,

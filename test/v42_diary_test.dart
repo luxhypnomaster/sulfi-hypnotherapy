@@ -273,8 +273,8 @@ void main() {
       );
       await t.pumpAndSettle();
       expect(find.textContaining('SECRET'), findsNothing);
-      expect(find.text('Автор: создать запись'), findsNothing);
-      expect(find.text('Опубликованных записей пока нет.'), findsOneWidget);
+      expect(find.text('Новая запись'), findsNothing);
+      expect(find.textContaining('Каталог ещё не загружен'), findsOneWidget);
       await t.pumpWidget(const SizedBox());
     },
   );
@@ -397,7 +397,10 @@ void main() {
         entry: entry(body: ''),
       ),
     );
-    await t.enterText(find.byType(TextField).first, 'Послание автора');
+    await t.enterText(
+      find.byKey(const Key('diary-message')),
+      'Послание автора',
+    );
     await t.enterText(
       find.byType(TextField).last,
       'Длинный текст, сохранённый автором.\n' * 80,

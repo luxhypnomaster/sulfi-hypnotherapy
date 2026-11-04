@@ -20,7 +20,7 @@ import '../models/local_dates.dart';
 import '../services/session_audio_handler.dart';
 import 'booking.dart';
 import 'templates_screen.dart';
-import 'diary_screen.dart';
+import 'diary_home.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -297,63 +297,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
               Expanded(
-                child: LeatherBoard(
+                child: DiaryHomeBoard(
+                  diary: c.diary,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (c.diary != null)
-                        ListenableBuilder(
-                          listenable: c.diary!,
-                          builder: (context, _) {
-                            final latest = c.diary!.published.firstOrNull;
-                            return InkWell(
-                              key: const Key('home-diary'),
-                              onTap: () => Navigator.push<void>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => latest == null
-                                      ? DiaryScreen(diary: c.diary!)
-                                      : DiaryReader(entry: latest),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.auto_stories_outlined,
-                                    color: neonPink,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: Text(
-                                      latest?.message ?? 'Дневник Сульфи',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: neonPink,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    tooltip: 'Оглавление дневника',
-                                    onPressed: () => Navigator.push<void>(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            DiaryScreen(diary: c.diary!),
-                                      ),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.chevron_right,
-                                      size: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                      if (c.diary != null) DiaryHomeMessage(diary: c.diary!),
                       Wrap(
                         alignment: WrapAlignment.spaceBetween,
                         crossAxisAlignment: WrapCrossAlignment.center,

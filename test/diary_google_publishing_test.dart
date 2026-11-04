@@ -271,7 +271,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byTooltip('Войти как автор через Google'), findsOneWidget);
-      expect(find.text('Автор: создать запись'), findsNothing);
+      expect(find.text('Новая запись'), findsNothing);
       expect(find.text('Приватный текст'), findsNothing);
       expect(find.text('Временный токен от сервера'), findsNothing);
       await tester.runAsync(() async {
@@ -279,8 +279,8 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 40));
       });
       await tester.pumpAndSettle();
-      expect(find.text('Автор: создать запись'), findsOneWidget);
-      await tester.tap(find.text('Автор: создать запись'));
+      expect(find.text('Новая запись'), findsOneWidget);
+      await tester.tap(find.text('Новая запись'));
       await tester.pumpAndSettle();
       expect(find.byType(DiaryEditor), findsOneWidget);
       expect(find.text('Временный токен от сервера'), findsNothing);

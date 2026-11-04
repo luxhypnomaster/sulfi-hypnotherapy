@@ -8,18 +8,19 @@ import '../models/diary_entry.dart';
 class DiaryRepository {
   DiaryRepository(this.database);
   final Database database;
-  Future<List<DiaryEntry>> published() async =>
-      (await database.query(
-            'diary_public',
-            orderBy: 'publishedAt DESC, id DESC',
-          ))
-          .map(
-            (r) => DiaryEntry.fromMap(
-              jsonDecode(r['payload'] as String) as Map<String, dynamic>,
-            ),
-          )
-          .where((e) => e.status == DiaryStatus.published)
-          .toList();
+  final invalidIds = <String>[];
+  Future<List<DiaryEntry>> published() async {
+    invalidIds.clear();
+    return (await database.query(
+          'diary_public',
+          orderBy: 'publishedAt DESC, id DESC',
+        ))
+        .expand((r) => _decodeRow(r, invalidIds))
+        .where((e) => e.status == DiaryStatus.published)
+        .toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+  }
+
   Future<String?> revision() async =>
       (await database.query(
             'diary_sync',
@@ -38,9 +39,38 @@ class DiaryRepository {
     }
     await database.transaction((tx) async {
       for (final id in removed) {
+        final old = await tx.query(
+          'diary_public',
+          columns: ['version'],
+          where: 'id=?',
+          whereArgs: [id],
+        );
+        final tomb = await tx.query(
+          'diary_removed',
+          where: 'id=?',
+          whereArgs: [id],
+        );
+        final version =
+            old.firstOrNull?['version'] as int? ??
+            tomb.firstOrNull?['version'] as int? ??
+            0;
+        await tx.insert('diary_removed', {
+          'id': id,
+          'version': version,
+          'revision': revision,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
         await tx.delete('diary_public', where: 'id=?', whereArgs: [id]);
       }
       for (final e in entries) {
+        if (removed.contains(e.id)) continue;
+        final tomb = await tx.query(
+          'diary_removed',
+          where: 'id=?',
+          whereArgs: [e.id],
+        );
+        if (tomb.isNotEmpty && (tomb.first['version'] as int) >= e.version) {
+          continue;
+        }
         final existing = await tx.query(
           'diary_public',
           columns: ['version'],
@@ -70,14 +100,16 @@ class DiaryRepository {
 class DiaryAuthorRepository {
   DiaryAuthorRepository(this.database);
   final Database database;
-  Future<List<DiaryEntry>> entries() async =>
-      (await database.query('diary_author', orderBy: 'updatedAt DESC'))
-          .map(
-            (r) => DiaryEntry.fromMap(
-              jsonDecode(r['payload'] as String) as Map<String, dynamic>,
-            ),
-          )
-          .toList();
+  final invalidIds = <String>[];
+  Future<List<DiaryEntry>> entries() async {
+    invalidIds.clear();
+    return (await database.query(
+        'diary_author',
+        orderBy: 'updatedAt DESC',
+      )).expand((r) => _decodeRow(r, invalidIds)).toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+  }
+
   Future<void> save(DiaryEntry e) => database
       .insert('diary_author', {
         'id': e.id,
@@ -96,4 +128,40 @@ class DiaryAuthorRepository {
           }, conflictAlgorithm: ConflictAlgorithm.ignore);
         }
       });
+}
+
+/// One SQLite transaction; numbers/dates and media references are untouched.
+extension DiaryAuthorOperations on DiaryAuthorRepository {
+  Future<void> remove(String id) async {
+    await database.delete('diary_author', where: 'id=?', whereArgs: [id]);
+  }
+
+  Future<void> reorder(List<DiaryEntry> entries) =>
+      database.transaction((tx) async {
+        for (var i = 0; i < entries.length; i++) {
+          final e = entries[i].copyWith(order: i);
+          await tx.update(
+            'diary_author',
+            {'payload': jsonEncode(e.toMap())},
+            where: 'id=?',
+            whereArgs: [e.id],
+          );
+        }
+      });
+}
+
+Iterable<DiaryEntry> _decodeRow(
+  Map<String, Object?> row,
+  List<String> invalid,
+) {
+  try {
+    return [
+      DiaryEntry.fromMap(
+        jsonDecode(row['payload'] as String) as Map<String, dynamic>,
+      ),
+    ];
+  } catch (_) {
+    invalid.add(row['id'].toString());
+    return const [];
+  }
 }
