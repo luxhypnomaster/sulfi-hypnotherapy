@@ -44,6 +44,16 @@ DiaryEntry draft(
   updatedAt: DateTime.utc(2026, 11, 4),
 );
 
+class SpyAuthorRepository extends DiaryAuthorRepository {
+  SpyAuthorRepository(super.database);
+  final writes = <DiaryEntry>[];
+  @override
+  Future<void> save(DiaryEntry entry) {
+    writes.add(entry);
+    return super.save(entry);
+  }
+}
+
 void main() {
   sqfliteFfiInit();
   late Database db;
@@ -52,6 +62,7 @@ void main() {
   late DiaryController controller;
   late Map<String, DiaryEntry> remote;
   bool offline = false;
+  Completer<void>? cloudGate, cloudStarted;
   Future<DiaryResponse> server(
     String method,
     Uri uri,
@@ -89,6 +100,8 @@ void main() {
         }),
       );
     }
+    cloudStarted?.complete();
+    await cloudGate?.future;
     final input = jsonDecode(body!) as Map<String, dynamic>;
     final entry = DiaryEntry.fromMap(input['entry'] as Map<String, dynamic>);
     if ((remote[entry.id]?.version ?? 0) != input['expectedVersion']) {
@@ -101,6 +114,8 @@ void main() {
 
   setUp(() async {
     offline = false;
+    cloudGate = null;
+    cloudStarted = null;
     remote = {};
     identity = FakeIdentity();
     dir = await Directory.systemTemp.createTemp('sulfi_google_test');
@@ -242,6 +257,7 @@ void main() {
     'one app shows Google author login but no editor or raw-token field to a reader',
     (tester) async {
       await tester.runAsync(() async {
+        controller.dispose();
         controller = DiaryController(
           DiaryRepository(db),
           authorRepository: DiaryAuthorRepository(db),
@@ -269,6 +285,70 @@ void main() {
       expect(find.byType(DiaryEditor), findsOneWidget);
       expect(find.text('Временный токен от сервера'), findsNothing);
       expect(find.text('Предпросмотр'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'backgrounding during cloud save cannot overwrite its confirmed version with stale autosave',
+    (tester) async {
+      late SpyAuthorRepository author;
+      await tester.runAsync(() async {
+        controller.dispose();
+        author = SpyAuthorRepository(db);
+        controller = DiaryController(
+          DiaryRepository(db),
+          authorRepository: author,
+          identity: identity,
+          api: DiaryApi(
+            Uri.parse('https://diary.example.test/v1'),
+            request: server,
+          ),
+        );
+        await controller.signInAuthor();
+      });
+      await tester.pumpWidget(
+        MaterialApp(
+          home: DiaryEditor(diary: controller, entry: draft('background')),
+        ),
+      );
+      await tester.pumpAndSettle();
+      cloudGate = Completer();
+      cloudStarted = Completer();
+      await tester.tap(find.text('Сохранить на Диск'));
+      for (var i = 0; i < 50 && !cloudStarted!.isCompleted; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expect(cloudStarted!.isCompleted, true);
+      expect(
+        tester
+            .widgetList<TextField>(find.byType(TextField))
+            .every((field) => field.enabled == false),
+        true,
+      );
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
+      expect(
+        author.writes.length,
+        1,
+        reason: 'the pre-upload local save is enough while fields are disabled',
+      );
+      cloudGate!.complete();
+      for (var i = 0; i < 50 && controller.drafts.single.version != 1; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+      expect(controller.drafts.single.version, 1);
+      expect(author.writes.length, 2);
       await tester.pumpWidget(const SizedBox());
     },
   );

@@ -104,7 +104,7 @@ flutter analyze --fatal-infos
 flutter test --reporter expanded
 ```
 
-Node использует настоящие независимо созданные RSA-подписи; Google/Drive/Apps
+Node/OpenSSL используют настоящие независимо созданные RSA-подписи и X.509; Google/Drive/Apps
 Script API подставлены. Flutter использует подставной identity и HTTP-сервер.
 Живые SDK/Consent Screen/Drive permissions/квоты/web app/телефон этим не проверены.
 После настройки нужны реальные вход владельца/чужого аккаунта, отказ сети/отмена,

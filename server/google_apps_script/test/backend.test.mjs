@@ -1,6 +1,9 @@
-import {readFileSync} from 'node:fs';
+import {readFileSync, mkdtempSync, writeFileSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import vm from 'node:vm';
 import {generateKeyPairSync, sign} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -18,7 +21,7 @@ function jwt(overrides = {}, header = {}) {
   });
   return input + '.' + sign('RSA-SHA256', Buffer.from(input), privateKey).toString('base64url');
 }
-function harness() {
+function harness(certificate = pem) {
   const cache = new Map(), properties = new Map([
     ['SULFI_GOOGLE_WEB_CLIENT_ID', audience], ['SULFI_AUTHOR_EMAIL', owner],
   ]);
@@ -29,7 +32,7 @@ function harness() {
     UrlFetchApp: {fetch: (url, options) => {
       fetches++; assert.equal(url, 'https://www.googleapis.com/oauth2/v1/certs');
       assert.equal(options.followRedirects, false);
-      return {getResponseCode: () => 200, getContentText: () => JSON.stringify({'current-key': pem})};
+      return {getResponseCode: () => 200, getContentText: () => JSON.stringify({'current-key': certificate})};
     }},
     Utilities: {
       base64EncodeWebSafe: encode,
@@ -71,6 +74,17 @@ test('real RSA signature verification accepts the configured Google issuer/audie
   assert.equal(h.context.SulfiJwt.verify(jwt()).email, owner);
   h.context.SulfiJwt.verify(jwt());
   assert.equal(h.fetches, 1, 'certificates are cached');
+});
+test('Google-format PEM X.509 certificate verifies independently signed JWT', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'sulfi-test-cert-'));
+  try {
+    const keyFile = join(dir, 'ephemeral-test-key.pem');
+    writeFileSync(keyFile, privateKey.export({type: 'pkcs8', format: 'pem'}), {mode: 0o600});
+    const certificate = execFileSync('openssl', ['req', '-new', '-x509', '-key', keyFile,
+      '-subj', '/CN=SulfiEphemeralTestOnly', '-days', '1'], {encoding: 'utf8'});
+    const h = harness(certificate);
+    assert.equal(h.context.SulfiJwt.verify(jwt()).email, owner);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
 });
 for (const [label, claims, header, code] of [
   ['other owner', {email: 'reader@example.test'}, {}, 403],

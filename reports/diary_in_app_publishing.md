@@ -26,9 +26,9 @@ SQLite остаётся v4, миграции/сброса нет. Аудио, к
 
 - `flutter pub get --enforce-lockfile` — PASS.
 - `flutter analyze --fatal-infos` — PASS, без замечаний.
-- `flutter test --reporter expanded` — PASS, **163 теста**, из них 20 новых.
-- `node --test server/google_apps_script/test/backend.test.mjs` — PASS, **23 теста**:
-  настоящие подписи, отказы токенам/чужому автору, приватность публикации, версии,
+- `flutter test --reporter expanded` — PASS, **164 теста**, из них 21 новый.
+- `node --test server/google_apps_script/test/backend.test.mjs` — PASS, **24 теста**:
+  настоящие RSA-подписи и X.509-сертификаты Google-формата, отказы токенам/чужому автору, приватность публикации, версии,
   курсоры, закрытый store, lock release, отказ shared/corrupt/duplicate storage.
 - Реальный Flutter-виджет: переход из оглавления в редактор после подставного
   Google-входа; обычный читатель не видит черновики/редактор/ручное поле token.

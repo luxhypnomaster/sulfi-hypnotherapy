@@ -479,8 +479,9 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
+    if (!busy &&
+        (state == AppLifecycleState.paused ||
+            state == AppLifecycleState.inactive)) {
       unawaited(_save());
     }
   }
@@ -544,7 +545,11 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     } catch (e) {
       if (mounted) {
         setState(
-          () => error = e is DiaryApiException ? e.message : 'Публикация не выполнена; черновик сохранён. Проверьте соединение и повторите попытку.',
+          () => error = e is DiaryApiException
+              ? e.message
+              : e is FormatException
+              ? e.message
+              : 'Не удалось подтвердить публикацию; черновик сохранён. Обновите дневник после восстановления соединения.',
         );
       }
     } finally {
