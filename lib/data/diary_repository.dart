@@ -66,7 +66,7 @@ class DiaryRepository {
   }
 }
 
-/// Only constructed for the explicitly enabled author workspace, never reader UI.
+/// Private work files. Only an authenticated author may expose them in the UI.
 class DiaryAuthorRepository {
   DiaryAuthorRepository(this.database);
   final Database database;
@@ -85,4 +85,15 @@ class DiaryAuthorRepository {
         'payload': jsonEncode(e.toMap()),
       }, conflictAlgorithm: ConflictAlgorithm.replace)
       .then((_) {});
+
+  Future<void> saveAll(List<DiaryEntry> entries) =>
+      database.transaction((tx) async {
+        for (final e in entries) {
+          await tx.insert('diary_author', {
+            'id': e.id,
+            'updatedAt': e.updatedAt.toUtc().toIso8601String(),
+            'payload': jsonEncode(e.toMap()),
+          }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        }
+      });
 }

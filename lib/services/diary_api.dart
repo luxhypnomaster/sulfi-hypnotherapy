@@ -11,9 +11,10 @@ class DiaryApiException implements Exception {
 }
 
 class DiaryResponse {
-  const DiaryResponse(this.status, this.body);
+  const DiaryResponse(this.status, this.body, {this.headers = const {}});
   final int status;
   final String body;
+  final Map<String, String> headers;
 }
 
 typedef DiaryRequest = Future<DiaryResponse> Function(
@@ -43,9 +44,10 @@ class DiaryPage {
   final String? nextPage;
 }
 
-/// No credentials in configuration. Tokens are entered at runtime and kept in RAM.
+/// No credentials in configuration. Identity tokens are kept only in RAM.
 class DiaryApi {
-  DiaryApi(this.base, {DiaryRequest? request}) : _request = request ?? _http {
+  DiaryApi(this.base, {DiaryRequest? request})
+    : _request = request ?? httpRequest {
     if (base.scheme != 'https' ||
         base.host.isEmpty ||
         base.userInfo.isNotEmpty ||
@@ -113,7 +115,7 @@ class DiaryApi {
 
   Future<DiaryAuthorSession> authenticate(String token) async {
     if (token.trim().isEmpty || token.contains(RegExp(r'[\r\n]'))) {
-      throw const DiaryApiException('Введите действительный токен автора');
+      throw const DiaryApiException('Войдите через Google заново');
     }
     final pending = DiaryAuthorSession._(
       token.trim(),
@@ -154,7 +156,53 @@ class DiaryApi {
     return result;
   }
 
-  static Future<DiaryResponse> _http(
+  Future<DiaryEntry> saveAuthorDraft(
+    DiaryEntry entry,
+    DiaryAuthorSession session,
+  ) async {
+    final m = await _json(
+      'PUT',
+      'author/entries/${Uri.encodeComponent(entry.id)}',
+      session: session,
+      body: {'expectedVersion': entry.version, 'entry': entry.toMap()},
+    );
+    final result = DiaryEntry.fromMap(m['entry'] as Map<String, dynamic>);
+    if (result.id != entry.id ||
+        result.version <= entry.version ||
+        result.message != entry.message ||
+        result.body != entry.body) {
+      throw const DiaryApiException(
+        'Сервер не подтвердил сохранение черновика',
+      );
+    }
+    return result;
+  }
+
+  Future<List<DiaryEntry>> authorDrafts(DiaryAuthorSession session) async {
+    final entries = <DiaryEntry>[];
+    final seen = <String>{};
+    String? page;
+    do {
+      final m = await _json(
+        'GET',
+        'author/entries',
+        session: session,
+        query: {'page': ?page, 'limit': '50'},
+      );
+      entries.addAll(
+        (m['entries'] as List).map(
+          (v) => DiaryEntry.fromMap(v as Map<String, dynamic>),
+        ),
+      );
+      page = m['nextPage'] as String?;
+      if (page != null && (!seen.add(page) || seen.length > 100)) {
+        throw const DiaryApiException('Ошибка страниц авторского дневника');
+      }
+    } while (page != null);
+    return entries;
+  }
+
+  static Future<DiaryResponse> httpRequest(
     String method,
     Uri uri,
     Map<String, String> headers,
@@ -180,7 +228,14 @@ class DiaryApi {
           throw const DiaryApiException('Слишком большой ответ дневника');
         }
       }
-      return DiaryResponse(response.statusCode, utf8.decode(bytes));
+      return DiaryResponse(
+        response.statusCode,
+        utf8.decode(bytes),
+        headers: {
+          if (response.headers.value('location') case final String location)
+            'location': location,
+        },
+      );
     } finally {
       client.close(force: true);
     }

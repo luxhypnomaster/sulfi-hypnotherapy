@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/diary_entry.dart';
 import '../models/session_plan.dart';
 import '../services/diary_controller.dart';
+import '../services/diary_api.dart';
 import 'design.dart';
 
 class DiaryScreen extends StatefulWidget {
@@ -45,12 +46,61 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 
+  Future<void> _authorAction(Future<void> Function() action) async {
+    try {
+      await action();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e is DiaryApiException
+                  ? e.message
+                  : 'Действие не выполнено. Попробуйте снова.',
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _restore() async {
+    final count = await d.restoreFromCloud();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Добавлено записей: $count. Существующие черновики на телефоне сохранены.',
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: d,
     builder: (context, _) => LeatherScaffold(
       title: 'Дневник Сульфи',
       actions: [
+        if (d.canSignIn)
+          IconButton(
+            tooltip: d.authorWorkspace
+                ? 'Выйти из аккаунта автора'
+                : 'Войти как автор через Google',
+            onPressed: d.authorBusy
+                ? null
+                : () => _authorAction(
+                    d.authorWorkspace ? d.logout : d.signInAuthor,
+                  ),
+            icon: Icon(d.authorWorkspace ? Icons.logout : Icons.person_outline),
+          ),
+        if (d.authorWorkspace && d.api != null)
+          IconButton(
+            tooltip: 'Загрузить недостающие черновики с Диска',
+            onPressed: d.authorBusy ? null : () => _authorAction(_restore),
+            icon: const Icon(Icons.cloud_download_outlined),
+          ),
         IconButton(
           tooltip: 'Обновить дневник',
           onPressed: d.syncing ? null : d.sync,
@@ -472,6 +522,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
   }
 
   Future<void> _close() async {
+    if (busy) return;
     if (await _save() && mounted) {
       setState(() => allowPop = true);
       Navigator.pop(context);
@@ -479,9 +530,10 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
   }
 
   Future<void> _publish(bool publish) async {
-    if (busy || !await _save()) return;
+    if (busy) return;
     setState(() => busy = true);
     try {
+      if (!await _save()) return;
       if (publish &&
           (message.text.trim().isEmpty || body.text.trim().isEmpty)) {
         throw const FormatException('Заполните послание и основной текст');
@@ -489,10 +541,10 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
       await widget.diary.publish(value, published: publish);
       entry = widget.diary.drafts.firstWhere((e) => e.id == entry.id);
       if (mounted) setState(() => error = null);
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
         setState(
-          () => error = 'Публикация не выполнена. Нужны настроенный сервер и авторизация; черновик сохранён.',
+          () => error = e is DiaryApiException ? e.message : 'Публикация не выполнена; черновик сохранён. Проверьте соединение и повторите попытку.',
         );
       }
     } finally {
@@ -501,48 +553,49 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
   }
 
   Future<void> _login() async {
-    final token = TextEditingController();
+    if (busy) return;
+    setState(() => busy = true);
     try {
-      final route = DialogRoute<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Авторизация автора'),
-          content: TextField(
-            controller: token,
-            obscureText: true,
-            autocorrect: false,
-            enableSuggestions: false,
-            decoration: const InputDecoration(
-              labelText: 'Временный токен от сервера',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Отмена'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Войти'),
-            ),
-          ],
-        ),
-      );
-      final accepted = await Navigator.of(context).push(route);
-      await route.completed;
-      if (accepted != true) return;
-      await widget.diary.authenticate(token.text);
-      if (mounted) setState(() => error = null);
-    } catch (_) {
+      await widget.diary.signInAuthor();
+      if (mounted) setState(() => error = widget.diary.error);
+    } catch (e) {
       if (mounted) {
         setState(
-          () => error =
-              'Авторизация не выполнена. Проверьте настройки сервера и права.',
+          () => error = e is DiaryApiException
+              ? e.message
+              : 'Не удалось войти через Google.',
         );
       }
     } finally {
-      token.clear();
-      token.dispose();
+      if (mounted) setState(() => busy = false);
+    }
+  }
+
+  Future<void> _saveToCloud() async {
+    if (busy) return;
+    setState(() => busy = true);
+    try {
+      if (!await _save()) return;
+      await widget.diary.saveToCloud(value);
+      entry = widget.diary.drafts.firstWhere((e) => e.id == entry.id);
+      if (mounted) {
+        setState(() => error = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Черновик сохранён на Диске. Публичная запись не изменена.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(
+          () => error = e is DiaryApiException ? e.message : 'Сохранение на Диск не выполнено. Черновик остался на телефоне.',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => busy = false);
     }
   }
 
@@ -576,11 +629,12 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
           ),
           title: const Text('Автор: дневник'),
           actions: [
-            IconButton(
-              tooltip: 'Авторизация автора',
-              onPressed: _login,
-              icon: const Icon(Icons.key),
-            ),
+            if (widget.diary.canSignIn)
+              IconButton(
+                tooltip: 'Подтвердить вход через Google',
+                onPressed: busy ? null : _login,
+                icon: const Icon(Icons.key),
+              ),
           ],
         ),
         body: SafeArea(
@@ -602,6 +656,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                   child: ListView(
                     children: [
                       TextField(
+                        enabled: !busy,
                         controller: message,
                         onChanged: _changed,
                         maxLength: 1000,
@@ -613,6 +668,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                         style: const TextStyle(color: neonPink),
                       ),
                       TextField(
+                        enabled: !busy,
                         controller: body,
                         onChanged: _changed,
                         minLines: 8,
@@ -632,19 +688,28 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       child: const Text('Сохранить черновик'),
                     ),
                     TextButton(
-                      onPressed: () async {
-                        if (await _save() && context.mounted) {
-                          await Navigator.push<void>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  DiaryReader(entry: value, preview: true),
-                            ),
-                          );
-                        }
-                      },
+                      onPressed: busy
+                          ? null
+                          : () async {
+                              if (await _save() && context.mounted) {
+                                await Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => DiaryReader(
+                                      entry: value,
+                                      preview: true,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                       child: const Text('Предпросмотр'),
                     ),
+                    if (widget.diary.api != null)
+                      TextButton(
+                        onPressed: busy ? null : _saveToCloud,
+                        child: const Text('Сохранить на Диск'),
+                      ),
                     TextButton(
                       onPressed: busy ? null : () => _publish(true),
                       child: const Text('Опубликовать'),

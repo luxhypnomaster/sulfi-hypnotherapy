@@ -63,6 +63,15 @@
 - [x] Replace procedural flat panel with clean decorative leather artwork; compact technical editor controls.
 - [ ] Owner device review of the revised layout, touch targets and haptics.
 
+## Diary — publication entirely inside Sulfi (0.4.3+8)
+- [x] Native Google login instead of token-entry UI; independent reader, local author and server publication permission.
+- [x] One app: autosave/preview, explicit cloud draft backup/restore, publish/unpublish.
+- [x] Apps Script/Drive server with RS256 verification, version conflicts, locks and private/public projections.
+- [x] Tests for account gating, logout/races, cloud failures/conflicts, redirects, signatures and storage.
+- [ ] Authorized Apps Script management, real OAuth clients, stable signing and deployment to the owner's project; existing source backed up.
+- [ ] Real Google login, private draft backup, publication/unpublish and sync on two physical phones.
+- [ ] Review UI for edits of the same draft across devices; restore currently imports missing IDs and preserves all existing local work.
+
 ## Milestone 0 — bootstrap
 - [x] Initialize Flutter application and Android target; configure Russian locale and theme.
 - [x] Choose and check current compatible packages; establish SQLite v1 and private app-controlled audio storage. Flutter 3.47.9 / Dart 3.13.7; dependencies pinned with lockfile.
