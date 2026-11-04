@@ -59,7 +59,7 @@
 | G01 | PASS | G01: сравнение всех прежних SQL строк и байтов файла до/после v3→v4; v1/v2 tests сохранены. |
 | G02 | PASS | G02: flutter analyze --fatal-infos — No issues found. |
 | G03 | PASS | G03: flutter test — 143 passed, 0 failed (итоговый локальный запуск). |
-| G04 | BLOCKED | G04: локальный flutter build apk --debug упёрся в No space left on device (Gradle transforms). Сборка GitHub Actions будет проверена перед выдачей APK. |
+| G04 | PASS (CI) | [GitHub Actions 41809528052](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41809528052): flutter build apk --debug и upload успешно завершены для c9be37b. [Архив APK](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41809528052/artifacts/13312297055). Локальный запуск FAIL из-за нехватки диска; локально бинарник не получен (403 от хранилища артефактов). |
 | G05 | PASS | G05: три отчёта v4_2_*.md, контракт и branch/PR. |
 
 ## Воспроизведение проверок
@@ -82,3 +82,9 @@ flutter build apk --debug
 - NOT TESTED: реальный Samsung, микрофон/длительность/прослушивание нативного дубля, фон и интервалы при блокировке, media notification, звонки/гарнитура/Bluetooth, haptic feel, TalkBack, обновление совместимо подписанного APK без потери данных.
 - BLOCKED: живой backend дневника, выдача/отзыв author credentials, проверка публикации на втором телефоне. API-контракт и fake server не означают развёрнутого сервера.
 - Постоянная Android-подпись ещё не настроена. Не удалять старое приложение с личной библиотекой при INSTALL_FAILED_UPDATE_INCOMPATIBLE.
+
+## Итоговая Android-сборка
+
+GitHub Actions завершился **success**: [запуск](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41809528052), исходный коммит `c9be37bb6b09faf95ea766f2cf77d2636980b7e2`. Повторены pub get с lockfile, format, analyze, 143 теста и Android build. Шаг upload сохранил `build/app/outputs/flutter-apk/app-debug.apk`. [Скачать ZIP с APK](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41809528052/artifacts/13312297055) (нужен вход в приватный GitHub). Размер ZIP 99 106 207 байт, SHA-256 архива `da987bc0da1e9cf9c32b7c62d5f03016874134bc2ca971061469b62c59593735`, срок хранения до 18.11.2026.
+
+Среда разработки не смогла скачать бинарный артефакт из хранилища (HTTP 403); локальные apksigner/установка не выполнены. Это ограничение не отменяет успешную реальную сборку/загрузку в CI и не выдаётся за проверку на телефоне. Финальное обновление отчётов после сборки содержит только Markdown; исходники APK остаются `c9be37b`.
