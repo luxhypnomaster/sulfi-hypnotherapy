@@ -26,6 +26,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: ./.github/actions/setup-flutter
+      - run: node --test server/google_apps_script/test/backend.test.mjs
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos

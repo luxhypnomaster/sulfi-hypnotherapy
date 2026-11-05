@@ -8,7 +8,7 @@ import '../services/preview_player.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
 import 'session_actions.dart';
-import 'structure_screen.dart';
+import 'modular_structure_screen.dart';
 
 class TemplatesScreen extends StatefulWidget {
   const TemplatesScreen({
@@ -37,6 +37,29 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
 
   Future<void> _select(SessionTemplate t, {bool edit = false}) =>
       _run(() async {
+        if (edit && !widget.selecting) {
+          final editor = await c.beginEditing();
+          try {
+            if (!mounted ||
+                !await loadTemplateSafely(context, editor, t) ||
+                !mounted) {
+              return;
+            }
+            await Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ModularStructureScreen(
+                  controller: editor,
+                  player: widget.player,
+                ),
+              ),
+            );
+          } finally {
+            editor.dispose();
+          }
+          await c.reload();
+          return;
+        }
         if (!await loadTemplateSafely(context, c, t) || !mounted) return;
         if (widget.selecting) {
           Navigator.pop(context);
@@ -47,7 +70,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             context,
             MaterialPageRoute(
               builder: (_) =>
-                  StructureScreen(controller: c, player: widget.player),
+                  ModularStructureScreen(controller: c, player: widget.player),
             ),
           );
         } else {
@@ -67,13 +90,24 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       plan: SessionPlan(steps: const []),
     );
     if (!mounted) return;
-    if (!await loadTemplateSafely(context, c, t) || !mounted) return;
-    await Navigator.push<void>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => StructureScreen(controller: c, player: widget.player),
-      ),
-    );
+    final editor = await c.beginEditing();
+    try {
+      if (!mounted ||
+          !await loadTemplateSafely(context, editor, t) ||
+          !mounted) {
+        return;
+      }
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              ModularStructureScreen(controller: editor, player: widget.player),
+        ),
+      );
+    } finally {
+      editor.dispose();
+    }
+    await c.reload();
   });
   Future<void> _action(String action, SessionTemplate t) => _run(() async {
     if (action == 'rename') {
@@ -131,36 +165,35 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         title: widget.selecting ? 'Выбрать шаблон' : 'Шаблоны',
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  NeonButton(
-                    label: 'Создать шаблон',
-                    icon: Icons.add,
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton.icon(
                     onPressed: _busy ? null : _create,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Создать'),
                   ),
-                  const SizedBox(height: 8),
-                  OutlinedButton.icon(
+                ),
+                Expanded(
+                  child: TextButton.icon(
                     onPressed: _busy
                         ? null
                         : () => _run(() async {
                             await saveTemplateDialog(context, c);
                           }),
                     icon: const Icon(Icons.save_outlined),
-                    label: const Text('Из текущей конфигурации'),
+                    label: const Text('Из текущей'),
                   ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Найти шаблон',
-                      prefixIcon: Icon(Icons.search),
-                    ),
-                    onChanged: (q) => setState(() => _query = q),
-                  ),
-                ],
+                ),
+              ],
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                isDense: true,
+                labelText: 'Найти шаблон',
+                prefixIcon: Icon(Icons.search),
               ),
+              onChanged: (q) => setState(() => _query = q),
             ),
             Expanded(
               child: visible.isEmpty
@@ -174,103 +207,63 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                       ),
                     )
                   : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                      padding: EdgeInsets.zero,
                       itemCount: visible.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      separatorBuilder: (_, _) => const Divider(height: 1),
                       itemBuilder: (context, index) {
                         final t = visible[index];
-                        return NeonPanel(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.layers_outlined,
-                                    color: neonPink,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      t.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ),
-                                  PopupMenuButton<String>(
-                                    tooltip: 'Действия шаблона',
-                                    enabled: !_busy,
-                                    onSelected: (s) {
-                                      if (s == 'edit') {
-                                        unawaited(_select(t, edit: true));
-                                      } else {
-                                        unawaited(_action(s, t));
-                                      }
-                                    },
-                                    itemBuilder: (_) => const [
-                                      PopupMenuItem(
-                                        value: 'edit',
-                                        child: Text('Редактировать'),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 'rename',
-                                        child: Text('Переименовать и описать'),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 'copy',
-                                        child: Text('Копировать'),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 'default',
-                                        child: Text('Сделать базовым'),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 'delete',
-                                        child: Text('Удалить'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                        return ListTile(
+                          key: ValueKey('template-${t.id}'),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                          ),
+                          minVerticalPadding: 2,
+                          title: Text(
+                            t.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          subtitle: Text(
+                            '${t.plan.steps.length} элементов · ${formatDuration(t.plan.totalMs)}${t.plan.exitStepId == null ? ' · без выхода' : ''}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: antiqueGold,
+                            ),
+                          ),
+                          onTap: _busy ? null : () => _select(t),
+                          trailing: PopupMenuButton<String>(
+                            tooltip: 'Действия шаблона',
+                            enabled: !_busy,
+                            onSelected: (v) {
+                              if (v == 'edit') {
+                                unawaited(_select(t, edit: true));
+                              } else {
+                                unawaited(_action(v, t));
+                              }
+                            },
+                            itemBuilder: (_) => const [
+                              PopupMenuItem(
+                                value: 'edit',
+                                child: Text('Редактировать'),
                               ),
-                              if (t.description.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 8,
-                                    bottom: 8,
-                                  ),
-                                  child: Text(
-                                    t.description,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              Text(
-                                '${t.plan.steps.length} блоков · ${t.plan.estimated ? '≈ ' : ''}${formatDuration(t.plan.totalMs)} · версия ${t.version}',
-                                style: Theme.of(context).textTheme.bodySmall,
+                              PopupMenuItem(
+                                value: 'rename',
+                                child: Text('Переименовать и описать'),
                               ),
-                              if (t.isDefault)
-                                const Text(
-                                  'Базовый шаблон',
-                                  style: TextStyle(color: neonLime),
-                                ),
-                              if (t.plan.exitStepId == null)
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 4),
-                                  child: Text(
-                                    'Без аудиовыхода',
-                                    style: TextStyle(
-                                      color: antiqueGold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(height: 10),
-                              NeonButton(
-                                label: 'Выбрать',
-                                icon: Icons.check,
-                                onPressed: _busy ? null : () => _select(t),
-                                compact: true,
+                              PopupMenuItem(
+                                value: 'copy',
+                                child: Text('Копировать'),
+                              ),
+                              PopupMenuItem(
+                                value: 'default',
+                                child: Text('Сделать базовым'),
+                              ),
+                              PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Удалить'),
                               ),
                             ],
                           ),

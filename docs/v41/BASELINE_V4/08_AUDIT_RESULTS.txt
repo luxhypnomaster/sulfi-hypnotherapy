@@ -1,0 +1,61 @@
+СУЛЬФИ v4.0 — АВТОМАТИЧЕСКИЙ АУДИТ ПАКЕТА
+Предмет: текстовый пакет, названия, файлы и основные решения. НЕ проверяет Flutter, APK, реальный Android, звукозапись или фон.
+Проверок: 57. Успешно: 57. Ошибок: 0.
+
+[PASS] file:00_README_RU.md
+[PASS] file:01_CODEX_EXECUTION_TASK_RU.md
+[PASS] file:02_UNIFIED_SPEC_V4_RU.md
+[PASS] file:03_DATA_MIGRATION_IMPLEMENTATION_RU.md
+[PASS] file:04_RECORDER_STATE_MACHINE_RU.md
+[PASS] file:05_ACCEPTANCE_TESTS_RU.md
+[PASS] file:06_FINAL_AUDIT_AND_DECISIONS_RU.md
+[PASS] file:07_ASSET_MANIFEST_RU.md
+[PASS] main:Фаза → Модуль → Трек
+[PASS] main:Записаться к мастеру
+[PASS] main:НАЧАТЬ ТРАНСФОРМАЦИЮ
+[PASS] main:Добавить модуль
+[PASS] main:Создать новый модуль
+[PASS] main:Теги
+[PASS] main:Возвращение в безопасное место
+[PASS] main:Серая комната
+[PASS] main:Тишина
+[PASS] main:Самостоятельная работа
+[PASS] main:Повторить сессию
+[PASS] main:Создать шаблон из сессии
+[PASS] main:Воспроизвести
+[PASS] main:Завершить
+[PASS] main:Сохранить трек
+[PASS] main:Фонов
+[PASS] main:день недели
+[PASS] main:Telegram
+[PASS] main:Электронная почта
+[PASS] repeat module same phase
+[PASS] no preset Razvedka
+[PASS] module via import
+[PASS] recorder bottom buttons
+[PASS] recorder start spiral
+[PASS] old asset instructions not active
+[PASS] remove outdated label PNG
+[PASS] remove outdated bottom preview
+[PASS] current task includes 4 nav
+[PASS] tests >=84 — tests=84
+[PASS] asset:assets/screens/01_MAIN_APPROVED.png — 2150539 bytes
+[PASS] asset:assets/screens/02_RECORDER_APPROVED.png — 2155332 bytes
+[PASS] asset:assets/screens/03_PAUSE_CLOCK_REFERENCE.png — 2592546 bytes
+[PASS] asset:assets/spiral/brand/sulfi_spiral_neon.svg — 29366 bytes
+[PASS] asset:assets/spiral/android/ic_launcher_foreground_432.png — 100862 bytes
+[PASS] asset:assets/spiral/android/ic_launcher_background_432.png — 11993 bytes
+[PASS] asset:assets/spiral/android/ic_launcher_monochrome_432.png — 26105 bytes
+[PASS] asset:assets/spiral/ui/booking_spiral_nav_96.png — 13272 bytes
+[PASS] asset:assets/current/MAIN_OLD_2_COLUMNS.jpg — 207086 bytes
+[PASS] portrait:assets/screens/01_MAIN_APPROVED.png
+[PASS] portrait:assets/screens/02_RECORDER_APPROVED.png
+[PASS] README lists 00_README_RU.md
+[PASS] README lists 01_CODEX_EXECUTION_TASK_RU.md
+[PASS] README lists 02_UNIFIED_SPEC_V4_RU.md
+[PASS] README lists 03_DATA_MIGRATION_IMPLEMENTATION_RU.md
+[PASS] README lists 04_RECORDER_STATE_MACHINE_RU.md
+[PASS] README lists 05_ACCEPTANCE_TESTS_RU.md
+[PASS] README lists 06_FINAL_AUDIT_AND_DECISIONS_RU.md
+[PASS] README lists 07_ASSET_MANIFEST_RU.md
+[PASS] no old v3 spec peers
