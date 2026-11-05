@@ -523,8 +523,6 @@ void main() {
       await t.tap(find.text('Модуль проверки'));
       await t.pumpAndSettle();
       Future<void> addPause(int pixels) async {
-        await t.tap(find.text('Добавить'));
-        await t.pumpAndSettle();
         await t.tap(find.text('Добавить паузу'));
         await t.pumpAndSettle();
         expect(find.byType(ApprovedPauseClock), findsOneWidget);
@@ -593,7 +591,7 @@ void main() {
         t.widget<StructureItemRow>(find.byType(StructureItemRow)).step.id,
         first.id,
       );
-      await t.tap(find.text('Применить'));
+      await t.tap(find.text('Сохранить модуль'));
       await t.pumpAndSettle();
       expect(c.modules.entries.single.items.single.id, first.id);
       expect(c.modules.entries.single.items.single.durationMs, 2000);

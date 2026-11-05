@@ -14,11 +14,65 @@ class DiaryHomeBoard extends StatelessWidget {
     clipBehavior: Clip.none,
     fit: StackFit.expand,
     children: [
-      LeatherBoard(child: child),
       if (diary != null)
         Positioned(
-          top: -8,
-          right: 32,
+          top: 0,
+          left: 26,
+          child: Container(
+            width: 112,
+            height: 42,
+            padding: const EdgeInsets.only(top: 2, bottom: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF101500),
+              border: Border.all(color: neonLime),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: neonLime.withValues(alpha: .35),
+                  blurRadius: 9,
+                ),
+              ],
+            ),
+            child: const FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                children: [
+                  Icon(Icons.edit_outlined, color: neonLime, size: 17),
+                  SizedBox(width: 4),
+                  Text(
+                    'Дневник',
+                    style: TextStyle(
+                      color: neonLime,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      Positioned.fill(
+        top: 20,
+        child: DecoratedBox(
+          key: const Key('home-board-frame'),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/art/leather_board.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 28, 17, 15),
+            child: child,
+          ),
+        ),
+      ),
+      if (diary != null)
+        Positioned(
+          top: 0,
+          left: 26,
+          width: 112,
+          height: 48,
           child: ListenableBuilder(
             listenable: diary!,
             builder: (context, _) {
@@ -27,19 +81,10 @@ class DiaryHomeBoard extends StatelessWidget {
                 label: 'Дневник',
                 button: true,
                 excludeSemantics: true,
-                child: TextButton(
+                child: GestureDetector(
                   key: const Key('home-diary'),
-                  style: TextButton.styleFrom(
-                    backgroundColor: neonLime,
-                    foregroundColor: ink,
-                    minimumSize: const Size(88, 48),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(8),
-                      ),
-                    ),
-                  ),
-                  onPressed: () => Navigator.push<void>(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => Navigator.push<void>(
                     context,
                     MaterialPageRoute(
                       builder: (_) => current == null
@@ -47,7 +92,7 @@ class DiaryHomeBoard extends StatelessWidget {
                           : DiaryReader(entry: current, diary: diary!),
                     ),
                   ),
-                  child: const Text('Дневник'),
+                  child: const SizedBox.expand(),
                 ),
               );
             },
@@ -68,10 +113,10 @@ class DiaryHomeMessage extends StatelessWidget {
       return current == null
           ? const SizedBox.shrink()
           : Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(vertical: 3),
               child: Text(
                 current.message,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 12, color: neonPink),
               ),

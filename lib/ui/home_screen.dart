@@ -14,13 +14,10 @@ import 'library_screen.dart';
 import 'run_screen.dart';
 import 'session_actions.dart';
 import 'modular_structure_screen.dart';
-import '../models/modular_plan.dart';
-import '../models/local_dates.dart';
-import '../models/plan_duration.dart';
 import '../services/session_audio_handler.dart';
-import 'booking.dart';
-import 'templates_screen.dart';
-import 'diary_home.dart';
+import 'templates_modules_screen.dart';
+import 'home_composition.dart';
+import '../services/library_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -128,7 +125,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     await Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => TemplatesScreen(controller: c, player: widget.player),
+        builder: (_) =>
+            TemplatesModulesScreen(controller: c, player: widget.player),
       ),
     );
     await c.reload();
@@ -189,400 +187,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       await c.reload();
     }
   });
+  Future<void> _preview(SessionStep step) => _run(() async {
+    if ((_engine?.active ?? false) ||
+        (sessionAudioHandler?.engine?.active ?? false)) {
+      throw const LibraryException('Сначала завершите активную сессию');
+    }
+    final asset = c.asset(step.audioAssetId);
+    if (asset != null) {
+      await widget.player.toggle(asset, c.library.fileFor(asset));
+    }
+  });
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
-    builder: (context, _) {
-      final plan = modularize(c.draft.plan);
-      final phases = plan.phases!.where((p) => p.enabled).toList();
-      return Scaffold(
-        bottomNavigationBar: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                NeonButton(
-                  label: 'НАЧАТЬ ТРАНСФОРМАЦИЮ',
-                  fitLabel: true,
-                  icon: Icons.play_circle_filled,
-                  onPressed: _busy || plan.steps.isEmpty || c.saving
-                      ? null
-                      : _start,
-                  primary: true,
-                  compact: true,
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    _nav(BookingConfig.label, null, () => showBooking(context)),
-                    _nav('Библиотека', Icons.headphones_outlined, _library),
-                    _nav('Шаблоны', Icons.layers_outlined, _templates),
-                    _nav('История', Icons.history, _history),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              if (MediaQuery.sizeOf(context).height >= 650 &&
-                  MediaQuery.textScalerOf(context).scale(1) <= 1.3)
-                SizedBox(
-                  height: (MediaQuery.sizeOf(context).height * .16).clamp(
-                    95.0,
-                    160.0,
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: ExcludeSemantics(
-                          child: Image.asset(
-                            'assets/art/sulfi_header.png',
-                            fit: BoxFit.cover,
-                            alignment: Alignment.centerRight,
-                          ),
-                        ),
-                      ),
-                      const Positioned(
-                        left: 16,
-                        top: 15,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'САМОГИПНОЗ',
-                              style: TextStyle(fontSize: 10, letterSpacing: 2),
-                            ),
-                            Text(
-                              'Сульфи',
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w800,
-                                fontStyle: FontStyle.italic,
-                                color: neonPink,
-                              ),
-                            ),
-                            Text(
-                              'Ваш внутренний\nнавигатор',
-                              style: TextStyle(fontSize: 11),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              Expanded(
-                child: DiaryHomeBoard(
-                  diary: c.diary,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (c.diary != null) DiaryHomeMessage(diary: c.diary!),
-                      Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 10,
-                        children: [
-                          Text(
-                            'Сессия №${c.nextNumber}',
-                            style: const TextStyle(
-                              color: neonLime,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const _LiveClock(),
-                        ],
-                      ),
-                      TextButton.icon(
-                        onPressed: _busy ? null : _notes,
-                        icon: const Icon(Icons.edit_note, size: 20),
-                        label: Text(
-                          c.draft.topicText.isEmpty
-                              ? 'Тема / запрос и заметка'
-                              : c.draft.topicText,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: _busy ? null : () => _run(_structure),
-                              child: const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Структура сессии',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w800,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            tooltip: 'Открыть конструктор',
-                            onPressed: _busy ? null : () => _run(_structure),
-                            icon: const Icon(
-                              Icons.open_in_full,
-                              color: neonPink,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              '${phases.length} фаз · ${phases.expand((p) => p.children).where((c) => c.enabled && c.isModule).length} модулей · ${plan.steps.where((s) => s.kind == StepKind.audio).length} треков · ${plan.steps.where((s) => s.kind != StepKind.audio).length} интервалов',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 11,
-                                color: antiqueGold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Semantics(
-                              label: PlanDuration.plan(plan).semantics,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Длительность',
-                                      style: TextStyle(fontSize: 9),
-                                    ),
-                                  ),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      PlanDuration.plan(plan).label,
-                                      key: const Key('home-duration'),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                        color: neonLime,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: phases.isEmpty
-                            ? Center(
-                                child: TextButton(
-                                  onPressed: _busy
-                                      ? null
-                                      : () => _run(_structure),
-                                  child: const Text(
-                                    'Добавьте фазу и свои аудиотреки\nОткрыть конструктор',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: phases.length,
-                                itemBuilder: (context, i) {
-                                  final p = phases[i];
-                                  return ExpansionTile(
-                                    tilePadding: EdgeInsets.zero,
-                                    key: PageStorageKey("home-${p.id}"),
-                                    initiallyExpanded: true,
-                                    title: Text(
-                                      'Фаза: ${p.title} · ${PlanDuration.phase(p).label}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    children: [
-                                      for (final child in p.children.where(
-                                        (c) => c.enabled,
-                                      ))
-                                        if (child.isModule)
-                                          ExpansionTile(
-                                            key: PageStorageKey(
-                                              'home-module-${child.id}',
-                                            ),
-                                            initiallyExpanded: true,
-                                            tilePadding: const EdgeInsets.only(
-                                              left: 8,
-                                            ),
-                                            title: Text(
-                                              'Модуль: ${child.title} · ${PlanDuration.child(child).label}',
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            children: [
-                                              for (final step
-                                                  in child.items.where(
-                                                    (s) => s.enabled,
-                                                  ))
-                                                _track(step),
-                                            ],
-                                          )
-                                        else
-                                          for (final step in child.items.where(
-                                            (s) => s.enabled,
-                                          ))
-                                            _track(step),
-                                    ],
-                                  );
-                                },
-                              ),
-                      ),
-                      InkWell(
-                        key: const Key('active-template'),
-                        onTap: _busy ? null : _templates,
-                        child: NeonPanel(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Image.asset('assets/brand/spiral.png', width: 28),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      c.baseTemplate?.name ??
-                                          c.draft.baseTemplateName ??
-                                          'Черновик без шаблона',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        color: neonLime,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      c.baseTemplate == null
-                                          ? 'Выбрать или сохранить шаблон'
-                                          : c.draft.modified
-                                          ? 'Изменён'
-                                          : 'Исходные настройки',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: neonPink,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Icon(Icons.chevron_right, color: neonPink),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (c.saveError != null)
-                        Text(
-                          c.saveError!,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-  Widget _track(SessionStep s) => Row(
-    children: [
-      TextButton(
-        onPressed: _busy ? null : () => _run(_structure),
-        child: Text(
-          formatPause(s.delayBeforeSeconds),
-          style: const TextStyle(color: neonLime, fontSize: 12),
-        ),
-      ),
-      Expanded(
-        child: InkWell(
-          onTap: _busy ? null : () => _run(_structure),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                s.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12),
-              ),
-              if (s.description.isNotEmpty)
-                Text(
-                  s.description,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 10, color: antiqueGold),
-                ),
-            ],
-          ),
-        ),
-      ),
-      Text(
-        s.durationMs == null ? '≈' : formatDuration(s.durationMs!),
-        style: const TextStyle(fontSize: 11),
-      ),
-      IconButton(
-        tooltip: 'Прослушать ${s.title}',
-        icon: const Icon(Icons.play_circle_outline, color: neonPink),
-        onPressed: s.kind != StepKind.audio
-            ? null
-            : () => _run(() async {
-                final a = c.asset(s.audioAssetId);
-                if (a != null) {
-                  await widget.player.toggle(a, c.library.fileFor(a));
-                }
-              }),
-      ),
-    ],
-  );
-  Widget _nav(String label, IconData? icon, VoidCallback callback) => Expanded(
-    child: TextButton(
-      onPressed: _busy ? null : callback,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon == null
-              ? Image.asset('assets/brand/spiral.png', width: 30, height: 30)
-              : Icon(icon, color: neonPink),
-          const SizedBox(height: 3),
-          Text(
-            label,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 10),
-          ),
-        ],
-      ),
+    builder: (context, _) => HomeComposition(
+      controller: c,
+      busy: _busy,
+      onStructure: () => _run(_structure),
+      onTemplates: _templates,
+      onLibrary: _library,
+      onHistory: _history,
+      onNotes: _notes,
+      onStart: _busy || c.draft.plan.steps.isEmpty || c.saving ? null : _start,
+      onPreview: _preview,
+      clock: const _LiveClock(),
     ),
   );
 }
@@ -613,9 +242,9 @@ class _LiveClockState extends State<_LiveClock> {
   Widget build(BuildContext context) {
     final d = DateTime.now();
     return Text(
-      localDateLabel(d),
+      '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')} · ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}',
       style: const TextStyle(
-        fontSize: 12,
+        fontSize: 10,
         fontFeatures: [FontFeature.tabularFigures()],
       ),
     );

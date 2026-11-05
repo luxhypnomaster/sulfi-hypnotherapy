@@ -26,6 +26,12 @@ import 'package:sulfi_hypnotherapy/ui/structure_item_row.dart';
 import 'package:sulfi_hypnotherapy/ui/structure_shell.dart';
 import 'package:sulfi_hypnotherapy/ui/pause_clock_art.dart';
 import 'package:sulfi_hypnotherapy/ui/templates_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/templates_modules_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/modules_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/home_composition.dart';
+import 'package:sulfi_hypnotherapy/ui/home_screen.dart';
+import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
+import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
 
 import 'support/fakes.dart';
@@ -710,7 +716,7 @@ void main() {
       await t.tap(find.text('Повторить элемент'));
       await t.pumpAndSettle();
       await capture(t, 'module-editor');
-      await t.tap(find.text('Применить'));
+      await t.tap(find.text('Сохранить модуль'));
       await settleIo(t);
       await t.pumpAndSettle();
       expect(c.modules.entries.single.items, hasLength(4));
@@ -818,7 +824,7 @@ void main() {
           ),
         ),
       );
-      await t.tap(find.text('Применить'));
+      await t.tap(find.text('Сохранить модуль'));
       await settleIo(t);
       await t.pumpAndSettle();
       expect(find.textContaining('Определение изменилось'), findsOneWidget);
@@ -1068,6 +1074,378 @@ void main() {
           find.byKey(const ValueKey('add-exit')).hitTestable(),
           findsOneWidget,
         );
+        await t.pumpWidget(const SizedBox());
+      }
+      t.view.resetPhysicalSize();
+      t.view.resetDevicePixelRatio();
+    },
+  );
+  Future<void> createModule(WidgetTester t) async {
+    await show(
+      t,
+      TemplatesModulesScreen(controller: c, player: MemoryPlayer()),
+      size: const Size(412, 915),
+    );
+    await t.tap(find.text('Модули'));
+    await t.pumpAndSettle();
+    expect(find.text('Из текущей'), findsNothing);
+    await t.tap(find.text('Создать модуль'));
+    await settleIo(t);
+    await t.pumpAndSettle();
+    expect(find.byType(ModuleEditor), findsOneWidget);
+    expect(find.byKey(const Key('module-name')), findsOneWidget);
+    expect(find.byKey(const Key('module-description')), findsOneWidget);
+  }
+
+  Future<void> modulePause(WidgetTester t) async {
+    await t.ensureVisible(find.text('Добавить паузу'));
+    await t.pumpAndSettle();
+    await t.tap(find.text('Добавить паузу'));
+    await t.pumpAndSettle();
+    await t.tap(find.text('Применить'));
+    await t.pumpAndSettle();
+  }
+
+  Future<void> saveModule(WidgetTester t) async {
+    await t.tap(find.text('Сохранить модуль'));
+    await settleIo(t);
+    await t.pumpAndSettle();
+  }
+
+  testWidgets(
+    'catalogue create fills definition, saves once, survives restart and inserts full independent copies',
+    (t) async {
+      final root = c.draft.plan.fingerprint;
+      await createModule(t);
+      expect(c.modules.entries, hasLength(1));
+      await t.enterText(
+        find.byKey(const Key('module-name')),
+        'Мой сохранённый модуль',
+      );
+      await t.enterText(
+        find.byKey(const Key('module-description')),
+        'Два трека и пауза',
+      );
+      t.testTextInput.hide();
+      await t.ensureVisible(find.text('Добавить трек'));
+      await t.tap(find.text('Добавить трек'));
+      await settleIo(t);
+      await t.pumpAndSettle();
+      for (var n = 0; n < 2; n++) {
+        await t.tap(find.byKey(const ValueKey('pick-a')));
+        await settleIo(t);
+        await t.pumpAndSettle();
+      }
+      await t.binding.handlePopRoute();
+      await settleIo(t);
+      await t.pumpAndSettle();
+      await modulePause(t);
+      expect(c.modules.entries, hasLength(1));
+      await capture(t, 'new-module-editor');
+      await saveModule(t);
+      expect(find.byType(ModuleEditor), findsNothing);
+      final saved = c.modules.entries.singleWhere(
+        (m) => m.title == 'Мой сохранённый модуль',
+      );
+      expect(saved.description, 'Два трека и пауза');
+      expect(saved.version, 1);
+      expect(saved.items.map((s) => s.kind), [
+        StepKind.audio,
+        StepKind.audio,
+        StepKind.silence,
+      ]);
+      expect(saved.items.map((s) => s.id).toSet(), hasLength(3));
+      expect(c.draft.plan.fingerprint, root);
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await capture(t, 'module-catalogue');
+      await t.pumpWidget(const SizedBox());
+      await t.runAsync(() async {
+        await db.close();
+        db = await openAppDatabase(
+          '${dir.path}/library.sqlite',
+          factory: databaseFactoryFfi,
+        );
+        sessions = SqliteSessionRepository(db);
+        final next = SessionController(
+          repository: sessions,
+          library: library,
+          modules: ModuleCatalog(db),
+        );
+        await next.modules.load();
+        final restored = next.modules.entries.singleWhere(
+          (m) => m.id == saved.id,
+        );
+        expect(restored.toMap(), saved.toMap());
+        // Reopen the actual current draft without asking the old library connection.
+        next.draft = (await sessions.loadDraft())!;
+        await next.addModule('induction', restored);
+        await next.addModule('induction', restored);
+        final copies = next.draft.plan.phases![1].children.skip(1).toList();
+        expect(copies.map((c) => c.items.length), [3, 3]);
+        expect(
+          copies[0].items
+              .map((s) => s.id)
+              .toSet()
+              .intersection(copies[1].items.map((s) => s.id).toSet()),
+          isEmpty,
+        );
+        await next.updateChild(
+          'induction',
+          copies[0].copyWith(items: [copies[0].items.first]),
+        );
+        expect(next.draft.plan.phases![1].children.last.items, hasLength(3));
+        expect(
+          next.modules.entries.singleWhere((m) => m.id == saved.id).items,
+          hasLength(3),
+        );
+        next.dispose();
+      });
+    },
+  );
+  testWidgets(
+    'cancel new module discards work without an empty catalogue record or current-plan change',
+    (t) async {
+      final root = c.draft.plan.fingerprint;
+      await createModule(t);
+      await t.enterText(find.byKey(const Key('module-name')), 'Не сохранять');
+      t.testTextInput.hide();
+      await modulePause(t);
+      await t.tap(find.text('Отмена'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Отбросить'));
+      await settleIo(t);
+      await t.pumpAndSettle();
+      expect(c.modules.entries, hasLength(1));
+      expect(c.draft.plan.fingerprint, root);
+      expect(
+        await t.runAsync(() => db.query('module_definitions')),
+        hasLength(1),
+      );
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'module save validates name and contents; old empty definition opens editor instead of inserting empty',
+    (t) async {
+      await createModule(t);
+      await saveModule(t);
+      expect(find.text('Введите название модуля'), findsOneWidget);
+      await t.enterText(find.byKey(const Key('module-name')), 'Пока пустой');
+      t.testTextInput.hide();
+      await saveModule(t);
+      expect(find.text('Добавьте в модуль трек или паузу'), findsOneWidget);
+      expect(c.modules.entries, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+      await t.runAsync(
+        () => c.modules.save(
+          ModuleDefinition(id: 'legacy-empty', title: 'Старая заготовка'),
+        ),
+      );
+      await show(
+        t,
+        ModulesScreen(controller: c, player: MemoryPlayer(), selecting: true),
+        size: const Size(412, 915),
+      );
+      await t.tap(find.byKey(const ValueKey('module-legacy-empty')));
+      await t.pumpAndSettle();
+      expect(find.byType(ModuleEditor), findsOneWidget);
+      await modulePause(t);
+      await saveModule(t);
+      expect(
+        c.modules.entries.singleWhere((m) => m.id == 'legacy-empty').items,
+        hasLength(1),
+      );
+      expect(c.draft.plan.phases![1].children, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'new module SQLite refusal retains fields and composition; explicit retry saves one definition',
+    (t) async {
+      await createModule(t);
+      await t.enterText(find.byKey(const Key('module-name')), 'Повтор записи');
+      t.testTextInput.hide();
+      await modulePause(t);
+      await t.runAsync(() => db.execute('PRAGMA query_only=ON'));
+      await saveModule(t);
+      expect(find.byType(ModuleEditor), findsOneWidget);
+      expect(c.modules.entries, hasLength(1));
+      expect(
+        t.widgetList<StructureItemRow>(find.byType(StructureItemRow)),
+        hasLength(1),
+      );
+      await t.runAsync(() => db.execute('PRAGMA query_only=OFF'));
+      await saveModule(t);
+      expect(
+        c.modules.entries.where((m) => m.title == 'Повтор записи'),
+        hasLength(1),
+      );
+      expect(
+        c.modules.entries.singleWhere((m) => m.title == 'Повтор записи').items,
+        hasLength(1),
+      );
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'existing filled session module can explicitly save its edited composition to catalogue without overwriting the original',
+    (t) async {
+      final original = c.draft.plan.fingerprint,
+          definitionBefore = jsonEncode(c.modules.entries.single.toMap());
+      final editor = (await t.runAsync(c.beginEditing))!;
+      final instance = editor.draft.plan.phases![1].children.single;
+      await show(
+        t,
+        ModuleEditor(
+          controller: editor,
+          player: MemoryPlayer(),
+          instance: instance,
+          phaseId: 'induction',
+        ),
+        size: const Size(412, 915),
+      );
+      await t.tap(find.byTooltip('Действия элемента').first);
+      await t.pumpAndSettle();
+      await t.tap(find.text('Повторить элемент'));
+      await t.pumpAndSettle();
+      await t.tap(find.byTooltip('Сохранить как модуль'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Отмена').last);
+      await t.pumpAndSettle();
+      expect(c.modules.entries, hasLength(1));
+      await t.tap(find.byTooltip('Сохранить как модуль'));
+      await t.pumpAndSettle();
+      await t.enterText(find.byType(TextFormField).first, 'Состав из сессии');
+      await t.tap(find.text('Сохранить'));
+      await settleIo(t);
+      await t.pumpAndSettle();
+      final saved = c.modules.entries.singleWhere(
+        (m) => m.title == 'Состав из сессии',
+      );
+      expect(saved.items, hasLength(4));
+      expect(saved.items.every((s) => s.groupId == null), true);
+      expect(
+        saved.items
+            .map((s) => s.id)
+            .toSet()
+            .intersection(instance.items.map((s) => s.id).toSet()),
+        isEmpty,
+      );
+      expect(saved.instantiate('another-phase').items, hasLength(4));
+      expect(
+        jsonEncode(
+          c.modules.entries.singleWhere((m) => m.id == 'elman').toMap(),
+        ),
+        definitionBefore,
+      );
+      expect(c.draft.plan.fingerprint, original);
+      expect(editor.draft.plan.fingerprint, original);
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await t.pumpWidget(const SizedBox());
+      editor.dispose();
+    },
+  );
+  testWidgets(
+    'templates and modules tabs retain template actions and expose one module creation action',
+    (t) async {
+      await show(
+        t,
+        TemplatesModulesScreen(controller: c, player: MemoryPlayer()),
+        size: const Size(412, 915),
+      );
+      expect(find.text('Создать'), findsOneWidget);
+      expect(find.text('Из текущей'), findsOneWidget);
+      await t.tap(find.text('Модули'));
+      await t.pumpAndSettle();
+      expect(find.text('Создать модуль'), findsOneWidget);
+      expect(find.text('Из текущей'), findsNothing);
+      await t.tap(find.text('Шаблоны'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Из текущей'));
+      await t.pumpAndSettle();
+      await t.enterText(find.byType(TextFormField).first, 'Шаблон из вкладки');
+      await t.tap(find.text('Сохранить'));
+      await settleIo(t);
+      await t.pumpAndSettle();
+      expect(c.templates.single.name, 'Шаблон из вкладки');
+      expect(c.modules.entries, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'approved home composition has live data, left diary tab, portrait-only crop and fixed full template',
+    (t) async {
+      final template = (await t.runAsync(
+        () => c.saveAsTemplate('Борьба с перееданием. Часть 3', ''),
+      ))!;
+      await t.runAsync(() => c.loadTemplate(template));
+      final diary = DiaryController(DiaryRepository(db));
+      await t.runAsync(diary.load);
+      final home = (await t.runAsync(() async {
+        final home = SessionController(
+          repository: sessions,
+          library: library,
+          modules: c.modules,
+          diary: diary,
+        );
+        await home.initialize();
+        return home;
+      }))!;
+      await show(t, HomeScreen(controller: home, player: MemoryPlayer()));
+      expect(find.byType(HomeReferenceHeader), findsOneWidget);
+      final tab = t.getRect(find.byKey(const Key('home-diary'))),
+          frame = t.getRect(find.byKey(const Key('home-board-frame'))),
+          strip = t.getRect(find.byKey(const Key('home-session-strip'))),
+          portrait = t.getRect(find.byKey(const Key('home-portrait')));
+      expect(tab.left, lessThan(180));
+      expect(tab.top, lessThan(frame.top));
+      expect(strip.top, greaterThanOrEqualTo(frame.top));
+      expect(portrait.height, lessThanOrEqualTo(360 * 185 / 683));
+      expect(find.text('Сессия №1'), findsOneWidget);
+      expect(find.text('Шаблоны\nи модули'), findsOneWidget);
+      expect(find.text('Борьба с перееданием. Часть 3'), findsOneWidget);
+      expect(
+        t.widget<Text>(find.text('Борьба с перееданием. Часть 3')).maxLines,
+        isNull,
+      );
+      expect(
+        t.getBottomLeft(find.byKey(const Key('active-template'))).dy,
+        lessThan(t.getTopLeft(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ')).dy),
+      );
+      await capture(t, 'home-approved-layout');
+      await t.tap(find.text('Шаблоны\nи модули'));
+      await t.pumpAndSettle();
+      expect(find.byType(TemplatesModulesScreen), findsOneWidget);
+      await t.pumpWidget(const SizedBox());
+      home.dispose();
+      diary.dispose();
+    },
+  );
+  testWidgets(
+    'home controls and full template remain accessible at narrow, landscape and 200 percent text sizes',
+    (t) async {
+      final template = (await t.runAsync(
+        () => c.saveAsTemplate('Борьба с перееданием. Часть 3', ''),
+      ))!;
+      await t.runAsync(() => c.loadTemplate(template));
+      for (final config in [
+        (const Size(320, 600), 1.6),
+        (const Size(360, 800), 2.0),
+        (const Size(800, 360), 1.0),
+      ]) {
+        await show(
+          t,
+          HomeScreen(controller: c, player: MemoryPlayer()),
+          size: config.$1,
+          scale: config.$2,
+        );
+        expect(t.takeException(), isNull);
+        expect(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ').hitTestable(), findsOneWidget);
+        expect(find.text('Шаблоны\nи модули').hitTestable(), findsOneWidget);
+        await t.ensureVisible(find.byKey(const Key('active-template')));
+        await t.pumpAndSettle();
+        expect(find.text('Борьба с перееданием. Часть 3'), findsOneWidget);
+        expect(t.takeException(), isNull);
         await t.pumpWidget(const SizedBox());
       }
       t.view.resetPhysicalSize();

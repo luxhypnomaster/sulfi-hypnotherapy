@@ -16,6 +16,8 @@ import 'package:sulfi_hypnotherapy/ui/structure_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/modular_structure_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/templates_screen.dart';
 
+import 'package:sulfi_hypnotherapy/ui/home_composition.dart';
+
 import 'support/fakes.dart';
 
 void main() {
@@ -105,8 +107,21 @@ void main() {
         SulfiApp(library: library, player: player, controller: c),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Сульфи'), findsOneWidget);
-      expect(find.text('Ваш внутренний\nнавигатор'), findsOneWidget);
+      expect(find.byType(HomeReferenceHeader), findsOneWidget);
+      expect(
+        tester
+            .widget<Semantics>(
+              find
+                  .descendant(
+                    of: find.byType(HomeReferenceHeader),
+                    matching: find.byType(Semantics),
+                  )
+                  .first,
+            )
+            .properties
+            .label,
+        'Самогипноз. Сульфи. Ваш внутренний навигатор.',
+      );
       expect(find.byType(NavigationBar), findsNothing);
       expect(find.text('История'), findsOneWidget);
       expect(repository.savedRuns, isEmpty);
@@ -133,7 +148,7 @@ void main() {
       for (final label in [
         'НАЧАТЬ ТРАНСФОРМАЦИЮ',
         'Библиотека',
-        'Шаблоны',
+        'Шаблоны\nи модули',
         'История',
       ]) {
         expect(find.text(label).hitTestable(), findsOneWidget);

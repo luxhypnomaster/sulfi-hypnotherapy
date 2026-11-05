@@ -16,10 +16,11 @@ class TemplatesScreen extends StatefulWidget {
     required this.controller,
     required this.player,
     this.selecting = false,
+    this.embedded = false,
   });
   final SessionController controller;
   final PreviewPlayer player;
-  final bool selecting;
+  final bool selecting, embedded;
   @override
   State<TemplatesScreen> createState() => _TemplatesScreenState();
 }
@@ -161,119 +162,122 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             ),
           )
           .toList();
-      return LeatherScaffold(
-        title: widget.selecting ? 'Выбрать шаблон' : 'Шаблоны',
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: _busy ? null : _create,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Создать'),
-                  ),
+      final content = Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: _busy ? null : _create,
+                  icon: const Icon(Icons.add),
+                  label: const Text('Создать'),
                 ),
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: _busy
-                        ? null
-                        : () => _run(() async {
-                            await saveTemplateDialog(context, c);
-                          }),
-                    icon: const Icon(Icons.save_outlined),
-                    label: const Text('Из текущей'),
-                  ),
-                ),
-              ],
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                isDense: true,
-                labelText: 'Найти шаблон',
-                prefixIcon: Icon(Icons.search),
               ),
-              onChanged: (q) => setState(() => _query = q),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: _busy
+                      ? null
+                      : () => _run(() async {
+                          await saveTemplateDialog(context, c);
+                        }),
+                  icon: const Icon(Icons.save_outlined),
+                  label: const Text('Из текущей'),
+                ),
+              ),
+            ],
+          ),
+          TextField(
+            decoration: const InputDecoration(
+              isDense: true,
+              labelText: 'Найти шаблон',
+              prefixIcon: Icon(Icons.search),
             ),
-            Expanded(
-              child: visible.isEmpty
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Text(
-                          'Шаблонов пока нет. Создайте свой или сохраните текущую конфигурацию.',
-                          textAlign: TextAlign.center,
-                        ),
+            onChanged: (q) => setState(() => _query = q),
+          ),
+          Expanded(
+            child: visible.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Text(
+                        'Шаблонов пока нет. Создайте свой или сохраните текущую конфигурацию.',
+                        textAlign: TextAlign.center,
                       ),
-                    )
-                  : ListView.separated(
-                      padding: EdgeInsets.zero,
-                      itemCount: visible.length,
-                      separatorBuilder: (_, _) => const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        final t = visible[index];
-                        return ListTile(
-                          key: ValueKey('template-${t.id}'),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                          ),
-                          minVerticalPadding: 2,
-                          title: Text(
-                            t.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          subtitle: Text(
-                            '${t.plan.steps.length} элементов · ${formatDuration(t.plan.totalMs)}${t.plan.exitStepId == null ? ' · без выхода' : ''}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: antiqueGold,
-                            ),
-                          ),
-                          onTap: _busy ? null : () => _select(t),
-                          trailing: PopupMenuButton<String>(
-                            tooltip: 'Действия шаблона',
-                            enabled: !_busy,
-                            onSelected: (v) {
-                              if (v == 'edit') {
-                                unawaited(_select(t, edit: true));
-                              } else {
-                                unawaited(_action(v, t));
-                              }
-                            },
-                            itemBuilder: (_) => const [
-                              PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Редактировать'),
-                              ),
-                              PopupMenuItem(
-                                value: 'rename',
-                                child: Text('Переименовать и описать'),
-                              ),
-                              PopupMenuItem(
-                                value: 'copy',
-                                child: Text('Копировать'),
-                              ),
-                              PopupMenuItem(
-                                value: 'default',
-                                child: Text('Сделать базовым'),
-                              ),
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Удалить'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
                     ),
-            ),
-          ],
-        ),
+                  )
+                : ListView.separated(
+                    padding: EdgeInsets.zero,
+                    itemCount: visible.length,
+                    separatorBuilder: (_, _) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final t = visible[index];
+                      return ListTile(
+                        key: ValueKey('template-${t.id}'),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                        ),
+                        minVerticalPadding: 2,
+                        title: Text(
+                          t.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        subtitle: Text(
+                          '${t.plan.steps.length} элементов · ${formatDuration(t.plan.totalMs)}${t.plan.exitStepId == null ? ' · без выхода' : ''}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: antiqueGold,
+                          ),
+                        ),
+                        onTap: _busy ? null : () => _select(t),
+                        trailing: PopupMenuButton<String>(
+                          tooltip: 'Действия шаблона',
+                          enabled: !_busy,
+                          onSelected: (v) {
+                            if (v == 'edit') {
+                              unawaited(_select(t, edit: true));
+                            } else {
+                              unawaited(_action(v, t));
+                            }
+                          },
+                          itemBuilder: (_) => const [
+                            PopupMenuItem(
+                              value: 'edit',
+                              child: Text('Редактировать'),
+                            ),
+                            PopupMenuItem(
+                              value: 'rename',
+                              child: Text('Переименовать и описать'),
+                            ),
+                            PopupMenuItem(
+                              value: 'copy',
+                              child: Text('Копировать'),
+                            ),
+                            PopupMenuItem(
+                              value: 'default',
+                              child: Text('Сделать базовым'),
+                            ),
+                            PopupMenuItem(
+                              value: 'delete',
+                              child: Text('Удалить'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
       );
+      return widget.embedded
+          ? content
+          : LeatherScaffold(
+              title: widget.selecting ? 'Выбрать шаблон' : 'Шаблоны',
+              child: content,
+            );
     },
   );
 }

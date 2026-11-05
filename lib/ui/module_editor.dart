@@ -17,6 +17,7 @@ import 'structure_item_row.dart';
 import 'structure_unsaved.dart';
 import 'session_actions.dart';
 import 'library_screen.dart';
+import 'module_actions.dart';
 import 'recorder_screen.dart';
 import 'pause_time_picker.dart';
 
@@ -28,12 +29,14 @@ class ModuleEditor extends StatefulWidget {
     this.module,
     this.instance,
     this.phaseId,
+    this.creating = false,
   }) : assert((module == null) != (instance == null));
   final SessionController controller;
   final PreviewPlayer player;
   final ModuleDefinition? module;
   final PhaseChild? instance;
   final String? phaseId;
+  final bool creating;
   @override
   State<ModuleEditor> createState() => _ModuleEditorState();
 }
@@ -61,6 +64,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
   bool get dirty => token() != baseline;
   Future<void> run(Future<void> Function() f) async {
     if (busy) return;
+    ScaffoldMessenger.maybeOf(context)?.removeCurrentSnackBar();
     setState(() => busy = true);
     await showActionError(context, f);
     if (mounted) setState(() => busy = false);
@@ -94,11 +98,16 @@ class _ModuleEditorState extends State<ModuleEditor> {
       throw const LibraryException('Повторяется ID элемента');
     }
     if (widget.module case final ModuleDefinition old) {
+      if (!archive && items.isEmpty) {
+        throw const LibraryException('Добавьте в модуль трек или паузу');
+      }
       await c.modules.load();
       final existing = c.modules.entries
           .where((m) => m.id == old.id)
           .firstOrNull;
-      if (existing == null || existing.version != old.version) {
+      if (widget.creating
+          ? existing != null
+          : existing == null || existing.version != old.version) {
         throw const LibraryException(
           'Определение изменилось. Закройте редактор и откройте его снова.',
         );
@@ -110,7 +119,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
           description: description,
           tags: old.tags,
           recommendedPhaseIds: old.recommendedPhaseIds,
-          version: old.version + 1,
+          version: widget.creating ? 1 : old.version + 1,
           archived: archive || old.archived,
           items: items,
         ),
@@ -232,33 +241,6 @@ class _ModuleEditorState extends State<ModuleEditor> {
     );
   }
 
-  Future<void> addMenu() async {
-    final action = await showModalBottomSheet<String>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final p in [
-              ('audio', Icons.library_music, 'Трек из библиотеки'),
-              ('pause', Icons.pause_circle_outline, 'Добавить паузу'),
-              ('record', Icons.mic_none, 'Записать свой трек'),
-            ])
-              ListTile(
-                leading: Icon(p.$2),
-                title: Text(p.$3),
-                onTap: () => Navigator.pop(context, p.$1),
-              ),
-          ],
-        ),
-      ),
-    );
-    if (!mounted) return;
-    if (action == 'audio') await addAudio();
-    if (action == 'pause') await pause(null);
-    if (action == 'record') await addAudio(record: true);
-  }
-
   Future<void> preview(SessionStep s) async {
     if (sessionAudioHandler?.engine?.active ?? false) {
       throw const LibraryException('Сначала завершите активную сессию');
@@ -364,7 +346,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
       if (!didPop) unawaited(close());
     },
     child: StructureShell(
-      title: name,
+      title: widget.creating ? 'Новый модуль' : name,
       onBack: close,
       summary: Row(
         children: [
@@ -377,12 +359,36 @@ class _ModuleEditorState extends State<ModuleEditor> {
               ),
             ),
           ),
+          if (widget.instance != null)
+            IconButton(
+              tooltip: 'Сохранить как модуль',
+              onPressed: busy
+                  ? null
+                  : () => run(
+                      () => saveModuleCopyDialog(
+                        context,
+                        widget.controller,
+                        widget.instance!.copyWith(
+                          title: name,
+                          description: description,
+                          items: items,
+                        ),
+                      ),
+                    ),
+              icon: const Icon(Icons.library_add_outlined, color: neonPink),
+            ),
+          if (widget.instance != null)
+            IconButton(
+              tooltip: 'Название и описание',
+              onPressed: busy ? null : metadata,
+              icon: const Icon(Icons.edit_outlined, color: neonPink),
+            ),
           IconButton(
-            tooltip: 'Название и описание',
-            onPressed: busy ? null : metadata,
-            icon: const Icon(Icons.edit_outlined, color: neonPink),
+            tooltip: 'Записать свой трек',
+            onPressed: busy ? null : () => run(() => addAudio(record: true)),
+            icon: const Icon(Icons.mic_none, color: neonPink),
           ),
-          if (widget.module != null)
+          if (widget.module != null && !widget.creating)
             IconButton(
               tooltip: 'Архивировать модуль',
               onPressed: busy
@@ -411,7 +417,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
           ),
           Expanded(
             child: StructureFooterButton(
-              label: 'Применить',
+              label: widget.module != null ? 'Сохранить модуль' : 'Применить',
               primary: true,
               onPressed: busy ? null : () => run(apply),
             ),
@@ -423,6 +429,43 @@ class _ModuleEditorState extends State<ModuleEditor> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         buildDefaultDragHandles: false,
         itemCount: items.length,
+        header: widget.module == null
+            ? null
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      key: const Key('module-name'),
+                      initialValue: name,
+                      readOnly: busy,
+                      maxLength: 120,
+                      decoration: const InputDecoration(
+                        labelText: 'Название модуля',
+                      ),
+                      onChanged: (value) => setState(() => name = value),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      key: const Key('module-description'),
+                      initialValue: description,
+                      readOnly: busy,
+                      minLines: 2,
+                      maxLines: 4,
+                      maxLength: 2000,
+                      decoration: const InputDecoration(
+                        labelText: 'Описание модуля',
+                      ),
+                      onChanged: (value) => setState(() => description = value),
+                    ),
+                    if (items.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text('Добавьте треки и паузы в нужном порядке.'),
+                      ),
+                  ],
+                ),
+              ),
         onReorderItem: (from, to) {
           final next = [...items];
           next.insert(to, next.removeAt(from));
@@ -457,12 +500,23 @@ class _ModuleEditorState extends State<ModuleEditor> {
             ),
           );
         },
-        footer: Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            onPressed: busy ? null : () => run(addMenu),
-            icon: const Icon(Icons.add, color: neonLime),
-            label: const Text('Добавить', style: TextStyle(color: neonLime)),
+        footer: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              OutlinedButton.icon(
+                onPressed: busy ? null : () => run(() => addAudio()),
+                icon: const Icon(Icons.library_music_outlined),
+                label: const Text('Добавить трек'),
+              ),
+              OutlinedButton.icon(
+                onPressed: busy ? null : () => run(() => pause(null)),
+                icon: const Icon(Icons.pause_circle_outline),
+                label: const Text('Добавить паузу'),
+              ),
+            ],
           ),
         ),
       ),

@@ -20,6 +20,7 @@ import '../models/structure_rows.dart';
 import '../services/library_service.dart';
 import '../services/session_audio_handler.dart';
 import 'module_editor.dart';
+import 'module_actions.dart';
 import 'structure_shell.dart';
 import 'structure_item_row.dart';
 import 'structure_unsaved.dart';
@@ -832,6 +833,9 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     iconSize: 20,
     onSelected: (v) => _run(() async {
       if (v == 'edit') await _editModule(p, child);
+      if (v == 'saveModule' && mounted) {
+        await saveModuleCopyDialog(context, c, child);
+      }
       if (v == 'alternative') await _alternative(p, child);
       if (v == 'toggle') {
         await c.updateChild(p.id, child.copyWith(enabled: !child.enabled));
@@ -876,6 +880,10 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     }),
     itemBuilder: (_) => [
       const PopupMenuItem(value: 'edit', child: Text('Редактировать модуль')),
+      const PopupMenuItem(
+        value: 'saveModule',
+        child: Text('Сохранить как модуль'),
+      ),
       PopupMenuItem(
         value: 'toggle',
         child: Text(child.enabled ? 'Выключить модуль' : 'Включить модуль'),

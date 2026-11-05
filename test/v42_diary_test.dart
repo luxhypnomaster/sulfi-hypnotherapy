@@ -466,11 +466,11 @@ void main() {
       );
       await t.pumpAndSettle();
       expect(find.text('Библиотека'), findsOneWidget);
-      expect(find.text('Шаблоны'), findsOneWidget);
+      expect(find.text('Шаблоны\nи модули'), findsOneWidget);
       expect(find.text('История'), findsOneWidget);
       expect(find.textContaining('мастеру'), findsOneWidget);
       final topic = find.text(c.draft.topicText);
-      expect(t.widget<Text>(topic).maxLines, 2);
+      expect(t.widget<Text>(topic).maxLines, 1);
       const path = String.fromEnvironment('SULFI_V42_SCREENSHOTS');
       if (path.isNotEmpty) {
         await t.runAsync(() async {
