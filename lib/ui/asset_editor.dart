@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../models/audio_asset.dart';
+import '../data/module_catalog.dart';
+import 'module_assignment.dart';
 
-Future<AudioAsset?> editAsset(BuildContext context, AudioAsset asset) =>
-    showDialog<AudioAsset>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => _AssetEditor(asset: asset),
-    );
+Future<AudioAsset?> editAsset(
+  BuildContext context,
+  AudioAsset asset, {
+  ModuleCatalog? catalog,
+  ModuleChoice? choice,
+}) => showDialog<AudioAsset>(
+  context: context,
+  barrierDismissible: false,
+  builder: (_) => _AssetEditor(asset: asset, catalog: catalog, choice: choice),
+);
 
 class _AssetEditor extends StatefulWidget {
-  const _AssetEditor({required this.asset});
+  const _AssetEditor({required this.asset, this.catalog, this.choice});
+  final ModuleCatalog? catalog;
+  final ModuleChoice? choice;
   final AudioAsset asset;
   @override
   State<_AssetEditor> createState() => _AssetEditorState();
@@ -23,7 +31,9 @@ class _AssetEditorState extends State<_AssetEditor> {
     text: widget.asset.description,
   );
   late final _tags = TextEditingController(text: widget.asset.tags.join(', '));
-  late LibrarySection _section = widget.asset.section;
+  late LibrarySection _section = widget.asset.source == 'recorded'
+      ? LibrarySection.personal
+      : widget.asset.section;
   late AudioCategory _category = widget.asset.category;
 
   @override
@@ -62,21 +72,24 @@ class _AssetEditorState extends State<_AssetEditor> {
                     : null,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<LibrarySection>(
-                initialValue: _section,
-                decoration: const InputDecoration(
-                  labelText: 'Раздел библиотеки',
+              if (widget.asset.source == 'recorded')
+                const Text('Мои аудиозаписи · записано на устройстве')
+              else
+                DropdownButtonFormField<LibrarySection>(
+                  initialValue: _section,
+                  decoration: const InputDecoration(
+                    labelText: 'Раздел библиотеки',
+                  ),
+                  isExpanded: true,
+                  items: LibrarySection.values
+                      .map(
+                        (s) => DropdownMenuItem(value: s, child: Text(s.label)),
+                      )
+                      .toList(),
+                  onChanged: (s) {
+                    if (s != null) setState(() => _section = s);
+                  },
                 ),
-                isExpanded: true,
-                items: LibrarySection.values
-                    .map(
-                      (s) => DropdownMenuItem(value: s, child: Text(s.label)),
-                    )
-                    .toList(),
-                onChanged: (s) {
-                  if (s != null) setState(() => _section = s);
-                },
-              ),
               const SizedBox(height: 12),
               DropdownButtonFormField<AudioCategory>(
                 initialValue: _category,
@@ -103,11 +116,17 @@ class _AssetEditorState extends State<_AssetEditor> {
                 decoration: const InputDecoration(labelText: 'Описание'),
               ),
               const SizedBox(height: 12),
+              if (widget.catalog != null && widget.choice != null)
+                ModuleAssignment(
+                  catalog: widget.catalog!,
+                  choice: widget.choice!,
+                ),
               TextFormField(
                 controller: _tags,
                 maxLength: 300,
                 decoration: const InputDecoration(
-                  labelText: 'Метки через запятую',
+                  labelText: 'Теги',
+                  hintText: 'Например: Элман, погружение',
                 ),
               ),
             ],

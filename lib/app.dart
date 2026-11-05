@@ -23,11 +23,19 @@ ThemeData sulfiTheme() {
     appBarTheme: const AppBarTheme(backgroundColor: ink, centerTitle: false),
     cardTheme: CardThemeData(
       elevation: 0,
+      color: const Color(0xFF180A13),
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(9),
+        side: const BorderSide(color: Color(0xFF762047)),
+      ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Color(0xFF762047)),
+        borderRadius: BorderRadius.circular(8),
+      ),
       fillColor: const Color(0xFF22101B),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
     ),
@@ -53,7 +61,7 @@ class SulfiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Сульфи — гипнотерапевт',
+    title: 'Сульфи — Самогипноз',
     locale: const Locale('ru'),
     supportedLocales: const [Locale('ru')],
     localizationsDelegates: GlobalMaterialLocalizations.delegates,

@@ -75,6 +75,15 @@ class LibraryService {
     }
   }
 
+  Future<AudioAsset> prepareRecording(String path) async {
+    final asset = await _copySelection((name: 'Личная запись.m4a', path: path));
+    return AudioAsset.fromMap({
+      ...asset.toMap(),
+      'source': 'recorded',
+      'section': 'personal',
+    });
+  }
+
   Future<AudioAsset> _copySelection(AudioSelection selected) async {
     final format = p
         .extension(selected.name)
@@ -149,7 +158,7 @@ class LibraryService {
     final usedBy = await references?.call(asset.id) ?? [];
     if (usedBy.isNotEmpty) {
       throw LibraryException(
-        'Аудио используется: ${usedBy.join(', ')}. Сначала замените или удалите эти блоки.',
+        'Аудио используется: ${usedBy.join(', ')}. Сначала замените или удалите эти элементы.',
       );
     }
     // Delete bytes first: if that fails, the visible entry remains retryable.
