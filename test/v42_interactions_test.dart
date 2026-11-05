@@ -124,6 +124,26 @@ void main() {
     await c.flush();
   }
 
+  Future<void> applyStructure(WidgetTester t) async {
+    await t.tap(
+      find.descendant(
+        of: find.byKey(const Key('structure-footer')),
+        matching: find.text('Применить'),
+      ),
+    );
+    for (var i = 0; i < 8; i++) {
+      await t.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 8)),
+      );
+      await t.pump();
+    }
+    await t.pumpAndSettle();
+    if (find.text('Сохранить полный план').evaluate().isNotEmpty) {
+      await t.tap(find.text('Сохранить полный план'));
+      await t.pumpAndSettle();
+    }
+  }
+
   Future<void> screenshot(WidgetTester t, String name) async {
     const path = String.fromEnvironment('SULFI_V42_SCREENSHOTS');
     if (path.isEmpty) return;
@@ -260,11 +280,9 @@ void main() {
       expect(
         find.descendant(
           of: find.byKey(const Key('structure-footer')),
-          matching: find.byWidgetPredicate(
-            (w) => w is TextButton || w is FilledButton,
-          ),
+          matching: find.byWidgetPredicate((w) => w is OutlinedButton),
         ),
-        findsNWidgets(3),
+        findsNWidgets(4),
       );
       await t.tap(find.text('Добавить'));
       await t.pumpAndSettle();
@@ -277,6 +295,8 @@ void main() {
       await screenshot(t, 'pause-clock');
       await t.tap(find.text('Применить'));
       await t.pumpAndSettle();
+      expect(c.draft.plan.steps, isEmpty);
+      await applyStructure(t);
       expect(c.draft.plan.steps.single.durationMs, 0);
       expect(c.draft.plan.steps.single.delayBeforeSeconds, 0);
       await screenshot(t, 'structure');
@@ -310,6 +330,7 @@ void main() {
         find.byKey(ValueKey(before[0])),
         find.byKey(ValueKey(before[2])),
       );
+      await applyStructure(t);
       expect(
         c.draft.plan.phases!.first.children.map((ch) => ch.items.single.id),
         [before[1], before[2], before[0]],
@@ -325,6 +346,7 @@ void main() {
         find.byKey(ValueKey('drag-$phase')),
         find.byKey(ValueKey('drag-$another')),
       );
+      await applyStructure(t);
       expect(c.draft.plan.phases!.map((p) => p.id), [another, phase]);
       await c.reload();
       expect(c.draft.plan.phases!.map((p) => p.id), [another, phase]);
@@ -370,6 +392,9 @@ void main() {
         find.byKey(const ValueKey('a')),
         find.byKey(const ValueKey('b')),
       );
+      expect(c.modules.entries.single.items.map((s) => s.id), ['a', 'p', 'b']);
+      await t.tap(find.text('Применить'));
+      await t.pumpAndSettle();
       expect(c.modules.entries.single.items.map((s) => s.id), ['p', 'b', 'a']);
       expect(
         c.modules.entries.single.items.fold<int>(

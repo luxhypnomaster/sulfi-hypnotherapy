@@ -74,13 +74,14 @@ class PhaseChild {
   PhaseChild({
     required this.id,
     required this.title,
+    this.description = '',
     this.definitionId,
     this.definitionVersion,
     this.baseFingerprint,
     this.enabled = true,
     List<SessionStep> items = const [],
   }) : items = List.unmodifiable(items);
-  final String id, title;
+  final String id, title, description;
   final String? definitionId, baseFingerprint;
   final int? definitionVersion;
   final bool enabled;
@@ -90,11 +91,13 @@ class PhaseChild {
   bool get modified => isModule && baseFingerprint != fingerprint;
   PhaseChild copyWith({
     String? title,
+    String? description,
     bool? enabled,
     List<SessionStep>? items,
   }) => PhaseChild(
     id: id,
     title: title ?? this.title,
+    description: description ?? this.description,
     definitionId: definitionId,
     definitionVersion: definitionVersion,
     baseFingerprint: baseFingerprint,
@@ -104,6 +107,7 @@ class PhaseChild {
   Map<String, dynamic> toMap() => {
     'id': id,
     'title': title,
+    if (description.isNotEmpty) 'description': description,
     'definitionId': definitionId,
     'definitionVersion': definitionVersion,
     'baseFingerprint': baseFingerprint,
@@ -113,6 +117,7 @@ class PhaseChild {
   factory PhaseChild.fromMap(Map<String, dynamic> m) => PhaseChild(
     id: m['id'],
     title: m['title'],
+    description: m['description'] ?? '',
     definitionId: m['definitionId'],
     definitionVersion: m['definitionVersion'],
     baseFingerprint: m['baseFingerprint'],
@@ -149,6 +154,7 @@ class ModuleDefinition {
     final child = PhaseChild(
       id: newId(),
       title: title,
+      description: description,
       definitionId: id,
       definitionVersion: version,
       items: cloned,
@@ -156,6 +162,7 @@ class ModuleDefinition {
     return PhaseChild(
       id: child.id,
       title: title,
+      description: description,
       definitionId: id,
       definitionVersion: version,
       items: cloned,

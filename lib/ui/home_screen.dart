@@ -11,12 +11,12 @@ import '../services/session_transport.dart';
 import 'design.dart';
 import 'history_screen.dart';
 import 'library_screen.dart';
-import 'pause_editor.dart';
 import 'run_screen.dart';
 import 'session_actions.dart';
 import 'modular_structure_screen.dart';
 import '../models/modular_plan.dart';
 import '../models/local_dates.dart';
+import '../models/plan_duration.dart';
 import '../services/session_audio_handler.dart';
 import 'booking.dart';
 import 'templates_screen.dart';
@@ -84,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _structure() async {
+    await c.flush();
     await widget.player.stop();
     if (!mounted) return;
     await Navigator.push<void>(
@@ -188,31 +189,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       await c.reload();
     }
   });
-  Future<void> _pause(SessionStep step) => _run(() async {
-    await widget.player.stop();
-    if (!mounted) return;
-    await Navigator.push<void>(
-      context,
-      MaterialPageRoute(
-        builder: (_) =>
-            PauseEditor(controller: c, stepId: step.id, player: widget.player),
-      ),
-    );
-  });
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
     builder: (context, _) {
       final plan = modularize(c.draft.plan);
-      final phases = plan.phases!
-          .where(
-            (p) =>
-                p.enabled &&
-                p.children.any(
-                  (child) => child.enabled && child.items.any((s) => s.enabled),
-                ),
-          )
-          .toList();
+      final phases = plan.phases!.where((p) => p.enabled).toList();
       return Scaffold(
         bottomNavigationBar: SafeArea(
           top: false,
@@ -359,14 +341,51 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
-                      Text(
-                        '${phases.length} фаз · ${phases.expand((p) => p.children).where((c) => c.enabled && c.isModule).length} модулей · ${plan.steps.where((s) => s.kind == StepKind.audio).length} треков · ${plan.steps.where((s) => s.kind != StepKind.audio).length} интервалов · ${formatDurationWords(plan.totalMs)}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: antiqueGold,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${phases.length} фаз · ${phases.expand((p) => p.children).where((c) => c.enabled && c.isModule).length} модулей · ${plan.steps.where((s) => s.kind == StepKind.audio).length} треков · ${plan.steps.where((s) => s.kind != StepKind.audio).length} интервалов',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: antiqueGold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Semantics(
+                              label: PlanDuration.plan(plan).semantics,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  const FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'Длительность',
+                                      style: TextStyle(fontSize: 9),
+                                    ),
+                                  ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      PlanDuration.plan(plan).label,
+                                      key: const Key('home-duration'),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: neonLime,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Expanded(
                         child: phases.isEmpty
@@ -390,7 +409,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     key: PageStorageKey("home-${p.id}"),
                                     initiallyExpanded: true,
                                     title: Text(
-                                      'Фаза: ${p.title}',
+                                      'Фаза: ${p.title} · ${PlanDuration.phase(p).label}',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
@@ -410,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                               left: 8,
                                             ),
                                             title: Text(
-                                              'Модуль: ${child.title}',
+                                              'Модуль: ${child.title} · ${PlanDuration.child(child).label}',
                                               style: const TextStyle(
                                                 fontSize: 12,
                                               ),
@@ -498,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget _track(SessionStep s) => Row(
     children: [
       TextButton(
-        onPressed: _busy ? null : () => _pause(s),
+        onPressed: _busy ? null : () => _run(_structure),
         child: Text(
           formatPause(s.delayBeforeSeconds),
           style: const TextStyle(color: neonLime, fontSize: 12),

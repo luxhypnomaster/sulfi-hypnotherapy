@@ -37,6 +37,29 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
 
   Future<void> _select(SessionTemplate t, {bool edit = false}) =>
       _run(() async {
+        if (edit && !widget.selecting) {
+          final editor = await c.beginEditing();
+          try {
+            if (!mounted ||
+                !await loadTemplateSafely(context, editor, t) ||
+                !mounted) {
+              return;
+            }
+            await Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ModularStructureScreen(
+                  controller: editor,
+                  player: widget.player,
+                ),
+              ),
+            );
+          } finally {
+            editor.dispose();
+          }
+          await c.reload();
+          return;
+        }
         if (!await loadTemplateSafely(context, c, t) || !mounted) return;
         if (widget.selecting) {
           Navigator.pop(context);
@@ -67,14 +90,24 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       plan: SessionPlan(steps: const []),
     );
     if (!mounted) return;
-    if (!await loadTemplateSafely(context, c, t) || !mounted) return;
-    await Navigator.push<void>(
-      context,
-      MaterialPageRoute(
-        builder: (_) =>
-            ModularStructureScreen(controller: c, player: widget.player),
-      ),
-    );
+    final editor = await c.beginEditing();
+    try {
+      if (!mounted ||
+          !await loadTemplateSafely(context, editor, t) ||
+          !mounted) {
+        return;
+      }
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              ModularStructureScreen(controller: editor, player: widget.player),
+        ),
+      );
+    } finally {
+      editor.dispose();
+    }
+    await c.reload();
   });
   Future<void> _action(String action, SessionTemplate t) => _run(() async {
     if (action == 'rename') {

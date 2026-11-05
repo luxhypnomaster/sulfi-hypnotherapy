@@ -15,6 +15,14 @@ import 'pause_editor.dart';
 import 'pause_time_picker.dart';
 import 'session_actions.dart';
 import 'templates_screen.dart';
+import '../models/plan_duration.dart';
+import '../models/structure_rows.dart';
+import '../services/library_service.dart';
+import '../services/session_audio_handler.dart';
+import 'module_editor.dart';
+import 'structure_shell.dart';
+import 'structure_item_row.dart';
+import 'structure_unsaved.dart';
 
 class ModularStructureScreen extends StatefulWidget {
   const ModularStructureScreen({
@@ -29,19 +37,118 @@ class ModularStructureScreen extends StatefulWidget {
 }
 
 class _ModularStructureScreenState extends State<ModularStructureScreen> {
-  SessionController get c => widget.controller;
+  SessionController? _working;
+  SessionController get c => _working!;
+  final ScrollController _scroll = ScrollController();
+  bool _owns = false, _busy = false, _allowPop = false;
+  String? _loadError, _selected;
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_initialize());
+  }
+
+  Future<void> _initialize() async {
+    try {
+      final work = widget.controller.isEditor
+          ? widget.controller
+          : await widget.controller.beginEditing();
+      if (!mounted) {
+        if (!widget.controller.isEditor) work.dispose();
+        return;
+      }
+      setState(() {
+        _working = work;
+        _owns = !widget.controller.isEditor;
+        _loadError = null;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _loadError =
+              'Не удалось открыть редактор. Текущая конфигурация сохранена.',
+        );
+      }
+    }
+  }
+
+  Future<void> _back() async {
+    if (_busy) return;
+    if (_working != null) {
+      await c.flush();
+      if (c.hasEditorChanges && mounted) {
+        final action = await askStructureExit(context);
+        if (!mounted || action == StructureExit.stay) return;
+        if (action == StructureExit.apply) {
+          await _run(_apply);
+          return;
+        }
+      }
+    }
+    _finish(false);
+  }
+
+  void _finish(bool applied) {
+    setState(() => _allowPop = true);
+    if (Navigator.canPop(context)) Navigator.pop(context, applied);
+  }
+
+  Future<void> _apply() async {
+    await c.flush();
+    if (!mounted || !await warnMissingPlanAudio(context, c, c.draft.plan)) {
+      return;
+    }
+    await c.applyEditor();
+    if (mounted) _finish(true);
+  }
+
+  Future<void> _editModule(PhaseInstance p, PhaseChild child) async {
+    await widget.player.stop();
+    if (!mounted) return;
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ModuleEditor(
+          controller: c,
+          player: widget.player,
+          phaseId: p.id,
+          instance: child,
+        ),
+      ),
+    );
+    await c.reload();
+  }
+
+  Future<void> _preview(SessionStep s) async {
+    if (sessionAudioHandler?.engine?.active ?? false) {
+      throw const LibraryException('Сначала завершите активную сессию');
+    }
+    final a = c.asset(s.audioAssetId);
+    if (a == null) throw const LibraryException('Аудиофайл недоступен');
+    await widget.player.toggle(a, c.library.fileFor(a));
+  }
+
   final Set<String> _collapsed = {};
   bool _open(String id) => !_collapsed.contains(id);
   void _toggle(String id) => setState(() {
+    _selected = id;
     if (!_collapsed.remove(id)) _collapsed.add(id);
   });
   @override
   void dispose() {
     unawaited(Future.microtask(widget.player.stop));
+    if (_owns) _working?.dispose();
+    _scroll.dispose();
     super.dispose();
   }
 
-  Future<void> _run(Future<void> Function() f) => showActionError(context, f);
+  Future<void> _run(Future<void> Function() f) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    await showActionError(context, f);
+    if (mounted) setState(() => _busy = false);
+  }
+
   Future<void> _addPhase([PhaseType? type]) async {
     final selected =
         type ??
@@ -349,296 +456,338 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => ListenableBuilder(
-    listenable: c,
-    builder: (context, _) {
-      final plan = modularize(c.draft.plan), phases = plan.phases!;
-      // One scrollable/reorder surface: dragging any level retains edge autoscroll.
-      final rows =
-          <
-            ({
-              String id,
-              String level,
-              PhaseInstance phase,
-              PhaseChild? child,
-              SessionStep? step,
-            })
-          >[];
-      for (final p in phases) {
-        rows.add((id: p.id, level: 'phase', phase: p, child: null, step: null));
-        if (!_open(p.id)) continue;
-        rows.add((
-          id: 'actions-${p.id}',
-          level: 'actions',
-          phase: p,
-          child: null,
-          step: null,
-        ));
-        for (final child in p.children) {
-          if (child.isModule) {
-            rows.add((
-              id: child.id,
-              level: 'module',
-              phase: p,
-              child: child,
-              step: null,
-            ));
-            if (!_open(child.id)) continue;
-            rows.add((
-              id: 'actions-${child.id}',
-              level: 'actions',
-              phase: p,
-              child: child,
-              step: null,
-            ));
-          }
-          for (final step in child.items) {
-            rows.add((
-              id: step.id,
-              level: child.isModule ? 'item' : 'loose',
-              phase: p,
-              child: child,
-              step: step,
-            ));
-          }
-        }
-      }
-      return LeatherScaffold(
-        title: 'Структура сессии',
-        bottom: Row(
-          key: const Key('structure-footer'),
-          children: [
-            Expanded(
-              child: Tooltip(
-                message: 'Выбрать другой шаблон',
-                child: TextButton(
-                  onPressed: _templates,
-                  child: const Text('Выбрать'),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Tooltip(
-                message: 'Сохранить как шаблон',
-                child: TextButton(
-                  onPressed: () => _run(() async {
-                    await saveTemplateDialog(context, c);
-                  }),
-                  child: const Text('Сохранить'),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Tooltip(
-                message: 'Применить изменения и вернуться',
-                child: FilledButton(
-                  onPressed: () => _run(() async {
-                    await c.flush();
-                    if (c.saveError == null && context.mounted) {
-                      Navigator.pop(context);
-                    }
-                  }),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: neonLime,
-                    foregroundColor: ink,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                  ),
-                  child: const Text('Применить'),
-                ),
-              ),
-            ),
-          ],
+  Widget build(BuildContext context) {
+    if (_working == null) {
+      return Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: _loadError == null
+                ? const CircularProgressIndicator()
+                : TextButton(onPressed: _initialize, child: Text(_loadError!)),
+          ),
         ),
-        child: Column(
-          children: [
-            Text(
-              '${phases.length} фаз · ${plan.steps.length} элементов · ${formatDuration(plan.totalMs)}',
-              style: const TextStyle(fontSize: 11, color: antiqueGold),
+      );
+    }
+    return PopScope(
+      canPop: _allowPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) unawaited(_back());
+      },
+      child: ListenableBuilder(
+        listenable: c,
+        builder: (context, _) {
+          final plan = modularize(c.draft.plan),
+              phases = plan.phases!,
+              rows = structureRows(phases, _collapsed);
+          final duration = PlanDuration.plan(plan);
+          return StructureShell(
+            title: 'Структура сессии',
+            onBack: _back,
+            summary: Semantics(
+              label: '${phases.length} фаз. ${duration.semantics}',
+              child: Text(
+                structureSummary(plan),
+                key: const Key('structure-summary'),
+                style: const TextStyle(fontSize: 12, height: 1.2),
+              ),
             ),
-            Row(
+            footer: Row(
+              key: const Key('structure-footer'),
               children: [
                 Expanded(
-                  child: TextButton.icon(
-                    onPressed: () => _run(_addPhase),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Добавить фазу'),
+                  child: StructureFooterButton(
+                    label: 'Добавить\nфазу',
+                    add: true,
+                    onPressed: _busy ? null : () => _run(_addPhase),
                   ),
                 ),
-                IconButton(
-                  tooltip: 'Каталог модулей',
-                  onPressed: () => Navigator.push<void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ModulesScreen(controller: c, player: widget.player),
-                    ),
+                Expanded(
+                  child: StructureFooterButton(
+                    label: 'Выбрать\nшаблон',
+                    onPressed: _busy ? null : () => _run(_templates),
                   ),
-                  icon: const Icon(Icons.layers_outlined),
+                ),
+                Expanded(
+                  child: StructureFooterButton(
+                    label: 'Сохранить\nшаблон',
+                    onPressed: _busy
+                        ? null
+                        : () => _run(() async {
+                            final saved = await saveTemplateDialog(context, c);
+                            if (saved != null) await c.loadTemplate(saved);
+                          }),
+                  ),
+                ),
+                Expanded(
+                  child: StructureFooterButton(
+                    label: 'Применить',
+                    primary: true,
+                    onPressed: _busy ? null : () => _run(_apply),
+                  ),
                 ),
               ],
             ),
-            Expanded(
-              child: phases.isEmpty
-                  ? ListView(
-                      children: [
-                        for (final type in phaseTypes)
-                          ListTile(
-                            title: Text(type.title),
-                            subtitle: Text(type.description),
-                            trailing: const Icon(Icons.add),
-                            onTap: () => _run(() => _addPhase(type)),
-                          ),
-                      ],
-                    )
-                  : ReorderableListView.builder(
-                      buildDefaultDragHandles: false,
-                      itemCount: rows.length,
-                      onReorderItem: (from, to) => _run(() async {
-                        final source = rows[from];
-                        final destination = rows[to.clamp(0, rows.length - 1)];
-                        if (source.level == 'phase') {
-                          final list = [...phases];
-                          final a = list.indexWhere(
-                            (p) => p.id == source.phase.id,
-                          );
-                          final b = list.indexWhere(
-                            (p) => p.id == destination.phase.id,
-                          );
-                          if (a == b) return;
-                          list.insert(b, list.removeAt(a));
-                          await c.changePhases((_) => list);
-                        } else if ((source.level == 'module' ||
-                            source.level == 'loose')) {
-                          final list = [...source.phase.children];
-                          final a = list.indexWhere(
-                            (v) => v.id == source.child!.id,
-                          );
-                          final b =
-                              source.phase.id == destination.phase.id &&
-                                  destination.child != null
-                              ? list.indexWhere(
-                                  (v) => v.id == destination.child!.id,
-                                )
-                              : (to > from ? list.length - 1 : 0);
-                          if (a < 0 || b < 0 || a == b) return;
-                          list.insert(b, list.removeAt(a));
-                          await c.updatePhase(
-                            source.phase.copyWith(children: list),
-                          );
-                        } else if (source.level == 'item') {
-                          final list = [...source.child!.items];
-                          final a = list.indexWhere((v) => v.id == source.id);
-                          final b =
-                              source.child?.id == destination.child?.id &&
-                                  destination.step != null
-                              ? list.indexWhere((v) => v.id == destination.id)
-                              : (to > from ? list.length - 1 : 0);
-                          if (a < 0 || b < 0 || a == b) return;
-                          list.insert(b, list.removeAt(a));
-                          await c.updateChild(
-                            source.phase.id,
-                            source.child!.copyWith(items: list),
-                          );
-                        }
-                      }),
-                      itemBuilder: (context, i) {
-                        final row = rows[i], p = row.phase, child = row.child;
-                        Widget content;
-                        if (row.level == 'phase' || row.level == 'module') {
-                          final id = child?.id ?? p.id;
-                          final title = child == null
-                              ? '${phases.indexOf(p) + 1}. ${p.title}'
-                              : child.title;
-                          content = Material(
-                            color: child == null
-                                ? const Color(0xFF321023)
-                                : const Color(0xFF1A0D15),
-                            child: InkWell(
-                              onTap: () => _toggle(id),
-                              child: Row(
-                                children: [
-                                  ReorderableDelayedDragStartListener(
-                                    index: i,
-                                    child: SizedBox(
-                                      key: ValueKey('drag-$id'),
-                                      width: 44,
-                                      height: 48,
-                                      child: const ColoredBox(
-                                        color: Colors.transparent,
-                                        child: Icon(
-                                          Icons.drag_indicator,
-                                          size: 18,
-                                          color: antiqueGold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      title,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: child == null ? 14 : 13,
-                                        color: (child?.enabled ?? p.enabled)
-                                            ? null
-                                            : Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    key: ValueKey('expand-$id'),
-                                    tooltip: _open(id)
-                                        ? 'Свернуть'
-                                        : 'Раскрыть',
-                                    onPressed: () => _toggle(id),
-                                    icon: Icon(
-                                      _open(id) ? Icons.remove : Icons.add,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        } else if (row.level == 'actions') {
-                          content = Row(
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextButton.icon(
-                                    onPressed: () => _addMenu(p, child: child),
-                                    icon: const Icon(Icons.add, size: 18),
-                                    label: const Text('Добавить'),
-                                  ),
-                                ),
-                              ),
-                              child == null
-                                  ? _phaseMenu(p)
-                                  : _childMenu(p, child),
-                            ],
-                          );
-                        } else {
-                          content = _item(p, child!, row.step!);
-                        }
-                        if (row.level == 'item' || row.level == 'loose') {
-                          content = ReorderableDelayedDragStartListener(
-                            index: i,
-                            child: content,
-                          );
-                        }
-                        return Container(key: ValueKey(row.id), child: content);
-                      },
+            child: phases.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Text(
+                        'Добавьте фазу, затем модуль, треки и паузы.',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-            ),
-          ],
+                  )
+                : ReorderableListView.builder(
+                    key: const Key('structure-list'),
+                    scrollController: _scroll,
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                    buildDefaultDragHandles: false,
+                    itemCount: rows.length,
+                    onReorderStart: (index) {
+                      final row = rows[index];
+                      if (row.level == StructureLevel.phase ||
+                          row.level == StructureLevel.module) {
+                        setState(() => _collapsed.add(row.id));
+                      }
+                    },
+                    onReorderItem: (from, to) => _run(
+                      () => c.changePhases(
+                        (current) => reorderStructure(current, rows, from, to),
+                      ),
+                    ),
+                    proxyDecorator: (child, index, animation) => Material(
+                      color: Colors.transparent,
+                      elevation: 5,
+                      child: child,
+                    ),
+                    itemBuilder: (context, index) =>
+                        _row(rows[index], index, phases),
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _handle(int index, String id) => ReorderableDragStartListener(
+    index: index,
+    enabled: !_busy,
+    child: SizedBox(
+      key: ValueKey('drag-$id'),
+      width: 32,
+      height: 48,
+      child: const Icon(Icons.drag_indicator, color: neonPink, size: 18),
+    ),
+  );
+  Widget _row(StructureRow row, int index, List<PhaseInstance> phases) {
+    final p = row.phase, child = row.child;
+    final phase = row.level == StructureLevel.phase,
+        module = row.level == StructureLevel.module;
+    final moduleBody =
+        row.level == StructureLevel.item ||
+        row.level == StructureLevel.addModuleItem;
+    final add =
+        row.level == StructureLevel.addPhaseChild ||
+        row.level == StructureLevel.addModuleItem;
+    Widget content;
+    if (phase || module) {
+      final duration = phase
+          ? PlanDuration.phase(p)
+          : PlanDuration.child(child!);
+      final id = phase ? p.id : child!.id, open = _open(row.id);
+      final enabled = phase ? p.enabled : child!.enabled;
+      content = Material(
+        color: phase ? const Color(0xFF35091F) : const Color(0xFF260A19),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(9),
+          side: BorderSide(
+            color: phase ? neonPink : const Color(0xFFC2809F),
+            width: phase ? 1.2 : .8,
+          ),
+        ),
+        child: InkWell(
+          onTap: _busy ? null : () => _toggle(id),
+          borderRadius: BorderRadius.circular(9),
+          child: Row(
+            children: [
+              _handle(index, id),
+              if (phase)
+                Container(
+                  width: 27,
+                  height: 27,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _selected == id || open
+                          ? neonLime
+                          : const Color(0xFFDDB5C8),
+                    ),
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '${phases.indexWhere((v) => v.id == p.id) + 1}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: open ? neonLime : null,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(
+                  width: 27,
+                  child: Icon(
+                    Icons.layers_outlined,
+                    color: antiqueGold,
+                    size: 23,
+                  ),
+                ),
+              const SizedBox(width: 7),
+              Expanded(
+                child: Text(
+                  phase ? p.title : child!.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: phase ? 16 : 14,
+                    height: 1.15,
+                    fontWeight: FontWeight.w700,
+                    color: !enabled
+                        ? Colors.grey
+                        : phase && open
+                        ? neonLime
+                        : const Color(0xFFF9EAF2),
+                  ),
+                ),
+              ),
+              if (open) phase ? _phaseMenu(p) : _childMenu(p, child!),
+              Semantics(
+                label: duration.semantics,
+                child: Text(
+                  duration.label,
+                  key: ValueKey('duration-$id'),
+                  style: TextStyle(
+                    fontSize: phase ? 14 : 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              IconButton(
+                key: ValueKey('expand-$id'),
+                tooltip: open ? 'Свернуть' : 'Раскрыть',
+                onPressed: _busy ? null : () => _toggle(id),
+                icon: Icon(
+                  open ? Icons.remove : Icons.add,
+                  color: neonPink,
+                  size: 23,
+                ),
+                style: IconButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                    side: const BorderSide(color: neonPink),
+                  ),
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
+            ],
+          ),
         ),
       );
-    },
-  );
+    } else if (add) {
+      content = Align(
+        alignment: Alignment.centerLeft,
+        child: OutlinedButton.icon(
+          onPressed: _busy
+              ? null
+              : () => _addMenu(p, child: moduleBody ? child : null),
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size(48, 48),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7),
+            ),
+            side: const BorderSide(color: neonLime),
+            foregroundColor: neonLime,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+          ),
+          icon: const Icon(Icons.add, size: 18),
+          label: const Text('Добавить', style: TextStyle(fontSize: 13)),
+        ),
+      );
+    } else {
+      content = _item(p, child!, row.step!, _handle(index, row.id));
+    }
+    if (!add) {
+      content = ReorderableDelayedDragStartListener(
+        index: index,
+        enabled: !_busy,
+        child: content,
+      );
+    }
+    if (!phase) {
+      final inside = module || moduleBody;
+      content = Container(
+        margin: const EdgeInsets.only(left: 8),
+        padding: EdgeInsets.only(
+          left: inside ? 7 : 3,
+          right: 3,
+          top: module ? 7 : 2,
+          bottom: row.level == StructureLevel.addPhaseChild ? 10 : 2,
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(color: neonPink.withValues(alpha: .55)),
+            right: BorderSide(color: neonPink.withValues(alpha: .55)),
+            bottom: row.level == StructureLevel.addPhaseChild
+                ? const BorderSide(color: neonPink)
+                : BorderSide.none,
+          ),
+        ),
+        child: inside
+            ? Container(
+                margin: const EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 3, right: 2),
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: const Color(0xFFDB9DAE).withValues(alpha: .6),
+                    ),
+                    bottom: row.level == StructureLevel.addModuleItem
+                        ? const BorderSide(color: Color(0xFFDB9DAE))
+                        : BorderSide.none,
+                  ),
+                ),
+                child: content,
+              )
+            : content,
+      );
+    } else {
+      content = Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: neonPink.withValues(alpha: .75)),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(color: neonPink.withValues(alpha: .3), blurRadius: 8),
+              BoxShadow(color: neonPink.withValues(alpha: .12), blurRadius: 15),
+            ],
+          ),
+          child: content,
+        ),
+      );
+    }
+    return Container(key: ValueKey(row.id), child: content);
+  }
 
   Widget _phaseMenu(PhaseInstance p) => PopupMenuButton<String>(
+    key: ValueKey('menu-${p.id}'),
+    tooltip: 'Действия фазы',
+    enabled: !_busy,
+    padding: EdgeInsets.zero,
+    icon: const Icon(Icons.more_horiz, color: neonPink),
+    iconSize: 20,
     onSelected: (v) => _run(() async {
       if (v == 'toggle') {
         await c.updatePhase(p.copyWith(enabled: !p.enabled));
@@ -671,102 +820,121 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       const PopupMenuItem(value: 'delete', child: Text('Удалить фазу')),
     ],
   );
-  Widget _childMenu(PhaseInstance p, PhaseChild child) =>
-      PopupMenuButton<String>(
-        onSelected: (v) => _run(() async {
-          if (v == 'alternative') await _alternative(p, child);
-          if (v == 'toggle') {
-            await c.updateChild(p.id, child.copyWith(enabled: !child.enabled));
-          }
-          if (v == 'remove' &&
-              mounted &&
-              await confirmAction(
-                context,
-                'Удалить экземпляр модуля?',
-                'Каталог и файлы останутся.',
-                confirm: 'Удалить',
-              )) {
-            await c.removeChild(p.id, child.id);
-          }
-          if (v == 'restore') {
-            final d = c.modules.entries
-                .where((m) => m.id == child.definitionId)
-                .firstOrNull;
-            if (d != null &&
-                mounted &&
-                await confirmAction(
-                  context,
-                  'Вернуть исходный состав модуля?',
-                  'Локальные правки экземпляра будут заменены.',
-                  confirm: 'Вернуть',
-                )) {
-              final replacement = d.instantiate(p.id);
-              await c.updateChild(
-                p.id,
-                PhaseChild(
-                  id: child.id,
-                  title: replacement.title,
-                  definitionId: replacement.definitionId,
-                  definitionVersion: replacement.definitionVersion,
-                  baseFingerprint: replacement.baseFingerprint,
-                  items: replacement.items,
-                ),
-              );
-            }
-          }
-        }),
-        itemBuilder: (_) => [
-          PopupMenuItem(
-            value: 'toggle',
-            child: Text(child.enabled ? 'Выключить модуль' : 'Включить модуль'),
-          ),
-          const PopupMenuItem(
-            value: 'alternative',
-            child: Text('Выбрать другой модуль'),
-          ),
-          const PopupMenuItem(
-            value: 'restore',
-            child: Text('Вернуть исходный состав модуля'),
-          ),
-          const PopupMenuItem(
-            value: 'remove',
-            child: Text('Удалить экземпляр'),
-          ),
-        ],
-      );
+  Widget _childMenu(
+    PhaseInstance p,
+    PhaseChild child,
+  ) => PopupMenuButton<String>(
+    key: ValueKey('menu-${child.id}'),
+    tooltip: 'Действия модуля',
+    enabled: !_busy,
+    padding: EdgeInsets.zero,
+    icon: const Icon(Icons.more_horiz, color: neonPink),
+    iconSize: 20,
+    onSelected: (v) => _run(() async {
+      if (v == 'edit') await _editModule(p, child);
+      if (v == 'alternative') await _alternative(p, child);
+      if (v == 'toggle') {
+        await c.updateChild(p.id, child.copyWith(enabled: !child.enabled));
+      }
+      if (v == 'remove' &&
+          mounted &&
+          await confirmAction(
+            context,
+            'Удалить экземпляр модуля?',
+            'Каталог и файлы останутся.',
+            confirm: 'Удалить',
+          )) {
+        await c.removeChild(p.id, child.id);
+      }
+      if (v == 'restore') {
+        final d = c.modules.entries
+            .where((m) => m.id == child.definitionId)
+            .firstOrNull;
+        if (d != null &&
+            mounted &&
+            await confirmAction(
+              context,
+              'Вернуть исходный состав модуля?',
+              'Локальные правки экземпляра будут заменены.',
+              confirm: 'Вернуть',
+            )) {
+          final replacement = d.instantiate(p.id);
+          await c.updateChild(
+            p.id,
+            PhaseChild(
+              id: child.id,
+              title: replacement.title,
+              description: replacement.description,
+              definitionId: replacement.definitionId,
+              definitionVersion: replacement.definitionVersion,
+              baseFingerprint: replacement.baseFingerprint,
+              items: replacement.items,
+            ),
+          );
+        }
+      }
+    }),
+    itemBuilder: (_) => [
+      const PopupMenuItem(value: 'edit', child: Text('Редактировать модуль')),
+      PopupMenuItem(
+        value: 'toggle',
+        child: Text(child.enabled ? 'Выключить модуль' : 'Включить модуль'),
+      ),
+      const PopupMenuItem(
+        value: 'alternative',
+        child: Text('Выбрать другой модуль'),
+      ),
+      const PopupMenuItem(
+        value: 'restore',
+        child: Text('Вернуть исходный состав модуля'),
+      ),
+      const PopupMenuItem(value: 'remove', child: Text('Удалить экземпляр')),
+    ],
+  );
 
-  Widget _item(PhaseInstance p, PhaseChild child, SessionStep s) => ListTile(
-    contentPadding: const EdgeInsets.symmetric(horizontal: 3),
-    minVerticalPadding: 0,
-    dense: true,
-    minTileHeight: 52,
-    leading: TextButton(
-      key: Key('pause-${s.id}'),
-      style: TextButton.styleFrom(
-        foregroundColor: neonLime,
-        padding: const EdgeInsets.symmetric(horizontal: 3),
-      ),
-      onPressed: () => Navigator.push<void>(
-        context,
-        MaterialPageRoute(
-          builder: (_) =>
-              PauseEditor(controller: c, stepId: s.id, player: widget.player),
-        ),
-      ),
-      child: Text(formatPause(s.delayBeforeSeconds)),
-    ),
-    title: Text(
-      '${s.enabled ? '' : '○ '}${s.kind == StepKind.audio ? s.title : 'Пауза'}',
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 13),
-    ),
-    subtitle: Text(
-      '${s.kind.label} · ${s.durationMs == null ? 'до завершения' : formatDuration(s.durationMs!)}',
-      style: const TextStyle(fontSize: 10, color: antiqueGold),
-    ),
-    trailing: PopupMenuButton<String>(
+  Widget _item(
+    PhaseInstance p,
+    PhaseChild child,
+    SessionStep s,
+    Widget handle,
+  ) => StructureItemRow(
+    step: s,
+    handle: handle,
+    onPause: _busy
+        ? null
+        : () => _run(() async {
+            await Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PauseEditor(
+                  controller: c,
+                  stepId: s.id,
+                  player: widget.player,
+                ),
+              ),
+            );
+          }),
+    onPreview: _busy ? null : () => _run(() => _preview(s)),
+    onDuration: _busy ? null : () => _run(() => _duration(s)),
+    menu: PopupMenuButton<String>(
+      key: ValueKey('menu-${s.id}'),
+      tooltip: 'Действия элемента',
+      enabled: !_busy,
+      padding: EdgeInsets.zero,
+      iconSize: 20,
       onSelected: (v) => _run(() async {
+        if (v == 'before') {
+          await Navigator.push<void>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PauseEditor(
+                controller: c,
+                stepId: s.id,
+                player: widget.player,
+              ),
+            ),
+          );
+        }
         if (v == 'toggle') await c.updateStep(s.copyWith(enabled: !s.enabled));
         if (v == 'move') await _move(s);
         if (v == 'duration') await _duration(s);
@@ -780,8 +948,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
           await c.updateChild(p.id, child.copyWith(items: list));
         }
         if (v == 'preview') {
-          final a = c.asset(s.audioAssetId);
-          if (a != null) await widget.player.toggle(a, c.library.fileFor(a));
+          await _preview(s);
         }
         if (v == 'delete' &&
             mounted &&
@@ -821,6 +988,11 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
           ),
         if (s.kind == StepKind.audio)
           const PopupMenuItem(value: 'replace', child: Text('Заменить трек')),
+        if (s.kind != StepKind.audio)
+          const PopupMenuItem(
+            value: 'before',
+            child: Text('Пауза перед элементом'),
+          ),
         if (s.kind != StepKind.audio)
           const PopupMenuItem(
             value: 'duration',

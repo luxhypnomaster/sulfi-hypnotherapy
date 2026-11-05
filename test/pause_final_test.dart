@@ -13,6 +13,7 @@ import 'package:sulfi_hypnotherapy/ui/modules_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/modular_structure_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/pause_clock_art.dart';
 import 'package:sulfi_hypnotherapy/ui/pause_editor.dart';
+import 'package:sulfi_hypnotherapy/ui/structure_item_row.dart';
 
 import 'support/fakes.dart';
 
@@ -503,7 +504,7 @@ void main() {
   );
 
   testWidgets(
-    'module pause creation and editing reuse the same screen and preserve ID/duration',
+    'module pauses retain pending IDs/duration until explicit module Apply',
     (t) async {
       final c = SessionController(
         repository: MemorySessionRepository(),
@@ -521,67 +522,87 @@ void main() {
       );
       await t.tap(find.text('Модуль проверки'));
       await t.pumpAndSettle();
-      await t.tap(find.text('Добавить паузу'));
-      await t.pumpAndSettle();
-      expect(find.byType(ApprovedPauseClock), findsOneWidget);
-      expect(value(t), '00:00');
-      await t.drag(wheel(false), const Offset(0, -28));
-      await t.pumpAndSettle();
-      await t.tap(find.text('Применить'));
-      await t.pumpAndSettle();
-      final saved = c.modules.entries.single.items.single;
-      expect(saved.durationMs, 2000);
-      await t.tap(find.text('Пауза'));
+      Future<void> addPause(int pixels) async {
+        await t.tap(find.text('Добавить'));
+        await t.pumpAndSettle();
+        await t.tap(find.text('Добавить паузу'));
+        await t.pumpAndSettle();
+        expect(find.byType(ApprovedPauseClock), findsOneWidget);
+        await t.drag(wheel(false), Offset(0, -pixels.toDouble()));
+        await t.pumpAndSettle();
+        await t.tap(find.text('Применить'));
+        await t.pumpAndSettle();
+      }
+
+      await addPause(28);
+      final first = t
+          .widget<StructureItemRow>(find.byType(StructureItemRow))
+          .step;
+      expect(first.durationMs, 2000);
+      expect(c.modules.entries.single.items, isEmpty);
+      await t.tap(find.byTooltip('Изменить длительность паузы'));
       await t.pumpAndSettle();
       expect(value(t), '00:02');
       await t.tap(find.text('Обнулить'));
       await t.tap(find.text('Отмена'));
       await t.pumpAndSettle();
-      expect(c.modules.entries.single.items.single.id, saved.id);
-      expect(c.modules.entries.single.items.single.durationMs, 2000);
-      await t.tap(find.text('Добавить паузу'));
-      await t.pumpAndSettle();
-      await t.drag(wheel(false), const Offset(0, -70));
-      await t.pumpAndSettle();
-      await t.tap(find.text('Применить'));
-      await t.pumpAndSettle();
-      final second = c.modules.entries.single.items.last;
+      expect(
+        t
+            .widget<StructureItemRow>(find.byType(StructureItemRow))
+            .step
+            .durationMs,
+        2000,
+      );
+      await addPause(70);
+      final second = t
+          .widgetList<StructureItemRow>(find.byType(StructureItemRow))
+          .last
+          .step;
       expect(second.durationMs, 5000);
-      final firstRow = find.byKey(ValueKey(saved.id));
-      final secondRow = find.byKey(ValueKey(second.id));
-      final from = t.getCenter(firstRow),
-          to = t.getCenter(secondRow) + const Offset(0, 24);
-      final drag = await t.startGesture(from);
-      await t.pump(const Duration(milliseconds: 650));
+      final from = t.getCenter(find.byKey(ValueKey('drag-${first.id}'))),
+          to =
+              t.getCenter(find.byKey(ValueKey('drag-${second.id}'))) +
+              const Offset(0, 20);
+      final gesture = await t.startGesture(from);
+      await gesture.moveBy(const Offset(0, 24));
+      await t.pump(const Duration(milliseconds: 50));
       for (var i = 1; i <= 8; i++) {
-        await drag.moveTo(Offset.lerp(from, to, i / 8)!);
+        await gesture.moveTo(
+          Offset.lerp(from + const Offset(0, 24), to, i / 8)!,
+        );
         await t.pump(const Duration(milliseconds: 40));
       }
-      await drag.up();
+      await gesture.up();
       await t.pumpAndSettle();
-      expect(c.modules.entries.single.items.map((s) => s.id), [
-        second.id,
-        saved.id,
-      ]);
-      expect(c.modules.entries.single.items.map((s) => s.durationMs), [
-        5000,
-        2000,
-      ]);
+      expect(
+        t
+            .widgetList<StructureItemRow>(find.byType(StructureItemRow))
+            .map((w) => w.step.durationMs),
+        [5000, 2000],
+      );
       await t.tap(
         find.descendant(
           of: find.byKey(ValueKey(second.id)),
-          matching: find.byTooltip('Удалить ссылку из модуля'),
+          matching: find.byTooltip('Действия элемента'),
         ),
       );
       await t.pumpAndSettle();
-      expect(c.modules.entries.single.items.single.id, saved.id);
+      await t.tap(find.text('Удалить ссылку из модуля'));
+      await t.pumpAndSettle();
+      expect(
+        t.widget<StructureItemRow>(find.byType(StructureItemRow)).step.id,
+        first.id,
+      );
+      await t.tap(find.text('Применить'));
+      await t.pumpAndSettle();
+      expect(c.modules.entries.single.items.single.id, first.id);
       expect(c.modules.entries.single.items.single.durationMs, 2000);
       await t.pumpWidget(const SizedBox());
     },
   );
 
   testWidgets(
-    'session pause creation and duration edit use the same clock and retain one element',
+    'session clock edits remain staged until structure Apply and retain ID',
     (t) async {
       final c = SessionController(
         repository: MemorySessionRepository(),
@@ -599,24 +620,23 @@ void main() {
       await t.pumpAndSettle();
       await t.tap(find.text('Добавить паузу'));
       await t.pumpAndSettle();
-      expect(find.byType(ApprovedPauseClock), findsOneWidget);
       await t.drag(wheel(false), const Offset(0, -28));
       await t.pumpAndSettle();
       await t.tap(find.text('Применить'));
       await t.pumpAndSettle();
-      final saved = c.draft.plan.steps.single;
+      final saved = t
+          .widget<StructureItemRow>(find.byType(StructureItemRow))
+          .step;
       expect(saved.durationMs, 2000);
-      await t.tap(
-        find.descendant(
-          of: find.widgetWithText(ListTile, 'Пауза'),
-          matching: find.byType(PopupMenuButton<String>),
-        ),
-      );
+      expect(c.draft.plan.steps, isEmpty);
+      await t.tap(find.byKey(ValueKey('menu-${saved.id}')));
       await t.pumpAndSettle();
       await t.tap(find.text('Изменить длительность'));
       await t.pumpAndSettle();
       expect(value(t), '00:02');
       await t.tap(find.text('Обнулить'));
+      await t.tap(find.text('Применить'));
+      await t.pumpAndSettle();
       await t.tap(find.text('Применить'));
       await t.pumpAndSettle();
       expect(c.draft.plan.steps.single.id, saved.id);

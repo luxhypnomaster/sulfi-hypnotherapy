@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:async';
 
 import 'diary_controller.dart';
@@ -18,6 +19,51 @@ class SessionController extends ChangeNotifier {
     ModuleCatalog? modules,
     this.diary,
   }) : modules = modules ?? ModuleCatalog();
+  SessionController? _editorSource;
+  String? _editorBaseline;
+  bool get isEditor => _editorSource != null;
+  static String _draftToken(CurrentSessionDraft d) =>
+      jsonEncode(d.toMap()..remove('updatedAt'));
+  bool get hasEditorChanges =>
+      isEditor && _draftToken(draft) != _editorBaseline;
+
+  /// Isolated working copy. It shares the catalogue/library, never the current
+  /// configuration or history writes. Opening an editor never interrupts a run.
+  Future<SessionController> beginEditing() async {
+    await flush();
+    final editor = SessionController(
+      repository: repository,
+      library: library,
+      modules: modules,
+      diary: diary,
+    );
+    editor._editorSource = this;
+    editor.draft = CurrentSessionDraft.fromMap(draft.toMap());
+    editor._editorBaseline = _draftToken(draft);
+    editor.assets = List.of(assets);
+    editor.templates = List.of(templates);
+    editor.runs = List.of(runs);
+    editor.nextNumber = nextNumber;
+    return editor;
+  }
+
+  Future<void> applyEditor() async {
+    if (!isEditor) throw StateError('Не открыт редактор');
+    await flush();
+    final snapshot = CurrentSessionDraft.fromMap(draft.toMap());
+    final expected = _editorBaseline;
+    await _editorSource!._edit((current) {
+      if (_draftToken(current) != expected) {
+        throw const LibraryException(
+          'Текущая конфигурация изменилась. Закройте редактор без применения и откройте его снова.',
+        );
+      }
+      return snapshot;
+    });
+    _editorBaseline = _draftToken(snapshot);
+    _notify();
+  }
+
   final ModuleCatalog modules;
   final DiaryController? diary;
   final SessionRepository repository;
@@ -39,7 +85,7 @@ class SessionController extends ChangeNotifier {
       templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
 
   Future<void> initialize() async {
-    await repository.interruptUnfinished();
+    if (!isEditor) await repository.interruptUnfinished();
     await reload();
   }
 
@@ -50,6 +96,25 @@ class SessionController extends ChangeNotifier {
     templates = await repository.templates();
     runs = await repository.history();
     nextNumber = await repository.nextNumber();
+    if (isEditor) {
+      final refreshed = draft.plan.allSteps.map((s) {
+        final actual = asset(s.audioAssetId);
+        return s.kind == StepKind.audio &&
+                actual != null &&
+                actual.durationMs != s.durationMs
+            ? s.copyWith(durationMs: actual.durationMs)
+            : s;
+      }).toList();
+      if (refreshed.any(
+        (s) =>
+            draft.plan.allSteps.firstWhere((v) => v.id == s.id).durationMs !=
+            s.durationMs,
+      )) {
+        draft = draft.copyWith(plan: draft.plan.copyWith(steps: refreshed));
+      }
+      _notify();
+      return;
+    }
     final stored = await repository.loadDraft();
     if (stored != null) {
       draft = stored;
@@ -88,7 +153,7 @@ class SessionController extends ChangeNotifier {
       try {
         final next = change(draft);
         _validate(next.plan);
-        await repository.saveDraft(next);
+        if (!isEditor) await repository.saveDraft(next);
         draft = next;
       } catch (_) {
         saveError = 'Изменения не сохранены. Повторите действие.';

@@ -191,7 +191,7 @@ void main() {
     },
   );
   workspaceTest(
-    'session card distinguishes empty plan and duration with explicit units',
+    'session card distinguishes empty plan and explicitly labelled duration',
     (tester) async {
       await open(
         tester,
@@ -201,7 +201,11 @@ void main() {
       expect(find.textContaining('Добавьте фазу'), findsOneWidget);
       await c.addAudio(sampleAsset());
       await tester.pumpAndSettle();
-      expect(find.textContaining('1 мин 05 с'), findsOneWidget);
+      expect(find.text('Длительность'), findsOneWidget);
+      expect(
+        tester.widget<Text>(find.byKey(const Key('home-duration'))).data,
+        '1:05',
+      );
       expect(find.text('Треки не добавлены'), findsNothing);
       await tester.pumpWidget(const SizedBox.shrink());
     },

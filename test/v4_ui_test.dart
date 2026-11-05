@@ -48,20 +48,26 @@ void main() {
         t,
         ModularStructureScreen(controller: c, player: MemoryPlayer()),
       );
+      await t.tap(find.text('Добавить\nфазу'));
+      await t.pumpAndSettle();
       for (final p in phaseTypes) {
-        await t.scrollUntilVisible(
-          find.text(p.title),
-          180,
-          scrollable: find
-              .descendant(
-                of: find.byType(ListView),
-                matching: find.byType(Scrollable),
-              )
-              .first,
+        expect(
+          find.descendant(
+            of: find.byType(SimpleDialog),
+            matching: find.text(p.title),
+          ),
+          findsOneWidget,
         );
-        expect(find.text(p.title), findsOneWidget);
       }
-      await t.tap(find.text('Добавить фазу'));
+      await t.tap(
+        find.descendant(
+          of: find.byType(SimpleDialog),
+          matching: find.text('Проработка'),
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(c.draft.plan.phases, isNull);
+      await t.tap(find.text('Добавить\nфазу'));
       await t.pumpAndSettle();
       await t.tap(
         find.descendant(
@@ -70,8 +76,7 @@ void main() {
         ),
       );
       await t.pumpAndSettle();
-      expect(c.draft.plan.phases, hasLength(1));
-      await c.createPhase('work');
+      await t.tap(find.text('Применить'));
       await t.pumpAndSettle();
       expect(c.draft.plan.phases, hasLength(2));
       expect(c.draft.plan.phases![0].id, isNot(c.draft.plan.phases![1].id));
