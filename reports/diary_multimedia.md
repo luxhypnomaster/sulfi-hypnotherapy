@@ -89,3 +89,68 @@ flutter test --no-pub test/diary_multimedia_test.dart --dart-define=SULFI_DIARY_
 2. После подтверждения сервера — согласованный мультимедийный контракт, загрузка и доставка проверенных вложений, атомарный каталог последним, идемпотентность и сверка операции после таймаута, публичный порядок/удаление, межустройственный конфликт с сохранением своей копии. До этого новые записи с title/media намеренно не отправляются текстовому серверу: он не должен молча потерять новые поля.
 3. Приёмка на физическом Android: picker, декодеры, слышимое аудио, наушники/звонки/блокировка, системный шрифт/клавиатура/TalkBack, обновление без удаления установки. `adb devices -l` пуст; эмулятора нет.
 4. Художественное принятие вариантов, помеченных предложениями в пакете. Новая художественная концепция не создавалась; рамка и фирменные ресурсы переиспользованы.
+
+## Git и состав изменения
+
+База `06207e4`; кодовый коммит `5ba02286c36a0736810c7c8bb292e9542e8a8aa4`; [draft PR №7 → develop](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/7). `main` остаётся `dcec7ed4`, `develop` — `505a7f2`. Данная ветка сохраняет предыдущие незамерженные этапы; статистика ниже относится только к дневнику после базы.
+
+```text
+ BACKLOG.md                                         |   14 +
+ CHANGELOG.md                                       |    9 +
+ README.md                                          |   12 +
+ docs/diary-multimedia/00_READ_FIRST.md             |   18 +
+ docs/diary-multimedia/01_FUNCTIONAL_SPEC_RU.md     |   94 ++
+ docs/diary-multimedia/02_DESIGN_REVIEW_RU.md       |   57 +
+ .../03_DRIVE_APPS_SCRIPT_AUDIT_RU.md               |   35 +
+ docs/diary-multimedia/04_ACCEPTANCE_TESTS_RU.md    |   37 +
+ docs/diary-multimedia/05_CODEX_TASK_RU.md          |   11 +
+ docs/diary-multimedia/actual/diary-demo.mp4        |  Bin 0 -> 524713 bytes
+ docs/diary-multimedia/actual/editor.png            |  Bin 0 -> 1672415 bytes
+ docs/diary-multimedia/actual/home.png              |  Bin 0 -> 2004837 bytes
+ docs/diary-multimedia/actual/journal-author.png    |  Bin 0 -> 2279867 bytes
+ docs/diary-multimedia/actual/journal-reader.png    |  Bin 0 -> 2306484 bytes
+ docs/diary-multimedia/actual/reader-01.png         |  Bin 0 -> 2287845 bytes
+ docs/diary-multimedia/actual/reader-02.png         |  Bin 0 -> 1621190 bytes
+ docs/diary-multimedia/actual/reader-03.png         |  Bin 0 -> 2252662 bytes
+ docs/diary-multimedia/fixtures/README.md           |    3 +
+ .../fixtures/catalog.observed-empty.json           |    6 +
+ docs/diary-multimedia/fixtures/entry.example.json  |   47 +
+ docs/diary-multimedia/mockups/01_author_editor.png |  Bin 0 -> 2642100 bytes
+ .../diary-multimedia/mockups/02_reader_page_02.png |  Bin 0 -> 2554867 bytes
+ .../diary-multimedia/mockups/03_reader_page_03.png |  Bin 0 -> 2277594 bytes
+ docs/diary-multimedia/mockups/README.md            |   13 +
+ .../references/01_reader_first_page.png            |  Bin 0 -> 3041986 bytes
+ .../references/02_author_journal.png               |  Bin 0 -> 2619349 bytes
+ .../references/03_home_sticker.png                 |  Bin 0 -> 2795659 bytes
+ .../references/04_compact_audio.png                |  Bin 0 -> 2859091 bytes
+ lib/data/app_database.dart                         |    7 +-
+ lib/data/diary_repository.dart                     |  108 +-
+ lib/main.dart                                      |   51 +
+ lib/models/diary_entry.dart                        |  185 +++-
+ lib/services/diary_api.dart                        |   94 +-
+ lib/services/diary_audio.dart                      |  197 ++++
+ lib/services/diary_controller.dart                 |   81 +-
+ lib/services/diary_layout.dart                     |  235 +++++
+ lib/services/diary_media_store.dart                |  175 ++++
+ lib/ui/diary_editor.dart                           |  595 +++++++++++
+ lib/ui/diary_home.dart                             |   81 ++
+ lib/ui/diary_legacy_pagination.dart                |   77 ++
+ lib/ui/diary_reader.dart                           |  627 +++++++++++
+ lib/ui/diary_screen.dart                           | 1024 +++++++-----------
+ lib/ui/home_screen.dart                            |   59 +-
+ pubspec.lock                                       |    2 +-
+ pubspec.yaml                                       |    3 +-
+ reports/diary_multimedia.md                        |   91 ++
+ test/diary_google_publishing_test.dart             |    6 +-
+ test/diary_multimedia_test.dart                    | 1100 ++++++++++++++++++++
+ test/v42_diary_test.dart                           |    9 +-
+ 49 files changed, 4409 insertions(+), 754 deletions(-)
+```
+
+Ручная проверка APK: открыть вкладку Дневник → включить локального тестового автора → Новая запись → заполнить название/послание → добавить и переставить текст, изображение и аудио → Сохранить → Предпросмотр. Проверить кнопки/свайп/увеличение картинки/seek/паузу при выходе. Вернуться, перезапустить приложение и убедиться, что черновик и вложения сохранились. Читательский режим не показывает этот черновик. Публикация до подключения сервера должна сообщать о недоступности, сохраняя правки. Отдельно проверить прежнюю библиотеку, шаблоны, историю и золотые часы.
+
+## Итог GitHub Actions
+
+[Run 41937773721](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41937773721): **SUCCESS** — повторно format/analyze, 215 Flutter + 24 Node, универсальный `flutter build apk --debug` и upload-artifact. Источник PR — `5ba0228`; GitHub собирал merge commit `ca9f724f40f2f0f0f391999ead08cef8d5d53211` (дерево сверено с кодовым коммитом). После этого изменяется только документация доставки.
+
+[Скачать ZIP с универсальным APK](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41937773721/artifacts/13375203787). Внутри `app-debug.apk`. Артефакт ID 13375203787, 103996979 байт, доступен до 19 ноября 2026 00:08 UTC; для приватного репозитория нужна авторизация владельца в GitHub. Скачивание и установка на физическом телефоне не проверены. Стабильный production signing остаётся отдельной задачей; локальная ARM64-сборка и CI-сборка могут иметь разные debug-подписи.

@@ -1,6 +1,6 @@
 # Мультимедийный дневник — локальный этап 0.4.5+10
 
-Ветка `feat/sulfi-multimedia-diary`, база `06207e4`. [Задание](docs/diary-multimedia/00_READ_FIRST.md) · [отчёт и приёмка](reports/diary_multimedia.md).
+Ветка `feat/sulfi-multimedia-diary`, база `06207e4`. [Скачать тестовый APK из GitHub](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/41937773721/artifacts/13375203787) (ZIP → app-debug.apk, вход в GitHub, доступен до 19.11.2026). [Задание](docs/diary-multimedia/00_READ_FIRST.md) · [отчёт и приёмка](reports/diary_multimedia.md).
 
 Дневник: заголовок, растущее многострочное послание, текст/изображения/аудио, перестановка блоков, локальный автосейв, предпросмотр и общий постраничный читатель. Прежние записи читаются; SQLite v5 добавляет только маркеры удалений дневника. Личные аудио, сессии, история, шаблоны и настройка паузы сохранены.
 
