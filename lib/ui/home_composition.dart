@@ -8,6 +8,7 @@ import '../services/session_controller.dart';
 import 'booking.dart';
 import 'design.dart';
 import 'diary_home.dart';
+import 'home_start_art.dart';
 
 const _lime = Color(0xFFDFFF00);
 
@@ -20,8 +21,8 @@ class HomeReferenceHeader extends StatelessWidget {
     label: 'Самогипноз. Сульфи. Ваш внутренний навигатор.',
     image: true,
     child: LayoutBuilder(
-      builder: (context, box) => ClipRect(
-        child: OverflowBox(
+      builder: (context, box) {
+        Widget source() => OverflowBox(
           alignment: Alignment.topCenter,
           minWidth: box.maxWidth,
           maxWidth: box.maxWidth,
@@ -36,10 +37,72 @@ class HomeReferenceHeader extends StatelessWidget {
               alignment: Alignment.topCenter,
             ),
           ),
-        ),
-      ),
+        );
+        return ClipRect(
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              source(),
+              // Recolour only the existing sulfur pixels; original geometry and
+              // source position remain exact. The original JPEG is not edited.
+              ClipPath(
+                clipper: _SulfurClipper(),
+                child: ColorFiltered(
+                  key: const Key('home-yellow-sulfur'),
+                  colorFilter: const ColorFilter.matrix([
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    224 / 255,
+                    18 / 255,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    0,
+                    0,
+                    0,
+                    -204,
+                  ]),
+                  child: source(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     ),
   );
+}
+
+class _SulfurClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final scale = size.width / 683;
+    var region = Path()
+      ..moveTo(290, 16)
+      ..lineTo(334, 88)
+      ..lineTo(246, 88)
+      ..close();
+    for (final shape in [
+      Path()..addRect(const Rect.fromLTRB(276, 76, 306, 134)),
+      Path()..addRect(const Rect.fromLTRB(260, 90, 319, 112)),
+      Path()..addOval(const Rect.fromLTRB(272, 105, 309, 141)),
+    ]) {
+      region = Path.combine(PathOperation.union, region, shape);
+    }
+    return region.transform(Matrix4.diagonal3Values(scale, scale, 1).storage);
+  }
+
+  @override
+  bool shouldReclip(_SulfurClipper old) => false;
 }
 
 class HomeComposition extends StatelessWidget {
@@ -75,7 +138,7 @@ class HomeComposition extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _StartButton(onPressed: onStart),
+              TransformationButton(onPressed: onStart),
               const SizedBox(height: 4),
               Row(
                 key: const Key('home-navigation'),
@@ -304,75 +367,90 @@ class _SessionStrip extends StatelessWidget {
     glow: true,
     child: SizedBox(
       key: const Key('home-session-strip'),
-      height: 32,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Сессия №${controller.nextNumber}',
-                style: const TextStyle(
-                  color: _lime,
-                  fontSize: 13,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 7),
-          Expanded(
-            flex: 3,
-            child: FittedBox(fit: BoxFit.scaleDown, child: clock),
-          ),
-          const SizedBox(width: 5),
-          Expanded(
-            flex: 4,
-            child: Tooltip(
-              message: controller.draft.topicText.isEmpty
-                  ? 'Тема / запрос и заметка'
-                  : controller.draft.topicText,
-              child: TextButton(
-                onPressed: onNotes,
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                ),
-                child: Text(
-                  controller.draft.topicText.isEmpty
-                      ? 'Тема / запрос'
-                      : controller.draft.topicText,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFFEBD8E0),
-                    fontSize: 11,
-                    fontStyle: FontStyle.italic,
-                    decoration: TextDecoration.underline,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 38),
+        child: LayoutBuilder(
+          builder: (context, box) => Row(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: box.maxWidth * .26),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Сессия №${controller.nextNumber}',
+                    style: const TextStyle(
+                      color: _lime,
+                      fontSize: 13,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            width: 26,
-            child: PopupMenuButton<String>(
-              tooltip: 'Действия сессии',
-              enabled: onNotes != null,
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.more_vert, color: neonPink, size: 21),
-              onSelected: (_) => onNotes?.call(),
-              itemBuilder: (_) => [
-                const PopupMenuItem(
-                  value: 'notes',
-                  child: Text('Тема и заметка'),
+              const SizedBox(width: 7),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: box.maxWidth * .29),
+                child: FittedBox(fit: BoxFit.scaleDown, child: clock),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                flex: 4,
+                child: Tooltip(
+                  message: controller.draft.topicText.isEmpty
+                      ? 'Тема / запрос и заметка'
+                      : controller.draft.topicText,
+                  child: TextButton(
+                    onPressed: onNotes,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2,
+                        vertical: 2,
+                      ),
+                      minimumSize: const Size(0, 36),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      controller.draft.topicText.isEmpty
+                          ? 'Тема / запрос'
+                          : controller.draft.topicText,
+                      key: const Key('home-topic'),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFFEBD8E0),
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                width: 26,
+                child: PopupMenuButton<String>(
+                  tooltip: 'Действия сессии',
+                  style: IconButton.styleFrom(
+                    minimumSize: const Size(26, 36),
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  enabled: onNotes != null,
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.more_vert, color: neonPink, size: 21),
+                  onSelected: (_) => onNotes?.call(),
+                  itemBuilder: (_) => [
+                    const PopupMenuItem(
+                      value: 'notes',
+                      child: Text('Тема и заметка'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     ),
   );
@@ -721,63 +799,6 @@ class _TemplateStrip extends StatelessWidget {
       ),
     );
   }
-}
-
-class _StartButton extends StatelessWidget {
-  const _StartButton({required this.onPressed});
-  final VoidCallback? onPressed;
-  @override
-  Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(minHeight: 48),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(28),
-      gradient: LinearGradient(
-        colors: onPressed == null
-            ? [const Color(0xFF737B40), const Color(0xFF53572C)]
-            : [const Color(0xFFE5FF30), _lime, const Color(0xFFB3FF00)],
-      ),
-      border: Border.all(color: neonPink, width: 1.4),
-      boxShadow: [
-        BoxShadow(color: neonPink.withValues(alpha: .55), blurRadius: 14),
-        BoxShadow(color: _lime.withValues(alpha: .18), blurRadius: 7),
-      ],
-    ),
-    child: TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        foregroundColor: ink,
-        disabledForegroundColor: const Color(0xFF25251C),
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      ),
-      child: Row(
-        children: [
-          ExcludeSemantics(
-            child: Image.asset(
-              'assets/brand/spiral.png',
-              width: 39,
-              height: 39,
-            ),
-          ),
-          const SizedBox(width: 4),
-          const Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'НАЧАТЬ ТРАНСФОРМАЦИЮ',
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-          ),
-          const Icon(Icons.double_arrow, size: 23),
-        ],
-      ),
-    ),
-  );
 }
 
 class _NavButton extends StatelessWidget {

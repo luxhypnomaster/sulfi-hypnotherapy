@@ -102,34 +102,34 @@ class StructureFooterButton extends StatelessWidget {
     required this.onPressed,
     this.primary = false,
     this.add = false,
+    this.compact = false,
   });
   final String label;
   final VoidCallback? onPressed;
-  final bool primary, add;
+  final bool primary, add, compact;
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 3),
     child: SizedBox(
-      height: MediaQuery.textScalerOf(context).scale(16) > 24 ? 72 : 58,
+      height: MediaQuery.textScalerOf(context).scale(16) > 24
+          ? (compact ? 64 : 72)
+          : (compact ? 44 : 58),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           backgroundColor: primary
               ? neonLime
               : add
-              ? Colors.black
+              ? const Color(0xFF4A002A)
               : const Color(0xFF250719),
           foregroundColor: primary
               ? ink
               : add
-              ? neonLime
+              ? neonPink
               : const Color(0xFFF8EBF3),
-          side: BorderSide(
-            color: primary || add ? neonLime : neonPink,
-            width: 1.3,
-          ),
+          side: BorderSide(color: primary ? neonLime : neonPink, width: 1.3),
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(compact ? 9 : 12),
           ),
         ),
         onPressed: onPressed,

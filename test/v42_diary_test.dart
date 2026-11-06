@@ -470,7 +470,7 @@ void main() {
       expect(find.text('История'), findsOneWidget);
       expect(find.textContaining('мастеру'), findsOneWidget);
       final topic = find.text(c.draft.topicText);
-      expect(t.widget<Text>(topic).maxLines, 1);
+      expect(t.widget<Text>(topic).maxLines, 2);
       const path = String.fromEnvironment('SULFI_V42_SCREENSHOTS');
       if (path.isNotEmpty) {
         await t.runAsync(() async {

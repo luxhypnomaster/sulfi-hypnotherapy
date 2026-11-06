@@ -546,20 +546,6 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
           return StructureShell(
             title: 'Структура сессии',
             onBack: _back,
-            actions: [
-              IconButton(
-                key: const Key('structure-add-phase'),
-                tooltip: 'Добавить фазу',
-                onPressed: _busy ? null : () => _run(_addPhase),
-                icon: const Icon(Icons.add, color: neonPink),
-                style: IconButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: const BorderSide(color: neonPink),
-                  ),
-                ),
-              ),
-            ],
             summary: Semantics(
               label: '${phases.length} фаз. ${duration.semantics}',
               child: Text(
@@ -572,13 +558,27 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
               key: const Key('structure-footer'),
               children: [
                 Expanded(
+                  child: Tooltip(
+                    message: 'Добавить фазу',
+                    child: StructureFooterButton(
+                      key: const Key('structure-add-phase'),
+                      label: 'Добавить\nфазу',
+                      compact: true,
+                      add: true,
+                      onPressed: _busy ? null : () => _run(_addPhase),
+                    ),
+                  ),
+                ),
+                Expanded(
                   child: StructureFooterButton(
+                    compact: true,
                     label: 'Выбрать',
                     onPressed: _busy ? null : () => _run(_templates),
                   ),
                 ),
                 Expanded(
                   child: StructureFooterButton(
+                    compact: true,
                     label: 'Сохранить',
                     onPressed: _busy
                         ? null
@@ -590,6 +590,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                 ),
                 Expanded(
                   child: StructureFooterButton(
+                    compact: true,
                     label: 'Применить',
                     primary: true,
                     onPressed: _busy ? null : () => _run(_apply),

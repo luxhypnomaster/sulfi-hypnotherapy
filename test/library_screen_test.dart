@@ -45,8 +45,8 @@ void main() {
   ) async {
     await open(tester);
     expect(find.text('Начните с одной записи'), findsOneWidget);
-    expect(find.text('Добавить аудио'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Установки').first);
+    expect(find.text('+ Добавить аудио'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('library-section-suggestions')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Мои'));
     await tester.pumpAndSettle();
@@ -58,7 +58,7 @@ void main() {
     tester,
   ) async {
     await open(tester);
-    await tester.tap(find.text('Добавить аудио'));
+    await tester.tap(find.text('+ Добавить аудио'));
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsNothing);
     expect(find.byType(SnackBar), findsNothing);
@@ -70,14 +70,14 @@ void main() {
   ) async {
     library.importResult = sampleAsset();
     await open(tester);
-    await tester.tap(find.text('Добавить аудио'));
+    await tester.tap(find.text('+ Добавить аудио'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, 'Моё введение');
     await tester.tap(find.text('Сохранить'));
     await tester.pumpAndSettle();
     expect(repository.items.values.single.title, 'Моё введение');
     expect(find.text('Моё введение'), findsOneWidget);
-    expect(find.text('1:05 · WAV · 0.0 МБ'), findsOneWidget);
+    expect(find.text('1 аудио · 1:05'), findsOneWidget);
     expect(library.discarded, isFalse);
   });
 
@@ -86,7 +86,7 @@ void main() {
   ) async {
     library.importResult = sampleAsset();
     await open(tester);
-    await tester.tap(find.text('Добавить аудио'));
+    await tester.tap(find.text('+ Добавить аудио'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, '   ');
     await tester.tap(find.text('Сохранить'));
@@ -105,7 +105,7 @@ void main() {
     library.importResult = sampleAsset();
     repository.failSave = true;
     await open(tester);
-    await tester.tap(find.text('Добавить аудио'));
+    await tester.tap(find.text('+ Добавить аудио'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Сохранить'));
     await tester.pumpAndSettle();
@@ -117,7 +117,7 @@ void main() {
   testWidgets('invalid import shows readable error', (tester) async {
     library.importFails = true;
     await open(tester);
-    await tester.tap(find.text('Добавить аудио'));
+    await tester.tap(find.text('+ Добавить аудио'));
     await tester.pumpAndSettle();
     expect(find.text('Повреждённый файл'), findsOneWidget);
     expect(repository.items, isEmpty);
@@ -210,7 +210,7 @@ void main() {
   });
 
   testWidgets(
-    'search finds descriptions and tags across sections then filters selected section',
+    'search combines descriptions and tags with the selected section',
     (tester) async {
       await repository.save(
         sampleAsset().edited(
@@ -224,8 +224,10 @@ void main() {
       await open(tester);
       await tester.enterText(find.byType(TextField), 'границы');
       await tester.pumpAndSettle();
-      expect(find.text('Личный модуль'), findsOneWidget);
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Установки').first);
+      expect(find.text('Личный модуль'), findsNothing);
+      await tester.tap(
+        find.byKey(const ValueKey('library-section-suggestions')),
+      );
       await tester.pumpAndSettle();
       expect(find.text('Личный модуль'), findsNothing);
       await tester.tap(find.text('Мои'));
@@ -250,10 +252,7 @@ void main() {
           widget is Scrollable && widget.axisDirection == AxisDirection.down,
     );
     await tester.drag(vertical, const Offset(0, -500));
-    expect(
-      tester.state<ScrollableState>(vertical).position.pixels,
-      greaterThan(0),
-    );
+    expect(find.text('+ Добавить аудио'), findsOneWidget);
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

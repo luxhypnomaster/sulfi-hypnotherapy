@@ -207,6 +207,8 @@ void main() {
           ),
         ),
       );
+      await t.tap(find.text('Мои'));
+      await t.pumpAndSettle();
       final visible = find
           .byWidgetPredicate(
             (w) =>
@@ -255,7 +257,7 @@ void main() {
       );
       await t.tap(find.text('Мои'));
       await t.pumpAndSettle();
-      await t.tap(find.byType(DropdownButton<AudioCategory>));
+      await t.tap(find.byKey(const Key('library-categories')));
       await t.pumpAndSettle();
       await t.tap(find.text('Установки').last);
       await t.pumpAndSettle();
@@ -282,7 +284,7 @@ void main() {
           of: find.byKey(const Key('structure-footer')),
           matching: find.byWidgetPredicate((w) => w is OutlinedButton),
         ),
-        findsNWidgets(3),
+        findsNWidgets(4),
       );
       await t.tap(find.text('Добавить'));
       await t.pumpAndSettle();

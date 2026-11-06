@@ -30,6 +30,7 @@ import 'package:sulfi_hypnotherapy/ui/templates_modules_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/modules_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/home_composition.dart';
 import 'package:sulfi_hypnotherapy/ui/home_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/design.dart' show neonLime;
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
 import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
@@ -560,7 +561,7 @@ void main() {
   }
 
   testWidgets(
-    'three footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only',
+    'four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only',
     (t) async {
       addTearDown(t.view.resetPhysicalSize);
       addTearDown(t.view.resetDevicePixelRatio);
@@ -574,7 +575,7 @@ void main() {
           of: find.byKey(const Key('structure-footer')),
           matching: find.byType(StructureFooterButton),
         ),
-        findsNWidgets(3),
+        findsNWidgets(4),
       );
       await t.tap(find.byKey(const ValueKey('expand-prep')));
       await t.pumpAndSettle();
@@ -857,6 +858,18 @@ void main() {
       await settleIo(t);
       await t.pumpAndSettle();
       expect(find.byType(LibraryScreen), findsOneWidget);
+      await t.tap(find.byKey(const Key('library-categories')));
+      await t.pumpAndSettle();
+      await t.tap(find.byKey(const ValueKey('category-preparation')));
+      await t.pumpAndSettle();
+      await t.tap(find.byKey(const ValueKey('category-induction')));
+      await t.pumpAndSettle();
+      expect(find.byKey(const Key('library-category-menu')), findsOneWidget);
+      await t.binding.handlePopRoute();
+      await t.pumpAndSettle();
+      expect(find.byType(LibraryScreen), findsOneWidget);
+      await t.enterText(find.byKey(const Key('library-search')), 'a');
+      await t.pumpAndSettle();
       await t.tap(find.byKey(const ValueKey('pick-a')));
       await settleIo(t);
       await t.pumpAndSettle();
@@ -1033,7 +1046,7 @@ void main() {
     },
   );
   testWidgets(
-    'safe 360dp and 200 percent fonts keep all three actions and final add reachable',
+    'safe 360dp and 200 percent fonts keep all four actions and final add reachable',
     (t) async {
       for (final size in [
         const Size(360, 640),
@@ -1052,7 +1065,12 @@ void main() {
         );
         expect(t.takeException(), isNull);
         expect(find.byKey(const Key('structure-footer')), findsOneWidget);
-        for (final label in ['Выбрать', 'Сохранить', 'Применить']) {
+        for (final label in [
+          'Добавить\nфазу',
+          'Выбрать',
+          'Сохранить',
+          'Применить',
+        ]) {
           expect(find.text(label).hitTestable(), findsOneWidget);
         }
         await t.scrollUntilVisible(
@@ -1229,7 +1247,7 @@ void main() {
     },
   );
   testWidgets(
-    'task2 phase insertion and three footer actions preserve template and explicit current-plan commit',
+    'task2 phase insertion and four footer actions preserve template and explicit current-plan commit',
     (t) async {
       await show(
         t,
@@ -1781,6 +1799,108 @@ void main() {
       await t.pumpWidget(const SizedBox());
       t.view.resetPhysicalSize();
       t.view.resetDevicePixelRatio();
+    },
+  );
+  testWidgets(
+    'task3 home gives long topic two lines and keeps number and date adjacent',
+    (t) async {
+      const topic =
+          'Длинная тема сессии: спокойствие, уверенность и устойчивое внимание к своим ощущениям без спешки';
+      await t.runAsync(() => c.setText(topic: topic));
+      var starts = 0;
+      await show(
+        t,
+        HomeComposition(
+          controller: c,
+          busy: false,
+          onStructure: () {},
+          onTemplates: () {},
+          onLibrary: () {},
+          onHistory: () {},
+          onNotes: () {},
+          onStart: () {
+            starts++;
+          },
+          onPreview: (_) async {},
+          clock: const Text(
+            '06.11 · 18:30',
+            key: Key('task3-clock'),
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+      );
+      final title = find.byKey(const Key('home-topic'));
+      expect(t.widget<Text>(title).data, topic);
+      expect(t.widget<Text>(title).maxLines, 2);
+      final paragraph = t.renderObject<RenderParagraph>(title);
+      final lines = paragraph.getBoxesForSelection(
+        const TextSelection(baseOffset: 0, extentOffset: topic.length),
+      );
+      expect(lines.map((b) => b.top).toSet(), hasLength(2));
+      final gap =
+          t.getTopLeft(find.byKey(const Key('task3-clock'))).dx -
+          t.getTopRight(find.text('Сессия №1')).dx;
+      expect(gap, inInclusiveRange(0, 8));
+      expect(find.byKey(const Key('home-yellow-sulfur')), findsOneWidget);
+      await capture(t, 'home-long-topic');
+      await t.tap(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ'));
+      await t.pumpAndSettle();
+      expect(starts, 1);
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'task3 home start follows playable plan and empty structure keeps four compact actions',
+    (t) async {
+      final player = MemoryPlayer();
+      await show(t, HomeScreen(controller: c, player: player));
+      Finder start() => find.descendant(
+        of: find.byKey(const Key('home-start')),
+        matching: find.byType(TextButton),
+      );
+      expect(t.widget<TextButton>(start()).onPressed, isNotNull);
+      await t.runAsync(() => c.changePhases((_) => []));
+      await t.pumpAndSettle();
+      expect(t.widget<TextButton>(start()).onPressed, isNull);
+      await capture(t, 'home-empty');
+      await t.pumpWidget(const SizedBox());
+      await show(
+        t,
+        ModularStructureScreen(controller: c, player: player),
+        size: const Size(320, 640),
+      );
+      final footer = find.byKey(const Key('structure-footer'));
+      expect(
+        find.descendant(
+          of: footer,
+          matching: find.byType(StructureFooterButton),
+        ),
+        findsNWidgets(4),
+      );
+      expect(t.getSize(footer).height, 44);
+      final applyButton = t.widget<OutlinedButton>(
+        find.descendant(
+          of: footer,
+          matching: find.widgetWithText(OutlinedButton, 'Применить'),
+        ),
+      );
+      expect(applyButton.style!.backgroundColor!.resolve({}), neonLime);
+      final button = find.byKey(const Key('structure-add-phase'));
+      expect(t.getCenter(button).dy, greaterThan(560));
+      expect(find.byType(ReorderableListView), findsNothing);
+      await capture(t, 'structure-empty');
+      await t.tap(button);
+      await t.pumpAndSettle();
+      await t.tap(find.text('Подготовка').last);
+      await settleIo(t);
+      await t.pumpAndSettle();
+      expect(find.byType(ReorderableListView), findsOneWidget);
+      expect(c.draft.plan.phases, isEmpty);
+      await footerApply(t);
+      expect(c.draft.plan.phases!.single.typeId, 'preparation');
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await t.pumpWidget(const SizedBox());
     },
   );
 }
