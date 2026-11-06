@@ -151,6 +151,7 @@ class MemorySessionRepository implements SessionRepository {
       name: formatLocalDate(now),
       snapshot: CurrentSessionDraft.fromMap(snapshot.toMap()),
       startedAt: now,
+      startedUtcOffsetMinutes: now.toLocal().timeZoneOffset.inMinutes,
       status: RunStatus.running,
     );
     savedRuns[r.id] = r;

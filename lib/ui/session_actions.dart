@@ -36,12 +36,39 @@ Future<SessionTemplate?> saveTemplateDialog(
     context,
     title: 'Сохранить как шаблон',
     name: initialName ?? '',
-    hint: (plan ?? c.draft.plan).exitStepId == null
+    hint: !(plan ?? c.draft.plan).hasExitAudio
         ? 'Аудиовыход не назначен. При завершении будет доступна текстовая ориентация.'
         : null,
   );
   if (result == null) return null;
+  if (!context.mounted ||
+      !await warnMissingPlanAudio(context, c, plan ?? c.draft.plan)) {
+    return null;
+  }
   return c.saveAsTemplate(result.name, result.description, plan: plan);
+}
+
+Future<bool> warnMissingPlanAudio(
+  BuildContext context,
+  SessionController c,
+  SessionPlan plan,
+) async {
+  final missing = <String>[];
+  for (final step in plan.allSteps) {
+    if (step.kind != StepKind.audio) continue;
+    final asset = c.asset(step.audioAssetId);
+    if (asset == null || !await c.library.fileFor(asset).exists()) {
+      missing.add(step.title);
+    }
+  }
+  if (missing.isEmpty) return true;
+  if (!context.mounted) return false;
+  return confirmAction(
+    context,
+    'Часть аудио недоступна',
+    'Не найдены: ${missing.join(', ')}. Полный план сохранится. Перед запуском замените отсутствующие треки в конструкторе.',
+    confirm: 'Сохранить полный план',
+  );
 }
 
 Future<bool> loadTemplateSafely(
@@ -78,6 +105,10 @@ Future<bool> loadTemplateSafely(
       if (!context.mounted) return false;
       if (await saveTemplateDialog(context, c) == null) return false;
     }
+  }
+  if (!context.mounted ||
+      !await warnMissingPlanAudio(context, c, template.plan)) {
+    return false;
   }
   await c.loadTemplate(template);
   return true;

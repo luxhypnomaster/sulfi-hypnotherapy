@@ -364,7 +364,7 @@ void main() {
     expect(await sessions.history(), isEmpty);
   });
   test(
-    'negative and non-five-second delays are rejected without changing draft',
+    'pause rejects negative/over-limit values and persists individual seconds',
     () async {
       await addSample();
       final id = controller.draft.plan.steps.single.id;
@@ -373,13 +373,16 @@ void main() {
         throwsA(isA<LibraryException>()),
       );
       await expectLater(
-        controller.setDelay(id, 7),
+        controller.setDelay(id, 5996),
         throwsA(isA<LibraryException>()),
       );
       expect(
         (await sessions.loadDraft())!.plan.steps.single.delayBeforeSeconds,
         0,
       );
+      await controller.setDelay(id, 7);
+      await controller.reload();
+      expect(controller.draft.plan.steps.single.delayBeforeSeconds, 7);
     },
   );
   test('immutable snapshot lists cannot be edited through aliases', () async {

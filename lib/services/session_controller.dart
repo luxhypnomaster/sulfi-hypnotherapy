@@ -1,14 +1,71 @@
+import 'dart:convert';
 import 'dart:async';
+
+import 'diary_controller.dart';
 
 import 'package:flutter/foundation.dart';
 
 import '../data/session_repository.dart';
+import '../data/module_catalog.dart';
+import '../models/modular_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
 import 'library_service.dart';
 
 class SessionController extends ChangeNotifier {
-  SessionController({required this.repository, required this.library});
+  SessionController({
+    required this.repository,
+    required this.library,
+    ModuleCatalog? modules,
+    this.diary,
+  }) : modules = modules ?? ModuleCatalog();
+  SessionController? _editorSource;
+  String? _editorBaseline;
+  bool get isEditor => _editorSource != null;
+  static String _draftToken(CurrentSessionDraft d) =>
+      jsonEncode(d.toMap()..remove('updatedAt'));
+  bool get hasEditorChanges =>
+      isEditor && _draftToken(draft) != _editorBaseline;
+
+  /// Isolated working copy. It shares the catalogue/library, never the current
+  /// configuration or history writes. Opening an editor never interrupts a run.
+  Future<SessionController> beginEditing() async {
+    await flush();
+    final editor = SessionController(
+      repository: repository,
+      library: library,
+      modules: modules,
+      diary: diary,
+    );
+    editor._editorSource = this;
+    editor.draft = CurrentSessionDraft.fromMap(draft.toMap());
+    editor._editorBaseline = _draftToken(draft);
+    editor.assets = List.of(assets);
+    editor.templates = List.of(templates);
+    editor.runs = List.of(runs);
+    editor.nextNumber = nextNumber;
+    return editor;
+  }
+
+  Future<void> applyEditor() async {
+    if (!isEditor) throw StateError('Не открыт редактор');
+    await flush();
+    final snapshot = CurrentSessionDraft.fromMap(draft.toMap());
+    final expected = _editorBaseline;
+    await _editorSource!._edit((current) {
+      if (_draftToken(current) != expected) {
+        throw const LibraryException(
+          'Текущая конфигурация изменилась. Закройте редактор без применения и откройте его снова.',
+        );
+      }
+      return snapshot;
+    });
+    _editorBaseline = _draftToken(snapshot);
+    _notify();
+  }
+
+  final ModuleCatalog modules;
+  final DiaryController? diary;
   final SessionRepository repository;
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(
@@ -28,16 +85,36 @@ class SessionController extends ChangeNotifier {
       templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
 
   Future<void> initialize() async {
-    await repository.interruptUnfinished();
+    if (!isEditor) await repository.interruptUnfinished();
     await reload();
   }
 
   Future<void> reload() async {
     await flush();
+    await modules.load();
     assets = await library.repository.list();
     templates = await repository.templates();
     runs = await repository.history();
     nextNumber = await repository.nextNumber();
+    if (isEditor) {
+      final refreshed = draft.plan.allSteps.map((s) {
+        final actual = asset(s.audioAssetId);
+        return s.kind == StepKind.audio &&
+                actual != null &&
+                actual.durationMs != s.durationMs
+            ? s.copyWith(durationMs: actual.durationMs)
+            : s;
+      }).toList();
+      if (refreshed.any(
+        (s) =>
+            draft.plan.allSteps.firstWhere((v) => v.id == s.id).durationMs !=
+            s.durationMs,
+      )) {
+        draft = draft.copyWith(plan: draft.plan.copyWith(steps: refreshed));
+      }
+      _notify();
+      return;
+    }
     final stored = await repository.loadDraft();
     if (stored != null) {
       draft = stored;
@@ -76,7 +153,7 @@ class SessionController extends ChangeNotifier {
       try {
         final next = change(draft);
         _validate(next.plan);
-        await repository.saveDraft(next);
+        if (!isEditor) await repository.saveDraft(next);
         draft = next;
       } catch (_) {
         saveError = 'Изменения не сохранены. Повторите действие.';
@@ -91,15 +168,13 @@ class SessionController extends ChangeNotifier {
   }
 
   void _validate(SessionPlan plan) {
-    if (plan.steps.map((s) => s.id).toSet().length != plan.steps.length) {
-      throw const LibraryException('Повторяется ID блока.');
+    if (plan.allSteps.map((s) => s.id).toSet().length != plan.allSteps.length) {
+      throw const LibraryException('Повторяется ID элемента.');
     }
-    for (final s in plan.steps) {
-      if (s.delayBeforeSeconds < 0 ||
-          s.delayBeforeSeconds > 5995 ||
-          s.delayBeforeSeconds % 5 != 0) {
+    for (final s in plan.allSteps) {
+      if (s.delayBeforeSeconds < 0 || s.delayBeforeSeconds > 5995) {
         throw const LibraryException(
-          'Пауза должна быть от 00:00 до 99:55 с шагом 5 секунд.',
+          'Пауза должна быть от 00:00 до 99:55 с шагом 1 секунда.',
         );
       }
       if (s.durationMs != null && s.durationMs! < 0) {
@@ -111,6 +186,98 @@ class SessionController extends ChangeNotifier {
     }
   }
 
+  Future<void> changePhases(
+    List<PhaseInstance> Function(List<PhaseInstance>) change,
+  ) => _edit(
+    (d) => d.copyWith(
+      plan: modularize(d.plan)
+          .copyWith(phases: change(modularize(d.plan).phases!)),
+    ),
+  );
+  Future<String> createPhase(String typeId) async {
+    final type = phaseTypes.firstWhere((p) => p.id == typeId);
+    final id = newId();
+    await changePhases(
+      (p) => [...p, PhaseInstance(id: id, typeId: typeId, title: type.title)],
+    );
+    return id;
+  }
+
+  Future<void> updatePhase(PhaseInstance phase) =>
+      changePhases((p) => p.map((v) => v.id == phase.id ? phase : v).toList());
+  Future<void> addModule(String phaseId, ModuleDefinition module) =>
+      changePhases(
+        (phases) => phases
+            .map(
+              (p) => p.id == phaseId
+                  ? p.copyWith(
+                      children: [...p.children, module.instantiate(p.id)],
+                    )
+                  : p,
+            )
+            .toList(),
+      );
+  Future<void> addLoose(String phaseId, SessionStep step, {String? childId}) =>
+      changePhases(
+        (phases) => phases
+            .map(
+              (p) => p.id != phaseId
+                  ? p
+                  : p.copyWith(
+                      children: childId == null
+                          ? [
+                              ...p.children,
+                              PhaseChild(
+                                id: newId(),
+                                title: step.title,
+                                items: [
+                                  step.copyWith(id: newId(), groupId: p.id),
+                                ],
+                              ),
+                            ]
+                          : p.children
+                                .map(
+                                  (c) => c.id == childId
+                                      ? c.copyWith(
+                                          items: [
+                                            ...c.items,
+                                            step.copyWith(
+                                              id: newId(),
+                                              groupId: p.id,
+                                            ),
+                                          ],
+                                        )
+                                      : c,
+                                )
+                                .toList(),
+                    ),
+            )
+            .toList(),
+      );
+  Future<void> updateChild(String phaseId, PhaseChild child) => changePhases(
+    (p) => p
+        .map(
+          (v) => v.id == phaseId
+              ? v.copyWith(
+                  children: v.children
+                      .map((c) => c.id == child.id ? child : c)
+                      .toList(),
+                )
+              : v,
+        )
+        .toList(),
+  );
+  Future<void> removeChild(String phaseId, String id) => changePhases(
+    (p) => p
+        .map(
+          (v) => v.id == phaseId
+              ? v.copyWith(
+                  children: v.children.where((c) => c.id != id).toList(),
+                )
+              : v,
+        )
+        .toList(),
+  );
   Future<void> setText({String? topic, String? notes}) =>
       _edit((d) => d.copyWith(topicText: topic, notes: notes));
   Future<void> addAudio(AudioAsset a, {String? afterId, String? groupId}) =>
@@ -175,14 +342,14 @@ class SessionController extends ChangeNotifier {
   Future<void> updateStep(SessionStep step) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps.map((s) => s.id == step.id ? step : s).toList(),
+        steps: d.plan.allSteps.map((s) => s.id == step.id ? step : s).toList(),
       ),
     ),
   );
   Future<void> setDelay(String id, int seconds) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps
+        steps: d.plan.allSteps
             .map(
               (s) => s.id == id ? s.copyWith(delayBeforeSeconds: seconds) : s,
             )
@@ -193,7 +360,7 @@ class SessionController extends ChangeNotifier {
   Future<void> remove(String id) => _edit(
     (d) => d.copyWith(
       plan: d.plan.copyWith(
-        steps: d.plan.steps.where((s) => s.id != id).toList(),
+        steps: d.plan.allSteps.where((s) => s.id != id).toList(),
         clearExit: d.plan.exitStepId == id,
       ),
     ),
@@ -334,34 +501,54 @@ class SessionController extends ChangeNotifier {
       );
     }
     if (draft.plan.steps.isEmpty) {
-      throw const LibraryException('Добавьте хотя бы один блок в структуру.');
+      throw const LibraryException(
+        'Добавьте хотя бы один трек или интервал в структуру.',
+      );
     }
     final frozen = <SessionStep>[];
-    for (final s in draft.plan.steps) {
-      if (s.kind == StepKind.voiceRecording) {
+    final activeIds = draft.plan.steps.map((s) => s.id).toSet();
+    for (final s in draft.plan.allSteps) {
+      if (s.kind == StepKind.voiceRecording && activeIds.contains(s.id)) {
         throw const LibraryException(
-          'Запись во время сессии будет доступна на следующем этапе. Замените этот блок тишиной или самостоятельной работой.',
+          'Запись во время сессии будет доступна на следующем этапе. Замените этот элемент тишиной или самостоятельной работой.',
         );
       }
       if (s.kind == StepKind.audio) {
         final a = asset(s.audioAssetId);
-        if (a == null || !await library.fileFor(a).exists()) {
+        if ((a == null || !await library.fileFor(a).exists()) &&
+            activeIds.contains(s.id)) {
           throw LibraryException(
             'Файл «${s.title}» недоступен. Замените его в структуре.',
           );
         }
         frozen.add(
-          s.copyWith(
-            title: a.title,
-            description: a.description,
-            durationMs: a.durationMs,
-          ),
+          a == null
+              ? s
+              : s.copyWith(
+                  title: s.title,
+                  description: s.description.isEmpty
+                      ? a.description
+                      : s.description,
+                  durationMs: a.durationMs,
+                ),
         );
       } else {
         frozen.add(s);
       }
     }
-    return draft.copyWith(plan: draft.plan.copyWith(steps: frozen));
+    return draft.copyWith(
+      plan: draft.plan.copyWith(steps: frozen),
+      audioMetadata: {
+        for (final a in assets.where(
+          (a) => frozen.any((s) => s.audioAssetId == a.id),
+        ))
+          a.id: {
+            'title': a.title,
+            'durationMs': a.durationMs,
+            'format': a.format,
+          },
+      },
+    );
   }
 
   @override
