@@ -282,7 +282,7 @@ void main() {
           of: find.byKey(const Key('structure-footer')),
           matching: find.byWidgetPredicate((w) => w is OutlinedButton),
         ),
-        findsNWidgets(4),
+        findsNWidgets(3),
       );
       await t.tap(find.text('Добавить'));
       await t.pumpAndSettle();

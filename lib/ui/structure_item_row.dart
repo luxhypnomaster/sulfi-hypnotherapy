@@ -13,26 +13,44 @@ class StructureItemRow extends StatelessWidget {
     required this.onPause,
     required this.onPreview,
     required this.onDuration,
+    this.compact = false,
   });
   final SessionStep step;
   final Widget handle, menu;
   final VoidCallback? onPause, onPreview, onDuration;
+  final bool compact;
   @override
   Widget build(BuildContext context) {
     final audio = step.kind == StepKind.audio;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      decoration: BoxDecoration(
-        color: const Color(0xAA230719),
-        border: Border.all(color: neonPink.withValues(alpha: .45)),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      margin: compact
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+      decoration: compact
+          ? BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: const Color(0xFFCCABBA).withValues(alpha: .32),
+                  width: .6,
+                ),
+              ),
+            )
+          : BoxDecoration(
+              color: const Color(0xAA230719),
+              border: Border.all(color: neonPink.withValues(alpha: .45)),
+              borderRadius: BorderRadius.circular(8),
+            ),
       child: Row(
         children: [
           handle,
           IconButton(
             tooltip: audio ? 'Прослушать трек' : 'Изменить длительность паузы',
             onPressed: audio ? onPreview : onDuration,
+            constraints: compact
+                ? const BoxConstraints(minWidth: 32, minHeight: 36)
+                : null,
+            padding: compact ? EdgeInsets.zero : null,
+            visualDensity: compact ? VisualDensity.compact : null,
             icon: Icon(
               audio
                   ? Icons.play_circle_outline
@@ -40,14 +58,14 @@ class StructureItemRow extends StatelessWidget {
                   ? Icons.mic_none
                   : Icons.pause_circle_outline,
               color: audio ? neonPink : antiqueGold,
-              size: 24,
+              size: compact ? 22 : 24,
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.symmetric(vertical: compact ? 3 : 5),
               child: Text(
-                '${step.enabled ? '' : '○ '}${audio ? step.title : step.kind.label}',
+                '${step.enabled ? '' : '○ '}${audio || compact ? step.title : step.kind.label}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -63,7 +81,10 @@ class StructureItemRow extends StatelessWidget {
               key: Key('pause-${step.id}'),
               onPressed: onPause,
               style: TextButton.styleFrom(
-                minimumSize: const Size(40, 48),
+                minimumSize: Size(compact ? 34 : 40, compact ? 36 : 48),
+                tapTargetSize: compact
+                    ? MaterialTapTargetSize.shrinkWrap
+                    : null,
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 foregroundColor: neonLime,
               ),
@@ -80,7 +101,10 @@ class StructureItemRow extends StatelessWidget {
             child: TextButton(
               onPressed: audio ? null : onDuration,
               style: TextButton.styleFrom(
-                minimumSize: const Size(40, 48),
+                minimumSize: Size(compact ? 36 : 40, compact ? 36 : 48),
+                tapTargetSize: compact
+                    ? MaterialTapTargetSize.shrinkWrap
+                    : null,
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 disabledForegroundColor: const Color(0xFFF6E9F1),
               ),

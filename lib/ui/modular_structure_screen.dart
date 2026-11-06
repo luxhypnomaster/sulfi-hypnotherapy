@@ -24,6 +24,7 @@ import 'module_actions.dart';
 import 'structure_shell.dart';
 import 'structure_item_row.dart';
 import 'structure_unsaved.dart';
+import 'structure_panels.dart';
 
 class ModularStructureScreen extends StatefulWidget {
   const ModularStructureScreen({
@@ -42,7 +43,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
   SessionController get c => _working!;
   final ScrollController _scroll = ScrollController();
   bool _owns = false, _busy = false, _allowPop = false;
-  String? _loadError, _selected;
+  String? _loadError;
   @override
   void initState() {
     super.initState();
@@ -132,7 +133,6 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
   final Set<String> _collapsed = {};
   bool _open(String id) => !_collapsed.contains(id);
   void _toggle(String id) => setState(() {
-    _selected = id;
     if (!_collapsed.remove(id)) _collapsed.add(id);
   });
   @override
@@ -150,7 +150,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     if (mounted) setState(() => _busy = false);
   }
 
-  Future<void> _addPhase([PhaseType? type]) async {
+  Future<void> _addPhase({PhaseType? type, String? afterPhaseId}) async {
     final selected =
         type ??
         await showDialog<PhaseType>(
@@ -170,28 +170,76 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                 .toList(),
           ),
         );
-    if (selected != null) await c.createPhase(selected.id);
+    if (selected == null) return;
+    final created = await c.createPhase(selected.id);
+    if (afterPhaseId != null) {
+      await c.changePhases((phases) {
+        final next = [...phases];
+        final added = next.removeAt(next.indexWhere((p) => p.id == created));
+        final anchor = next.indexWhere((p) => p.id == afterPhaseId);
+        next.insert(anchor < 0 ? next.length : anchor + 1, added);
+        return next;
+      });
+    }
+  }
+
+  Future<String> _positionLast(
+    String phaseId, {
+    String? childId,
+    required String afterId,
+  }) async {
+    final phase = c.draft.plan.phases!.firstWhere((p) => p.id == phaseId);
+    if (childId == null) {
+      final added = phase.children.last;
+      await c.changePhases(
+        (phases) => phases.map((p) {
+          if (p.id != phaseId) return p;
+          final next = [...p.children]
+            ..removeWhere((child) => child.id == added.id);
+          final anchor = next.indexWhere((child) => child.id == afterId);
+          next.insert(anchor < 0 ? next.length : anchor + 1, added);
+          return p.copyWith(children: next);
+        }).toList(),
+      );
+      return added.id;
+    }
+    final child = phase.children.firstWhere((child) => child.id == childId);
+    final added = child.items.last;
+    final next = [...child.items]..removeWhere((step) => step.id == added.id);
+    final anchor = next.indexWhere((step) => step.id == afterId);
+    next.insert(anchor < 0 ? next.length : anchor + 1, added);
+    await c.updateChild(phaseId, child.copyWith(items: next));
+    return added.id;
   }
 
   Future<void> _audio(
     PhaseInstance phase, {
     PhaseChild? child,
     bool record = false,
+    String? afterId,
   }) async {
     await widget.player.stop();
     if (!mounted) return;
-    Future<void> add(AudioAsset asset) => c.addLoose(
-      phase.id,
-      SessionStep(
-        id: newId(),
-        kind: StepKind.audio,
-        title: asset.title,
-        description: asset.description,
-        audioAssetId: asset.id,
-        durationMs: asset.durationMs,
-      ),
-      childId: child?.id,
-    );
+    var anchor = afterId;
+    Future<void> add(AudioAsset asset) async {
+      await c.addLoose(
+        phase.id,
+        SessionStep(
+          id: newId(),
+          kind: StepKind.audio,
+          title: asset.title,
+          description: asset.description,
+          audioAssetId: asset.id,
+          durationMs: asset.durationMs,
+        ),
+        childId: child?.id,
+      );
+      final at = anchor;
+      if (at != null) {
+        anchor = await _positionLast(phase.id, childId: child?.id, afterId: at);
+      }
+    }
+
     if (!record) {
       await Navigator.push<void>(
         context,
@@ -217,7 +265,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     await c.reload();
   }
 
-  Future<void> _module(PhaseInstance phase) async {
+  Future<void> _module(PhaseInstance phase, {String? afterId}) async {
     await c.modules.load();
     if (!mounted) return;
     final m = await Navigator.push<ModuleDefinition>(
@@ -230,10 +278,17 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
         ),
       ),
     );
-    if (m != null) await c.addModule(phase.id, m);
+    if (m != null) {
+      await c.addModule(phase.id, m);
+      if (afterId != null) await _positionLast(phase.id, afterId: afterId);
+    }
   }
 
-  Future<void> _interval(PhaseInstance phase, {PhaseChild? child}) async {
+  Future<void> _interval(
+    PhaseInstance phase, {
+    PhaseChild? child,
+    String? afterId,
+  }) async {
     final seconds = await Navigator.push<int>(
       context,
       MaterialPageRoute(builder: (_) => const PauseTimePicker()),
@@ -249,6 +304,9 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       ),
       childId: child?.id,
     );
+    if (afterId != null) {
+      await _positionLast(phase.id, childId: child?.id, afterId: afterId);
+    }
   }
 
   Future<void> _alternative(PhaseInstance phase, PhaseChild current) async {
@@ -415,7 +473,11 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     await c.reload();
   }
 
-  Future<void> _addMenu(PhaseInstance p, {PhaseChild? child}) async {
+  Future<void> _addMenu(
+    PhaseInstance p, {
+    PhaseChild? child,
+    String? afterId,
+  }) async {
     final action = await showModalBottomSheet<String>(
       context: context,
       builder: (context) => SafeArea(
@@ -448,12 +510,12 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       ),
     );
     if (!mounted) return;
-    await _run(() async {
-      if (action == 'module') await _module(p);
-      if (action == 'audio') await _audio(p, child: child);
-      if (action == 'pause') await _interval(p, child: child);
-      if (action == 'record') await _audio(p, child: child, record: true);
-    });
+    if (action == 'module') await _module(p, afterId: afterId);
+    if (action == 'audio') await _audio(p, child: child, afterId: afterId);
+    if (action == 'pause') await _interval(p, child: child, afterId: afterId);
+    if (action == 'record') {
+      await _audio(p, child: child, record: true, afterId: afterId);
+    }
   }
 
   @override
@@ -484,6 +546,20 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
           return StructureShell(
             title: 'Структура сессии',
             onBack: _back,
+            actions: [
+              IconButton(
+                key: const Key('structure-add-phase'),
+                tooltip: 'Добавить фазу',
+                onPressed: _busy ? null : () => _run(_addPhase),
+                icon: const Icon(Icons.add, color: neonPink),
+                style: IconButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: neonPink),
+                  ),
+                ),
+              ),
+            ],
             summary: Semantics(
               label: '${phases.length} фаз. ${duration.semantics}',
               child: Text(
@@ -497,20 +573,13 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
               children: [
                 Expanded(
                   child: StructureFooterButton(
-                    label: 'Добавить\nфазу',
-                    add: true,
-                    onPressed: _busy ? null : () => _run(_addPhase),
-                  ),
-                ),
-                Expanded(
-                  child: StructureFooterButton(
-                    label: 'Выбрать\nшаблон',
+                    label: 'Выбрать',
                     onPressed: _busy ? null : () => _run(_templates),
                   ),
                 ),
                 Expanded(
                   child: StructureFooterButton(
-                    label: 'Сохранить\nшаблон',
+                    label: 'Сохранить',
                     onPressed: _busy
                         ? null
                         : () => _run(() async {
@@ -533,7 +602,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(24),
                       child: Text(
-                        'Добавьте фазу, затем модуль, треки и паузы.',
+                        'Добавьте фазу. Внутри можно разместить модули, треки и паузы.',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -541,7 +610,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                 : ReorderableListView.builder(
                     key: const Key('structure-list'),
                     scrollController: _scroll,
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     buildDefaultDragHandles: false,
                     itemCount: rows.length,
                     onReorderStart: (index) {
@@ -575,16 +644,18 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     enabled: !_busy,
     child: SizedBox(
       key: ValueKey('drag-$id'),
-      width: 32,
-      height: 48,
-      child: const Icon(Icons.drag_indicator, color: neonPink, size: 18),
+      width: 23,
+      height: 36,
+      child: const Icon(Icons.drag_indicator, color: neonPink, size: 16),
     ),
   );
+
   Widget _row(StructureRow row, int index, List<PhaseInstance> phases) {
     final p = row.phase, child = row.child;
     final phase = row.level == StructureLevel.phase,
         module = row.level == StructureLevel.module;
-    final moduleBody =
+    final inModule =
+        module ||
         row.level == StructureLevel.item ||
         row.level == StructureLevel.addModuleItem;
     final add =
@@ -592,128 +663,118 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
         row.level == StructureLevel.addModuleItem;
     Widget content;
     if (phase || module) {
+      final id = row.id, open = _open(id);
       final duration = phase
           ? PlanDuration.phase(p)
           : PlanDuration.child(child!);
-      final id = phase ? p.id : child!.id, open = _open(row.id);
       final enabled = phase ? p.enabled : child!.enabled;
       content = Material(
-        color: phase ? const Color(0xFF35091F) : const Color(0xFF260A19),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(9),
-          side: BorderSide(
-            color: phase ? neonPink : const Color(0xFFC2809F),
-            width: phase ? 1.2 : .8,
-          ),
-        ),
+        type: MaterialType.transparency,
         child: InkWell(
           onTap: _busy ? null : () => _toggle(id),
-          borderRadius: BorderRadius.circular(9),
-          child: Row(
-            children: [
-              _handle(index, id),
-              if (phase)
-                Container(
-                  width: 27,
-                  height: 27,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: _selected == id || open
-                          ? neonLime
-                          : const Color(0xFFDDB5C8),
+          borderRadius: BorderRadius.circular(10),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: phase ? 40 : 36),
+            child: Row(
+              children: [
+                _handle(index, id),
+                if (phase)
+                  Container(
+                    width: 22,
+                    height: 22,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFFF0D8E3)),
                     ),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '${phases.indexWhere((v) => v.id == p.id) + 1}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: open ? neonLime : null,
+                    child: FittedBox(
+                      child: Text(
+                        '${phases.indexWhere((v) => v.id == p.id) + 1}',
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ),
-                  ),
-                )
-              else
-                const SizedBox(
-                  width: 27,
-                  child: Icon(
+                  )
+                else
+                  const Icon(
                     Icons.layers_outlined,
-                    color: antiqueGold,
-                    size: 23,
+                    size: 21,
+                    color: Color(0xFFF0BDD4),
+                  ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    phase ? 'Фаза: ${p.title}' : 'Модуль: ${child!.title}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: phase ? 15 : 13,
+                      height: 1.12,
+                      fontWeight: FontWeight.w700,
+                      color: !enabled
+                          ? Colors.grey
+                          : phase && open
+                          ? neonLime
+                          : const Color(0xFFF9EDF3),
+                    ),
                   ),
                 ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: Text(
-                  phase ? p.title : child!.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: phase ? 16 : 14,
-                    height: 1.15,
-                    fontWeight: FontWeight.w700,
-                    color: !enabled
-                        ? Colors.grey
-                        : phase && open
-                        ? neonLime
-                        : const Color(0xFFF9EAF2),
+                phase ? _phaseMenu(p) : _childMenu(p, child!),
+                Semantics(
+                  label: duration.semantics,
+                  child: Text(
+                    duration.label,
+                    key: ValueKey('duration-$id'),
+                    style: TextStyle(
+                      fontSize: phase ? 12 : 11,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
-              ),
-              if (open) phase ? _phaseMenu(p) : _childMenu(p, child!),
-              Semantics(
-                label: duration.semantics,
-                child: Text(
-                  duration.label,
-                  key: ValueKey('duration-$id'),
-                  style: TextStyle(
-                    fontSize: phase ? 14 : 12,
-                    fontWeight: FontWeight.w600,
+                SizedBox(
+                  width: 34,
+                  height: 36,
+                  child: IconButton(
+                    key: ValueKey('expand-$id'),
+                    tooltip: open ? 'Свернуть' : 'Раскрыть',
+                    onPressed: _busy ? null : () => _toggle(id),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 34,
+                      minHeight: 36,
+                    ),
+                    icon: Icon(
+                      open
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: neonPink,
+                      size: 26,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                key: ValueKey('expand-$id'),
-                tooltip: open ? 'Свернуть' : 'Раскрыть',
-                onPressed: _busy ? null : () => _toggle(id),
-                icon: Icon(
-                  open ? Icons.remove : Icons.add,
-                  color: neonPink,
-                  size: 23,
-                ),
-                style: IconButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    side: const BorderSide(color: neonPink),
-                  ),
-                  visualDensity: VisualDensity.compact,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
     } else if (add) {
       content = Align(
         alignment: Alignment.centerLeft,
-        child: OutlinedButton.icon(
-          onPressed: _busy
-              ? null
-              : () => _addMenu(p, child: moduleBody ? child : null),
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(48, 48),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7),
+        child: SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            onPressed: _busy
+                ? null
+                : () => _run(() => _addMenu(p, child: inModule ? child : null)),
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerLeft,
+              minimumSize: const Size(48, 36),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              foregroundColor: neonLime,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            side: const BorderSide(color: neonLime),
-            foregroundColor: neonLime,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Добавить', style: TextStyle(fontSize: 12)),
           ),
-          icon: const Icon(Icons.add, size: 18),
-          label: const Text('Добавить', style: TextStyle(fontSize: 13)),
         ),
       );
     } else {
@@ -726,60 +787,51 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
         child: content,
       );
     }
-    if (!phase) {
-      final inside = module || moduleBody;
-      content = Container(
-        margin: const EdgeInsets.only(left: 8),
-        padding: EdgeInsets.only(
-          left: inside ? 7 : 3,
-          right: 3,
-          top: module ? 7 : 2,
-          bottom: row.level == StructureLevel.addPhaseChild ? 10 : 2,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(color: neonPink.withValues(alpha: .55)),
-            right: BorderSide(color: neonPink.withValues(alpha: .55)),
-            bottom: row.level == StructureLevel.addPhaseChild
-                ? const BorderSide(color: neonPink)
-                : BorderSide.none,
-          ),
-        ),
-        child: inside
-            ? Container(
-                margin: const EdgeInsets.only(left: 5),
-                padding: const EdgeInsets.only(left: 3, right: 2),
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: const Color(0xFFDB9DAE).withValues(alpha: .6),
-                    ),
-                    bottom: row.level == StructureLevel.addModuleItem
-                        ? const BorderSide(color: Color(0xFFDB9DAE))
-                        : BorderSide.none,
-                  ),
-                ),
-                child: content,
-              )
-            : content,
-      );
-    } else {
-      content = Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(color: neonPink.withValues(alpha: .75)),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(color: neonPink.withValues(alpha: .3), blurRadius: 8),
-              BoxShadow(color: neonPink.withValues(alpha: .12), blurRadius: 15),
-            ],
-          ),
+    if (inModule) {
+      content = StructurePanelSegment(
+        key: ValueKey('module-frame-${child!.id}-${row.id}'),
+        first: module,
+        last: module
+            ? !_open(row.id)
+            : row.level == StructureLevel.addModuleItem,
+        module: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: content,
         ),
       );
     }
-    return Container(key: ValueKey(row.id), child: content);
+    return Container(
+      key: ValueKey(row.id),
+      padding: EdgeInsets.only(top: phase ? 7 : 0),
+      child: StructurePanelSegment(
+        key: ValueKey('phase-frame-${p.id}-${row.id}'),
+        first: phase,
+        last: phase
+            ? !_open(row.id)
+            : row.level == StructureLevel.addPhaseChild,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            phase ? 4 : 8,
+            phase
+                ? 2
+                : module
+                ? 5
+                : 0,
+            phase ? 4 : 8,
+            phase
+                ? 2
+                : row.level == StructureLevel.addPhaseChild
+                ? 5
+                : row.level == StructureLevel.addModuleItem ||
+                      module && !_open(row.id)
+                ? 4
+                : 0,
+          ),
+          child: content,
+        ),
+      ),
+    );
   }
 
   Widget _phaseMenu(PhaseInstance p) => PopupMenuButton<String>(
@@ -788,8 +840,14 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     enabled: !_busy,
     padding: EdgeInsets.zero,
     icon: const Icon(Icons.more_horiz, color: neonPink),
-    iconSize: 20,
+    style: IconButton.styleFrom(
+      minimumSize: const Size(28, 36),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: EdgeInsets.zero,
+    ),
+    iconSize: 19,
     onSelected: (v) => _run(() async {
+      if (v == 'addAfter') await _addPhase(afterPhaseId: p.id);
       if (v == 'toggle') {
         await c.updatePhase(p.copyWith(enabled: !p.enabled));
       }
@@ -813,6 +871,10 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       }
     }),
     itemBuilder: (_) => [
+      const PopupMenuItem(
+        value: 'addAfter',
+        child: Text('Добавить фазу после'),
+      ),
       PopupMenuItem(
         value: 'toggle',
         child: Text(p.enabled ? 'Выключить фазу' : 'Включить фазу'),
@@ -830,8 +892,14 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     enabled: !_busy,
     padding: EdgeInsets.zero,
     icon: const Icon(Icons.more_horiz, color: neonPink),
-    iconSize: 20,
+    style: IconButton.styleFrom(
+      minimumSize: const Size(28, 36),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: EdgeInsets.zero,
+    ),
+    iconSize: 19,
     onSelected: (v) => _run(() async {
+      if (v == 'addAfter') await _addMenu(p, afterId: child.id);
       if (v == 'edit') await _editModule(p, child);
       if (v == 'saveModule' && mounted) {
         await saveModuleCopyDialog(context, c, child);
@@ -879,6 +947,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       }
     }),
     itemBuilder: (_) => [
+      const PopupMenuItem(value: 'addAfter', child: Text('Добавить после')),
       const PopupMenuItem(value: 'edit', child: Text('Редактировать модуль')),
       const PopupMenuItem(
         value: 'saveModule',
@@ -907,6 +976,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     Widget handle,
   ) => StructureItemRow(
     step: s,
+    compact: true,
     handle: handle,
     onPause: _busy
         ? null
@@ -929,9 +999,21 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
       tooltip: 'Действия элемента',
       enabled: !_busy,
       padding: EdgeInsets.zero,
-      iconSize: 20,
+      style: IconButton.styleFrom(
+        minimumSize: const Size(28, 36),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: EdgeInsets.zero,
+      ),
+      iconSize: 19,
       onSelected: (v) => _run(() async {
-        if (v == 'before') {
+        if (v == 'addAfter') {
+          await _addMenu(
+            p,
+            child: child.isModule ? child : null,
+            afterId: child.isModule ? s.id : child.id,
+          );
+        }
+        if (v == 'before' && mounted) {
           await Navigator.push<void>(
             context,
             MaterialPageRoute(
@@ -983,6 +1065,7 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
         }
       }),
       itemBuilder: (_) => [
+        const PopupMenuItem(value: 'addAfter', child: Text('Добавить после')),
         if (s.kind == StepKind.audio)
           const PopupMenuItem(value: 'preview', child: Text('Прослушать')),
         PopupMenuItem(

@@ -11,10 +11,12 @@ class StructureShell extends StatelessWidget {
     required this.summary,
     required this.child,
     required this.footer,
+    this.actions = const [],
   });
   final String title;
   final VoidCallback onBack;
   final Widget summary, child, footer;
+  final List<Widget> actions;
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFF14030D),
@@ -60,6 +62,7 @@ class StructureShell extends StatelessWidget {
                       ),
                     ),
                   ),
+                  ...actions,
                 ],
               ),
             ),

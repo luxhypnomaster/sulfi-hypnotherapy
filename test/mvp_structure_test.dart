@@ -560,7 +560,7 @@ void main() {
   }
 
   testWidgets(
-    'four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only',
+    'three footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only',
     (t) async {
       addTearDown(t.view.resetPhysicalSize);
       addTearDown(t.view.resetDevicePixelRatio);
@@ -574,7 +574,7 @@ void main() {
           of: find.byKey(const Key('structure-footer')),
           matching: find.byType(StructureFooterButton),
         ),
-        findsNWidgets(4),
+        findsNWidgets(3),
       );
       await t.tap(find.byKey(const ValueKey('expand-prep')));
       await t.pumpAndSettle();
@@ -645,7 +645,7 @@ void main() {
       await t.tap(find.text('Открыть'));
       await settleIo(t);
       await t.pumpAndSettle();
-      await t.tap(find.text('Добавить\nфазу'));
+      await t.tap(find.byTooltip('Добавить фазу'));
       await t.pumpAndSettle();
       await t.tap(
         find.descendant(
@@ -889,7 +889,7 @@ void main() {
         t,
         ModularStructureScreen(controller: c, player: MemoryPlayer()),
       );
-      await t.tap(find.text('Добавить\nфазу'));
+      await t.tap(find.byTooltip('Добавить фазу'));
       await t.pumpAndSettle();
       await t.tap(
         find.descendant(
@@ -898,7 +898,7 @@ void main() {
         ),
       );
       await t.pumpAndSettle();
-      await t.tap(find.text('Выбрать\nшаблон'));
+      await t.tap(find.text('Выбрать'));
       await settleIo(t);
       await t.pumpAndSettle();
       await t.tap(find.byKey(ValueKey('template-${template!.id}')));
@@ -1033,7 +1033,7 @@ void main() {
     },
   );
   testWidgets(
-    'safe 360dp and 200 percent fonts keep all four actions and final add reachable',
+    'safe 360dp and 200 percent fonts keep all three actions and final add reachable',
     (t) async {
       for (final size in [
         const Size(360, 640),
@@ -1052,12 +1052,7 @@ void main() {
         );
         expect(t.takeException(), isNull);
         expect(find.byKey(const Key('structure-footer')), findsOneWidget);
-        for (final label in [
-          'Добавить\nфазу',
-          'Выбрать\nшаблон',
-          'Сохранить\nшаблон',
-          'Применить',
-        ]) {
+        for (final label in ['Выбрать', 'Сохранить', 'Применить']) {
           expect(find.text(label).hitTestable(), findsOneWidget);
         }
         await t.scrollUntilVisible(
@@ -1070,6 +1065,7 @@ void main() {
               )
               .first,
         );
+        await t.pumpAndSettle();
         expect(
           find.byKey(const ValueKey('add-exit')).hitTestable(),
           findsOneWidget,
@@ -1078,6 +1074,293 @@ void main() {
       }
       t.view.resetPhysicalSize();
       t.view.resetDevicePixelRatio();
+    },
+  );
+  Future<void> showMixedStructure(
+    WidgetTester t, {
+    Size size = const Size(412, 915),
+  }) async {
+    await t.runAsync(
+      () => c.changePhases(
+        (_) => [
+          PhaseInstance(
+            id: 'mixed',
+            typeId: 'work',
+            title: 'Смешанная фаза',
+            children: [
+              PhaseChild(
+                id: 'before',
+                title: 'Прямой трек',
+                items: [track('direct-track', 'a', 114000)],
+              ),
+              module('nested', definition(), 'mixed'),
+              PhaseChild(
+                id: 'after',
+                title: 'Прямая пауза',
+                items: [interval('direct-pause', 5000)],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+    await show(
+      t,
+      ModularStructureScreen(controller: c, player: MemoryPlayer()),
+      size: size,
+    );
+  }
+
+  Finder structureItem(String id) => find.descendant(
+    of: find.byKey(ValueKey(id)),
+    matching: find.byType(StructureItemRow),
+  );
+  Future<void> addAfter(WidgetTester t, String id, String action) async {
+    await t.ensureVisible(find.byKey(ValueKey('menu-$id')));
+    await t.pumpAndSettle();
+    await t.tap(find.byKey(ValueKey('menu-$id')));
+    await t.pumpAndSettle();
+    await t.tap(find.text('Добавить после'));
+    await t.pumpAndSettle();
+    await t.tap(find.text(action));
+    await settleIo(t);
+    await t.pumpAndSettle();
+  }
+
+  testWidgets(
+    'task2 hierarchy encloses module rows, keeps direct rows outside and uses independent arrows and menus',
+    (t) async {
+      await showMixedStructure(t, size: const Size(360, 640));
+      final before = c.draft.plan.fingerprint;
+      final phase = t.getRect(
+            find.byKey(const ValueKey('phase-frame-mixed-mixed')),
+          ),
+          module = t.getRect(
+            find.byKey(const ValueKey('module-frame-nested-nested')),
+          ),
+          item = t.getRect(structureItem('focus')),
+          direct = t.getRect(structureItem('direct-track')),
+          end = t.getRect(
+            find.byKey(const ValueKey('module-frame-nested-add-nested')),
+          );
+      expect(module.left, greaterThan(phase.left));
+      expect(module.right, lessThan(phase.right));
+      expect(item.left, greaterThan(module.left));
+      expect(direct.left, lessThan(item.left));
+      expect(item.top, greaterThanOrEqualTo(module.bottom));
+      expect(
+        end.bottom,
+        lessThan(t.getRect(structureItem('direct-pause')).top),
+      );
+      expect(item.height, lessThanOrEqualTo(44));
+      expect(module.height, lessThanOrEqualTo(42));
+      expect(phase.height, lessThanOrEqualTo(48));
+      final arrow = t.getRect(find.byKey(const ValueKey('expand-nested')));
+      await t.tap(find.byKey(const ValueKey('menu-nested')));
+      await t.pumpAndSettle();
+      expect(structureItem('focus'), findsOneWidget);
+      await t.tapAt(const Offset(2, 2));
+      await t.pumpAndSettle();
+      await t.tap(find.byKey(const ValueKey('expand-nested')));
+      await t.pumpAndSettle();
+      expect(structureItem('focus'), findsNothing);
+      expect(structureItem('direct-track'), findsOneWidget);
+      expect(structureItem('direct-pause'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('menu-nested')).hitTestable(),
+        findsOneWidget,
+      );
+      expect(t.getRect(find.byKey(const ValueKey('expand-nested'))), arrow);
+      expect(c.draft.plan.fingerprint, before);
+      await capture(t, 'task2-mixed-module-collapsed');
+      await t.tap(find.byKey(const ValueKey('expand-nested')));
+      await t.pumpAndSettle();
+      await capture(t, 'task2-mixed-expanded');
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'task2 insert after module and after track keeps repeated audio, pauses and exact parents until Apply',
+    (t) async {
+      await showMixedStructure(t);
+      final before = c.draft.plan.fingerprint;
+      await addAfter(t, 'nested', 'Трек из библиотеки');
+      for (var i = 0; i < 2; i++) {
+        await t.tap(find.byKey(const ValueKey('pick-a')));
+        await settleIo(t);
+        await t.pumpAndSettle();
+      }
+      await t.binding.handlePopRoute();
+      await settleIo(t);
+      await t.pumpAndSettle();
+      await addAfter(t, 'focus', 'Добавить паузу');
+      await t.tap(find.text('Применить'));
+      await t.pumpAndSettle();
+      expect(c.draft.plan.fingerprint, before);
+      await footerApply(t);
+      final children = c.draft.plan.phases!.single.children;
+      expect(children.first.id, 'before');
+      expect(children[1].id, 'nested');
+      expect(children.last.id, 'after');
+      expect(children.map((c) => c.isModule), [
+        false,
+        true,
+        false,
+        false,
+        false,
+      ]);
+      expect(children.skip(2).take(2).map((c) => c.items.single.audioAssetId), [
+        'a',
+        'a',
+      ]);
+      expect(children[1].items.map((s) => s.id).first, 'focus');
+      expect(children[1].items[1].kind, StepKind.silence);
+      expect(children[1].items[1].durationMs, 0);
+      expect(children[1].items[2].id, 'pause');
+      expect(c.draft.plan.totalMs, 644000);
+      expect(c.draft.plan.allSteps.map((s) => s.id).toSet(), hasLength(8));
+      expect(c.modules.entries.single.items, hasLength(3));
+      expect(
+        (await t.runAsync(sessions.loadDraft))!.plan.fingerprint,
+        c.draft.plan.fingerprint,
+      );
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'task2 phase insertion and three footer actions preserve template and explicit current-plan commit',
+    (t) async {
+      await show(
+        t,
+        ModularStructureScreen(controller: c, player: MemoryPlayer()),
+        size: const Size(412, 915),
+      );
+      final before = c.draft.plan.fingerprint;
+      await t.tap(find.byKey(const ValueKey('menu-prep')));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Добавить фазу после'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Проработка'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Сохранить'));
+      await t.pumpAndSettle();
+      await t.enterText(find.byType(TextFormField).first, 'Смешанный план');
+      await t.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text('Сохранить'),
+        ),
+      );
+      await settleIo(t);
+      await t.pumpAndSettle();
+      expect(c.draft.plan.fingerprint, before);
+      final saved = (await t.runAsync(sessions.templates))!.single;
+      expect(saved.plan.phases!.map((p) => p.typeId), [
+        'preparation',
+        'work',
+        'induction',
+        'exit',
+      ]);
+      await footerApply(t);
+      expect(c.draft.plan.phases!.map((p) => p.typeId), [
+        'preparation',
+        'work',
+        'induction',
+        'exit',
+      ]);
+      expect(c.draft.baseTemplateId, saved.id);
+      expect(
+        (await t.runAsync(sessions.templates))!.single.plan.fingerprint,
+        saved.plan.fingerprint,
+      );
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'task2 long-press moves module past a direct pause without losing nesting, IDs or playback order',
+    (t) async {
+      await showMixedStructure(t);
+      final ids = c.draft.plan.allSteps.map((s) => s.id).toSet(),
+          total = c.draft.plan.totalMs;
+      await t.tap(find.byKey(const ValueKey('expand-nested')));
+      await t.pumpAndSettle();
+      final from = t.getCenter(find.byKey(const ValueKey('nested'))),
+          to =
+              t.getCenter(find.byKey(const ValueKey('direct-pause'))) +
+              const Offset(0, 44);
+      final gesture = await t.startGesture(from);
+      await t.pump(const Duration(milliseconds: 600));
+      await gesture.moveBy(const Offset(0, 24));
+      await t.pump(const Duration(milliseconds: 80));
+      for (var n = 1; n <= 12; n++) {
+        await gesture.moveTo(
+          Offset.lerp(from + const Offset(0, 24), to, n / 12)!,
+        );
+        await t.pump(const Duration(milliseconds: 50));
+      }
+      await t.pump(const Duration(milliseconds: 700));
+      await capture(t, 'task2-drag-before-drop');
+      await gesture.up();
+      await t.pumpAndSettle();
+      await footerApply(t);
+      expect(c.draft.plan.phases!.single.children.map((c) => c.id), [
+        'before',
+        'after',
+        'nested',
+      ]);
+      expect(c.draft.plan.allSteps.map((s) => s.id).toSet(), ids);
+      expect(c.draft.plan.totalMs, total);
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      final run = (await t.runAsync(() => sessions.startRun(c.draft)))!;
+      expect(run.snapshot.plan.steps.map((s) => s.id), [
+        'direct-track',
+        'direct-pause',
+        'focus',
+        'pause',
+        'deep',
+      ]);
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'task2 container removal confirms and leaves source, catalogue and audio intact until Apply',
+    (t) async {
+      await showMixedStructure(t);
+      Future<void> removeModule() async {
+        await t.tap(find.byKey(const ValueKey('menu-nested')));
+        await t.pumpAndSettle();
+        await t.tap(find.text('Удалить экземпляр'));
+        await t.pumpAndSettle();
+      }
+
+      await removeModule();
+      expect(find.text('Удалить экземпляр модуля?'), findsOneWidget);
+      await t.tap(find.text('Отмена'));
+      await t.pumpAndSettle();
+      expect(structureItem('focus'), findsOneWidget);
+      await removeModule();
+      await t.tap(find.text('Удалить'));
+      await t.pumpAndSettle();
+      expect(structureItem('focus'), findsNothing);
+      expect(c.draft.plan.phases!.single.children, hasLength(3));
+      await t.tap(find.byKey(const ValueKey('menu-mixed')));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Удалить фазу'));
+      await t.pumpAndSettle();
+      expect(find.text('Удалить фазу?'), findsOneWidget);
+      await t.tap(find.text('Удалить'));
+      await t.pumpAndSettle();
+      expect(c.draft.plan.phases, hasLength(1));
+      await footerApply(t);
+      expect(c.draft.plan.phases, isEmpty);
+      expect(c.modules.entries.single.items, hasLength(3));
+      expect(
+        await t.runAsync(() => library.fileFor(c.asset('a')!).exists()),
+        true,
+      );
+      expect((await t.runAsync(sessions.history))!, isEmpty);
+      await t.pumpWidget(const SizedBox());
     },
   );
   Future<void> createModule(WidgetTester t) async {

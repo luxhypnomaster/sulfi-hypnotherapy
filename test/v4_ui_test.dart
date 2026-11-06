@@ -48,7 +48,7 @@ void main() {
         t,
         ModularStructureScreen(controller: c, player: MemoryPlayer()),
       );
-      await t.tap(find.text('Добавить\nфазу'));
+      await t.tap(find.byTooltip('Добавить фазу'));
       await t.pumpAndSettle();
       for (final p in phaseTypes) {
         expect(
@@ -67,7 +67,7 @@ void main() {
       );
       await t.pumpAndSettle();
       expect(c.draft.plan.phases, isNull);
-      await t.tap(find.text('Добавить\nфазу'));
+      await t.tap(find.byTooltip('Добавить фазу'));
       await t.pumpAndSettle();
       await t.tap(
         find.descendant(
