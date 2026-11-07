@@ -27,6 +27,7 @@ class TemplatesScreen extends StatefulWidget {
 
 class _TemplatesScreenState extends State<TemplatesScreen> {
   String _query = '';
+  String origin = 'all';
   bool _busy = false;
   SessionController get c => widget.controller;
   Future<void> _run(Future<void> Function() action) async {
@@ -111,6 +112,13 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     await c.reload();
   });
   Future<void> _action(String action, SessionTemplate t) => _run(() async {
+    if (t.origin == 'supplied' &&
+        ['rename', 'delete'].contains(action) &&
+        !(c.diary?.authenticated ?? false)) {
+      throw StateError(
+        'Общий шаблон изменяет только автор. Сохраните личный вариант.',
+      );
+    }
     if (action == 'rename') {
       final result = await askDetails(
         context,
@@ -129,6 +137,9 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             updatedAt: DateTime.now().toUtc(),
             version: t.version + 1,
             isDefault: t.isDefault,
+            origin: t.origin,
+            baseRevision: t.baseRevision,
+            author: t.author,
           ),
         );
       }
@@ -157,9 +168,11 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     builder: (context, _) {
       final visible = c.templates
           .where(
-            (t) => '${t.name} ${t.description}'.toLowerCase().contains(
-              _query.toLowerCase(),
-            ),
+            (t) =>
+                (origin == 'all' || t.origin == origin) &&
+                '${t.name} ${t.description}'.toLowerCase().contains(
+                  _query.toLowerCase(),
+                ),
           )
           .toList();
       final content = Column(
@@ -187,10 +200,20 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             ],
           ),
           TextField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               isDense: true,
               labelText: 'Найти шаблон',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: DropdownButton<String>(
+                value: origin,
+                underline: const SizedBox.shrink(),
+                onChanged: (value) => setState(() => origin = value!),
+                items: const [
+                  DropdownMenuItem(value: 'all', child: Text('Все')),
+                  DropdownMenuItem(value: 'supplied', child: Text('Общие')),
+                  DropdownMenuItem(value: 'personal', child: Text('Мои')),
+                ],
+              ),
             ),
             onChanged: (q) => setState(() => _query = q),
           ),

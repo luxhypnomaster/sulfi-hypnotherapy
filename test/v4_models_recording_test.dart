@@ -254,7 +254,14 @@ void main() {
         ),
       );
       final a = sampleAsset();
-      await db.insert('audio_assets', a.toMap());
+      await db.insert(
+        'audio_assets',
+        a.toMap()
+          ..remove('origin')
+          ..remove('contentHash')
+          ..remove('baseRevision')
+          ..remove('author'),
+      );
       final bytes = File('${dir.path}/${a.filePath}');
       await bytes.writeAsBytes([7, 8, 9]);
       final draft = CurrentSessionDraft(
@@ -377,6 +384,25 @@ void main() {
         expect(await library.fileFor(a).readAsBytes(), [1, 2, 3, 4]);
         expect(await File(temp).exists(), isFalse);
         expect(await r.save('Ещё', AudioCategory.work), isNull);
+      });
+      test('diary capture stores via same recorder without a library row; failure keeps raw take retryable', () async {
+        await r.start();
+        await r.finish();
+        final raw = r.path!;
+        final failed = await r.saveTo<String>(
+          (_) async => throw const FileSystemException('test disk failure'),
+        );
+        expect(failed, isNull);
+        expect(r.state, CaptureState.finished);
+        expect(await File(raw).exists(), isTrue);
+        expect(repo.items, isEmpty);
+        final stored = await r.saveTo(
+          (path) => File(path).copy('${dir.path}/diary-copy.m4a'),
+        );
+        expect(await stored!.readAsBytes(), [1, 2, 3, 4]);
+        expect(await File(raw).exists(), isFalse);
+        expect(repo.items, isEmpty);
+        expect(r.state, CaptureState.saved);
       });
       test(
         'delete only unsaved take and retains existing library files',

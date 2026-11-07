@@ -201,7 +201,7 @@ void main() {
   }
 
   testWidgets(
-    'P01 P02 P03 P10 P11 P18 P20 P28: real controls and current phase only',
+    'P01 P02 P03 P10 P11 P18 P20 P28: real controls and future phases stay open',
     (t) async {
       final f = (await t.runAsync(() => Fixture.create()))!;
       await open(t, f);
@@ -222,7 +222,7 @@ void main() {
       }
       expect(find.text('Личная подготовка — трек 1'), findsWidgets);
       expect(find.text('Личная подготовка — трек 2'), findsOneWidget);
-      expect(find.text('Первый рабочий модуль — трек 1'), findsNothing);
+      expect(find.text('Первый рабочий модуль — трек 1'), findsOneWidget);
       expect(find.text('Модуль: Первый рабочий модуль'), findsOneWidget);
       expect(find.text('Модуль: Второй рабочий модуль'), findsOneWidget);
       final button = t.widget<OutlinedButton>(
@@ -246,7 +246,10 @@ void main() {
       await settleEngine(t, f);
       expect(f.engine.paused, isTrue);
       expect(f.transport.plays, plays);
-      expect(find.text('Личная подготовка — трек 2'), findsNothing);
+      expect(
+        find.text('Личная подготовка — трек 2'),
+        findsOneWidget,
+      ); // skipped, not completed
       expect(find.text('Первый рабочий модуль — трек 24'), findsOneWidget);
       expect(find.text('Второй рабочий модуль — трек 2'), findsOneWidget);
       final nav = t.getTopLeft(find.byKey(const Key('player-navigation')));
@@ -349,16 +352,18 @@ void main() {
     },
   );
   testWidgets(
-    'L05: on-watch previous/next and PlayPause control the same run',
+    'L05: external previous/next and watch PlayPause control the same run',
     (t) async {
       final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
       await open(t, f);
       final run = f.engine.run!.id, first = f.engine.step!.id;
-      await t.tap(find.byKey(const Key('watch-next')));
+      expect(find.byKey(const Key('watch-next')), findsNothing);
+      expect(find.byKey(const Key('watch-previous')), findsNothing);
+      await t.tap(find.byKey(const Key('nav-track-next')));
       await settleEngine(t, f);
       expect(f.engine.step!.id, isNot(first));
       expect(f.engine.paused, isTrue);
-      await t.tap(find.byKey(const Key('watch-previous')));
+      await t.tap(find.byKey(const Key('nav-track-previous')));
       await settleEngine(t, f);
       expect(f.engine.step!.id, first);
       await t.tap(find.byKey(const Key('watch-play-pause')));
@@ -471,6 +476,84 @@ void main() {
       await close(t, f);
     },
   );
+  testWidgets(
+    'Task4 counters stay on right, flask percent on left and watch time below its control',
+    (t) async {
+      final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
+      await open(t, f);
+      expect(
+        t.getRect(find.byKey(const Key('session-totals'))).left,
+        greaterThan(206),
+      );
+      expect(
+        t.getRect(find.byKey(const Key('flask-percent'))).center.dx,
+        lessThan(206),
+      );
+      expect(find.byType(LinearProgressIndicator), findsNothing);
+      final play = t.getRect(find.byKey(const Key('watch-play-pause'))),
+          time = t.getRect(find.byKey(const Key('watch-time')));
+      expect(time.top, greaterThanOrEqualTo(play.bottom));
+      expect(find.byKey(const Key('watch-next')), findsNothing);
+      expect(find.byKey(const Key('watch-previous')), findsNothing);
+      await close(t, f);
+    },
+  );
+  testWidgets(
+    'Task4 naturally completed phase is green and collapsed; seek-to-end still completes',
+    (t) async {
+      final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
+      await open(t, f);
+      final phase = f.engine.currentEntry!.phase.id;
+      await t.runAsync(f.engine.resume);
+      await settleEngine(t, f);
+      for (var i = 0; i < 2; i++) {
+        if (f.engine.run!.phase == 'delay') {
+          f.engine.tick();
+          await settleEngine(t, f);
+        }
+        await t.runAsync(
+          () => f.engine.seek(const Duration(milliseconds: 64900)),
+        );
+        f.transport.completed = true;
+        f.engine.tick();
+        await settleEngine(t, f);
+      }
+      expect(f.engine.currentEntry!.phase.id, isNot(phase));
+      expect(find.text('Личная подготовка — трек 1'), findsNothing);
+      expect(find.text('Личная подготовка — трек 2'), findsNothing);
+      final row = find.byKey(ValueKey('player-phase-$phase'));
+      expect(
+        find.descendant(of: row, matching: find.byIcon(Icons.check_circle)),
+        findsOneWidget,
+      );
+      final text = t.widget<Text>(
+        find.descendant(of: row, matching: find.byType(Text)),
+      );
+      expect(text.style!.color, const Color(0xffa6ed49));
+      expect(
+        find.text('Личный выход — трек 1'),
+        findsOneWidget,
+      ); // future remains open
+      await close(t, f);
+    },
+  );
+  testWidgets('Task4 manually skipped phase stays incomplete and expanded', (
+    t,
+  ) async {
+    final f = (await t.runAsync(() => Fixture.create(workTracks: 2)))!;
+    await open(t, f);
+    final phase = f.engine.currentEntry!.phase.id;
+    await t.runAsync(() => f.engine.navigate(NavigationUnit.phase, true));
+    await settleEngine(t, f);
+    final row = find.byKey(ValueKey('player-phase-$phase'));
+    expect(
+      find.descendant(of: row, matching: find.byIcon(Icons.check_circle)),
+      findsNothing,
+    );
+    expect(find.text('Личная подготовка — трек 1'), findsOneWidget);
+    expect(find.text('Личная подготовка — трек 2'), findsOneWidget);
+    await close(t, f);
+  });
   testWidgets('optional V41 rendered screenshots', (t) async {
     const output = String.fromEnvironment('SULFI_V41_SCREENSHOTS');
     if (output.isEmpty) return;

@@ -8,11 +8,19 @@ import '../services/diary_controller.dart';
 import '../services/diary_api.dart';
 import 'diary_reader.dart';
 import 'design.dart';
+import 'session_scope.dart';
+import 'recorder_screen.dart';
 
 class DiaryEditor extends StatefulWidget {
-  const DiaryEditor({super.key, required this.diary, required this.entry});
+  const DiaryEditor({
+    super.key,
+    required this.diary,
+    required this.entry,
+    this.recordAudio,
+  });
   final DiaryController diary;
   final DiaryEntry entry;
+  final Future<DiaryBlock?> Function()? recordAudio;
   @override
   State<DiaryEditor> createState() => _DiaryEditorState();
 }
@@ -168,17 +176,73 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
       setState(() => error = 'Импорт вложений не настроен');
       return;
     }
+    var record = false;
+    if (type == DiaryBlockType.audio) {
+      final method = await showModalBottomSheet<String>(
+        context: context,
+        builder: (context) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.mic),
+                title: const Text('Записать аудио'),
+                onTap: () => Navigator.pop(context, 'record'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.audio_file_outlined),
+                title: const Text('Выбрать с телефона'),
+                onTap: () => Navigator.pop(context, 'pick'),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (method == null || !mounted) return;
+      record = method == 'record';
+      if (record && !await save()) return;
+      if (!mounted) return;
+    }
     setState(() => busy = true);
     try {
-      final imported = await store.import(type, blockId: replacing?.id);
-      if (imported != null && mounted) {
+      DiaryBlock? imported;
+      if (record) {
+        if (widget.recordAudio != null) {
+          imported = await widget.recordAudio!();
+        } else {
+          final scope = SessionScope.maybeOf(context);
+          if (scope == null) {
+            throw const FormatException('Диктофон недоступен в этом контексте');
+          }
+          imported = await Navigator.push<DiaryBlock>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RecorderScreen(
+                controller: scope.controller,
+                player: scope.player,
+                diaryRecording: true,
+              ),
+            ),
+          );
+        }
+        if (replacing != null && imported != null) {
+          imported = DiaryBlock.fromMap({
+            ...imported.toMap(),
+            'id': replacing.id,
+          });
+        }
+      } else {
+        imported = await store.import(type, blockId: replacing?.id);
+      }
+      final added = imported;
+      if (added != null && mounted) {
         setState(() {
           if (replacing == null) {
-            blocks.add(imported);
+            blocks.add(added);
           } else {
             final index = blocks.indexWhere((b) => b.id == replacing.id);
             if (index >= 0) {
-              blocks[index] = imported.copyWith(
+              blocks[index] = added.copyWith(
                 altText: replacing.altText,
                 caption: replacing.caption,
                 label: replacing.label,
@@ -509,6 +573,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       children: [
                         for (final type in DiaryBlockType.values)
                           OutlinedButton.icon(
+                            key: ValueKey('diary-add-${type.name}'),
                             onPressed: busy ? null : () => add(type),
                             icon: Icon(switch (type) {
                               DiaryBlockType.text => Icons.notes,

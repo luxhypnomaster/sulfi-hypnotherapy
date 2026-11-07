@@ -230,6 +230,30 @@ class RecorderService extends ChangeNotifier {
     return result;
   }
 
+  /// Reuse capture for a diary block without inserting an unwanted library row.
+  Future<T?> saveTo<T>(Future<T> Function(String path) store) async {
+    T? result;
+    await _command(() async {
+      if (!canSave || path == null) return;
+      state = CaptureState.saving;
+      _notify();
+      try {
+        result = await store(path!);
+        state = CaptureState.saved;
+        try {
+          await File(path!).delete();
+        } catch (_) {
+          /* copied bytes are safe */
+        }
+        path = null;
+      } catch (_) {
+        state = CaptureState.finished;
+        rethrow;
+      }
+    });
+    return result;
+  }
+
   Future<void> discard() => _command(() async {
     await backend.cancel();
     await _levels?.cancel();

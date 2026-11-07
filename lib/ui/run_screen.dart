@@ -23,6 +23,37 @@ class _RunScreenState extends State<RunScreen> {
   SessionEngine get e => widget.engine;
   final _scroll = ScrollController();
   final Map<String, GlobalKey> _rowKeys = {};
+  final Map<String, bool> _expanded = {};
+  final Set<String> _completedGroups = {};
+  String? _expandedForStep;
+  void _syncExpansion() {
+    final done = e.run!.completedStepIds.toSet();
+    final timeline = e.timeline;
+    for (final phase in timeline.phases) {
+      for (final id in [
+        phase.id,
+        ...phase.children.where((c) => c.isModule).map((c) => c.id),
+      ]) {
+        final entries = timeline.entries
+            .where((x) => x.phase.id == id || x.child.id == id)
+            .toList();
+        final completed =
+            entries.isNotEmpty &&
+            entries.every((x) => done.contains(x.step.id));
+        if (completed && _completedGroups.add(id)) _expanded[id] = false;
+        if (!completed) _completedGroups.remove(id);
+      }
+    }
+    if (_expandedForStep != e.step?.id) {
+      _expandedForStep = e.step?.id;
+      final current = e.currentEntry;
+      if (current != null && e.active) {
+        _expanded[current.phase.id] = true;
+        _expanded[current.child.id] = true;
+      }
+    }
+  }
+
   String? _lastItem;
   double? _scrubMs;
   bool _historyQueued = false;
@@ -180,6 +211,7 @@ class _RunScreenState extends State<RunScreen> {
     child: ListenableBuilder(
       listenable: e,
       builder: (context, _) {
+        _syncExpansion();
         _scrollToCurrent();
         final run = e.run!, f = e.forecast;
         final title = run.snapshot.topicText.trim().isNotEmpty
@@ -236,11 +268,14 @@ class _RunScreenState extends State<RunScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
+                                      _totals(f),
+                                      const SizedBox(height: 4),
                                       if (!landscape) Flexible(child: _watch()),
                                       if (!landscape && body.maxHeight >= 380)
                                         _info(compact: compact),
                                       if (!landscape) const SizedBox(height: 6),
                                       _navigation(
+                                        height: landscape ? 30 : 48,
                                         compact:
                                             box.maxWidth < 390 ||
                                             MediaQuery.textScalerOf(context)
@@ -249,7 +284,7 @@ class _RunScreenState extends State<RunScreen> {
                                       ),
                                       const SizedBox(height: 8),
                                       SizedBox(
-                                        height: 52,
+                                        height: landscape ? 44 : 52,
                                         child: FilledButton.icon(
                                           key: const Key('finish-session'),
                                           style: FilledButton.styleFrom(
@@ -366,7 +401,6 @@ class _RunScreenState extends State<RunScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          Expanded(child: _totals(f)),
         ],
       );
     }
@@ -386,7 +420,6 @@ class _RunScreenState extends State<RunScreen> {
         else
           slogan,
         date,
-        _totals(f),
       ],
     );
   }
@@ -436,24 +469,6 @@ class _RunScreenState extends State<RunScreen> {
               ),
           ],
         ),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            Expanded(
-              child: LinearProgressIndicator(
-                value: f.progress ?? 0,
-                minHeight: 5,
-                color: neonPink,
-                backgroundColor: const Color(0xff42112d),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              f.progress == null ? '≈' : '${(f.progress! * 100).round()}%',
-              style: const TextStyle(fontSize: 11),
-            ),
-          ],
-        ),
       ],
     ),
   );
@@ -468,6 +483,7 @@ class _RunScreenState extends State<RunScreen> {
       required bool isPhase,
       bool active = false,
       Key? key,
+      VoidCallback? onTap,
     }) {
       final completed =
           entries.isNotEmpty && entries.every((x) => done.contains(x.step.id));
@@ -493,45 +509,53 @@ class _RunScreenState extends State<RunScreen> {
           : antiqueGold;
       return Semantics(
         label: '$title. $label',
+        button: onTap != null,
+        onTap: onTap,
         excludeSemantics: true,
-        child: Container(
-          key: key,
-          margin: const EdgeInsets.only(bottom: 5),
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
-          decoration: BoxDecoration(
-            color: active ? const Color(0xff4a002c) : Colors.transparent,
-            border: isPhase
-                ? Border(bottom: BorderSide(color: color.withValues(alpha: .4)))
-                : null,
-            borderRadius: isPhase ? null : BorderRadius.circular(6),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                active
-                    ? Icons.play_circle
-                    : completed
-                    ? Icons.check_circle
-                    : omit
-                    ? Icons.skip_next
-                    : Icons.circle_outlined,
-                size: 14,
-                color: color,
-              ),
-              const SizedBox(width: 3),
-              Expanded(
-                child: Text(
-                  title,
-                  maxLines: null,
-                  style: TextStyle(
-                    fontSize: isPhase ? 13 : 12,
-                    color: color,
-                    fontWeight: isPhase ? FontWeight.w700 : FontWeight.normal,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            key: key,
+            margin: const EdgeInsets.only(bottom: 2),
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+            decoration: BoxDecoration(
+              color: active ? const Color(0xff4a002c) : Colors.transparent,
+              border: isPhase
+                  ? Border(
+                      bottom: BorderSide(color: color.withValues(alpha: .4)),
+                    )
+                  : null,
+              borderRadius: isPhase ? null : BorderRadius.circular(6),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  active
+                      ? Icons.play_circle
+                      : completed
+                      ? Icons.check_circle
+                      : omit
+                      ? Icons.skip_next
+                      : Icons.circle_outlined,
+                  size: 12,
+                  color: color,
+                ),
+                const SizedBox(width: 2),
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: null,
+                    style: TextStyle(
+                      fontSize: isPhase ? 12 : 11,
+                      height: 1.15,
+                      color: color,
+                      fontWeight: isPhase ? FontWeight.w700 : FontWeight.normal,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -539,7 +563,7 @@ class _RunScreenState extends State<RunScreen> {
 
     return LayoutBuilder(
       builder: (context, box) {
-        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(64.0, 120.0);
+        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(42.0, 72.0);
         return Stack(
           children: [
             Positioned(
@@ -558,7 +582,7 @@ class _RunScreenState extends State<RunScreen> {
               ),
             ),
             Positioned.fill(
-              left: flaskWidth * .95,
+              left: flaskWidth * .98,
               child: SingleChildScrollView(
                 controller: _scroll,
                 key: const Key('phase-scale'),
@@ -572,38 +596,75 @@ class _RunScreenState extends State<RunScreen> {
                             .where((x) => x.phase.id == phase.id)
                             .toList(),
                         isPhase: true,
+                        key: ValueKey('player-phase-${phase.id}'),
+                        onTap: () => setState(
+                          () => _expanded[phase.id] =
+                              !(_expanded[phase.id] ?? true),
+                        ),
                         active: e.active && current?.phase.id == phase.id,
                       ),
-                      for (final child in phase.children.where(
-                        (c) =>
-                            c.enabled &&
-                            timeline.entries.any((x) => x.child.id == c.id),
-                      )) ...[
-                        if (child.isModule)
-                          row(
-                            'Модуль: ${child.title}',
-                            timeline.entries
-                                .where((x) => x.child.id == child.id)
-                                .toList(),
-                            isPhase: false,
-                          ),
-                        if (e.active && current?.phase.id == phase.id)
-                          for (final entry in timeline.entries.where(
-                            (x) => x.child.id == child.id,
-                          ))
+                      if (_expanded[phase.id] ?? true)
+                        for (final child in phase.children.where(
+                          (c) =>
+                              c.enabled &&
+                              timeline.entries.any((x) => x.child.id == c.id),
+                        )) ...[
+                          if (child.isModule)
                             row(
-                              '${entry.step.kind == StepKind.audio ? '' : '${entry.step.kind.label}: '}${entry.step.title}',
-                              [entry],
+                              'Модуль: ${child.title}',
+                              timeline.entries
+                                  .where((x) => x.child.id == child.id)
+                                  .toList(),
                               isPhase: false,
-                              key: _rowKeys.putIfAbsent(
-                                entry.step.id,
-                                GlobalKey.new,
+                              key: ValueKey('player-module-${child.id}'),
+                              onTap: () => setState(
+                                () => _expanded[child.id] =
+                                    !(_expanded[child.id] ?? true),
                               ),
-                              active: current?.step.id == entry.step.id,
                             ),
-                      ],
+                          if (!child.isModule || (_expanded[child.id] ?? true))
+                            for (final entry in timeline.entries.where(
+                              (x) => x.child.id == child.id,
+                            ))
+                              row(
+                                '${entry.step.kind == StepKind.audio ? '' : '${entry.step.kind.label}: '}${entry.step.title}',
+                                [entry],
+                                isPhase: false,
+                                key: _rowKeys.putIfAbsent(
+                                  entry.step.id,
+                                  GlobalKey.new,
+                                ),
+                                active: current?.step.id == entry.step.id,
+                              ),
+                        ],
                     ],
                   ],
+                ),
+              ),
+            ),
+            Positioned(
+              left: flaskWidth * .13,
+              bottom: box.maxHeight * .025,
+              width: flaskWidth * .67,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  e.forecast.progress == null
+                      ? '≈'
+                      : '${(e.forecast.progress! * 100).round()}%',
+                  key: const Key('flask-percent'),
+                  style: const TextStyle(
+                    color: antiqueGold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 3,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -641,6 +702,7 @@ class _RunScreenState extends State<RunScreen> {
         math.max(144.0, box.maxHeight * 470 / 595),
       );
       final height = math.min(box.maxHeight, width * 595 / 470);
+      final buttonSize = math.min(48.0, math.max(20.0, height * .18));
       Future<void> commit() async {
         final value = _scrubMs;
         if (value == null || !e.canSeek || e.busy) return;
@@ -664,26 +726,6 @@ class _RunScreenState extends State<RunScreen> {
         return true;
       }
 
-      Widget track(bool forward) => IconButton(
-        key: Key(forward ? 'watch-next' : 'watch-previous'),
-        tooltip: forward
-            ? 'Следующий трек на часах'
-            : 'Предыдущий трек на часах',
-        onPressed:
-            !e.active ||
-                e.busy ||
-                e.navigationTarget(NavigationUnit.track, forward) == null
-            ? null
-            : () => showActionError(
-                context,
-                () => e.navigate(NavigationUnit.track, forward),
-              ),
-        icon: Icon(
-          forward ? Icons.skip_next : Icons.skip_previous,
-          color: neonPink,
-          size: 22,
-        ),
-      );
       return Align(
         alignment: Alignment.topCenter,
         heightFactor: 1,
@@ -736,7 +778,8 @@ class _RunScreenState extends State<RunScreen> {
                 Positioned(
                   left: width * .12,
                   right: width * .17,
-                  top: height * .48,
+                  top: height * .66,
+                  key: const Key('watch-time'),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
@@ -751,14 +794,16 @@ class _RunScreenState extends State<RunScreen> {
               Positioned(
                 left: width * .1,
                 right: width * .16,
-                top: (height * .57).clamp(0.0, math.max(0.0, height - 48)),
+                top: (height * .43).clamp(
+                  0.0,
+                  math.max(0.0, height - buttonSize),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: track(false)),
                     SizedBox(
-                      width: 48,
-                      height: 48,
+                      width: buttonSize,
+                      height: buttonSize,
                       child: IconButton.filled(
                         key: const Key('watch-play-pause'),
                         tooltip: e.paused
@@ -777,11 +822,10 @@ class _RunScreenState extends State<RunScreen> {
                               ),
                         icon: Icon(
                           e.paused ? Icons.play_arrow : Icons.pause,
-                          size: 26,
+                          size: buttonSize * .55,
                         ),
                       ),
                     ),
-                    Expanded(child: track(true)),
                   ],
                 ),
               ),
@@ -837,7 +881,7 @@ class _RunScreenState extends State<RunScreen> {
     );
   }
 
-  Widget _navigation({required bool compact}) => Column(
+  Widget _navigation({required bool compact, double height = 48}) => Column(
     key: const Key('player-navigation'),
     children: [
       for (final unit in NavigationUnit.values)
@@ -881,7 +925,7 @@ class _RunScreenState extends State<RunScreen> {
                           ? label
                           : '$label. Между позициями $between интервалов; переход будет отмечен в истории.';
                       return SizedBox(
-                        height: 48,
+                        height: height,
                         child: Tooltip(
                           message: hint,
                           child: OutlinedButton(

@@ -12,6 +12,9 @@ import '../services/session_audio_handler.dart';
 import '../models/local_dates.dart';
 import 'design.dart';
 import 'module_assignment.dart';
+import '../models/diary_entry.dart';
+import '../services/device_files.dart';
+import 'recorder_microphone.dart';
 
 class RecorderScreen extends StatefulWidget {
   const RecorderScreen({
@@ -19,10 +22,12 @@ class RecorderScreen extends StatefulWidget {
     required this.controller,
     required this.player,
     this.backend,
+    this.diaryRecording = false,
   });
   final SessionController controller;
   final PreviewPlayer player;
   final CaptureBackend? backend;
+  final bool diaryRecording;
   @override
   State<RecorderScreen> createState() => _RecorderScreenState();
 }
@@ -44,11 +49,20 @@ class _RecorderScreenState extends State<RecorderScreen>
   final _choice = ModuleChoice();
   AudioCategory _category = AudioCategory.freeform;
   bool _allowPop = false;
+  bool _awake = false;
+  void _wake() {
+    final awake = r.state == CaptureState.recording;
+    if (_awake == awake) return;
+    _awake = awake;
+    unawaited(DeviceFiles.keepAwake(awake));
+  }
+
   StreamSubscription<dynamic>? _focus;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    r.addListener(_wake);
     unawaited(Future.microtask(_initialize));
   }
 
@@ -87,6 +101,8 @@ class _RecorderScreenState extends State<RecorderScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    r.removeListener(_wake);
+    unawaited(DeviceFiles.keepAwake(false));
     unawaited(_focus?.cancel());
     unawaited(Future.microtask(widget.player.stop));
     unawaited(r.close());
@@ -157,6 +173,21 @@ class _RecorderScreenState extends State<RecorderScreen>
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
     await widget.player.stop();
+    if (widget.diaryRecording) {
+      final store = widget.controller.diary?.mediaStore;
+      if (store == null) return;
+      final block = await r.saveTo(
+        (path) async => (await store.importFile(DiaryBlockType.audio, (
+          name: '${_title.text}.m4a',
+          path: path,
+        ))).copyWith(label: _title.text),
+      );
+      if (block != null && mounted) {
+        setState(() => _allowPop = true);
+        Navigator.pop(context, block);
+      }
+      return;
+    }
     final asset = await r.save(
       _title.text,
       _category,
@@ -211,7 +242,10 @@ class _RecorderScreenState extends State<RecorderScreen>
           CaptureState.error => 'Ошибка записи',
         };
         return Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            toolbarHeight: 46,
             leading: IconButton(
               tooltip: 'Отмена',
               onPressed: _cancel,
@@ -221,21 +255,28 @@ class _RecorderScreenState extends State<RecorderScreen>
               children: [
                 Image.asset('assets/brand/spiral.png', width: 36),
                 const SizedBox(width: 8),
-                const Text('Запись трека'),
+                const Text(
+                  'Запись трека',
+                  style: TextStyle(
+                    color: neonLime,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ],
             ),
           ),
           body: SafeArea(
+            top: false,
             child: Column(
               children: [
                 SizedBox(
-                  height: 32,
+                  height: 46 + MediaQuery.viewPaddingOf(context).top,
                   child: ExcludeSemantics(
                     child: Image.asset(
                       'assets/art/sulfi_header.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      alignment: Alignment.centerRight,
+                      alignment: const Alignment(1, .3),
                     ),
                   ),
                 ),
@@ -265,6 +306,7 @@ class _RecorderScreenState extends State<RecorderScreen>
                                   ? 'Введите название'
                                   : null,
                             ),
+                            const SizedBox(height: 6),
                             TextFormField(
                               controller: _description,
                               decoration: const InputDecoration(
@@ -273,6 +315,7 @@ class _RecorderScreenState extends State<RecorderScreen>
                               ),
                               maxLines: 1,
                             ),
+                            const SizedBox(height: 6),
                             DropdownButtonFormField<AudioCategory>(
                               initialValue: _category,
                               isExpanded: true,
@@ -290,28 +333,23 @@ class _RecorderScreenState extends State<RecorderScreen>
                                   .toList(),
                               onChanged: (v) => setState(() => _category = v!),
                             ),
-                            ExpansionTile(
-                              title: const Text(
-                                'Теги и модуль',
-                                style: TextStyle(fontSize: 12),
+                            const SizedBox(height: 6),
+                            TextFormField(
+                              controller: _tags,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                labelText: 'Теги',
+                                hintText: 'Например: мой голос, расслабление',
                               ),
-                              tilePadding: EdgeInsets.zero,
-                              children: [
-                                TextFormField(
-                                  controller: _tags,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Теги',
-                                    hintText:
-                                        'Например: мой голос, расслабление',
-                                  ),
-                                ),
-                                ModuleAssignment(
-                                  catalog: widget.controller.modules,
-                                  choice: _choice,
-                                ),
-                              ],
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 6),
+                            if (!widget.diaryRecording)
+                              ModuleAssignment(
+                                compact: true,
+                                catalog: widget.controller.modules,
+                                choice: _choice,
+                              ),
+                            const Divider(height: 12, color: antiqueGold),
                             const Text(
                               'Запись',
                               style: TextStyle(
@@ -325,7 +363,8 @@ class _RecorderScreenState extends State<RecorderScreen>
                                 tooltip: paused
                                     ? 'Продолжить запись'
                                     : 'Начать запись',
-                                iconSize: 62,
+                                iconSize: 96,
+                                padding: EdgeInsets.zero,
                                 onPressed: r.busy
                                     ? null
                                     : paused
@@ -335,11 +374,7 @@ class _RecorderScreenState extends State<RecorderScreen>
                                               !r.hasTake
                                     ? _begin
                                     : null,
-                                icon: Image.asset(
-                                  'assets/brand/spiral.png',
-                                  width: 64,
-                                  height: 64,
-                                ),
+                                icon: const RecorderMicrophone(),
                               ),
                             ),
                             LinearProgressIndicator(
@@ -354,7 +389,7 @@ class _RecorderScreenState extends State<RecorderScreen>
                                         r.duration.inSeconds == 0
                                     ? '< 1 секунды'
                                     : formatDuration(r.duration.inMilliseconds),
-                                style: const TextStyle(fontSize: 28),
+                                style: const TextStyle(fontSize: 32),
                               ),
                             ),
                             Center(child: Text(status)),
@@ -462,22 +497,10 @@ class _RecorderScreenState extends State<RecorderScreen>
   );
   Widget _action(String label, IconData icon, VoidCallback? callback) =>
       Expanded(
-        child: TextButton(
+        child: IconButton(
+          tooltip: label,
           onPressed: callback,
-          child: Column(
-            children: [
-              Icon(icon),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 10),
-                ),
-              ),
-            ],
-          ),
+          icon: Icon(icon, size: 32),
         ),
       );
 }

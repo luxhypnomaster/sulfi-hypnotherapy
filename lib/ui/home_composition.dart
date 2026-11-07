@@ -714,7 +714,10 @@ class _HomePlanOverviewState extends State<HomePlanOverview> {
             height: 28,
             child: IconButton(
               tooltip: s.kind == StepKind.audio
-                  ? 'Прослушать ${s.title}'
+                  ? (widget.player?.current?.id == s.audioAssetId &&
+                            (widget.player?.playing ?? false)
+                        ? 'Пауза прослушивания'
+                        : 'Прослушать ${s.title}')
                   : s.kind.label,
               onPressed: s.kind == StepKind.audio && widget.onPreview != null
                   ? () => widget.onPreview!(s)

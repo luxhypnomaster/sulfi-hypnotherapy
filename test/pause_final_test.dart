@@ -591,7 +591,7 @@ void main() {
         t.widget<StructureItemRow>(find.byType(StructureItemRow)).step.id,
         first.id,
       );
-      await t.tap(find.text('Сохранить модуль'));
+      await t.tap(find.text('Сохранить\nизменения'));
       await t.pumpAndSettle();
       expect(c.modules.entries.single.items.single.id, first.id);
       expect(c.modules.entries.single.items.single.durationMs, 2000);

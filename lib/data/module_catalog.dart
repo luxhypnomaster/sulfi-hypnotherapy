@@ -22,7 +22,7 @@ class ModuleCatalog {
               .toList();
   }
 
-  Future<void> save(ModuleDefinition module) async {
+  Future<void> save(ModuleDefinition module, {int? expectedVersion}) async {
     if (module.title.trim().isEmpty) {
       throw ArgumentError('Введите название модуля');
     }
@@ -40,6 +40,12 @@ class ModuleCatalog {
             : ModuleDefinition.fromMap(
                 jsonDecode(previous.single['payload'] as String),
               );
+        if (expectedVersion != null &&
+            (expectedVersion == 0
+                ? old != null
+                : old?.version != expectedVersion)) {
+          throw StateError('Определение изменилось. Откройте редактор заново.');
+        }
         // Supplied revisions and personal copies have distinct origins and IDs.
         if (old != null && old.origin != module.origin) {
           throw StateError(
@@ -112,6 +118,11 @@ class ModuleCatalog {
   Future<void> attach(String moduleId, SessionStep item) async {
     await load();
     final m = entries.firstWhere((m) => m.id == moduleId);
+    if (m.origin == 'supplied') {
+      throw StateError(
+        'Общий модуль редактируется в авторском редакторе. Создайте личный вариант.',
+      );
+    }
     await save(
       ModuleDefinition(
         id: m.id,
@@ -128,13 +139,16 @@ class ModuleCatalog {
           item.copyWith(id: newId(), ungroup: true),
         ],
       ),
+      expectedVersion: m.version,
     );
   }
 
   Future<List<String>> references(String assetId) async {
     await load();
     return entries
-        .where((m) => m.items.any((s) => s.audioAssetId == assetId))
+        .where(
+          (m) => !m.archived && m.items.any((s) => s.audioAssetId == assetId),
+        )
         .map((m) => 'модуль «${m.title}»')
         .toList();
   }

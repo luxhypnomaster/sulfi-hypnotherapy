@@ -395,7 +395,7 @@ void main() {
         find.byKey(const ValueKey('b')),
       );
       expect(c.modules.entries.single.items.map((s) => s.id), ['a', 'p', 'b']);
-      await t.tap(find.text('Сохранить модуль'));
+      await t.tap(find.text('Сохранить\nизменения'));
       await t.pumpAndSettle();
       expect(c.modules.entries.single.items.map((s) => s.id), ['p', 'b', 'a']);
       expect(

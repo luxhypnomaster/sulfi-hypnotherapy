@@ -223,6 +223,11 @@ void main() {
       );
       await open(tester);
       await tester.enterText(find.byType(TextField), 'границы');
+      expect(
+        find.text('Личный модуль'),
+        findsOneWidget,
+      ); // personal-only library opens My
+      await tester.tap(find.byKey(const ValueKey('library-section-general')));
       await tester.pumpAndSettle();
       expect(find.text('Личный модуль'), findsNothing);
       await tester.tap(

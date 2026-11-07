@@ -45,6 +45,7 @@ class _LibraryScreenState extends State<LibraryScreen>
   final Set<AudioCategory> _categories = {};
   final GlobalKey _categoryButton = GlobalKey();
   bool _selecting = false;
+  bool _initialLoad = true;
   @override
   void initState() {
     super.initState();
@@ -82,7 +83,17 @@ class _LibraryScreenState extends State<LibraryScreen>
     }
     try {
       final items = await widget.library.repository.list();
-      if (mounted) setState(() => _assets = items);
+      if (mounted) {
+        setState(() {
+          _assets = items;
+          if (_initialLoad &&
+              items.isNotEmpty &&
+              items.every((a) => a.isPersonal)) {
+            _section = LibrarySection.personal;
+          }
+          _initialLoad = false;
+        });
+      }
     } catch (_) {
       if (mounted) {
         setState(
@@ -208,7 +219,7 @@ class _LibraryScreenState extends State<LibraryScreen>
             ),
             const SizedBox(height: 16),
             const Text(
-              'Все аудио и заметки хранятся на этом устройстве. Нет облака, аналитики и передачи записей. Сохраняйте исходные файлы отдельно: удаление приложения удаляет его данные.',
+              'Личные аудио, планы и история хранятся на этом устройстве. Дневник имеет отдельную настройку публикаций. Удаление приложения удалит локальные данные: создайте внешнюю ZIP-копию.',
             ),
             const SizedBox(height: 12),
             const Text(
@@ -217,15 +228,18 @@ class _LibraryScreenState extends State<LibraryScreen>
             const SizedBox(height: 20),
             if (widget.controller?.capsules != null)
               OutlinedButton.icon(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context);
-                  Navigator.push<void>(
+                  await widget.player.stop();
+                  if (!mounted) return;
+                  await Navigator.push<void>(
                     this.context,
                     MaterialPageRoute(
                       builder: (_) =>
                           BackupScreen(controller: widget.controller!),
                     ),
                   );
+                  if (mounted) await _load();
                 },
                 icon: const Icon(Icons.archive_outlined),
                 label: const Text('Резервная копия и обновления'),
@@ -239,7 +253,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Сульфи · 0.4.9+14', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.10+15', textAlign: TextAlign.center),
           ],
         ),
       ),

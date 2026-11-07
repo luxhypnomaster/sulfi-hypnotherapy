@@ -7,6 +7,7 @@ import 'services/session_controller.dart';
 import 'services/session_transport.dart';
 import 'ui/home_screen.dart';
 import 'ui/design.dart';
+import 'ui/session_scope.dart';
 
 ThemeData sulfiTheme() {
   final colors = ColorScheme.fromSeed(
@@ -66,6 +67,8 @@ class SulfiApp extends StatelessWidget {
     supportedLocales: const [Locale('ru')],
     localizationsDelegates: GlobalMaterialLocalizations.delegates,
     theme: sulfiTheme(),
+    builder: (context, child) =>
+        SessionScope(controller: controller, player: player, child: child!),
     home: HomeScreen(
       controller: controller,
       player: player,

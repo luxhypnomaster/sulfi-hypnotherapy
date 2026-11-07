@@ -15,9 +15,11 @@ class ModuleAssignment extends StatefulWidget {
     super.key,
     required this.catalog,
     required this.choice,
+    this.compact = false,
   });
   final ModuleCatalog catalog;
   final ModuleChoice choice;
+  final bool compact;
   @override
   State<ModuleAssignment> createState() => _ModuleAssignmentState();
 }
@@ -29,7 +31,10 @@ class _ModuleAssignmentState extends State<ModuleAssignment> {
       DropdownButtonFormField<String>(
         initialValue: widget.choice.id ?? 'none',
         isExpanded: true,
-        decoration: const InputDecoration(labelText: 'Добавить в модуль'),
+        decoration: InputDecoration(
+          labelText: 'Добавить в модуль',
+          isDense: widget.compact,
+        ),
         items: [
           const DropdownMenuItem(
             value: 'none',
@@ -39,7 +44,9 @@ class _ModuleAssignmentState extends State<ModuleAssignment> {
             value: 'new',
             child: Text('Создать новый модуль'),
           ),
-          for (final m in widget.catalog.entries.where((m) => !m.archived))
+          for (final m in widget.catalog.entries.where(
+            (m) => !m.archived && m.origin == 'personal',
+          ))
             DropdownMenuItem(value: m.id, child: Text(m.title)),
         ],
         onChanged: (v) =>

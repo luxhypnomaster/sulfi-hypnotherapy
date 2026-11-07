@@ -256,7 +256,7 @@ void main() {
     );
     expect(await db.query('session_templates'), before);
   });
-  test('v4 to v5 additive migration retains author/public payload and actual media', () async {
+  test('v4 to v6 additive migration retains author/public payload and actual media', () async {
     final file = await File('${dir.path}/keep.wav')
         .writeAsString('private recording');
     await author.saveDraft(sample());
@@ -270,7 +270,7 @@ void main() {
     );
     expect((await db.query('diary_author')).single['payload'], payload);
     expect(await file.readAsString(), 'private recording');
-    expect(await db.getVersion(), 5);
+    expect(await db.getVersion(), 6);
     expect(await db.query('diary_removed'), isEmpty);
   });
   test(

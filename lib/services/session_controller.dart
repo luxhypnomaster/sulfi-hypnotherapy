@@ -609,6 +609,7 @@ class SessionController extends ChangeNotifier {
       );
     }
     final frozen = <SessionStep>[];
+    final verified = <String, AudioAsset>{};
     final activeIds = draft.plan.steps.map((s) => s.id).toSet();
     for (final s in draft.plan.allSteps) {
       if (activeIds.contains(s.id) && draft.unavailableStepIds.contains(s.id)) {
@@ -630,7 +631,10 @@ class SessionController extends ChangeNotifier {
           );
         }
         if (a != null && activeIds.contains(s.id)) {
-          final identified = await library.identify(a, verify: true);
+          final identified = verified[a.id] ??= await library.identify(
+            a,
+            verify: true,
+          );
           final expected = draft.audioMetadata[a.id]?['contentHash'];
           if (expected != null && expected != identified.contentHash) {
             throw LibraryException(

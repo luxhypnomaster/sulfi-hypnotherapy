@@ -113,9 +113,10 @@ class _ModuleEditorState extends State<ModuleEditor> {
       final existing = c.modules.entries
           .where((m) => m.id == old.id)
           .firstOrNull;
-      if (widget.creating
-          ? existing != null
-          : existing == null || existing.version != old.version) {
+      if (!asNew &&
+          (widget.creating
+              ? existing != null
+              : existing == null || existing.version != old.version)) {
         throw const LibraryException(
           'Определение изменилось. Закройте редактор и откройте его снова.',
         );
@@ -139,6 +140,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
                     .toList()
               : items,
         ),
+        expectedVersion: asNew || widget.creating ? 0 : old.version,
       );
       await c.reload();
     } else {

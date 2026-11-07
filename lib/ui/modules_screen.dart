@@ -25,6 +25,7 @@ class ModulesScreen extends StatefulWidget {
 
 class _ModulesScreenState extends State<ModulesScreen> {
   String query = '';
+  String origin = 'all';
   bool busy = false;
   Future<void> _create() =>
       _edit(ModuleDefinition(id: newId(), title: ''), creating: true);
@@ -54,7 +55,19 @@ class _ModulesScreenState extends State<ModulesScreen> {
     final content = Column(
       children: [
         TextField(
-          decoration: const InputDecoration(labelText: 'Поиск модулей'),
+          decoration: InputDecoration(
+            labelText: 'Поиск модулей',
+            suffixIcon: DropdownButton<String>(
+              value: origin,
+              underline: const SizedBox.shrink(),
+              onChanged: (value) => setState(() => origin = value!),
+              items: const [
+                DropdownMenuItem(value: 'all', child: Text('Все')),
+                DropdownMenuItem(value: 'supplied', child: Text('Общие')),
+                DropdownMenuItem(value: 'personal', child: Text('Мои')),
+              ],
+            ),
+          ),
           onChanged: (v) => setState(() => query = v.toLowerCase()),
         ),
         TextButton.icon(
@@ -68,6 +81,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
               for (final m in widget.controller.modules.entries.where(
                 (m) =>
                     !m.archived &&
+                    (origin == 'all' || m.origin == origin) &&
                     '${m.title} ${m.description} ${m.tags.join(' ')}'
                         .toLowerCase()
                         .contains(query),
@@ -78,7 +92,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
                   subtitle: Text(
                     m.items.isEmpty
                         ? 'Пустой модуль'
-                        : '${m.items.length} элементов · ${m.description}',
+                        : '${m.origin == 'supplied' ? 'Общие' : 'Мои'} · Постоянный · ${m.items.length} элементов · ${m.description}',
                   ),
                   onTap: busy
                       ? null
