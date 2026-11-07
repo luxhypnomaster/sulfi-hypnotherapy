@@ -171,6 +171,15 @@ class _BackupScreenState extends State<BackupScreen> {
               : () => action(() async {
                   final d = await DeviceFiles.diagnostics();
                   if (!context.mounted) return;
+                  final runs = await widget.controller.repository.history();
+                  d['history'] = {
+                    'storedRecords': runs.length,
+                    'displayNumbers': runs.map((r) => r.displayNumber).toList(),
+                    'nextNumber': await widget.controller.repository
+                        .nextNumber(),
+                    'note': 'Пробелы нумерации не доказывают потерю записей',
+                  };
+                  if (!context.mounted) return;
                   final text = const JsonEncoder.withIndent('  ').convert(d);
                   await showDialog<void>(
                     context: context,

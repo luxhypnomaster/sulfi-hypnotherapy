@@ -15,6 +15,7 @@ import 'module_assignment.dart';
 import '../models/diary_entry.dart';
 import '../services/device_files.dart';
 import '../services/library_service.dart';
+import '../services/diary_media_store.dart';
 import 'recorder_microphone.dart';
 
 class RecorderScreen extends StatefulWidget {
@@ -25,11 +26,15 @@ class RecorderScreen extends StatefulWidget {
     this.backend,
     this.diaryRecording = false,
     this.attachDiaryBlock,
+    this.attachmentStore,
+    this.attachmentTitle,
   });
   final SessionController controller;
   final PreviewPlayer player;
   final CaptureBackend? backend;
   final bool diaryRecording;
+  final DiaryMediaStore? attachmentStore;
+  final String? attachmentTitle;
   final Future<DiaryBlock> Function(DiaryBlock)? attachDiaryBlock;
   @override
   State<RecorderScreen> createState() => _RecorderScreenState();
@@ -125,7 +130,7 @@ class _RecorderScreenState extends State<RecorderScreen>
           context,
           'Отменить и удалить несохранённую запись?',
           widget.diaryRecording
-              ? 'Текст и сохранённые вложения дневника останутся.'
+              ? 'Текст и сохранённые вложения останутся.'
               : 'Сохранённые треки библиотеки останутся.',
           confirm: 'Отменить запись',
         )) {
@@ -180,7 +185,8 @@ class _RecorderScreenState extends State<RecorderScreen>
     await widget.player.stop();
     if (!mounted) return;
     if (widget.diaryRecording) {
-      final store = widget.controller.diary?.mediaStore;
+      final store =
+          widget.attachmentStore ?? widget.controller.diary?.mediaStore;
       if (store == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -283,7 +289,9 @@ class _RecorderScreenState extends State<RecorderScreen>
                 Image.asset('assets/brand/spiral.png', width: 36),
                 const SizedBox(width: 8),
                 Text(
-                  widget.diaryRecording ? 'Аудио для дневника' : 'Запись трека',
+                  widget.diaryRecording
+                      ? (widget.attachmentTitle ?? 'Аудио для дневника')
+                      : 'Запись трека',
                   style: const TextStyle(
                     color: neonLime,
                     fontWeight: FontWeight.w700,
@@ -514,7 +522,9 @@ class _RecorderScreenState extends State<RecorderScreen>
                   Expanded(
                     child: NeonButton(
                       label: widget.diaryRecording
-                          ? 'Добавить в дневник'
+                          ? (widget.attachmentTitle == null
+                                ? 'Добавить в дневник'
+                                : 'Добавить заметку')
                           : 'Сохранить трек',
                       icon: Icons.check,
                       onPressed: r.canSave && !r.busy && !playing

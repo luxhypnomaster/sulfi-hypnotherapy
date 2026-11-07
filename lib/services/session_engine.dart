@@ -168,8 +168,10 @@ class SessionEngine extends ChangeNotifier {
 
   Future<void> start() => _enqueue(() async {
     if (active) throw const LibraryException('Сессия уже запущена.');
+    await controller.preview?.stop();
     final snapshot = await controller.snapshotForStart();
     run = await controller.repository.startRun(snapshot);
+    await controller.preview?.stop();
     _generation++;
     _exiting = false;
     _runBase = 0;

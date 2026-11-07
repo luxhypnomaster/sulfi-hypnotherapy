@@ -8,6 +8,7 @@ import 'services/session_transport.dart';
 import 'ui/home_screen.dart';
 import 'ui/design.dart';
 import 'ui/session_scope.dart';
+import 'ui/preview_bar.dart';
 
 ThemeData sulfiTheme() {
   final colors = ColorScheme.fromSeed(
@@ -67,12 +68,84 @@ class SulfiApp extends StatelessWidget {
     supportedLocales: const [Locale('ru')],
     localizationsDelegates: GlobalMaterialLocalizations.delegates,
     theme: sulfiTheme(),
-    builder: (context, child) =>
-        SessionScope(controller: controller, player: player, child: child!),
+    builder: (context, child) => _PreviewOverlay(
+      child: SessionScope(
+        controller: controller,
+        player: player,
+        child: GlobalPreviewScope(
+          child: ListenableBuilder(
+            listenable: player,
+            builder: (context, _) {
+              final active =
+                  player.current != null &&
+                  player.current?.id != 'unsaved-take';
+              final inset = active
+                  ? MediaQuery.viewInsetsOf(context).bottom
+                  : 0.0;
+              return Padding(
+                padding: EdgeInsets.only(bottom: inset),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: active
+                          ? MediaQuery.removeViewInsets(
+                              context: context,
+                              removeBottom: true,
+                              child: child!,
+                            )
+                          : child!,
+                    ),
+                    if (active)
+                      SafeArea(
+                        top: false,
+                        child: PreviewBar(
+                          key: const Key('global-preview-bar'),
+                          player: player,
+                          library: library,
+                          compact: true,
+                          global: true,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    ),
     home: HomeScreen(
       controller: controller,
       player: player,
       transportFactory: transportFactory,
     ),
   );
+}
+
+class _PreviewOverlay extends StatefulWidget {
+  const _PreviewOverlay({required this.child});
+  final Widget child;
+  @override
+  State<_PreviewOverlay> createState() => _PreviewOverlayState();
+}
+
+class _PreviewOverlayState extends State<_PreviewOverlay> {
+  late final entry = OverlayEntry(
+    builder: (_) =>
+        Material(type: MaterialType.transparency, child: widget.child),
+  );
+  @override
+  void didUpdateWidget(_PreviewOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    entry.markNeedsBuild();
+  }
+
+  @override
+  Widget build(BuildContext context) => Overlay(initialEntries: [entry]);
+  @override
+  void dispose() {
+    entry.remove();
+    entry.dispose();
+    super.dispose();
+  }
 }

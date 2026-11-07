@@ -183,7 +183,6 @@ class _ModuleEditorState extends State<ModuleEditor> {
 
   Future<void> addAudio({bool record = false}) async {
     final c = widget.controller;
-    await widget.player.stop();
     if (!mounted) return;
     void insert(AudioAsset a) => changed([
       ...items,
@@ -352,7 +351,6 @@ class _ModuleEditorState extends State<ModuleEditor> {
   );
   @override
   void dispose() {
-    unawaited(Future.microtask(widget.player.stop));
     super.dispose();
   }
 

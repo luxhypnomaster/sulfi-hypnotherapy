@@ -106,7 +106,6 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
   }
 
   Future<void> _editModule(PhaseInstance p, PhaseChild child) async {
-    await widget.player.stop();
     if (!mounted) return;
     await Navigator.push<void>(
       context,
@@ -138,7 +137,6 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
   });
   @override
   void dispose() {
-    unawaited(Future.microtask(widget.player.stop));
     if (_owns) _working?.dispose();
     _scroll.dispose();
     super.dispose();
@@ -219,7 +217,6 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     bool record = false,
     String? afterId,
   }) async {
-    await widget.player.stop();
     if (!mounted) return;
     var anchor = afterId;
     Future<void> add(AudioAsset asset) async {

@@ -6,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 
 import '../models/diary_entry.dart';
 import 'diary_media_store.dart';
+import 'preview_diary_transport.dart';
 
 abstract class DiaryAudioTransport {
   Stream<void> get changes;
@@ -79,6 +80,8 @@ class DiaryAudio extends ChangeNotifier {
     );
   }
   final DiaryAudioTransport transport;
+  Future<void> navigationPause() =>
+      transport is PreviewDiaryTransport ? Future.value() : pause();
   final DiaryMediaStore store;
   final bool Function()? sessionActive;
   final Future<void> Function()? beforePlay;
@@ -104,7 +107,21 @@ class DiaryAudio extends ChangeNotifier {
         await pause();
         throw const FormatException('Сначала завершите активную сессию');
       }
-      if (current == block.id && playing) {
+      final shared = transport is PreviewDiaryTransport
+          ? transport as PreviewDiaryTransport
+          : null;
+      if (shared != null) shared.block = block;
+      if (shared != null && shared.player.current?.id == shared.id) {
+        current = block.id;
+        await shared.player.toggle(
+          shared.player.current!,
+          shared.player.currentFile ?? store.file(block.media)!,
+        );
+        return;
+      }
+      if (shared != null
+          ? shared.player.current?.id == shared.id && shared.player.playing
+          : current == block.id && playing) {
         await pause();
         return;
       }
@@ -119,6 +136,9 @@ class DiaryAudio extends ChangeNotifier {
         loading = true;
         notifyListeners();
         current = block.id;
+        if (transport is PreviewDiaryTransport) {
+          (transport as PreviewDiaryTransport).block = block;
+        }
         await transport.load(file.path);
         if (transport.duration != null) {
           _durations[block.id] = transport.duration!;

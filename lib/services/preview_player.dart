@@ -10,6 +10,8 @@ import 'library_service.dart';
 
 abstract class PreviewPlayer extends ChangeNotifier {
   AudioAsset? get current;
+  File? get currentFile => null;
+  bool Function()? sessionActive;
   bool get playing;
   Duration get position;
   String? get error;
@@ -23,6 +25,9 @@ class LocalPreviewPlayer extends PreviewPlayer {
   final AudioPlayer _player = AudioPlayer();
   final List<StreamSubscription<dynamic>> _subscriptions = [];
   AudioAsset? _current;
+  File? _file;
+  @override
+  File? get currentFile => _file;
   String? _error;
   bool _closed = false;
   int _generation = 0;
@@ -71,6 +76,9 @@ class LocalPreviewPlayer extends PreviewPlayer {
   @override
   Future<void> toggle(AudioAsset asset, File file) async {
     if (_closed) return;
+    if (sessionActive?.call() ?? false) {
+      throw const LibraryException('Сначала завершите активную сессию');
+    }
     final generation = ++_generation;
     try {
       _error = null;
@@ -86,6 +94,7 @@ class LocalPreviewPlayer extends PreviewPlayer {
         if (_current?.id != asset.id) {
           await _player.stop();
           _current = asset;
+          _file = file;
           await _player
               .setFilePath(file.path)
               .timeout(const Duration(seconds: 15));
@@ -119,6 +128,7 @@ class LocalPreviewPlayer extends PreviewPlayer {
     _generation++;
     await _player.stop();
     _current = null;
+    _file = null;
     if (!_closed) notifyListeners();
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/diary_entry.dart';
 import '../services/diary_audio.dart';
+import '../services/preview_diary_transport.dart';
 import '../services/diary_controller.dart';
 import '../services/diary_layout.dart';
 import 'design.dart';
@@ -44,7 +45,7 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   void diaryChanged() {
     if (!mounted || widget.preview) return;
-    unawaited(audio?.pause());
+    unawaited(audio?.navigationPause());
     setState(() {});
   }
 
@@ -112,17 +113,17 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   }
 
   Future<void> turn(int next) async {
-    await audio?.pause();
+    await audio?.navigationPause();
     if (mounted) setState(() => page = next.clamp(0, layout!.pages.length - 1));
   }
 
   Future<void> home() async {
-    await audio?.pause();
+    await audio?.navigationPause();
     if (mounted) Navigator.popUntil(context, (r) => r.isFirst);
   }
 
   Future<void> journal() async {
-    await audio?.pause();
+    await audio?.navigationPause();
     if (!mounted) return;
     if (widget.preview || widget.fromJournal || widget.diary == null) {
       Navigator.maybePop(context);
@@ -530,13 +531,22 @@ class DiaryAudioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget content() {
-      final a = audio, selected = a?.current == block.id;
+      final a = audio,
+          selected = a?.transport is PreviewDiaryTransport
+              ? (a!.transport as PreviewDiaryTransport).player.current?.id ==
+                    'diary:${block.media?.assetId}'
+              : a?.current == block.id;
       final duration = selected
-          ? a?.duration
+          ? (a?.duration ??
+                (block.durationMs == null
+                    ? null
+                    : Duration(milliseconds: block.durationMs!)))
           : (block.durationMs == null
                 ? null
                 : Duration(milliseconds: block.durationMs!));
-      final position = a?.positionFor(block.id) ?? Duration.zero;
+      final position = selected && a?.transport is PreviewDiaryTransport
+          ? (a!.transport as PreviewDiaryTransport).player.position
+          : a?.positionFor(block.id) ?? Duration.zero;
       final playing = selected && (a?.playing ?? false);
       return NeonPanel(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

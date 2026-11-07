@@ -33,6 +33,8 @@ import 'services/preview_player.dart';
 import 'services/capsule_service.dart';
 import 'services/device_files.dart';
 import 'services/access_policy.dart';
+import 'services/history_attachments.dart';
+import 'services/preview_diary_transport.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -122,6 +124,7 @@ class _BootstrapState extends State<_Bootstrap> {
       await FilePicker.clearTemporaryFiles();
       final player = LocalPreviewPlayer();
       _player = player;
+      player.sessionActive = () => sessionAudioHandler?.engine?.active ?? false;
       await player.initialize();
       const diaryUrl = String.fromEnvironment('SULFI_DIARY_API');
       const googleClientId = String.fromEnvironment(
@@ -164,10 +167,9 @@ class _BootstrapState extends State<_Bootstrap> {
         allowDebugAuthor: kDebugMode,
         audioFactory: () {
           final audio = DiaryAudio(
-            transport: NativeDiaryAudio(),
+            transport: PreviewDiaryTransport(player),
             store: diaryMedia,
             sessionActive: () => sessionAudioHandler?.engine?.active ?? false,
-            beforePlay: player.stop,
           );
           unawaited(audio.initializeFocus());
           return audio;
@@ -189,8 +191,25 @@ class _BootstrapState extends State<_Bootstrap> {
         });
       }
       if (diary.api != null) unawaited(diary.sync());
+      final historyMedia = DiaryMediaStore(
+        Directory(p.join(root.path, 'history_media')),
+        stripImageMetadata: true,
+        pick: diaryMedia.pick,
+        probe: library.probe,
+      );
+      final historyAttachments = HistoryAttachments(
+        repository.database,
+        historyMedia,
+      );
+      try {
+        await historyAttachments.collect();
+      } catch (_) {
+        /* Corrupt metadata must preserve media, not block startup. */
+      }
       final controller = SessionController(
         repository: sessions,
+        historyAttachments: historyAttachments,
+        preview: player,
         library: library,
         modules: modules,
         diary: diary,

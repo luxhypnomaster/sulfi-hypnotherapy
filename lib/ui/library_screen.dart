@@ -57,7 +57,6 @@ class _LibraryScreenState extends State<LibraryScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    unawaited(Future.microtask(widget.player.stop));
     super.dispose();
   }
 
@@ -287,7 +286,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Сульфи · 0.4.11+16', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.12+17', textAlign: TextAlign.center),
           ],
         ),
       ),

@@ -23,8 +23,14 @@ typedef DiaryMediaPicker = Future<AudioSelection?> Function(
 
 /// Separate from the user's audio library. Originals are never moved/deleted.
 class DiaryMediaStore {
-  DiaryMediaStore(this.directory, {required this.pick, required this.probe});
+  DiaryMediaStore(
+    this.directory, {
+    required this.pick,
+    required this.probe,
+    this.stripImageMetadata = false,
+  });
   final Directory directory;
+  final bool stripImageMetadata;
   final DiaryMediaPicker pick;
   final DurationProbe probe;
   Future<DiaryBlock?> import(DiaryBlockType type, {String? blockId}) async {
@@ -42,7 +48,7 @@ class DiaryMediaStore {
       throw const FormatException('Выберите изображение или аудио');
     }
     final source = File(selected.path);
-    final size = await source.length();
+    var size = await source.length();
     final limit = DiaryMediaLimits.bytes(type);
     if (size == 0 || size > limit) {
       throw FormatException(
@@ -54,7 +60,7 @@ class DiaryMediaStore {
     final temp = File(p.join(directory.path, '$id.part'));
     try {
       await source.copy(temp.path);
-      final data = await temp.readAsBytes();
+      var data = await temp.readAsBytes();
       if (data.length != size || data.length > limit) {
         throw const FormatException('Файл изменился при копировании');
       }
@@ -92,9 +98,28 @@ class DiaryMediaStore {
           if (width * height > DiaryMediaLimits.imagePixels) {
             throw const FormatException('Изображение больше 40 мегапикселей');
           }
-          final codec = await descriptor.instantiateCodec(targetWidth: 256);
+          final codec = await descriptor.instantiateCodec(
+            targetWidth: stripImageMetadata ? null : 256,
+          );
           try {
             final frame = await codec.getNextFrame();
+            if (stripImageMetadata) {
+              width = frame.image.width;
+              height = frame.image.height;
+              final png = await frame.image.toByteData(
+                format: ui.ImageByteFormat.png,
+              );
+              if (png == null || png.lengthInBytes > limit) {
+                throw const FormatException(
+                  'Изображение слишком большое после обработки',
+                );
+              }
+              data = png.buffer.asUint8List();
+              size = data.length;
+              mime = 'image/png';
+              ext = 'png';
+              await temp.writeAsBytes(data, flush: true);
+            }
             frame.image.dispose();
           } finally {
             codec.dispose();

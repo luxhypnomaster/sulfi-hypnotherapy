@@ -21,6 +21,7 @@ import 'package:sulfi_hypnotherapy/services/library_service.dart';
 import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 import 'package:sulfi_hypnotherapy/services/capsule_service.dart';
+import 'package:sulfi_hypnotherapy/services/history_attachments.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_editor.dart';
 
 import 'dart:convert';
@@ -72,6 +73,16 @@ void main() {
       repository: SqliteSessionRepository(db),
       library: library,
       diary: diary,
+      historyAttachments: HistoryAttachments(
+        db,
+        DiaryMediaStore(
+          Directory('${root.path}/history_media'),
+          pick: (_) async =>
+              (name: 'picture.png', path: '${root.path}/picture.png'),
+          probe: library.probe,
+          stripImageMetadata: true,
+        ),
+      ),
     );
     await c.initialize();
     player = MemoryPlayer();
@@ -540,6 +551,77 @@ void main() {
       expect(icon.color, Colors.lightGreenAccent);
       expect(find.text('Исторический модуль'), findsOneWidget);
       expect(c.modules.entries, isEmpty);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'Task6 history picture is attached to exact run, opens and deletes with confirmation without changing snapshot',
+    (t) async {
+      await t.runAsync(
+        () => File('${root.path}/picture.png').writeAsBytes(
+          base64Decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8/5+BgYGBiYGBgYGBAQAZEQICnc4XwwAAAABJRU5ErkJggg==',
+          ),
+        ),
+      );
+      final before = run.snapshot.toMap();
+      await show(
+        t,
+        HistoryScreen(controller: c, player: player, selectedRunId: run.id),
+      );
+      await t.ensureVisible(find.text('Изображение'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Изображение'));
+      await io(t);
+      await io(t);
+      expect(
+        (await t.runAsync(() => c.historyAttachments!.list(run.id)))!,
+        hasLength(1),
+      );
+      expect(
+        (await t.runAsync(c.repository.history))!.single.snapshot.toMap(),
+        before,
+      );
+      await t.ensureVisible(find.byTooltip('Удалить вложение'));
+      await t.pumpAndSettle();
+      await t.tap(find.byTooltip('Удалить вложение'));
+      await io(t);
+      expect(find.text('Удалить вложение?'), findsOneWidget);
+      await t.tap(find.text('Удалить'));
+      await io(t);
+      expect(
+        (await t.runAsync(() => c.historyAttachments!.list(run.id)))!,
+        isEmpty,
+      );
+      expect((await t.runAsync(c.repository.history))!, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'Task6 one preview survives library navigation and closes globally',
+    (t) async {
+      await t.runAsync(() => c.repository.acknowledgeHistory(run.id));
+      await player.toggle(c.assets.first, c.library.fileFor(c.assets.first));
+      t.view.physicalSize = const Size(412, 915);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
+      await t.pumpWidget(
+        SulfiApp(library: c.library, player: player, controller: c),
+      );
+      await io(t);
+      expect(find.byKey(const Key('global-preview-bar')), findsOneWidget);
+      await t.tap(find.text('Библиотека'));
+      await io(t);
+      expect(player.playing, isTrue);
+      await t.tap(find.byTooltip('Назад'));
+      await io(t);
+      expect(player.playing, isTrue);
+      await t.tap(find.byTooltip('Остановить прослушивание'));
+      await io(t);
+      expect(player.current, isNull);
       await t.pumpWidget(const SizedBox());
       await io(t);
     },

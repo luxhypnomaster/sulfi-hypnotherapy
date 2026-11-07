@@ -33,7 +33,6 @@ class _PauseEditorState extends State<PauseEditor> {
   @override
   void initState() {
     super.initState();
-    unawaited(Future.microtask(widget.player.stop));
   }
 
   @override

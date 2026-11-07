@@ -15,11 +15,22 @@ import java.util.concurrent.Executors
 class MainActivity: AudioServiceActivity() {
     private val executor = Executors.newSingleThreadExecutor()
     private var pending: MethodChannel.Result? = null
+    private var cameraResult: MethodChannel.Result? = null
+    private var cameraFile: File? = null
     private var exportPath: String? = null
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "ru.sulfi/device_files").setMethodCallHandler { call, result ->
             when (call.method) {
+                "capturePhoto" -> {
+                    if (cameraResult != null) { result.error("BUSY", "Камера уже открыта", null); return@setMethodCallHandler }
+                    val file = File.createTempFile("sulfi-photo-", ".jpg", cacheDir)
+                    val uri = androidx.core.content.FileProvider.getUriForFile(this, "$packageName.history.camera", file)
+                    val intent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri).addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    intent.clipData = android.content.ClipData.newRawUri("photo", uri)
+                    cameraResult = result; cameraFile = file
+                    try { startActivityForResult(intent, 742) } catch (e: Exception) { cameraResult = null; cameraFile = null; file.delete(); result.error("CAMERA", "Камера недоступна", null) }
+                }
                 "copyLegacyAudio" -> {
                     val uri = android.net.Uri.parse(call.arguments as String)
                     if (uri.scheme != "content") { result.error("URI", "Недопустимый источник", null); return@setMethodCallHandler }
@@ -70,6 +81,13 @@ class MainActivity: AudioServiceActivity() {
     @Deprecated("Activity result API used by the Flutter Activity")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 742) {
+            val callback = cameraResult; val file = cameraFile
+            cameraResult = null; cameraFile = null
+            if (resultCode == Activity.RESULT_OK && file != null && file.length() > 0) callback?.success(file.path)
+            else { file?.delete(); callback?.success(null) }
+            return
+        }
         if (requestCode != 741) return
         val callback = pending ?: return
         val uri = data?.data

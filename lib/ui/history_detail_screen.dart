@@ -10,6 +10,7 @@ import '../services/preview_player.dart';
 import 'design.dart';
 import 'session_actions.dart';
 import 'modular_structure_screen.dart';
+import 'history_attachment_panel.dart';
 
 class HistoryDetailScreen extends StatefulWidget {
   const HistoryDetailScreen({
@@ -232,6 +233,13 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
+          if (widget.controller.historyAttachments != null &&
+              widget.player != null)
+            HistoryAttachmentPanel(
+              controller: widget.controller,
+              runId: r.id,
+              player: widget.player!,
+            ),
           const Text(
             'План и ход сессии',
             style: TextStyle(

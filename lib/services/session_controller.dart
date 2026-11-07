@@ -14,6 +14,8 @@ import '../models/execution_identity.dart';
 import 'library_service.dart';
 import 'capsule_service.dart';
 import 'access_policy.dart';
+import 'history_attachments.dart';
+import 'preview_player.dart';
 
 class SessionController extends ChangeNotifier {
   SessionController({
@@ -22,6 +24,8 @@ class SessionController extends ChangeNotifier {
     ModuleCatalog? modules,
     this.diary,
     this.capsules,
+    this.historyAttachments,
+    this.preview,
   }) : modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
   }
@@ -43,6 +47,7 @@ class SessionController extends ChangeNotifier {
       library: library,
       modules: modules,
       diary: diary,
+      historyAttachments: historyAttachments,
     );
     editor._editorSource = this;
     editor.draft = CurrentSessionDraft.fromMap(draft.toMap());
@@ -73,6 +78,8 @@ class SessionController extends ChangeNotifier {
 
   final ModuleCatalog modules;
   final CapsuleService? capsules;
+  final HistoryAttachments? historyAttachments;
+  final PreviewPlayer? preview;
   final DiaryController? diary;
   final SessionRepository repository;
   final LibraryService library;

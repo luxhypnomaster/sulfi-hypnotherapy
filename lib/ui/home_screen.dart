@@ -95,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Future<void> _structure() async {
     await c.flush();
-    await widget.player.stop();
     if (!mounted) return;
     await Navigator.push<void>(
       context,
@@ -109,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Future<void> _library() => _run(() async {
     await c.flush();
-    await widget.player.stop();
     if (!mounted) return;
     final chosen = await Navigator.push<AudioAsset>(
       context,
@@ -133,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   });
   Future<void> _templates() => _run(() async {
-    await widget.player.stop();
     if (!mounted) return;
     await Navigator.push<void>(
       context,
@@ -147,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Future<void> _history({String? selectedId}) async {
     SessionRun? repeat;
     await _run(() async {
-      await widget.player.stop();
       if (!mounted) return;
       repeat = await Navigator.push<SessionRun>(
         context,
