@@ -10,7 +10,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 5,
+    version: 6,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -27,6 +27,7 @@ Future<Database> openAppDatabase(
       await _createSessionTables(db);
       await _createV4Tables(db);
       await _createDiaryTables(db);
+      await _addIdentity(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -72,9 +73,34 @@ Future<Database> openAppDatabase(
         }
       }
       if (oldVersion < 5) await _createDiaryTables(db);
+      if (oldVersion < 6) await _addIdentity(db);
     },
   ),
 );
+Future<void> _addIdentity(DatabaseExecutor db) async {
+  final columns = (await db.rawQuery('PRAGMA table_info(audio_assets)'))
+      .map((r) => r['name'])
+      .toSet();
+  for (final e in {
+    'origin': "TEXT NOT NULL DEFAULT 'personal'",
+    'contentHash': 'TEXT',
+    'baseRevision': 'INTEGER NOT NULL DEFAULT 1',
+    'author': 'TEXT',
+  }.entries) {
+    if (!columns.contains(e.key)) {
+      await db.execute(
+        'ALTER TABLE audio_assets ADD COLUMN ${e.key} ${e.value}',
+      );
+    }
+  }
+  await db.execute(
+    "UPDATE audio_assets SET origin='supplied' WHERE source='supplied'",
+  );
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS capsule_imports(id TEXT PRIMARY KEY, importedAt TEXT NOT NULL)',
+  );
+}
+
 Future<void> _createSessionTables(DatabaseExecutor db) async {
   await db.execute(
     'CREATE TABLE session_templates (id TEXT PRIMARY KEY,payload TEXT NOT NULL)',

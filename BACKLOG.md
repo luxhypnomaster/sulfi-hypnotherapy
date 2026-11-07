@@ -217,3 +217,11 @@
 - [ ] Configure a persistent signing plan and verify upgrading the installed debug app without data loss; see docs/UPGRADING.md. No key/app ID changes made here.
 - [ ] Build encrypted local backup/export before broad distribution; Git/APK do not back up personal data.
 - [ ] Complete native/device scenarios K1–K10; K5 and background/recording acceptance are not claimed complete.
+# Задание 4 · 07.11.2026
+
+- [x] P0: безопасный импорт, идентичность аудио и внешний ZIP, полный/выборочный перенос и откат (автотесты).
+- [x] Повторяемая подпись следующих тестовых сборок, диагностика APK; совместимость с фактической установкой требует её сертификата и устройства.
+- [ ] P1: связанные модули и архивный повтор истории.
+- [ ] Общий мини-плеер, выбор аудио дневника, активная сессия и диктофон по эталону.
+- [ ] Полная регрессия, нативная сборка и отчёт по A–J.
+

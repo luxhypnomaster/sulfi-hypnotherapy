@@ -11,6 +11,7 @@ import '../models/modular_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
 import 'library_service.dart';
+import 'capsule_service.dart';
 
 class SessionController extends ChangeNotifier {
   SessionController({
@@ -18,6 +19,7 @@ class SessionController extends ChangeNotifier {
     required this.library,
     ModuleCatalog? modules,
     this.diary,
+    this.capsules,
   }) : modules = modules ?? ModuleCatalog();
   SessionController? _editorSource;
   String? _editorBaseline;
@@ -65,6 +67,7 @@ class SessionController extends ChangeNotifier {
   }
 
   final ModuleCatalog modules;
+  final CapsuleService? capsules;
   final DiaryController? diary;
   final SessionRepository repository;
   final LibraryService library;

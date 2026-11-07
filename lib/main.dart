@@ -30,6 +30,8 @@ import 'package:audio_service/audio_service.dart';
 import 'services/session_controller.dart';
 import 'services/library_service.dart';
 import 'services/preview_player.dart';
+import 'services/capsule_service.dart';
+import 'services/device_files.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +70,8 @@ class _BootstrapState extends State<_Bootstrap> {
       final modules = ModuleCatalog(repository.database);
       final library = LibraryService(
         repository: repository,
+        externalReader: (uri) async => (await DeviceFiles.channel
+            .invokeMethod<String>('copyLegacyAudio', uri))!,
         directory: Directory(p.join(root.path, 'audio')),
         pick: () async {
           final selected = await FilePicker.pickFile(
@@ -181,6 +185,15 @@ class _BootstrapState extends State<_Bootstrap> {
         library: library,
         modules: modules,
         diary: diary,
+        capsules: CapsuleService(
+          database: repository.database,
+          library: library,
+          diaryDirectory: diaryMedia.directory,
+          workspace: Directory(
+            p.join((await getTemporaryDirectory()).path, 'sulfi-capsules'),
+          ),
+          availableBytes: DeviceFiles.freeBytes,
+        ),
       );
       _controller = controller;
       await controller.initialize();

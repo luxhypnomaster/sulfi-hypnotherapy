@@ -31,10 +31,33 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos
       - run: flutter test --reporter expanded
+      - name: Restore persistent user-test signing key
+        env:
+          SULFI_TEST_KEYSTORE_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$SULFI_TEST_KEYSTORE_BASE64" || { echo 'Missing persistent test signing key. Refusing a newly signed APK.'; exit 1; }
+          printf '%s' "$SULFI_TEST_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
+          chmod 600 "$RUNNER_TEMP/sulfi-test.keystore"
       - run: flutter build apk --debug
+        env:
+          SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
+          SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+          SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
+      - name: Record public APK diagnostics
+        run: |
+          BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          "$BUILD_TOOLS/apksigner" verify --print-certs build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/APK_CERT.txt
+          grep -q '0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6' build/app/outputs/flutter-apk/APK_CERT.txt
+          "$BUILD_TOOLS/aapt" dump badging build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/APK_BADGING.txt
+          sha256sum build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/SHA256SUMS
       - uses: actions/upload-artifact@v4
         with:
           name: sulfi-android-debug-${{ github.sha }}
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: |
+            build/app/outputs/flutter-apk/app-debug.apk
+            build/app/outputs/flutter-apk/APK_CERT.txt
+            build/app/outputs/flutter-apk/APK_BADGING.txt
+            build/app/outputs/flutter-apk/SHA256SUMS
           if-no-files-found: error
           retention-days: 14

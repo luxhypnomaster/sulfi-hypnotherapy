@@ -13,6 +13,7 @@ import '../services/preview_player.dart';
 import 'asset_editor.dart';
 import 'design.dart';
 import 'preview_bar.dart';
+import 'backup_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({
@@ -214,6 +215,21 @@ class _LibraryScreenState extends State<LibraryScreen>
               'Инструмент саморегуляции не заменяет медицинскую помощь. Не используйте за рулём. Предпрослушивание останавливается при уходе в фон.',
             ),
             const SizedBox(height: 20),
+            if (widget.controller?.capsules != null)
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push<void>(
+                    this.context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          BackupScreen(controller: widget.controller!),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.archive_outlined),
+                label: const Text('Резервная копия и обновления'),
+              ),
             OutlinedButton.icon(
               onPressed: () {
                 Navigator.pop(context);
