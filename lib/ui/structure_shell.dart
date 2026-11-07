@@ -12,11 +12,13 @@ class StructureShell extends StatelessWidget {
     required this.child,
     required this.footer,
     this.actions = const [],
+    this.preview,
   });
   final String title;
   final VoidCallback onBack;
   final Widget summary, child, footer;
   final List<Widget> actions;
+  final Widget? preview;
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFF14030D),
@@ -24,7 +26,10 @@ class StructureShell extends StatelessWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 3),
-        child: footer,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [?preview, footer],
+        ),
       ),
     ),
     body: DecoratedBox(

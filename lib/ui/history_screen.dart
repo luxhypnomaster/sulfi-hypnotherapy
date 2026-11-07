@@ -28,14 +28,30 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() => _busy = true);
     await showActionError(context, () async {
       if (action == 'repeat') {
-        if (!await warnMissingPlanAudio(
-          context,
-          widget.controller,
-          run.snapshot.plan,
-        )) {
-          return;
-        }
+        final issues = await widget.controller.replayIssues(run);
         if (!mounted) return;
+        var rebuild = false;
+        if (issues.isNotEmpty) {
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Точный повтор недоступен'),
+              content: SingleChildScrollView(child: Text(issues.join('\n'))),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Закрыть'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Пересобрать сессию'),
+                ),
+              ],
+            ),
+          );
+          if (result != true || !mounted) return;
+          rebuild = true;
+        }
         if (widget.controller.draft.modified &&
             !await confirmAction(
               context,
@@ -45,7 +61,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             )) {
           return;
         }
-        await widget.controller.useRun(run);
+        await widget.controller.useRun(run, rebuild: rebuild);
         if (mounted) Navigator.pop(context, run);
       }
       if (action == 'template') {

@@ -20,6 +20,7 @@ import 'library_screen.dart';
 import 'module_actions.dart';
 import 'recorder_screen.dart';
 import 'pause_time_picker.dart';
+import 'preview_bar.dart';
 
 class ModuleEditor extends StatefulWidget {
   const ModuleEditor({
@@ -89,7 +90,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
     if (Navigator.canPop(context)) Navigator.pop(context, applied);
   }
 
-  Future<void> apply({bool archive = false}) async {
+  Future<void> apply({bool archive = false, bool asNew = false}) async {
     final c = widget.controller;
     if (name.trim().isEmpty) {
       throw const LibraryException('Введите название модуля');
@@ -98,6 +99,13 @@ class _ModuleEditorState extends State<ModuleEditor> {
       throw const LibraryException('Повторяется ID элемента');
     }
     if (widget.module case final ModuleDefinition old) {
+      if (!asNew &&
+          old.origin == 'supplied' &&
+          !(c.diary?.authenticated ?? false)) {
+        throw const LibraryException(
+          'Общий модуль изменяет только автор. Сохраните свой вариант как новый.',
+        );
+      }
       if (!archive && items.isEmpty) {
         throw const LibraryException('Добавьте в модуль трек или паузу');
       }
@@ -112,18 +120,27 @@ class _ModuleEditorState extends State<ModuleEditor> {
           'Определение изменилось. Закройте редактор и откройте его снова.',
         );
       }
+      await c.flush();
       await c.modules.save(
         ModuleDefinition(
-          id: old.id,
+          id: asNew ? newId() : old.id,
           title: name.trim(),
           description: description,
           tags: old.tags,
           recommendedPhaseIds: old.recommendedPhaseIds,
-          version: widget.creating ? 1 : old.version + 1,
+          version: widget.creating || asNew ? 1 : old.version + 1,
+          origin: asNew ? 'personal' : old.origin,
+          baseRevision: asNew ? 1 : old.baseRevision,
+          author: asNew ? null : old.author,
           archived: archive || old.archived,
-          items: items,
+          items: asNew
+              ? items
+                    .map((s) => s.copyWith(id: newId(), ungroup: true))
+                    .toList()
+              : items,
         ),
       );
+      await c.reload();
     } else {
       final phase = modularize(c.draft.plan).phases!
           .where((p) => p.id == widget.phaseId)
@@ -348,13 +365,18 @@ class _ModuleEditorState extends State<ModuleEditor> {
     child: StructureShell(
       title: widget.creating ? 'Новый модуль' : name,
       onBack: close,
+      preview: PreviewBar(
+        player: widget.player,
+        library: widget.controller.library,
+        compact: true,
+      ),
       summary: Row(
         children: [
           Expanded(
             child: Semantics(
               label: PlanDuration.steps(items).semantics,
               child: Text(
-                '${items.length} элементов • ${PlanDuration.steps(items).label}',
+                '${items.length} элементов • ${PlanDuration.steps(items).label}${widget.instance == null ? '' : ' · ${widget.instance!.workingStatus}'}',
                 style: const TextStyle(color: neonLime, fontSize: 13),
               ),
             ),
@@ -415,9 +437,20 @@ class _ModuleEditorState extends State<ModuleEditor> {
               onPressed: busy ? null : close,
             ),
           ),
+          if (widget.module != null && !widget.creating)
+            Expanded(
+              child: StructureFooterButton(
+                label: 'Сохранить\nкак новый',
+                onPressed: busy ? null : () => run(() => apply(asNew: true)),
+              ),
+            ),
           Expanded(
             child: StructureFooterButton(
-              label: widget.module != null ? 'Сохранить модуль' : 'Применить',
+              label: widget.module == null
+                  ? 'Применить'
+                  : widget.creating
+                  ? 'Сохранить модуль'
+                  : 'Сохранить\nизменения',
               primary: true,
               onPressed: busy ? null : () => run(apply),
             ),
@@ -478,6 +511,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
             index: i,
             enabled: !busy,
             child: StructureItemRow(
+              player: widget.player,
               step: s,
               handle: ReorderableDragStartListener(
                 index: i,

@@ -10,6 +10,7 @@ import '../data/module_catalog.dart';
 import '../models/modular_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
+import '../models/execution_identity.dart';
 import 'library_service.dart';
 import 'capsule_service.dart';
 
@@ -455,6 +456,11 @@ class SessionController extends ChangeNotifier {
     if (old == null) {
       throw const LibraryException('Исходный шаблон недоступен.');
     }
+    if (old.origin == 'supplied' && !(diary?.authenticated ?? false)) {
+      throw const LibraryException(
+        'Общий шаблон изменяет только автор. Сохраните как новый.',
+      );
+    }
     final updated = SessionTemplate(
       id: old.id,
       name: old.name,
@@ -464,6 +470,9 @@ class SessionController extends ChangeNotifier {
       updatedAt: DateTime.now().toUtc(),
       version: old.version + 1,
       isDefault: old.isDefault,
+      origin: old.origin,
+      baseRevision: old.baseRevision,
+      author: old.author,
     );
     await repository.saveTemplate(updated);
     templates = await repository.templates();
@@ -480,14 +489,105 @@ class SessionController extends ChangeNotifier {
     await loadTemplate(t);
   }
 
-  Future<void> useRun(SessionRun run) => _edit(
-    (d) => CurrentSessionDraft(
-      plan: SessionPlan.fromMap(run.snapshot.plan.toMap()),
-      updatedAt: DateTime.now().toUtc(),
-      topicText: run.snapshot.topicText,
-      notes: run.notes,
-    ),
-  );
+  Future<List<String>> replayIssues(SessionRun run) async {
+    final issues = <String>[];
+    for (final id
+        in run.snapshot.plan.steps
+            .where((s) => s.kind == StepKind.audio)
+            .map((s) => s.audioAssetId)
+            .toSet()) {
+      final a = asset(id);
+      final expected = run.snapshot.audioMetadata[id]?['contentHash'];
+      if (a == null) {
+        issues.add('Аудио $id удалено');
+        continue;
+      }
+      try {
+        final verified = await library.identify(a, verify: true);
+        if (expected == null) {
+          issues.add(
+            '«${a.title}»: старая история без подтверждённой идентичности аудио',
+          );
+        } else if (verified.contentHash != expected) {
+          issues.add('«${a.title}»: содержимое отличается от исходной сессии');
+        }
+      } catch (_) {
+        issues.add('«${a.title}»: файл недоступен или повреждён');
+      }
+    }
+    return issues;
+  }
+
+  Future<void> useRun(SessionRun run, {bool rebuild = false}) async {
+    if (!rebuild) {
+      final issues = await replayIssues(run);
+      if (issues.isNotEmpty) throw LibraryException(issues.join('\n'));
+    }
+    final t = templates
+        .where((t) => t.id == run.snapshot.baseTemplateId)
+        .firstOrNull;
+    final metadata = <String, dynamic>{};
+    final unavailable = <String>[];
+    if (rebuild) {
+      for (final step in run.snapshot.plan.steps.where(
+        (s) => s.kind == StepKind.audio,
+      )) {
+        final a = asset(step.audioAssetId);
+        try {
+          if (a == null ||
+              run.snapshot.audioMetadata[a.id]?['contentHash'] == null ||
+              (await library.identify(a, verify: true)).contentHash !=
+                  run.snapshot.audioMetadata[a.id]?['contentHash']) {
+            unavailable.add(step.id);
+          }
+        } catch (_) {
+          unavailable.add(step.id);
+        }
+      }
+    }
+    if (t != null) {
+      for (final id
+          in t.plan.steps
+              .map((s) => s.audioAssetId)
+              .whereType<String>()
+              .toSet()) {
+        final a = asset(id);
+        if (a != null) {
+          try {
+            metadata[id] = {
+              'contentHash': (await library.identify(a)).contentHash,
+            };
+          } catch (_) {
+            /* Missing changed-template audio implies archival fallback. */
+          }
+        }
+      }
+    }
+    final matching =
+        !rebuild &&
+        t != null &&
+        run.snapshot.executionFingerprint != null &&
+        executionFingerprint(t.plan, metadata) ==
+            run.snapshot.executionFingerprint;
+    await _edit(
+      (d) => matching
+          ? CurrentSessionDraft.fromTemplate(
+              t,
+              topicText: run.snapshot.topicText,
+              notes: run.notes,
+            ).copyWith(audioMetadata: run.snapshot.audioMetadata)
+          : CurrentSessionDraft(
+              plan: archivalPlan(run.snapshot.plan),
+              updatedAt: DateTime.now().toUtc(),
+              topicText: run.snapshot.topicText,
+              notes: run.notes,
+              archiveName: run.snapshot.baseTemplateName ?? run.name,
+              unavailableStepIds: unavailable,
+              audioMetadata: run.snapshot.audioMetadata,
+            ),
+    );
+  }
+
   Future<void> clearPlan() => _edit(
     (d) => CurrentSessionDraft(
       plan: SessionPlan(steps: const []),
@@ -511,6 +611,11 @@ class SessionController extends ChangeNotifier {
     final frozen = <SessionStep>[];
     final activeIds = draft.plan.steps.map((s) => s.id).toSet();
     for (final s in draft.plan.allSteps) {
+      if (activeIds.contains(s.id) && draft.unavailableStepIds.contains(s.id)) {
+        throw LibraryException(
+          '«${s.title}»: замените или удалите недоступный архивный трек.',
+        );
+      }
       if (s.kind == StepKind.voiceRecording && activeIds.contains(s.id)) {
         throw const LibraryException(
           'Запись во время сессии будет доступна на следующем этапе. Замените этот элемент тишиной или самостоятельной работой.',
@@ -523,6 +628,15 @@ class SessionController extends ChangeNotifier {
           throw LibraryException(
             'Файл «${s.title}» недоступен. Замените его в структуре.',
           );
+        }
+        if (a != null && activeIds.contains(s.id)) {
+          final identified = await library.identify(a, verify: true);
+          final expected = draft.audioMetadata[a.id]?['contentHash'];
+          if (expected != null && expected != identified.contentHash) {
+            throw LibraryException(
+              'Для «${a.title}» изменились байты. Замените или удалите этот трек.',
+            );
+          }
         }
         frozen.add(
           a == null
@@ -539,19 +653,30 @@ class SessionController extends ChangeNotifier {
         frozen.add(s);
       }
     }
-    return draft.copyWith(
-      plan: draft.plan.copyWith(steps: frozen),
-      audioMetadata: {
-        for (final a in assets.where(
-          (a) => frozen.any((s) => s.audioAssetId == a.id),
-        ))
-          a.id: {
-            'title': a.title,
-            'durationMs': a.durationMs,
-            'format': a.format,
-          },
-      },
-    );
+    assets = await library.repository.list();
+    final metadata = <String, dynamic>{
+      for (final a in assets.where(
+        (a) => frozen.any((s) => s.audioAssetId == a.id),
+      ))
+        a.id: {
+          'title': a.title,
+          'durationMs': a.durationMs,
+          'format': a.format,
+          'contentHash': a.contentHash,
+        },
+    };
+    return CurrentSessionDraft.fromMap({
+      ...draft
+          .copyWith(
+            plan: draft.plan.copyWith(steps: frozen),
+            audioMetadata: metadata,
+          )
+          .toMap(),
+      'executionFingerprint': executionFingerprint(
+        draft.plan.copyWith(steps: frozen),
+        metadata,
+      ),
+    });
   }
 
   @override

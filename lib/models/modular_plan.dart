@@ -78,6 +78,7 @@ class PhaseChild {
     this.definitionId,
     this.definitionVersion,
     this.baseFingerprint,
+    this.detached = false,
     this.enabled = true,
     List<SessionStep> items = const [],
   }) : items = List.unmodifiable(items);
@@ -85,10 +86,13 @@ class PhaseChild {
   final String? definitionId, baseFingerprint;
   final int? definitionVersion;
   final bool enabled;
+  final bool detached;
   final List<SessionStep> items;
   bool get isModule => definitionId != null;
   String get fingerprint => items.map((s) => s.toMap().toString()).join('|');
-  bool get modified => isModule && baseFingerprint != fingerprint;
+  bool get modified => isModule && (detached || baseFingerprint != fingerprint);
+  String get workingStatus =>
+      isModule && !modified ? 'Постоянный' : 'Временный';
   PhaseChild copyWith({
     String? title,
     String? description,
@@ -101,6 +105,14 @@ class PhaseChild {
     definitionId: definitionId,
     definitionVersion: definitionVersion,
     baseFingerprint: baseFingerprint,
+    detached:
+        detached ||
+        (isModule &&
+            ((title != null && title != this.title) ||
+                (description != null && description != this.description) ||
+                (items != null &&
+                    items.map((s) => s.toMap().toString()).join('|') !=
+                        fingerprint))),
     enabled: enabled ?? this.enabled,
     items: items ?? this.items,
   );
@@ -111,6 +123,7 @@ class PhaseChild {
     'definitionId': definitionId,
     'definitionVersion': definitionVersion,
     'baseFingerprint': baseFingerprint,
+    if (detached) 'detached': true,
     'enabled': enabled,
     'items': items.map((s) => s.toMap()).toList(),
   };
@@ -121,6 +134,7 @@ class PhaseChild {
     definitionId: m['definitionId'],
     definitionVersion: m['definitionVersion'],
     baseFingerprint: m['baseFingerprint'],
+    detached: m['detached'] ?? false,
     enabled: m['enabled'] ?? true,
     items: (m['items'] as List)
         .map((s) => SessionStep.fromMap(Map<String, dynamic>.from(s)))
@@ -137,6 +151,9 @@ class ModuleDefinition {
     this.recommendedPhaseIds = const [],
     this.version = 1,
     this.archived = false,
+    this.origin = 'personal',
+    this.baseRevision = 1,
+    this.author,
     List<SessionStep> items = const [],
     DateTime? updatedAt,
   }) : items = List.unmodifiable(items),
@@ -145,6 +162,9 @@ class ModuleDefinition {
   final List<String> tags, recommendedPhaseIds;
   final int version;
   final bool archived;
+  final String origin;
+  final int baseRevision;
+  final String? author;
   final List<SessionStep> items;
   final DateTime updatedAt;
   PhaseChild instantiate(String phaseId) {
@@ -179,6 +199,9 @@ class ModuleDefinition {
     'version': version,
     'archived': archived,
     'source': 'localUser',
+    'origin': origin,
+    'baseRevision': baseRevision,
+    'author': author,
     'updatedAt': updatedAt.toIso8601String(),
     'items': items.map((s) => s.toMap()).toList(),
   };
@@ -190,6 +213,9 @@ class ModuleDefinition {
     recommendedPhaseIds: List<String>.from(m['recommendedPhaseIds'] ?? []),
     version: m['version'] ?? 1,
     archived: m['archived'] ?? false,
+    origin: m['origin'] ?? 'personal',
+    baseRevision: m['baseRevision'] ?? 1,
+    author: m['author'],
     updatedAt: DateTime.parse(m['updatedAt']),
     items: (m['items'] as List)
         .map((s) => SessionStep.fromMap(Map<String, dynamic>.from(s)))

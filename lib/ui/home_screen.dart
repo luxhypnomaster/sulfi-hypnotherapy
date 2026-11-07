@@ -202,6 +202,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
     builder: (context, _) => HomeComposition(
+      player: widget.player,
       controller: c,
       busy: _busy,
       onStructure: () => _run(_structure),

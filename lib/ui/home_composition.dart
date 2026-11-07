@@ -7,6 +7,8 @@ import '../models/session_plan.dart';
 import '../services/session_controller.dart';
 import 'booking.dart';
 import 'design.dart';
+import '../services/preview_player.dart';
+import 'preview_bar.dart';
 import 'diary_home.dart';
 import 'home_start_art.dart';
 
@@ -118,8 +120,10 @@ class HomeComposition extends StatelessWidget {
     required this.onStart,
     required this.onPreview,
     required this.clock,
+    this.player,
   });
   final SessionController controller;
+  final PreviewPlayer? player;
   final bool busy;
   final VoidCallback onStructure, onTemplates, onLibrary, onHistory, onNotes;
   final VoidCallback? onStart;
@@ -138,6 +142,12 @@ class HomeComposition extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (player != null)
+                PreviewBar(
+                  player: player!,
+                  library: controller.library,
+                  compact: true,
+                ),
               TransformationButton(onPressed: onStart),
               const SizedBox(height: 4),
               Row(
@@ -283,6 +293,9 @@ class HomeComposition extends StatelessWidget {
                         );
                         final overview = HomePlanOverview(
                           plan: plan,
+                          player: player,
+                          unavailableStepIds:
+                              controller.draft.unavailableStepIds,
                           onStructure: busy ? null : onStructure,
                           onPreview: busy ? null : onPreview,
                         );
@@ -462,8 +475,12 @@ class HomePlanOverview extends StatefulWidget {
     required this.plan,
     required this.onStructure,
     required this.onPreview,
+    this.player,
+    this.unavailableStepIds = const [],
   });
   final SessionPlan plan;
+  final PreviewPlayer? player;
+  final List<String> unavailableStepIds;
   final VoidCallback? onStructure;
   final Future<void> Function(SessionStep)? onPreview;
   @override
@@ -473,7 +490,13 @@ class HomePlanOverview extends StatefulWidget {
 class _HomePlanOverviewState extends State<HomePlanOverview> {
   final Map<String, bool> expanded = {};
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => widget.player == null
+      ? _overview(context)
+      : ListenableBuilder(
+          listenable: widget.player!,
+          builder: (context, _) => _overview(context),
+        );
+  Widget _overview(BuildContext context) {
     final phases = widget.plan.phases!.where((p) => p.enabled).toList();
     if (phases.isEmpty) {
       return Padding(
@@ -699,7 +722,10 @@ class _HomePlanOverviewState extends State<HomePlanOverview> {
               padding: EdgeInsets.zero,
               icon: Icon(
                 s.kind == StepKind.audio
-                    ? Icons.play_circle_outline
+                    ? (widget.player?.current?.id == s.audioAssetId &&
+                              (widget.player?.playing ?? false)
+                          ? Icons.pause_circle_outline
+                          : Icons.play_circle_outline)
                     : Icons.pause_circle_outline,
                 color: s.kind == StepKind.audio ? neonPink : antiqueGold,
                 size: 21,
@@ -710,7 +736,7 @@ class _HomePlanOverviewState extends State<HomePlanOverview> {
             child: InkWell(
               onTap: widget.onStructure,
               child: Text(
-                s.kind == StepKind.audio ? s.title : s.kind.label,
+                '${widget.unavailableStepIds.contains(s.id) ? '⚠ Недоступен · ' : ''}${s.kind == StepKind.audio ? s.title : s.kind.label}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 11),
@@ -738,6 +764,9 @@ class _TemplateStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final title =
         controller.baseTemplate?.name ??
+        (controller.draft.archiveName == null
+            ? null
+            : 'Архивный · ${controller.draft.archiveName}') ??
         controller.draft.baseTemplateName ??
         'Выбрать шаблон';
     return Tooltip(

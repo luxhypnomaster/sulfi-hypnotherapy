@@ -12,6 +12,7 @@ import 'modules_screen.dart';
 import 'library_screen.dart';
 import 'recorder_screen.dart';
 import 'pause_editor.dart';
+import 'preview_bar.dart';
 import 'pause_time_picker.dart';
 import 'session_actions.dart';
 import 'templates_screen.dart';
@@ -544,6 +545,11 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
               rows = structureRows(phases, _collapsed);
           final duration = PlanDuration.plan(plan);
           return StructureShell(
+            preview: PreviewBar(
+              player: widget.player,
+              library: c.library,
+              compact: true,
+            ),
             title: 'Структура сессии',
             onBack: _back,
             summary: Semantics(
@@ -976,6 +982,8 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
     SessionStep s,
     Widget handle,
   ) => StructureItemRow(
+    player: widget.player,
+    unavailable: c.draft.unavailableStepIds.contains(s.id),
     step: s,
     compact: true,
     handle: handle,

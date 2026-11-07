@@ -310,11 +310,17 @@ class SessionTemplate {
     this.description = '',
     this.version = 1,
     this.isDefault = false,
+    this.origin = 'personal',
+    this.baseRevision = 1,
+    this.author,
   });
   final String id, name, description;
   final SessionPlan plan;
   final int version;
   final bool isDefault;
+  final String origin;
+  final int baseRevision;
+  final String? author;
   final DateTime createdAt, updatedAt;
   Map<String, Object?> toMap() => {
     'id': id,
@@ -323,6 +329,9 @@ class SessionTemplate {
     'plan': plan.toMap(),
     'version': version,
     'isDefault': isDefault,
+    'origin': origin,
+    'baseRevision': baseRevision,
+    'author': author,
     'createdAt': createdAt.toUtc().toIso8601String(),
     'updatedAt': updatedAt.toUtc().toIso8601String(),
   };
@@ -333,6 +342,9 @@ class SessionTemplate {
     plan: SessionPlan.fromMap(Map<String, dynamic>.from(m['plan'] as Map)),
     version: m['version'] as int,
     isDefault: m['isDefault'] as bool,
+    origin: m['origin'] as String? ?? 'personal',
+    baseRevision: m['baseRevision'] as int? ?? 1,
+    author: m['author'] as String?,
     createdAt: DateTime.parse(m['createdAt'] as String),
     updatedAt: DateTime.parse(m['updatedAt'] as String),
   );
@@ -348,6 +360,9 @@ class CurrentSessionDraft {
     this.baseFingerprint,
     this.topicText = '',
     this.notes = '',
+    this.executionFingerprint,
+    this.archiveName,
+    this.unavailableStepIds = const [],
     Map<String, dynamic> audioMetadata = const {},
   }) : audioMetadata = Map.unmodifiable({
          for (final e in audioMetadata.entries)
@@ -358,6 +373,8 @@ class CurrentSessionDraft {
   final String? baseTemplateId, baseTemplateName, baseFingerprint;
   final int? baseTemplateVersion;
   final String topicText, notes;
+  final String? executionFingerprint, archiveName;
+  final List<String> unavailableStepIds;
   final DateTime updatedAt;
   bool get modified =>
       plan.fingerprint !=
@@ -370,6 +387,9 @@ class CurrentSessionDraft {
   }) => CurrentSessionDraft(
     plan: plan ?? this.plan,
     audioMetadata: audioMetadata ?? this.audioMetadata,
+    executionFingerprint: executionFingerprint,
+    archiveName: archiveName,
+    unavailableStepIds: unavailableStepIds,
     updatedAt: DateTime.now().toUtc(),
     baseTemplateId: baseTemplateId,
     baseTemplateVersion: baseTemplateVersion,
@@ -395,6 +415,10 @@ class CurrentSessionDraft {
   Map<String, Object?> toMap() => {
     'plan': plan.toMap(),
     if (audioMetadata.isNotEmpty) 'audioMetadata': audioMetadata,
+    if (executionFingerprint != null)
+      'executionFingerprint': executionFingerprint,
+    if (archiveName != null) 'archiveName': archiveName,
+    if (unavailableStepIds.isNotEmpty) 'unavailableStepIds': unavailableStepIds,
     'updatedAt': updatedAt.toUtc().toIso8601String(),
     'baseTemplateId': baseTemplateId,
     'baseTemplateVersion': baseTemplateVersion,
@@ -407,6 +431,9 @@ class CurrentSessionDraft {
       CurrentSessionDraft(
         plan: SessionPlan.fromMap(Map<String, dynamic>.from(m['plan'] as Map)),
         audioMetadata: Map<String, dynamic>.from(m['audioMetadata'] ?? {}),
+        executionFingerprint: m['executionFingerprint'],
+        archiveName: m['archiveName'],
+        unavailableStepIds: List<String>.from(m['unavailableStepIds'] ?? []),
         updatedAt: DateTime.parse(m['updatedAt'] as String),
         baseTemplateId: m['baseTemplateId'] as String?,
         baseTemplateVersion: m['baseTemplateVersion'] as int?,

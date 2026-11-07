@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
 import 'design.dart';
+import '../services/preview_player.dart';
 
 class StructureItemRow extends StatelessWidget {
   const StructureItemRow({
@@ -14,14 +15,26 @@ class StructureItemRow extends StatelessWidget {
     required this.onPreview,
     required this.onDuration,
     this.compact = false,
+    this.player,
+    this.unavailable = false,
   });
   final SessionStep step;
   final Widget handle, menu;
   final VoidCallback? onPause, onPreview, onDuration;
   final bool compact;
+  final bool unavailable;
+  final PreviewPlayer? player;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => player == null
+      ? _row(context)
+      : ListenableBuilder(
+          listenable: player!,
+          builder: (context, _) => _row(context),
+        );
+  Widget _row(BuildContext context) {
     final audio = step.kind == StepKind.audio;
+    final playing =
+        player?.current?.id == step.audioAssetId && (player?.playing ?? false);
     return Container(
       margin: compact
           ? EdgeInsets.zero
@@ -44,7 +57,9 @@ class StructureItemRow extends StatelessWidget {
         children: [
           handle,
           IconButton(
-            tooltip: audio ? 'Прослушать трек' : 'Изменить длительность паузы',
+            tooltip: audio
+                ? (playing ? 'Пауза прослушивания' : 'Прослушать трек')
+                : 'Изменить длительность паузы',
             onPressed: audio ? onPreview : onDuration,
             constraints: compact
                 ? const BoxConstraints(minWidth: 32, minHeight: 36)
@@ -53,7 +68,9 @@ class StructureItemRow extends StatelessWidget {
             visualDensity: compact ? VisualDensity.compact : null,
             icon: Icon(
               audio
-                  ? Icons.play_circle_outline
+                  ? (playing
+                        ? Icons.pause_circle_outline
+                        : Icons.play_circle_outline)
                   : step.kind == StepKind.voiceRecording
                   ? Icons.mic_none
                   : Icons.pause_circle_outline,
@@ -65,7 +82,7 @@ class StructureItemRow extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: compact ? 3 : 5),
               child: Text(
-                '${step.enabled ? '' : '○ '}${audio || compact ? step.title : step.kind.label}',
+                '${unavailable ? '⚠ Недоступен · ' : ''}${step.enabled ? '' : '○ '}${audio || compact ? step.title : step.kind.label}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

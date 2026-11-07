@@ -676,7 +676,7 @@ void main() {
     },
   );
   testWidgets(
-    'module definition cancel preserves catalogue; Apply changes only future instances',
+    'module definition cancel preserves catalogue; Save changes refreshes linked instances',
     (t) async {
       await show(
         t,
@@ -717,12 +717,12 @@ void main() {
       await t.tap(find.text('Повторить элемент'));
       await t.pumpAndSettle();
       await capture(t, 'module-editor');
-      await t.tap(find.text('Сохранить модуль'));
+      await t.tap(find.text('Сохранить\nизменения'));
       await settleIo(t);
       await t.pumpAndSettle();
       expect(c.modules.entries.single.items, hasLength(4));
       expect(c.modules.entries.single.version, 2);
-      expect(c.draft.plan.phases![1].children.single.items, hasLength(3));
+      expect(c.draft.plan.phases![1].children.single.items, hasLength(4));
       await t.pumpWidget(const SizedBox());
     },
   );
@@ -825,7 +825,7 @@ void main() {
           ),
         ),
       );
-      await t.tap(find.text('Сохранить модуль'));
+      await t.tap(find.text('Сохранить\nизменения'));
       await settleIo(t);
       await t.pumpAndSettle();
       expect(find.textContaining('Определение изменилось'), findsOneWidget);
@@ -1408,7 +1408,13 @@ void main() {
   }
 
   Future<void> saveModule(WidgetTester t) async {
-    await t.tap(find.text('Сохранить модуль'));
+    await t.tap(
+      find.text(
+        find.text('Сохранить модуль').evaluate().isEmpty
+            ? 'Сохранить\nизменения'
+            : 'Сохранить модуль',
+      ),
+    );
     await settleIo(t);
     await t.pumpAndSettle();
   }

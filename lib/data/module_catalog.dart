@@ -29,10 +29,82 @@ class ModuleCatalog {
     if (database == null) {
       _memory[module.id] = module;
     } else {
-      await database!.insert('module_definitions', {
-        'id': module.id,
-        'payload': jsonEncode(module.toMap()),
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await database!.transaction((tx) async {
+        final previous = await tx.query(
+          'module_definitions',
+          where: 'id=?',
+          whereArgs: [module.id],
+        );
+        final old = previous.isEmpty
+            ? null
+            : ModuleDefinition.fromMap(
+                jsonDecode(previous.single['payload'] as String),
+              );
+        // Supplied revisions and personal copies have distinct origins and IDs.
+        if (old != null && old.origin != module.origin) {
+          throw StateError(
+            'Происхождение определения нельзя менять при сохранении',
+          );
+        }
+        await tx.insert('module_definitions', {
+          'id': module.id,
+          'payload': jsonEncode(module.toMap()),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+        if (old != null && module.version != old.version && !module.archived) {
+          for (final table in ['current_draft', 'session_templates']) {
+            for (final row in await tx.query(table)) {
+              final m = Map<String, dynamic>.from(
+                jsonDecode(row['payload'] as String),
+              );
+              final plan = SessionPlan.fromMap(
+                Map<String, dynamic>.from(m['plan']),
+              );
+              var changed = false;
+              final next = plan.phases
+                  ?.map(
+                    (phase) => phase.copyWith(
+                      children: phase.children.map((child) {
+                        if (child.definitionId != module.id ||
+                            child.modified ||
+                            child.title != old.title ||
+                            child.description != old.description) {
+                          return child;
+                        }
+                        changed = true;
+                        final fresh = module.instantiate(phase.id);
+                        return PhaseChild(
+                          id: child.id,
+                          title: fresh.title,
+                          description: fresh.description,
+                          definitionId: fresh.definitionId,
+                          definitionVersion: fresh.definitionVersion,
+                          baseFingerprint: fresh.baseFingerprint,
+                          enabled: child.enabled,
+                          items: fresh.items,
+                        );
+                      }).toList(),
+                    ),
+                  )
+                  .toList();
+              if (changed) {
+                m['plan'] = plan.copyWith(phases: next).toMap();
+                // Keep the old current-draft baseFingerprint: its accepted
+                // yellow pencil must reveal the changed working composition.
+                m['updatedAt'] = DateTime.now().toUtc().toIso8601String();
+                if (table == 'session_templates') {
+                  m['version'] = (m['version'] as int) + 1;
+                }
+                await tx.update(
+                  table,
+                  {'payload': jsonEncode(m)},
+                  where: 'id=?',
+                  whereArgs: [row['id']],
+                );
+              }
+            }
+          }
+        }
+      });
     }
     await load();
   }
@@ -48,6 +120,9 @@ class ModuleCatalog {
         tags: m.tags,
         recommendedPhaseIds: m.recommendedPhaseIds,
         version: m.version + 1,
+        origin: m.origin,
+        baseRevision: m.baseRevision,
+        author: m.author,
         items: [
           ...m.items,
           item.copyWith(id: newId(), ungroup: true),
