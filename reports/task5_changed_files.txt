@@ -12,6 +12,7 @@ docs/task5-2026-11-07/screens/diary-recorder-finished.png
 docs/task5-2026-11-07/screens/history-detail-bottom.png
 docs/task5-2026-11-07/screens/history-detail-top.png
 docs/task5-2026-11-07/screens/history-editor.png
+docs/task5-2026-11-07/verification.json
 lib/data/app_database.dart
 lib/data/module_catalog.dart
 lib/data/session_repository.dart
@@ -39,10 +40,14 @@ lib/ui/module_editor.dart
 lib/ui/recorder_screen.dart
 lib/ui/templates_screen.dart
 pubspec.yaml
+reports/task5_changed_files.txt
 reports/task5_diary_history_access.md
 scripts/check_apk_update.py
+scripts/flutter_test_summary.py
 test/diary_multimedia_test.dart
 test/fixtures/android_aac_isom.m4a
+test/mvp_structure_test.dart
+test/support/async_ui.dart
 test/support/fakes.dart
 test/task3_library_test.dart
 test/task4_capsule_test.dart
