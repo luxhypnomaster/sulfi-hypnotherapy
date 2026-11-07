@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/session_plan.dart';
+import '../services/access_policy.dart';
 
 abstract interface class SessionRepository {
   Future<CurrentSessionDraft?> loadDraft();
@@ -21,11 +22,34 @@ abstract interface class SessionRepository {
   Future<void> interruptUnfinished();
   Future<List<String>> references(String assetId);
   Future<void> reset();
+  Future<String?> pendingHistory();
+  Future<void> acknowledgeHistory(String id);
 }
 
 class SqliteSessionRepository implements SessionRepository {
-  SqliteSessionRepository(this.database);
+  SqliteSessionRepository(this.database, [AccessPolicy? policy])
+    : policy = policy ?? AccessPolicy();
+  final AccessPolicy policy;
   final Database database;
+  @override
+  Future<String?> pendingHistory() async {
+    final rows = await database.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['pending_history'],
+    );
+    return rows.firstOrNull?['value'] as String?;
+  }
+
+  @override
+  Future<void> acknowledgeHistory(String id) async {
+    await database.delete(
+      'app_settings',
+      where: 'name=? AND value=?',
+      whereArgs: ['pending_history', id],
+    );
+  }
+
   Map<String, dynamic> _decode(Map<String, Object?> row) =>
       jsonDecode(row['payload'] as String) as Map<String, dynamic>;
   @override
@@ -51,6 +75,11 @@ class SqliteSessionRepository implements SessionRepository {
   )).map((r) => SessionTemplate.fromMap(_decode(r))).toList();
   @override
   Future<void> saveTemplate(SessionTemplate template) async {
+    final old = (await templates())
+        .where((t) => t.id == template.id)
+        .firstOrNull;
+    if (old != null) policy.requireOrigin(old.origin);
+    policy.requireOrigin(template.origin);
     await database.insert('session_templates', {
       'id': template.id,
       'payload': jsonEncode(template.toMap()),
@@ -59,7 +88,14 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> deleteTemplate(String id) async {
+    final old = (await templates()).where((t) => t.id == id).firstOrNull;
+    if (old != null) policy.requireOrigin(old.origin);
     await database.delete('session_templates', where: 'id=?', whereArgs: [id]);
+    await database.delete(
+      'legacy_v2_documents',
+      where: 'kind=? AND documentId=?',
+      whereArgs: ['session_templates', id],
+    );
   }
 
   @override
@@ -93,13 +129,18 @@ class SqliteSessionRepository implements SessionRepository {
       database.transaction((tx) async {
         final active = await tx.query(
           'session_runs',
-          where: 'status IN (?,?)',
-          whereArgs: ['running', 'paused'],
+          where: 'status IN (?,?,?)',
+          whereArgs: ['running', 'paused', 'exitingEarly'],
           limit: 1,
         );
         if (active.isNotEmpty) {
           throw StateError('Сначала завершите активную сессию.');
         }
+        await tx.delete(
+          'app_settings',
+          where: 'name=?',
+          whereArgs: ['pending_history'],
+        );
         final rows = await tx.query(
           'app_counters',
           where: 'name=?',
@@ -113,6 +154,7 @@ class SqliteSessionRepository implements SessionRepository {
           name: formatLocalDate(now),
           snapshot: CurrentSessionDraft.fromMap(snapshot.toMap()),
           startedAt: now,
+          startedUtcOffsetMinutes: DateTime.now().timeZoneOffset.inMinutes,
           status: RunStatus.running,
           lastCheckpointAt: now,
         );
@@ -139,6 +181,8 @@ class SqliteSessionRepository implements SessionRepository {
         'phase': run.phase,
         'playheadMs': run.playheadMs,
         'elapsedMs': run.elapsedMs,
+        'skippedStepIds': run.skippedStepIds,
+        'completedStepIds': run.completedStepIds,
       }),
     });
   }
@@ -153,7 +197,9 @@ class SqliteSessionRepository implements SessionRepository {
       );
       if (rows.isEmpty) throw StateError('Сессия не найдена.');
       final existing = _decode(rows.single);
-      if (!['running', 'paused'].contains(existing['status'])) return;
+      if (!['running', 'paused', 'exitingEarly'].contains(existing['status'])) {
+        return;
+      }
       final update = run.toMap();
       for (final key in [
         'status',
@@ -163,6 +209,8 @@ class SqliteSessionRepository implements SessionRepository {
         'elapsedMs',
         'endedAt',
         'endEstimated',
+        'skippedStepIds',
+        'completedStepIds',
       ]) {
         existing[key] = update[key];
       }
@@ -175,6 +223,12 @@ class SqliteSessionRepository implements SessionRepository {
         whereArgs: [run.id],
       );
       if (event != null) await _event(tx, run, event);
+      if (!run.active) {
+        await tx.insert('app_settings', {
+          'name': 'pending_history',
+          'value': run.id,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
     });
   }
 
@@ -215,11 +269,21 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> deleteRun(String id) async {
-    await database.delete(
-      'session_runs',
-      where: 'id=? AND status NOT IN (?,?)',
-      whereArgs: [id, 'running', 'paused'],
-    );
+    await acknowledgeHistory(id);
+    await database.transaction((tx) async {
+      final count = await tx.delete(
+        'session_runs',
+        where: 'id=? AND status NOT IN (?,?,?)',
+        whereArgs: [id, 'running', 'paused', 'exitingEarly'],
+      );
+      if (count > 0) {
+        await tx.delete(
+          'legacy_v2_documents',
+          where: 'kind=? AND documentId=?',
+          whereArgs: ['session_runs', id],
+        );
+      }
+    });
   }
 
   @override
@@ -240,7 +304,8 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<List<String>> references(String assetId) async {
-    bool uses(SessionPlan p) => p.steps.any((s) => s.audioAssetId == assetId);
+    bool uses(SessionPlan p) =>
+        p.allSteps.any((s) => s.audioAssetId == assetId);
     final refs = <String>[];
     final draft = await loadDraft();
     if (draft != null && uses(draft.plan)) refs.add('Текущая конфигурация');
@@ -257,8 +322,12 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> reset() async {
+    if (!policy.isAuthor) {
+      throw StateError('Полный сброс недоступен в клиентском режиме');
+    }
     await database.transaction((tx) async {
       for (final table in [
+        'legacy_v2_documents',
         'run_events',
         'session_runs',
         'session_templates',

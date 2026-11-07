@@ -28,6 +28,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            // CI restores the EXISTING test key from a protected repository
+            // secret. Never create a fresh key per user build.
+            System.getenv("SULFI_SIGNING_STORE_FILE")?.let { keyPath ->
+                signingConfigs.getByName("debug").apply {
+                    storeFile = file(keyPath)
+                    storePassword = System.getenv("SULFI_SIGNING_STORE_PASSWORD")
+                    keyAlias = System.getenv("SULFI_SIGNING_KEY_ALIAS")
+                    keyPassword = System.getenv("SULFI_SIGNING_KEY_PASSWORD")
+                }
+            }
+        }
         release {
             // Official release signing will be configured separately. Never
             // distribute a release variant silently signed with a debug key.

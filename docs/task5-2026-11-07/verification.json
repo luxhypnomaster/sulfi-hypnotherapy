@@ -1,0 +1,67 @@
+{
+  "task": 5,
+  "version": "0.4.11+16",
+  "baseline": "77f3eaf",
+  "branch": "fix/task5-diary-history-access",
+  "verifiedCommit": "e91c2a01e351d6d8f3442905d1405d14af8b4660",
+  "lastAppChange": "4df07b9dadb1773f4a5f4aff93f44aa92ee3a317",
+  "pullRequest": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/12",
+  "validation": {
+    "flutterExpanded": 321,
+    "flutterMachine": 321,
+    "modifiedRegressionFiles": 69,
+    "clientBuildConfiguration": "PASS",
+    "node": 24,
+    "dartFilesFormatted": 105,
+    "analyze": "No issues found",
+    "localAndroidBuild": "PASS",
+    "githubCI": "SUCCESS"
+  },
+  "sdk": {
+    "frameworkVersion": "3.47.9",
+    "channel": "stable",
+    "repositoryUrl": "https://github.com/flutter/flutter.git",
+    "frameworkRevision": "c197ca5199e9ee5661e865596c9c07294dfab51c",
+    "frameworkCommitDate": "2026-10-29 10:10:20 -0400",
+    "engineRevision": "89c39edfdfae2949f6806e4a315c0c08522238b7",
+    "engineCommitDate": "2026-10-27 19:51:20.000Z",
+    "engineContentHash": "9e025265bef30b838c0c1b68cad19decf97048f2",
+    "engineBuildDate": "2026-10-27 20:22:45.983",
+    "dartSdkVersion": "3.13.7",
+    "devToolsVersion": "2.60.0",
+    "flutterVersion": "3.47.9"
+  },
+  "localAPK": {
+    "path": "/workspace/artifacts/task5/sulfi-0.4.11+16-arm64-debug.apk",
+    "bytes": 112938629,
+    "sha256": "ca4e41f3e8881c3728563bdc4347c81d1d79d6c8b5571a78ff677a88531a99af",
+    "target": "android-arm64",
+    "applicationId": "ru.sulfi.sulfi_hypnotherapy",
+    "versionCode": 16,
+    "certificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+  },
+  "github": {
+    "run": 42384576655,
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42384576655",
+    "artifact": 13579411596,
+    "download": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42384576655/artifacts/13579411596",
+    "zipBytes": 105550547,
+    "zipSha256FromGitHub": "sha256:c6543b98fa7472af8701a1890550289ca824c08883d31ec055ea089b28575067",
+    "expiresAt": "2026-11-21T15:16:57Z",
+    "mergeTreeMatchesCode": true
+  },
+  "deviceTests": {
+    "status": "NOT RUN / BLOCKED",
+    "reasons": [
+      "No attached Android device",
+      "No emulator",
+      "Actual previous APK certificate unavailable"
+    ],
+    "upgrade4to5": "NOT VERIFIED",
+    "realMicrophonePlaybackBackgroundSAF": "NOT RUN"
+  },
+  "googleDriveUploads": false,
+  "mainChanged": false,
+  "developChanged": false,
+  "mergesOrReleases": false
+}

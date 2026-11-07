@@ -13,8 +13,11 @@ enum AudioCategory {
   preparation('Подготовка'),
   induction('Погружение'),
   deepener('Углубление'),
+  safePlace('Безопасное место'),
   work('Терапевтическое задание'),
   integration('Интеграция'),
+  progression('Прогрессия'),
+  suggestions('Установки'),
   exit('Выход'),
   freeform('Другое');
 
@@ -36,6 +39,11 @@ class AudioAsset {
     this.section = LibrarySection.general,
     this.tags = const [],
     this.source = 'imported',
+    this.origin,
+    this.contentHash,
+    this.baseRevision = 1,
+    this.author,
+    this.authorManaged = false,
   });
 
   final String id;
@@ -51,6 +59,22 @@ class AudioAsset {
   final LibrarySection section;
   final List<String> tags;
   final String source;
+  final String? origin, contentHash, author;
+  final int baseRevision;
+  final bool authorManaged;
+  bool get authorControlled =>
+      authorManaged ||
+      origin == 'supplied' ||
+      section != LibrarySection.personal;
+
+  /// Origin is independent of content category and legacy presentation section.
+  bool get isPersonal =>
+      origin == 'personal' ||
+      (origin == null &&
+          (source == 'recorded' || section == LibrarySection.personal));
+  bool get isSuggestion =>
+      category == AudioCategory.suggestions ||
+      section == LibrarySection.suggestions;
 
   AudioAsset edited(
     String title,
@@ -71,6 +95,11 @@ class AudioAsset {
     section: section ?? this.section,
     tags: List.unmodifiable(tags ?? this.tags),
     source: source,
+    origin: origin,
+    contentHash: contentHash,
+    baseRevision: baseRevision,
+    author: author,
+    authorManaged: authorManaged,
   );
 
   Map<String, Object?> toMap() => {
@@ -86,6 +115,11 @@ class AudioAsset {
     'section': section.name,
     'tags': jsonEncode(tags),
     'source': source,
+    'origin': origin ?? (isPersonal ? 'personal' : 'supplied'),
+    'contentHash': contentHash,
+    'baseRevision': baseRevision,
+    'author': author,
+    'authorManaged': authorManaged ? 1 : 0,
   };
 
   factory AudioAsset.fromMap(Map<String, Object?> row) => AudioAsset(
@@ -105,6 +139,11 @@ class AudioAsset {
       (jsonDecode(row['tags'] as String? ?? '[]') as List).cast<String>(),
     ),
     source: row['source'] as String? ?? 'imported',
+    origin: row['origin'] as String?,
+    contentHash: row['contentHash'] as String?,
+    baseRevision: row['baseRevision'] as int? ?? 1,
+    author: row['author'] as String?,
+    authorManaged: row['authorManaged'] == 1,
   );
 }
 
