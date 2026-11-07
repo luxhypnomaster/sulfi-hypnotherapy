@@ -357,6 +357,7 @@ class CurrentSessionDraft {
     this.baseTemplateId,
     this.baseTemplateVersion,
     this.baseTemplateName,
+    this.baseTemplateDescription,
     this.baseFingerprint,
     this.topicText = '',
     this.notes = '',
@@ -371,6 +372,7 @@ class CurrentSessionDraft {
   final SessionPlan plan;
   final Map<String, dynamic> audioMetadata;
   final String? baseTemplateId, baseTemplateName, baseFingerprint;
+  final String? baseTemplateDescription;
   final int? baseTemplateVersion;
   final String topicText, notes;
   final String? executionFingerprint, archiveName;
@@ -394,6 +396,7 @@ class CurrentSessionDraft {
     baseTemplateId: baseTemplateId,
     baseTemplateVersion: baseTemplateVersion,
     baseTemplateName: baseTemplateName,
+    baseTemplateDescription: baseTemplateDescription,
     baseFingerprint: baseFingerprint,
     topicText: topicText ?? this.topicText,
     notes: notes ?? this.notes,
@@ -408,6 +411,7 @@ class CurrentSessionDraft {
     baseTemplateId: template.id,
     baseTemplateVersion: template.version,
     baseTemplateName: template.name,
+    baseTemplateDescription: template.description,
     baseFingerprint: template.plan.fingerprint,
     topicText: topicText,
     notes: notes,
@@ -423,6 +427,8 @@ class CurrentSessionDraft {
     'baseTemplateId': baseTemplateId,
     'baseTemplateVersion': baseTemplateVersion,
     'baseTemplateName': baseTemplateName,
+    if (baseTemplateDescription != null)
+      'baseTemplateDescription': baseTemplateDescription,
     'baseFingerprint': baseFingerprint,
     'topicText': topicText,
     'notes': notes,
@@ -438,6 +444,7 @@ class CurrentSessionDraft {
         baseTemplateId: m['baseTemplateId'] as String?,
         baseTemplateVersion: m['baseTemplateVersion'] as int?,
         baseTemplateName: m['baseTemplateName'] as String?,
+        baseTemplateDescription: m['baseTemplateDescription'] as String?,
         baseFingerprint: m['baseFingerprint'] as String?,
         topicText: m['topicText'] as String? ?? '',
         notes: m['notes'] as String? ?? '',

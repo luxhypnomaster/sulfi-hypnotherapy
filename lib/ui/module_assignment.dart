@@ -45,7 +45,7 @@ class _ModuleAssignmentState extends State<ModuleAssignment> {
             child: Text('Создать новый модуль'),
           ),
           for (final m in widget.catalog.entries.where(
-            (m) => !m.archived && m.origin == 'personal',
+            (m) => !m.archived && widget.catalog.policy.canEditOrigin(m.origin),
           ))
             DropdownMenuItem(value: m.id, child: Text(m.title)),
         ],

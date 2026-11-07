@@ -80,7 +80,7 @@ void main() {
     final before = {for (final t in tables) t: await db.query(t)};
     await db.close();
     db = await openAppDatabase(path, factory: databaseFactoryFfi);
-    expect(await db.getVersion(), 6);
+    expect(await db.getVersion(), 7);
     for (final t in tables) {
       final after = await db.query(t);
       expect(after.length, before[t]!.length);

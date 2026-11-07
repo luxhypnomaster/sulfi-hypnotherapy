@@ -44,6 +44,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     c.addListener(_sync);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_restoreHistory());
+    });
+  }
+
+  Future<void> _restoreHistory() async {
+    final id = await c.repository.pendingHistory();
+    if (!mounted || id == null || _busy) return;
+    if (!c.runs.any((r) => r.id == id && !r.active)) {
+      await c.repository.acknowledgeHistory(id);
+      return;
+    }
+    await _history(selectedId: id);
   }
 
   void _sync() {
@@ -131,16 +144,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
     await c.reload();
   });
-  Future<void> _history() => _run(() async {
-    await widget.player.stop();
-    if (!mounted) return;
-    await Navigator.push<SessionRun>(
-      context,
-      MaterialPageRoute(builder: (_) => HistoryScreen(controller: c)),
-    );
-    await c.reload();
-    // Repeat only replaces the draft; return to the main screen without autoplay.
-  });
+  Future<void> _history({String? selectedId}) async {
+    SessionRun? repeat;
+    await _run(() async {
+      await widget.player.stop();
+      if (!mounted) return;
+      repeat = await Navigator.push<SessionRun>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HistoryScreen(
+            controller: c,
+            player: widget.player,
+            selectedRunId: selectedId,
+          ),
+        ),
+      );
+      await c.reload();
+    });
+    if (repeat != null && mounted) await _start();
+  }
+
   Future<void> _notes() => _run(() async {
     final details = await askDetails(
       context,
@@ -154,39 +177,48 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       await c.setText(topic: details.name, notes: details.description);
     }
   });
-  Future<void> _start() => _run(() async {
-    await widget.player.stop();
-    final engine = sessionAudioHandler != null
-        ? await sessionAudioHandler!.startSession()
-        : SessionEngine(
-            controller: c,
-            transport:
-                widget.transportFactory?.call() ?? JustAudioSessionTransport(),
-          );
-    _engine = engine;
-    try {
-      if (sessionAudioHandler == null) await engine.start();
-      if (!mounted) return;
-      final finishedId = await Navigator.push<String>(
-        context,
-        MaterialPageRoute(builder: (_) => RunScreen(engine: engine)),
-      );
-      await c.reload();
-      if (finishedId != null && mounted) {
-        await Navigator.push<SessionRun>(
+  Future<void> _start() async {
+    SessionRun? repeat;
+    await _run(() async {
+      await widget.player.stop();
+      final engine = sessionAudioHandler != null
+          ? await sessionAudioHandler!.startSession()
+          : SessionEngine(
+              controller: c,
+              transport:
+                  widget.transportFactory?.call() ??
+                  JustAudioSessionTransport(),
+            );
+      _engine = engine;
+      try {
+        if (sessionAudioHandler == null) await engine.start();
+        if (!mounted) return;
+        final finishedId = await Navigator.push<String>(
           context,
-          MaterialPageRoute(
-            builder: (_) =>
-                HistoryScreen(controller: c, selectedRunId: finishedId),
-          ),
+          MaterialPageRoute(builder: (_) => RunScreen(engine: engine)),
         );
+        await c.reload();
+        if (finishedId != null && mounted) {
+          repeat = await Navigator.push<SessionRun>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HistoryScreen(
+                controller: c,
+                player: widget.player,
+                selectedRunId: finishedId,
+              ),
+            ),
+          );
+        }
+      } finally {
+        if (sessionAudioHandler?.engine != engine) await engine.close();
+        _engine = null;
+        await c.reload();
       }
-    } finally {
-      if (sessionAudioHandler?.engine != engine) await engine.close();
-      _engine = null;
-      await c.reload();
-    }
-  });
+    });
+    if (repeat != null && mounted) await _start();
+  }
+
   Future<void> _preview(SessionStep step) => _run(() async {
     if ((_engine?.active ?? false) ||
         (sessionAudioHandler?.engine?.active ?? false)) {

@@ -260,7 +260,8 @@ void main() {
           ..remove('origin')
           ..remove('contentHash')
           ..remove('baseRevision')
-          ..remove('author'),
+          ..remove('author')
+          ..remove('authorManaged'),
       );
       final bytes = File('${dir.path}/${a.filePath}');
       await bytes.writeAsBytes([7, 8, 9]);

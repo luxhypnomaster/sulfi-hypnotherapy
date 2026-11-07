@@ -99,9 +99,7 @@ class _ModuleEditorState extends State<ModuleEditor> {
       throw const LibraryException('Повторяется ID элемента');
     }
     if (widget.module case final ModuleDefinition old) {
-      if (!asNew &&
-          old.origin == 'supplied' &&
-          !(c.diary?.authenticated ?? false)) {
+      if (!asNew && !c.policy.canEditOrigin(old.origin)) {
         throw const LibraryException(
           'Общий модуль изменяет только автор. Сохраните свой вариант как новый.',
         );

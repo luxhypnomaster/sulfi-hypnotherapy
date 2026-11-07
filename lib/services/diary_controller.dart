@@ -6,11 +6,13 @@ import 'diary_api.dart';
 import 'diary_identity.dart';
 import 'diary_media_store.dart';
 import 'diary_audio.dart';
+import 'access_policy.dart';
 
 class DiaryController extends ChangeNotifier {
   DiaryController(
     this.repository, {
     this.api,
+    this.policy,
     this.authorRepository,
     this.identity,
     this.mediaStore,
@@ -19,6 +21,7 @@ class DiaryController extends ChangeNotifier {
     this.authorEmail = 'luxhypnomaster@gmail.com',
   });
   final DiaryRepository repository;
+  final AccessPolicy? policy;
   final DiaryAuthorRepository? authorRepository;
   final DiaryApi? api;
   final DiaryIdentity? identity;
@@ -81,9 +84,13 @@ class DiaryController extends ChangeNotifier {
   bool _localAuthor = false;
   int _authGeneration = 0;
   bool authorBusy = false;
-  bool get canSignIn => identity != null && authorRepository != null;
+  bool get canSignIn =>
+      identity != null &&
+      authorRepository != null &&
+      (policy?.isAuthor ?? true);
   bool get authorWorkspace =>
-      authorRepository != null && (identity == null || _localAuthor);
+      authorRepository != null &&
+      (policy != null || identity == null || _localAuthor);
   bool get authenticated => _session?.valid ?? false;
   List<DiaryEntry> published = [], drafts = [];
   bool syncing = false;
@@ -219,6 +226,11 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {
+    if (policy != null && !policy!.isAuthor) {
+      throw const DiaryApiException(
+        'В клиентском режиме доступны личные записи. Публикация авторских материалов запрещена.',
+      );
+    }
     if (debugAuthor || !authorWorkspace || api == null) {
       throw const DiaryApiException(
         'Облачный сервер ещё не подключён. Черновик сохранён на телефоне.',

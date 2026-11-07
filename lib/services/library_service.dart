@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 
 import '../data/library_repository.dart';
 import '../models/audio_asset.dart';
+import 'access_policy.dart';
 
 typedef AudioSelection = ({String name, String path});
 typedef AudioPicker = Future<AudioSelection?> Function();
@@ -29,8 +30,10 @@ class LibraryService {
     this.references,
     this.resetRelatedData,
     this.externalReader,
-  });
+    AccessPolicy? policy,
+  }) : policy = policy ?? AccessPolicy();
 
+  final AccessPolicy policy;
   final LibraryRepository repository;
   final Directory directory;
   final AudioPicker pick;
@@ -223,10 +226,24 @@ class LibraryService {
         'Название должно содержать от 1 до 120 символов.',
       );
     }
-    await repository.save(asset);
+    final old = (await repository.list())
+        .where((a) => a.id == asset.id)
+        .firstOrNull;
+    if (old != null) policy.requireAudio(old);
+    policy.requireAudio(asset);
+    await repository.save(
+      AudioAsset.fromMap({
+        ...asset.toMap(),
+        'authorManaged': asset.authorControlled ? 1 : 0,
+      }),
+    );
   }
 
   Future<void> delete(AudioAsset asset) async {
+    final actual = (await repository.list())
+        .where((a) => a.id == asset.id)
+        .firstOrNull;
+    policy.requireAudio(actual ?? asset);
     final usedBy = await references?.call(asset.id) ?? [];
     if (usedBy.isNotEmpty) {
       throw LibraryException(
@@ -240,6 +257,11 @@ class LibraryService {
   }
 
   Future<void> reset() async {
+    if (!policy.isAuthor) {
+      throw const LibraryException(
+        'Полный сброс авторских материалов недоступен в клиентском режиме.',
+      );
+    }
     await resetRelatedData?.call();
     for (final asset in await repository.list()) {
       await delete(asset);

@@ -114,7 +114,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
   Future<void> _action(String action, SessionTemplate t) => _run(() async {
     if (t.origin == 'supplied' &&
         ['rename', 'delete'].contains(action) &&
-        !(c.diary?.authenticated ?? false)) {
+        !c.policy.isAuthor) {
       throw StateError(
         'Общий шаблон изменяет только автор. Сохраните личный вариант.',
       );

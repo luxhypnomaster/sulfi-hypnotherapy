@@ -10,6 +10,7 @@ import 'diary_reader.dart';
 import 'design.dart';
 import 'session_scope.dart';
 import 'recorder_screen.dart';
+import '../services/recorder_service.dart';
 
 class DiaryEditor extends StatefulWidget {
   const DiaryEditor({
@@ -17,10 +18,12 @@ class DiaryEditor extends StatefulWidget {
     required this.diary,
     required this.entry,
     this.recordAudio,
+    this.captureBackend,
   });
   final DiaryController diary;
   final DiaryEntry entry;
   final Future<DiaryBlock?> Function()? recordAudio;
+  final CaptureBackend? captureBackend;
   @override
   State<DiaryEditor> createState() => _DiaryEditorState();
 }
@@ -206,6 +209,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     setState(() => busy = true);
     try {
       DiaryBlock? imported;
+      var committed = false;
       if (record) {
         if (widget.recordAudio != null) {
           imported = await widget.recordAudio!();
@@ -221,6 +225,12 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                 controller: scope.controller,
                 player: scope.player,
                 diaryRecording: true,
+                backend: widget.captureBackend,
+                attachDiaryBlock: (block) async {
+                  final attached = await _commitAttachment(block, replacing);
+                  committed = true;
+                  return attached;
+                },
               ),
             ),
           );
@@ -233,6 +243,9 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
         }
       } else {
         imported = await store.import(type, blockId: replacing?.id);
+      }
+      if (imported != null && !committed) {
+        imported = await _commitAttachment(imported, replacing);
       }
       final added = imported;
       if (added != null && mounted) {
@@ -264,6 +277,31 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     } finally {
       if (mounted) setState(() => busy = false);
     }
+  }
+
+  Future<DiaryBlock> _commitAttachment(
+    DiaryBlock block,
+    DiaryBlock? replacing,
+  ) async {
+    final attached = replacing == null
+        ? block
+        : DiaryBlock.fromMap({...block.toMap(), 'id': replacing.id}).copyWith(
+            altText: replacing.altText,
+            caption: replacing.caption,
+            label: replacing.label,
+          );
+    final next = List<DiaryBlock>.of(blocks);
+    final index = replacing == null
+        ? -1
+        : next.indexWhere((b) => b.id == replacing.id);
+    if (index < 0) {
+      next.add(attached);
+    } else {
+      next[index] = attached;
+    }
+    await tail;
+    await widget.diary.saveDraft(value.copyWith(blocks: next));
+    return attached;
   }
 
   void reorder(int old, int next) {
@@ -606,20 +644,23 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       onPressed: busy ? null : save,
                       child: const Text('Сохранить черновик'),
                     ),
-                    if (widget.diary.api != null)
+                    if (widget.diary.api != null &&
+                        (widget.diary.policy?.isAuthor ?? true))
                       TextButton(
                         onPressed: busy ? null : () => cloud(),
                         child: const Text('Сохранить на Диск'),
                       ),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: neonLime,
-                        foregroundColor: ink,
+                    if (widget.diary.policy?.isAuthor ?? true)
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: neonLime,
+                          foregroundColor: ink,
+                        ),
+                        onPressed: busy ? null : () => cloud(publish: true),
+                        child: const Text('Опубликовать'),
                       ),
-                      onPressed: busy ? null : () => cloud(publish: true),
-                      child: const Text('Опубликовать'),
-                    ),
-                    if (entry.status == DiaryStatus.published)
+                    if (entry.status == DiaryStatus.published &&
+                        (widget.diary.policy?.isAuthor ?? true))
                       TextButton(
                         onPressed: busy ? null : () => cloud(publish: false),
                         child: const Text('Снять публикацию'),

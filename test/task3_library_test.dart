@@ -217,7 +217,8 @@ void main() {
           closeTo(toolbar.center.dy, 2),
         );
       }
-      expect(rows(), {'prep', 'deep', 'legacy'});
+      expect(rows(), {'prep', 'deep'});
+      // Task5: explicit sections are independent; Suggestions no longer leaks into General.
       await capture(t, 'library');
       await t.tap(find.byKey(const ValueKey('library-prep')));
       await t.pumpAndSettle();
@@ -240,14 +241,14 @@ void main() {
       expect(find.byKey(const Key('library-category-menu')), findsOneWidget);
       await category(t, 'suggestions');
       expect(find.text('Категории · 2'), findsOneWidget);
-      expect(rows(), {'prep', 'legacy'});
+      expect(rows(), {'prep'});
       await capture(t, 'library-categories');
       await t.tapAt(const Offset(1, 1));
       await t.pumpAndSettle();
       expect(find.byKey(const Key('library-category-menu')), findsNothing);
       await t.tap(find.byKey(const ValueKey('library-section-suggestions')));
       await t.pumpAndSettle();
-      expect(rows(), {'legacy', 'mine'});
+      expect(rows(), {'legacy'});
       expect(find.byKey(const ValueKey('library-legacy')), findsOneWidget);
       await t.tap(find.byKey(const ValueKey('library-section-personal')));
       await t.pumpAndSettle();

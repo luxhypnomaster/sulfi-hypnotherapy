@@ -32,6 +32,7 @@ import 'services/library_service.dart';
 import 'services/preview_player.dart';
 import 'services/capsule_service.dart';
 import 'services/device_files.dart';
+import 'services/access_policy.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,10 +71,13 @@ class _BootstrapState extends State<_Bootstrap> {
         p.join(root.path, 'library.sqlite'),
       );
       _repository = repository;
-      final sessions = SqliteSessionRepository(repository.database);
-      final modules = ModuleCatalog(repository.database);
+      final policy = AccessPolicy(database: repository.database);
+      await policy.load();
+      final sessions = SqliteSessionRepository(repository.database, policy);
+      final modules = ModuleCatalog(repository.database, policy);
       final library = LibraryService(
         repository: repository,
+        policy: policy,
         externalReader: (uri) async => (await DeviceFiles.channel
             .invokeMethod<String>('copyLegacyAudio', uri))!,
         directory: Directory(p.join(root.path, 'audio')),
@@ -145,6 +149,7 @@ class _BootstrapState extends State<_Bootstrap> {
       );
       final diary = DiaryController(
         DiaryRepository(repository.database),
+        policy: policy,
         api: diaryBase == null
             ? null
             : DiaryApi(

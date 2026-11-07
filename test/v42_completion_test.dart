@@ -4,6 +4,7 @@ import 'package:sulfi_hypnotherapy/app.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
 import 'package:sulfi_hypnotherapy/ui/run_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/history_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/history_detail_screen.dart';
 
 import 'support/fakes.dart';
 import 'support/session_transport_fake.dart';
@@ -38,6 +39,9 @@ void main() {
         ))!;
         await t.runAsync(f.engine.interrupt);
         await t.runAsync(f.controller.reload);
+        await t.runAsync(
+          () => f.controller.repository.acknowledgeHistory(f.engine.run!.id),
+        );
         final transport = TestTransport();
         t.view.physicalSize = const Size(412, 915);
         t.view.devicePixelRatio = 1;
@@ -71,6 +75,13 @@ void main() {
             await drain(t);
           }
         }
+        expect(find.byType(HistoryDetailScreen), findsOneWidget);
+        expect(
+          t.widget<HistoryDetailScreen>(find.byType(HistoryDetailScreen)).runId,
+          runId,
+        );
+        await t.tap(find.byTooltip('Назад'));
+        await drain(t);
         expect(find.byType(HistoryScreen), findsOneWidget);
         expect(find.byKey(ValueKey('history-$runId')), findsOneWidget);
         final run = f.controller.runs.firstWhere((r) => r.id == runId);

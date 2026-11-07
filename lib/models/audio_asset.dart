@@ -43,6 +43,7 @@ class AudioAsset {
     this.contentHash,
     this.baseRevision = 1,
     this.author,
+    this.authorManaged = false,
   });
 
   final String id;
@@ -60,6 +61,11 @@ class AudioAsset {
   final String source;
   final String? origin, contentHash, author;
   final int baseRevision;
+  final bool authorManaged;
+  bool get authorControlled =>
+      authorManaged ||
+      origin == 'supplied' ||
+      section != LibrarySection.personal;
 
   /// Origin is independent of content category and legacy presentation section.
   bool get isPersonal =>
@@ -93,6 +99,7 @@ class AudioAsset {
     contentHash: contentHash,
     baseRevision: baseRevision,
     author: author,
+    authorManaged: authorManaged,
   );
 
   Map<String, Object?> toMap() => {
@@ -112,6 +119,7 @@ class AudioAsset {
     'contentHash': contentHash,
     'baseRevision': baseRevision,
     'author': author,
+    'authorManaged': authorManaged ? 1 : 0,
   };
 
   factory AudioAsset.fromMap(Map<String, Object?> row) => AudioAsset(
@@ -135,6 +143,7 @@ class AudioAsset {
     contentHash: row['contentHash'] as String?,
     baseRevision: row['baseRevision'] as int? ?? 1,
     author: row['author'] as String?,
+    authorManaged: row['authorManaged'] == 1,
   );
 }
 

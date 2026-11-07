@@ -8,14 +8,18 @@ import '../models/local_dates.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
 import 'session_actions.dart';
+import 'history_detail_screen.dart';
+import '../services/preview_player.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({
     super.key,
     required this.controller,
     this.selectedRunId,
+    this.player,
   });
   final String? selectedRunId;
+  final PreviewPlayer? player;
   final SessionController controller;
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -23,7 +27,60 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   bool _busy = false;
-  Future<void> _action(String action, SessionRun run) async {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectedRunId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _open(widget.selectedRunId!);
+      });
+    }
+  }
+
+  Future<void> _open(String id) async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HistoryDetailScreen(
+          controller: widget.controller,
+          runId: id,
+          player: widget.player,
+          onRepeat: (r) async {
+            final start = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Повторить сессию?'),
+                content: const Text(
+                  'Можно подготовить конфигурацию или сразу начать новый сеанс. Исходная история сохранится.',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('Подготовить'),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Начать повтор'),
+                  ),
+                ],
+              ),
+            );
+            if (start == null || !mounted) return;
+            Navigator.pop(context);
+            await _action('repeat', r, start: start);
+          },
+        ),
+      ),
+    );
+    await widget.controller.repository.acknowledgeHistory(id);
+    await widget.controller.reload();
+  }
+
+  Future<void> _action(
+    String action,
+    SessionRun run, {
+    bool start = false,
+  }) async {
     if (_busy) return;
     setState(() => _busy = true);
     await showActionError(context, () async {
@@ -62,7 +119,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           return;
         }
         await widget.controller.useRun(run, rebuild: rebuild);
-        if (mounted) Navigator.pop(context, run);
+        if (mounted) Navigator.pop(context, start && !rebuild ? run : null);
       }
       if (action == 'template') {
         if (!mounted) return;
@@ -148,15 +205,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: neonLime, fontSize: 11),
                       ),
-                      onTap: () => Navigator.push<void>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => _RunDetails(
-                            controller: widget.controller,
-                            run: r,
-                          ),
-                        ),
-                      ),
+                      onTap: () => _open(r.id),
                       trailing: PopupMenuButton<String>(
                         enabled: !_busy,
                         onSelected: (s) => unawaited(_action(s, r)),
@@ -188,132 +237,3 @@ class _HistoryScreenState extends State<HistoryScreen> {
     },
   );
 }
-
-class _RunDetails extends StatefulWidget {
-  const _RunDetails({required this.controller, required this.run});
-  final SessionController controller;
-  final SessionRun run;
-  @override
-  State<_RunDetails> createState() => _RunDetailsState();
-}
-
-class _RunDetailsState extends State<_RunDetails> {
-  late final _events = widget.controller.repository.events(widget.run.id);
-  @override
-  Widget build(BuildContext context) => LeatherScaffold(
-    title: 'Сессия №${widget.run.displayNumber}',
-    child: FutureBuilder(
-      future: _events,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text(
-              'Не удалось прочитать события. Вернитесь и повторите попытку.',
-            ),
-          );
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final events = snapshot.data!;
-        final r = widget.run;
-        final plan = r.snapshot.plan;
-        return ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(r.name, style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 12),
-            Text(
-              '${r.status.label}\nНачало: ${historicalDateLabel(r.startedAt, r.startedUtcOffsetMinutes, legacyLabel: r.name)}\n${r.endEstimated ? 'Последнее сохранение (точное время остановки неизвестно)' : 'Окончание'}: ${r.endedAt == null ? '—' : formatLocalDate(r.endedAt!)}\n${r.endEstimated ? 'Сохранённая' : 'Фактическая'} длительность: ${formatDuration(r.elapsedMs)}',
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Источник: ${r.snapshot.baseTemplateName ?? 'Текущая конфигурация'}${r.snapshot.baseTemplateVersion == null ? '' : ' · версия ${r.snapshot.baseTemplateVersion}'}',
-            ),
-            if (r.snapshot.topicText.isNotEmpty)
-              Text('Тема: ${r.snapshot.topicText}'),
-            if (r.notes.isNotEmpty) Text('Заметка: ${r.notes}'),
-            const SizedBox(height: 18),
-            const Text(
-              'Сохранённая последовательность',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            for (final step in plan.allSteps)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  '${plan.allSteps.indexOf(step) + 1}. ${step.title}\nПауза до: ${formatDuration(step.delayBeforeSeconds * 1000)} · элемент: ${step.durationMs == null ? 'до остановки' : formatDuration(step.durationMs!)}\n${!plan.steps.any((s) => s.id == step.id)
-                      ? 'Выключен в плане запуска'
-                      : r.skippedStepIds.contains(step.id)
-                      ? 'Пропущен при выходе'
-                      : _stepStatus(events, plan.steps.indexWhere((s) => s.id == step.id))}',
-                ),
-              ),
-            const Divider(),
-            const Text(
-              'Фактические события',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            for (final event in events)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(_eventLabel(event['eventType'] as String)),
-                subtitle: Text(
-                  '${historicalDateLabel(DateTime.parse(event['timestamp'] as String), r.startedUtcOffsetMinutes)} · элемент ${(event['stepIndex'] as int) + 1} · позиция ${formatDuration(event['playheadMs'] as int)}',
-                ),
-              ),
-          ],
-        );
-      },
-    ),
-  );
-  String _stepStatus(List<Map<String, dynamic>> events, int index) {
-    final kinds = events
-        .where((e) => e['stepIndex'] == index)
-        .map((e) => e['eventType'])
-        .toList();
-    for (final kind in kinds.reversed) {
-      if (kind == 'block_completed') return 'Выполнен';
-      if (kind == 'work_completed_early') return 'Завершён пользователем';
-      if (kind == 'block_skipped') return 'Пропущен пользователем';
-      if (kind == 'block_started') return 'Начат · не завершён';
-      if (kind == 'delay_started') return 'Началось ожидание перед элементом';
-    }
-    return 'Не запускался';
-  }
-}
-
-String _eventLabel(String event) => switch (event) {
-  'started' => 'Сессия начата',
-  'delay_started' => 'Пауза перед элементом',
-  'block_started' => 'Элемент начат',
-  'block_completed' => 'Элемент завершён',
-  'work_completed_early' => 'Самостоятельная работа завершена пользователем',
-  'block_skipped' => 'Элемент пропущен',
-  'paused' => 'Пауза',
-  'resumed' => 'Продолжение',
-  'seek' => 'Перемотка текущего аудио',
-  'seek_from' => 'Позиция перед перемоткой',
-  'navigation_next_track' => 'Переход к следующему треку',
-  'navigation_previous_track' => 'Переход к предыдущему треку',
-  'navigation_next_module' => 'Переход к следующему модулю',
-  'navigation_previous_module' => 'Переход к предыдущему модулю',
-  'navigation_next_phase' => 'Переход к следующей фазе',
-  'navigation_previous_phase' => 'Переход к предыдущей фазе',
-  'exit_cancelled_by_navigation' =>
-    'Возврат из выхода к плану по команде пользователя',
-  'items_skipped_for_exit' => 'Зафиксированы пропуски при переходе к выходу',
-  _ when event.startsWith('navigation_') && event.endsWith('_from') =>
-    'Позиция перед переходом',
-  'extended_5min' => 'Самостоятельная работа продлена на 5 минут',
-  'exit_requested' => 'Запрошен выход',
-  'exit_completed' => 'Выход воспроизведён · досрочное завершение',
-  'exit_without_audio' => 'Завершение без завершающего аудио',
-  'exit_file_missing' => 'Файл выхода недоступен',
-  'completed' => 'Сессия завершена',
-  'interrupted' => 'Сессия прервана',
-  'process_interrupted' =>
-    'Приложение было закрыто · восстановлен последний checkpoint',
-  'audio_error' || 'execution_error' => 'Ошибка · звук остановлен',
-  _ => event,
-};

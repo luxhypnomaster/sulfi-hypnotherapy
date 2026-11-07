@@ -245,7 +245,7 @@ class CapsuleService {
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
         'schema': schema,
-        'databaseSchema': 6,
+        'databaseSchema': 7,
         'scope': moduleId == null ? 'full' : 'module',
         'records': records,
         'files': files.values.toList(),
@@ -351,7 +351,7 @@ class CapsuleService {
       final identity = Map<String, dynamic>.from(manifest)..remove('id');
       if (manifest['format'] != 'sulfi-capsule' ||
           manifest['schema'] != schema ||
-          manifest['databaseSchema'] != 6 ||
+          ![6, 7].contains(manifest['databaseSchema']) ||
           digest(identity) != manifest['id']) {
         throw const FormatException(
           'Неизвестная версия или повреждённый манифест',
@@ -361,6 +361,16 @@ class CapsuleService {
       if (records.keys.toSet().difference(tables.toSet()).isNotEmpty ||
           tables.any((t) => records[t] is! List)) {
         throw const FormatException('Некорректные таблицы');
+      }
+      // The digest above authenticates the original schema-6 manifest first.
+      // Add the v7 capability flag only in memory; IDs and media are unchanged.
+      if (manifest['databaseSchema'] == 6) {
+        for (final row in records['audio_assets'] as List) {
+          row['authorManaged'] =
+              row['origin'] == 'supplied' || row['section'] != 'personal'
+              ? 1
+              : 0;
+        }
       }
       final files = manifest['files'] as List;
       final hashes = <String>{};
@@ -791,6 +801,32 @@ class CapsuleService {
             }
             if (table == 'app_counters') continue;
             if (skipped[table]!.contains(row['id'])) continue;
+            if (!library.policy.isAuthor &&
+                const {
+                  'audio_assets',
+                  'module_definitions',
+                  'session_templates',
+                }.contains(table)) {
+              final existing = await tx.query(
+                table,
+                where: 'id=?',
+                whereArgs: [row['id']],
+              );
+              if (existing.isNotEmpty) {
+                if (table == 'audio_assets') {
+                  library.policy.requireAudio(
+                    AudioAsset.fromMap(existing.single),
+                  );
+                } else {
+                  final previous = jsonDecode(
+                    existing.single['payload'] as String,
+                  );
+                  library.policy.requireOrigin(
+                    previous['origin'] as String? ?? 'personal',
+                  );
+                }
+              }
+            }
             if (table == 'session_runs') {
               final occupied = await tx.query(
                 'session_runs',

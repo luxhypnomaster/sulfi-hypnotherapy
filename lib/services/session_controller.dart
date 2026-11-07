@@ -13,6 +13,7 @@ import '../models/session_plan.dart';
 import '../models/execution_identity.dart';
 import 'library_service.dart';
 import 'capsule_service.dart';
+import 'access_policy.dart';
 
 class SessionController extends ChangeNotifier {
   SessionController({
@@ -21,7 +22,10 @@ class SessionController extends ChangeNotifier {
     ModuleCatalog? modules,
     this.diary,
     this.capsules,
-  }) : modules = modules ?? ModuleCatalog();
+  }) : modules = modules ?? ModuleCatalog(null, library.policy) {
+    library.policy.addListener(_notify);
+  }
+  AccessPolicy get policy => library.policy;
   SessionController? _editorSource;
   String? _editorBaseline;
   bool get isEditor => _editorSource != null;
@@ -456,7 +460,7 @@ class SessionController extends ChangeNotifier {
     if (old == null) {
       throw const LibraryException('Исходный шаблон недоступен.');
     }
-    if (old.origin == 'supplied' && !(diary?.authenticated ?? false)) {
+    if (!policy.canEditOrigin(old.origin)) {
       throw const LibraryException(
         'Общий шаблон изменяет только автор. Сохраните как новый.',
       );
@@ -685,6 +689,7 @@ class SessionController extends ChangeNotifier {
 
   @override
   void dispose() {
+    library.policy.removeListener(_notify);
     _disposed = true;
     super.dispose();
   }

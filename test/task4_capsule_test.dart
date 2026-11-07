@@ -10,6 +10,8 @@ import 'package:sulfi_hypnotherapy/data/module_catalog.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
+import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
+import 'package:sulfi_hypnotherapy/services/access_policy.dart';
 import 'package:sulfi_hypnotherapy/models/modular_plan.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
 import 'package:sulfi_hypnotherapy/services/library_service.dart';
@@ -402,6 +404,90 @@ void main() {
       expect(await b.database.query('module_definitions'), isEmpty);
     });
   }
+  test(
+    'Task5: schema6 capsule remains readable; access mode is never imported',
+    () async {
+      final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
+      final manifest = jsonDecode(
+        utf8.decode(decoded.findFile('manifest.json')!.content),
+      );
+      manifest['databaseSchema'] = 6;
+      for (final row in manifest['records']['audio_assets']) {
+        row.remove('authorManaged');
+      }
+      manifest.remove('id');
+      manifest['id'] = CapsuleService.digest(manifest);
+      final archive = Archive();
+      for (final f in decoded.files.where((f) => f.isFile)) {
+        final data = f.name == 'manifest.json'
+            ? utf8.encode(jsonEncode(manifest))
+            : f.content;
+        archive.addFile(ArchiveFile(f.name, data.length, data));
+      }
+      final legacy = await File(p.join(root.path, 'legacy6.zip'))
+          .writeAsBytes(ZipEncoder().encode(archive));
+      await target.policy.setMode(LocalMode.client);
+      final preview = await destination.inspect(legacy);
+      await destination.restore(preview);
+      await preview.close();
+      expect(target.policy.mode, LocalMode.client);
+      final again = await destination.inspect(legacy);
+      expect(again.alreadyImported, isTrue);
+      expect(again.conflicts, isEmpty);
+      await destination.restore(again);
+      await again.close();
+      expect(await b.list(), hasLength(2));
+      expect(
+        (await DiaryAuthorRepository(
+          b.database,
+        ).entries()).single.blocks.first.media!.assetId,
+        'diary-audio',
+      );
+    },
+  );
+  test(
+    'Task5: CLIENT capsule replacement cannot overwrite protected author audio',
+    () async {
+      final asset = (await a.list()).first;
+      await original.save(
+        asset.edited(
+          'Авторская запись',
+          asset.category,
+          section: LibrarySection.general,
+        ),
+      );
+      final initialZip = await source.export();
+      final first = await destination.inspect(initialZip);
+      await destination.restore(first);
+      await first.close();
+      final before = (await b.list())
+          .firstWhere((a) => a.id == asset.id)
+          .toMap();
+      await original.save(
+        (await a.list())
+            .firstWhere((a) => a.id == asset.id)
+            .edited('Изменено в капсуле', asset.category),
+      );
+      final changed = await source.export();
+      await target.policy.setMode(LocalMode.client);
+      final preview = await destination.inspect(changed);
+      await expectLater(
+        destination.restore(preview, choice: CapsuleConflictChoice.replace),
+        throwsA(isA<Exception>()),
+      );
+      await preview.close();
+      expect(
+        (await b.list()).firstWhere((a) => a.id == asset.id).toMap(),
+        before,
+      );
+      expect(
+        await target
+            .fileFor((await b.list()).firstWhere((a) => a.id == asset.id))
+            .exists(),
+        isTrue,
+      );
+    },
+  );
   test('free-space preflight blocks before extracting files', () async {
     final limited = CapsuleService(
       database: b.database,

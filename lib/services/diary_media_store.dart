@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 import '../models/diary_entry.dart';
 import '../models/session_plan.dart';
 import 'library_service.dart';
+import 'mp4_audio.dart';
 
 class DiaryMediaLimits {
   static const imageBytes = 20 * 1024 * 1024;
@@ -108,9 +109,7 @@ class DiaryMediaStore {
             ascii(8, 12) == 'WAVE') {
           mime = 'audio/wav';
           ext = 'wav';
-        } else if (data.length > 12 &&
-            ascii(4, 8) == 'ftyp' &&
-            ['M4A ', 'M4B '].contains(ascii(8, 12))) {
+        } else if (isAudioOnlyMp4(data)) {
           mime = 'audio/mp4';
           ext = 'm4a';
         } else if (starts([73, 68, 51]) ||

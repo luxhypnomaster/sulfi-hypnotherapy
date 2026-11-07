@@ -14,6 +14,7 @@ import 'design.dart';
 import 'module_assignment.dart';
 import '../models/diary_entry.dart';
 import '../services/device_files.dart';
+import '../services/library_service.dart';
 import 'recorder_microphone.dart';
 
 class RecorderScreen extends StatefulWidget {
@@ -23,11 +24,13 @@ class RecorderScreen extends StatefulWidget {
     required this.player,
     this.backend,
     this.diaryRecording = false,
+    this.attachDiaryBlock,
   });
   final SessionController controller;
   final PreviewPlayer player;
   final CaptureBackend? backend;
   final bool diaryRecording;
+  final Future<DiaryBlock> Function(DiaryBlock)? attachDiaryBlock;
   @override
   State<RecorderScreen> createState() => _RecorderScreenState();
 }
@@ -173,15 +176,37 @@ class _RecorderScreenState extends State<RecorderScreen>
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
     await widget.player.stop();
+    if (!mounted) return;
     if (widget.diaryRecording) {
       final store = widget.controller.diary?.mediaStore;
-      if (store == null) return;
-      final block = await r.saveTo(
-        (path) async => (await store.importFile(DiaryBlockType.audio, (
-          name: '${_title.text}.m4a',
+      if (store == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Хранилище дневника недоступно. Дубль сохранён до выхода.',
+            ),
+          ),
+        );
+        return;
+      }
+      final title = _title.text.trim().isEmpty
+          ? _initialTitle
+          : _title.text.trim();
+      final block = await r.saveTo((path) async {
+        final copied = (await store.importFile(DiaryBlockType.audio, (
+          name: '$title.m4a',
           path: path,
-        ))).copyWith(label: _title.text),
-      );
+        ))).copyWith(label: title);
+        try {
+          // The raw take is removed by saveTo only AFTER the entry's SQLite
+          // attachment commit succeeds. A failed commit remains retryable.
+          return await widget.attachDiaryBlock?.call(copied) ?? copied;
+        } catch (_) {
+          throw const LibraryException(
+            'Не удалось прикрепить аудио к дневнику. Дубль сохранён временно; повторите добавление.',
+          );
+        }
+      });
       if (block != null && mounted) {
         setState(() => _allowPop = true);
         Navigator.pop(context, block);
@@ -255,9 +280,9 @@ class _RecorderScreenState extends State<RecorderScreen>
               children: [
                 Image.asset('assets/brand/spiral.png', width: 36),
                 const SizedBox(width: 8),
-                const Text(
-                  'Запись трека',
-                  style: TextStyle(
+                Text(
+                  widget.diaryRecording ? 'Аудио для дневника' : 'Запись трека',
+                  style: const TextStyle(
                     color: neonLime,
                     fontWeight: FontWeight.w700,
                   ),
@@ -288,9 +313,11 @@ class _RecorderScreenState extends State<RecorderScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Text(
-                              'Параметры трека',
-                              style: TextStyle(
+                            Text(
+                              widget.diaryRecording
+                                  ? 'Аудиовложение'
+                                  : 'Параметры трека',
+                              style: const TextStyle(
                                 color: neonLime,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -298,57 +325,63 @@ class _RecorderScreenState extends State<RecorderScreen>
                             ),
                             TextFormField(
                               controller: _title,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 isDense: true,
-                                labelText: 'Название трека *',
+                                labelText: widget.diaryRecording
+                                    ? 'Название (необязательно)'
+                                    : 'Название трека *',
                               ),
-                              validator: (v) => (v ?? '').trim().isEmpty
+                              validator: (v) =>
+                                  !widget.diaryRecording &&
+                                      (v ?? '').trim().isEmpty
                                   ? 'Введите название'
                                   : null,
                             ),
-                            const SizedBox(height: 6),
-                            TextFormField(
-                              controller: _description,
-                              decoration: const InputDecoration(
-                                isDense: true,
-                                labelText: 'Описание',
+                            if (!widget.diaryRecording) ...[
+                              const SizedBox(height: 6),
+                              TextFormField(
+                                controller: _description,
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  labelText: 'Описание',
+                                ),
+                                maxLines: 1,
                               ),
-                              maxLines: 1,
-                            ),
-                            const SizedBox(height: 6),
-                            DropdownButtonFormField<AudioCategory>(
-                              initialValue: _category,
-                              isExpanded: true,
-                              decoration: const InputDecoration(
-                                isDense: true,
-                                labelText: 'Категория · Мои аудиозаписи',
+                              const SizedBox(height: 6),
+                              DropdownButtonFormField<AudioCategory>(
+                                initialValue: _category,
+                                isExpanded: true,
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  labelText: 'Категория · Мои аудиозаписи',
+                                ),
+                                items: AudioCategory.values
+                                    .map(
+                                      (v) => DropdownMenuItem(
+                                        value: v,
+                                        child: Text(v.label),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (v) =>
+                                    setState(() => _category = v!),
                               ),
-                              items: AudioCategory.values
-                                  .map(
-                                    (v) => DropdownMenuItem(
-                                      value: v,
-                                      child: Text(v.label),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (v) => setState(() => _category = v!),
-                            ),
-                            const SizedBox(height: 6),
-                            TextFormField(
-                              controller: _tags,
-                              decoration: const InputDecoration(
-                                isDense: true,
-                                labelText: 'Теги',
-                                hintText: 'Например: мой голос, расслабление',
+                              const SizedBox(height: 6),
+                              TextFormField(
+                                controller: _tags,
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  labelText: 'Теги',
+                                  hintText: 'Например: мой голос, расслабление',
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 6),
-                            if (!widget.diaryRecording)
+                              const SizedBox(height: 6),
                               ModuleAssignment(
                                 compact: true,
                                 catalog: widget.controller.modules,
                                 choice: _choice,
                               ),
+                            ],
                             const Divider(height: 12, color: antiqueGold),
                             const Text(
                               'Запись',
@@ -478,7 +511,9 @@ class _RecorderScreenState extends State<RecorderScreen>
                   const SizedBox(width: 8),
                   Expanded(
                     child: NeonButton(
-                      label: 'Сохранить трек',
+                      label: widget.diaryRecording
+                          ? 'Добавить в дневник'
+                          : 'Сохранить трек',
                       icon: Icons.check,
                       onPressed: r.canSave && !r.busy && !playing
                           ? _save

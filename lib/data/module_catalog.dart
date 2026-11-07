@@ -4,9 +4,12 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/modular_plan.dart';
 import '../models/session_plan.dart';
+import '../services/access_policy.dart';
 
 class ModuleCatalog {
-  ModuleCatalog([this.database]);
+  ModuleCatalog([this.database, AccessPolicy? policy])
+    : policy = policy ?? AccessPolicy();
+  final AccessPolicy policy;
   final Database? database;
   final Map<String, ModuleDefinition> _memory = {};
   List<ModuleDefinition> entries = [];
@@ -23,6 +26,10 @@ class ModuleCatalog {
   }
 
   Future<void> save(ModuleDefinition module, {int? expectedVersion}) async {
+    await load();
+    final previousModule = entries.where((m) => m.id == module.id).firstOrNull;
+    if (previousModule != null) policy.requireOrigin(previousModule.origin);
+    policy.requireOrigin(module.origin);
     if (module.title.trim().isEmpty) {
       throw ArgumentError('Введите название модуля');
     }
@@ -62,6 +69,10 @@ class ModuleCatalog {
               final m = Map<String, dynamic>.from(
                 jsonDecode(row['payload'] as String),
               );
+              if (table == 'session_templates' &&
+                  !policy.canEditOrigin(m['origin'] as String? ?? 'personal')) {
+                continue;
+              }
               final plan = SessionPlan.fromMap(
                 Map<String, dynamic>.from(m['plan']),
               );
@@ -118,11 +129,7 @@ class ModuleCatalog {
   Future<void> attach(String moduleId, SessionStep item) async {
     await load();
     final m = entries.firstWhere((m) => m.id == moduleId);
-    if (m.origin == 'supplied') {
-      throw StateError(
-        'Общий модуль редактируется в авторском редакторе. Создайте личный вариант.',
-      );
-    }
+    policy.requireOrigin(m.origin);
     await save(
       ModuleDefinition(
         id: m.id,
@@ -154,6 +161,10 @@ class ModuleCatalog {
   }
 
   Future<void> clear() async {
+    await load();
+    for (final m in entries) {
+      policy.requireOrigin(m.origin);
+    }
     _memory.clear();
     await database?.delete('module_definitions');
     entries = [];

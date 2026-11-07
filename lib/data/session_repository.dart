@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/session_plan.dart';
+import '../services/access_policy.dart';
 
 abstract interface class SessionRepository {
   Future<CurrentSessionDraft?> loadDraft();
@@ -21,11 +22,34 @@ abstract interface class SessionRepository {
   Future<void> interruptUnfinished();
   Future<List<String>> references(String assetId);
   Future<void> reset();
+  Future<String?> pendingHistory();
+  Future<void> acknowledgeHistory(String id);
 }
 
 class SqliteSessionRepository implements SessionRepository {
-  SqliteSessionRepository(this.database);
+  SqliteSessionRepository(this.database, [AccessPolicy? policy])
+    : policy = policy ?? AccessPolicy();
+  final AccessPolicy policy;
   final Database database;
+  @override
+  Future<String?> pendingHistory() async {
+    final rows = await database.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['pending_history'],
+    );
+    return rows.firstOrNull?['value'] as String?;
+  }
+
+  @override
+  Future<void> acknowledgeHistory(String id) async {
+    await database.delete(
+      'app_settings',
+      where: 'name=? AND value=?',
+      whereArgs: ['pending_history', id],
+    );
+  }
+
   Map<String, dynamic> _decode(Map<String, Object?> row) =>
       jsonDecode(row['payload'] as String) as Map<String, dynamic>;
   @override
@@ -51,6 +75,11 @@ class SqliteSessionRepository implements SessionRepository {
   )).map((r) => SessionTemplate.fromMap(_decode(r))).toList();
   @override
   Future<void> saveTemplate(SessionTemplate template) async {
+    final old = (await templates())
+        .where((t) => t.id == template.id)
+        .firstOrNull;
+    if (old != null) policy.requireOrigin(old.origin);
+    policy.requireOrigin(template.origin);
     await database.insert('session_templates', {
       'id': template.id,
       'payload': jsonEncode(template.toMap()),
@@ -59,6 +88,8 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> deleteTemplate(String id) async {
+    final old = (await templates()).where((t) => t.id == id).firstOrNull;
+    if (old != null) policy.requireOrigin(old.origin);
     await database.delete('session_templates', where: 'id=?', whereArgs: [id]);
     await database.delete(
       'legacy_v2_documents',
@@ -105,6 +136,11 @@ class SqliteSessionRepository implements SessionRepository {
         if (active.isNotEmpty) {
           throw StateError('Сначала завершите активную сессию.');
         }
+        await tx.delete(
+          'app_settings',
+          where: 'name=?',
+          whereArgs: ['pending_history'],
+        );
         final rows = await tx.query(
           'app_counters',
           where: 'name=?',
@@ -187,6 +223,12 @@ class SqliteSessionRepository implements SessionRepository {
         whereArgs: [run.id],
       );
       if (event != null) await _event(tx, run, event);
+      if (!run.active) {
+        await tx.insert('app_settings', {
+          'name': 'pending_history',
+          'value': run.id,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
     });
   }
 
@@ -227,6 +269,7 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> deleteRun(String id) async {
+    await acknowledgeHistory(id);
     await database.transaction((tx) async {
       final count = await tx.delete(
         'session_runs',
@@ -279,6 +322,9 @@ class SqliteSessionRepository implements SessionRepository {
 
   @override
   Future<void> reset() async {
+    if (!policy.isAuthor) {
+      throw StateError('Полный сброс недоступен в клиентском режиме');
+    }
     await database.transaction((tx) async {
       for (final table in [
         'legacy_v2_documents',

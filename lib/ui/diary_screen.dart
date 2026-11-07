@@ -342,7 +342,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       icon: const Icon(Icons.add, color: neonLime),
                       label: const Text('Новая запись'),
                     ),
-                  if (author && d.api != null)
+                  if (author && d.api != null && (d.policy?.isAuthor ?? true))
                     IconButton(
                       tooltip: 'Загрузить недостающие черновики с Диска',
                       onPressed: busy

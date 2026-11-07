@@ -106,6 +106,14 @@ class MemoryPlayer extends PreviewPlayer {
 }
 
 class MemorySessionRepository implements SessionRepository {
+  String? pending;
+  @override
+  Future<String?> pendingHistory() async => pending;
+  @override
+  Future<void> acknowledgeHistory(String id) async {
+    if (pending == id) pending = null;
+  }
+
   CurrentSessionDraft? draft;
   final Map<String, SessionTemplate> savedTemplates = {};
   final Map<String, SessionRun> savedRuns = {};
@@ -161,6 +169,7 @@ class MemorySessionRepository implements SessionRepository {
   @override
   Future<void> checkpoint(SessionRun run, {String? event}) async {
     savedRuns[run.id] = run;
+    if (!run.active) pending = run.id;
     if (event != null) {
       (journal[run.id] ??= []).add({
         'eventType': event,

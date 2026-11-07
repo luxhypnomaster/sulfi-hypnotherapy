@@ -3,20 +3,33 @@ import 'package:flutter/material.dart';
 import '../models/audio_asset.dart';
 import '../data/module_catalog.dart';
 import 'module_assignment.dart';
+import '../services/access_policy.dart';
 
 Future<AudioAsset?> editAsset(
   BuildContext context,
   AudioAsset asset, {
   ModuleCatalog? catalog,
+  AccessPolicy? policy,
   ModuleChoice? choice,
 }) => showDialog<AudioAsset>(
   context: context,
   barrierDismissible: false,
-  builder: (_) => _AssetEditor(asset: asset, catalog: catalog, choice: choice),
+  builder: (_) => _AssetEditor(
+    asset: asset,
+    catalog: catalog,
+    choice: choice,
+    policy: policy ?? AccessPolicy(),
+  ),
 );
 
 class _AssetEditor extends StatefulWidget {
-  const _AssetEditor({required this.asset, this.catalog, this.choice});
+  const _AssetEditor({
+    required this.asset,
+    this.catalog,
+    this.choice,
+    required this.policy,
+  });
+  final AccessPolicy policy;
   final ModuleCatalog? catalog;
   final ModuleChoice? choice;
   final AudioAsset asset;
@@ -31,9 +44,7 @@ class _AssetEditorState extends State<_AssetEditor> {
     text: widget.asset.description,
   );
   late final _tags = TextEditingController(text: widget.asset.tags.join(', '));
-  late LibrarySection _section = widget.asset.source == 'recorded'
-      ? LibrarySection.personal
-      : widget.asset.section;
+  late LibrarySection _section = widget.asset.section;
   late AudioCategory _category = widget.asset.category;
 
   @override
@@ -72,7 +83,7 @@ class _AssetEditorState extends State<_AssetEditor> {
                     : null,
               ),
               const SizedBox(height: 12),
-              if (widget.asset.source == 'recorded')
+              if (!widget.policy.isAuthor)
                 const Text('Мои аудиозаписи · записано на устройстве')
               else
                 DropdownButtonFormField<LibrarySection>(

@@ -10,7 +10,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 6,
+    version: 7,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -28,6 +28,7 @@ Future<Database> openAppDatabase(
       await _createV4Tables(db);
       await _createDiaryTables(db);
       await _addIdentity(db);
+      await _addAccessSettings(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -74,6 +75,7 @@ Future<Database> openAppDatabase(
       }
       if (oldVersion < 5) await _createDiaryTables(db);
       if (oldVersion < 6) await _addIdentity(db);
+      if (oldVersion < 7) await _addAccessSettings(db);
     },
   ),
 );
@@ -141,5 +143,22 @@ Future<void> _createDiaryTables(DatabaseExecutor db) async {
   );
   await db.execute(
     'CREATE TABLE IF NOT EXISTS diary_sync(id INTEGER PRIMARY KEY CHECK(id=1),revision TEXT NOT NULL)',
+  );
+}
+
+Future<void> _addAccessSettings(DatabaseExecutor db) async {
+  final columns = (await db.rawQuery('PRAGMA table_info(audio_assets)'))
+      .map((r) => r['name'])
+      .toSet();
+  if (!columns.contains('authorManaged')) {
+    await db.execute(
+      "ALTER TABLE audio_assets ADD COLUMN authorManaged INTEGER NOT NULL DEFAULT 0",
+    );
+    await db.execute(
+      "UPDATE audio_assets SET authorManaged=1 WHERE origin='supplied' OR section IN ('general','suggestions')",
+    );
+  }
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS app_settings(name TEXT PRIMARY KEY, value TEXT NOT NULL)',
   );
 }

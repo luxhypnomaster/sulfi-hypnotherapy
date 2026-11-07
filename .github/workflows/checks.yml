@@ -2,8 +2,10 @@ name: Flutter checks and Android debug APK
 on:
   pull_request:
     branches: [develop, main]
+    paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   push:
     branches: [develop]
+    paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
 
 permissions:
@@ -31,6 +33,7 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos
       - run: flutter test --reporter expanded
+      - run: flutter test test/task5_client_build_test.dart --dart-define=SULFI_EDITION=client
       - name: Restore persistent user-test signing key
         env:
           SULFI_TEST_KEYSTORE_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
@@ -54,8 +57,13 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sulfi-android-debug-${{ github.sha }}
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sulfi-android-diagnostics-${{ github.sha }}
           path: |
-            build/app/outputs/flutter-apk/app-debug.apk
             build/app/outputs/flutter-apk/APK_CERT.txt
             build/app/outputs/flutter-apk/APK_BADGING.txt
             build/app/outputs/flutter-apk/SHA256SUMS

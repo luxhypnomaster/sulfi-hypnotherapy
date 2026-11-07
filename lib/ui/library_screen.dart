@@ -14,6 +14,7 @@ import 'asset_editor.dart';
 import 'design.dart';
 import 'preview_bar.dart';
 import 'backup_screen.dart';
+import '../services/access_policy.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({
@@ -88,7 +89,7 @@ class _LibraryScreenState extends State<LibraryScreen>
           _assets = items;
           if (_initialLoad &&
               items.isNotEmpty &&
-              items.every((a) => a.isPersonal)) {
+              items.every((a) => a.section == LibrarySection.personal)) {
             _section = LibrarySection.personal;
           }
           _initialLoad = false;
@@ -143,6 +144,7 @@ class _LibraryScreenState extends State<LibraryScreen>
         () => editAsset(
           context,
           draft,
+          policy: widget.library.policy,
           catalog: widget.controller?.modules,
           choice: choice,
         ),
@@ -164,7 +166,9 @@ class _LibraryScreenState extends State<LibraryScreen>
   });
   Future<void> _edit(AudioAsset asset) => _run(() async {
     await widget.player.stop();
-    final edited = await _ask(() => editAsset(context, asset));
+    final edited = await _ask(
+      () => editAsset(context, asset, policy: widget.library.policy),
+    );
     if (edited != null) {
       await widget.library.save(edited);
       _section = edited.section;
@@ -226,6 +230,36 @@ class _LibraryScreenState extends State<LibraryScreen>
               'Инструмент саморегуляции не заменяет медицинскую помощь. Не используйте за рулём. Предпрослушивание останавливается при уходе в фон.',
             ),
             const SizedBox(height: 20),
+            ListenableBuilder(
+              listenable: widget.library.policy,
+              builder: (context, _) => Column(
+                children: [
+                  Text(
+                    widget.library.policy.isAuthor
+                        ? 'Режим: Автор'
+                        : 'Режим: Клиент',
+                  ),
+                  if (!widget.library.policy.clientEdition)
+                    SegmentedButton<LocalMode>(
+                      segments: const [
+                        ButtonSegment(
+                          value: LocalMode.author,
+                          label: Text('Автор'),
+                        ),
+                        ButtonSegment(
+                          value: LocalMode.client,
+                          label: Text('Клиент'),
+                        ),
+                      ],
+                      selected: {widget.library.policy.mode},
+                      onSelectionChanged: (value) async {
+                        await widget.library.policy.setMode(value.single);
+                        if (mounted) await _load();
+                      },
+                    ),
+                ],
+              ),
+            ),
             if (widget.controller?.capsules != null)
               OutlinedButton.icon(
                 onPressed: () async {
@@ -253,7 +287,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               label: const Text('Удалить все данные приложения'),
             ),
             const SizedBox(height: 12),
-            const Text('Сульфи · 0.4.10+15', textAlign: TextAlign.center),
+            const Text('Сульфи · 0.4.11+16', textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -261,9 +295,9 @@ class _LibraryScreenState extends State<LibraryScreen>
   );
   bool _matches(AudioAsset a) {
     final section = switch (_section) {
-      LibrarySection.general => !a.isPersonal,
-      LibrarySection.suggestions => a.isSuggestion,
-      LibrarySection.personal => a.isPersonal,
+      LibrarySection.general => a.section == LibrarySection.general,
+      LibrarySection.suggestions => a.section == LibrarySection.suggestions,
+      LibrarySection.personal => a.section == LibrarySection.personal,
     };
     final category =
         _categories.isEmpty ||
@@ -793,13 +827,21 @@ class _LibraryScreenState extends State<LibraryScreen>
                   if (s == 'edit') _edit(a);
                   if (s == 'delete') _delete(a);
                 },
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: 'info', child: Text('Сведения о треке')),
+                itemBuilder: (_) => [
+                  const PopupMenuItem(
+                    value: 'info',
+                    child: Text('Сведения о треке'),
+                  ),
                   PopupMenuItem(
                     value: 'edit',
+                    enabled: widget.library.policy.canEditAudio(a),
                     child: Text('Изменить название и категорию'),
                   ),
-                  PopupMenuItem(value: 'delete', child: Text('Удалить')),
+                  PopupMenuItem(
+                    value: 'delete',
+                    enabled: widget.library.policy.canEditAudio(a),
+                    child: const Text('Удалить'),
+                  ),
                 ],
               ),
             ],

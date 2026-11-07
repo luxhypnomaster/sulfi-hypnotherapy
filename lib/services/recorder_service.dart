@@ -106,7 +106,11 @@ class RecorderService extends ChangeNotifier {
       _timer?.cancel();
       level = 0;
       if (state != CaptureState.finished) state = CaptureState.error;
-      error = e is LibraryException ? e.message : 'Не удалось записать или сохранить. Дубль не удалён: проверьте микрофон и свободное место.';
+      error = e is LibraryException
+          ? e.message
+          : e is FormatException
+          ? e.message
+          : 'Не удалось записать или сохранить. Дубль не удалён: проверьте микрофон и свободное место.';
     } finally {
       busy = false;
       _notify();
