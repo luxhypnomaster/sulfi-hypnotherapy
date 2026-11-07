@@ -115,6 +115,16 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
   Widget _content() {
     final r = run!, plan = r.snapshot.plan;
     final facts = HistoryFacts(r, events!);
+    final tracks = plan.steps.where((s) => s.kind == StepKind.audio).toList();
+    final phases = plan.phases?.where((p) => p.enabled).toList();
+    final completedPhases = phases
+        ?.where(
+          (p) =>
+              facts.group(p.children.expand((c) => c.items)) ==
+              StepFact.completed,
+        )
+        .length;
+
     return SingleChildScrollView(
       key: const Key('history-detail-scroll'),
       padding: const EdgeInsets.all(14),
@@ -151,6 +161,10 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                 ),
                 Text(
                   'Подтверждено выполненных элементов: ${facts.completed} из ${plan.steps.length}',
+                ),
+                Text(
+                  'Треки: ${tracks.where((s) => facts.step(s) == StepFact.completed).length}/${tracks.length} · Фазы: ${phases == null ? 'Нет данных' : '$completedPhases/${phases.length}'}',
+                  style: const TextStyle(fontSize: 12),
                 ),
                 if (r.snapshot.topicText.isNotEmpty)
                   Text('Тема: ${r.snapshot.topicText}'),
@@ -319,10 +333,15 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
+                        key: ValueKey('history-module-header-${c.id}'),
                         children: [
-                          const Icon(
-                            Icons.layers_outlined,
-                            color: antiqueGold,
+                          Icon(
+                            facts.group(c.items) == StepFact.completed
+                                ? Icons.check_circle_outline
+                                : facts.group(c.items) == StepFact.interrupted
+                                ? Icons.error_outline
+                                : Icons.layers_outlined,
+                            color: _color(facts.group(c.items)),
                             size: 19,
                           ),
                           const SizedBox(width: 6),

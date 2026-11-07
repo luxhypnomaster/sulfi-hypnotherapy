@@ -22,6 +22,9 @@ import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 import 'package:sulfi_hypnotherapy/services/capsule_service.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_editor.dart';
+
+import 'dart:convert';
+
 import 'package:sulfi_hypnotherapy/ui/recorder_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/history_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/history_detail_screen.dart';
@@ -503,6 +506,40 @@ void main() {
         historical,
       );
       await t.runAsync(engine.close);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'history module completion aggregates frozen children and never current catalogue contents',
+    (t) async {
+      final child = run.snapshot.plan.phases!.first.children.single;
+      final complete = run.checkpoint(
+        completedStepIds: child.items.map((s) => s.id).toList(),
+      );
+      await t.runAsync(() async {
+        await db.update(
+          'session_runs',
+          {'payload': jsonEncode(complete.toMap())},
+          where: 'id=?',
+          whereArgs: [run.id],
+        );
+        await c.modules.clear();
+        await c.reload();
+      });
+      await show(
+        t,
+        HistoryScreen(controller: c, player: player, selectedRunId: run.id),
+      );
+      final header = find.byKey(ValueKey('history-module-header-${child.id}'));
+      expect(header, findsOneWidget);
+      final icon = t.widget<Icon>(
+        find.descendant(of: header, matching: find.byType(Icon)),
+      );
+      expect(icon.icon, Icons.check_circle_outline);
+      expect(icon.color, Colors.lightGreenAccent);
+      expect(find.text('Исторический модуль'), findsOneWidget);
+      expect(c.modules.entries, isEmpty);
       await t.pumpWidget(const SizedBox());
       await io(t);
     },

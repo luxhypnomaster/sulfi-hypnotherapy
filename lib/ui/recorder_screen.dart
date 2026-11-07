@@ -124,7 +124,9 @@ class _RecorderScreenState extends State<RecorderScreen>
         !await confirmAction(
           context,
           'Отменить и удалить несохранённую запись?',
-          'Сохранённые треки библиотеки останутся.',
+          widget.diaryRecording
+              ? 'Текст и сохранённые вложения дневника останутся.'
+              : 'Сохранённые треки библиотеки останутся.',
           confirm: 'Отменить запись',
         )) {
       return;

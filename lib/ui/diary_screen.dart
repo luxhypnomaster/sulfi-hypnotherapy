@@ -284,6 +284,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: d,
     builder: (context, _) {
+      final cloudSignedIn = d.policy != null
+          ? d.authenticated
+          : d.authorWorkspace;
       final author = d.authorWorkspace && !readerMode,
           list = entries(author),
           drag = author && !byDate && query.isEmpty && filter == null;
@@ -292,15 +295,13 @@ class _DiaryScreenState extends State<DiaryScreen> {
         actions: [
           if (d.canSignIn)
             IconButton(
-              tooltip: d.authorWorkspace
+              tooltip: cloudSignedIn
                   ? 'Выйти из аккаунта автора'
                   : 'Войти как автор через Google',
               onPressed: d.authorBusy || busy
                   ? null
-                  : () => action(d.authorWorkspace ? d.logout : d.signInAuthor),
-              icon: Icon(
-                d.authorWorkspace ? Icons.logout : Icons.person_outline,
-              ),
+                  : () => action(cloudSignedIn ? d.logout : d.signInAuthor),
+              icon: Icon(cloudSignedIn ? Icons.logout : Icons.person_outline),
             ),
           IconButton(
             tooltip: 'Обновить дневник',
@@ -327,7 +328,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 spacing: 8,
                 children: [
                   ChoiceChip(
-                    label: const Text('Автор'),
+                    label: Text(
+                      d.policy?.isAuthor == false ? 'Мои записи' : 'Автор',
+                    ),
                     selected: !readerMode,
                     onSelected: (_) => setState(() => readerMode = false),
                   ),
