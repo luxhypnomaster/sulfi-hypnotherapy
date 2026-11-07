@@ -32,7 +32,24 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos
-      - run: flutter test --reporter expanded
+      - name: Flutter tests with failure summaries
+        run: |
+          set +e
+          flutter test --reporter json > "$RUNNER_TEMP/flutter-tests.jsonl" 2>&1
+          TEST_STATUS=$?
+          set -e
+          python3 scripts/flutter_test_summary.py "$RUNNER_TEMP/flutter-tests.jsonl" "$RUNNER_TEMP/flutter-test-summary.json"
+          exit "$TEST_STATUS"
+      - name: Preserve test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sulfi-flutter-test-report-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/flutter-tests.jsonl
+            ${{ runner.temp }}/flutter-test-summary.json
+          if-no-files-found: ignore
+          retention-days: 14
       - run: flutter test test/task5_client_build_test.dart --dart-define=SULFI_EDITION=client
       - name: Restore persistent user-test signing key
         env:
