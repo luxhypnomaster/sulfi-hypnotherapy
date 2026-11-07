@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'audio_asset.dart';
+import 'modular_plan.dart';
 
 String newId() {
   final random = Random.secure();
@@ -13,8 +14,8 @@ String newId() {
 
 enum StepKind {
   audio('Аудио'),
-  silence('Тишина'),
-  freeWork('Самостоятельная работа'),
+  silence('Пауза'),
+  freeWork('Пауза'),
   voiceRecording('Запись речи');
 
   const StepKind(this.label);
@@ -96,11 +97,13 @@ class SessionStep {
     this.audioAssetId,
     this.groupId,
     this.description = '',
+    this.enabled = true,
     this.delayBeforeSeconds = 0,
     this.durationMs = 0,
   });
   final String id;
   final StepKind kind;
+  final bool enabled;
   final String title;
   final String? audioAssetId;
   final String? groupId;
@@ -120,9 +123,11 @@ class SessionStep {
     int? durationMs,
     bool indefinite = false,
     bool ungroup = false,
+    bool? enabled,
   }) => SessionStep(
     id: id ?? this.id,
     kind: kind,
+    enabled: enabled ?? this.enabled,
     title: title ?? this.title,
     audioAssetId: audioAssetId ?? this.audioAssetId,
     groupId: ungroup ? null : groupId ?? this.groupId,
@@ -133,6 +138,7 @@ class SessionStep {
   Map<String, Object?> toMap() => {
     'id': id,
     'kind': kind.name,
+    if (!enabled) 'enabled': false,
     'title': title,
     'audioAssetId': audioAssetId,
     'groupId': groupId,
@@ -143,6 +149,7 @@ class SessionStep {
   factory SessionStep.fromMap(Map<String, dynamic> m) => SessionStep(
     id: m['id'] as String,
     kind: StepKind.values.byName(m['kind'] as String),
+    enabled: m['enabled'] as bool? ?? true,
     title: m['title'] as String,
     audioAssetId: m['audioAssetId'] as String?,
     groupId: m['groupId'] as String?,
@@ -158,11 +165,46 @@ class SessionPlan {
     required List<SessionStep> steps,
     List<StageGroup> groups = const [],
     this.exitStepId,
-  }) : steps = List.unmodifiable(steps),
+    List<PhaseInstance>? phases,
+  }) : _steps = List.unmodifiable(steps),
+       phases = phases == null ? null : List.unmodifiable(phases),
        groups = List.unmodifiable(groups);
-  final List<SessionStep> steps;
+  final List<SessionStep> _steps;
+  final List<PhaseInstance>? phases;
+  List<SessionStep> get allSteps => List.unmodifiable(
+    phases == null
+        ? _steps
+        : [
+            for (final p in phases!)
+              for (final c in p.children) ...c.items,
+          ],
+  );
+  List<SessionStep> get steps => List.unmodifiable(
+    phases == null
+        ? List.unmodifiable(_steps.where((s) => s.enabled))
+        : [
+            for (final p in phases!)
+              if (p.enabled)
+                for (final c in p.children)
+                  if (c.enabled)
+                    for (final s in c.items)
+                      if (s.enabled) s,
+          ],
+  );
   final List<StageGroup> groups;
   final String? exitStepId;
+  bool get hasExitAudio => phases == null
+      ? steps.any((s) => s.id == exitStepId && s.kind == StepKind.audio)
+      : phases!.any(
+          (p) =>
+              p.enabled &&
+              p.typeId == 'exit' &&
+              p.children.any(
+                (c) =>
+                    c.enabled &&
+                    c.items.any((s) => s.enabled && s.kind == StepKind.audio),
+              ),
+        );
   int get totalMs => steps.fold(0, (sum, s) => sum + s.estimatedMs);
   int get delayMs =>
       steps.fold(0, (sum, s) => sum + s.delayBeforeSeconds * 1000);
@@ -202,6 +244,7 @@ class SessionPlan {
   }
 
   String groupName(String? id) =>
+      phases?.where((p) => p.id == id).firstOrNull?.title ??
       availableGroups.where((g) => g.id == id).firstOrNull?.name ??
       'Без раздела';
   SessionPlan copyWith({
@@ -209,13 +252,36 @@ class SessionPlan {
     List<StageGroup>? groups,
     String? exitStepId,
     bool clearExit = false,
+    List<PhaseInstance>? phases,
   }) => SessionPlan(
-    steps: steps ?? this.steps,
+    steps: steps ?? _steps,
+    phases:
+        phases ??
+        (steps == null
+            ? this.phases
+            : this.phases
+                  ?.map(
+                    (p) => p.copyWith(
+                      children: p.children
+                          .map(
+                            (c) => c.copyWith(
+                              items: [
+                                for (final old in c.items)
+                                  if (steps.any((s) => s.id == old.id))
+                                    steps.firstWhere((s) => s.id == old.id),
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  )
+                  .toList()),
     groups: groups ?? this.groups,
     exitStepId: clearExit ? null : exitStepId ?? this.exitStepId,
   );
   Map<String, Object?> toMap() => {
-    'steps': steps.map((s) => s.toMap()).toList(),
+    'steps': allSteps.map((s) => s.toMap()).toList(),
+    if (phases != null) 'phases': phases!.map((p) => p.toMap()).toList(),
     'groups': groups.map((g) => g.toMap()).toList(),
     'exitStepId': exitStepId,
   };
@@ -226,6 +292,9 @@ class SessionPlan {
         .toList(),
     groups: ((m['groups'] as List?) ?? [])
         .map((g) => StageGroup.fromMap(Map<String, dynamic>.from(g as Map)))
+        .toList(),
+    phases: (m['phases'] as List?)
+        ?.map((p) => PhaseInstance.fromMap(Map<String, dynamic>.from(p)))
         .toList(),
     exitStepId: m['exitStepId'] as String?,
   );
@@ -241,11 +310,17 @@ class SessionTemplate {
     this.description = '',
     this.version = 1,
     this.isDefault = false,
+    this.origin = 'personal',
+    this.baseRevision = 1,
+    this.author,
   });
   final String id, name, description;
   final SessionPlan plan;
   final int version;
   final bool isDefault;
+  final String origin;
+  final int baseRevision;
+  final String? author;
   final DateTime createdAt, updatedAt;
   Map<String, Object?> toMap() => {
     'id': id,
@@ -254,6 +329,9 @@ class SessionTemplate {
     'plan': plan.toMap(),
     'version': version,
     'isDefault': isDefault,
+    'origin': origin,
+    'baseRevision': baseRevision,
+    'author': author,
     'createdAt': createdAt.toUtc().toIso8601String(),
     'updatedAt': updatedAt.toUtc().toIso8601String(),
   };
@@ -264,13 +342,16 @@ class SessionTemplate {
     plan: SessionPlan.fromMap(Map<String, dynamic>.from(m['plan'] as Map)),
     version: m['version'] as int,
     isDefault: m['isDefault'] as bool,
+    origin: m['origin'] as String? ?? 'personal',
+    baseRevision: m['baseRevision'] as int? ?? 1,
+    author: m['author'] as String?,
     createdAt: DateTime.parse(m['createdAt'] as String),
     updatedAt: DateTime.parse(m['updatedAt'] as String),
   );
 }
 
 class CurrentSessionDraft {
-  const CurrentSessionDraft({
+  CurrentSessionDraft({
     required this.plan,
     required this.updatedAt,
     this.baseTemplateId,
@@ -279,11 +360,21 @@ class CurrentSessionDraft {
     this.baseFingerprint,
     this.topicText = '',
     this.notes = '',
-  });
+    this.executionFingerprint,
+    this.archiveName,
+    this.unavailableStepIds = const [],
+    Map<String, dynamic> audioMetadata = const {},
+  }) : audioMetadata = Map.unmodifiable({
+         for (final e in audioMetadata.entries)
+           e.key: Map.unmodifiable(Map<String, dynamic>.from(e.value)),
+       });
   final SessionPlan plan;
+  final Map<String, dynamic> audioMetadata;
   final String? baseTemplateId, baseTemplateName, baseFingerprint;
   final int? baseTemplateVersion;
   final String topicText, notes;
+  final String? executionFingerprint, archiveName;
+  final List<String> unavailableStepIds;
   final DateTime updatedAt;
   bool get modified =>
       plan.fingerprint !=
@@ -292,8 +383,13 @@ class CurrentSessionDraft {
     SessionPlan? plan,
     String? topicText,
     String? notes,
+    Map<String, dynamic>? audioMetadata,
   }) => CurrentSessionDraft(
     plan: plan ?? this.plan,
+    audioMetadata: audioMetadata ?? this.audioMetadata,
+    executionFingerprint: executionFingerprint,
+    archiveName: archiveName,
+    unavailableStepIds: unavailableStepIds,
     updatedAt: DateTime.now().toUtc(),
     baseTemplateId: baseTemplateId,
     baseTemplateVersion: baseTemplateVersion,
@@ -318,6 +414,11 @@ class CurrentSessionDraft {
   );
   Map<String, Object?> toMap() => {
     'plan': plan.toMap(),
+    if (audioMetadata.isNotEmpty) 'audioMetadata': audioMetadata,
+    if (executionFingerprint != null)
+      'executionFingerprint': executionFingerprint,
+    if (archiveName != null) 'archiveName': archiveName,
+    if (unavailableStepIds.isNotEmpty) 'unavailableStepIds': unavailableStepIds,
     'updatedAt': updatedAt.toUtc().toIso8601String(),
     'baseTemplateId': baseTemplateId,
     'baseTemplateVersion': baseTemplateVersion,
@@ -329,6 +430,10 @@ class CurrentSessionDraft {
   factory CurrentSessionDraft.fromMap(Map<String, dynamic> m) =>
       CurrentSessionDraft(
         plan: SessionPlan.fromMap(Map<String, dynamic>.from(m['plan'] as Map)),
+        audioMetadata: Map<String, dynamic>.from(m['audioMetadata'] ?? {}),
+        executionFingerprint: m['executionFingerprint'],
+        archiveName: m['archiveName'],
+        unavailableStepIds: List<String>.from(m['unavailableStepIds'] ?? []),
         updatedAt: DateTime.parse(m['updatedAt'] as String),
         baseTemplateId: m['baseTemplateId'] as String?,
         baseTemplateVersion: m['baseTemplateVersion'] as int?,
@@ -343,6 +448,8 @@ enum RunStatus {
   running('В процессе'),
   paused('Пауза'),
   completed('Завершена'),
+  exitingEarly('Переход к выходу'),
+  completedEarlyWithExit('Завершена досрочно с выходом'),
   interrupted('Прервана'),
   error('Ошибка');
 
@@ -351,7 +458,7 @@ enum RunStatus {
 }
 
 class SessionRun {
-  const SessionRun({
+  SessionRun({
     required this.id,
     required this.displayNumber,
     required this.name,
@@ -366,17 +473,27 @@ class SessionRun {
     this.userNotes,
     this.lastCheckpointAt,
     this.endEstimated = false,
-  });
+    this.startedUtcOffsetMinutes,
+    List<String> skippedStepIds = const [],
+    List<String> completedStepIds = const [],
+  }) : skippedStepIds = List.unmodifiable(skippedStepIds),
+       completedStepIds = List.unmodifiable(completedStepIds);
   final String id, name, phase;
   final int displayNumber, stepIndex, playheadMs, elapsedMs;
   final CurrentSessionDraft snapshot;
   final DateTime startedAt;
   final DateTime? endedAt, lastCheckpointAt;
   final bool endEstimated;
+  final int? startedUtcOffsetMinutes;
+  final List<String> skippedStepIds;
+  final List<String> completedStepIds;
   final RunStatus status;
   final String? userNotes;
   String get notes => userNotes ?? snapshot.notes;
-  bool get active => status == RunStatus.running || status == RunStatus.paused;
+  bool get active =>
+      status == RunStatus.running ||
+      status == RunStatus.paused ||
+      status == RunStatus.exitingEarly;
   SessionRun checkpoint({
     RunStatus? status,
     int? stepIndex,
@@ -385,8 +502,13 @@ class SessionRun {
     int? elapsedMs,
     DateTime? endedAt,
     bool? endEstimated,
+    List<String>? skippedStepIds,
+    List<String>? completedStepIds,
   }) => SessionRun(
     id: id,
+    startedUtcOffsetMinutes: startedUtcOffsetMinutes,
+    skippedStepIds: skippedStepIds ?? this.skippedStepIds,
+    completedStepIds: completedStepIds ?? this.completedStepIds,
     displayNumber: displayNumber,
     name: name,
     snapshot: snapshot,
@@ -404,6 +526,9 @@ class SessionRun {
   Map<String, Object?> toMap() => {
     'id': id,
     'displayNumber': displayNumber,
+    'startedUtcOffsetMinutes': startedUtcOffsetMinutes,
+    'skippedStepIds': skippedStepIds,
+    'completedStepIds': completedStepIds,
     'name': name,
     'snapshot': snapshot.toMap(),
     'startedAt': startedAt.toUtc().toIso8601String(),
@@ -420,6 +545,9 @@ class SessionRun {
   factory SessionRun.fromMap(Map<String, dynamic> m) => SessionRun(
     id: m['id'] as String,
     displayNumber: m['displayNumber'] as int,
+    startedUtcOffsetMinutes: m['startedUtcOffsetMinutes'] as int?,
+    skippedStepIds: List<String>.from(m['skippedStepIds'] ?? []),
+    completedStepIds: List<String>.from(m['completedStepIds'] ?? []),
     name: m['name'] as String,
     snapshot: CurrentSessionDraft.fromMap(
       Map<String, dynamic>.from(m['snapshot'] as Map),

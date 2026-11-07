@@ -3,17 +3,35 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
+import 'services/diary_media_store.dart';
+import 'services/diary_audio.dart';
+import 'models/diary_entry.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
+import 'data/diary_repository.dart';
+import 'services/diary_api.dart';
+import 'services/diary_controller.dart';
+import 'services/diary_identity.dart';
+import 'services/apps_script_diary_transport.dart';
 import 'data/library_repository.dart';
 import 'data/session_repository.dart';
+import 'data/module_catalog.dart';
+import 'services/session_audio_handler.dart';
+
+import 'package:audio_service/audio_service.dart';
+
 import 'services/session_controller.dart';
 import 'services/library_service.dart';
 import 'services/preview_player.dart';
+import 'services/capsule_service.dart';
+import 'services/device_files.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,13 +62,20 @@ class _BootstrapState extends State<_Bootstrap> {
     try {
       final root = await getApplicationSupportDirectory();
       await root.create(recursive: true);
+      final cache = await getTemporaryDirectory();
+      await CapsuleService.cleanWorkspace(cache);
+      final capsuleWorkspace = Directory(p.join(cache.path, 'sulfi-capsules'));
+      await CapsuleService.cleanWorkspace(capsuleWorkspace);
       final repository = await SqliteLibraryRepository.open(
         p.join(root.path, 'library.sqlite'),
       );
       _repository = repository;
       final sessions = SqliteSessionRepository(repository.database);
+      final modules = ModuleCatalog(repository.database);
       final library = LibraryService(
         repository: repository,
+        externalReader: (uri) async => (await DeviceFiles.channel
+            .invokeMethod<String>('copyLegacyAudio', uri))!,
         directory: Directory(p.join(root.path, 'audio')),
         pick: () async {
           final selected = await FilePicker.pickFile(
@@ -80,20 +105,109 @@ class _BootstrapState extends State<_Bootstrap> {
           }
         },
         releaseSelection: FilePicker.clearTemporaryFiles,
-        references: sessions.references,
-        resetRelatedData: sessions.reset,
+        references: (id) async => [
+          ...await sessions.references(id),
+          ...await modules.references(id),
+        ],
+        resetRelatedData: () async {
+          await modules.clear();
+          await sessions.reset();
+        },
       );
       await library.initialize();
       await FilePicker.clearTemporaryFiles();
       final player = LocalPreviewPlayer();
       _player = player;
       await player.initialize();
+      const diaryUrl = String.fromEnvironment('SULFI_DIARY_API');
+      const googleClientId = String.fromEnvironment(
+        'SULFI_GOOGLE_WEB_CLIENT_ID',
+      );
+      final diaryBase = diaryUrl.isEmpty ? null : Uri.parse(diaryUrl);
+      final diaryMedia = DiaryMediaStore(
+        Directory(p.join(root.path, 'diary_media')),
+        pick: (type) async {
+          final selected = await FilePicker.pickFile(
+            type: FileType.custom,
+            allowedExtensions: type == DiaryBlockType.image
+                ? ['jpg', 'jpeg', 'png', 'webp']
+                : ['mp3', 'm4a', 'wav'],
+          );
+          if (selected == null) return null;
+          if (selected.path == null) {
+            throw const FormatException(
+              'Файл недоступен. Сохраните его на телефон и повторите.',
+            );
+          }
+          return (name: selected.name, path: selected.path!);
+        },
+        probe: library.probe,
+      );
+      final diary = DiaryController(
+        DiaryRepository(repository.database),
+        api: diaryBase == null
+            ? null
+            : DiaryApi(
+                diaryBase,
+                request: AppsScriptDiaryTransport.supports(diaryBase)
+                    ? AppsScriptDiaryTransport(diaryBase).request
+                    : null,
+              ),
+        authorRepository: DiaryAuthorRepository(repository.database),
+        identity: GoogleDiaryIdentity(serverClientId: googleClientId),
+        mediaStore: diaryMedia,
+        allowDebugAuthor: kDebugMode,
+        audioFactory: () {
+          final audio = DiaryAudio(
+            transport: NativeDiaryAudio(),
+            store: diaryMedia,
+            sessionActive: () => sessionAudioHandler?.engine?.active ?? false,
+            beforePlay: player.stop,
+          );
+          unawaited(audio.initializeFocus());
+          return audio;
+        },
+      );
+      await diary.load();
+      // Startup only: include private drafts even while logged out. Never run
+      // collection during imports/Undo, and never touch the personal audio dir.
+      final allDiaryEntries = [
+        ...await diary.authorRepository!.entries(),
+        ...await diary.repository.published(),
+      ];
+      if (diary.authorRepository!.invalidIds.isEmpty &&
+          diary.repository.invalidIds.isEmpty) {
+        await diaryMedia.collect({
+          for (final e in allDiaryEntries)
+            for (final b in e.blocks)
+              if (b.media?.localPath case final String path) path,
+        });
+      }
+      if (diary.api != null) unawaited(diary.sync());
       final controller = SessionController(
         repository: sessions,
         library: library,
+        modules: modules,
+        diary: diary,
+        capsules: CapsuleService(
+          database: repository.database,
+          library: library,
+          diaryDirectory: diaryMedia.directory,
+          workspace: capsuleWorkspace,
+          availableBytes: DeviceFiles.freeBytes,
+        ),
       );
       _controller = controller;
       await controller.initialize();
+      sessionAudioHandler = await AudioService.init<SessionAudioHandler>(
+        builder: () => SessionAudioHandler(controller),
+        config: const AudioServiceConfig(
+          androidNotificationChannelId: 'ru.sulfi.sessions',
+          androidNotificationChannelName: 'Сессия самогипноза',
+          androidNotificationOngoing: false,
+          androidStopForegroundOnPause: false,
+        ),
+      );
       if (mounted) setState(() => _library = library);
     } catch (_) {
       await _player?.close();

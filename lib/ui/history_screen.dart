@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
+import '../models/local_dates.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
 import 'session_actions.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key, required this.controller});
+  const HistoryScreen({
+    super.key,
+    required this.controller,
+    this.selectedRunId,
+  });
+  final String? selectedRunId;
   final SessionController controller;
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -22,6 +28,30 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() => _busy = true);
     await showActionError(context, () async {
       if (action == 'repeat') {
+        final issues = await widget.controller.replayIssues(run);
+        if (!mounted) return;
+        var rebuild = false;
+        if (issues.isNotEmpty) {
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Точный повтор недоступен'),
+              content: SingleChildScrollView(child: Text(issues.join('\n'))),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Закрыть'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Пересобрать сессию'),
+                ),
+              ],
+            ),
+          );
+          if (result != true || !mounted) return;
+          rebuild = true;
+        }
         if (widget.controller.draft.modified &&
             !await confirmAction(
               context,
@@ -31,7 +61,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             )) {
           return;
         }
-        await widget.controller.useRun(run);
+        await widget.controller.useRun(run, rebuild: rebuild);
         if (mounted) Navigator.pop(context, run);
       }
       if (action == 'template') {
@@ -87,7 +117,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: Padding(
                   padding: EdgeInsets.all(28),
                   child: Text(
-                    'История появится после нажатия «Начать сессию». Прослушивание отдельных треков сюда не записывается.',
+                    'История появится после нажатия «Начать трансформацию». Прослушивание отдельных треков сюда не записывается.',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -99,92 +129,57 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 itemBuilder: (context, i) {
                   final r = runs[i];
                   return NeonPanel(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '№${r.displayNumber} · ${r.name}',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                            PopupMenuButton<String>(
-                              enabled: !_busy,
-                              onSelected: (s) => unawaited(_action(s, r)),
-                              itemBuilder: (_) => [
-                                const PopupMenuItem(
-                                  value: 'repeat',
-                                  child: Text('Повторить сессию'),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'rename',
-                                  child: Text('Название и заметка'),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'template',
-                                  child: Text('Создать шаблон'),
-                                ),
-                                if (!r.active)
-                                  const PopupMenuItem(
-                                    value: 'delete',
-                                    child: Text('Удалить из истории'),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '${r.status.label} · ${formatDuration(r.elapsedMs)}',
-                          style: const TextStyle(color: neonLime),
-                        ),
-                        const SizedBox(height: 7),
-                        Text(
-                          formatLocalDate(r.startedAt),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        if (r.snapshot.topicText.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(r.snapshot.topicText),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    color: r.id == widget.selectedRunId ? neonLime : neonPink,
+                    child: ListTile(
+                      key: ValueKey('history-${r.id}'),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        '№${r.displayNumber} · ${historicalDateLabel(r.startedAt, r.startedUtcOffsetMinutes, legacyLabel: r.name)}',
+                        maxLines: 2,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      subtitle: Text(
+                        '${r.status.label} · ${formatDuration(r.elapsedMs)}${r.snapshot.topicText.isEmpty ? '' : ' · ${r.snapshot.topicText}'}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: neonLime, fontSize: 11),
+                      ),
+                      onTap: () => Navigator.push<void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => _RunDetails(
+                            controller: widget.controller,
+                            run: r,
                           ),
-                        if (r.notes.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Text(
-                              r.notes,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 8,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () => Navigator.push<void>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => _RunDetails(
-                                    controller: widget.controller,
-                                    run: r,
-                                  ),
-                                ),
-                              ),
-                              icon: const Icon(Icons.receipt_long_outlined),
-                              label: const Text('Состав и события'),
-                            ),
-                            TextButton.icon(
-                              onPressed: _busy
-                                  ? null
-                                  : () => _action('rename', r),
-                              icon: const Icon(Icons.note_alt_outlined),
-                              label: const Text('Заметка'),
-                            ),
-                          ],
                         ),
-                      ],
+                      ),
+                      trailing: PopupMenuButton<String>(
+                        enabled: !_busy,
+                        onSelected: (s) => unawaited(_action(s, r)),
+                        itemBuilder: (_) => [
+                          const PopupMenuItem(
+                            value: 'repeat',
+                            child: Text('Повторить сессию'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'template',
+                            child: Text('Создать шаблон из сессии'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'rename',
+                            child: Text('Название и заметка'),
+                          ),
+                          if (!r.active)
+                            const PopupMenuItem(
+                              value: 'delete',
+                              child: Text('Удалить из истории'),
+                            ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -222,28 +217,36 @@ class _RunDetailsState extends State<_RunDetails> {
         }
         final events = snapshot.data!;
         final r = widget.run;
+        final plan = r.snapshot.plan;
         return ListView(
           padding: const EdgeInsets.all(20),
           children: [
             Text(r.name, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 12),
             Text(
-              '${r.status.label}\nНачало: ${formatLocalDate(r.startedAt)}\n${r.endEstimated ? 'Последнее сохранение (точное время остановки неизвестно)' : 'Окончание'}: ${r.endedAt == null ? '—' : formatLocalDate(r.endedAt!)}\n${r.endEstimated ? 'Сохранённая' : 'Фактическая'} длительность: ${formatDuration(r.elapsedMs)}',
+              '${r.status.label}\nНачало: ${historicalDateLabel(r.startedAt, r.startedUtcOffsetMinutes, legacyLabel: r.name)}\n${r.endEstimated ? 'Последнее сохранение (точное время остановки неизвестно)' : 'Окончание'}: ${r.endedAt == null ? '—' : formatLocalDate(r.endedAt!)}\n${r.endEstimated ? 'Сохранённая' : 'Фактическая'} длительность: ${formatDuration(r.elapsedMs)}',
             ),
             const SizedBox(height: 12),
             Text(
               'Источник: ${r.snapshot.baseTemplateName ?? 'Текущая конфигурация'}${r.snapshot.baseTemplateVersion == null ? '' : ' · версия ${r.snapshot.baseTemplateVersion}'}',
             ),
+            if (r.snapshot.topicText.isNotEmpty)
+              Text('Тема: ${r.snapshot.topicText}'),
+            if (r.notes.isNotEmpty) Text('Заметка: ${r.notes}'),
             const SizedBox(height: 18),
             const Text(
               'Сохранённая последовательность',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            for (var i = 0; i < r.snapshot.plan.steps.length; i++)
+            for (final step in plan.allSteps)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
-                  '${i + 1}. ${r.snapshot.plan.steps[i].title}\nПауза до: ${formatDuration(r.snapshot.plan.steps[i].delayBeforeSeconds * 1000)} · блок: ${r.snapshot.plan.steps[i].durationMs == null ? 'до остановки' : formatDuration(r.snapshot.plan.steps[i].durationMs!)}\n${_stepStatus(events, i)}',
+                  '${plan.allSteps.indexOf(step) + 1}. ${step.title}\nПауза до: ${formatDuration(step.delayBeforeSeconds * 1000)} · элемент: ${step.durationMs == null ? 'до остановки' : formatDuration(step.durationMs!)}\n${!plan.steps.any((s) => s.id == step.id)
+                      ? 'Выключен в плане запуска'
+                      : r.skippedStepIds.contains(step.id)
+                      ? 'Пропущен при выходе'
+                      : _stepStatus(events, plan.steps.indexWhere((s) => s.id == step.id))}',
                 ),
               ),
             const Divider(),
@@ -256,7 +259,7 @@ class _RunDetailsState extends State<_RunDetails> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(_eventLabel(event['eventType'] as String)),
                 subtitle: Text(
-                  '${formatLocalDate(DateTime.parse(event['timestamp'] as String))} · блок ${(event['stepIndex'] as int) + 1} · позиция ${formatDuration(event['playheadMs'] as int)}',
+                  '${historicalDateLabel(DateTime.parse(event['timestamp'] as String), r.startedUtcOffsetMinutes)} · элемент ${(event['stepIndex'] as int) + 1} · позиция ${formatDuration(event['playheadMs'] as int)}',
                 ),
               ),
           ],
@@ -267,13 +270,14 @@ class _RunDetailsState extends State<_RunDetails> {
   String _stepStatus(List<Map<String, dynamic>> events, int index) {
     final kinds = events
         .where((e) => e['stepIndex'] == index)
-        .map((e) => e['eventType']);
-    if (kinds.contains('block_completed')) return 'Выполнен';
-    if (kinds.contains('work_completed_early')) return 'Завершён пользователем';
-    if (kinds.contains('block_skipped')) return 'Пропущен пользователем';
-    if (kinds.contains('block_started')) return 'Начат · не завершён';
-    if (kinds.contains('delay_started')) {
-      return 'Началось ожидание перед блоком';
+        .map((e) => e['eventType'])
+        .toList();
+    for (final kind in kinds.reversed) {
+      if (kind == 'block_completed') return 'Выполнен';
+      if (kind == 'work_completed_early') return 'Завершён пользователем';
+      if (kind == 'block_skipped') return 'Пропущен пользователем';
+      if (kind == 'block_started') return 'Начат · не завершён';
+      if (kind == 'delay_started') return 'Началось ожидание перед элементом';
     }
     return 'Не запускался';
   }
@@ -281,17 +285,30 @@ class _RunDetailsState extends State<_RunDetails> {
 
 String _eventLabel(String event) => switch (event) {
   'started' => 'Сессия начата',
-  'delay_started' => 'Пауза перед блоком',
-  'block_started' => 'Блок начат',
-  'block_completed' => 'Блок завершён',
+  'delay_started' => 'Пауза перед элементом',
+  'block_started' => 'Элемент начат',
+  'block_completed' => 'Элемент завершён',
   'work_completed_early' => 'Самостоятельная работа завершена пользователем',
-  'block_skipped' => 'Блок пропущен',
+  'block_skipped' => 'Элемент пропущен',
   'paused' => 'Пауза',
   'resumed' => 'Продолжение',
+  'seek' => 'Перемотка текущего аудио',
+  'seek_from' => 'Позиция перед перемоткой',
+  'navigation_next_track' => 'Переход к следующему треку',
+  'navigation_previous_track' => 'Переход к предыдущему треку',
+  'navigation_next_module' => 'Переход к следующему модулю',
+  'navigation_previous_module' => 'Переход к предыдущему модулю',
+  'navigation_next_phase' => 'Переход к следующей фазе',
+  'navigation_previous_phase' => 'Переход к предыдущей фазе',
+  'exit_cancelled_by_navigation' =>
+    'Возврат из выхода к плану по команде пользователя',
+  'items_skipped_for_exit' => 'Зафиксированы пропуски при переходе к выходу',
+  _ when event.startsWith('navigation_') && event.endsWith('_from') =>
+    'Позиция перед переходом',
   'extended_5min' => 'Самостоятельная работа продлена на 5 минут',
   'exit_requested' => 'Запрошен выход',
   'exit_completed' => 'Выход воспроизведён · досрочное завершение',
-  'exit_without_audio' => 'Завершение без аудиовыхода',
+  'exit_without_audio' => 'Завершение без завершающего аудио',
   'exit_file_missing' => 'Файл выхода недоступен',
   'completed' => 'Сессия завершена',
   'interrupted' => 'Сессия прервана',
