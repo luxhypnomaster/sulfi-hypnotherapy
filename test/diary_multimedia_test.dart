@@ -22,6 +22,7 @@ import 'package:sulfi_hypnotherapy/ui/diary_home.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 
 import 'support/fakes.dart';
+import 'support/async_ui.dart';
 
 DiaryEntry sample({
   String id = 'entry',
@@ -736,8 +737,15 @@ void main() {
       expect(t.widget<TextField>(message).controller!.text, 'Строка\n' * 20);
       expect(t.widget<TextField>(message).maxLength, isNull);
       failing.fail = false;
+      await t.ensureVisible(find.text('Сохранить черновик'));
+      await t.pumpAndSettle();
       await t.tap(find.text('Сохранить черновик'));
-      await settleIo(t);
+      await pumpUntilIo(
+        t,
+        () =>
+            find.textContaining('Сохранено на телефоне').evaluate().isNotEmpty,
+        reason: 'Повтор должен завершить запись дневника после отказа SQLite',
+      );
       expect(
         (await t.runAsync(() => DiaryAuthorRepository(db).entries()))!
             .single

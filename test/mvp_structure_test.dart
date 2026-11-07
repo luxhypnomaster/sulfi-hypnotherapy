@@ -36,6 +36,7 @@ import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
 
 import 'support/fakes.dart';
+import 'support/async_ui.dart';
 import 'support/session_transport_fake.dart';
 
 SessionStep track(String id, String asset, int ms, {int delay = 0}) =>
@@ -556,8 +557,23 @@ void main() {
         matching: find.text('Применить'),
       ),
     );
-    await settleIo(t);
-    await t.pumpAndSettle();
+    await t.pump();
+    await pumpUntilIo(
+      t,
+      () {
+        if (find.byType(AlertDialog).evaluate().isNotEmpty) return true;
+        final buttons = t
+            .widgetList<StructureFooterButton>(
+              find.descendant(
+                of: find.byKey(const Key('structure-footer')),
+                matching: find.byType(StructureFooterButton),
+              ),
+            )
+            .where((b) => b.label == 'Применить');
+        return buttons.isEmpty || buttons.single.onPressed != null;
+      },
+      reason: 'Применение плана должно завершить сохранение SQLite или показать диалог',
+    );
   }
 
   testWidgets(

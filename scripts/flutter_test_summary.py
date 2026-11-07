@@ -16,10 +16,13 @@ for line in source.read_text(errors='replace').splitlines():
 
 tests = {}
 errors = {}
+printed = {}
 results = []
 for event in events:
     if event.get('type') == 'testStart':
         tests[event['test']['id']] = event['test']['name']
+    elif event.get('type') == 'print':
+        printed.setdefault(event.get('testID'), []).append(str(event.get('message', '')))
     elif event.get('type') == 'error':
         errors.setdefault(event.get('testID'), []).append(str(event.get('error', 'Unknown error')) + '\n' + str(event.get('stackTrace', '')))
     elif event.get('type') == 'testDone':
@@ -30,7 +33,7 @@ failed.update(errors)
 summary = {
     'success': any(e.get('type') == 'done' and e.get('success') is True for e in events),
     'passed': sum(r.get('result') == 'success' and not r.get('hidden') and not r.get('skipped') for r in results),
-    'failures': [{'name': tests.get(i, f'test {i}'), 'errors': errors.get(i, [])} for i in sorted(failed, key=str)],
+    'failures': [{'name': tests.get(i, f'test {i}'), 'errors': printed.get(i, [])[-8:] + errors.get(i, [])} for i in sorted(failed, key=str)],
 }
 if len(sys.argv) > 2:
     Path(sys.argv[2]).write_text(json.dumps(summary, ensure_ascii=False, indent=2))
