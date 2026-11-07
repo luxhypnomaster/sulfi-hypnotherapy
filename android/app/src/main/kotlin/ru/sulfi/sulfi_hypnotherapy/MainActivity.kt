@@ -43,9 +43,10 @@ class MainActivity: AudioServiceActivity() {
                     @Suppress("DEPRECATION")
                     val signatures = if (Build.VERSION.SDK_INT >= 28) info.signingInfo?.apkContentsSigners else info.signatures
                     val hashes = signatures?.map { signature -> MessageDigest.getInstance("SHA-256").digest(signature.toByteArray()).joinToString("") { "%02x".format(it) } } ?: emptyList<String>()
+                    val lineage = if (Build.VERSION.SDK_INT >= 28) info.signingInfo?.signingCertificateHistory?.map { signature -> MessageDigest.getInstance("SHA-256").digest(signature.toByteArray()).joinToString("") { "%02x".format(it) } } ?: emptyList<String>() else hashes
                     @Suppress("DEPRECATION")
                     val code = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else info.versionCode.toLong()
-                    result.success(mapOf("applicationId" to packageName, "versionName" to info.versionName, "versionCode" to code, "certificateSha256" to hashes,
+                    result.success(mapOf("applicationId" to packageName, "versionName" to info.versionName, "versionCode" to code, "certificateSha256" to hashes, "certificateHistorySha256" to lineage,
                         "debuggable" to ((applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0)))
                 }
                 "saveZip", "openZip" -> {

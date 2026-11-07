@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import '../services/capsule_service.dart';
 import '../services/device_files.dart';
 import '../services/session_controller.dart';
-import 'session_actions.dart';
+import '../services/library_service.dart';
 
 class BackupScreen extends StatefulWidget {
   const BackupScreen({super.key, required this.controller});
@@ -18,11 +18,32 @@ class BackupScreen extends StatefulWidget {
 
 class _BackupScreenState extends State<BackupScreen> {
   bool busy = false;
+  bool restoring = false, cancelled = false;
   String? message;
+  @override
+  void dispose() {
+    cancelled = true;
+    super.dispose();
+  }
+
   Future<void> action(Future<void> Function() f) async {
     if (busy) return;
     setState(() => busy = true);
-    await showActionError(context, f);
+    try {
+      await f();
+    } catch (e) {
+      if (mounted) {
+        setState(
+          () => message = e is FormatException
+              ? e.message
+              : e is LibraryException
+              ? e.message
+              : e is PlatformException
+              ? e.message ?? 'Не удалось открыть системный выбор файла'
+              : 'Не удалось перенести данные. Прежние данные сохранены.',
+        );
+      }
+    }
     if (mounted) setState(() => busy = false);
   }
 
@@ -30,6 +51,7 @@ class _BackupScreenState extends State<BackupScreen> {
     await widget.controller.flush();
     final zip = await widget.controller.capsules!.export();
     try {
+      if (!mounted) return;
       final saved = await DeviceFiles.save(zip.path);
       if (mounted) {
         setState(
@@ -44,11 +66,19 @@ class _BackupScreenState extends State<BackupScreen> {
   }
 
   Future<void> restore() async {
+    setState(() => restoring = true);
+    cancelled = false;
     final path = await DeviceFiles.open();
-    if (path == null) return;
+    if (path == null) {
+      if (mounted) setState(() => restoring = false);
+      return;
+    }
     CapsulePreview? preview;
     try {
-      preview = await widget.controller.capsules!.inspect(File(path));
+      preview = await widget.controller.capsules!.inspect(
+        File(path),
+        cancelled: () => cancelled,
+      );
       if (!mounted) return;
       final p = preview;
       final choice = await showDialog<CapsuleConflictChoice>(
@@ -57,7 +87,7 @@ class _BackupScreenState extends State<BackupScreen> {
           title: const Text('Проверенная копия'),
           content: SingleChildScrollView(
             child: Text(
-              '${p.alreadyImported ? 'Эта копия уже восстановлена.\n' : ''}${p.counts.entries.where((e) => e.value > 0).map((e) => '${_labels[e.key] ?? e.key}: ${e.value}').join('\n')}\nФайлы: ${(p.bytes / 1048576).toStringAsFixed(1)} МБ\n\n${p.conflicts.isEmpty ? 'Конфликтов идентификаторов нет.' : 'Конфликты (${p.conflicts.length}):\n${p.conflicts.take(12).join('\n')}\nЗамена перепишет перечисленные объекты. Сохранение местных оставит их прежними.'}',
+              '${p.alreadyImported ? 'Эта копия уже восстановлена.\n' : ''}${p.counts.entries.where((e) => e.value > 0).map((e) => '${_labels[e.key] ?? e.key}: ${e.value}').join('\n')}\nФайлы: ${(p.bytes / 1048576).toStringAsFixed(1)} МБ\n\n${p.conflicts.isEmpty ? 'Конфликтов идентификаторов нет.' : 'Конфликты (${p.conflicts.length}):\n${p.conflicts.take(12).join('\n')}\nЗамена перепишет перечисленные объекты. Сохранение местных оставит их прежними.'}\n\nПри совпадении номеров разные сессии получат новые номера; их ID и снимки сохранятся. Активная сессия из копии восстановится как прерванная.',
             ),
           ),
           actions: [
@@ -82,7 +112,11 @@ class _BackupScreenState extends State<BackupScreen> {
         ),
       );
       if (choice == null) return;
-      await widget.controller.capsules!.restore(p, choice: choice);
+      await widget.controller.capsules!.restore(
+        p,
+        choice: choice,
+        cancelled: () => cancelled,
+      );
       await widget.controller.reload();
       await widget.controller.diary?.load();
       if (mounted) {
@@ -94,6 +128,7 @@ class _BackupScreenState extends State<BackupScreen> {
       }
     } finally {
       await preview?.close();
+      if (mounted) setState(() => restoring = false);
       if (await File(path).exists()) await File(path).delete();
     }
   }
@@ -163,6 +198,11 @@ class _BackupScreenState extends State<BackupScreen> {
           label: const Text('Диагностика установленной версии'),
         ),
         if (busy) const LinearProgressIndicator(),
+        if (busy && restoring)
+          TextButton(
+            onPressed: () => setState(() => cancelled = true),
+            child: const Text('Отменить восстановление'),
+          ),
         if (message != null)
           Padding(
             padding: const EdgeInsets.only(top: 16),

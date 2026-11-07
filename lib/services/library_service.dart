@@ -43,7 +43,9 @@ class LibraryService {
 
   File fileFor(AudioAsset asset) {
     if (p.basename(asset.filePath) != asset.filePath) {
-      throw const LibraryException('Некорректный путь к аудиофайлу.');
+      throw const LibraryException(
+        'Прежний источник аудио недоступен. Сохраните оригинал на устройство и импортируйте заново.',
+      );
     }
     return File(p.join(directory.path, asset.filePath));
   }

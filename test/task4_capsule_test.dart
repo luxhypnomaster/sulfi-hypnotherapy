@@ -112,6 +112,12 @@ void main() {
     await source.diaryDirectory.create();
     final media = await File(p.join(source.diaryDirectory.path, 'sound.wav'))
         .writeAsBytes([1, 2, 3, 4]);
+    final image = await File(p.join(source.diaryDirectory.path, 'image.png'))
+        .writeAsBytes(
+          base64Decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==',
+          ),
+        );
     await DiaryAuthorRepository(a.database).save(
       DiaryEntry(
         id: 'diary',
@@ -130,6 +136,18 @@ void main() {
               localPath: media.path,
             ),
           ),
+          DiaryBlock(
+            id: 'image',
+            type: DiaryBlockType.image,
+            width: 1,
+            height: 1,
+            media: DiaryMedia(
+              assetId: 'diary-image',
+              mime: 'image/png',
+              bytes: await image.length(),
+              localPath: image.path,
+            ),
+          ),
         ],
       ),
     );
@@ -145,8 +163,8 @@ void main() {
     final archive = ZipDecoder().decodeBytes(await zip.readAsBytes());
     expect(
       archive.files.where((f) => f.isFile && f.name.startsWith('blobs/')),
-      hasLength(2),
-    ); // deduplicated audio + diary
+      hasLength(3),
+    ); // deduplicated audio + diary audio/image
     expect(
       utf8.decode(archive.findFile('manifest.json')!.content),
       isNot(contains(root.path)),
@@ -180,12 +198,16 @@ void main() {
       hasLength(2),
     );
     final diary = (await DiaryAuthorRepository(b.database).entries()).single;
-    expect(await File(diary.blocks.single.media!.localPath!).readAsBytes(), [
+    expect(await File(diary.blocks.first.media!.localPath!).readAsBytes(), [
       1,
       2,
       3,
       4,
     ]);
+    expect(
+      await File(diary.blocks.last.media!.localPath!).readAsBytes(),
+      await File(p.join(source.diaryDirectory.path, 'image.png')).readAsBytes(),
+    );
     final dbPath = b.database.path;
     await b.database.close();
     b = await SqliteLibraryRepository.open(dbPath, factory: databaseFactoryFfi);
@@ -207,6 +229,42 @@ void main() {
     await preview.close();
     expect(await b.list(), hasLength(2));
     expect(await b.database.query('run_events'), hasLength(2));
+  });
+  test('merging equal session numbers preserves both histories and remains idempotent', () async {
+    final originalRun = (await SqliteSessionRepository(
+      a.database,
+    ).history()).single;
+    final sessions = SqliteSessionRepository(b.database);
+    final local = await sessions.startRun(originalRun.snapshot);
+    await sessions.checkpoint(local.checkpoint(status: RunStatus.interrupted));
+    var preview = await destination.inspect(zip);
+    await destination.restore(preview);
+    await preview.close();
+    final runs = await sessions.history();
+    expect(runs.map((r) => r.id).toSet(), {local.id, originalRun.id});
+    expect(runs.map((r) => r.displayNumber).toSet(), {1, 2});
+    expect(await sessions.events(local.id), hasLength(1));
+    preview = await destination.inspect(zip);
+    expect(preview.alreadyImported, isTrue);
+    await destination.restore(preview);
+    await preview.close();
+    expect(await sessions.history(), hasLength(2));
+  });
+  test('history may reference deliberately deleted audio without making its backup unrestorable', () async {
+    for (final table in [
+      'current_draft',
+      'session_templates',
+      'module_definitions',
+      'audio_assets',
+    ]) {
+      await a.database.delete(table);
+    }
+    final partial = await source.export();
+    final preview = await destination.inspect(partial);
+    await destination.restore(preview);
+    await preview.close();
+    expect(await b.list(), isEmpty);
+    expect(await SqliteSessionRepository(b.database).history(), hasLength(1));
   });
   test(
     'same mechanism selectively exports module and its only dependency',
@@ -275,6 +333,41 @@ void main() {
       await preview.close();
     },
   );
+  test('explicit cancellation before commit rolls back both database and new files', () async {
+    final preview = await destination.inspect(zip);
+    var cancel = false;
+    await expectLater(
+      destination.restore(
+        preview,
+        cancelled: () => cancel,
+        beforeCommit: () async {
+          cancel = true;
+        },
+      ),
+      throwsFormatException,
+    );
+    expect(await b.list(), isEmpty);
+    expect(await b.database.query('session_runs'), isEmpty);
+    expect(await target.directory.list().toList(), isEmpty);
+    await preview.close();
+  });
+  test('startup removes only abandoned transfer cache and preserves committed media and unrelated files', () async {
+    await destination.workspace.create(recursive: true);
+    final stale = Directory('${destination.workspace.path}/restore-old');
+    await stale.create();
+    await File('${stale.path}/partial').writeAsBytes([0]);
+    final keep = await File('${destination.workspace.path}/unrelated.txt')
+        .writeAsString('keep');
+    final cached = await File(
+      '${destination.workspace.path}/sulfi-incoming-old.zip',
+    ).writeAsBytes([1]);
+    await CapsuleService.cleanWorkspace(destination.workspace);
+    expect(await stale.exists(), isFalse);
+    expect(await cached.exists(), isFalse);
+    expect(await keep.exists(), isTrue);
+    expect(await zip.exists(), isTrue);
+    expect(await original.fileFor((await a.list()).first).exists(), isTrue);
+  });
   for (final mode in ['checksum', 'schema', 'dependency', 'traversal']) {
     test('rejects $mode without touching destination', () async {
       final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
@@ -319,5 +412,20 @@ void main() {
     );
     await expectLater(limited.inspect(zip), throwsFormatException);
     expect(await b.list(), isEmpty);
+  });
+  test('a readable capsule can repair lost bytes after an earlier successful restore', () async {
+    var preview = await destination.inspect(zip);
+    await destination.restore(preview);
+    await preview.close();
+    final lost = (await b.list()).first;
+    await target.fileFor(lost).delete();
+    preview = await destination.inspect(zip);
+    expect(preview.alreadyImported, isFalse);
+    expect(preview.conflicts, isNotEmpty);
+    await destination.restore(preview, choice: CapsuleConflictChoice.replace);
+    await preview.close();
+    final restored = (await b.list()).firstWhere((a) => a.id == lost.id);
+    expect(await target.fileFor(restored).exists(), isTrue);
+    expect(await b.database.query('run_events'), hasLength(2));
   });
 }

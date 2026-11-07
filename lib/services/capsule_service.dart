@@ -8,6 +8,8 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/modular_plan.dart';
 import '../models/session_plan.dart';
+import '../models/audio_asset.dart';
+import '../models/diary_entry.dart';
 import 'library_service.dart';
 
 enum CapsuleConflictChoice { cancel, keepExisting, replace }
@@ -68,6 +70,25 @@ class CapsuleService {
   // into one Dart Uint8List. 4 GiB is the explicit format limit for this edition.
   static const maxBytes = 4 * 1024 * 1024 * 1024;
   static const maxManifest = 32 * 1024 * 1024;
+
+  /// Startup only, before any transfer. A killed process may leave staged bytes;
+  /// committed media live in different directories and are never visited here.
+  static Future<void> cleanWorkspace(Directory dir) async {
+    if (!await dir.exists()) return;
+    await for (final entry in dir.list(followLinks: false)) {
+      final name = p.basename(entry.path);
+      if (entry is Directory &&
+          (name.startsWith('restore-') || name.startsWith('export-'))) {
+        await entry.delete(recursive: true);
+      }
+      if (entry is File &&
+          ((name.startsWith('sulfi-') && name.endsWith('.zip')) ||
+              (name.startsWith('sulfi-legacy-') && name.endsWith('.part')))) {
+        await entry.delete();
+      }
+    }
+  }
+
   static String canonical(Object? v) {
     Object? sorted(Object? x) => x is Map
         ? {
@@ -82,6 +103,21 @@ class CapsuleService {
 
   static String digest(Object? v) =>
       sha256.convert(utf8.encode(canonical(v))).toString();
+  static void _validatePlan(SessionPlan plan) {
+    final ids = plan.allSteps.map((s) => s.id).toList();
+    if (ids.toSet().length != ids.length || ids.any((id) => id.isEmpty)) {
+      throw const FormatException('Некорректные ID шагов');
+    }
+    for (final s in plan.allSteps) {
+      if (s.delayBeforeSeconds < 0 ||
+          s.delayBeforeSeconds > 5995 ||
+          (s.durationMs ?? 0) < 0 ||
+          (s.kind == StepKind.audio && s.audioAssetId == null)) {
+        throw const FormatException('Некорректный шаг плана');
+      }
+    }
+  }
+
   Future<Map<String, dynamic>> _records() async {
     final result = <String, dynamic>{};
     await database.transaction((tx) async {
@@ -125,7 +161,7 @@ class CapsuleService {
         }
       }
       final files = <String, Map<String, dynamic>>{};
-      Future<String> add(File file) async {
+      Future<String> add(File file, {String? expected}) async {
         if (!await file.exists()) {
           throw const FormatException(
             'Не найден файл для копии. Исходные данные сохранены.',
@@ -133,7 +169,26 @@ class CapsuleService {
         }
         final size = await file.length();
         final hash = (await sha256.bind(file.openRead()).first).toString();
+        if (expected != null && hash != expected) {
+          throw const FormatException(
+            'Содержимое файла изменилось. Копия не создана; исходные данные сохранены.',
+          );
+        }
         if (!files.containsKey(hash)) {
+          final retained = files.values.fold<int>(
+            0,
+            (n, f) => n + (f['bytes'] as int),
+          );
+          if (size + retained > maxBytes - maxManifest) {
+            throw const FormatException('Копия больше лимита 4 ГБ');
+          }
+          if (availableBytes != null &&
+              await availableBytes!() <
+                  size * 2 + retained + 16 * 1024 * 1024) {
+            throw const FormatException(
+              'Недостаточно места для подготовки ZIP. Прежние данные сохранены.',
+            );
+          }
           final target = File(p.join(work.path, 'blobs', hash));
           await target.parent.create(recursive: true);
           await file.copy(target.path);
@@ -153,7 +208,7 @@ class CapsuleService {
             'Внешний путь аудио: сначала восстановите доступ к оригиналу',
           );
         }
-        row['filePath'] = await add(source);
+        row['filePath'] = await add(source, expected: row['contentHash']);
         row['contentHash'] = (row['filePath'] as String).substring(10);
       }
       Future<Object?> portable(Object? v) async {
@@ -169,7 +224,7 @@ class CapsuleService {
               )) {
                 throw const FormatException('Вложение вне хранилища дневника');
               }
-              m[key] = await add(file);
+              m[key] = await add(file, expected: m['hash']);
             } else {
               m[key] = await portable(m[key]);
             }
@@ -204,12 +259,12 @@ class CapsuleService {
         throw const FormatException('Слишком большая копия');
       }
       final zip = ZipFileEncoder();
-      await zip.zipDirectory(
-        work,
-        filename: output.path,
-        level: 0,
-        followLinks: false,
-      );
+      zip.create(output.path, level: 0);
+      try {
+        await zip.addDirectory(work, includeDirName: false, followLinks: false);
+      } finally {
+        await zip.close();
+      }
       return output;
     } catch (_) {
       if (await output.exists()) await output.delete();
@@ -239,20 +294,30 @@ class CapsuleService {
       'module_definitions',
       'session_templates',
       'current_draft',
-      'session_runs',
     ]) {
       for (final row in records[table] as List) {
-        scan(jsonDecode(row['payload']));
+        final payload = jsonDecode(row['payload']);
+        if (table == 'module_definitions' && payload['archived'] == true) {
+          continue;
+        }
+        scan(payload);
       }
     }
     return ids.toList()..sort();
   }
 
-  Future<CapsulePreview> inspect(File zipFile) async {
+  Future<CapsulePreview> inspect(
+    File zipFile, {
+    bool Function()? cancelled,
+  }) async {
     await workspace.create(recursive: true);
     final stage = await workspace.createTemp('restore-');
-    final input = InputFileStream(zipFile.path);
+    InputFileStream? input;
     try {
+      if (cancelled?.call() ?? false) {
+        throw const FormatException('Восстановление отменено');
+      }
+      input = InputFileStream(zipFile.path);
       final archive = ZipDecoder().decodeStream(input);
       var total = 0;
       final names = <String>{};
@@ -300,6 +365,9 @@ class CapsuleService {
       final files = manifest['files'] as List;
       final hashes = <String>{};
       for (final f in files) {
+        if (cancelled?.call() ?? false) {
+          throw const FormatException('Восстановление отменено');
+        }
         final hash = f['sha256'] as String;
         if (!RegExp(r'^[a-f0-9]{64}$').hasMatch(hash) ||
             f['path'] != 'blobs/$hash' ||
@@ -327,7 +395,6 @@ class CapsuleService {
       }
       final local = await _records();
       final available = {
-        ...(local['audio_assets'] as List).map((r) => r['id']),
         ...(records['audio_assets'] as List).map((r) => r['id']),
       };
       final missing = _dependencies(records)
@@ -354,18 +421,98 @@ class CapsuleService {
             throw const FormatException('Повторяющийся идентификатор');
           }
           if (table == 'module_definitions') {
-            ModuleDefinition.fromMap(jsonDecode(row['payload']));
+            final module = ModuleDefinition.fromMap(jsonDecode(row['payload']));
+            _validatePlan(SessionPlan(steps: module.items));
+            if (module.id != row['id']) {
+              throw const FormatException('Несогласованный ID модуля');
+            }
           }
           if (table == 'session_templates') {
-            SessionTemplate.fromMap(jsonDecode(row['payload']));
+            final template = SessionTemplate.fromMap(
+              jsonDecode(row['payload']),
+            );
+            _validatePlan(template.plan);
+            if (template.id != row['id']) {
+              throw const FormatException('Несогласованный ID шаблона');
+            }
           }
           if (table == 'current_draft') {
-            CurrentSessionDraft.fromMap(jsonDecode(row['payload']));
+            _validatePlan(
+              CurrentSessionDraft.fromMap(jsonDecode(row['payload'])).plan,
+            );
+            if (row['id'] != 1) {
+              throw const FormatException('Некорректная текущая конфигурация');
+            }
           }
           if (table == 'session_runs') {
-            SessionRun.fromMap(jsonDecode(row['payload']));
+            final run = SessionRun.fromMap(jsonDecode(row['payload']));
+            _validatePlan(run.snapshot.plan);
+            if (run.id != row['id'] ||
+                run.displayNumber != row['displayNumber']) {
+              throw const FormatException('Несогласованная история');
+            }
+          }
+          if (table == 'audio_assets') {
+            final asset = AudioAsset.fromMap(Map<String, Object?>.from(row));
+            if (asset.contentHash == null ||
+                row['filePath'] != 'capsule://${asset.contentHash}' ||
+                !hashes.contains(asset.contentHash) ||
+                asset.durationMs <= 0 ||
+                asset.fileSizeBytes !=
+                    (await File(p.join(stage.path, asset.contentHash!))
+                        .length()) ||
+                !{'mp3', 'm4a', 'wav'}.contains(asset.format)) {
+              throw const FormatException('Неполное описание аудио');
+            }
+          }
+          if (['diary_author', 'diary_public'].contains(table)) {
+            final entry = DiaryEntry.fromMap(jsonDecode(row['payload']));
+            if (entry.id != row['id']) {
+              throw const FormatException('Несогласованный ID дневника');
+            }
+            for (final b in entry.blocks) {
+              if (b.media?.localPath case final String path) {
+                if (!path.startsWith('capsule://') ||
+                    !hashes.contains(path.substring(10))) {
+                  throw const FormatException(
+                    'Непереносимое вложение дневника',
+                  );
+                }
+              }
+            }
+          }
+          if (table == 'run_events' && jsonDecode(row['payload']) is! Map) {
+            throw const FormatException('Некорректное событие');
           }
         }
+      }
+      final runIds = (records['session_runs'] as List)
+          .map((r) => r['id'])
+          .toSet();
+      if ((records['run_events'] as List).any(
+        (r) => !runIds.contains(r['runId']),
+      )) {
+        throw const FormatException('Событие без снимка сессии');
+      }
+      var requiredBytes = (records['audio_assets'] as List).fold<int>(
+        0,
+        (n, r) => n + (r['fileSizeBytes'] as int),
+      );
+      for (final table in ['diary_author', 'diary_public']) {
+        for (final row in records[table] as List) {
+          final entry = DiaryEntry.fromMap(jsonDecode(row['payload']));
+          for (final block in entry.blocks) {
+            if (block.media?.localPath != null) {
+              requiredBytes += block.media!.bytes;
+            }
+          }
+        }
+      }
+      if (availableBytes != null &&
+          await availableBytes!() < requiredBytes + 16 * 1024 * 1024) {
+        throw const FormatException(
+          'Недостаточно места для всех экземпляров восстановленных файлов',
+        );
       }
       final imported = (await database.query(
         'capsule_imports',
@@ -380,23 +527,38 @@ class CapsuleService {
           final existing = (local[table] as List)
               .where((r) => r['id'] == row['id'])
               .firstOrNull;
-          if (existing != null && !_same(table, existing, row)) {
-            conflicts.add('$table · ${row['id']}');
+          if (existing != null && !await _matches(table, existing, row)) {
+            final payload = row['payload'] == null
+                ? null
+                : jsonDecode(row['payload']);
+            final name =
+                row['title'] ??
+                payload?['title'] ??
+                payload?['name'] ??
+                (table == 'current_draft' ? 'Текущий план' : row['id']);
+            conflicts.add('$name · ${row['id']}');
           }
         }
       }
+      final allPresent = tables
+          .where((t) => !['run_events', 'app_counters'].contains(t))
+          .every(
+            (t) => (records[t] as List).every(
+              (r) => (local[t] as List).any((l) => l['id'] == r['id']),
+            ),
+          );
       return CapsulePreview(
         manifest,
         stage,
         digest(local),
         conflicts,
-        imported,
+        imported && allPresent && conflicts.isEmpty,
       );
     } catch (_) {
       await stage.delete(recursive: true);
       rethrow;
     } finally {
-      await input.close();
+      await input?.close();
     }
   }
 
@@ -404,6 +566,18 @@ class CapsuleService {
     Map normalized(Map row) {
       final r = Map<String, dynamic>.from(row);
       if (table == 'audio_assets') r.remove('filePath');
+      if (table == 'session_runs') {
+        r.remove('displayNumber');
+        final payload = Map<String, dynamic>.from(jsonDecode(r['payload']));
+        payload.remove('displayNumber');
+        if (['running', 'paused', 'exitingEarly'].contains(r['status'])) {
+          r['status'] = payload['status'] = 'interrupted';
+          payload['endedAt'] =
+              payload['lastCheckpointAt'] ?? payload['startedAt'];
+          payload['endEstimated'] = true;
+        }
+        r['payload'] = payload;
+      }
       if (table.startsWith('diary_') && r['payload'] is String) {
         Object? clean(Object? x) => x is List
             ? x.map(clean).toList()
@@ -421,11 +595,74 @@ class CapsuleService {
     return canonical(normalized(a)) == canonical(normalized(b));
   }
 
+  Future<bool> _matches(String table, Map a, Map b) async {
+    if (!_same(table, a, b)) return false;
+    Future<bool> intact(String path, String expected) async {
+      try {
+        final file = File(path);
+        return await file.exists() &&
+            (await sha256.bind(file.openRead()).first).toString() == expected;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    if (table == 'audio_assets') {
+      if (p.basename(a['filePath']) != a['filePath']) return false;
+      return intact(
+        p.join(library.directory.path, a['filePath']),
+        b['contentHash'],
+      );
+    }
+    if (table == 'diary_author' || table == 'diary_public') {
+      Future<bool> walk(Object? local, Object? incoming) async {
+        if (incoming is List && local is List) {
+          for (var i = 0; i < incoming.length; i++) {
+            if (!await walk(local[i], incoming[i])) return false;
+          }
+        }
+        if (incoming is Map && local is Map) {
+          for (final k in incoming.keys) {
+            if (k == 'localPath' && incoming[k] is String) {
+              if (local[k] is! String ||
+                  !p.isWithin(
+                    diaryDirectory.absolute.path,
+                    p.absolute(local[k]),
+                  ) ||
+                  !await intact(
+                    local[k],
+                    (incoming[k] as String).substring(10),
+                  )) {
+                return false;
+              }
+            } else if (!await walk(local[k], incoming[k])) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
+      return walk(jsonDecode(a['payload']), jsonDecode(b['payload']));
+    }
+    return true;
+  }
+
   Future<void> restore(
     CapsulePreview preview, {
     CapsuleConflictChoice choice = CapsuleConflictChoice.cancel,
     Future<void> Function()? beforeCommit,
+    bool Function()? cancelled,
   }) async {
+    void checkCancelled() {
+      if (cancelled?.call() ?? false) {
+        throw const FormatException(
+          'Восстановление отменено. Прежние данные сохранены.',
+        );
+      }
+    }
+
+    checkCancelled();
     if (preview.alreadyImported) return;
     if (preview.conflicts.isNotEmpty &&
         choice == CapsuleConflictChoice.cancel) {
@@ -442,6 +679,7 @@ class CapsuleService {
         );
       }
       Future<String> materialize(String uri, Directory dir, String ext) async {
+        checkCancelled();
         if (!RegExp(r'^capsule://[a-f0-9]{64}$').hasMatch(uri)) {
           throw const FormatException('Непереносимый путь в копии');
         }
@@ -468,7 +706,7 @@ class CapsuleService {
               .where((r) => r['id'] == row['id'])
               .firstOrNull;
           if (existing != null &&
-              (_same(table, existing, row) ||
+              (await _matches(table, existing, row) ||
                   choice == CapsuleConflictChoice.keepExisting)) {
             skipped[table]!.add(row['id']);
           }
@@ -482,6 +720,12 @@ class CapsuleService {
         row['filePath'] = p.basename(
           await materialize(row['filePath'], library.directory, row['format']),
         );
+        final decoded = await library
+            .probe(p.join(library.directory.path, row['filePath']))
+            .timeout(const Duration(seconds: 30));
+        if (decoded == null || decoded.inMilliseconds <= 0) {
+          throw const FormatException('Восстановленное аудио не декодируется');
+        }
       }
       Future<Object?> relocate(Object? x) async {
         if (x is List) return Future.wait(x.map(relocate));
@@ -518,6 +762,7 @@ class CapsuleService {
         }
       }
       await database.transaction((tx) async {
+        checkCancelled();
         // Detect concurrent writes again under the write transaction.
         final locked = <String, dynamic>{};
         for (final table in tables) {
@@ -547,6 +792,24 @@ class CapsuleService {
             if (table == 'app_counters') continue;
             if (skipped[table]!.contains(row['id'])) continue;
             if (table == 'session_runs') {
+              final occupied = await tx.query(
+                'session_runs',
+                where: 'displayNumber=? AND id<>?',
+                whereArgs: [row['displayNumber'], row['id']],
+              );
+              if (occupied.isNotEmpty) {
+                final number =
+                    (Sqflite.firstIntValue(
+                          await tx.rawQuery(
+                            'SELECT MAX(displayNumber) FROM session_runs',
+                          ),
+                        ) ??
+                        0) +
+                    1;
+                final payload = jsonDecode(row['payload']);
+                payload['displayNumber'] = row['displayNumber'] = number;
+                row['payload'] = jsonEncode(payload);
+              }
               if ([
                 'running',
                 'paused',
@@ -591,10 +854,11 @@ class CapsuleService {
           'value': counter,
         }, conflictAlgorithm: ConflictAlgorithm.replace);
         await beforeCommit?.call();
+        checkCancelled();
         await tx.insert('capsule_imports', {
           'id': preview.id,
           'importedAt': DateTime.now().toUtc().toIso8601String(),
-        });
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
       });
     } catch (_) {
       for (final file in created) {

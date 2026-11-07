@@ -62,6 +62,10 @@ class _BootstrapState extends State<_Bootstrap> {
     try {
       final root = await getApplicationSupportDirectory();
       await root.create(recursive: true);
+      final cache = await getTemporaryDirectory();
+      await CapsuleService.cleanWorkspace(cache);
+      final capsuleWorkspace = Directory(p.join(cache.path, 'sulfi-capsules'));
+      await CapsuleService.cleanWorkspace(capsuleWorkspace);
       final repository = await SqliteLibraryRepository.open(
         p.join(root.path, 'library.sqlite'),
       );
@@ -189,9 +193,7 @@ class _BootstrapState extends State<_Bootstrap> {
           database: repository.database,
           library: library,
           diaryDirectory: diaryMedia.directory,
-          workspace: Directory(
-            p.join((await getTemporaryDirectory()).path, 'sulfi-capsules'),
-          ),
+          workspace: capsuleWorkspace,
           availableBytes: DeviceFiles.freeBytes,
         ),
       );
