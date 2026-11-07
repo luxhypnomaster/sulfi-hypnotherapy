@@ -128,9 +128,13 @@ class DiaryEntry {
     this.publishedAt,
     this.status = DiaryStatus.draft,
     this.number,
+    this.readingState = const {},
     // ignore: prefer_initializing_formals
   }) : _body = body,
        _blocks = blocks == null ? null : List.unmodifiable(blocks);
+  // Reserved per-medium fields: textReadAt, audioListenedAt, priority,
+  // showcasePosition. No rotation or completion inference is enabled.
+  final Map<String, dynamic> readingState;
   final String id, message, title, _body;
   final List<DiaryBlock>? _blocks;
   final int version, order;
@@ -184,6 +188,7 @@ class DiaryEntry {
     status: status ?? this.status,
     version: version ?? this.version,
     number: number,
+    readingState: readingState,
   );
   Map<String, Object?> toMap({bool public = false}) => {
     'schemaVersion': 2,
@@ -202,6 +207,7 @@ class DiaryEntry {
     'status': status.name,
     'version': version,
     'number': number,
+    if (!public && readingState.isNotEmpty) 'readingState': readingState,
   };
   factory DiaryEntry.fromMap(Map<String, dynamic> m) {
     if ((m['schemaVersion'] as int? ?? 1) > 2) {
@@ -226,6 +232,7 @@ class DiaryEntry {
       status: DiaryStatus.values.byName(m['status'] as String),
       version: m['version'] as int,
       number: m['number'] as int?,
+      readingState: Map<String, dynamic>.from(m['readingState'] ?? {}),
     );
     if (entry.id.isEmpty ||
         entry.version < 0 ||

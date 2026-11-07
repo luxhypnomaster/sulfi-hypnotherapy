@@ -10,6 +10,8 @@ import '../models/modular_plan.dart';
 import '../models/session_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/diary_entry.dart';
+import 'history_attachments.dart';
+import 'diary_media_store.dart';
 import 'library_service.dart';
 
 enum CapsuleConflictChoice { cancel, keepExisting, replace }
@@ -61,6 +63,7 @@ class CapsuleService {
     'current_draft',
     'session_runs',
     'run_events',
+    'history_attachments',
     'app_counters',
     'diary_author',
     'diary_public',
@@ -211,6 +214,7 @@ class CapsuleService {
         row['filePath'] = await add(source, expected: row['contentHash']);
         row['contentHash'] = (row['filePath'] as String).substring(10);
       }
+      var mediaRoot = diaryDirectory;
       Future<Object?> portable(Object? v) async {
         if (v is List) return Future.wait(v.map(portable));
         if (v is Map) {
@@ -218,10 +222,7 @@ class CapsuleService {
           for (final key in m.keys.toList()) {
             if (key == 'localPath' && m[key] is String) {
               final file = File(m[key]);
-              if (!p.isWithin(
-                diaryDirectory.absolute.path,
-                file.absolute.path,
-              )) {
+              if (!p.isWithin(mediaRoot.absolute.path, file.absolute.path)) {
                 throw const FormatException('Вложение вне хранилища дневника');
               }
               m[key] = await add(file, expected: m['hash']);
@@ -234,7 +235,14 @@ class CapsuleService {
         return v;
       }
 
-      for (final table in ['diary_author', 'diary_public']) {
+      for (final table in [
+        'diary_author',
+        'diary_public',
+        'history_attachments',
+      ]) {
+        mediaRoot = table == 'history_attachments'
+            ? Directory(p.join(diaryDirectory.parent.path, 'history_media'))
+            : diaryDirectory;
         for (final row in records[table] as List) {
           row['payload'] = jsonEncode(
             await portable(jsonDecode(row['payload'])),
@@ -245,7 +253,7 @@ class CapsuleService {
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
         'schema': schema,
-        'databaseSchema': 7,
+        'databaseSchema': 8,
         'scope': moduleId == null ? 'full' : 'module',
         'records': records,
         'files': files.values.toList(),
@@ -351,13 +359,16 @@ class CapsuleService {
       final identity = Map<String, dynamic>.from(manifest)..remove('id');
       if (manifest['format'] != 'sulfi-capsule' ||
           manifest['schema'] != schema ||
-          ![6, 7].contains(manifest['databaseSchema']) ||
+          ![6, 7, 8].contains(manifest['databaseSchema']) ||
           digest(identity) != manifest['id']) {
         throw const FormatException(
           'Неизвестная версия или повреждённый манифест',
         );
       }
       final records = Map<String, dynamic>.from(manifest['records']);
+      if (manifest['databaseSchema'] < 8) {
+        records.putIfAbsent('history_attachments', () => []);
+      }
       if (records.keys.toSet().difference(tables.toSet()).isNotEmpty ||
           tables.any((t) => records[t] is! List)) {
         throw const FormatException('Некорректные таблицы');
@@ -491,6 +502,49 @@ class CapsuleService {
               }
             }
           }
+          if (table == 'history_attachments') {
+            final a = HistoryAttachment.fromMap(jsonDecode(row['payload']));
+            if (a.id != row['id'] ||
+                a.runId != row['runId'] ||
+                !(records['session_runs'] as List).any(
+                  (r) => r['id'] == a.runId,
+                )) {
+              throw const FormatException('Несогласованное вложение истории');
+            }
+            final path = a.block.media?.localPath;
+            if (a.block.type == DiaryBlockType.text) {
+              throw const FormatException('Ожидается медиа');
+            }
+            if (path == null ||
+                !path.startsWith('capsule://') ||
+                !hashes.contains(path.substring(10))) {
+              throw const FormatException('Нет файла вложения истории');
+            }
+          }
+          if (table == 'history_attachments') {
+            final a = HistoryAttachment.fromMap(jsonDecode(row['payload']));
+            final media = a.block.media!;
+            final file = File(
+              p.join(stage.path, media.localPath!.substring(10)),
+            );
+            if (media.hash != media.localPath!.substring(10) ||
+                await file.length() != media.bytes) {
+              throw const FormatException('Размер вложения не совпадает');
+            }
+            final checker = DiaryMediaStore(
+              Directory(p.join(stage.path, 'media-check')),
+              pick: (_) async => null,
+              probe: library.probe,
+            );
+            final checked = await checker.importFile(a.block.type, (
+              name: 'attachment',
+              path: file.path,
+            ));
+            if (checked.media!.mime != media.mime) {
+              throw const FormatException('Тип вложения не совпадает');
+            }
+            await checker.directory.delete(recursive: true);
+          }
           if (table == 'run_events' && jsonDecode(row['payload']) is! Map) {
             throw const FormatException('Некорректное событие');
           }
@@ -508,10 +562,16 @@ class CapsuleService {
         0,
         (n, r) => n + (r['fileSizeBytes'] as int),
       );
-      for (final table in ['diary_author', 'diary_public']) {
+      for (final table in [
+        'diary_author',
+        'diary_public',
+        'history_attachments',
+      ]) {
         for (final row in records[table] as List) {
-          final entry = DiaryEntry.fromMap(jsonDecode(row['payload']));
-          for (final block in entry.blocks) {
+          final blocks = table == 'history_attachments'
+              ? [HistoryAttachment.fromMap(jsonDecode(row['payload'])).block]
+              : DiaryEntry.fromMap(jsonDecode(row['payload'])).blocks;
+          for (final block in blocks) {
             if (block.media?.localPath != null) {
               requiredBytes += block.media!.bytes;
             }
@@ -588,7 +648,8 @@ class CapsuleService {
         }
         r['payload'] = payload;
       }
-      if (table.startsWith('diary_') && r['payload'] is String) {
+      if ((table.startsWith('diary_') || table == 'history_attachments') &&
+          r['payload'] is String) {
         Object? clean(Object? x) => x is List
             ? x.map(clean).toList()
             : x is Map
@@ -624,7 +685,9 @@ class CapsuleService {
         b['contentHash'],
       );
     }
-    if (table == 'diary_author' || table == 'diary_public') {
+    if (table == 'diary_author' ||
+        table == 'diary_public' ||
+        table == 'history_attachments') {
       Future<bool> walk(Object? local, Object? incoming) async {
         if (incoming is List && local is List) {
           for (var i = 0; i < incoming.length; i++) {
@@ -636,7 +699,16 @@ class CapsuleService {
             if (k == 'localPath' && incoming[k] is String) {
               if (local[k] is! String ||
                   !p.isWithin(
-                    diaryDirectory.absolute.path,
+                    (table == 'history_attachments'
+                            ? Directory(
+                                p.join(
+                                  diaryDirectory.parent.path,
+                                  'history_media',
+                                ),
+                              )
+                            : diaryDirectory)
+                        .absolute
+                        .path,
                     p.absolute(local[k]),
                   ) ||
                   !await intact(
@@ -737,6 +809,7 @@ class CapsuleService {
           throw const FormatException('Восстановленное аудио не декодируется');
         }
       }
+      var mediaDestination = diaryDirectory;
       Future<Object?> relocate(Object? x) async {
         if (x is List) return Future.wait(x.map(relocate));
         if (x is Map) {
@@ -752,7 +825,7 @@ class CapsuleService {
                 'audio/mp4' => 'm4a',
                 _ => throw const FormatException('Неизвестное вложение'),
               };
-              m[k] = await materialize(m[k], diaryDirectory, ext);
+              m[k] = await materialize(m[k], mediaDestination, ext);
             } else {
               m[k] = await relocate(m[k]);
             }
@@ -762,7 +835,14 @@ class CapsuleService {
         return x;
       }
 
-      for (final table in ['diary_author', 'diary_public']) {
+      for (final table in [
+        'diary_author',
+        'diary_public',
+        'history_attachments',
+      ]) {
+        mediaDestination = table == 'history_attachments'
+            ? Directory(p.join(diaryDirectory.parent.path, 'history_media'))
+            : diaryDirectory;
         for (final row in records[table] as List) {
           if (!skipped[table]!.contains(row['id'])) {
             row['payload'] = jsonEncode(
@@ -797,6 +877,13 @@ class CapsuleService {
               if (skipped['session_runs']!.contains(row['runId'])) continue;
               final event = Map<String, Object?>.from(row)..remove('id');
               await tx.insert(table, event);
+              continue;
+            }
+            if (table == 'history_attachments' &&
+                skipped['session_runs']!.contains(row['runId']) &&
+                !(local['session_runs'] as List).any(
+                  (r) => r['id'] == row['runId'],
+                )) {
               continue;
             }
             if (table == 'app_counters') continue;
@@ -863,6 +950,16 @@ class CapsuleService {
                 where: 'runId=?',
                 whereArgs: [row['id']],
               );
+            }
+            if (table == 'session_runs' &&
+                (locked[table] as List).any((r) => r['id'] == row['id'])) {
+              await tx.update(
+                table,
+                Map<String, Object?>.from(row),
+                where: 'id=?',
+                whereArgs: [row['id']],
+              );
+              continue;
             }
             await tx.insert(
               table,

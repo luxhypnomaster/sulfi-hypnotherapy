@@ -221,7 +221,7 @@ void main() {
       '${root.path}/db.sqlite',
       factory: databaseFactoryFfi,
     );
-    expect(await db.getVersion(), 7);
+    expect(await db.getVersion(), 8);
     final after = await db.query('audio_assets');
     for (final e in before.single.entries) {
       expect(after.single[e.key], e.value);

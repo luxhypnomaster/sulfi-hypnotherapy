@@ -10,7 +10,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 7,
+    version: 8,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -29,6 +29,7 @@ Future<Database> openAppDatabase(
       await _createDiaryTables(db);
       await _addIdentity(db);
       await _addAccessSettings(db);
+      await _addHistoryAttachments(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -76,6 +77,7 @@ Future<Database> openAppDatabase(
       if (oldVersion < 5) await _createDiaryTables(db);
       if (oldVersion < 6) await _addIdentity(db);
       if (oldVersion < 7) await _addAccessSettings(db);
+      if (oldVersion < 8) await _addHistoryAttachments(db);
     },
   ),
 );
@@ -160,5 +162,14 @@ Future<void> _addAccessSettings(DatabaseExecutor db) async {
   }
   await db.execute(
     'CREATE TABLE IF NOT EXISTS app_settings(name TEXT PRIMARY KEY, value TEXT NOT NULL)',
+  );
+}
+
+Future<void> _addHistoryAttachments(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS history_attachments(id TEXT PRIMARY KEY,runId TEXT NOT NULL REFERENCES session_runs(id) ON DELETE CASCADE,payload TEXT NOT NULL)',
+  );
+  await db.execute(
+    'CREATE INDEX IF NOT EXISTS history_attachments_run ON history_attachments(runId)',
   );
 }
