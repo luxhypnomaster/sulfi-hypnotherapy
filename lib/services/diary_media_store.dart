@@ -148,6 +148,12 @@ class DiaryMediaStore {
         }
         // Some native decoders require the correct extension.
       }
+      final persisted = await temp.open(mode: FileMode.append);
+      try {
+        await persisted.flush();
+      } finally {
+        await persisted.close();
+      }
       final target = File(p.join(directory.path, '$id.$ext'));
       await temp.rename(target.path);
       try {

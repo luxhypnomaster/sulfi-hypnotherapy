@@ -29,6 +29,7 @@ import 'dart:convert';
 import 'package:sulfi_hypnotherapy/ui/recorder_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/history_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/history_detail_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/history_attachment_panel.dart';
 import 'package:sulfi_hypnotherapy/ui/modular_structure_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/session_scope.dart';
 import 'package:sulfi_hypnotherapy/ui/home_screen.dart';
@@ -586,6 +587,17 @@ void main() {
         (await t.runAsync(c.repository.history))!.single.snapshot.toMap(),
         before,
       );
+      final thumbnail = find.descendant(
+        of: find.byType(HistoryAttachmentPanel),
+        matching: find.byType(Image),
+      );
+      await t.ensureVisible(thumbnail);
+      await t.pumpAndSettle();
+      await t.tap(thumbnail);
+      await io(t);
+      expect(find.byType(InteractiveViewer), findsOneWidget);
+      await t.tapAt(const Offset(5, 5));
+      await io(t);
       await t.ensureVisible(find.byTooltip('Удалить вложение'));
       await t.pumpAndSettle();
       await t.tap(find.byTooltip('Удалить вложение'));
@@ -612,7 +624,10 @@ void main() {
       addTearDown(t.view.resetPhysicalSize);
       addTearDown(t.view.resetDevicePixelRatio);
       await t.pumpWidget(
-        SulfiApp(library: c.library, player: player, controller: c),
+        RepaintBoundary(
+          key: const Key('task5-capture'),
+          child: SulfiApp(library: c.library, player: player, controller: c),
+        ),
       );
       await io(t);
       expect(find.byKey(const Key('global-preview-bar')), findsOneWidget);

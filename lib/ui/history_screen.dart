@@ -155,6 +155,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
             'Аудиофайлы и шаблоны останутся на устройстве.',
             confirm: 'Удалить',
           )) {
+        final attachments =
+            await widget.controller.historyAttachments?.list(run.id) ?? [];
+        if (attachments.any((a) => a.id == widget.player?.current?.id)) {
+          await widget.player?.stop();
+        }
         await widget.controller.repository.deleteRun(run.id);
       }
       await widget.controller.reload();

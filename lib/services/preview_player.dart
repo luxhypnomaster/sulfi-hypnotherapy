@@ -84,7 +84,7 @@ class LocalPreviewPlayer extends PreviewPlayer {
       _error = null;
       if (!await file.exists()) {
         throw const LibraryException(
-          'Аудиофайл отсутствует. Удалите запись из библиотеки и импортируйте заново.',
+          'Аудиофайл недоступен. Восстановите его из копии или выберите файл заново.',
         );
       }
       if (generation != _generation) return;
