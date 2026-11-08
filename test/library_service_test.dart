@@ -59,6 +59,33 @@ void main() {
     expect(cacheReleases, 1);
   });
 
+  test('legacy external path migrates bytes preserving its stable ID; lost source stays visible', () async {
+    final imported = (await service.prepareImport())!;
+    await service.discard(imported);
+    final legacy = AudioAsset.fromMap({
+      ...imported.toMap(),
+      'filePath': source.path,
+      'contentHash': null,
+    });
+    await repository.save(legacy);
+    await service.initialize();
+    final migrated = (await repository.list()).single;
+    expect(migrated.id, legacy.id);
+    expect(migrated.contentHash, hasLength(64));
+    await source.rename('${source.path}.moved');
+    expect(await service.fileFor(migrated).readAsBytes(), [1, 2, 3, 4]);
+    await repository.save(
+      AudioAsset.fromMap({
+        ...migrated.toMap(),
+        'id': 'lost',
+        'filePath': '/missing/test.wav',
+      }),
+    );
+    await service.initialize();
+    expect(await repository.list(), hasLength(2));
+    expect(service.migrationIssues.single, contains('недоступен'));
+  });
+
   for (final format in ['mp3', 'm4a', 'wav']) {
     test(
       'copies $format and preserves it after external original is removed',

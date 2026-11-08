@@ -12,11 +12,15 @@ class PreviewBar extends StatelessWidget {
     required this.library,
     this.idleAsset,
     this.compact = false,
+    this.global = false,
+    this.navigatorKey,
   });
   final PreviewPlayer player;
   final LibraryService library;
   final AudioAsset? idleAsset;
   final bool compact;
+  final bool global;
+  final GlobalKey<NavigatorState>? navigatorKey;
   Future<void> _action(
     BuildContext context,
     Future<void> Function() action,
@@ -42,6 +46,9 @@ class PreviewBar extends StatelessWidget {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: player,
     builder: (context, _) {
+      if (!global && GlobalPreviewScope.present(context)) {
+        return const SizedBox.shrink();
+      }
       final a = player.current ?? idleAsset;
       if (a == null) {
         return player.error == null
@@ -70,7 +77,7 @@ class PreviewBar extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () => showDialog<void>(
-                        context: context,
+                        context: navigatorKey?.currentContext ?? context,
                         builder: (context) => AlertDialog(
                           title: Text(a.title),
                           content: Text(
@@ -133,7 +140,10 @@ class PreviewBar extends StatelessWidget {
                         : 'Прослушать трек',
                     onPressed: () => _action(
                       context,
-                      () => player.toggle(a, library.fileFor(a)),
+                      () => player.toggle(
+                        a,
+                        player.currentFile ?? library.fileFor(a),
+                      ),
                     ),
                     icon: Icon(
                       player.playing ? Icons.pause_circle : Icons.play_circle,
@@ -217,7 +227,10 @@ class PreviewBar extends StatelessWidget {
                         : 'Прослушать трек',
                     onPressed: () => _action(
                       context,
-                      () => player.toggle(a, library.fileFor(a)),
+                      () => player.toggle(
+                        a,
+                        player.currentFile ?? library.fileFor(a),
+                      ),
                     ),
                     icon: Icon(
                       player.playing ? Icons.pause_circle : Icons.play_circle,
@@ -251,4 +264,12 @@ class PreviewBar extends StatelessWidget {
       );
     },
   );
+}
+
+class GlobalPreviewScope extends InheritedWidget {
+  const GlobalPreviewScope({super.key, required super.child});
+  static bool present(BuildContext c) =>
+      c.dependOnInheritedWidgetOfExactType<GlobalPreviewScope>() != null;
+  @override
+  bool updateShouldNotify(GlobalPreviewScope oldWidget) => false;
 }
