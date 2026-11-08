@@ -1,0 +1,52 @@
+{
+  "task": 6,
+  "sourceCommit": "e4624d62d8f29c6f6caeef7120b5106e4e50a786",
+  "sourceTree": "7a2e353d8c1a28a354d5b8d13bd1b0213cccd05e",
+  "flutterTests": {
+    "success": true,
+    "passed": 328,
+    "failures": []
+  },
+  "nodeTests": {
+    "passed": 24,
+    "failed": 0
+  },
+  "format": {
+    "files": 109,
+    "changed": 0
+  },
+  "analyze": "PASS, no issues",
+  "fixedClient": "PASS",
+  "localApk": {
+    "version": "0.4.12+17",
+    "sourceCommit": "e4624d62d8f29c6f6caeef7120b5106e4e50a786",
+    "abi": "arm64-v8a",
+    "bytes": 112964799,
+    "sha256": "d600255f21419e03f079c51b1cf4faadaed05e6320449b95ac57490f66a89436",
+    "applicationId": "ru.sulfi.sulfi_hypnotherapy",
+    "oldVersionCode": 16,
+    "versionCode": 17,
+    "signerSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+    "sameSignerAsTask5": true,
+    "apkCrc": "PASS",
+    "unchangedPreviousAppAssets": 12,
+    "physicalUpdate5to6": "NOT RUN"
+  },
+  "ci": {
+    "run": 42429278302,
+    "mergeCommit": "0c825fe5e3b7c89aa5711e8986a30924df7e567c",
+    "status": "SUCCESS",
+    "job": 128574411520,
+    "apkArtifact": {
+      "id": 13596669642,
+      "name": "sulfi-android-debug-0c825fe5e3b7c89aa5711e8986a30924df7e567c",
+      "size_in_bytes": 105577755,
+      "digest": "sha256:af25075f2e197e1927aa7fb686c7c38233d370f12f826ccf37b98ff8cc55afac",
+      "expires_at": "2026-11-22T00:33:36Z",
+      "expired": false
+    },
+    "apkDownloadUrl": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42429278302/artifacts/13596669642"
+  },
+  "physicalDevice": "NOT RUN; no adb device or emulator",
+  "googleDrive": "Read task archive only; no uploads"
+}
