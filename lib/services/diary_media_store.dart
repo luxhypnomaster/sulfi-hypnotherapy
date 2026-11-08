@@ -103,24 +103,27 @@ class DiaryMediaStore {
           );
           try {
             final frame = await codec.getNextFrame();
-            if (stripImageMetadata) {
-              width = frame.image.width;
-              height = frame.image.height;
-              final png = await frame.image.toByteData(
-                format: ui.ImageByteFormat.png,
-              );
-              if (png == null || png.lengthInBytes > limit) {
-                throw const FormatException(
-                  'Изображение слишком большое после обработки',
+            try {
+              if (stripImageMetadata) {
+                width = frame.image.width;
+                height = frame.image.height;
+                final png = await frame.image.toByteData(
+                  format: ui.ImageByteFormat.png,
                 );
+                if (png == null || png.lengthInBytes > limit) {
+                  throw const FormatException(
+                    'Изображение слишком большое после обработки',
+                  );
+                }
+                data = png.buffer.asUint8List();
+                size = data.length;
+                mime = 'image/png';
+                ext = 'png';
+                await temp.writeAsBytes(data, flush: true);
               }
-              data = png.buffer.asUint8List();
-              size = data.length;
-              mime = 'image/png';
-              ext = 'png';
-              await temp.writeAsBytes(data, flush: true);
+            } finally {
+              frame.image.dispose();
             }
-            frame.image.dispose();
           } finally {
             codec.dispose();
           }

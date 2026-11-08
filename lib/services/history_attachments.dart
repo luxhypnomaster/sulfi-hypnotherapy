@@ -28,16 +28,28 @@ class HistoryAttachment {
     'block': block.toMap(),
     if (transcription != null) 'transcription': transcription,
   };
-  factory HistoryAttachment.fromMap(Map<String, dynamic> m) =>
-      HistoryAttachment(
-        id: m['id'],
-        runId: m['runId'],
-        block: DiaryBlock.fromMap(Map<String, dynamic>.from(m['block'])),
-        createdAt: DateTime.parse(m['createdAt']),
-        transcription: m['transcription'] == null
-            ? null
-            : Map<String, dynamic>.from(m['transcription']),
-      );
+  factory HistoryAttachment.fromMap(Map<String, dynamic> m) {
+    final a = HistoryAttachment(
+      id: m['id'],
+      runId: m['runId'],
+      block: DiaryBlock.fromMap(Map<String, dynamic>.from(m['block'])),
+      createdAt: DateTime.parse(m['createdAt']),
+      transcription: m['transcription'] == null
+          ? null
+          : Map<String, dynamic>.from(m['transcription']),
+    );
+    if (a.id.isEmpty ||
+        a.runId.isEmpty ||
+        a.block.type == DiaryBlockType.text ||
+        (a.block.type == DiaryBlockType.audio &&
+            (a.block.durationMs ?? 0) <= 0) ||
+        a.block.media == null ||
+        a.block.media!.bytes <= 0 ||
+        !RegExp(r'^[a-f0-9]{64}$').hasMatch(a.block.media!.hash ?? '')) {
+      throw const FormatException('Некорректное вложение истории');
+    }
+    return a;
+  }
 }
 
 class HistoryAttachments {

@@ -174,6 +174,7 @@ class _HistoryAttachmentPanelState extends State<HistoryAttachmentPanel> {
                       File(a.block.media!.localPath!),
                       width: 48,
                       height: 48,
+                      cacheWidth: 144,
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => const Icon(Icons.broken_image),
                     ),

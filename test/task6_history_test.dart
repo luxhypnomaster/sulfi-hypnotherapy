@@ -6,6 +6,8 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sulfi_hypnotherapy/data/app_database.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
+import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
+import 'package:archive/archive_io.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
 import 'package:sulfi_hypnotherapy/services/history_attachments.dart';
@@ -18,6 +20,7 @@ import 'package:sulfi_hypnotherapy/services/diary_audio.dart';
 import 'support/fakes.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
   test('six histories, separate multimedia, deletion gaps and clean capsule restore remain idempotent', () async {
     final root = await Directory.systemTemp.createTemp('task6');
@@ -35,6 +38,7 @@ void main() {
     final repo = SqliteSessionRepository(db);
     final media = DiaryMediaStore(
       Directory('${root.path}/history_media'),
+      stripImageMetadata: true,
       pick: (_) async => null,
       probe: lib.probe,
     );
@@ -93,6 +97,53 @@ void main() {
     expect(await media.file(block.media)!.exists(), isTrue);
     await db.execute('DROP TRIGGER history_failure');
     final a = await attachments.attach(ids.last, block);
+    final originalImage = await File('${root.path}/original.png').writeAsBytes(
+      base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAH3RFWHRDb21tZW50AFJFTU9WRS1NRVRBREFUQS1GSVhUVVJFjb2KVwAAABZJREFUeJxj/P+fgYGBgYmBgYGBgQEAGRECAp3OF8MAAAAASUVORK5CYII=',
+      ),
+    );
+    final picture = await media.importFile(DiaryBlockType.image, (
+      name: 'picture.png',
+      path: originalImage.path,
+    ));
+    await attachments.attach(ids.last, picture);
+    expect(
+      utf8.decode(
+        await media.file(picture.media)!.readAsBytes(),
+        allowMalformed: true,
+      ),
+      isNot(contains('REMOVE-METADATA-FIXTURE')),
+    );
+    expect(
+      utf8.decode(await originalImage.readAsBytes(), allowMalformed: true),
+      contains('REMOVE-METADATA-FIXTURE'),
+    );
+    final diaryMedia = DiaryMediaStore(
+      Directory('${root.path}/diary'),
+      pick: (_) async => null,
+      probe: lib.probe,
+    );
+    final diaryBlock = await diaryMedia.importFile(DiaryBlockType.audio, (
+      name: 'diary-note.m4a',
+      path: 'test/fixtures/android_aac_isom.m4a',
+    ));
+    final diary = DiaryEntry(
+      id: 'portable-diary',
+      message: 'Текст дневника',
+      createdAt: DateTime.utc(2026),
+      updatedAt: DateTime.utc(2026),
+      blocks: [
+        DiaryBlock(id: 'text', type: DiaryBlockType.text, text: 'До аудио'),
+        diaryBlock,
+      ],
+      readingState: {
+        'textReadAt': '2026-11-01',
+        'audioListenedAt': null,
+        'priority': 2,
+      },
+    );
+    await DiaryAuthorRepository(db).save(diary);
+
     await repo.editRun(ids.last, notes: 'Текст');
     expect(
       (await repo.history()).map((r) => r.snapshot.toMap()).toList(),
@@ -112,6 +163,15 @@ void main() {
       workspace: Directory('${root.path}/cache'),
     );
     final zip = await capsule.export();
+    final archive = ZipDecoder().decodeBytes(await zip.readAsBytes());
+    expect(
+      archive.files.where((f) => f.isFile && f.name.startsWith('blobs/')),
+      hasLength(2),
+    );
+    expect(
+      utf8.decode(archive.findFile('manifest.json')!.content),
+      isNot(contains(root.path)),
+    );
     final target = await openAppDatabase(
       '${root.path}/other/db',
       factory: databaseFactoryFfi,
@@ -145,8 +205,37 @@ void main() {
         pick: (_) async => null,
         probe: lib.probe,
       ),
-    ).list(ids.last)).single;
+    ).list(ids.last)).firstWhere((item) => item.id == a.id);
     expect(restored.id, a.id);
+    final targetAttachments = HistoryAttachments(
+      target,
+      DiaryMediaStore(
+        Directory('${root.path}/other/history_media'),
+        pick: (_) async => null,
+        probe: lib.probe,
+      ),
+    );
+    expect(await targetAttachments.list(ids.last), hasLength(2));
+    final targetPicture = (await targetAttachments.list(ids.last))
+        .firstWhere((a) => a.block.type == DiaryBlockType.image);
+    expect(
+      await File(targetPicture.block.media!.localPath!).readAsBytes(),
+      await media.file(picture.media)!.readAsBytes(),
+    );
+    expect(await target.query('session_runs'), await db.query('session_runs'));
+    final restoredDiary = (await DiaryAuthorRepository(
+      target,
+    ).entries()).single;
+    expect(
+      restoredDiary.blocks.map((b) => b.id),
+      diary.blocks.map((b) => b.id),
+    );
+    expect(restoredDiary.readingState, diary.readingState);
+    expect(
+      await File(restoredDiary.blocks.last.media!.localPath!).readAsBytes(),
+      await diaryMedia.file(diaryBlock.media)!.readAsBytes(),
+    );
+
     expect(
       await File(restored.block.media!.localPath!).readAsBytes(),
       await media.file(block.media)!.readAsBytes(),
@@ -168,6 +257,52 @@ void main() {
     await attachments.collect();
     expect(await media.file(block.media)!.exists(), isFalse);
     await target.close();
+    await db.close();
+    await root.delete(recursive: true);
+  });
+  test('invalid history audio metadata is rejected and corrupt references preserve every private file', () async {
+    final root = await Directory.systemTemp.createTemp('task6-invalid');
+    final db = await openAppDatabase(
+      '${root.path}/db',
+      factory: databaseFactoryFfi,
+    );
+    final repo = SqliteSessionRepository(db);
+    final run = await repo.startRun(
+      CurrentSessionDraft(
+        plan: SessionPlan(steps: const []),
+        updatedAt: DateTime.now(),
+      ),
+    );
+    await repo.checkpoint(
+      run.checkpoint(status: RunStatus.completed),
+      event: 'completed',
+    );
+    final store = DiaryMediaStore(
+      Directory('${root.path}/history_media'),
+      pick: (_) async => null,
+      probe: (_) async => const Duration(seconds: 12),
+    );
+    final service = HistoryAttachments(db, store);
+    final block = await store.importFile(DiaryBlockType.audio, (
+      name: 'note.m4a',
+      path: 'test/fixtures/android_aac_isom.m4a',
+    ));
+    final attachment = await service.attach(run.id, block);
+    final invalid = attachment.toMap();
+    (invalid['block'] as Map)['durationMs'] = null;
+    expect(() => HistoryAttachment.fromMap(invalid), throwsFormatException);
+    final unrelated = await File(
+      '${store.directory.path}/retained-after-error.m4a',
+    ).writeAsBytes([1, 2, 3]);
+    await db.update(
+      'history_attachments',
+      {'payload': jsonEncode(invalid)},
+      where: 'id=?',
+      whereArgs: [attachment.id],
+    );
+    await expectLater(service.collect(), throwsFormatException);
+    expect(await unrelated.exists(), isTrue);
+    expect(await store.file(block.media)!.exists(), isTrue);
     await db.close();
     await root.delete(recursive: true);
   });
