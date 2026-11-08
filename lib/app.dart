@@ -47,7 +47,7 @@ ThemeData sulfiTheme() {
   );
 }
 
-class SulfiApp extends StatelessWidget {
+class SulfiApp extends StatefulWidget {
   const SulfiApp({
     super.key,
     required this.library,
@@ -61,8 +61,19 @@ class SulfiApp extends StatelessWidget {
   final SessionTransport Function()? transportFactory;
 
   @override
+  State<SulfiApp> createState() => _SulfiAppState();
+}
+
+class _SulfiAppState extends State<SulfiApp> {
+  final navigatorKey = GlobalKey<NavigatorState>();
+  LibraryService get library => widget.library;
+  PreviewPlayer get player => widget.player;
+  SessionController get controller => widget.controller;
+  SessionTransport Function()? get transportFactory => widget.transportFactory;
+  @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
+    navigatorKey: navigatorKey,
     title: 'Сульфи — Самогипноз',
     locale: const Locale('ru'),
     supportedLocales: const [Locale('ru')],
@@ -104,6 +115,7 @@ class SulfiApp extends StatelessWidget {
                           library: library,
                           compact: true,
                           global: true,
+                          navigatorKey: navigatorKey,
                         ),
                       ),
                   ],

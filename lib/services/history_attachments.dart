@@ -108,10 +108,11 @@ class HistoryAttachments {
       // Corrupt metadata aborts collection, preserving all original media.
       final a = HistoryAttachment.fromMap(jsonDecode(row['payload'] as String));
       final file = media.file(a.block.media);
-      if (file == null || !await file.exists())
+      if (file == null || !await file.exists()) {
         throw const FormatException(
           'Ссылки требуют восстановления; уборка отменена',
         );
+      }
       retained.add(file.path);
     }
     await media.collect(retained);

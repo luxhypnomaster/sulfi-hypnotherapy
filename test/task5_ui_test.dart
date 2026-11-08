@@ -579,6 +579,9 @@ void main() {
         (await t.runAsync(() => c.historyAttachments!.list(run.id)))!,
         hasLength(1),
       );
+      await t.ensureVisible(find.text('Заметки и вложения'));
+      await t.pumpAndSettle();
+      await screenshot(t, 'history-attachments');
       expect(
         (await t.runAsync(c.repository.history))!.single.snapshot.toMap(),
         before,
@@ -613,6 +616,18 @@ void main() {
       );
       await io(t);
       expect(find.byKey(const Key('global-preview-bar')), findsOneWidget);
+      await screenshot(t, 'global-preview');
+      await t.tap(
+        find.descendant(
+          of: find.byKey(const Key('global-preview-bar')),
+          matching: find.text(c.assets.first.title),
+        ),
+      );
+      await io(t);
+      expect(find.byType(AlertDialog), findsOneWidget);
+      await t.tap(find.text('Закрыть'));
+      await io(t);
+
       await t.tap(find.text('Библиотека'));
       await io(t);
       expect(player.playing, isTrue);

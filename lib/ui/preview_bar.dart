@@ -13,12 +13,14 @@ class PreviewBar extends StatelessWidget {
     this.idleAsset,
     this.compact = false,
     this.global = false,
+    this.navigatorKey,
   });
   final PreviewPlayer player;
   final LibraryService library;
   final AudioAsset? idleAsset;
   final bool compact;
   final bool global;
+  final GlobalKey<NavigatorState>? navigatorKey;
   Future<void> _action(
     BuildContext context,
     Future<void> Function() action,
@@ -75,7 +77,7 @@ class PreviewBar extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () => showDialog<void>(
-                        context: context,
+                        context: navigatorKey?.currentContext ?? context,
                         builder: (context) => AlertDialog(
                           title: Text(a.title),
                           content: Text(
