@@ -790,23 +790,6 @@ class _RunScreenState extends State<RunScreen> {
                   ),
                 ),
               ),
-              if (height >= 100)
-                Positioned(
-                  left: width * .12,
-                  right: width * .17,
-                  top: math.max(height * .72, height * .48 + buttonSize),
-                  key: const Key('watch-time'),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '${formatDuration(position.round())} / ${duration == null ? '≈' : formatDuration(duration)}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ),
-                ),
               Positioned(
                 left: width * .1,
                 right: width * .16,
@@ -852,6 +835,31 @@ class _RunScreenState extends State<RunScreen> {
     },
   );
 
+  Widget _trackClock() {
+    final duration = e.phaseDurationMs;
+    final position = (_scrubMs ?? e.phasePositionMs.toDouble()).clamp(
+      0.0,
+      (duration ?? 0x7fffffff).toDouble(),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Center(
+        child: FittedBox(
+          key: const Key('watch-time'),
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '${formatDuration(position.round())} / ${duration == null ? '≈' : formatDuration(duration)}',
+            key: const Key('current-track-time'),
+            style: const TextStyle(
+              fontSize: 30,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _info({required bool compact}) {
     final entry = e.currentEntry;
     final entries = e.timeline.entries;
@@ -882,11 +890,12 @@ class _RunScreenState extends State<RunScreen> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: SizedBox(
-        height: compact ? 86 : 112,
+        height: compact ? 122 : 148,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (e.active) _trackClock(),
               for (final field in fields)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
