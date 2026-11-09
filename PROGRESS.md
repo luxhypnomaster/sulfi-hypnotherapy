@@ -16,7 +16,7 @@
 ## G1 — COMPLETE
 Читать TASK_RU.md §1 и acceptance UI-01…UI-13. Не переписывать уже работающий CapsuleService/плеер. Проверить гипотезу: editor.reload обновляет durationMs всем старым экземплярам, но источник хранит прежний кеш длительности; новая копия C не проходит этот refresh. Прежде фикса написать regression с такой metadata drift и реальным A/B/C, persistence и Undo. Сохранить существующий тест metadata refresh.
 
-G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: COMPLETE local slice / K008 PARTIAL. G5: ACTIVE. G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: COMPLETE local slice / K008 PARTIAL. G5: COMPLETE local conformance / CI artifacts in G6. G6: ACTIVE. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
 
 ### G1 checkpoint
 - before_sha: 5177c62
@@ -61,3 +61,15 @@ G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: 
 - next gate: G5, same-code client edition and independent stores FakeProvider; no live server. Add explicit clienttest Android suffix without changing author applicationId or signing. Keep provider injected, no HTTP default.
 - next command: cat .github/workflows/checks.yml; cat android/app/build.gradle.kts
 - SERVER_READY: NO (G3 + K008).
+
+## G5 — COMPLETE local conformance, builds verified on final G6 SHA
+- before_sha: 9ebc030
+- after_sha: bfbfb56539ea36f2f134659c1afbb0e128c97ade
+- PASS_IDs: CLI-01/02/03/06/07/08/09/10, SRV-02/03/04/05/06 local consumer tests. CLI-04/05 final APK diagnostics pending CI onG6.
+- files/tables: same-code SULFI_EDITION=client companion .clienttest, default author ID retained; build18 version0.4.13, persistent CI key unchanged. Injected DiaryContractProvider/cache/outbox (no HTTP default), server role/ETag/idempotence/entitlement FakeProvider, canonical index shared by picker and ZIP.
+- tests: g5-tests.log 10 PASS (G4 eight +two-store e2e/contract); client dart-define g5-client-build-tests.log 3 PASS; analyzer clean. Regression fixed initial completed-Future in fake-zone readstore load; no uninitialized reader crash. Screenshot g5-client*.png. Actual audio completion callback covered in G4; e2e uses deterministic completion fixture.
+- touched tables: app_settings namespaced private outbox, existing diary_public cache and usual content installer. No audio schema migration, no live accounts/permissions.
+- blockers: G3 exact audio revision coexistence; K008 Home media; physical Android and server remote NOT_RUN. No local mode is a server grant.
+- next gate: G6. Write complete SERVER_HANDOFF schemas/playbooks, validate fixtures, full Flutter +Node suite once at stable source; final CI both APKs, PR, Drive report upload+readback.
+- next command: mkdir -p docs/task15/SERVER_HANDOFF/JSON_SCHEMAS
+- SERVER_READY: NO.
