@@ -24,6 +24,7 @@ dependencies:
   sqflite: 2.4.5
   google_sign_in: 7.2.0
   archive: 4.0.9
+  unorm_dart: 0.3.2
 
 dev_dependencies:
   flutter_test:

@@ -72,6 +72,26 @@ Future<void> showSpaceSheet(
             OutlinedButton.icon(
               onPressed: () async {
                 Navigator.pop(context);
+                if (!pageContext.mounted) return;
+                await Navigator.push<void>(
+                  pageContext,
+                  MaterialPageRoute(
+                    builder: (_) => ContentCatalogScreen(
+                      controller: controller!,
+                      player: player,
+                      openOnStart: true,
+                    ),
+                  ),
+                );
+                if (pageContext.mounted) await onChanged?.call();
+              },
+              icon: const Icon(Icons.file_open_outlined),
+              label: const Text('Импортировать ZIP'),
+            ),
+          if (controller?.capsules != null)
+            OutlinedButton.icon(
+              onPressed: () async {
+                Navigator.pop(context);
                 await Navigator.push<void>(
                   pageContext,
                   MaterialPageRoute(

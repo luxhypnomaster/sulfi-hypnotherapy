@@ -15,6 +15,7 @@ import '../models/diary_entry.dart';
 import 'history_attachments.dart';
 import 'diary_media_store.dart';
 import 'library_service.dart';
+import 'export_file_name.dart';
 
 enum CapsuleConflictChoice { cancel, keepExisting, replace }
 
@@ -52,11 +53,13 @@ class CapsuleService {
     required this.diaryDirectory,
     required this.workspace,
     this.availableBytes,
-  });
+    DateTime Function()? clock,
+  }) : clock = clock ?? DateTime.now;
   final Database database;
   final LibraryService library;
   final Directory diaryDirectory, workspace;
   final Future<int> Function()? availableBytes;
+  final DateTime Function() clock;
   static const schema = 1;
   static const tables = [
     'audio_assets',
@@ -146,7 +149,9 @@ class CapsuleService {
     }
     await workspace.create(recursive: true);
     final work = await workspace.createTemp('export-');
-    final output = File(p.join(workspace.path, 'sulfi-${newId()}.zip'));
+    File? generated;
+    final stamp = clock();
+    String? originalTitle;
     try {
       final records = await _records();
       if (moduleId != null || trackId != null || templateId != null) {
@@ -162,6 +167,8 @@ class CapsuleService {
               .where((r) => r['id'] == moduleId)
               .firstOrNull;
           if (row == null) throw const FormatException('Модуль не найден');
+          originalTitle = ModuleDefinition.fromMap(jsonDecode(row['payload']))
+              .title;
           selectedModules.add(Map<String, dynamic>.from(row));
           audio(ModuleDefinition.fromMap(jsonDecode(row['payload'])).items);
         }
@@ -170,6 +177,8 @@ class CapsuleService {
               .where((r) => r['id'] == templateId)
               .firstOrNull;
           if (row == null) throw const FormatException('Шаблон не найден');
+          originalTitle = SessionTemplate.fromMap(jsonDecode(row['payload']))
+              .name;
           selectedTemplates.add(Map<String, dynamic>.from(row));
           final template = SessionTemplate.fromMap(jsonDecode(row['payload']));
           audio(template.plan.allSteps);
@@ -196,6 +205,9 @@ class CapsuleService {
         final selectedAudio = (records['audio_assets'] as List)
             .where((r) => ids.contains(r['id']))
             .toList();
+        if (trackId != null && selectedAudio.length == 1) {
+          originalTitle = selectedAudio.single['title'] as String;
+        }
         if (selectedAudio.length != ids.length) {
           throw const FormatException('Недостающие аудиозависимости');
         }
@@ -208,6 +220,14 @@ class CapsuleService {
           };
         }
       }
+      final outputDir = await workspace.createTemp('export-');
+      final output = File(
+        p.join(
+          outputDir.path,
+          exportFileName(localDate: stamp.toLocal(), title: originalTitle),
+        ),
+      );
+      generated = output;
       final files = <String, Map<String, dynamic>>{};
       Future<String> add(File file, {String? expected}) async {
         if (!await file.exists()) {
@@ -297,6 +317,8 @@ class CapsuleService {
       final dependencies = _dependencies(records);
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
+        'originalTitle': ?originalTitle,
+        'exportedAt': stamp.toUtc().toIso8601String(),
         'schema': schema,
         'databaseSchema': 9,
         'scope': trackId != null
@@ -326,7 +348,10 @@ class CapsuleService {
       }
       return output;
     } catch (_) {
-      if (await output.exists()) await output.delete();
+      if (generated != null) {
+        if (await generated.exists()) await generated.delete();
+        if (await generated.parent.exists()) await generated.parent.delete();
+      }
       rethrow;
     } finally {
       await work.delete(recursive: true);

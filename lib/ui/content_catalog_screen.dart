@@ -19,11 +19,13 @@ class ContentCatalogScreen extends StatefulWidget {
     required this.player,
     this.requested,
     this.initialSource,
+    this.openOnStart = false,
   });
   final SessionController controller;
   final PreviewPlayer player;
   final RevisionKey? requested;
   final LocalCatalogSource? initialSource;
+  final bool openOnStart;
   @override
   State<ContentCatalogScreen> createState() => _ContentCatalogScreenState();
 }
@@ -33,12 +35,18 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
   ContentType? filter;
   bool busy = false, cancelled = false;
   String message = '';
+  String? installedDescription;
   final Map<String, bool> installed = {};
   @override
   void initState() {
     super.initState();
     source = widget.initialSource;
     if (source != null) refresh();
+    if (widget.openOnStart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) open();
+      });
+    }
   }
 
   @override
@@ -155,7 +163,17 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
       );
       await widget.controller.reload();
       await refresh();
-      if (mounted) setState(() => message = 'Установлено');
+      if (mounted) {
+        setState(() {
+          message = 'Установлено';
+          installedDescription =
+              '«${r.payload['title'] ?? r.payload['name'] ?? r.key.content.id}» — ${switch (r.key.content.type) {
+                ContentType.track => 'Библиотека',
+                ContentType.module => 'Шаблоны и модули → Модули',
+                ContentType.template => 'Шаблоны и модули → Шаблоны',
+              }}';
+        });
+      }
     });
     if (mounted) setState(() => busy = false);
   }
@@ -214,7 +232,7 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
           OutlinedButton.icon(
             onPressed: busy ? null : open,
             icon: const Icon(Icons.folder_open),
-            label: const Text('Выбрать ZIP материалов'),
+            label: const Text('Импортировать ZIP'),
           ),
           DropdownButton<ContentType?>(
             value: filter,
@@ -234,6 +252,7 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
             onChanged: busy ? null : (v) => setState(() => filter = v),
           ),
           if (message.isNotEmpty) Text(message),
+          if (installedDescription != null) Text(installedDescription!),
           if (busy)
             TextButton(
               onPressed: () => setState(() {

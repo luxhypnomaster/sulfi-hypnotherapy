@@ -764,7 +764,7 @@ class _LibraryScreenState extends State<LibraryScreen>
                   if (widget.controller?.capsules != null)
                     const PopupMenuItem(
                       value: 'export',
-                      child: Text('Экспорт трека'),
+                      child: Text('Экспортировать трек'),
                     ),
                   const PopupMenuItem(
                     value: 'info',

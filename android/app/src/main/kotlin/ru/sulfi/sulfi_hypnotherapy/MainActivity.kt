@@ -67,9 +67,11 @@ class MainActivity: AudioServiceActivity() {
                         result.error("PATH", "Файл вне временного хранилища", null); return@setMethodCallHandler
                     }
                     pending = result
+                    // ACTION_CREATE_DOCUMENT creates a new document. The system provider
+                    // resolves name collisions; no existing URI is preselected.
                     val intent = Intent(if (exportPath == null) Intent.ACTION_OPEN_DOCUMENT else Intent.ACTION_CREATE_DOCUMENT).apply {
                         addCategory(Intent.CATEGORY_OPENABLE); type = "application/zip"
-                        if (exportPath != null) putExtra(Intent.EXTRA_TITLE, "Сульфи-резервная-копия.zip")
+                        if (exportPath != null) putExtra(Intent.EXTRA_TITLE, File(exportPath!!).name)
                     }
                     try { startActivityForResult(intent, 741) }
                     catch (e: Exception) { pending = null; result.error("PICKER", "Не удалось открыть системный выбор файла", null) }

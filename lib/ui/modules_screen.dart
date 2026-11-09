@@ -127,7 +127,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
                       if (widget.controller.capsules != null)
                         const PopupMenuItem(
                           value: 'export',
-                          child: Text('Экспорт модуля'),
+                          child: Text('Экспортировать модуль'),
                         ),
                     ],
                   ),

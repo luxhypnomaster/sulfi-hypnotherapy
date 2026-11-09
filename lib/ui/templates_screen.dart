@@ -280,7 +280,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                             if (c.capsules != null)
                               const PopupMenuItem(
                                 value: 'export',
-                                child: Text('Экспорт шаблона'),
+                                child: Text('Экспортировать шаблон'),
                               ),
                             const PopupMenuItem(
                               value: 'edit',
