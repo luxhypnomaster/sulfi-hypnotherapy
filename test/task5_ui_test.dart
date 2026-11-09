@@ -175,8 +175,13 @@ void main() {
   }
 
   var fonts = false;
-  Future<void> show(WidgetTester t, Widget page) async {
-    t.view.physicalSize = const Size(412, 915);
+  Future<void> show(
+    WidgetTester t,
+    Widget page, {
+    Size size = const Size(412, 915),
+    double scale = 1,
+  }) async {
+    t.view.physicalSize = size;
     t.view.devicePixelRatio = 1;
     addTearDown(t.view.resetPhysicalSize);
     addTearDown(t.view.resetDevicePixelRatio);
@@ -215,7 +220,11 @@ void main() {
           player: player,
           child: RepaintBoundary(
             key: const Key('task5-capture'),
-            child: child!,
+            child: MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(scale)),
+              child: child!,
+            ),
           ),
         ),
         home: page,
@@ -227,6 +236,17 @@ void main() {
   Future<void> screenshot(WidgetTester t, String name) async {
     const dir = String.fromEnvironment('SULFI_TASK5_SCREENSHOTS');
     if (dir.isEmpty) return;
+    void repaint(RenderObject node) {
+      node.visitChildren(repaint);
+      node.markNeedsPaint();
+    }
+
+    repaint(
+      t.renderObject<RenderRepaintBoundary>(
+        find.byKey(const Key('task5-capture')),
+      ),
+    );
+    await t.pump();
     await t.runAsync(() async {
       final boundary = t.renderObject<RenderRepaintBoundary>(
         find.byKey(const Key('task5-capture')),
@@ -239,6 +259,67 @@ void main() {
     });
   }
 
+  for (final size in [
+    const Size(320, 600),
+    const Size(360, 800),
+    const Size(412, 915),
+  ]) {
+    for (final scale in [1.0, 1.3, 1.6]) {
+      testWidgets('Task14 history Home stack ${size.width} $scale', (t) async {
+        await t.runAsync(() => c.repository.acknowledgeHistory(run.id));
+        final before = (await t.runAsync(c.repository.history))!
+            .map((r) => r.toMap())
+            .toList();
+        await show(
+          t,
+          HomeScreen(controller: c, player: player),
+          size: size,
+          scale: scale,
+        );
+        final nav = Navigator.of(t.element(find.byType(HomeScreen)));
+        nav.push<void>(
+          MaterialPageRoute(
+            builder: (_) => HistoryScreen(
+              controller: c,
+              player: player,
+              selectedRunId: run.id,
+            ),
+          ),
+        );
+        await io(t);
+        expect(find.byType(HistoryDetailScreen), findsOneWidget);
+        for (final key in [
+          'history-repeat',
+          'history-open-editor',
+          'history-home',
+        ]) {
+          await t.ensureVisible(find.byKey(Key(key)));
+          await t.pumpAndSettle();
+          expect(find.byKey(Key(key)).hitTestable(), findsOneWidget);
+          final rect = t.getRect(find.byKey(Key(key)));
+          expect(rect.left, greaterThanOrEqualTo(0));
+          expect(rect.right, lessThanOrEqualTo(size.width));
+        }
+        await screenshot(t, 'task14-history-${size.width.toInt()}-$scale');
+        await t.tap(find.byKey(const Key('history-home')));
+        await io(t);
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(find.byType(HistoryDetailScreen), findsNothing);
+        expect(find.byType(HistoryScreen), findsNothing);
+        expect(find.byType(RunScreen), findsNothing);
+        expect(nav.canPop(), false);
+        expect(player.playing, false);
+        expect(
+          (await t.runAsync(c.repository.history))!
+              .map((r) => r.toMap())
+              .toList(),
+          before,
+        );
+        await t.pumpWidget(const SizedBox());
+        await io(t);
+      });
+    }
+  }
   testWidgets(
     'Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution',
     (t) async {

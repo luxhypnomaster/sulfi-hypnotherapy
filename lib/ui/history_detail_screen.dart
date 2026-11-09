@@ -277,10 +277,27 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                 : () => _action(_editor),
           ),
           const SizedBox(height: 10),
-          NeonButton(
+          FilledButton.icon(
             key: const Key('history-home'),
-            label: 'На главную страницу',
-            icon: Icons.home_outlined,
+            style: FilledButton.styleFrom(
+              backgroundColor: neonPink,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(48, 60),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              textStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                fontStyle: FontStyle.italic,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+            ),
+            label: const Text(
+              'На главную страницу',
+              textAlign: TextAlign.center,
+            ),
+            icon: const Icon(Icons.home_outlined),
             onPressed: busy
                 ? null
                 : () =>
