@@ -341,5 +341,56 @@ void main() {
     });
     expect(read.extra.containsKey('privateFuture'), false);
     expect(s.manifests[e.id], hasLength(2));
+    final first = ext.copyWith(
+      blocks: [
+        DiaryBlock(
+          id: 'img',
+          type: DiaryBlockType.image,
+          width: 1,
+          height: 1,
+          media: DiaryMedia(
+            assetId: 'img',
+            mime: 'image/png',
+            bytes: 3,
+            hash: hash,
+          ),
+        ),
+      ],
+    );
+    await author.publish(first, ifMatch: s.etag, idempotencyKey: 'image-first');
+    final newBytes = Uint8List.fromList([4, 5, 6]),
+        newHash = sha256.convert([4, 5, 6]).toString();
+    final replacement = first.copyWith(
+      blocks: [
+        first.blocks.single.copyWith(
+          media: DiaryMedia(
+            assetId: 'img2',
+            mime: 'image/png',
+            bytes: 3,
+            hash: newHash,
+          ),
+        ),
+      ],
+    );
+    final plan = DiaryDiffPlan.between(first, replacement);
+    expect(plan.mediaUploads, 1);
+    final uploads = s.uploads;
+    for (final digest in plan.newDigests) {
+      await author.upload(digest, newBytes, idempotencyKey: 'replace-image');
+    }
+    await author.publish(
+      replacement,
+      ifMatch: s.etag,
+      idempotencyKey: 'image-replacement',
+    );
+    expect(s.uploads, uploads + 1);
+    expect(s.blobs.containsKey(hash), true);
+    expect(
+      DiaryDiffPlan.between(
+        replacement,
+        replacement.copyWith(title: 'Metadata'),
+      ).mediaUploads,
+      0,
+    );
   });
 }

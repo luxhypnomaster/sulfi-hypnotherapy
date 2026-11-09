@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/AuthContext.json",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "type": "string"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "reader",
+          "author"
+        ]
+      }
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    }
+  },
+  "required": [
+    "subject",
+    "roles",
+    "expiresAt"
+  ],
+  "additionalProperties": false
+}

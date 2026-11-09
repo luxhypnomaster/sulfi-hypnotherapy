@@ -60,6 +60,26 @@ void main() {
       await f.close();
     }
   });
+  test('G3 never remove retained duplicate based on a corrupt committed file hash claim', () async {
+    final f = await Fixture15.open();
+    try {
+      await f.c.library.save((await f.c.library.prepareImport())!);
+      await f.c.reload();
+      final asset = f.c.assets.single;
+      final candidate = await f.c.library.prepareImport();
+      await f.c.library.fileFor(asset).writeAsBytes([1, 2, 3]);
+      await f.c.library.initialize();
+      expect(await f.c.library.fileFor(candidate!).exists(), true);
+      expect(
+        sha256
+            .convert(await f.c.library.fileFor(candidate).readAsBytes())
+            .toString(),
+        asset.contentHash,
+      );
+    } finally {
+      await f.close();
+    }
+  });
   test('G3 missing content bytes excludes metadata-only edits; physical copies and staging are separate', () async {
     final a = await Fixture15.open(), b = await Fixture15.open();
     try {

@@ -538,6 +538,28 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     await save();
   }
 
+  Widget addBlockActions() => Wrap(
+    alignment: WrapAlignment.center,
+    spacing: 8,
+    children: [
+      for (final type in DiaryBlockType.values)
+        OutlinedButton.icon(
+          key: ValueKey('diary-add-${type.name}'),
+          onPressed: busy ? null : () => add(type),
+          icon: Icon(switch (type) {
+            DiaryBlockType.text => Icons.notes,
+            DiaryBlockType.image => Icons.image_outlined,
+            DiaryBlockType.audio => Icons.mic_none,
+          }, color: neonLime),
+          label: Text(switch (type) {
+            DiaryBlockType.text => 'Текст',
+            DiaryBlockType.image => 'Изображение',
+            DiaryBlockType.audio => 'Аудио',
+          }),
+        ),
+    ],
+  );
+
   Widget blockCard(int i) {
     final b = blocks[i];
     final name = switch (b.type) {
@@ -794,29 +816,10 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       ],
                     ),
                     itemBuilder: (_, i) => blockCard(i),
-                    footer: Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 8,
-                      children: [
-                        for (final type in DiaryBlockType.values)
-                          OutlinedButton.icon(
-                            key: ValueKey('diary-add-${type.name}'),
-                            onPressed: busy ? null : () => add(type),
-                            icon: Icon(switch (type) {
-                              DiaryBlockType.text => Icons.notes,
-                              DiaryBlockType.image => Icons.image_outlined,
-                              DiaryBlockType.audio => Icons.mic_none,
-                            }, color: neonLime),
-                            label: Text(switch (type) {
-                              DiaryBlockType.text => 'Текст',
-                              DiaryBlockType.image => 'Изображение',
-                              DiaryBlockType.audio => 'Аудио',
-                            }),
-                          ),
-                      ],
-                    ),
+                    footer: const SizedBox.shrink(),
                   ),
                 ),
+                addBlockActions(),
                 Text(
                   '$saved · ${pages == null ? 'Расчёт страниц…' : 'Страниц: $pages'}',
                   style: const TextStyle(fontSize: 11, color: antiqueGold),

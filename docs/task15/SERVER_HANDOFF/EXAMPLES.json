@@ -1,0 +1,160 @@
+{
+  "DiaryPublication": {
+    "schemaVersion": 2,
+    "id": "fixture",
+    "title": "Название fixture",
+    "message": "Послание fixture",
+    "blocks": [
+      {
+        "id": "text",
+        "type": "text",
+        "text": "Текст",
+        "media": null,
+        "width": null,
+        "height": null,
+        "altText": "",
+        "caption": "",
+        "label": "",
+        "durationMs": null
+      },
+      {
+        "id": "image",
+        "type": "image",
+        "text": "",
+        "media": {
+          "assetId": "image",
+          "mime": "image/png",
+          "bytes": 20,
+          "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "width": 1,
+        "height": 1,
+        "altText": "",
+        "caption": "",
+        "label": "",
+        "durationMs": null
+      }
+    ],
+    "order": 0,
+    "createdAt": "2026-11-01T00:00:00.000Z",
+    "updatedAt": "2026-11-01T00:00:00.000Z",
+    "publishedAt": "2026-11-01T00:00:00.000Z",
+    "status": "published",
+    "version": 0,
+    "number": null,
+    "publication": {
+      "categoryId": "announcements",
+      "priority": "normal",
+      "urgent": false,
+      "activationCycleId": "cycle-fixture",
+      "activatedAt": "2026-11-01T00:00:00.000Z",
+      "authorClosed": false,
+      "validUntil": null
+    },
+    "contentLinks": [
+      {
+        "type": "track",
+        "logicalId": "fixture",
+        "revision": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+        "digest": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+        "action": "install"
+      }
+    ],
+    "publicExtensions": {
+      "futureOptional": true
+    }
+  },
+  "ContentRevision": {
+    "schema": 1,
+    "type": "track",
+    "logicalId": "fixture",
+    "revision": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+    "digest": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+    "payload": {
+      "id": "fixture",
+      "title": "Аудио",
+      "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "dependencies": [],
+    "parent": null,
+    "declaredVersion": 1
+  },
+  "ContentLink": {
+    "type": "track",
+    "logicalId": "fixture",
+    "revision": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+    "digest": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+    "action": "install"
+  },
+  "Feed": {
+    "entries": [
+      {
+        "schemaVersion": 2,
+        "id": "fixture",
+        "title": "Название fixture",
+        "message": "Послание fixture",
+        "blocks": [
+          {
+            "id": "text",
+            "type": "text",
+            "text": "Текст",
+            "media": null,
+            "width": null,
+            "height": null,
+            "altText": "",
+            "caption": "",
+            "label": "",
+            "durationMs": null
+          },
+          {
+            "id": "image",
+            "type": "image",
+            "text": "",
+            "media": {
+              "assetId": "image",
+              "mime": "image/png",
+              "bytes": 20,
+              "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "width": 1,
+            "height": 1,
+            "altText": "",
+            "caption": "",
+            "label": "",
+            "durationMs": null
+          }
+        ],
+        "order": 0,
+        "createdAt": "2026-11-01T00:00:00.000Z",
+        "updatedAt": "2026-11-01T00:00:00.000Z",
+        "publishedAt": "2026-11-01T00:00:00.000Z",
+        "status": "published",
+        "version": 0,
+        "number": null,
+        "publication": {
+          "categoryId": "announcements",
+          "priority": "normal",
+          "urgent": false,
+          "activationCycleId": "cycle-fixture",
+          "activatedAt": "2026-11-01T00:00:00.000Z",
+          "authorClosed": false,
+          "validUntil": null
+        },
+        "contentLinks": [
+          {
+            "type": "track",
+            "logicalId": "fixture",
+            "revision": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+            "digest": "94fd14dc422946b234f769e1c3666de2f72af51e1496d3a8afa60fd5c47fcc94",
+            "action": "install"
+          }
+        ],
+        "publicExtensions": {
+          "futureOptional": true
+        }
+      }
+    ],
+    "revision": "\"1\"",
+    "nextPage": null
+  }
+}

@@ -14,7 +14,7 @@ class ChangedContentName extends StatelessWidget {
   final bool changed;
   final TextStyle style;
   final Key? markerKey;
-  final int maxLines;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) => Wrap(
     crossAxisAlignment: WrapCrossAlignment.center,
@@ -23,7 +23,7 @@ class ChangedContentName extends StatelessWidget {
       Text(
         title,
         maxLines: maxLines,
-        overflow: TextOverflow.ellipsis,
+        overflow: maxLines == null ? null : TextOverflow.ellipsis,
         style: style,
       ),
       if (changed)

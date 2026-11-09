@@ -28,6 +28,10 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: ./.github/actions/setup-flutter
+      - name: Validate offline Task15 JSON schemas and contract fixtures
+        run: |
+          python3 -m pip install -r scripts/task15-contract-requirements.txt
+          python3 scripts/task15_contract_check.py
       - run: node --test server/google_apps_script/test/backend.test.mjs
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test

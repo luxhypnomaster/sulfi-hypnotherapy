@@ -96,7 +96,8 @@ class LibraryService {
     }
     // Recover abandoned imports/deletes after process death. Only our generated
     // files are eligible, and all database-referenced files are preserved.
-    final retained = (await repository.list()).map((a) => a.filePath).toSet();
+    final retainedAssets = await repository.list();
+    final retained = retainedAssets.map((a) => a.filePath).toSet();
     final retainedHashes = <String>{};
     var uncertainRevision = false;
     if (repository is SqliteLibraryRepository) {
@@ -151,7 +152,22 @@ class LibraryService {
           !retained.contains(name)) {
         if (uncertainRevision) continue;
         final hash = (await sha256.bind(entry.openRead()).first).toString();
-        if (retainedHashes.contains(hash)) continue;
+        if (retainedHashes.contains(hash)) {
+          // A byte-identical abandoned draft may be removed only if a current
+          // referenced file was actually verified. Claimed metadata is not proof.
+          var committedCopyVerified = false;
+          for (final asset in retainedAssets.where(
+            (a) => a.contentHash == hash,
+          )) {
+            final file = fileFor(asset);
+            if (await file.exists() &&
+                (await sha256.bind(file.openRead()).first).toString() == hash) {
+              committedCopyVerified = true;
+              break;
+            }
+          }
+          if (!committedCopyVerified) continue;
+        }
         await entry.delete();
       }
     }

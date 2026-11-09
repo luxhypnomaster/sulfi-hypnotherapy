@@ -868,6 +868,7 @@ class _TemplateStrip extends StatelessWidget {
                       title: title,
                       changed: controller.templateDiffersFromSource,
                       markerKey: const Key('template-changed'),
+                      maxLines: null,
                       style: TextStyle(
                         fontSize: 12,
                         height: 1.2,

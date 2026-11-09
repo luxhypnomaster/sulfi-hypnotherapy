@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/DiaryPublication.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "$ref": "DiaryBlock.json"
+      }
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "status": {
+      "const": "published"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "number": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "publication": {
+      "$ref": "Publication.json"
+    },
+    "contentLinks": {
+      "type": "array",
+      "items": {
+        "$ref": "ContentLink.json"
+      }
+    },
+    "publicExtensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "message",
+    "blocks",
+    "order",
+    "createdAt",
+    "updatedAt",
+    "publishedAt",
+    "status",
+    "version",
+    "number",
+    "publication",
+    "contentLinks"
+  ],
+  "additionalProperties": false
+}

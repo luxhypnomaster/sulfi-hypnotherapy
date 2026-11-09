@@ -62,6 +62,9 @@ class DiaryContractProvider {
 
   Future<({List<DiaryEntry> entries, String etag})> feed() async {
     final r = await _call('feed');
+    if (r.json['revision'] != r.headers['ETag']) {
+      throw const FormatException('Inconsistent feed snapshot');
+    }
     return (
       entries: (r.json['entries'] as List)
           .map((v) => DiaryEntry.fromMap(Map<String, dynamic>.from(v)))

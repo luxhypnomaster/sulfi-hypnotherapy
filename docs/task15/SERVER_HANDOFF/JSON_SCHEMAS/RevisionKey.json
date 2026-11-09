@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/RevisionKey.json",
+  "type": "object",
+  "properties": {
+    "type": {
+      "enum": [
+        "track",
+        "module",
+        "template"
+      ]
+    },
+    "logicalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "type",
+    "logicalId",
+    "revision",
+    "digest"
+  ],
+  "additionalProperties": false
+}

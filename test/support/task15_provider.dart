@@ -25,7 +25,11 @@ class FakePublicationServer {
     if (operation == 'feed') {
       return ContractResponse.json(
         200,
-        {'entries': manifests.values.map((v) => v.last).toList()},
+        {
+          'entries': manifests.values.map((v) => v.last).toList(),
+          'revision': etag,
+          'nextPage': null,
+        },
         headers: {'ETag': etag},
       );
     }
