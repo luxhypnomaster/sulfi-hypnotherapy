@@ -250,7 +250,7 @@ class _RunScreenState extends State<RunScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
-                                  flex: landscape ? 5 : 6,
+                                  flex: landscape ? 5 : 7,
                                   child: _scale(),
                                 ),
                                 const SizedBox(width: 5),
@@ -546,7 +546,7 @@ class _RunScreenState extends State<RunScreen> {
 
     return LayoutBuilder(
       builder: (context, box) {
-        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(34.0, 52.0);
+        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(32.0, 44.0);
         return Stack(
           children: [
             Positioned(
@@ -606,7 +606,7 @@ class _RunScreenState extends State<RunScreen> {
                         )) ...[
                           if (child.isModule)
                             row(
-                              'Модуль: ${child.title}',
+                              child.title,
                               timeline.entries
                                   .where((x) => x.child.id == child.id)
                                   .toList(),

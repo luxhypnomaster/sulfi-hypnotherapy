@@ -261,8 +261,8 @@ void main() {
       expect(find.text('Личная подготовка — трек 1'), findsWidgets);
       expect(find.text('Личная подготовка — трек 2'), findsOneWidget);
       expect(find.text('Первый рабочий модуль — трек 1'), findsOneWidget);
-      expect(find.text('Модуль: Первый рабочий модуль'), findsOneWidget);
-      expect(find.text('Модуль: Второй рабочий модуль'), findsOneWidget);
+      expect(find.text('Первый рабочий модуль'), findsOneWidget);
+      expect(find.text('Второй рабочий модуль'), findsOneWidget);
       final button = t.widget<OutlinedButton>(
         find.byKey(const ValueKey('nav-phase-previous')),
       );
@@ -303,10 +303,7 @@ void main() {
       expect(t.getTopLeft(find.byKey(const Key('finish-session'))), stop);
       expect(t.getTopLeft(find.byKey(const Key('player-context'))), context);
       final index = f.engine.run!.stepIndex;
-      await t.tap(
-        find.text('Модуль: Второй рабочий модуль'),
-        warnIfMissed: false,
-      );
+      await t.tap(find.text('Второй рабочий модуль'), warnIfMissed: false);
       await t.pump();
       expect(f.engine.run!.stepIndex, index);
       await t.runAsync(() => f.engine.navigate(NavigationUnit.phase, true));

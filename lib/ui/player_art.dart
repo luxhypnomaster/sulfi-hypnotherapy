@@ -45,6 +45,10 @@ class _ArtPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (flask) {
+      canvas.drawRect(
+        Offset.zero & size,
+        Paint()..color = const Color(0xff050004),
+      );
       canvas.save();
       canvas.scale(size.width / 190, size.height / 1517);
       final shape = Path()
