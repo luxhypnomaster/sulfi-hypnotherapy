@@ -565,14 +565,36 @@ class _RunScreenState extends State<RunScreen> {
               ),
             ),
             Positioned(
+              top: flaskWidth * .8,
+              left: flaskWidth * .35,
+              width: flaskWidth * .18,
+              height: math.max(
+                0,
+                box.maxHeight * 145 / 1517 - flaskWidth * .8 + 3,
+              ),
+              child: const IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff7a2600),
+                        Color(0xffffde79),
+                        Color(0xffa44400),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
               top: 0,
               left: flaskWidth * .015,
               width: flaskWidth * .86,
-              height: box.maxHeight * 145 / 1517 + 4,
+              height: flaskWidth * .94,
               child: IgnorePointer(
                 child: Image.asset(
                   'assets/player/snake_front.png',
-                  fit: BoxFit.fill,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
