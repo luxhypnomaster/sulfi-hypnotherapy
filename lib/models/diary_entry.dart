@@ -1,3 +1,5 @@
+import 'content_link.dart';
+
 enum DiaryStatus { draft, published, unpublished }
 
 enum DiaryBlockType { text, image, audio }
@@ -129,12 +131,29 @@ class DiaryEntry {
     this.status = DiaryStatus.draft,
     this.number,
     this.readingState = const {},
+    this.extra = const {},
     // ignore: prefer_initializing_formals
   }) : _body = body,
        _blocks = blocks == null ? null : List.unmodifiable(blocks);
   // Reserved per-medium fields: textReadAt, audioListenedAt, priority,
   // showcasePosition. No rotation or completion inference is enabled.
   final Map<String, dynamic> readingState;
+  final Map<String, dynamic> extra;
+  List<ContentLink> get contentLinks {
+    final result = <ContentLink>[];
+    for (final raw
+        in extra['contentLinks'] is List
+            ? extra['contentLinks'] as List
+            : const []) {
+      try {
+        result.add(ContentLink.fromMap(Map<String, dynamic>.from(raw)));
+      } catch (_) {
+        /* Future link types retained verbatim, not executed. */
+      }
+    }
+    return List.unmodifiable(result);
+  }
+
   final String id, message, title, _body;
   final List<DiaryBlock>? _blocks;
   final int version, order;
@@ -157,6 +176,9 @@ class DiaryEntry {
   );
   bool get multimedia => blocks.any((b) => b.type != DiaryBlockType.text);
   String? get publicationError {
+    if (extra.containsKey('contentLinks')) {
+      return 'Ссылки на материалы пока доступны локально. Публикация требует подтверждённого серверного контракта.';
+    }
     if (title.trim().isEmpty) return 'Заполните название записи';
     if (message.trim().isEmpty) return 'Заполните короткое послание';
     if (!blocks.any((b) => b.substantive)) {
@@ -189,8 +211,10 @@ class DiaryEntry {
     version: version ?? this.version,
     number: number,
     readingState: readingState,
+    extra: extra,
   );
   Map<String, Object?> toMap({bool public = false}) => {
+    if (!public) ...extra,
     'schemaVersion': 2,
     'id': id,
     'title': title,
@@ -233,6 +257,26 @@ class DiaryEntry {
       version: m['version'] as int,
       number: m['number'] as int?,
       readingState: Map<String, dynamic>.from(m['readingState'] ?? {}),
+      extra: {
+        for (final e in m.entries)
+          if (!{
+            'schemaVersion',
+            'id',
+            'title',
+            'message',
+            'body',
+            'blocks',
+            'order',
+            'createdAt',
+            'updatedAt',
+            'publishedAt',
+            'status',
+            'version',
+            'number',
+            'readingState',
+          }.contains(e.key))
+            e.key: e.value,
+      },
     );
     if (entry.id.isEmpty ||
         entry.version < 0 ||

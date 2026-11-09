@@ -284,7 +284,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               foregroundColor: Colors.white,
               minimumSize: const Size(48, 60),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              textStyle: const TextStyle(
+              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 fontStyle: FontStyle.italic,

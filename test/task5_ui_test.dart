@@ -9,6 +9,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sulfi_hypnotherapy/app.dart';
 import 'package:sulfi_hypnotherapy/data/app_database.dart';
+import 'package:sulfi_hypnotherapy/data/module_catalog.dart';
+import 'package:sulfi_hypnotherapy/models/content_revision.dart';
+import 'package:sulfi_hypnotherapy/models/content_link.dart';
+import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
+import 'package:sulfi_hypnotherapy/ui/content_catalog_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/diary_content_link.dart';
+import 'package:sulfi_hypnotherapy/ui/design.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
@@ -74,6 +81,12 @@ void main() {
       repository: SqliteSessionRepository(db),
       library: library,
       diary: diary,
+      capsules: CapsuleService(
+        database: db,
+        library: library,
+        diaryDirectory: Directory('${root.path}/diary'),
+        workspace: Directory('${root.path}/capsules'),
+      ),
       historyAttachments: HistoryAttachments(
         db,
         DiaryMediaStore(
@@ -259,6 +272,148 @@ void main() {
     });
   }
 
+  testWidgets(
+    'Task14 semantic module and template styles revert after Undo in actual editor and Home',
+    (t) async {
+      final phase = c.draft.plan.phases!.first;
+      final child = phase.children.single;
+      final changed = child.copyWith(items: child.items.reversed.toList());
+      await t.runAsync(() => c.updateChild(phase.id, changed));
+      await show(t, ModularStructureScreen(controller: c, player: player));
+      final toggle = find.byKey(ValueKey('expand-${phase.id}'));
+      if (find.text('Модуль: ${child.title}').evaluate().isEmpty) {
+        await t.tap(toggle);
+        await io(t);
+      }
+      final title = t.widget<Text>(find.text('Модуль: ${child.title}'));
+      expect(title.style!.color, neonPink);
+      expect(title.style!.fontStyle, FontStyle.italic);
+      await screenshot(t, 'task14-module-changed');
+      await t.runAsync(() => c.repository.acknowledgeHistory(run.id));
+      await show(t, HomeScreen(controller: c, player: player));
+      final name = c.draft.baseTemplateName!;
+      expect(t.widget<Text>(find.text(name)).style!.color, neonPink);
+      expect(
+        t.widget<Text>(find.text(name)).style!.fontStyle,
+        FontStyle.italic,
+      );
+      await screenshot(t, 'task14-template-changed');
+      await t.runAsync(
+        () => c.updateChild(phase.id, changed.copyWith(items: child.items)),
+      );
+      await io(t);
+      expect(c.draft.plan.phases!.first.children.single.modified, true);
+      expect(
+        t.widget<Text>(find.text(name)).style!.fontStyle,
+        FontStyle.normal,
+      );
+      expect(t.widget<Text>(find.text(name)).style!.color, isNot(neonPink));
+      await screenshot(t, 'task14-template-undo');
+      await show(t, ModularStructureScreen(controller: c, player: player));
+      if (find.text('Модуль: ${child.title}').evaluate().isEmpty) {
+        await t.tap(toggle);
+        await io(t);
+      }
+      expect(
+        t.widget<Text>(find.text('Модуль: ${child.title}')).style!.fontStyle,
+        FontStyle.normal,
+      );
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'Task14 catalog cards, exact install and diary installed/unavailable actions are real',
+    (t) async {
+      await t.runAsync(() => ModuleCatalog(db).save(c.modules.entries.single));
+      final zip = (await t.runAsync(
+        () => c.capsules!.export(templateId: c.templates.single.id),
+      ))!;
+      final local = (await t.runAsync(
+        () => LocalCatalogSource.open(c.capsules!, zip),
+      ))!;
+      final revision = local.revisions.singleWhere(
+        (r) => r.key.content.type == ContentType.template,
+      );
+      await show(
+        t,
+        ContentCatalogScreen(
+          controller: c,
+          player: player,
+          initialSource: local,
+        ),
+      );
+      expect(find.text('ЛОКАЛЬНЫЙ КАТАЛОГ'), findsOneWidget);
+      expect(find.textContaining('не онлайн-каталог'), findsOneWidget);
+      await screenshot(t, 'task14-catalog-before');
+      await t.tap(find.byKey(ValueKey('catalog-${revision.key.token}')));
+      await io(t);
+      await screenshot(t, 'task14-catalog-details');
+      await t.tap(find.widgetWithText(FilledButton, 'Установить'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.text('Установлено').evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      expect(find.text('Установлено'), findsOneWidget);
+      expect(player.playing, false);
+      await screenshot(t, 'task14-catalog-installed');
+      final installedLink = ContentLink(revision.key, ContentLinkAction.open);
+      await show(t, Scaffold(body: DiaryContentLink(link: installedLink)));
+      expect(find.text('Открыть'), findsOneWidget);
+      await screenshot(t, 'task14-diary-installed-link');
+      await t.tap(find.text('Открыть'));
+      await io(t);
+      expect(find.text('ШАБЛОНЫ'), findsOneWidget);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+      final track = local.revisions.firstWhere(
+        (r) => r.key.content.type == ContentType.track,
+      );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(track.key, ContentLinkAction.open),
+          ),
+        ),
+      );
+      await t.tap(find.text('Открыть'));
+      await io(t);
+      expect(player.playing, true);
+      expect(player.current!.id, track.key.content.id);
+      expect(
+        await t.runAsync(() => c.library.fileFor(player.current!).exists()),
+        true,
+      );
+      await player.stop();
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+      final unknown = RevisionKey(
+        const ContentKey(ContentType.track, 'unavailable'),
+        'exact',
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(unknown, ContentLinkAction.install),
+          ),
+        ),
+      );
+      await t.tap(find.text('Посмотреть / установить'));
+      await io(t);
+      expect(find.textContaining('Точная ревизия недоступна'), findsOneWidget);
+      await screenshot(t, 'task14-diary-unavailable-link');
+      expect(player.playing, false);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
   for (final size in [
     const Size(320, 600),
     const Size(360, 800),
