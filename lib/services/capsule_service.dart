@@ -133,34 +133,76 @@ class CapsuleService {
     return result;
   }
 
-  Future<File> export({String? moduleId}) async {
+  Future<File> export({
+    String? moduleId,
+    String? trackId,
+    String? templateId,
+  }) async {
+    if ([moduleId, trackId, templateId].whereType<String>().length > 1) {
+      throw ArgumentError("Выберите один материал");
+    }
     await workspace.create(recursive: true);
     final work = await workspace.createTemp('export-');
     final output = File(p.join(workspace.path, 'sulfi-${newId()}.zip'));
     try {
       final records = await _records();
-      if (moduleId != null) {
-        final modules = (records['module_definitions'] as List)
-            .where((r) => r['id'] == moduleId)
-            .toList();
-        if (modules.length != 1) {
-          throw const FormatException('Модуль не найден');
+      if (moduleId != null || trackId != null || templateId != null) {
+        final selectedModules = <Map<String, dynamic>>[];
+        final selectedTemplates = <Map<String, dynamic>>[];
+        final ids = <String>{?trackId};
+        void audio(Iterable<SessionStep> steps) {
+          ids.addAll(steps.map((s) => s.audioAssetId).whereType<String>());
         }
-        final definition = ModuleDefinition.fromMap(
-          jsonDecode(modules.single['payload']),
-        );
-        final ids = definition.items
-            .map((s) => s.audioAssetId)
-            .whereType<String>()
-            .toSet();
+
+        if (moduleId != null) {
+          final row = (records['module_definitions'] as List)
+              .where((r) => r['id'] == moduleId)
+              .firstOrNull;
+          if (row == null) throw const FormatException('Модуль не найден');
+          selectedModules.add(Map<String, dynamic>.from(row));
+          audio(ModuleDefinition.fromMap(jsonDecode(row['payload'])).items);
+        }
+        if (templateId != null) {
+          final row = (records['session_templates'] as List)
+              .where((r) => r['id'] == templateId)
+              .firstOrNull;
+          if (row == null) throw const FormatException('Шаблон не найден');
+          selectedTemplates.add(Map<String, dynamic>.from(row));
+          final template = SessionTemplate.fromMap(jsonDecode(row['payload']));
+          audio(template.plan.allSteps);
+          for (final phase in template.plan.phases ?? <PhaseInstance>[]) {
+            for (final child in phase.children.where((c) => c.isModule)) {
+              final source = (records['module_definitions'] as List)
+                  .where((r) => r['id'] == child.definitionId)
+                  .firstOrNull;
+              // Embedded copies remain exact snapshots. Never substitute latest
+              // for an unavailable old source revision.
+              if (source != null) {
+                final module = ModuleDefinition.fromMap(
+                  jsonDecode(source['payload']),
+                );
+                if (module.version == child.definitionVersion &&
+                    !selectedModules.any((m) => m['id'] == module.id)) {
+                  selectedModules.add(Map<String, dynamic>.from(source));
+                  audio(module.items);
+                }
+              }
+            }
+          }
+        }
+        final selectedAudio = (records['audio_assets'] as List)
+            .where((r) => ids.contains(r['id']))
+            .toList();
+        if (selectedAudio.length != ids.length) {
+          throw const FormatException('Недостающие аудиозависимости');
+        }
         for (final table in tables) {
-          records[table] = table == 'module_definitions'
-              ? modules
-              : table == 'audio_assets'
-              ? (records[table] as List)
-                    .where((r) => ids.contains(r['id']))
-                    .toList()
-              : [];
+          records[table] = switch (table) {
+            'module_definitions' => selectedModules,
+            'session_templates' => selectedTemplates,
+            'audio_assets' => selectedAudio,
+            _ => <dynamic>[],
+          };
         }
       }
       final files = <String, Map<String, dynamic>>{};
@@ -254,7 +296,13 @@ class CapsuleService {
         'format': 'sulfi-capsule',
         'schema': schema,
         'databaseSchema': 8,
-        'scope': moduleId == null ? 'full' : 'module',
+        'scope': trackId != null
+            ? 'track'
+            : templateId != null
+            ? 'template'
+            : moduleId != null
+            ? 'module'
+            : 'full',
         'records': records,
         'files': files.values.toList(),
         'dependencies': dependencies,

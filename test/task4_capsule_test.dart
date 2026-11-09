@@ -161,6 +161,87 @@ void main() {
     await root.delete(recursive: true);
   });
 
+  for (final scope in ['track', 'module', 'template']) {
+    test(
+      'Task14 selective $scope roundtrip and idempotence without private records',
+      () async {
+        final asset = (await a.list()).first;
+        final file = await source.export(
+          trackId: scope == 'track' ? asset.id : null,
+          moduleId: scope == 'module' ? 'module' : null,
+          templateId: scope == 'template' ? 'template' : null,
+        );
+        final archive = ZipDecoder().decodeBytes(await file.readAsBytes());
+        final manifest = jsonDecode(
+          utf8.decode(archive.findFile('manifest.json')!.content),
+        );
+        expect(manifest['scope'], scope);
+        expect(manifest['records']['audio_assets'], hasLength(1));
+        for (final table in [
+          'session_runs',
+          'run_events',
+          'diary_author',
+          'diary_public',
+          'history_attachments',
+          'current_draft',
+        ]) {
+          expect(manifest['records'][table], isEmpty);
+        }
+        expect(
+          archive.files.where((f) => f.isFile && f.name.startsWith('blobs/')),
+          hasLength(1),
+        );
+        final preview = await destination.inspect(file);
+        await destination.restore(preview);
+        await preview.close();
+        expect(await b.list(), hasLength(1));
+        if (scope == 'module' || scope == 'template') {
+          final modules = ModuleCatalog(b.database);
+          await modules.load();
+          expect(modules.entries.single.items.map((s) => s.kind), [
+            StepKind.audio,
+            StepKind.silence,
+          ]);
+        }
+        if (scope == 'template')
+          expect(
+            (await SqliteSessionRepository(
+              b.database,
+            ).templates()).single.plan.totalMs,
+            5000,
+          );
+        final again = await destination.inspect(file);
+        expect(again.alreadyImported, true);
+        await destination.restore(again);
+        await again.close();
+        expect(await b.list(), hasLength(1));
+        expect(await target.directory.list().length, 1);
+      },
+    );
+  }
+  test(
+    'Task14 selective scope rejects absent metadata and absent bytes',
+    () async {
+      await expectLater(
+        source.export(trackId: 'missing'),
+        throwsFormatException,
+      );
+      await expectLater(
+        source.export(moduleId: 'missing'),
+        throwsFormatException,
+      );
+      await expectLater(
+        source.export(templateId: 'missing'),
+        throwsFormatException,
+      );
+      await original.fileFor((await a.list()).first).delete();
+      await expectLater(
+        source.export(templateId: 'template'),
+        throwsFormatException,
+      );
+      expect(await b.list(), isEmpty);
+    },
+  );
   test('full offline capsule restores IDs, bytes, plans, history, diary and survives restart', () async {
     final archive = ZipDecoder().decodeBytes(await zip.readAsBytes());
     expect(

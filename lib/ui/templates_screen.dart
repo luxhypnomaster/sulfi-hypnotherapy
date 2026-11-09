@@ -7,6 +7,7 @@ import '../models/session_plan.dart';
 import '../services/preview_player.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
+import 'content_export.dart';
 import 'session_actions.dart';
 import 'modular_structure_screen.dart';
 
@@ -144,6 +145,9 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         );
       }
     }
+    if (action == 'export' && mounted && c.capsules != null) {
+      await exportMaterial(context, c.capsules!, templateId: t.id);
+    }
     if (action == 'copy') {
       await c.saveAsTemplate('${t.name} — копия', t.description, plan: t.plan);
     }
@@ -266,8 +270,13 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                               unawaited(_action(v, t));
                             }
                           },
-                          itemBuilder: (_) => const [
-                            PopupMenuItem(
+                          itemBuilder: (_) => [
+                            if (c.capsules != null)
+                              const PopupMenuItem(
+                                value: 'export',
+                                child: Text('Экспорт шаблона'),
+                              ),
+                            const PopupMenuItem(
                               value: 'edit',
                               child: Text('Редактировать'),
                             ),
