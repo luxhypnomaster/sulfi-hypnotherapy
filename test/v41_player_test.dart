@@ -700,6 +700,18 @@ void main() {
   Future<void> capture13(WidgetTester t, String name) async {
     const output = String.fromEnvironment('SULFI_TASK13_SCREENSHOTS');
     if (output.isEmpty) return;
+    // Repaint retained text layers after playback/scroll changes before readback.
+    // This changes the test capture only, not application rendering or state.
+    void repaint(RenderObject node) {
+      node.visitChildren(repaint);
+      node.markNeedsPaint();
+    }
+
+    repaint(
+      t.renderObject<RenderRepaintBoundary>(
+        find.byKey(const Key('player-capture')),
+      ),
+    );
     await t.pump();
     await t.runAsync(() async {
       final boundary = t.renderObject<RenderRepaintBoundary>(
