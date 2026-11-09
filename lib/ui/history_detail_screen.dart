@@ -276,6 +276,16 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                 ? null
                 : () => _action(_editor),
           ),
+          const SizedBox(height: 10),
+          NeonButton(
+            key: const Key('history-home'),
+            label: 'На главную страницу',
+            icon: Icons.home_outlined,
+            onPressed: busy
+                ? null
+                : () =>
+                      Navigator.of(context).popUntil((route) => route.isFirst),
+          ),
           const SizedBox(height: 16),
         ],
       ),
