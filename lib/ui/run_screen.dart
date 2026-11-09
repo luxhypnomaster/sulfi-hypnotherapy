@@ -19,6 +19,7 @@ class RunScreen extends StatefulWidget {
 }
 
 class _RunScreenState extends State<RunScreen> {
+  static const timeYellow = Color(0xffffe34d);
   SessionEngine get e => widget.engine;
   final _scroll = ScrollController();
   final Map<String, GlobalKey> _rowKeys = {};
@@ -245,7 +246,7 @@ class _RunScreenState extends State<RunScreen> {
                       Expanded(
                         child: LayoutBuilder(
                           builder: (context, body) {
-                            final compact = body.maxHeight < 490;
+                            final compact = body.maxHeight < 600;
                             return Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
@@ -389,7 +390,7 @@ class _RunScreenState extends State<RunScreen> {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 10, color: antiqueGold),
+      style: const TextStyle(fontSize: 10, color: timeYellow),
     );
   }
 
@@ -430,7 +431,7 @@ class _RunScreenState extends State<RunScreen> {
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 17,
-                          color: antiqueGold,
+                          color: timeYellow,
                           fontFeatures: [FontFeature.tabularFigures()],
                         ),
                       ),
@@ -451,6 +452,9 @@ class _RunScreenState extends State<RunScreen> {
       entries.fold<int>(0, (sum, x) => sum + x.step.estimatedMs),
     );
   }
+
+  String _moduleLabel(String name) =>
+      'Модуль: ${name.replaceFirst(RegExp(r'^(?:\s*Модуль(?:\s*:\s*|\s+))+', caseSensitive: false), '')}';
 
   Widget _scale() {
     final timeline = e.timeline, current = e.currentEntry;
@@ -537,7 +541,10 @@ class _RunScreenState extends State<RunScreen> {
                 const SizedBox(width: 3),
                 Text(
                   _duration(entries),
-                  style: TextStyle(fontSize: 10, color: color),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: active || completed ? color : timeYellow,
+                  ),
                 ),
               ],
             ),
@@ -608,57 +615,126 @@ class _RunScreenState extends State<RunScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    for (final phase in timeline.phases) ...[
-                      row(
-                        'Фаза ${timeline.phases.indexOf(phase) + 1}. ${phase.title}',
-                        timeline.entries
-                            .where((x) => x.phase.id == phase.id)
-                            .toList(),
-                        isPhase: true,
-                        key: ValueKey('player-phase-${phase.id}'),
-                        onTap: () => setState(
-                          () => _expanded[phase.id] =
-                              !(_expanded[phase.id] ?? true),
+                    for (final phase in timeline.phases)
+                      Container(
+                        key: ValueKey('phase-group-${phase.id}'),
+                        margin: const EdgeInsets.only(bottom: 3),
+                        padding: const EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: neonPink.withValues(alpha: .35),
+                            width: .6,
+                          ),
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        active: e.active && current?.phase.id == phase.id,
-                      ),
-                      if (_expanded[phase.id] ?? true)
-                        for (final child in phase.children.where(
-                          (c) =>
-                              c.enabled &&
-                              timeline.entries.any((x) => x.child.id == c.id),
-                        )) ...[
-                          if (child.isModule)
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
                             row(
-                              child.title,
+                              'Фаза ${timeline.phases.indexOf(phase) + 1}. ${phase.title}',
                               timeline.entries
-                                  .where((x) => x.child.id == child.id)
+                                  .where((x) => x.phase.id == phase.id)
                                   .toList(),
-                              isPhase: false,
-                              key: ValueKey('player-module-${child.id}'),
+                              isPhase: true,
+                              key: ValueKey('player-phase-${phase.id}'),
                               onTap: () => setState(
-                                () => _expanded[child.id] =
-                                    !(_expanded[child.id] ?? true),
+                                () => _expanded[phase.id] =
+                                    !(_expanded[phase.id] ?? true),
                               ),
+                              active: e.active && current?.phase.id == phase.id,
                             ),
-                          if (!child.isModule || (_expanded[child.id] ?? true))
-                            for (final entry in timeline.entries.where(
-                              (x) => x.child.id == child.id,
-                            ))
-                              row(
-                                entry.step.kind == StepKind.audio
-                                    ? entry.step.title
-                                    : 'Пауза',
-                                [entry],
-                                isPhase: false,
-                                key: _rowKeys.putIfAbsent(
-                                  entry.step.id,
-                                  GlobalKey.new,
-                                ),
-                                active: current?.step.id == entry.step.id,
-                              ),
-                        ],
-                    ],
+                            if (_expanded[phase.id] ?? true)
+                              for (final child in phase.children.where(
+                                (c) =>
+                                    c.enabled &&
+                                    timeline.entries.any(
+                                      (x) => x.child.id == c.id,
+                                    ),
+                              ))
+                                if (child.isModule)
+                                  Container(
+                                    key: ValueKey('module-group-${child.id}'),
+                                    margin: const EdgeInsets.only(
+                                      left: 2,
+                                      bottom: 2,
+                                    ),
+                                    padding: const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: antiqueGold.withValues(
+                                          alpha: .45,
+                                        ),
+                                        width: .6,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        row(
+                                          _moduleLabel(child.title),
+                                          timeline.entries
+                                              .where(
+                                                (x) => x.child.id == child.id,
+                                              )
+                                              .toList(),
+                                          isPhase: false,
+                                          key: ValueKey(
+                                            'player-module-${child.id}',
+                                          ),
+                                          onTap: () => setState(
+                                            () => _expanded[child.id] =
+                                                !(_expanded[child.id] ?? true),
+                                          ),
+                                        ),
+                                        if (_expanded[child.id] ?? true)
+                                          for (final entry
+                                              in timeline.entries.where(
+                                                (x) => x.child.id == child.id,
+                                              ))
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4,
+                                              ),
+                                              child: row(
+                                                entry.step.kind ==
+                                                        StepKind.audio
+                                                    ? entry.step.title
+                                                    : 'Пауза',
+                                                [entry],
+                                                isPhase: false,
+                                                key: _rowKeys.putIfAbsent(
+                                                  entry.step.id,
+                                                  GlobalKey.new,
+                                                ),
+                                                active:
+                                                    current?.step.id ==
+                                                    entry.step.id,
+                                              ),
+                                            ),
+                                      ],
+                                    ),
+                                  )
+                                else
+                                  for (final entry in timeline.entries.where(
+                                    (x) => x.child.id == child.id,
+                                  ))
+                                    row(
+                                      entry.step.kind == StepKind.audio
+                                          ? entry.step.title
+                                          : 'Пауза',
+                                      [entry],
+                                      isPhase: false,
+                                      key: _rowKeys.putIfAbsent(
+                                        entry.step.id,
+                                        GlobalKey.new,
+                                      ),
+                                      active: current?.step.id == entry.step.id,
+                                    ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -790,23 +866,6 @@ class _RunScreenState extends State<RunScreen> {
                   ),
                 ),
               ),
-              if (height >= 100)
-                Positioned(
-                  left: width * .12,
-                  right: width * .17,
-                  top: math.max(height * .72, height * .48 + buttonSize),
-                  key: const Key('watch-time'),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '${formatDuration(position.round())} / ${duration == null ? '≈' : formatDuration(duration)}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ),
-                ),
               Positioned(
                 left: width * .1,
                 right: width * .16,
@@ -852,6 +911,32 @@ class _RunScreenState extends State<RunScreen> {
     },
   );
 
+  Widget _trackClock() {
+    final duration = e.phaseDurationMs;
+    final position = (_scrubMs ?? e.phasePositionMs.toDouble()).clamp(
+      0.0,
+      (duration ?? 0x7fffffff).toDouble(),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Center(
+        child: FittedBox(
+          key: const Key('watch-time'),
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '${formatDuration(position.round())} / ${duration == null ? '≈' : formatDuration(duration)}',
+            key: const Key('current-track-time'),
+            style: const TextStyle(
+              fontSize: 30,
+              color: timeYellow,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _info({required bool compact}) {
     final entry = e.currentEntry;
     final entries = e.timeline.entries;
@@ -865,7 +950,9 @@ class _RunScreenState extends State<RunScreen> {
         _duration(entries.where((x) => x.phase.id == entry?.phase.id).toList()),
       ),
       (
-        'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}',
+        entry?.moduleId == null
+            ? 'Модуль: Отдельный элемент'
+            : _moduleLabel(entry!.child.title),
         _duration(entries.where((x) => x.child.id == entry?.child.id).toList()),
       ),
       (
@@ -882,11 +969,12 @@ class _RunScreenState extends State<RunScreen> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: SizedBox(
-        height: compact ? 86 : 112,
+        height: compact ? 100 : 148,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (e.active) _trackClock(),
               for (final field in fields)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -904,10 +992,7 @@ class _RunScreenState extends State<RunScreen> {
                       const SizedBox(width: 4),
                       Text(
                         field.$2,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: antiqueGold,
-                        ),
+                        style: const TextStyle(fontSize: 11, color: timeYellow),
                       ),
                     ],
                   ),

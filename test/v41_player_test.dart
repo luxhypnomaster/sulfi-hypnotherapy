@@ -31,6 +31,10 @@ class Fixture {
     bool exit = true,
     bool unknownWork = false,
     bool longSession = false,
+    bool mixed = false,
+    bool shortPhase = false,
+    bool pauseOnly = false,
+    int pauseDurationMs = 8000,
   }) async {
     final dir = await Directory.systemTemp.createTemp('sulfi_v41_ui');
     final audio = MemoryRepository();
@@ -125,6 +129,59 @@ class Fixture {
       }
       await c.setText(
         topic: 'Длинная тема сессии для проверки безопасной разметки',
+      );
+    }
+    if (shortPhase || mixed) {
+      await c.clearPlan();
+      for (var n = 0; n < (mixed ? 6 : 1); n++) {
+        final phase = await c.createPhase('work');
+        SessionStep audio(String id, String name) => SessionStep(
+          id: id,
+          kind: StepKind.audio,
+          title: name,
+          audioAssetId: sampleAsset().id,
+          durationMs: 65000,
+        );
+        await c.addLoose(
+          phase,
+          pauseOnly
+              ? SessionStep(
+                  id: 'pause-only',
+                  kind: StepKind.silence,
+                  title: 'Пауза',
+                  durationMs: pauseDurationMs,
+                )
+              : audio('direct-$n', 'Прямой фокус'),
+        );
+        if (mixed) {
+          await c.addModule(
+            phase,
+            ModuleDefinition(
+              id: 'mixed-$n',
+              title: 'Модуль: Индукция Элман v2',
+              items: [
+                for (var i = 1; i <= 5; i++)
+                  audio('nested-$n-$i', 'Веки тест $i'),
+              ],
+            ),
+          );
+          await c.addLoose(
+            phase,
+            SessionStep(
+              id: 'direct-pause-$n',
+              kind: StepKind.silence,
+              title: 'Пауза',
+              durationMs: 41000,
+            ),
+          );
+          await c.addModule(phase, module('second-$n', 'Ресурс', 2));
+          await c.addLoose(phase, audio('last-$n', 'Прямой выход'));
+        }
+      }
+      await c.setText(
+        topic: mixed
+            ? 'Длинная тема сессии — проверка реальной вложенности'
+            : 'Короткая сессия',
       );
     }
     final transport = TestTransport();
@@ -261,8 +318,8 @@ void main() {
       expect(find.text('Личная подготовка — трек 1'), findsWidgets);
       expect(find.text('Личная подготовка — трек 2'), findsOneWidget);
       expect(find.text('Первый рабочий модуль — трек 1'), findsOneWidget);
-      expect(find.text('Первый рабочий модуль'), findsOneWidget);
-      expect(find.text('Второй рабочий модуль'), findsOneWidget);
+      expect(find.text('Модуль: Первый рабочий модуль'), findsOneWidget);
+      expect(find.text('Модуль: Второй рабочий модуль'), findsOneWidget);
       final button = t.widget<OutlinedButton>(
         find.byKey(const ValueKey('nav-phase-previous')),
       );
@@ -303,7 +360,10 @@ void main() {
       expect(t.getTopLeft(find.byKey(const Key('finish-session'))), stop);
       expect(t.getTopLeft(find.byKey(const Key('player-context'))), context);
       final index = f.engine.run!.stepIndex;
-      await t.tap(find.text('Второй рабочий модуль'), warnIfMissed: false);
+      await t.tap(
+        find.text('Модуль: Второй рабочий модуль'),
+        warnIfMissed: false,
+      );
       await t.pump();
       expect(f.engine.run!.stepIndex, index);
       await t.runAsync(() => f.engine.navigate(NavigationUnit.phase, true));
@@ -637,6 +697,296 @@ void main() {
       }
     }
   }
+  Future<void> capture13(WidgetTester t, String name) async {
+    const output = String.fromEnvironment('SULFI_TASK13_SCREENSHOTS');
+    if (output.isEmpty) return;
+    // Repaint retained text layers after playback/scroll changes before readback.
+    // This changes the test capture only, not application rendering or state.
+    void repaint(RenderObject node) {
+      node.visitChildren(repaint);
+      node.markNeedsPaint();
+    }
+
+    repaint(
+      t.renderObject<RenderRepaintBoundary>(
+        find.byKey(const Key('player-capture')),
+      ),
+    );
+    await t.pump();
+    await t.runAsync(() async {
+      final boundary = t.renderObject<RenderRepaintBoundary>(
+        find.byKey(const Key('player-capture')),
+      );
+      final image = await boundary.toImage(pixelRatio: 2);
+      final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+      await Directory(output).create(recursive: true);
+      await File('$output/$name.png').writeAsBytes(bytes!.buffer.asUint8List());
+      image.dispose();
+    });
+  }
+
+  String timer(WidgetTester t) =>
+      t.widget<Text>(find.byKey(const Key('current-track-time'))).data!;
+  for (final size in [const Size(360, 800), const Size(412, 915)]) {
+    for (final scale in [1.0, 1.3]) {
+      for (final mixed in [false, true]) {
+        testWidgets('Task13 matrix $size $scale mixed=$mixed', (t) async {
+          final f = (await t.runAsync(
+            () => Fixture.create(shortPhase: !mixed, mixed: mixed),
+          ))!;
+          await open(t, f, size: size, scale: scale, systemBars: true);
+          expect(f.engine.timeline.phases.length, mixed ? 6 : 1);
+          expect(
+            find.byKey(const Key('finish-session')).hitTestable(),
+            findsOneWidget,
+          );
+          expect(
+            find.byKey(const Key('watch-play-pause')).hitTestable(),
+            findsOneWidget,
+          );
+          final context = find.byKey(const Key('player-context'));
+          expect(
+            find.descendant(
+              of: context,
+              matching: find.byKey(const Key('current-track-time')),
+            ),
+            findsOneWidget,
+          );
+          final clock = t.getRect(find.byKey(const Key('watch-time')));
+          final ring = t.getRect(find.byKey(const Key('track-seek')));
+          expect(clock.overlaps(ring), isFalse);
+          final time = t.widget<Text>(
+            find.byKey(const Key('current-track-time')),
+          );
+          expect(time.style!.fontSize, 30);
+          expect(time.style!.color, const Color(0xffffe34d));
+          expect(
+            t.getRect(find.byKey(const Key('phase-scale'))).right,
+            lessThanOrEqualTo(t.getRect(context).left),
+          );
+          if (mixed) {
+            final phase = f.engine.timeline.phases.first;
+            final children = phase.children;
+            expect(children.map((x) => x.isModule).toList(), [
+              false,
+              true,
+              false,
+              true,
+              false,
+            ]);
+            final module = find.byKey(
+              ValueKey('module-group-${children[1].id}'),
+            );
+            expect(
+              find.descendant(of: module, matching: find.text('Веки тест 1')),
+              findsOneWidget,
+            );
+            expect(
+              find.descendant(of: module, matching: find.text('Прямой фокус')),
+              findsNothing,
+            );
+            expect(
+              find.descendant(of: module, matching: find.text('Пауза')),
+              findsNothing,
+            );
+            expect(find.textContaining('Модуль: Модуль:'), findsNothing);
+            final direct = f.engine.timeline.entries.first;
+            final directRow = find
+                .byWidgetPredicate(
+                  (w) =>
+                      w is Semantics &&
+                      (w.properties.label ?? '').startsWith('Прямой фокус.'),
+                )
+                .first;
+            final numbers = find.descendant(
+              of: directRow,
+              matching: find.text('1:05'),
+            );
+            expect(
+              t.widget<Text>(numbers).style!.color,
+              const Color(0xffff168f),
+            );
+            expect(direct.moduleId, isNull);
+          }
+          expect(t.takeException(), isNull);
+          await capture13(
+            t,
+            '${size.width.toInt()}x${size.height.toInt()}-$scale-${mixed ? 'mixed-six-phases' : 'short'}',
+          );
+          await close(t, f);
+        });
+      }
+    }
+  }
+  testWidgets(
+    'Task13 timer playing pause ring seek and next track use same source',
+    (t) async {
+      final f = (await t.runAsync(() => Fixture.create(mixed: true)))!;
+      await open(t, f);
+      expect(timer(t), '0:00 / 1:05');
+      await t.runAsync(f.engine.resume);
+      await settleEngine(t, f);
+      f.transport.position = const Duration(seconds: 6);
+      f.engine.tick();
+      await t.pump();
+      expect(timer(t), '0:06 / 1:05');
+      await t.runAsync(f.engine.pause);
+      await settleEngine(t, f);
+      f.clock.value += 2000;
+      f.engine.tick();
+      await t.pump();
+      expect(timer(t), '0:06 / 1:05');
+      final ring = t.getRect(find.byKey(const Key('track-seek')));
+      await t.tapAt(
+        ring.topLeft +
+            Offset(ring.width * (221.5 + 164) / 470, ring.height * 318.5 / 595),
+      );
+      await settleEngine(t, f);
+      expect(timer(t), '0:16 / 1:05');
+      await t.tap(find.byKey(const Key('nav-track-next')));
+      await settleEngine(t, f);
+      expect(timer(t), '0:00 / 1:05');
+      expect(f.engine.currentEntry!.moduleId, isNotNull);
+      expect(find.textContaining('Модуль: Модуль:'), findsNothing);
+      await capture13(t, 'current-in-module');
+      await close(t, f);
+    },
+  );
+  testWidgets('Task13 pause element elapsed total and unknown duration', (
+    t,
+  ) async {
+    final f = (await t.runAsync(
+      () => Fixture.create(shortPhase: true, pauseOnly: true),
+    ))!;
+    await open(t, f);
+    expect(timer(t), '0:00 / 0:08');
+    await t.runAsync(f.engine.resume);
+    await settleEngine(t, f);
+    f.clock.value += 2000;
+    f.engine.tick();
+    await t.pump();
+    expect(timer(t), '0:02 / 0:08');
+    await capture13(t, 'pause-element');
+    await close(t, f);
+    final unknown = (await t.runAsync(
+      () => Fixture.create(unknownWork: true),
+    ))!;
+    await open(t, unknown);
+    expect(timer(t), '0:00 / ≈');
+    await close(t, unknown);
+  });
+  testWidgets(
+    'Task13 completed module reopens green with green child durations',
+    (t) async {
+      final f = (await t.runAsync(() => Fixture.create(mixed: true)))!;
+      await open(t, f);
+      await t.runAsync(f.engine.resume);
+      await settleEngine(t, f);
+      for (var i = 0; i < 6; i++) {
+        if (f.engine.run!.phase == 'delay') {
+          f.engine.tick();
+          await settleEngine(t, f);
+        }
+        f.clock.value += 65000;
+        await t.runAsync(
+          () => f.engine.seek(const Duration(milliseconds: 64900)),
+        );
+        f.transport.completed = true;
+        f.engine.tick();
+        await settleEngine(t, f);
+      }
+      if (f.engine.run!.phase == 'delay') {
+        f.engine.tick();
+        await settleEngine(t, f);
+      }
+      await t.runAsync(f.engine.pause);
+      await settleEngine(t, f);
+      expect(f.engine.step!.kind, StepKind.silence);
+      expect(timer(t), '0:00 / 0:41');
+      final moduleId = f.engine.timeline.phases.first.children[1].id;
+      final moduleRow = find.byKey(ValueKey('player-module-$moduleId'));
+      expect(
+        find.text('Веки тест 1'),
+        findsNWidgets(5),
+      ); // only the five future phases remain expanded
+      await t.ensureVisible(moduleRow);
+      await t.tap(moduleRow);
+      await t.pumpAndSettle();
+      final group = find.byKey(ValueKey('module-group-$moduleId'));
+      expect(
+        find.descendant(of: group, matching: find.text('Веки тест 1')),
+        findsOneWidget,
+      );
+      for (final text in t.widgetList<Text>(
+        find.descendant(of: group, matching: find.byType(Text)),
+      )) {
+        expect(text.style!.color, const Color(0xffa6ed49));
+      }
+      await t.ensureVisible(
+        find.byKey(
+          ValueKey('player-phase-${f.engine.timeline.phases.first.id}'),
+        ),
+      );
+      await t.pumpAndSettle();
+      await capture13(t, 'completed-green-manually-expanded');
+      await t.tap(moduleRow);
+      await t.pump();
+      expect(
+        find.descendant(of: group, matching: find.text('Веки тест 1')),
+        findsNothing,
+      );
+      await close(t, f);
+    },
+  );
+  testWidgets(
+    'Task13 hour timer fits narrow summary and semantic yellow stays local',
+    (t) async {
+      final f = (await t.runAsync(
+        () => Fixture.create(
+          shortPhase: true,
+          pauseOnly: true,
+          pauseDurationMs: 4215000,
+        ),
+      ))!;
+      await open(
+        t,
+        f,
+        size: const Size(360, 800),
+        scale: 1.3,
+        systemBars: true,
+      );
+      await t.runAsync(f.engine.resume);
+      await settleEngine(t, f);
+      f.clock.value += 3723000;
+      f.engine.tick();
+      await settleEngine(t, f);
+      expect(timer(t), '1:02:03 / 1:10:15');
+      final frame = t.getRect(find.byKey(const Key('player-context')));
+      final time = t.getRect(find.byKey(const Key('watch-time')));
+      expect(time.left, greaterThanOrEqualTo(frame.left));
+      expect(time.right, lessThanOrEqualTo(frame.right));
+      final totals = t.widgetList<Text>(
+        find.descendant(
+          of: find.byKey(const Key('session-totals')),
+          matching: find.byType(Text),
+        ),
+      );
+      expect(
+        totals.where((x) => x.style?.color == const Color(0xffffe34d)).length,
+        3,
+      );
+      final previous = t.widget<OutlinedButton>(
+        find.byKey(const Key('nav-track-previous')),
+      );
+      expect(
+        previous.style!.foregroundColor!.resolve({WidgetState.disabled}),
+        const Color(0xff66555f),
+      );
+      expect(t.takeException(), isNull);
+      await capture13(t, 'hour-timer-narrow');
+      await close(t, f);
+    },
+  );
   testWidgets('optional V41 rendered screenshots', (t) async {
     const output = String.fromEnvironment('SULFI_V41_SCREENSHOTS');
     if (output.isEmpty) return;
