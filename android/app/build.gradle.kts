@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -7,7 +9,7 @@ plugins {
 // Test-only companion package. Flutter passes --dart-define as Base64 values.
 val sulfiDefines = (project.findProperty("dart-defines") as String?).orEmpty()
     .split(",").filter { it.isNotEmpty() }.map {
-        String(java.util.Base64.getDecoder().decode(it))
+        String(Base64.getDecoder().decode(it))
     }.toSet()
 val sulfiClientTest = sulfiDefines.contains("SULFI_EDITION=client")
 

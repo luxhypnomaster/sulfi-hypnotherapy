@@ -91,3 +91,9 @@ G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: 
 - reason: private artifact Azure downloads were blocked in this environment in previous cycles. Log both public APK byte hashes directly in CI diagnostics so APK_INFO can quote actual binary SHA without guessing from artifact ZIP digest.
 - run42679000217 superseded before full-suite completion by final-head dispatch; do not count it as final PASS. Final run must match the HEAD containing this checkpoint.
 - next command: env -u GH_TOKEN gh run list --repo luxhypnomaster/sulfi-hypnotherapy --branch feat/task15-pre-server-readiness --limit 2; then verify both build/checksum/signature steps and upload final reports. No app source changes after G6 corrected tests.
+
+### G6 Android build correction
+- before_sha: 5ee9d03035467b4d48f71c11f50a24889491d72e
+- CI42679387335: full Flutter/Node/schema/client tests PASS, author APK FAILED in Gradle script before assembly. `java.util.Base64` resolved `java` as Gradle Java extension, not package; explicit import java.util.Base64 fixes this name collision. No Flutter/app data/signing change.
+- files: android/app/build.gradle.kts only +this checkpoint; no schema/file migration. Next final-head CI must pass actual BOTH APK builds; earlier red run is not APK readiness evidence.
+- next command: env -u GH_TOKEN gh run list --repo luxhypnomaster/sulfi-hypnotherapy --branch feat/task15-pre-server-readiness --limit 2; fetch failure log if red; do not repeat G0–G5 or reset user data.
