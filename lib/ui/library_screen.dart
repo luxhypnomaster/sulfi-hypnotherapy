@@ -14,6 +14,9 @@ import 'asset_editor.dart';
 import 'design.dart';
 import 'preview_bar.dart';
 import 'backup_screen.dart';
+import 'content_export.dart';
+import 'content_catalog_screen.dart';
+import 'session_actions.dart';
 import '../services/access_policy.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -259,6 +262,24 @@ class _LibraryScreenState extends State<LibraryScreen>
                 ],
               ),
             ),
+            if (widget.controller?.capsules != null)
+              OutlinedButton.icon(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await Navigator.push<void>(
+                    this.context,
+                    MaterialPageRoute(
+                      builder: (_) => ContentCatalogScreen(
+                        controller: widget.controller!,
+                        player: widget.player,
+                      ),
+                    ),
+                  );
+                  if (mounted) await _load();
+                },
+                icon: const Icon(Icons.view_list_outlined),
+                label: const Text('Локальный каталог материалов'),
+              ),
             if (widget.controller?.capsules != null)
               OutlinedButton.icon(
                 onPressed: () async {
@@ -823,10 +844,27 @@ class _LibraryScreenState extends State<LibraryScreen>
                 ),
                 onSelected: (s) {
                   if (s == 'info') _details(a);
+                  if (s == 'export') {
+                    unawaited(
+                      showActionError(
+                        context,
+                        () => exportMaterial(
+                          context,
+                          widget.controller!.capsules!,
+                          trackId: a.id,
+                        ),
+                      ),
+                    );
+                  }
                   if (s == 'edit') _edit(a);
                   if (s == 'delete') _delete(a);
                 },
                 itemBuilder: (_) => [
+                  if (widget.controller?.capsules != null)
+                    const PopupMenuItem(
+                      value: 'export',
+                      child: Text('Экспорт трека'),
+                    ),
                   const PopupMenuItem(
                     value: 'info',
                     child: Text('Сведения о треке'),

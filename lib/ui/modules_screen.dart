@@ -5,6 +5,7 @@ import '../models/session_plan.dart' show newId;
 import '../services/session_controller.dart';
 import '../services/preview_player.dart';
 import 'design.dart';
+import 'content_export.dart';
 import 'module_editor.dart';
 import 'session_actions.dart';
 
@@ -99,10 +100,36 @@ class _ModulesScreenState extends State<ModulesScreen> {
                       : widget.selecting && m.items.isNotEmpty
                       ? () => Navigator.pop(context, m)
                       : () => _edit(m),
-                  trailing: IconButton(
-                    tooltip: 'Изменить определение модуля',
-                    icon: const Icon(Icons.edit),
-                    onPressed: busy ? null : () => _edit(m),
+                  trailing: PopupMenuButton<String>(
+                    tooltip: 'Действия модуля',
+                    enabled: !busy,
+                    onSelected: (value) async {
+                      if (value == 'edit') {
+                        await _edit(m);
+                        return;
+                      }
+                      setState(() => busy = true);
+                      await showActionError(
+                        context,
+                        () => exportMaterial(
+                          context,
+                          widget.controller.capsules!,
+                          moduleId: m.id,
+                        ),
+                      );
+                      if (mounted) setState(() => busy = false);
+                    },
+                    itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Text('Редактировать'),
+                      ),
+                      if (widget.controller.capsules != null)
+                        const PopupMenuItem(
+                          value: 'export',
+                          child: Text('Экспорт модуля'),
+                        ),
+                    ],
                   ),
                 ),
             ],

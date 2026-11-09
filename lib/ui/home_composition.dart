@@ -293,6 +293,7 @@ class HomeComposition extends StatelessWidget {
                         );
                         final overview = HomePlanOverview(
                           plan: plan,
+                          moduleDiffers: controller.moduleDiffersFromSource,
                           player: player,
                           unavailableStepIds:
                               controller.draft.unavailableStepIds,
@@ -477,7 +478,9 @@ class HomePlanOverview extends StatefulWidget {
     required this.onPreview,
     this.player,
     this.unavailableStepIds = const [],
+    this.moduleDiffers,
   });
+  final bool Function(PhaseChild)? moduleDiffers;
   final SessionPlan plan;
   final PreviewPlayer? player;
   final List<String> unavailableStepIds;
@@ -651,9 +654,15 @@ class _HomePlanOverviewState extends State<HomePlanOverview> {
                       'Модуль: ${c.title}',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
+                        color: widget.moduleDiffers?.call(c) == true
+                            ? neonPink
+                            : null,
+                        fontStyle: widget.moduleDiffers?.call(c) == true
+                            ? FontStyle.italic
+                            : FontStyle.normal,
                       ),
                     ),
                   ),
@@ -813,12 +822,21 @@ class _TemplateStrip extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Text(
                       title,
-                      style: const TextStyle(fontSize: 12, height: 1.2),
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.2,
+                        color: controller.templateDiffersFromSource
+                            ? neonPink
+                            : null,
+                        fontStyle: controller.templateDiffersFromSource
+                            ? FontStyle.italic
+                            : FontStyle.normal,
+                      ),
                     ),
                   ),
                 ),
               ),
-              if (controller.draft.modified &&
+              if (controller.templateDiffersFromSource &&
                   controller.draft.baseTemplateId != null)
                 const Tooltip(
                   message: 'Текущая конфигурация изменена',

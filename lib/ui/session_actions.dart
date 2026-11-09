@@ -18,6 +18,8 @@ Future<void> showActionError(
           content: Text(
             e is LibraryException
                 ? e.message
+                : e is FormatException
+                ? e.message.toString()
                 : 'Не удалось сохранить изменения. Повторите действие.',
           ),
         ),

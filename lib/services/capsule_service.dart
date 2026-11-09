@@ -7,6 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 import '../models/modular_plan.dart';
+import '../models/content_revision.dart';
+import '../data/content_revision_store.dart';
 import '../models/session_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/diary_entry.dart';
@@ -68,6 +70,7 @@ class CapsuleService {
     'diary_author',
     'diary_public',
     'diary_removed',
+    'content_revisions',
   ];
   // Limits are checked BEFORE decompression; file streams avoid loading audio
   // into one Dart Uint8List. 4 GiB is the explicit format limit for this edition.
@@ -133,34 +136,76 @@ class CapsuleService {
     return result;
   }
 
-  Future<File> export({String? moduleId}) async {
+  Future<File> export({
+    String? moduleId,
+    String? trackId,
+    String? templateId,
+  }) async {
+    if ([moduleId, trackId, templateId].whereType<String>().length > 1) {
+      throw ArgumentError("Выберите один материал");
+    }
     await workspace.create(recursive: true);
     final work = await workspace.createTemp('export-');
     final output = File(p.join(workspace.path, 'sulfi-${newId()}.zip'));
     try {
       final records = await _records();
-      if (moduleId != null) {
-        final modules = (records['module_definitions'] as List)
-            .where((r) => r['id'] == moduleId)
-            .toList();
-        if (modules.length != 1) {
-          throw const FormatException('Модуль не найден');
+      if (moduleId != null || trackId != null || templateId != null) {
+        final selectedModules = <Map<String, dynamic>>[];
+        final selectedTemplates = <Map<String, dynamic>>[];
+        final ids = <String>{?trackId};
+        void audio(Iterable<SessionStep> steps) {
+          ids.addAll(steps.map((s) => s.audioAssetId).whereType<String>());
         }
-        final definition = ModuleDefinition.fromMap(
-          jsonDecode(modules.single['payload']),
-        );
-        final ids = definition.items
-            .map((s) => s.audioAssetId)
-            .whereType<String>()
-            .toSet();
+
+        if (moduleId != null) {
+          final row = (records['module_definitions'] as List)
+              .where((r) => r['id'] == moduleId)
+              .firstOrNull;
+          if (row == null) throw const FormatException('Модуль не найден');
+          selectedModules.add(Map<String, dynamic>.from(row));
+          audio(ModuleDefinition.fromMap(jsonDecode(row['payload'])).items);
+        }
+        if (templateId != null) {
+          final row = (records['session_templates'] as List)
+              .where((r) => r['id'] == templateId)
+              .firstOrNull;
+          if (row == null) throw const FormatException('Шаблон не найден');
+          selectedTemplates.add(Map<String, dynamic>.from(row));
+          final template = SessionTemplate.fromMap(jsonDecode(row['payload']));
+          audio(template.plan.allSteps);
+          for (final phase in template.plan.phases ?? <PhaseInstance>[]) {
+            for (final child in phase.children.where((c) => c.isModule)) {
+              final source = (records['module_definitions'] as List)
+                  .where((r) => r['id'] == child.definitionId)
+                  .firstOrNull;
+              // Embedded copies remain exact snapshots. Never substitute latest
+              // for an unavailable old source revision.
+              if (source != null) {
+                final module = ModuleDefinition.fromMap(
+                  jsonDecode(source['payload']),
+                );
+                if (module.version == child.definitionVersion &&
+                    !selectedModules.any((m) => m['id'] == module.id)) {
+                  selectedModules.add(Map<String, dynamic>.from(source));
+                  audio(module.items);
+                }
+              }
+            }
+          }
+        }
+        final selectedAudio = (records['audio_assets'] as List)
+            .where((r) => ids.contains(r['id']))
+            .toList();
+        if (selectedAudio.length != ids.length) {
+          throw const FormatException('Недостающие аудиозависимости');
+        }
         for (final table in tables) {
-          records[table] = table == 'module_definitions'
-              ? modules
-              : table == 'audio_assets'
-              ? (records[table] as List)
-                    .where((r) => ids.contains(r['id']))
-                    .toList()
-              : [];
+          records[table] = switch (table) {
+            'module_definitions' => selectedModules,
+            'session_templates' => selectedTemplates,
+            'audio_assets' => selectedAudio,
+            _ => <dynamic>[],
+          };
         }
       }
       final files = <String, Map<String, dynamic>>{};
@@ -253,8 +298,14 @@ class CapsuleService {
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
         'schema': schema,
-        'databaseSchema': 8,
-        'scope': moduleId == null ? 'full' : 'module',
+        'databaseSchema': 9,
+        'scope': trackId != null
+            ? 'track'
+            : templateId != null
+            ? 'template'
+            : moduleId != null
+            ? 'module'
+            : 'full',
         'records': records,
         'files': files.values.toList(),
         'dependencies': dependencies,
@@ -359,13 +410,16 @@ class CapsuleService {
       final identity = Map<String, dynamic>.from(manifest)..remove('id');
       if (manifest['format'] != 'sulfi-capsule' ||
           manifest['schema'] != schema ||
-          ![6, 7, 8].contains(manifest['databaseSchema']) ||
+          ![6, 7, 8, 9].contains(manifest['databaseSchema']) ||
           digest(identity) != manifest['id']) {
         throw const FormatException(
           'Неизвестная версия или повреждённый манифест',
         );
       }
       final records = Map<String, dynamic>.from(manifest['records']);
+      if (manifest['databaseSchema'] < 9) {
+        records.putIfAbsent('content_revisions', () => []);
+      }
       if (manifest['databaseSchema'] < 8) {
         records.putIfAbsent('history_attachments', () => []);
       }
@@ -373,7 +427,9 @@ class CapsuleService {
           tables.any((t) => records[t] is! List)) {
         throw const FormatException('Некорректные таблицы');
       }
-      // The digest above authenticates the original schema-6 manifest first.
+      // Integrity of the original manifest was verified before normalization.
+      manifest['records'] = records;
+      // This is not publisher authentication or a digital signature.
       // Add the v7 capability flag only in memory; IDs and media are unchanged.
       if (manifest['databaseSchema'] == 6) {
         for (final row in records['audio_assets'] as List) {
@@ -440,6 +496,49 @@ class CapsuleService {
           if (table != 'run_events' &&
               !seen.add(row[table == 'app_counters' ? 'name' : 'id'])) {
             throw const FormatException('Повторяющийся идентификатор');
+          }
+          if (table == 'content_revisions') {
+            final revision = ContentRevision.fromMap(
+              jsonDecode(row['payload']),
+            );
+            if (revision.key.token != row['id']) {
+              throw const FormatException('Несогласованная ревизия');
+            }
+            try {
+              final payload = revision.payload;
+              if (payload['id'] != revision.key.content.id) {
+                throw const FormatException('ID ревизии');
+              }
+              switch (revision.key.content.type) {
+                case ContentType.track:
+                  final asset = AudioAsset.fromMap({
+                    ...payload,
+                    'filePath': payload['filePath'] ?? 'unavailable',
+                  });
+                  if (payload['filePath'] != null &&
+                      payload['filePath'] != 'capsule://${asset.contentHash}') {
+                    throw const FormatException('Путь аудиоревизии');
+                  }
+                  if (asset.contentHash != null &&
+                      !RegExp(r'^[a-f0-9]{64}$').hasMatch(asset.contentHash!)) {
+                    throw const FormatException('Хеш аудиоревизии');
+                  }
+                  if (asset.durationMs <= 0 ||
+                      asset.fileSizeBytes <= 0 ||
+                      !{'wav', 'm4a', 'mp3'}.contains(asset.format)) {
+                    throw const FormatException('Аудиоревизия');
+                  }
+                case ContentType.module:
+                  final module = ModuleDefinition.fromMap(payload);
+                  _validatePlan(SessionPlan(steps: module.items));
+                case ContentType.template:
+                  _validatePlan(SessionTemplate.fromMap(payload).plan);
+              }
+            } catch (_) {
+              throw const FormatException(
+                'Некорректное содержимое сохранённой ревизии',
+              );
+            }
           }
           if (table == 'module_definitions') {
             final module = ModuleDefinition.fromMap(jsonDecode(row['payload']));
@@ -636,6 +735,7 @@ class CapsuleService {
     Map normalized(Map row) {
       final r = Map<String, dynamic>.from(row);
       if (table == 'audio_assets') r.remove('filePath');
+      if (table == 'content_revisions') r['payload'] = jsonDecode(r['payload']);
       if (table == 'session_runs') {
         r.remove('displayNumber');
         final payload = Map<String, dynamic>.from(jsonDecode(r['payload']));
@@ -795,6 +895,16 @@ class CapsuleService {
         }
       }
       for (final row in records['audio_assets'] as List) {
+        final previous = (local['audio_assets'] as List)
+            .where((r) => r['id'] == row['id'])
+            .firstOrNull;
+        if (previous != null &&
+            previous['contentHash'] != row['contentHash'] &&
+            choice != CapsuleConflictChoice.keepExisting) {
+          throw const FormatException(
+            'Изменённые аудиобайты требуют нового ID. Прежние зависимости истории сохранены.',
+          );
+        }
         if (skipped['audio_assets']!.contains(row['id'])) continue;
         if (!{'mp3', 'm4a', 'wav'}.contains(row['format'])) {
           throw const FormatException('Неизвестный формат аудио');
@@ -873,6 +983,32 @@ class CapsuleService {
         }
         for (final table in tables) {
           for (final row in records[table] as List) {
+            if (table == 'content_revisions') {
+              await ContentRevisionStore(tx)
+                  .put(ContentRevision.fromMap(jsonDecode(row['payload'])));
+              continue;
+            }
+            if (const [
+                  'audio_assets',
+                  'module_definitions',
+                  'session_templates',
+                ].contains(table) &&
+                !skipped[table]!.contains(row['id'])) {
+              for (final old in (local[table] as List).where(
+                (r) => r['id'] == row['id'],
+              )) {
+                await ContentRevisionStore.retainRow(
+                  tx,
+                  table,
+                  Map<String, Object?>.from(old),
+                );
+              }
+              await ContentRevisionStore.retainRow(
+                tx,
+                table,
+                Map<String, Object?>.from(row),
+              );
+            }
             if (table == 'run_events') {
               if (skipped['session_runs']!.contains(row['runId'])) continue;
               final event = Map<String, Object?>.from(row)..remove('id');

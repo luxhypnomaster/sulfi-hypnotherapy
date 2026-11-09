@@ -246,6 +246,11 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {
+    if (entry.extra.containsKey('contentLinks')) {
+      throw const DiaryApiException(
+        'Ссылки на материалы пока сохраняются только локально. Серверный контракт не подтверждён.',
+      );
+    }
     final session = await _cloudSession();
     final result = await api!.saveAuthorDraft(entry, session);
     await authorRepository!.save(result);
@@ -264,6 +269,11 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
+    if (entry.extra.containsKey('contentLinks')) {
+      throw const DiaryApiException(
+        'Публикация ссылок на материалы пока недоступна. Локальная запись сохранена.',
+      );
+    }
     final session = await _cloudSession();
     final result = await api!.publish(entry, session, published: published);
     await authorRepository!.save(result);

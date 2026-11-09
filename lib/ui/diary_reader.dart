@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../models/diary_entry.dart';
+import 'diary_content_link.dart';
 import '../services/diary_audio.dart';
 import '../services/preview_diary_transport.dart';
 import '../services/diary_controller.dart';
@@ -148,6 +149,7 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
     onJournal: journal,
     child: Column(
       children: [
+        for (final link in entry.contentLinks) DiaryContentLink(link: link),
         Expanded(
           child: LayoutBuilder(
             builder: (context, box) {

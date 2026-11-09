@@ -9,6 +9,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sulfi_hypnotherapy/app.dart';
 import 'package:sulfi_hypnotherapy/data/app_database.dart';
+import 'package:sulfi_hypnotherapy/data/module_catalog.dart';
+import 'package:sulfi_hypnotherapy/models/content_revision.dart';
+import 'package:sulfi_hypnotherapy/models/content_link.dart';
+import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
+import 'package:sulfi_hypnotherapy/ui/content_catalog_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/diary_content_link.dart';
+import 'package:sulfi_hypnotherapy/ui/design.dart';
+import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/modules_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/templates_screen.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
@@ -74,6 +84,12 @@ void main() {
       repository: SqliteSessionRepository(db),
       library: library,
       diary: diary,
+      capsules: CapsuleService(
+        database: db,
+        library: library,
+        diaryDirectory: Directory('${root.path}/diary'),
+        workspace: Directory('${root.path}/capsules'),
+      ),
       historyAttachments: HistoryAttachments(
         db,
         DiaryMediaStore(
@@ -175,8 +191,13 @@ void main() {
   }
 
   var fonts = false;
-  Future<void> show(WidgetTester t, Widget page) async {
-    t.view.physicalSize = const Size(412, 915);
+  Future<void> show(
+    WidgetTester t,
+    Widget page, {
+    Size size = const Size(412, 915),
+    double scale = 1,
+  }) async {
+    t.view.physicalSize = size;
     t.view.devicePixelRatio = 1;
     addTearDown(t.view.resetPhysicalSize);
     addTearDown(t.view.resetDevicePixelRatio);
@@ -215,7 +236,11 @@ void main() {
           player: player,
           child: RepaintBoundary(
             key: const Key('task5-capture'),
-            child: child!,
+            child: MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(scale)),
+              child: child!,
+            ),
           ),
         ),
         home: page,
@@ -227,6 +252,17 @@ void main() {
   Future<void> screenshot(WidgetTester t, String name) async {
     const dir = String.fromEnvironment('SULFI_TASK5_SCREENSHOTS');
     if (dir.isEmpty) return;
+    void repaint(RenderObject node) {
+      node.visitChildren(repaint);
+      node.markNeedsPaint();
+    }
+
+    repaint(
+      t.renderObject<RenderRepaintBoundary>(
+        find.byKey(const Key('task5-capture')),
+      ),
+    );
+    await t.pump();
     await t.runAsync(() async {
       final boundary = t.renderObject<RenderRepaintBoundary>(
         find.byKey(const Key('task5-capture')),
@@ -239,6 +275,308 @@ void main() {
     });
   }
 
+  testWidgets(
+    'Task14 three export menus invoke the existing system save dialog',
+    (t) async {
+      var saves = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('ru.sulfi/device_files'),
+            (call) async {
+              if (call.method == 'saveZip') {
+                saves++;
+                return false;
+              }
+              return null;
+            },
+          );
+      await t.runAsync(() => ModuleCatalog(db).save(c.modules.entries.single));
+      await show(
+        t,
+        LibraryScreen(library: c.library, player: player, controller: c),
+      );
+      await t.tap(find.byTooltip('Действия с аудио').first);
+      await io(t);
+      await t.tap(find.text('Экспорт трека'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 1; i++) {
+        await io(t);
+      }
+      expect(saves, 1);
+      await show(t, ModulesScreen(controller: c, player: player));
+      await t.tap(find.byTooltip('Действия модуля').first);
+      await io(t);
+      await t.tap(find.text('Экспорт модуля'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 2; i++) {
+        await io(t);
+      }
+      expect(saves, 2);
+      await show(t, TemplatesScreen(controller: c, player: player));
+      await t.tap(find.byTooltip('Действия шаблона').first);
+      await io(t);
+      await t.tap(find.text('Экспорт шаблона'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 3; i++) {
+        await io(t);
+      }
+      expect(saves, 3);
+      expect(player.playing, false);
+      expect((await t.runAsync(c.repository.history))!, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'Task14 semantic module and template styles revert after Undo in actual editor and Home',
+    (t) async {
+      final phase = c.draft.plan.phases!.first;
+      final child = phase.children.single;
+      final changed = child.copyWith(items: child.items.reversed.toList());
+      await t.runAsync(() => c.updateChild(phase.id, changed));
+      await show(t, ModularStructureScreen(controller: c, player: player));
+      final toggle = find.byKey(ValueKey('expand-${phase.id}'));
+      if (find.text('Модуль: ${child.title}').evaluate().isEmpty) {
+        await t.tap(toggle);
+        await io(t);
+      }
+      final title = t.widget<Text>(find.text('Модуль: ${child.title}'));
+      expect(title.style!.color, neonPink);
+      expect(title.style!.fontStyle, FontStyle.italic);
+      await screenshot(t, 'task14-module-changed');
+      await t.runAsync(() => c.repository.acknowledgeHistory(run.id));
+      await show(t, HomeScreen(controller: c, player: player));
+      final name = c.draft.baseTemplateName!;
+      expect(t.widget<Text>(find.text(name)).style!.color, neonPink);
+      expect(
+        t.widget<Text>(find.text(name)).style!.fontStyle,
+        FontStyle.italic,
+      );
+      await screenshot(t, 'task14-template-changed');
+      await t.runAsync(
+        () => c.updateChild(phase.id, changed.copyWith(items: child.items)),
+      );
+      await io(t);
+      expect(c.draft.plan.phases!.first.children.single.modified, true);
+      expect(
+        t.widget<Text>(find.text(name)).style!.fontStyle,
+        FontStyle.normal,
+      );
+      expect(t.widget<Text>(find.text(name)).style!.color, isNot(neonPink));
+      await screenshot(t, 'task14-template-undo');
+      await show(t, ModularStructureScreen(controller: c, player: player));
+      if (find.text('Модуль: ${child.title}').evaluate().isEmpty) {
+        await t.tap(toggle);
+        await io(t);
+      }
+      expect(
+        t.widget<Text>(find.text('Модуль: ${child.title}')).style!.fontStyle,
+        FontStyle.normal,
+      );
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  testWidgets(
+    'Task14 catalog cards, exact install and diary installed/unavailable actions are real',
+    (t) async {
+      await t.runAsync(() => ModuleCatalog(db).save(c.modules.entries.single));
+      final zip = (await t.runAsync(
+        () => c.capsules!.export(templateId: c.templates.single.id),
+      ))!;
+      final local = (await t.runAsync(
+        () => LocalCatalogSource.open(c.capsules!, zip),
+      ))!;
+      final revision = local.revisions.singleWhere(
+        (r) => r.key.content.type == ContentType.template,
+      );
+      await show(
+        t,
+        ContentCatalogScreen(
+          controller: c,
+          player: player,
+          initialSource: local,
+        ),
+      );
+      expect(find.text('ЛОКАЛЬНЫЙ КАТАЛОГ'), findsOneWidget);
+      expect(find.textContaining('не онлайн-каталог'), findsOneWidget);
+      await screenshot(t, 'task14-catalog-before');
+      await t.tap(find.byKey(ValueKey('catalog-${revision.key.token}')));
+      await io(t);
+      await screenshot(t, 'task14-catalog-details');
+      await t.tap(find.widgetWithText(FilledButton, 'Установить'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.text('Установлено').evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      expect(find.text('Установлено'), findsOneWidget);
+      expect(player.playing, false);
+      await screenshot(t, 'task14-catalog-installed');
+      final installedLink = ContentLink(revision.key, ContentLinkAction.open);
+      await show(t, Scaffold(body: DiaryContentLink(link: installedLink)));
+      expect(find.text('Открыть'), findsOneWidget);
+      await screenshot(t, 'task14-diary-installed-link');
+      await t.tap(find.text('Открыть'));
+      await io(t);
+      expect(find.text('ШАБЛОНЫ'), findsOneWidget);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+      final track = local.revisions.firstWhere(
+        (r) => r.key.content.type == ContentType.track,
+      );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(track.key, ContentLinkAction.open),
+          ),
+        ),
+      );
+      await t.tap(find.text('Открыть'));
+      await io(t);
+      expect(player.playing, true);
+      expect(player.current!.id, track.key.content.id);
+      expect(
+        await t.runAsync(() => c.library.fileFor(player.current!).exists()),
+        true,
+      );
+      await player.stop();
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+      await t.runAsync(
+        () => c.repository.deleteTemplate(revision.key.content.id),
+      );
+      await t.runAsync(c.reload);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('ru.sulfi/device_files'),
+            (call) async => call.method == 'openZip' ? zip.path : null,
+          );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(revision.key, ContentLinkAction.install),
+          ),
+        ),
+      );
+      await t.tap(find.text('Посмотреть / установить'));
+      await io(t);
+      await t.tap(find.text('Выбрать ZIP материалов'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 40 &&
+            find
+                .byKey(ValueKey('catalog-${revision.key.token}'))
+                .evaluate()
+                .isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      await t.tap(find.byKey(ValueKey('catalog-${revision.key.token}')));
+      await io(t);
+      await t.tap(find.widgetWithText(FilledButton, 'Установить'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.text('Установлено').evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      expect(find.text('Установлено'), findsOneWidget);
+      await screenshot(t, 'task14-diary-install-through-link');
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+      final unknown = RevisionKey(
+        const ContentKey(ContentType.track, 'unavailable'),
+        'exact',
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(unknown, ContentLinkAction.install),
+          ),
+        ),
+      );
+      await t.tap(find.text('Посмотреть / установить'));
+      await io(t);
+      expect(find.textContaining('Точная ревизия недоступна'), findsOneWidget);
+      await screenshot(t, 'task14-diary-unavailable-link');
+      expect(player.playing, false);
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
+  for (final size in [
+    const Size(320, 600),
+    const Size(360, 800),
+    const Size(412, 915),
+  ]) {
+    for (final scale in [1.0, 1.3, 1.6]) {
+      testWidgets('Task14 history Home stack ${size.width} $scale', (t) async {
+        await t.runAsync(() => c.repository.acknowledgeHistory(run.id));
+        final before = (await t.runAsync(c.repository.history))!
+            .map((r) => r.toMap())
+            .toList();
+        await show(
+          t,
+          HomeScreen(controller: c, player: player),
+          size: size,
+          scale: scale,
+        );
+        final nav = Navigator.of(t.element(find.byType(HomeScreen)));
+        nav.push<void>(
+          MaterialPageRoute(
+            builder: (_) => HistoryScreen(
+              controller: c,
+              player: player,
+              selectedRunId: run.id,
+            ),
+          ),
+        );
+        await io(t);
+        expect(find.byType(HistoryDetailScreen), findsOneWidget);
+        for (final key in [
+          'history-repeat',
+          'history-open-editor',
+          'history-home',
+        ]) {
+          await t.ensureVisible(find.byKey(Key(key)));
+          await t.pumpAndSettle();
+          expect(find.byKey(Key(key)).hitTestable(), findsOneWidget);
+          final rect = t.getRect(find.byKey(Key(key)));
+          expect(rect.left, greaterThanOrEqualTo(0));
+          expect(rect.right, lessThanOrEqualTo(size.width));
+        }
+        await screenshot(t, 'task14-history-${size.width.toInt()}-$scale');
+        await t.tap(find.byKey(const Key('history-home')));
+        await io(t);
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(find.byType(HistoryDetailScreen), findsNothing);
+        expect(find.byType(HistoryScreen), findsNothing);
+        expect(find.byType(RunScreen), findsNothing);
+        expect(nav.canPop(), false);
+        expect(player.playing, false);
+        expect(
+          (await t.runAsync(c.repository.history))!
+              .map((r) => r.toMap())
+              .toList(),
+          before,
+        );
+        await t.pumpWidget(const SizedBox());
+        await io(t);
+      });
+    }
+  }
   testWidgets(
     'Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution',
     (t) async {
@@ -500,6 +838,13 @@ void main() {
       await io(t);
       await t.tap(find.text('Начать повтор'));
       await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.byType(RunScreen).evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
       expect(find.byType(RunScreen), findsOneWidget);
       final engine = t.widget<RunScreen>(find.byType(RunScreen)).engine;
       expect(engine.run!.id, isNot(run.id));

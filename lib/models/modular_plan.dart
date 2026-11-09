@@ -1,4 +1,5 @@
 import 'session_plan.dart';
+import 'content_revision.dart';
 
 class PhaseType {
   const PhaseType(this.id, this.title, this.description);
@@ -154,6 +155,7 @@ class ModuleDefinition {
     this.origin = 'personal',
     this.baseRevision = 1,
     this.author,
+    this.parentRevision,
     List<SessionStep> items = const [],
     DateTime? updatedAt,
   }) : items = List.unmodifiable(items),
@@ -165,6 +167,7 @@ class ModuleDefinition {
   final String origin;
   final int baseRevision;
   final String? author;
+  final RevisionKey? parentRevision;
   final List<SessionStep> items;
   final DateTime updatedAt;
   PhaseChild instantiate(String phaseId) {
@@ -202,6 +205,7 @@ class ModuleDefinition {
     'origin': origin,
     'baseRevision': baseRevision,
     'author': author,
+    if (parentRevision != null) 'parentRevision': parentRevision!.toMap(),
     'updatedAt': updatedAt.toIso8601String(),
     'items': items.map((s) => s.toMap()).toList(),
   };
@@ -216,6 +220,9 @@ class ModuleDefinition {
     origin: m['origin'] ?? 'personal',
     baseRevision: m['baseRevision'] ?? 1,
     author: m['author'],
+    parentRevision: m['parentRevision'] == null
+        ? null
+        : RevisionKey.fromMap(Map<String, dynamic>.from(m['parentRevision'])),
     updatedAt: DateTime.parse(m['updatedAt']),
     items: (m['items'] as List)
         .map((s) => SessionStep.fromMap(Map<String, dynamic>.from(s)))

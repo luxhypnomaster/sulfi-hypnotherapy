@@ -7,6 +7,7 @@ import '../models/session_plan.dart';
 import '../services/preview_player.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
+import 'content_export.dart';
 import 'session_actions.dart';
 import 'modular_structure_screen.dart';
 
@@ -138,14 +139,23 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             version: t.version + 1,
             isDefault: t.isDefault,
             origin: t.origin,
+            parentRevision: t.parentRevision,
             baseRevision: t.baseRevision,
             author: t.author,
           ),
         );
       }
     }
+    if (action == 'export' && mounted && c.capsules != null) {
+      await exportMaterial(context, c.capsules!, templateId: t.id);
+    }
     if (action == 'copy') {
-      await c.saveAsTemplate('${t.name} — копия', t.description, plan: t.plan);
+      await c.saveAsTemplate(
+        '${t.name} — копия',
+        t.description,
+        plan: t.plan,
+        parent: t,
+      );
     }
     if (action == 'default') await c.repository.setDefault(t.id);
     if (action == 'delete') {
@@ -266,8 +276,13 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                               unawaited(_action(v, t));
                             }
                           },
-                          itemBuilder: (_) => const [
-                            PopupMenuItem(
+                          itemBuilder: (_) => [
+                            if (c.capsules != null)
+                              const PopupMenuItem(
+                                value: 'export',
+                                child: Text('Экспорт шаблона'),
+                              ),
+                            const PopupMenuItem(
                               value: 'edit',
                               child: Text('Редактировать'),
                             ),

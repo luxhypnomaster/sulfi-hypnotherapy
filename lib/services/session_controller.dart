@@ -11,6 +11,9 @@ import '../models/modular_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
 import '../models/execution_identity.dart';
+import '../models/composition_identity.dart';
+import '../models/content_revision.dart';
+import '../data/content_revision_store.dart';
 import 'library_service.dart';
 import 'capsule_service.dart';
 import 'access_policy.dart';
@@ -54,6 +57,7 @@ class SessionController extends ChangeNotifier {
     editor._editorBaseline = _draftToken(draft);
     editor.assets = List.of(assets);
     editor.templates = List.of(templates);
+    editor._templateRevisions.addAll(_templateRevisions);
     editor.runs = List.of(runs);
     editor.nextNumber = nextNumber;
     return editor;
@@ -99,6 +103,35 @@ class SessionController extends ChangeNotifier {
   SessionTemplate? get baseTemplate =>
       templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
 
+  bool moduleDiffersFromSource(PhaseChild instance) {
+    if (!instance.isModule || instance.definitionVersion == null) return false;
+    final source = modules.source(
+      instance.definitionId!,
+      instance.definitionVersion!,
+    );
+    return source != null &&
+        stepsComposition(source.items) != stepsComposition(instance.items);
+  }
+
+  final List<SessionTemplate> _templateRevisions = [];
+  bool get templateDiffersFromSource {
+    final matches = [..._templateRevisions, ...templates]
+        .where(
+          (t) =>
+              t.id == draft.baseTemplateId &&
+              t.version == draft.baseTemplateVersion,
+        )
+        .toList();
+    final source =
+        matches.isNotEmpty &&
+            matches.map((t) => planComposition(t.plan)).toSet().length == 1
+        ? matches.first
+        : null;
+    return source != null &&
+        draft.baseTemplateVersion == source.version &&
+        planComposition(source.plan) != planComposition(draft.plan);
+  }
+
   Future<void> initialize() async {
     if (!isEditor) await repository.interruptUnfinished();
     await reload();
@@ -109,6 +142,16 @@ class SessionController extends ChangeNotifier {
     await modules.load();
     assets = await library.repository.list();
     templates = await repository.templates();
+    if (repository is SqliteSessionRepository) {
+      _templateRevisions.clear();
+      for (final r in await ContentRevisionStore(
+        (repository as SqliteSessionRepository).database,
+      ).list()) {
+        if (r.key.content.type == ContentType.template) {
+          _templateRevisions.add(SessionTemplate.fromMap(r.payload));
+        }
+      }
+    }
     runs = await repository.history();
     nextNumber = await repository.nextNumber();
     if (isEditor) {
@@ -433,6 +476,7 @@ class SessionController extends ChangeNotifier {
     String name,
     String description, {
     SessionPlan? plan,
+    SessionTemplate? parent,
   }) async {
     await flush();
     if (name.trim().isEmpty) {
@@ -441,6 +485,12 @@ class SessionController extends ChangeNotifier {
     final now = DateTime.now().toUtc();
     final template = SessionTemplate(
       id: newId(),
+      parentRevision: parent == null
+          ? null
+          : ContentRevisionStore.revisionForRow('session_templates', {
+              'id': parent.id,
+              'payload': jsonEncode(parent.toMap()),
+            })!.key,
       name: name.trim(),
       description: description.trim(),
       plan: SessionPlan.fromMap((plan ?? draft.plan).toMap()),
@@ -449,6 +499,16 @@ class SessionController extends ChangeNotifier {
     );
     await repository.saveTemplate(template);
     templates = await repository.templates();
+    if (repository is SqliteSessionRepository) {
+      _templateRevisions.clear();
+      for (final r in await ContentRevisionStore(
+        (repository as SqliteSessionRepository).database,
+      ).list()) {
+        if (r.key.content.type == ContentType.template) {
+          _templateRevisions.add(SessionTemplate.fromMap(r.payload));
+        }
+      }
+    }
     _notify();
     return template;
   }
@@ -482,11 +542,22 @@ class SessionController extends ChangeNotifier {
       version: old.version + 1,
       isDefault: old.isDefault,
       origin: old.origin,
+      parentRevision: old.parentRevision,
       baseRevision: old.baseRevision,
       author: old.author,
     );
     await repository.saveTemplate(updated);
     templates = await repository.templates();
+    if (repository is SqliteSessionRepository) {
+      _templateRevisions.clear();
+      for (final r in await ContentRevisionStore(
+        (repository as SqliteSessionRepository).database,
+      ).list()) {
+        if (r.key.content.type == ContentType.template) {
+          _templateRevisions.add(SessionTemplate.fromMap(r.payload));
+        }
+      }
+    }
     await loadTemplate(updated);
   }
 

@@ -276,6 +276,33 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                 ? null
                 : () => _action(_editor),
           ),
+          const SizedBox(height: 10),
+          FilledButton.icon(
+            key: const Key('history-home'),
+            style: FilledButton.styleFrom(
+              backgroundColor: neonPink,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(48, 60),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                fontStyle: FontStyle.italic,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+            ),
+            label: const Text(
+              'На главную страницу',
+              textAlign: TextAlign.center,
+            ),
+            icon: const Icon(Icons.home_outlined),
+            onPressed: busy
+                ? null
+                : () =>
+                      Navigator.of(context).popUntil((route) => route.isFirst),
+          ),
           const SizedBox(height: 16),
         ],
       ),

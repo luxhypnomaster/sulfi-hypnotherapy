@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/modular_plan.dart';
+import 'content_revision_store.dart';
+import '../models/content_revision.dart';
+import '../models/composition_identity.dart';
 import '../models/session_plan.dart';
 import '../services/access_policy.dart';
 
@@ -13,7 +16,27 @@ class ModuleCatalog {
   final Database? database;
   final Map<String, ModuleDefinition> _memory = {};
   List<ModuleDefinition> entries = [];
+  final List<ModuleDefinition> _revisions = [];
+  ModuleDefinition? source(String id, int version) {
+    final matches = [
+      ..._revisions,
+      ...entries,
+    ].where((m) => m.id == id && m.version == version).toList();
+    return matches.isNotEmpty &&
+            matches.map((m) => stepsComposition(m.items)).toSet().length == 1
+        ? matches.first
+        : null;
+  }
+
   Future<void> load() async {
+    if (database != null) {
+      _revisions.clear();
+      for (final r in await ContentRevisionStore(database!).list()) {
+        if (r.key.content.type == ContentType.module) {
+          _revisions.add(ModuleDefinition.fromMap(r.payload));
+        }
+      }
+    }
     entries = database == null
         ? _memory.values.toList()
         : (await database!.query('module_definitions'))
@@ -34,6 +57,8 @@ class ModuleCatalog {
       throw ArgumentError('Введите название модуля');
     }
     if (database == null) {
+      if (previousModule != null) _revisions.add(previousModule);
+      _revisions.add(module);
       _memory[module.id] = module;
     } else {
       await database!.transaction((tx) async {
@@ -59,6 +84,13 @@ class ModuleCatalog {
             'Происхождение определения нельзя менять при сохранении',
           );
         }
+        for (final row in previous) {
+          await ContentRevisionStore.retainRow(tx, 'module_definitions', row);
+        }
+        await ContentRevisionStore.retainRow(tx, 'module_definitions', {
+          'id': module.id,
+          'payload': jsonEncode(module.toMap()),
+        });
         await tx.insert('module_definitions', {
           'id': module.id,
           'payload': jsonEncode(module.toMap()),
@@ -111,6 +143,13 @@ class ModuleCatalog {
                 if (table == 'session_templates') {
                   m['version'] = (m['version'] as int) + 1;
                 }
+                if (table == 'session_templates') {
+                  await ContentRevisionStore.retainRow(tx, table, row);
+                  await ContentRevisionStore.retainRow(tx, table, {
+                    'id': row['id'],
+                    'payload': jsonEncode(m),
+                  });
+                }
                 await tx.update(
                   table,
                   {'payload': jsonEncode(m)},
@@ -139,6 +178,7 @@ class ModuleCatalog {
         recommendedPhaseIds: m.recommendedPhaseIds,
         version: m.version + 1,
         origin: m.origin,
+        parentRevision: m.parentRevision,
         baseRevision: m.baseRevision,
         author: m.author,
         items: [
