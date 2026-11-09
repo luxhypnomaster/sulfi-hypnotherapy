@@ -454,7 +454,7 @@ class _RunScreenState extends State<RunScreen> {
   }
 
   String _moduleLabel(String name) =>
-      'Модуль: ${name.replaceFirst(RegExp(r'^(?:\s*Модуль\s*:\s*)+', caseSensitive: false), '')}';
+      'Модуль: ${name.replaceFirst(RegExp(r'^(?:\s*Модуль(?:\s*:\s*|\s+))+', caseSensitive: false), '')}';
 
   Widget _scale() {
     final timeline = e.timeline, current = e.currentEntry;
@@ -950,7 +950,9 @@ class _RunScreenState extends State<RunScreen> {
         _duration(entries.where((x) => x.phase.id == entry?.phase.id).toList()),
       ),
       (
-        'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}',
+        entry?.moduleId == null
+            ? 'Модуль: Отдельный элемент'
+            : _moduleLabel(entry!.child.title),
         _duration(entries.where((x) => x.child.id == entry?.child.id).toList()),
       ),
       (

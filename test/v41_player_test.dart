@@ -835,6 +835,7 @@ void main() {
       await settleEngine(t, f);
       expect(timer(t), '0:00 / 1:05');
       expect(f.engine.currentEntry!.moduleId, isNotNull);
+      expect(find.textContaining('Модуль: Модуль:'), findsNothing);
       await capture13(t, 'current-in-module');
       await close(t, f);
     },
@@ -874,6 +875,7 @@ void main() {
           f.engine.tick();
           await settleEngine(t, f);
         }
+        f.clock.value += 65000;
         await t.runAsync(
           () => f.engine.seek(const Duration(milliseconds: 64900)),
         );
@@ -881,9 +883,14 @@ void main() {
         f.engine.tick();
         await settleEngine(t, f);
       }
+      if (f.engine.run!.phase == 'delay') {
+        f.engine.tick();
+        await settleEngine(t, f);
+      }
       await t.runAsync(f.engine.pause);
       await settleEngine(t, f);
       expect(f.engine.step!.kind, StepKind.silence);
+      expect(timer(t), '0:00 / 0:41');
       final moduleId = f.engine.timeline.phases.first.children[1].id;
       final moduleRow = find.byKey(ValueKey('player-module-$moduleId'));
       expect(
@@ -903,6 +910,12 @@ void main() {
       )) {
         expect(text.style!.color, const Color(0xffa6ed49));
       }
+      await t.ensureVisible(
+        find.byKey(
+          ValueKey('player-phase-${f.engine.timeline.phases.first.id}'),
+        ),
+      );
+      await t.pumpAndSettle();
       await capture13(t, 'completed-green-manually-expanded');
       await t.tap(moduleRow);
       await t.pump();
