@@ -504,6 +504,39 @@ class CapsuleService {
             if (revision.key.token != row['id']) {
               throw const FormatException('Несогласованная ревизия');
             }
+            try {
+              final payload = revision.payload;
+              if (payload['id'] != revision.key.content.id) {
+                throw const FormatException('ID ревизии');
+              }
+              switch (revision.key.content.type) {
+                case ContentType.track:
+                  final asset = AudioAsset.fromMap({
+                    ...payload,
+                    'filePath': payload['filePath'] ?? 'unavailable',
+                  });
+                  if (payload['filePath'] != null &&
+                      payload['filePath'] != 'capsule://${asset.contentHash}')
+                    throw const FormatException('Путь аудиоревизии');
+                  if (asset.contentHash != null &&
+                      !RegExp(r'^[a-f0-9]{64}$').hasMatch(asset.contentHash!))
+                    throw const FormatException('Хеш аудиоревизии');
+                  if (asset.durationMs <= 0 ||
+                      asset.fileSizeBytes <= 0 ||
+                      !{'wav', 'm4a', 'mp3'}.contains(asset.format)) {
+                    throw const FormatException('Аудиоревизия');
+                  }
+                case ContentType.module:
+                  final module = ModuleDefinition.fromMap(payload);
+                  _validatePlan(SessionPlan(steps: module.items));
+                case ContentType.template:
+                  _validatePlan(SessionTemplate.fromMap(payload).plan);
+              }
+            } catch (_) {
+              throw const FormatException(
+                'Некорректное содержимое сохранённой ревизии',
+              );
+            }
           }
           if (table == 'module_definitions') {
             final module = ModuleDefinition.fromMap(jsonDecode(row['payload']));

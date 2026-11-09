@@ -673,6 +673,7 @@ void main() {
     'traversal',
     'size',
     'duplicate',
+    'revision-payload',
   ]) {
     test('rejects $mode without touching destination', () async {
       final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
@@ -680,6 +681,16 @@ void main() {
         utf8.decode(decoded.findFile('manifest.json')!.content),
       ) as Map<String, dynamic>;
       if (mode == 'schema') manifest['schema'] = 999;
+      if (mode == 'revision-payload') {
+        final invalid = ContentRevision.create(
+          const ContentKey(ContentType.module, 'invalid'),
+          {'id': 'invalid'},
+        );
+        manifest['records']['content_revisions'].add({
+          'id': invalid.key.token,
+          'payload': jsonEncode(invalid.toMap()),
+        });
+      }
       if (mode == 'size') manifest['files'][0]['bytes'] += 1;
       if (mode == 'duplicate') {
         manifest['records']['audio_assets'].add(

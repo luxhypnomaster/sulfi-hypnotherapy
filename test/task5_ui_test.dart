@@ -447,6 +447,53 @@ void main() {
       await player.stop();
       await t.pumpWidget(const SizedBox());
       await io(t);
+      await t.runAsync(
+        () => c.repository.deleteTemplate(revision.key.content.id),
+      );
+      await t.runAsync(c.reload);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('ru.sulfi/device_files'),
+            (call) async => call.method == 'openZip' ? zip.path : null,
+          );
+      await show(
+        t,
+        Scaffold(
+          body: DiaryContentLink(
+            link: ContentLink(revision.key, ContentLinkAction.install),
+          ),
+        ),
+      );
+      await t.tap(find.text('Посмотреть / установить'));
+      await io(t);
+      await t.tap(find.text('Выбрать ZIP материалов'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 40 &&
+            find
+                .byKey(ValueKey('catalog-${revision.key.token}'))
+                .evaluate()
+                .isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      await t.tap(find.byKey(ValueKey('catalog-${revision.key.token}')));
+      await io(t);
+      await t.tap(find.widgetWithText(FilledButton, 'Установить'));
+      await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.text('Установлено').evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
+      expect(find.text('Установлено'), findsOneWidget);
+      await screenshot(t, 'task14-diary-install-through-link');
+      await t.pumpWidget(const SizedBox());
+      await io(t);
       final unknown = RevisionKey(
         const ContentKey(ContentType.track, 'unavailable'),
         'exact',

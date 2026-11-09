@@ -66,6 +66,9 @@ void main() {
     final damaged = fork.toMap();
     damaged['payload'] = {'title': 'подмена'};
     expect(() => ContentRevision.fromMap(damaged), throwsFormatException);
+    final rebound = official.toMap();
+    rebound['logicalId'] = 'other';
+    expect(() => ContentRevision.fromMap(rebound), throwsFormatException);
     expect(() => official.fork('official'), throwsArgumentError);
   });
   test('diary exact ContentLink and future fields survive old entry/copy/serialization; live publishing stays blocked', () {

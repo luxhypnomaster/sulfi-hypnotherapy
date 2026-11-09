@@ -77,6 +77,8 @@ class ContentRevision {
     int? declaredVersion,
   }) {
     final body = {
+      'type': content.type.name,
+      'logicalId': content.id,
       'payload': payload,
       'dependencies': dependencies.map((d) => d.toMap()).toList(),
       'parent': parent?.toMap(),
