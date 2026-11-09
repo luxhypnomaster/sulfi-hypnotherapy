@@ -276,7 +276,7 @@ class _RunScreenState extends State<RunScreen> {
                                       const SizedBox(height: 3),
                                       _totals(f),
                                       const SizedBox(height: 4),
-                                      if (!landscape) Expanded(child: _watch()),
+                                      if (!landscape) Flexible(child: _watch()),
                                       if (!landscape) _info(compact: compact),
                                       if (!landscape) const SizedBox(height: 6),
                                       _navigation(
@@ -525,7 +525,7 @@ class _RunScreenState extends State<RunScreen> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: isPhase ? 12 : 11,
+                      fontSize: isPhase ? 10 : 9,
                       height: 1.15,
                       color: color,
                       fontWeight: isPhase ? FontWeight.w700 : FontWeight.normal,
@@ -535,7 +535,7 @@ class _RunScreenState extends State<RunScreen> {
                 const SizedBox(width: 3),
                 Text(
                   _duration(entries),
-                  style: TextStyle(fontSize: 11, color: color),
+                  style: TextStyle(fontSize: 10, color: color),
                 ),
               ],
             ),
@@ -546,7 +546,7 @@ class _RunScreenState extends State<RunScreen> {
 
     return LayoutBuilder(
       builder: (context, box) {
-        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(42.0, 72.0);
+        final flaskWidth = (box.maxHeight * 190 / 1517).clamp(34.0, 52.0);
         return Stack(
           children: [
             Positioned(
@@ -561,6 +561,18 @@ class _RunScreenState extends State<RunScreen> {
                 child: PlayerArt(
                   flask: true,
                   liquid: e.forecast.liquidFraction ?? 1,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: flaskWidth * .015,
+              width: flaskWidth * .86,
+              height: box.maxHeight * 145 / 1517 + 4,
+              child: IgnorePointer(
+                child: Image.asset(
+                  'assets/player/snake_front.png',
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
@@ -758,7 +770,7 @@ class _RunScreenState extends State<RunScreen> {
                 Positioned(
                   left: width * .12,
                   right: width * .17,
-                  top: math.max(height * .72, height * .54 + buttonSize),
+                  top: math.max(height * .72, height * .48 + buttonSize),
                   key: const Key('watch-time'),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
@@ -774,7 +786,7 @@ class _RunScreenState extends State<RunScreen> {
               Positioned(
                 left: width * .1,
                 right: width * .16,
-                top: (height * .54).clamp(
+                top: (height * .48).clamp(
                   0.0,
                   math.max(0.0, height - buttonSize),
                 ),
@@ -962,12 +974,15 @@ class _RunScreenState extends State<RunScreen> {
                               label: hint,
                               button: true,
                               child: ExcludeSemantics(
-                                child: Text(
-                                  '$prefix\n$noun',
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    height: 1.1,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '$prefix\n$noun',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      height: 1.1,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -65,12 +65,14 @@ class _ArtPainter extends CustomPainter {
           ..addRect(const Rect.fromLTWH(0, 1440, 185, 77)),
       );
       canvas.clipPath(ornamentalClip);
+      // The old profile head ends above y=145. Keep only its lower body.
+      canvas.clipRect(const Rect.fromLTRB(0, 145, 190, 1517));
       if (source != null) {
         canvas.drawImageRect(
           source!,
           const Rect.fromLTWH(0, 136, 190, 1517),
           const Rect.fromLTWH(0, 0, 190, 1517),
-          Paint(),
+          Paint()..blendMode = BlendMode.screen,
         );
       }
       canvas.restore();

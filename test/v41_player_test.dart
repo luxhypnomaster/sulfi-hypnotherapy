@@ -30,6 +30,7 @@ class Fixture {
     int workTracks = 24,
     bool exit = true,
     bool unknownWork = false,
+    bool longSession = false,
   }) async {
     final dir = await Directory.systemTemp.createTemp('sulfi_v41_ui');
     final audio = MemoryRepository();
@@ -86,6 +87,44 @@ class Fixture {
           title: 'Работа без ограничения',
           durationMs: null,
         ),
+      );
+    }
+    if (longSession) {
+      await c.clearPlan();
+      for (var i = 0; i < 6; i++) {
+        final phase = await c.createPhase('work');
+        await c.addModule(
+          phase,
+          ModuleDefinition(
+            id: 'long-$i',
+            title: 'Индукция Элман v2',
+            items: [
+              SessionStep(
+                id: 'a-$i',
+                kind: StepKind.audio,
+                title: 'Внешний фокус',
+                audioAssetId: sampleAsset().id,
+                durationMs: 150000,
+              ),
+              SessionStep(
+                id: 'p-$i',
+                kind: StepKind.silence,
+                title: 'Пауза',
+                durationMs: 41000,
+              ),
+              SessionStep(
+                id: 'b-$i',
+                kind: StepKind.audio,
+                title: 'Углубление погружения',
+                audioAssetId: sampleAsset().id,
+                durationMs: 180000,
+              ),
+            ],
+          ),
+        );
+      }
+      await c.setText(
+        topic: 'Длинная тема сессии для проверки безопасной разметки',
       );
     }
     final transport = TestTransport();
@@ -553,6 +592,54 @@ void main() {
     expect(find.text('Личная подготовка — трек 2'), findsOneWidget);
     await close(t, f);
   });
+  for (final size in [const Size(360, 800), const Size(412, 915)]) {
+    for (final scale in [1.0, 1.3]) {
+      for (final longSession in [false, true]) {
+        testWidgets('Task12 $size scale=$scale long=$longSession', (t) async {
+          final f = (await t.runAsync(
+            () => Fixture.create(workTracks: 3, longSession: longSession),
+          ))!;
+          await open(t, f, size: size, scale: scale, systemBars: true);
+          await t.runAsync(() async {
+            await Future<void>.delayed(const Duration(milliseconds: 100));
+          });
+          await t.pumpAndSettle();
+          expect(f.engine.timeline.phases.length, longSession ? 6 : 3);
+          expect(
+            find.byKey(const Key('finish-session')).hitTestable(),
+            findsOneWidget,
+          );
+          expect(
+            find.byKey(const Key('watch-play-pause')).hitTestable(),
+            findsOneWidget,
+          );
+          final left = t.getRect(find.byKey(const Key('phase-scale')));
+          final right = t.getRect(find.byKey(const Key('player-context')));
+          expect(left.right, lessThanOrEqualTo(right.left));
+          expect(t.takeException(), isNull);
+          const output = String.fromEnvironment('SULFI_TASK12_SCREENSHOTS');
+          if (output.isNotEmpty) {
+            await t.runAsync(() async {
+              final b = t.renderObject<RenderRepaintBoundary>(
+                find.byKey(const Key('player-capture')),
+              );
+              final image = await b.toImage(pixelRatio: 2);
+              final bytes = await image.toByteData(
+                format: ui.ImageByteFormat.png,
+              );
+              final path = Directory(output);
+              await path.create(recursive: true);
+              await File(
+                '${path.path}/${size.width.toInt()}x${size.height.toInt()}-$scale-${longSession ? 'long' : 'short'}.png',
+              ).writeAsBytes(bytes!.buffer.asUint8List());
+              image.dispose();
+            });
+          }
+          await close(t, f);
+        });
+      }
+    }
+  }
   testWidgets('optional V41 rendered screenshots', (t) async {
     const output = String.fromEnvironment('SULFI_V41_SCREENSHOTS');
     if (output.isEmpty) return;
