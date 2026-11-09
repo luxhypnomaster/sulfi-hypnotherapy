@@ -17,7 +17,21 @@ class ModuleCatalog {
   final Map<String, ModuleDefinition> _memory = {};
   List<ModuleDefinition> entries = [];
   final List<ModuleDefinition> _revisions = [];
-  ModuleDefinition? source(String id, int version) {
+  ModuleDefinition? source(String id, int version, {RevisionKey? revision}) {
+    if (revision != null) {
+      if (revision.content.type != ContentType.module ||
+          revision.content.id != id) {
+        return null;
+      }
+      return [..._revisions, ...entries]
+          .where(
+            (m) =>
+                m.id == id &&
+                m.revisionKey.token == revision.token &&
+                m.revisionKey.digest == revision.digest,
+          )
+          .firstOrNull;
+    }
     final matches = [
       ..._revisions,
       ...entries,
@@ -127,6 +141,7 @@ class ModuleCatalog {
                           description: fresh.description,
                           definitionId: fresh.definitionId,
                           definitionVersion: fresh.definitionVersion,
+                          sourceRevision: fresh.sourceRevision,
                           baseFingerprint: fresh.baseFingerprint,
                           enabled: child.enabled,
                           items: fresh.items,

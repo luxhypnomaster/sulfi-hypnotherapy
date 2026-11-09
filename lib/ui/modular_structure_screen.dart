@@ -8,6 +8,7 @@ import '../models/modular_plan.dart';
 import '../services/session_controller.dart';
 import '../services/preview_player.dart';
 import 'design.dart';
+import 'changed_content_name.dart';
 import 'modules_screen.dart';
 import 'library_screen.dart';
 import 'recorder_screen.dart';
@@ -706,10 +707,12 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                   ),
                 const SizedBox(width: 5),
                 Expanded(
-                  child: Text(
-                    phase ? 'Фаза: ${p.title}' : 'Модуль: ${child!.title}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  child: ChangedContentName(
+                    title: phase
+                        ? 'Фаза: ${p.title}'
+                        : 'Модуль: ${child!.title}',
+                    changed: !phase && c.moduleDiffersFromSource(child!),
+                    markerKey: ValueKey('module-changed-${child?.id}'),
                     style: TextStyle(
                       fontSize: phase ? 15 : 13,
                       height: 1.12,

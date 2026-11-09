@@ -7,6 +7,9 @@ import '../models/session_plan.dart';
 import '../services/session_controller.dart';
 import 'booking.dart';
 import 'design.dart';
+import 'changed_content_name.dart';
+import 'space_sheet.dart';
+import 'session_actions.dart';
 import '../services/preview_player.dart';
 import 'preview_bar.dart';
 import 'diary_home.dart';
@@ -191,7 +194,48 @@ class HomeComposition extends StatelessWidget {
                 SizedBox(
                   key: const Key('home-portrait'),
                   height: headerHeight,
-                  child: const HomeReferenceHeader(),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      const HomeReferenceHeader(),
+                      Positioned(
+                        top: 0,
+                        right: 4,
+                        child: IconButton(
+                          key: const Key('home-space'),
+                          tooltip: 'О приложении и данных',
+                          constraints: const BoxConstraints(
+                            minWidth: 48,
+                            minHeight: 48,
+                          ),
+                          onPressed: busy || player == null
+                              ? null
+                              : () => showSpaceSheet(
+                                  context,
+                                  library: controller.library,
+                                  controller: controller,
+                                  player: player!,
+                                  onReset: () =>
+                                      showActionError(context, () async {
+                                        if (!await confirmAction(
+                                          context,
+                                          'Удалить все данные?',
+                                          'Библиотека, шаблоны, текущая конфигурация и история будут удалены с этого устройства. Исходные файлы останутся на месте.',
+                                          confirm: 'Удалить всё',
+                                        )) {
+                                          return;
+                                        }
+                                        await player!.stop();
+                                        await controller.library.reset();
+                                        await controller.reload();
+                                      }),
+                                ),
+                          icon: const Icon(Icons.shield_outlined),
+                          color: neonPink,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: DiaryHomeBoard(
@@ -650,10 +694,10 @@ class _HomePlanOverviewState extends State<HomePlanOverview> {
                     ),
                   ),
                   Expanded(
-                    child: Text(
-                      'Модуль: ${c.title}',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    child: ChangedContentName(
+                      title: 'Модуль: ${c.title}',
+                      changed: widget.moduleDiffers?.call(c) == true,
+                      markerKey: ValueKey('module-changed-${c.id}'),
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -820,8 +864,10 @@ class _TemplateStrip extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 80),
                   child: SingleChildScrollView(
-                    child: Text(
-                      title,
+                    child: ChangedContentName(
+                      title: title,
+                      changed: controller.templateDiffersFromSource,
+                      markerKey: const Key('template-changed'),
                       style: TextStyle(
                         fontSize: 12,
                         height: 1.2,

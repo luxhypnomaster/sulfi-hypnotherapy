@@ -78,6 +78,7 @@ class PhaseChild {
     this.description = '',
     this.definitionId,
     this.definitionVersion,
+    this.sourceRevision,
     this.baseFingerprint,
     this.detached = false,
     this.enabled = true,
@@ -86,6 +87,7 @@ class PhaseChild {
   final String id, title, description;
   final String? definitionId, baseFingerprint;
   final int? definitionVersion;
+  final RevisionKey? sourceRevision;
   final bool enabled;
   final bool detached;
   final List<SessionStep> items;
@@ -105,6 +107,7 @@ class PhaseChild {
     description: description ?? this.description,
     definitionId: definitionId,
     definitionVersion: definitionVersion,
+    sourceRevision: sourceRevision,
     baseFingerprint: baseFingerprint,
     detached:
         detached ||
@@ -123,6 +126,7 @@ class PhaseChild {
     if (description.isNotEmpty) 'description': description,
     'definitionId': definitionId,
     'definitionVersion': definitionVersion,
+    if (sourceRevision != null) 'sourceRevision': sourceRevision!.toMap(),
     'baseFingerprint': baseFingerprint,
     if (detached) 'detached': true,
     'enabled': enabled,
@@ -134,6 +138,9 @@ class PhaseChild {
     description: m['description'] ?? '',
     definitionId: m['definitionId'],
     definitionVersion: m['definitionVersion'],
+    sourceRevision: m['sourceRevision'] == null
+        ? null
+        : RevisionKey.fromMap(Map<String, dynamic>.from(m['sourceRevision'])),
     baseFingerprint: m['baseFingerprint'],
     detached: m['detached'] ?? false,
     enabled: m['enabled'] ?? true,
@@ -170,6 +177,12 @@ class ModuleDefinition {
   final RevisionKey? parentRevision;
   final List<SessionStep> items;
   final DateTime updatedAt;
+  RevisionKey get revisionKey => ContentRevision.create(
+    ContentKey(ContentType.module, id),
+    toMap(),
+    declaredVersion: version,
+    parent: parentRevision,
+  ).key;
   PhaseChild instantiate(String phaseId) {
     final cloned = items
         .map((s) => s.copyWith(id: newId(), groupId: phaseId))
@@ -180,6 +193,7 @@ class ModuleDefinition {
       description: description,
       definitionId: id,
       definitionVersion: version,
+      sourceRevision: revisionKey,
       items: cloned,
     );
     return PhaseChild(
@@ -188,6 +202,7 @@ class ModuleDefinition {
       description: description,
       definitionId: id,
       definitionVersion: version,
+      sourceRevision: revisionKey,
       items: cloned,
       baseFingerprint: child.fingerprint,
     );
