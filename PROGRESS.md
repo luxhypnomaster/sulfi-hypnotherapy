@@ -13,7 +13,18 @@
 - next gate: G1 ACTIVE — occurrence A/B/C, отдельныйmarker, Home shield/shared sheet.
 - next command: rg -n 'metadata refresh|moduleDiffersFromSource|_privacy' test/mvp_structure_test.dart lib/services/session_controller.dart lib/ui/library_screen.dart
 
-## G1 — IN PROGRESS
+## G1 — COMPLETE
 Читать TASK_RU.md §1 и acceptance UI-01…UI-13. Не переписывать уже работающий CapsuleService/плеер. Проверить гипотезу: editor.reload обновляет durationMs всем старым экземплярам, но источник хранит прежний кеш длительности; новая копия C не проходит этот refresh. Прежде фикса написать regression с такой metadata drift и реальным A/B/C, persistence и Undo. Сохранить существующий тест metadata refresh.
 
-G2–G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+G2: ACTIVE. G3–G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+
+### G1 checkpoint
+- before_sha: 5177c62
+- after_sha: bcedbb0dfd7b896e2d7e01eded57192d45638987
+- PASS_IDs: UI-01…UI-13; BAS-03 restricted paths unchanged.
+- PARTIAL_IDs: none for G1; source legacy ambiguity remains neutral by design.
+- root cause: library duration cache refresh changed all old occurrences; semantic comparison now uses the same measured metadata for both source and occurrence. Exact sourceRevision persisted on new module instances; no source mutation.
+- files/tables: composition_identity, ModuleCatalog/PhaseChild/SessionController, ChangedContentName, Home/Library/shared space_sheet; optional JSON fields only, schema remains9.
+- tests: G1 reproduction failed beforefix [true,true] vs[true,false]; afterfix 13 unit/storage regressions PASS; UI11 PASS (9 sizes/scales +markers +clientEdition); legacy metadata-refresh/style2 PASS; analyze clean.
+- evidence: /workspace/scratch/task15/g1-*.log, report/screenshots/g1-*.png.
+- next exact step: G2 TASK_RU §2 + EXPORT_IMPORT_UX.md; inspect MainActivity saveZip hardcoded EXTRA_TITLE, add deterministic filename/UTC originalTitle, visible import using sameLocalCatalogSource. Do not rerunG1/full suite without cause.
