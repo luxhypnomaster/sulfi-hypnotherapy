@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../models/session_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_timeline.dart';
-import '../models/local_dates.dart';
 import '../services/session_engine.dart';
 import 'design.dart';
 import 'player_art.dart';
@@ -54,6 +53,7 @@ class _RunScreenState extends State<RunScreen> {
     }
   }
 
+  Timer? _dateTimer;
   String? _lastItem;
   double? _scrubMs;
   bool _historyQueued = false;
@@ -61,6 +61,9 @@ class _RunScreenState extends State<RunScreen> {
   void initState() {
     super.initState();
     e.addListener(_checkEnd);
+    _dateTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
   }
 
   void _checkEnd() {
@@ -85,6 +88,7 @@ class _RunScreenState extends State<RunScreen> {
   @override
   void dispose() {
     e.removeListener(_checkEnd);
+    _dateTimer?.cancel();
     _scroll.dispose();
     super.dispose();
   }
@@ -268,11 +272,12 @@ class _RunScreenState extends State<RunScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
+                                      _date(),
+                                      const SizedBox(height: 3),
                                       _totals(f),
                                       const SizedBox(height: 4),
-                                      if (!landscape) Flexible(child: _watch()),
-                                      if (!landscape && body.maxHeight >= 380)
-                                        _info(compact: compact),
+                                      if (!landscape) Expanded(child: _watch()),
+                                      if (!landscape) _info(compact: compact),
                                       if (!landscape) const SizedBox(height: 6),
                                       _navigation(
                                         height: landscape ? 30 : 48,
@@ -372,55 +377,19 @@ class _RunScreenState extends State<RunScreen> {
         ),
       ],
     );
-    final date = Text(
-      historicalDateLabel(
-        run.startedAt,
-        run.startedUtcOffsetMinutes,
-        legacyLabel: run.name,
-      ),
+    return heading;
+  }
+
+  Widget _date() {
+    final now = DateTime.now();
+    const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    String two(int n) => n.toString().padLeft(2, '0');
+    return Text(
+      '${days[now.weekday - 1]}, ${two(now.day)}.${two(now.month)}.${now.year} · ${two(now.hour)}:${two(now.minute)}',
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 11, color: antiqueGold),
-    );
-    final slogan = Text(
-      'Время трансформации',
-      maxLines: landscape || compact ? 1 : null,
-      style: TextStyle(
-        color: neonPink,
-        fontSize: landscape ? 14 : 20,
-        fontWeight: FontWeight.w800,
-      ),
-    );
-    if (landscape) {
-      return Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [heading, slogan, date],
-            ),
-          ),
-          const SizedBox(width: 8),
-        ],
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        heading,
-        if (compact)
-          SizedBox(
-            height: 28,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: slogan,
-            ),
-          )
-        else
-          slogan,
-        date,
-      ],
+      textAlign: TextAlign.right,
+      style: const TextStyle(fontSize: 10, color: antiqueGold),
     );
   }
 
@@ -472,6 +441,14 @@ class _RunScreenState extends State<RunScreen> {
       ],
     ),
   );
+
+  String _duration(List<TimelineEntry> entries) {
+    if (entries.isEmpty) return '—';
+    if (entries.any((x) => x.step.durationMs == null)) return '≈ —';
+    return formatDuration(
+      entries.fold<int>(0, (sum, x) => sum + x.step.estimatedMs),
+    );
+  }
 
   Widget _scale() {
     final timeline = e.timeline, current = e.currentEntry;
@@ -545,7 +522,8 @@ class _RunScreenState extends State<RunScreen> {
                 Expanded(
                   child: Text(
                     title,
-                    maxLines: null,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: isPhase ? 12 : 11,
                       height: 1.15,
@@ -553,6 +531,11 @@ class _RunScreenState extends State<RunScreen> {
                       fontWeight: isPhase ? FontWeight.w700 : FontWeight.normal,
                     ),
                   ),
+                ),
+                const SizedBox(width: 3),
+                Text(
+                  _duration(entries),
+                  style: TextStyle(fontSize: 11, color: color),
                 ),
               ],
             ),
@@ -627,7 +610,9 @@ class _RunScreenState extends State<RunScreen> {
                               (x) => x.child.id == child.id,
                             ))
                               row(
-                                '${entry.step.kind == StepKind.audio ? '' : '${entry.step.kind.label}: '}${entry.step.title}',
+                                entry.step.kind == StepKind.audio
+                                    ? entry.step.title
+                                    : 'Пауза',
                                 [entry],
                                 isPhase: false,
                                 key: _rowKeys.putIfAbsent(
@@ -692,17 +677,12 @@ class _RunScreenState extends State<RunScreen> {
       final fraction = duration == null || duration == 0
           ? 0.0
           : position / duration;
-      final label = e.run!.phase == 'delay'
-          ? 'Пауза перед треком'
-          : e.step?.kind == StepKind.audio
-          ? e.step!.title
-          : 'Пауза';
       final width = math.min(
         box.maxWidth,
         math.max(144.0, box.maxHeight * 470 / 595),
       );
       final height = math.min(box.maxHeight, width * 595 / 470);
-      final buttonSize = math.min(48.0, math.max(20.0, height * .18));
+      final buttonSize = 48.0;
       Future<void> commit() async {
         final value = _scrubMs;
         if (value == null || !e.canSeek || e.busy) return;
@@ -778,7 +758,7 @@ class _RunScreenState extends State<RunScreen> {
                 Positioned(
                   left: width * .12,
                   right: width * .17,
-                  top: height * .66,
+                  top: math.max(height * .72, height * .54 + buttonSize),
                   key: const Key('watch-time'),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
@@ -794,7 +774,7 @@ class _RunScreenState extends State<RunScreen> {
               Positioned(
                 left: width * .1,
                 right: width * .16,
-                top: (height * .43).clamp(
+                top: (height * .54).clamp(
                   0.0,
                   math.max(0.0, height - buttonSize),
                 ),
@@ -829,19 +809,6 @@ class _RunScreenState extends State<RunScreen> {
                   ],
                 ),
               ),
-              if (height >= 160)
-                Positioned(
-                  left: width * .18,
-                  right: width * .23,
-                  top: height * .77,
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 10, color: antiqueGold),
-                  ),
-                ),
             ],
           ),
         ),
@@ -851,12 +818,24 @@ class _RunScreenState extends State<RunScreen> {
 
   Widget _info({required bool compact}) {
     final entry = e.currentEntry;
+    final entries = e.timeline.entries;
     final fields = [
-      if (!compact)
+      (
         'Шаблон: ${e.run!.snapshot.baseTemplateName ?? 'Без шаблона'}',
-      'Фаза: ${entry?.phase.title ?? '—'}',
-      'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}',
-      if (!compact) 'Трек: ${e.step?.title ?? '—'}',
+        _duration(entries),
+      ),
+      (
+        'Фаза: ${entry?.phase.title ?? '—'}',
+        _duration(entries.where((x) => x.phase.id == entry?.phase.id).toList()),
+      ),
+      (
+        'Модуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}',
+        _duration(entries.where((x) => x.child.id == entry?.child.id).toList()),
+      ),
+      (
+        'Трек: ${e.step?.kind == StepKind.audio ? e.step?.title ?? '—' : 'Пауза'}',
+        _duration(entry == null ? [] : [entry]),
+      ),
     ];
     return Container(
       key: const Key('player-context'),
@@ -866,17 +845,40 @@ class _RunScreenState extends State<RunScreen> {
         border: Border.all(color: neonPink),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final s in fields)
-            Text(
-              s,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11),
-            ),
-        ],
+      child: SizedBox(
+        height: compact ? 86 : 112,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final field in fields)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          field.$1,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        field.$2,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: antiqueGold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -961,9 +963,7 @@ class _RunScreenState extends State<RunScreen> {
                               button: true,
                               child: ExcludeSemantics(
                                 child: Text(
-                                  compact
-                                      ? '${forward ? '→' : '←'} $noun'
-                                      : '$prefix\n$noun',
+                                  '$prefix\n$noun',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontSize: 11,

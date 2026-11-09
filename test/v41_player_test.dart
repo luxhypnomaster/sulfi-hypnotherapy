@@ -205,11 +205,10 @@ void main() {
     (t) async {
       final f = (await t.runAsync(() => Fixture.create()))!;
       await open(t, f);
-      expect(find.text('Время трансформации'), findsOneWidget);
-      expect(
-        t.widget<Text>(find.text('Время трансформации')).style!.color,
-        const Color(0xffff168f),
-      );
+      expect(find.text('Время трансформации'), findsNothing);
+      expect(find.text('Предыдущий\nтрек'), findsOneWidget);
+      expect(find.text('Следующий\nмодуль'), findsOneWidget);
+      expect(find.text('Предыдущая\nфаза'), findsOneWidget);
       expect(find.byKey(const Key('watch-play-pause')), findsOneWidget);
       expect(find.text('Закончить сеанс'), findsOneWidget);
       for (final unit in NavigationUnit.values) {
@@ -527,7 +526,7 @@ void main() {
         findsOneWidget,
       );
       final text = t.widget<Text>(
-        find.descendant(of: row, matching: find.byType(Text)),
+        find.descendant(of: row, matching: find.byType(Text)).first,
       );
       expect(text.style!.color, const Color(0xffa6ed49));
       expect(
