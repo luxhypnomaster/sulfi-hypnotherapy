@@ -84,3 +84,10 @@ G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: 
 - publication: no merge/main/develop changes, no release/deploy/OAuth/ACL changes. Author0.4.13+18 package/signing preserved; .clienttest companion separate.
 - exact next commands: env -u GH_TOKEN gh run list --repo luxhypnomaster/sulfi-hypnotherapy --branch feat/task15-pre-server-readiness --limit 3; verify newest head SHA==git rev-parse HEAD, conclusion success, both APK artifacts/certificate diagnostics. Final result/links/readback saved in Drive folder1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS. If CI red, fix ONLY failing boundary then new commit/checkpoint; do not repeat G0-G5.
 - resume after complete delivery: read docs/task15/MIGRATION_BLOCKER.md before any G3 continuation; do not connect the future provider to live server without a separate approved task.
+
+### G6 delivery evidence checkpoint
+- before_sha: 9a191e5256364cc6ea518dfd66128023ae5755aa
+- after_sha: 9e32aa74f6b9f96faa2b3c4963e9c73699a046d2 (workflow-only public SHA256 output; app code unchanged)
+- reason: private artifact Azure downloads were blocked in this environment in previous cycles. Log both public APK byte hashes directly in CI diagnostics so APK_INFO can quote actual binary SHA without guessing from artifact ZIP digest.
+- run42679000217 superseded before full-suite completion by final-head dispatch; do not count it as final PASS. Final run must match the HEAD containing this checkpoint.
+- next command: env -u GH_TOKEN gh run list --repo luxhypnomaster/sulfi-hypnotherapy --branch feat/task15-pre-server-readiness --limit 2; then verify both build/checksum/signature steps and upload final reports. No app source changes after G6 corrected tests.
