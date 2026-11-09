@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+
+import '../models/diary_publication.dart';
+import 'diary_read_state.dart';
 
 import '../data/diary_repository.dart';
 import '../models/diary_entry.dart';
@@ -12,6 +17,8 @@ class DiaryController extends ChangeNotifier {
   DiaryController(
     this.repository, {
     this.api,
+    DiaryReadStore? reads,
+    DateTime Function()? clock,
     this.policy,
     this.authorRepository,
     this.identity,
@@ -19,7 +26,118 @@ class DiaryController extends ChangeNotifier {
     this.audioFactory,
     this.allowDebugAuthor = false,
     this.authorEmail = 'luxhypnomaster@gmail.com',
-  });
+  }) : reads = reads ?? DiaryReadStore(repository.database),
+       clock = clock ?? DateTime.now;
+  final DiaryReadStore reads;
+  final DateTime Function() clock;
+  Timer? _expiry;
+  int _rotation = 0;
+  final _readerAudio = <String, DiaryAudio>{};
+  final _heard = <String, HeardAudio>{};
+  void rotateHome() {
+    _rotation++;
+    notifyListeners();
+  }
+
+  void refreshVisibility() {
+    notifyListeners();
+    _scheduleExpiry();
+  }
+
+  void _scheduleExpiry() {
+    _expiry?.cancel();
+    final now = clock().toUtc();
+    final ends =
+        published
+            .map(DiaryPublication.of)
+            .where((p) => p.validUntil != null && p.validUntil!.isAfter(now))
+            .map((p) => p.validUntil!)
+            .toList()
+          ..sort();
+    if (ends.isNotEmpty) {
+      _expiry = Timer(ends.first.difference(now), refreshVisibility);
+    }
+  }
+
+  Future<void> textProgress(DiaryEntry e, int page, {bool end = false}) async {
+    if (!reads.loaded) return;
+    final wasRead = reads.isRead(e);
+    await reads.progress(e, page: page, textEnd: end);
+    if (wasRead != reads.isRead(e)) notifyListeners();
+  }
+
+  DiaryAudio? audioFor(DiaryEntry e, {bool preview = false}) {
+    if (audioFactory == null) return null;
+    if (preview || !reads.loaded) return audioFactory!();
+    final key = '${reads.key(e)}:${reads.fingerprint(e)}';
+    return _readerAudio.putIfAbsent(key, () {
+      final audio = audioFactory!();
+      audio.addListener(() {
+        final latest = published.where((p) => p.id == e.id).firstOrNull;
+        if (latest != null &&
+            (DiaryPublication.of(latest).cycle !=
+                    DiaryPublication.of(e).cycle ||
+                reads.fingerprint(latest) != reads.fingerprint(e))) {
+          return;
+        }
+        final id = audio.current;
+        if (id == null) return;
+        final block = e.blocks.where((b) => b.id == id).firstOrNull;
+        if (block == null || block.type != DiaryBlockType.audio) return;
+        final state = reads.state(e);
+        final saved =
+            state['fingerprint'] == reads.fingerprint(e) &&
+                state['audio'] is Map
+            ? state['audio'][id]
+            : null;
+        final heard = _heard.putIfAbsent(
+          '$key:$id:${block.media?.hash}',
+          () => HeardAudio(
+            intervals: saved is Map
+                ? (saved['intervals'] as List? ?? [])
+                      .map((i) => List<int>.from(i))
+                      .toList()
+                : const [],
+          ),
+        );
+        final done = heard.sample(
+          position: audio.position.inMilliseconds,
+          nowMs: clock().millisecondsSinceEpoch,
+          playing: audio.playing,
+          completed: audio.transport.completed,
+          duration: audio.duration?.inMilliseconds ?? block.durationMs ?? 0,
+          seekEpoch: audio.seekEpoch,
+        );
+        final wasRead = reads.isRead(e);
+        unawaited(
+          reads
+              .progress(
+                e,
+                audioId: id,
+                intervals: heard.intervals.map((i) => List<int>.of(i)).toList(),
+                audioDone: done,
+              )
+              .then((_) {
+                if (wasRead != reads.isRead(e)) notifyListeners();
+              })
+              .catchError((Object _) {}),
+        );
+      });
+      return audio;
+    });
+  }
+
+  bool ownsAudio(DiaryAudio? audio) => _readerAudio.values.contains(audio);
+
+  @override
+  void dispose() {
+    _expiry?.cancel();
+    for (final audio in _readerAudio.values) {
+      unawaited(audio.close());
+    }
+    super.dispose();
+  }
+
   final DiaryRepository repository;
   final AccessPolicy? policy;
   final DiaryAuthorRepository? authorRepository;
@@ -32,13 +150,19 @@ class DiaryController extends ChangeNotifier {
   bool debugAuthor = false;
   bool hasCache = false;
   void enterDebugAuthor() {
-    if (!kDebugMode || !allowDebugAuthor) return;
+    if (!kDebugMode || !allowDebugAuthor || (policy?.clientEdition ?? false)) {
+      return;
+    }
     debugAuthor = true;
     _localAuthor = true;
     notifyListeners();
   }
 
-  DiaryEntry? get currentEntry => published.firstOrNull;
+  DiaryEntry? get currentEntry {
+    final list = diaryRotation(published, clock(), reads.isRead);
+    return list.isEmpty ? null : list[_rotation % list.length];
+  }
+
   Future<void> deleteEntry(DiaryEntry entry) async {
     if (!authorWorkspace) {
       throw const DiaryApiException('Авторский режим недоступен');
@@ -90,13 +214,23 @@ class DiaryController extends ChangeNotifier {
       (policy?.isAuthor ?? true);
   bool get authorWorkspace =>
       authorRepository != null &&
+      !(policy?.clientEdition ?? false) &&
       (policy != null || identity == null || _localAuthor);
   bool get authenticated => _session?.valid ?? false;
   List<DiaryEntry> published = [], drafts = [];
   bool syncing = false;
   String? error;
   Future<void> load() async {
+    await reads.load();
+    final oldCycles = published
+        .map((e) => '${e.id}:${DiaryPublication.of(e).cycle}')
+        .toSet();
     published = await repository.published();
+    if (published.any(
+      (e) => !oldCycles.contains('${e.id}:${DiaryPublication.of(e).cycle}'),
+    )) {
+      _rotation = 0;
+    }
     hasCache = await repository.revision() != null;
     final work = authorWorkspace
         ? await authorRepository!.entries()
@@ -106,6 +240,7 @@ class DiaryController extends ChangeNotifier {
         (authorWorkspace && authorRepository!.invalidIds.isNotEmpty)) {
       error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
     }
+    _scheduleExpiry();
     notifyListeners();
   }
 
@@ -246,7 +381,8 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {
-    if (entry.extra.containsKey('contentLinks')) {
+    if (entry.extra.containsKey('contentLinks') ||
+        entry.extra.containsKey('publication')) {
       throw const DiaryApiException(
         'Ссылки на материалы пока сохраняются только локально. Серверный контракт не подтверждён.',
       );
@@ -269,7 +405,8 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
-    if (entry.extra.containsKey('contentLinks')) {
+    if (entry.extra.containsKey('contentLinks') ||
+        entry.extra.containsKey('publication')) {
       throw const DiaryApiException(
         'Публикация ссылок на материалы пока недоступна. Локальная запись сохранена.',
       );

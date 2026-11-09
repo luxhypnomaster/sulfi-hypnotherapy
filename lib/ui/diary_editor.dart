@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/diary_entry.dart';
+import '../models/diary_publication.dart';
+import 'diary_content_picker.dart';
 import '../models/session_plan.dart';
 import '../services/diary_controller.dart';
 import '../services/diary_api.dart';
@@ -392,6 +394,150 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     alt.dispose();
   }
 
+  void publication(DiaryPublication next) {
+    setState(() => entry = next.apply(entry));
+    changed();
+  }
+
+  Future<void> expiry() async {
+    final input = TextEditingController(
+      text:
+          DiaryPublication.of(entry).validUntil?.toUtc().toIso8601String() ??
+          '',
+    );
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Срок видимости'),
+        content: TextField(
+          controller: input,
+          decoration: const InputDecoration(
+            labelText: 'UTC: 2026-12-01T18:00:00Z',
+            helperText: 'Пусто — без срока',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () {
+              final value = input.text.trim();
+              if (value.isEmpty ||
+                  (value.endsWith('Z') && DateTime.tryParse(value) != null)) {
+                Navigator.pop(context, value);
+              }
+            },
+            child: const Text('Сохранить'),
+          ),
+        ],
+      ),
+    );
+    if (result != null && mounted) {
+      publication(
+        DiaryPublication.of(entry).changed(
+          validUntil: DateTime.tryParse(result)?.toUtc(),
+          clearExpiry: result.isEmpty,
+        ),
+      );
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 350));
+    input.dispose();
+  }
+
+  Widget publicationControls() {
+    final p = DiaryPublication.of(entry);
+    return ExpansionTile(
+      key: const Key('diary-publication-settings'),
+      title: const Text('Категория и показ записи'),
+      children: [
+        const Text(
+          'Настройки сохраняются локально. Новый серверный контракт ещё не подключён.',
+          style: TextStyle(fontSize: 11),
+        ),
+        DropdownButtonFormField<String>(
+          initialValue: p.categoryId,
+          isExpanded: true,
+          decoration: const InputDecoration(labelText: 'Категория'),
+          items: [
+            for (final item in diaryCategories.entries)
+              DropdownMenuItem(
+                value: item.key,
+                child: Text(item.value, maxLines: 2),
+              ),
+            if (!diaryCategories.containsKey(p.categoryId))
+              DropdownMenuItem(
+                value: p.categoryId,
+                child: Text('Неизвестная категория: ${p.categoryId}'),
+              ),
+          ],
+          onChanged: busy ? null : (v) => publication(p.changed(categoryId: v)),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Высокий приоритет'),
+          value: p.highPriority,
+          onChanged: busy
+              ? null
+              : (v) => publication(p.changed(highPriority: v)),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Срочно'),
+          value: p.urgent,
+          onChanged: busy ? null : (v) => publication(p.changed(urgent: v)),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Закрыть показ'),
+          value: p.authorClosed,
+          onChanged: busy
+              ? null
+              : (v) => publication(p.changed(authorClosed: v)),
+        ),
+        TextButton(
+          onPressed: busy ? null : expiry,
+          child: Text(
+            p.validUntil == null
+                ? 'Без срока · изменить'
+                : 'До ${p.validUntil!.toUtc().toIso8601String()}',
+          ),
+        ),
+        TextButton(
+          onPressed: busy
+              ? null
+              : () => publication(p.changed(reannounce: true)),
+          child: const Text('Показать снова как новое'),
+        ),
+      ],
+    );
+  }
+
+  Future<void> addContent() async {
+    final link = await pickDiaryContent(context);
+    if (link == null || !mounted) return;
+    setState(
+      () => entry = entry.copyWith(
+        extra: {
+          ...entry.extra,
+          'contentLinks': [
+            if (entry.extra['contentLinks'] is List)
+              ...entry.extra['contentLinks'],
+            if (!entry.contentLinks.any(
+              (v) =>
+                  v.key.token == link.key.token &&
+                  v.key.digest == link.key.digest,
+            ))
+              link.toMap(),
+          ],
+        },
+      ),
+    );
+    changed();
+    await save();
+  }
+
   Widget blockCard(int i) {
     final b = blocks[i];
     final name = switch (b.type) {
@@ -591,6 +737,49 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                             labelText: 'Короткое послание',
                           ),
                           style: const TextStyle(color: neonPink),
+                        ),
+                        publicationControls(),
+                        for (final link in entry.contentLinks)
+                          ListTile(
+                            dense: true,
+                            title: Text(
+                              '${link.key.content.type.name} · ${link.key.content.id}',
+                            ),
+                            subtitle: Text(
+                              'Точная ревизия ${link.key.digest.substring(0, 12)}',
+                            ),
+                            trailing: IconButton(
+                              tooltip: 'Удалить ссылку на материал',
+                              icon: const Icon(Icons.close),
+                              onPressed: busy
+                                  ? null
+                                  : () {
+                                      setState(
+                                        () => entry = entry.copyWith(
+                                          extra: {
+                                            ...entry.extra,
+                                            'contentLinks': entry.contentLinks
+                                                .where(
+                                                  (v) =>
+                                                      v.key.token !=
+                                                          link.key.token ||
+                                                      v.key.digest !=
+                                                          link.key.digest,
+                                                )
+                                                .map((v) => v.toMap())
+                                                .toList(),
+                                          },
+                                        ),
+                                      );
+                                      changed();
+                                    },
+                            ),
+                          ),
+                        TextButton.icon(
+                          key: const Key('diary-add-content'),
+                          onPressed: busy ? null : addContent,
+                          icon: const Icon(Icons.link),
+                          label: const Text('Добавить материал'),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 14),

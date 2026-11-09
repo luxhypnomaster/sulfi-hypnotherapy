@@ -12,6 +12,7 @@ abstract class PreviewPlayer extends ChangeNotifier {
   AudioAsset? get current;
   File? get currentFile => null;
   bool Function()? sessionActive;
+  bool get completed => false;
   bool get playing;
   Duration get position;
   String? get error;
@@ -68,6 +69,8 @@ class LocalPreviewPlayer extends PreviewPlayer {
   @override
   bool get playing =>
       _player.playing && _player.processingState != ProcessingState.completed;
+  @override
+  bool get completed => _player.processingState == ProcessingState.completed;
   @override
   Duration get position => _player.position;
   @override

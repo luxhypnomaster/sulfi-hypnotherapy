@@ -84,14 +84,17 @@ class DiaryHomeBoard extends StatelessWidget {
                 child: GestureDetector(
                   key: const Key('home-diary'),
                   behavior: HitTestBehavior.translucent,
-                  onTap: () => Navigator.push<void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => current == null
-                          ? DiaryScreen(diary: diary!)
-                          : DiaryReader(entry: current, diary: diary!),
-                    ),
-                  ),
+                  onTap: () async {
+                    await Navigator.push<void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => current == null
+                            ? DiaryScreen(diary: diary!)
+                            : DiaryReader(entry: current, diary: diary!),
+                      ),
+                    );
+                    diary!.rotateHome();
+                  },
                   child: const SizedBox.expand(),
                 ),
               );

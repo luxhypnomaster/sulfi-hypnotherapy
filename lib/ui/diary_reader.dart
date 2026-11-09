@@ -41,7 +41,9 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     widget.diary?.addListener(diaryChanged);
-    if (!widget.calculateOnly) audio = widget.diary?.audioFactory?.call();
+    if (!widget.calculateOnly) {
+      audio = widget.diary?.audioFor(widget.entry, preview: widget.preview);
+    }
   }
 
   void diaryChanged() {
@@ -60,7 +62,9 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
     generation++;
     WidgetsBinding.instance.removeObserver(this);
     widget.diary?.removeListener(diaryChanged);
-    unawaited(audio?.close());
+    if (widget.preview || !(widget.diary?.ownsAudio(audio) ?? false)) {
+      unawaited(audio?.close());
+    }
     super.dispose();
   }
 
@@ -108,6 +112,18 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
           layout = value;
           calculating = false;
           page = value.pageFor(readingAnchor);
+          if (readingAnchor == null &&
+              !widget.preview &&
+              !widget.calculateOnly) {
+            final store = widget.diary?.reads;
+            final saved = store?.state(entry);
+            if (saved?['fingerprint'] == store?.fingerprint(entry)) {
+              page = (saved?['page'] as int? ?? 0).clamp(
+                0,
+                value.pages.length - 1,
+              );
+            }
+          }
         });
       }),
     );
@@ -115,7 +131,12 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   Future<void> turn(int next) async {
     await audio?.navigationPause();
-    if (mounted) setState(() => page = next.clamp(0, layout!.pages.length - 1));
+    if (mounted) {
+      setState(() => page = next.clamp(0, layout!.pages.length - 1));
+      if (!widget.preview && !widget.calculateOnly) {
+        await widget.diary?.textProgress(entry, page);
+      }
+    }
   }
 
   Future<void> home() async {
@@ -226,6 +247,25 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                                     f.end == f.block.text.length)
                                   const SizedBox(height: 12),
                               ],
+                              if (index == value.pages.length - 1 &&
+                                  !widget.preview &&
+                                  !widget.calculateOnly &&
+                                  widget.diary != null &&
+                                  entry.blocks.any(
+                                    (b) =>
+                                        b.substantive &&
+                                        b.type != DiaryBlockType.audio,
+                                  ))
+                                TextButton.icon(
+                                  key: const Key('diary-text-end'),
+                                  onPressed: () => widget.diary!.textProgress(
+                                    entry,
+                                    index,
+                                    end: true,
+                                  ),
+                                  icon: const Icon(Icons.done),
+                                  label: const Text('Дочитано'),
+                                ),
                             ],
                           ),
                         ),

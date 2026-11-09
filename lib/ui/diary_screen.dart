@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/diary_entry.dart';
+import '../models/diary_publication.dart';
 import '../models/session_plan.dart';
 import '../services/diary_api.dart';
 import '../services/diary_controller.dart';
@@ -25,6 +26,7 @@ class DiaryScreen extends StatefulWidget {
 class _DiaryScreenState extends State<DiaryScreen> {
   DiaryController get d => widget.diary;
   String query = '';
+  String? category;
   DiaryBlockType? filter;
   bool byDate = false, readerMode = false, busy = false;
   @override
@@ -125,7 +127,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   '${e.displayTitle} ${e.message}'.toLowerCase().contains(
                     query.toLowerCase(),
                   )) &&
-              (filter == null || e.blocks.any((b) => b.type == filter)),
+              (filter == null || e.blocks.any((b) => b.type == filter)) &&
+              (category == null ||
+                  DiaryPublication.of(e).categoryId == category),
         )
         .toList();
   }
@@ -207,6 +211,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         Wrap(
                           spacing: 8,
                           children: [
+                            Text(
+                              DiaryPublication.of(e).categoryName,
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                            if (d.reads.isRead(e))
+                              const Text(
+                                'Прочитано',
+                                style: TextStyle(fontSize: 11),
+                              ),
                             for (final type
                                 in e.blocks.map((b) => b.type).toSet())
                               Text(
@@ -357,7 +370,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                 ],
               ),
-            if (!d.authorWorkspace && d.allowDebugAuthor)
+            if (!d.authorWorkspace &&
+                d.allowDebugAuthor &&
+                !(d.policy?.clientEdition ?? false))
               TextButton(
                 onPressed: () async {
                   d.enterDebugAuthor();
@@ -365,6 +380,29 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 },
                 child: const Text('Локальный автор · тестовый режим'),
               ),
+            DropdownButton<String>(
+              isExpanded: true,
+              value: category,
+              hint: const Text('Все категории'),
+              items: [
+                const DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('Все категории'),
+                ),
+                for (final c in diaryCategories.entries)
+                  DropdownMenuItem(value: c.key, child: Text(c.value)),
+                for (final id
+                    in d.published
+                        .map((e) => DiaryPublication.of(e).categoryId)
+                        .toSet()
+                        .where((id) => !diaryCategories.containsKey(id)))
+                  DropdownMenuItem(
+                    value: id,
+                    child: Text('Неизвестная категория: $id'),
+                  ),
+              ],
+              onChanged: (v) => setState(() => category = v),
+            ),
             TextField(
               decoration: const InputDecoration(
                 labelText: 'Поиск записей',
