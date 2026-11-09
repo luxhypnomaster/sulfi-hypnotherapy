@@ -10,4 +10,4 @@ ContentLink picker выбирает настоящий immutable ключ Conten
 
 UI_BLOCKER K-008: медиавитрина и Home preview не получили утверждённого layout. Новый художественный вариант не создавался; реальный DiaryReader preview работает, Home media preview не заявлен DONE. DAY-20 PARTIAL.
 
-Тесты: g4-final.log 8 PASS; g4-retest.log 38 PASS (8 новых +30 прежних мультимедиа); первые legacy ошибки uninitialized controller устранены и повторены. Остальные legacy publishing/transport тесты проходили; весь набор повторится один раз наG6. Физический звук/фокус/блокировка Android — NOT_RUN.
+Тесты: g5-tests.log повтор G4 8 PASS после исправления initial Future fake-zone deadlock; g4-retest.log 38 PASS (8 новых +30 прежних мультимедиа); первые legacy ошибки uninitialized controller устранены и повторены. Остальные legacy publishing/transport тесты проходили; весь набор повторится один раз наG6. Физический звук/фокус/блокировка Android — NOT_RUN.

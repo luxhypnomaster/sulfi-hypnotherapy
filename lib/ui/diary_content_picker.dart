@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import '../data/content_revision_store.dart';
 import '../models/content_link.dart';
 import 'session_scope.dart';
+import '../services/local_content_catalog.dart';
 
 /// Selects a real immutable registry key, never a title/latest alias or URL.
 Future<ContentLink?> pickDiaryContent(BuildContext context) async {
   final scope = SessionScope.maybeOf(context);
-  final database = scope?.controller.capsules?.database;
-  if (database == null) return null;
-  final revisions = await ContentRevisionStore(database).list();
+  final service = scope?.controller.capsules;
+  if (service == null) return null;
+  final revisions = await LocalCatalogSource.currentIndex(service);
+  // Retain exact keys and their dependencies; no current object or file mutation.
+  for (final r in revisions) {
+    await ContentRevisionStore(service.database).put(r);
+  }
   if (!context.mounted) return null;
   return showDialog<ContentLink>(
     context: context,

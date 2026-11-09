@@ -17,7 +17,7 @@ class DiaryReadStore {
   String get readerId => _readerId!;
   bool get loaded => _readerId != null;
   final _states = <String, Map<String, dynamic>>{};
-  Future<void> _tail = Future.value();
+  Future<void>? _tail;
   Future<void> load() async {
     if (_readerId == null) {
       await db.transaction((tx) async {
@@ -33,7 +33,7 @@ class DiaryReadStore {
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
       });
     }
-    await _tail;
+    if (_tail != null) await _tail;
     for (final r in await db.query(
       'app_settings',
       where: 'name LIKE ?',
@@ -110,7 +110,7 @@ class DiaryReadStore {
     };
     _states[k] = value;
     final snapshot = jsonEncode(value);
-    final op = _tail.then(
+    final op = (_tail ?? Future<void>.value()).then(
       (_) => db.insert('app_settings', {
         'name': k,
         'value': snapshot,
@@ -120,7 +120,9 @@ class DiaryReadStore {
     return op.then((_) {});
   }
 
-  Future<void> flush() => _tail;
+  Future<void> flush() async {
+    if (_tail != null) await _tail;
+  }
 }
 
 /// Credits only continuous playback, bounded by elapsed wall time. A jump/seek

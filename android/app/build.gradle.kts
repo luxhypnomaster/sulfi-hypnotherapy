@@ -4,6 +4,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Test-only companion package. Flutter passes --dart-define as Base64 values.
+val sulfiDefines = (project.findProperty("dart-defines") as String?).orEmpty()
+    .split(",").filter { it.isNotEmpty() }.map {
+        String(java.util.Base64.getDecoder().decode(it))
+    }.toSet()
+val sulfiClientTest = sulfiDefines.contains("SULFI_EDITION=client")
+
 android {
     namespace = "ru.sulfi.sulfi_hypnotherapy"
     compileSdk = flutter.compileSdkVersion
@@ -16,7 +23,8 @@ android {
 
     defaultConfig {
         // Keep this ID stable to preserve the on-device library across upgrades.
-        applicationId = "ru.sulfi.sulfi_hypnotherapy"
+        applicationId = if (sulfiClientTest) "ru.sulfi.sulfi_hypnotherapy.clienttest" else "ru.sulfi.sulfi_hypnotherapy"
+        manifestPlaceholders["sulfiAppLabel"] = if (sulfiClientTest) "Сульфи — клиент (тест)" else "Сульфи"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION

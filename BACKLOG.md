@@ -267,3 +267,14 @@
 - [x] 321 Flutter-тест, 24 Node-теста, analyze/format и фиксированный CLIENT локально; CI SUCCESS, локальная ARM64 APK и универсальная GitHub APK собраны, сертификат проверен.
 - [x] Владелец подтвердил обновление до №5 без удаления и сохранение аудио/дневника, реальную сессию и открытие истории.
 - [ ] Остальная аппаратная приёмка №5: микрофон/restore, системный SAF, фон/блокировка — отдельные сценарии; успешное обновление их не заменяет.
+
+
+## TASK15 — контрольная ветка
+
+- [x] Occurrence-only semantic marker, shield Home, safe export filename/import.
+- [x] Safe old revision startup retention + storage preflight + subprocess crash tests.
+- [ ] Exact audio physical revision binding/ownership/GC migration (G3 PARTIAL; blocker в docs/task15).
+- [x] Local diary lifecycle/categories/read state/ContentLink picker; injected provider contract and two-store e2e.
+- [ ] Утверждение Home media K008 и Home draft preview.
+- [x] Separate same-code client test build configuration; actual CI artifact verification tracked in Task15 report.
+- [ ] Live provider deployment/auth decisions and physical two-device acceptance (следующее серверное ТЗ).

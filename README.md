@@ -167,7 +167,7 @@ flutter build apk --debug
 flutter run
 ```
 
-APK: `build/app/outputs/flutter-apk/app-debug.apk`. Универсальные debug APK также сохраняются в [GitHub Actions](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/workflows/checks.yml) → Artifacts на 14 дней. Это тестовые сборки; стабильная подпись ещё не настроена. `applicationId` сохранён: `ru.sulfi.sulfi_hypnotherapy`.
+APK: `build/app/outputs/flutter-apk/app-debug.apk`. Универсальные debug APK также сохраняются в [GitHub Actions](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/workflows/checks.yml) → Artifacts на 14 дней. Это тестовые сборки; CI использует существующий постоянный тестовый ключ (секрет GitHub), каждый сертификат проверяется. `applicationId` сохранён: `ru.sulfi.sulfi_hypnotherapy`.
 
 Контакты настраиваются при сборке через `--dart-define=BOOKING_TELEGRAM_URL=https://t.me/LuchikLuxxx`, `--dart-define=BOOKING_EMAIL=luxhypnomaster@gmail.com` и `--dart-define=BOOKING_ENABLED=true`. Оба подтверждённых контакта заданы по умолчанию. Кнопка «Электронная почта» открывает почтовое приложение; если оно недоступно, адрес копируется.
 
@@ -180,3 +180,12 @@ APK: `build/app/outputs/flutter-apk/app-debug.apk`. Универсальные d
 Личные аудио, темы и история остаются локальными. Сеть дневника передаёт только авторские тексты после явного действия; сервер пока не развёрнут. Нет GPT, аналитики, платежей, авторских MP3 или синтеза голоса. Голос Сульфи создаётся отдельно и импортируется пользователем. Микрофон запрашивается только для явной записи. Запись темы/голоса во время сеанса и зашифрованный экспорт отложены. Локальный sandbox не заменяет резервную копию; APK и Git тоже не являются копией записей.
 
 Требования: [V4](docs/v4/00_README_RU.md), [план](BACKLOG.md), [версии](VERSIONING.md), [изменения](CHANGELOG.md). Старые SPEC/CODEX_TASK и отчёты V2 сохранены как история. Релиз/мердж в `main` требуют отдельного согласования.
+
+
+## Задание 15 — локальная подготовка следующего сервера
+
+Ветка `feat/task15-pre-server-readiness`, контрольные точки в [PROGRESS.md](PROGRESS.md). SQLite schema9 сохранена; новые reader-local состояния дневника и offline contract outbox используют отдельные ключи app_settings, не входят в публикации или контентные ZIP. Не удаляйте установленное приложение ради обновления: авторский ID/подпись сохранены, Android build18 увеличен. Если система всё же сообщает конфликт, сначала проверьте APK_CERT и ID, сохраните данные и сообщите ошибку.
+
+CI выпускает author/test `ru.sulfi.sulfi_hypnotherapy` и отдельный companion client/test `ru.sulfi.sulfi_hypnotherapy.clienttest`. Клиентская сборка: `flutter build apk --debug --dart-define=SULFI_EDITION=client`. Локальная сборка без существующего CI ключа не является совместимым обновлением авторского APK; не распространяйте случайную debug подпись.
+
+`DiaryContractProvider` требует явно переданного transport. Действующий Apps Script не менялся; новый контракт не подключён к live серверу. [SERVER_HANDOFF](docs/task15/SERVER_HANDOFF/) и [G3 blocker](docs/task15/MIGRATION_BLOCKER.md): SERVER_READY:NO, пока старые и новые байты одного logical audio ID не исполняются через все readers. Превью медиавитрины Home также ждёт утверждения K008. Контрактный e2e: `flutter test test/task15_client_test.dart`; физический двухтелефонный сценарий пока отдельный ручной runbook.
