@@ -76,6 +76,7 @@ jobs:
           "$BUILD_TOOLS/aapt" dump badging build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/APK_BADGING.txt
           grep -q "name='ru.sulfi.sulfi_hypnotherapy'" build/app/outputs/flutter-apk/APK_BADGING.txt
           sha256sum build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/SHA256SUMS
+          cat build/app/outputs/flutter-apk/SHA256SUMS
       - uses: actions/upload-artifact@v4
         with:
           name: sulfi-android-debug-${{ github.sha }}
@@ -107,6 +108,7 @@ jobs:
           "$BUILD_TOOLS/aapt" dump badging build/app/outputs/flutter-apk/app-debug.apk > "$RUNNER_TEMP/CLIENT_BADGING.txt"
           grep -q "name='ru.sulfi.sulfi_hypnotherapy.clienttest'" "$RUNNER_TEMP/CLIENT_BADGING.txt"
           sha256sum build/app/outputs/flutter-apk/app-debug.apk > "$RUNNER_TEMP/CLIENT_SHA256SUMS"
+          cat "$RUNNER_TEMP/CLIENT_SHA256SUMS"
       - uses: actions/upload-artifact@v4
         with:
           name: sulfi-client-test-${{ github.sha }}
