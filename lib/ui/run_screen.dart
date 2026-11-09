@@ -19,6 +19,7 @@ class RunScreen extends StatefulWidget {
 }
 
 class _RunScreenState extends State<RunScreen> {
+  static const timeYellow = Color(0xffffe34d);
   SessionEngine get e => widget.engine;
   final _scroll = ScrollController();
   final Map<String, GlobalKey> _rowKeys = {};
@@ -389,7 +390,7 @@ class _RunScreenState extends State<RunScreen> {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 10, color: antiqueGold),
+      style: const TextStyle(fontSize: 10, color: timeYellow),
     );
   }
 
@@ -430,7 +431,7 @@ class _RunScreenState extends State<RunScreen> {
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 17,
-                          color: antiqueGold,
+                          color: timeYellow,
                           fontFeatures: [FontFeature.tabularFigures()],
                         ),
                       ),
@@ -537,7 +538,10 @@ class _RunScreenState extends State<RunScreen> {
                 const SizedBox(width: 3),
                 Text(
                   _duration(entries),
-                  style: TextStyle(fontSize: 10, color: color),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: active || completed ? color : timeYellow,
+                  ),
                 ),
               ],
             ),
@@ -852,6 +856,7 @@ class _RunScreenState extends State<RunScreen> {
             key: const Key('current-track-time'),
             style: const TextStyle(
               fontSize: 30,
+              color: timeYellow,
               fontFeatures: [FontFeature.tabularFigures()],
             ),
           ),
@@ -913,10 +918,7 @@ class _RunScreenState extends State<RunScreen> {
                       const SizedBox(width: 4),
                       Text(
                         field.$2,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: antiqueGold,
-                        ),
+                        style: const TextStyle(fontSize: 11, color: timeYellow),
                       ),
                     ],
                   ),
