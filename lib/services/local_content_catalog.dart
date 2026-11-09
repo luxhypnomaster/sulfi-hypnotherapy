@@ -61,9 +61,18 @@ ResolvedContent resolveContent(
 }
 
 class ContentInstallPlan {
-  ContentInstallPlan(this.closure, this.newBytes, this.missingDigests);
+  ContentInstallPlan(
+    this.closure,
+    this.newBytes,
+    this.missingDigests, {
+    this.stagingBytes = 0,
+    this.physicalWriteBytes = 0,
+    this.reserveBytes = 16 * 1024 * 1024,
+  });
   final ResolvedContent closure;
   final int newBytes;
+  final int stagingBytes, physicalWriteBytes, reserveBytes;
+  int get requiredFreeBytes => stagingBytes + physicalWriteBytes + reserveBytes;
   final Set<String> missingDigests;
 }
 
@@ -214,17 +223,36 @@ class LocalCatalogSource {
     final closure = resolveContent(root, revisions);
     final missing = <String>{};
     final sizes = <String, int>{};
+    final availableHashes = <String>{};
+    for (final asset in await service.library.repository.list()) {
+      try {
+        final file = service.library.fileFor(asset);
+        if (!await file.exists()) continue;
+        final hash = (await sha256.bind(file.openRead()).first).toString();
+        if (asset.contentHash == null || asset.contentHash == hash) {
+          availableHashes.add(hash);
+        }
+      } catch (_) {
+        /* Unreadable/corrupt files cannot count as reusable. */
+      }
+    }
+    var physicalWriteBytes = 0;
     for (final r in closure.revisions.where(
       (r) => r.key.content.type == ContentType.track,
     )) {
       final hash = r.payload['contentHash'] as String;
       sizes[hash] = r.payload['fileSizeBytes'];
-      if (!await installed(r)) missing.add(hash);
+      if (!availableHashes.contains(hash)) missing.add(hash);
+      if (!await installed(r)) {
+        physicalWriteBytes += r.payload['fileSizeBytes'] as int;
+      }
     }
     return ContentInstallPlan(
       closure,
       missing.fold<int>(0, (n, h) => n + sizes[h]!),
       Set.unmodifiable(missing),
+      stagingBytes: sizes.values.fold<int>(0, (n, size) => n + size) * 2,
+      physicalWriteBytes: physicalWriteBytes,
     );
   }
 
@@ -286,9 +314,8 @@ class LocalCatalogSource {
       manifest['id'] = CapsuleService.digest(manifest);
       onState?.call(ContentInstallState.staging);
       check();
-      final required =
-          files.fold<int>(0, (n, f) => n + (f['bytes'] as int)) * 3 +
-          16 * 1024 * 1024;
+      final freshPlan = await this.plan(actual.revisions.last.key);
+      final required = freshPlan.requiredFreeBytes;
       if (service.availableBytes != null &&
           await service.availableBytes!() < required) {
         throw const FormatException(

@@ -114,7 +114,7 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
         ),
         content: SingleChildScrollView(
           child: Text(
-            '${r.payload['description'] ?? ''}\nТип: ${r.key.content.type.name}\nВерсия: ${r.declaredVersion ?? "неизвестна"}\nТочная ревизия: ${r.key.revision}\nПроисхождение: ${r.payload['origin'] ?? "неизвестно"}\nЗависимостей: ${plan.closure.revisions.length - 1}\nНовые аудиобайты: ${plan.newBytes} Б\n\nSHA-256 проверяет целостность; это не подпись издателя и не право доступа.',
+            '${r.payload['description'] ?? ''}\nТип: ${r.key.content.type.name}\nВерсия: ${r.declaredVersion ?? "неизвестна"}\nТочная ревизия: ${r.key.revision}\nПроисхождение: ${r.payload['origin'] ?? "неизвестно"}\nЗависимостей: ${plan.closure.revisions.length - 1}\nНовый аудиоконтент: ${plan.newBytes} Б\nЗапись файлов: ${plan.physicalWriteBytes} Б\nВременное место: ${plan.stagingBytes} Б\nРезерв: ${plan.reserveBytes} Б\n\nSHA-256 проверяет целостность; это не подпись издателя и не право доступа.',
           ),
         ),
         actions: [

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
@@ -7,6 +8,8 @@ import 'package:path/path.dart' as p;
 
 import '../data/library_repository.dart';
 import '../models/audio_asset.dart';
+import '../models/content_revision.dart';
+import '../data/content_revision_store.dart';
 import 'access_policy.dart';
 
 typedef AudioSelection = ({String name, String path});
@@ -94,11 +97,61 @@ class LibraryService {
     // Recover abandoned imports/deletes after process death. Only our generated
     // files are eligible, and all database-referenced files are preserved.
     final retained = (await repository.list()).map((a) => a.filePath).toSet();
+    final retainedHashes = <String>{};
+    var uncertainRevision = false;
+    if (repository is SqliteLibraryRepository) {
+      final db = (repository as SqliteLibraryRepository).database;
+      try {
+        for (final revision in await ContentRevisionStore(db).list()) {
+          if (revision.key.content.type != ContentType.track) continue;
+          final hash = revision.payload['contentHash'];
+          if (hash is String && RegExp(r'^[a-f0-9]{64}$').hasMatch(hash)) {
+            retainedHashes.add(hash);
+          } else {
+            uncertainRevision = true;
+          }
+        }
+        void collect(Object? value) {
+          if (value is List) {
+            for (final item in value) {
+              collect(item);
+            }
+          }
+          if (value is Map) {
+            if (value['contentHash'] is String) {
+              retainedHashes.add(value['contentHash']);
+            }
+            for (final child in value.values) {
+              collect(child);
+            }
+          }
+        }
+
+        for (final table in [
+          'current_draft',
+          'session_runs',
+          'session_templates',
+          'module_definitions',
+        ]) {
+          for (final row in await db.query(table)) {
+            collect(jsonDecode(row['payload'] as String));
+          }
+        }
+      } catch (_) {
+        // Missing/corrupt ownership evidence is a reason to keep bytes, never
+        // permission to remove a possibly referenced private recording.
+        uncertainRevision = true;
+      }
+    }
+
     await for (final entry in directory.list()) {
       final name = p.basename(entry.path);
       if (entry is File &&
           name.startsWith('asset_') &&
           !retained.contains(name)) {
+        if (uncertainRevision) continue;
+        final hash = (await sha256.bind(entry.openRead()).first).toString();
+        if (retainedHashes.contains(hash)) continue;
         await entry.delete();
       }
     }
