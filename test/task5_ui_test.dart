@@ -16,6 +16,9 @@ import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
 import 'package:sulfi_hypnotherapy/ui/content_catalog_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_content_link.dart';
 import 'package:sulfi_hypnotherapy/ui/design.dart';
+import 'package:sulfi_hypnotherapy/ui/library_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/modules_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/templates_screen.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
@@ -272,6 +275,58 @@ void main() {
     });
   }
 
+  testWidgets(
+    'Task14 three export menus invoke the existing system save dialog',
+    (t) async {
+      var saves = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('ru.sulfi/device_files'),
+            (call) async {
+              if (call.method == 'saveZip') {
+                saves++;
+                return false;
+              }
+              return null;
+            },
+          );
+      await t.runAsync(() => ModuleCatalog(db).save(c.modules.entries.single));
+      await show(
+        t,
+        LibraryScreen(library: c.library, player: player, controller: c),
+      );
+      await t.tap(find.byTooltip('Действия с аудио').first);
+      await io(t);
+      await t.tap(find.text('Экспорт трека'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 1; i++) {
+        await io(t);
+      }
+      expect(saves, 1);
+      await show(t, ModulesScreen(controller: c, player: player));
+      await t.tap(find.byTooltip('Действия модуля').first);
+      await io(t);
+      await t.tap(find.text('Экспорт модуля'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 2; i++) {
+        await io(t);
+      }
+      expect(saves, 2);
+      await show(t, TemplatesScreen(controller: c, player: player));
+      await t.tap(find.byTooltip('Действия шаблона').first);
+      await io(t);
+      await t.tap(find.text('Экспорт шаблона'));
+      await io(t);
+      for (var i = 0; i < 40 && saves < 3; i++) {
+        await io(t);
+      }
+      expect(saves, 3);
+      expect(player.playing, false);
+      expect((await t.runAsync(c.repository.history))!, hasLength(1));
+      await t.pumpWidget(const SizedBox());
+      await io(t);
+    },
+  );
   testWidgets(
     'Task14 semantic module and template styles revert after Undo in actual editor and Home',
     (t) async {

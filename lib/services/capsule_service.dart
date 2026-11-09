@@ -427,7 +427,9 @@ class CapsuleService {
           tables.any((t) => records[t] is! List)) {
         throw const FormatException('Некорректные таблицы');
       }
-      // The digest above authenticates the original schema-6 manifest first.
+      // Integrity of the original manifest was verified before normalization.
+      manifest['records'] = records;
+      // This is not publisher authentication or a digital signature.
       // Add the v7 capability flag only in memory; IDs and media are unchanged.
       if (manifest['databaseSchema'] == 6) {
         for (final row in records['audio_assets'] as List) {

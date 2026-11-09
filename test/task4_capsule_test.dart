@@ -20,6 +20,8 @@ import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
 import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/data/content_revision_store.dart';
 import 'package:sulfi_hypnotherapy/data/app_database.dart';
+import 'package:sulfi_hypnotherapy/services/history_attachments.dart';
+import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 
 void main() {
   sqfliteFfiInit();
@@ -323,7 +325,22 @@ void main() {
     await local.close();
   });
   test('Task14 schema8 populated upgrade retains every table and media, then pins old definition after v2', () async {
-    final preview = await destination.inspect(zip);
+    final historyMedia = DiaryMediaStore(
+      Directory(p.join(source.diaryDirectory.parent.path, 'history_media')),
+      pick: (_) async => null,
+      probe: original.probe,
+    );
+    final attachment = await historyMedia.importFile(DiaryBlockType.audio, (
+      name: 'note.m4a',
+      path: 'test/fixtures/android_aac_isom.m4a',
+    ));
+    final run = (await SqliteSessionRepository(a.database).history()).single;
+    await HistoryAttachments(
+      a.database,
+      historyMedia,
+    ).attach(run.id, attachment);
+    final populatedZip = await source.export();
+    final preview = await destination.inspect(populatedZip);
     await destination.restore(preview);
     await preview.close();
     await b.database.insert('app_settings', {
@@ -341,6 +358,18 @@ void main() {
       for (final a in await target.repository.list())
         a.filePath: await target.fileFor(a).readAsBytes(),
     };
+    expect(await b.database.query('history_attachments'), hasLength(1));
+    final mediaBytes = <String, List<int>>{};
+    for (final dir in [
+      destination.diaryDirectory,
+      Directory(
+        p.join(destination.diaryDirectory.parent.path, 'history_media'),
+      ),
+    ]) {
+      await for (final f in dir.list(recursive: true)) {
+        if (f is File) mediaBytes[f.path] = await f.readAsBytes();
+      }
+    }
     final path = b.database.path;
     await b.database.execute('DROP TABLE content_revisions');
     await b.database.execute('PRAGMA user_version=8');
@@ -356,6 +385,9 @@ void main() {
           await File(p.join(target.directory.path, e.key)).readAsBytes(),
           e.value,
         );
+      }
+      for (final e in mediaBytes.entries) {
+        expect(await File(e.key).readAsBytes(), e.value);
       }
       final store = ContentRevisionStore(reopened);
       final old = (await store.list()).singleWhere(
@@ -634,13 +666,26 @@ void main() {
     expect(await zip.exists(), isTrue);
     expect(await original.fileFor((await a.list()).first).exists(), isTrue);
   });
-  for (final mode in ['checksum', 'schema', 'dependency', 'traversal']) {
+  for (final mode in [
+    'checksum',
+    'schema',
+    'dependency',
+    'traversal',
+    'size',
+    'duplicate',
+  ]) {
     test('rejects $mode without touching destination', () async {
       final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
       final manifest = jsonDecode(
         utf8.decode(decoded.findFile('manifest.json')!.content),
       ) as Map<String, dynamic>;
       if (mode == 'schema') manifest['schema'] = 999;
+      if (mode == 'size') manifest['files'][0]['bytes'] += 1;
+      if (mode == 'duplicate') {
+        manifest['records']['audio_assets'].add(
+          Map<String, dynamic>.from(manifest['records']['audio_assets'][0]),
+        );
+      }
       if (mode == 'dependency') manifest['records']['audio_assets'] = [];
       manifest.remove('id');
       manifest['id'] = CapsuleService.digest(manifest);
@@ -668,47 +713,53 @@ void main() {
       expect(await b.database.query('module_definitions'), isEmpty);
     });
   }
-  test(
-    'Task5: schema6 capsule remains readable; access mode is never imported',
-    () async {
-      final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
-      final manifest = jsonDecode(
-        utf8.decode(decoded.findFile('manifest.json')!.content),
-      );
-      manifest['databaseSchema'] = 6;
-      for (final row in manifest['records']['audio_assets']) {
-        row.remove('authorManaged');
-      }
-      manifest.remove('id');
-      manifest['id'] = CapsuleService.digest(manifest);
-      final archive = Archive();
-      for (final f in decoded.files.where((f) => f.isFile)) {
-        final data = f.name == 'manifest.json'
-            ? utf8.encode(jsonEncode(manifest))
-            : f.content;
-        archive.addFile(ArchiveFile(f.name, data.length, data));
-      }
-      final legacy = await File(p.join(root.path, 'legacy6.zip'))
-          .writeAsBytes(ZipEncoder().encode(archive));
-      await target.policy.setMode(LocalMode.client);
-      final preview = await destination.inspect(legacy);
-      await destination.restore(preview);
-      await preview.close();
-      expect(target.policy.mode, LocalMode.client);
-      final again = await destination.inspect(legacy);
-      expect(again.alreadyImported, isTrue);
-      expect(again.conflicts, isEmpty);
-      await destination.restore(again);
-      await again.close();
-      expect(await b.list(), hasLength(2));
-      expect(
-        (await DiaryAuthorRepository(
-          b.database,
-        ).entries()).single.blocks.first.media!.assetId,
-        'diary-audio',
-      );
-    },
-  );
+  for (final legacySchema in [6, 7, 8]) {
+    test(
+      'Task14 legacy schema $legacySchema capsule remains readable; access mode is never imported',
+      () async {
+        final decoded = ZipDecoder().decodeBytes(await zip.readAsBytes());
+        final manifest = jsonDecode(
+          utf8.decode(decoded.findFile('manifest.json')!.content),
+        );
+        manifest['databaseSchema'] = legacySchema;
+        manifest['records'].remove('content_revisions');
+        if (legacySchema < 8) manifest['records'].remove('history_attachments');
+        if (legacySchema == 6) {
+          for (final row in manifest['records']['audio_assets']) {
+            row.remove('authorManaged');
+          }
+        }
+        manifest.remove('id');
+        manifest['id'] = CapsuleService.digest(manifest);
+        final archive = Archive();
+        for (final f in decoded.files.where((f) => f.isFile)) {
+          final data = f.name == 'manifest.json'
+              ? utf8.encode(jsonEncode(manifest))
+              : f.content;
+          archive.addFile(ArchiveFile(f.name, data.length, data));
+        }
+        final legacy = await File(p.join(root.path, 'legacy6.zip'))
+            .writeAsBytes(ZipEncoder().encode(archive));
+        await target.policy.setMode(LocalMode.client);
+        final preview = await destination.inspect(legacy);
+        await destination.restore(preview);
+        await preview.close();
+        expect(target.policy.mode, LocalMode.client);
+        final again = await destination.inspect(legacy);
+        expect(again.alreadyImported, isTrue);
+        expect(again.conflicts, isEmpty);
+        await destination.restore(again);
+        await again.close();
+        expect(await b.list(), hasLength(2));
+        expect(
+          (await DiaryAuthorRepository(
+            b.database,
+          ).entries()).single.blocks.first.media!.assetId,
+          'diary-audio',
+        );
+      },
+    );
+  }
   test(
     'Task5: CLIENT capsule replacement cannot overwrite protected author audio',
     () async {

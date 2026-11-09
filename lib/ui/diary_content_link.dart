@@ -49,7 +49,8 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
     try {
       if (service != null) {
         final r = await ContentRevisionStore(service.database).get(key);
-        if (r != null && await LocalCatalogSource.installedRevision(service, r)) {
+        if (r != null &&
+            await LocalCatalogSource.installedRevision(service, r)) {
           result = r;
         }
       }
