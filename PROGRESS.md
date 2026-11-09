@@ -16,7 +16,7 @@
 ## G1 — COMPLETE
 Читать TASK_RU.md §1 и acceptance UI-01…UI-13. Не переписывать уже работающий CapsuleService/плеер. Проверить гипотезу: editor.reload обновляет durationMs всем старым экземплярам, но источник хранит прежний кеш длительности; новая копия C не проходит этот refresh. Прежде фикса написать regression с такой metadata drift и реальным A/B/C, persistence и Undo. Сохранить существующий тест metadata refresh.
 
-G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: COMPLETE local slice / K008 PARTIAL. G5: COMPLETE local conformance / CI artifacts in G6. G6: ACTIVE. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: COMPLETE local slice / K008 PARTIAL. G5: COMPLETE local conformance / CI artifacts in G6. G6: LOCAL HANDOFF COMPLETE / overall PARTIAL (CI and delivery evidence in Drive). SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
 
 ### G1 checkpoint
 - before_sha: 5177c62
@@ -73,3 +73,14 @@ G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: 
 - next gate: G6. Write complete SERVER_HANDOFF schemas/playbooks, validate fixtures, full Flutter +Node suite once at stable source; final CI both APKs, PR, Drive report upload+readback.
 - next command: mkdir -p docs/task15/SERVER_HANDOFF/JSON_SCHEMAS
 - SERVER_READY: NO.
+
+## G6 — LOCAL HANDOFF COMPLETE / overall PARTIAL
+- before_sha: f331176
+- after_sha: 097c157d326f666ce6e1d91d52c6a44c87e0f425
+- PASS_IDs: SRV-01…08 local contract/document checks; DEL-01 checkpoint protocol. Final per-ID matrix and immutable CI/APK evidence are delivered in For_Codex/Отчёты — Задание15/TESTS.md and APK_INFO.md, not guessed in this pre-build commit.
+- source checks: 13 JSON schemas +4 real-domain fixtures +negative fixtures, analyzer no issues, format140files unchanged, Node24 PASS. First full local candidate407PASS/3FAIL; identified Home title clipping, orphan duplicate retention, offscreen record action. Targeted fixes: retention19PASS plus new corrupt-file guard test; both failed Home/record UI2PASS; G6 extra retention+Diff4PASS. Final full CI is mandatory on this checkpoint's report SHA before calling APK usable.
+- files/tables: SERVER_HANDOFF OpenAPI/13schemas/playbooks, future transport snapshot consistency, regression fixes only. Schema9 unchanged. Protected RunScreen/PlayerArt/assets diff empty. No secret patterns in lib/android/task15docs scan; no real private data. Source root archives untracked and untouched; build cache symlink points RAM.
+- remaining P0: REV-01/06 partial, REV-02…05 blocked by exact audio migration; DAY-20 partial K008 Home media preview. SERVER_READY:NO. Physical Android/live server NOT_RUN.
+- publication: no merge/main/develop changes, no release/deploy/OAuth/ACL changes. Author0.4.13+18 package/signing preserved; .clienttest companion separate.
+- exact next commands: env -u GH_TOKEN gh run list --repo luxhypnomaster/sulfi-hypnotherapy --branch feat/task15-pre-server-readiness --limit 3; verify newest head SHA==git rev-parse HEAD, conclusion success, both APK artifacts/certificate diagnostics. Final result/links/readback saved in Drive folder1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS. If CI red, fix ONLY failing boundary then new commit/checkpoint; do not repeat G0-G5.
+- resume after complete delivery: read docs/task15/MIGRATION_BLOCKER.md before any G3 continuation; do not connect the future provider to live server without a separate approved task.
