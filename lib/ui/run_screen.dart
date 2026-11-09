@@ -415,11 +415,13 @@ class _RunScreenState extends State<RunScreen> {
               Expanded(
                 child: Column(
                   children: [
-                    Text(
-                      pair.$1,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        pair.$1,
+                        maxLines: 1,
+                        style: const TextStyle(fontSize: 10),
+                      ),
                     ),
                     FittedBox(
                       fit: BoxFit.scaleDown,
