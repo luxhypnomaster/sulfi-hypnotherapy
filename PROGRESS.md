@@ -16,7 +16,7 @@
 ## G1 — COMPLETE
 Читать TASK_RU.md §1 и acceptance UI-01…UI-13. Не переписывать уже работающий CapsuleService/плеер. Проверить гипотезу: editor.reload обновляет durationMs всем старым экземплярам, но источник хранит прежний кеш длительности; новая копия C не проходит этот refresh. Прежде фикса написать regression с такой metadata drift и реальным A/B/C, persistence и Undo. Сохранить существующий тест metadata refresh.
 
-G2: COMPLETE. G3: ACTIVE. G4–G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: ACTIVE. G5–G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
 
 ### G1 checkpoint
 - before_sha: 5177c62
@@ -39,3 +39,14 @@ G2: COMPLETE. G3: ACTIVE. G4–G6: NOT STARTED. SERVER_READY: NO до завер
 - next gate: G3. Main risk paths: SessionEngine resolves3times bylogicalID, SessionController.snapshotForStart/replayIssues/current asset lookup, LibraryService.fileFor/initialize/discard, CapsuleService export/restore, LocalCatalogSource.installed/plan. Registry snapshots alone do not bind physical blobs or old exact readers. Inspect before invasive migration.
 - next command: sed -n '195,225p' lib/services/session_engine.dart; sed -n '200,223p' lib/services/local_content_catalog.dart
 - proposed safe G3 slice: verify ownership cleanup against retained revision hashes, correct missing-bytes vs metadata comparison, reproduce simultaneous audio version blocker and subprocess SIGKILL/reopen of existing importer. Do not introduce placeholder CAS tables or rewrite acceptedplayer to claim DONE. If exact binding cannot be proved across ALL readers, record MIGRATION_BLOCKER and continue independentG4/G5, SERVER_READY:NO.
+
+## G3 — PARTIAL (safe stop, continue G4)
+- before_sha: 17ee04d
+- after_sha: ef78f09
+- PASS_IDs: REV-07/08/09/10/11/12; REV-06 metadata missing-bytes fixed, physical cross-ID dedup not shipped. REV-01 not an audio migration claim.
+- BLOCKED: REV-02/03/04/05, full REV-01/06 pending exact audio reader/storage migration. Concrete evidence: docs/task15/MIGRATION_BLOCKER.md, task15_revision_boundary_test.dart same-ID candidate safely refused.
+- tables: audio schema9 and paths unchanged; startup retention honors old hash references; preflight storage breakdown only.
+- tests: 34 PASS safe/legacy; actual separate-process SIGKILL+reopen/retry 2 PASS; analyzer clean. No power-loss or physical Android claim.
+- next gate: G4. Read docs/task15/DIARY_AND_CLIENT.md and existing DiaryController/Reader/Editor/Audio; add reader-local state and publication metadata without live API changes.
+- next command: sed -n '145,180p' lib/main.dart
+- SERVER_READY: NO (P0 exact audio storage blocked).
