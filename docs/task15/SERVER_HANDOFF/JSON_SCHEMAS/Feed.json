@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/Feed.json",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "DiaryPublication.json"
+      }
+    },
+    "revision": {
+      "type": "string"
+    },
+    "nextPage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "entries",
+    "revision",
+    "nextPage"
+  ],
+  "additionalProperties": false
+}

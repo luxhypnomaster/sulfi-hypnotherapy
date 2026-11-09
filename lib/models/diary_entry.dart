@@ -135,8 +135,8 @@ class DiaryEntry {
     // ignore: prefer_initializing_formals
   }) : _body = body,
        _blocks = blocks == null ? null : List.unmodifiable(blocks);
-  // Reserved per-medium fields: textReadAt, audioListenedAt, priority,
-  // showcasePosition. No rotation or completion inference is enabled.
+  // Legacy private state is retained verbatim. New reader state lives separately
+  // in DiaryReadStore, never in the author publication.
   final Map<String, dynamic> readingState;
   final Map<String, dynamic> extra;
   List<ContentLink> get contentLinks {
@@ -176,8 +176,8 @@ class DiaryEntry {
   );
   bool get multimedia => blocks.any((b) => b.type != DiaryBlockType.text);
   String? get publicationError {
-    if (extra.containsKey('contentLinks')) {
-      return 'Ссылки на материалы пока доступны локально. Публикация требует подтверждённого серверного контракта.';
+    if (extra.containsKey('contentLinks') || extra.containsKey('publication')) {
+      return 'Новые настройки и ссылки пока доступны локально. Публикация требует подтверждённого серверного контракта.';
     }
     if (title.trim().isEmpty) return 'Заполните название записи';
     if (message.trim().isEmpty) return 'Заполните короткое послание';
@@ -197,6 +197,7 @@ class DiaryEntry {
     DateTime? publishedAt,
     DiaryStatus? status,
     int? version,
+    Map<String, dynamic>? extra,
   }) => DiaryEntry(
     id: id,
     message: message ?? this.message,
@@ -211,7 +212,7 @@ class DiaryEntry {
     version: version ?? this.version,
     number: number,
     readingState: readingState,
-    extra: extra,
+    extra: extra ?? this.extra,
   );
   Map<String, Object?> toMap({bool public = false}) => {
     if (!public) ...extra,

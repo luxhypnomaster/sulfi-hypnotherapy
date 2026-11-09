@@ -103,14 +103,26 @@ class SessionController extends ChangeNotifier {
   SessionTemplate? get baseTemplate =>
       templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
 
+  // Audio length is measured library metadata, not an editable trim. A cache
+  // refresh must not turn every occurrence into a composition edit.
+  int? _comparisonAudioDuration(SessionStep step) =>
+      asset(step.audioAssetId)?.durationMs ?? step.durationMs;
   bool moduleDiffersFromSource(PhaseChild instance) {
     if (!instance.isModule || instance.definitionVersion == null) return false;
     final source = modules.source(
       instance.definitionId!,
       instance.definitionVersion!,
+      revision: instance.sourceRevision,
     );
     return source != null &&
-        stepsComposition(source.items) != stepsComposition(instance.items);
+        stepsComposition(
+              source.items,
+              audioDuration: _comparisonAudioDuration,
+            ) !=
+            stepsComposition(
+              instance.items,
+              audioDuration: _comparisonAudioDuration,
+            );
   }
 
   final List<SessionTemplate> _templateRevisions = [];
@@ -124,12 +136,25 @@ class SessionController extends ChangeNotifier {
         .toList();
     final source =
         matches.isNotEmpty &&
-            matches.map((t) => planComposition(t.plan)).toSet().length == 1
+            matches
+                    .map(
+                      (t) => planComposition(
+                        t.plan,
+                        audioDuration: _comparisonAudioDuration,
+                      ),
+                    )
+                    .toSet()
+                    .length ==
+                1
         ? matches.first
         : null;
     return source != null &&
         draft.baseTemplateVersion == source.version &&
-        planComposition(source.plan) != planComposition(draft.plan);
+        planComposition(source.plan, audioDuration: _comparisonAudioDuration) !=
+            planComposition(
+              draft.plan,
+              audioDuration: _comparisonAudioDuration,
+            );
   }
 
   Future<void> initialize() async {

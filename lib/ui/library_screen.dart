@@ -13,11 +13,9 @@ import '../services/preview_player.dart';
 import 'asset_editor.dart';
 import 'design.dart';
 import 'preview_bar.dart';
-import 'backup_screen.dart';
 import 'content_export.dart';
-import 'content_catalog_screen.dart';
+import 'space_sheet.dart';
 import 'session_actions.dart';
-import '../services/access_policy.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({
@@ -208,110 +206,13 @@ class _LibraryScreenState extends State<LibraryScreen>
   });
   Future<void> _preview(AudioAsset a) =>
       _run(() => widget.player.toggle(a, widget.library.fileFor(a)));
-  void _privacy() => showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
-    builder: (context) => SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Ваше пространство',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Личные аудио, планы и история хранятся на этом устройстве. Дневник имеет отдельную настройку публикаций. Удаление приложения удалит локальные данные: создайте внешнюю ZIP-копию.',
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Инструмент саморегуляции не заменяет медицинскую помощь. Не используйте за рулём. Предпрослушивание останавливается при уходе в фон.',
-            ),
-            const SizedBox(height: 20),
-            ListenableBuilder(
-              listenable: widget.library.policy,
-              builder: (context, _) => Column(
-                children: [
-                  Text(
-                    widget.library.policy.isAuthor
-                        ? 'Режим: Автор'
-                        : 'Режим: Клиент',
-                  ),
-                  if (!widget.library.policy.clientEdition)
-                    SegmentedButton<LocalMode>(
-                      segments: const [
-                        ButtonSegment(
-                          value: LocalMode.author,
-                          label: Text('Автор'),
-                        ),
-                        ButtonSegment(
-                          value: LocalMode.client,
-                          label: Text('Клиент'),
-                        ),
-                      ],
-                      selected: {widget.library.policy.mode},
-                      onSelectionChanged: (value) async {
-                        await widget.library.policy.setMode(value.single);
-                        if (mounted) await _load();
-                      },
-                    ),
-                ],
-              ),
-            ),
-            if (widget.controller?.capsules != null)
-              OutlinedButton.icon(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await Navigator.push<void>(
-                    this.context,
-                    MaterialPageRoute(
-                      builder: (_) => ContentCatalogScreen(
-                        controller: widget.controller!,
-                        player: widget.player,
-                      ),
-                    ),
-                  );
-                  if (mounted) await _load();
-                },
-                icon: const Icon(Icons.view_list_outlined),
-                label: const Text('Локальный каталог материалов'),
-              ),
-            if (widget.controller?.capsules != null)
-              OutlinedButton.icon(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await widget.player.stop();
-                  if (!mounted) return;
-                  await Navigator.push<void>(
-                    this.context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          BackupScreen(controller: widget.controller!),
-                    ),
-                  );
-                  if (mounted) await _load();
-                },
-                icon: const Icon(Icons.archive_outlined),
-                label: const Text('Резервная копия и обновления'),
-              ),
-            OutlinedButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-                unawaited(_reset());
-              },
-              icon: const Icon(Icons.delete_outline),
-              label: const Text('Удалить все данные приложения'),
-            ),
-            const SizedBox(height: 12),
-            const Text('Сульфи · 0.4.12+17', textAlign: TextAlign.center),
-          ],
-        ),
-      ),
-    ),
+  void _privacy() => showSpaceSheet(
+    context,
+    library: widget.library,
+    controller: widget.controller,
+    player: widget.player,
+    onReset: _reset,
+    onChanged: _load,
   );
   bool _matches(AudioAsset a) {
     final section = switch (_section) {
@@ -863,7 +764,7 @@ class _LibraryScreenState extends State<LibraryScreen>
                   if (widget.controller?.capsules != null)
                     const PopupMenuItem(
                       value: 'export',
-                      child: Text('Экспорт трека'),
+                      child: Text('Экспортировать трек'),
                     ),
                   const PopupMenuItem(
                     value: 'info',

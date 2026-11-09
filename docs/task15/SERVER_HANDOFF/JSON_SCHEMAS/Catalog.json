@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/Catalog.json",
+  "type": "object",
+  "properties": {
+    "revision": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "ContentRevision.json"
+      }
+    },
+    "nextPage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "revision",
+    "items",
+    "nextPage"
+  ],
+  "additionalProperties": false
+}

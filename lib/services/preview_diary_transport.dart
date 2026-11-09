@@ -20,9 +20,9 @@ class PreviewDiaryTransport implements DiaryAudioTransport {
   @override
   Stream<void> get changes => stream.stream;
   @override
-  bool get playing => player.playing;
+  bool get playing => player.current?.id == id && player.playing;
   @override
-  bool get completed => false;
+  bool get completed => player.current?.id == id && player.completed;
   @override
   Duration get position =>
       player.current?.id == id ? player.position : Duration.zero;

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/DiaryBlock.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "enum": [
+        "text",
+        "image",
+        "audio"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "media": {
+      "anyOf": [
+        {
+          "$ref": "AssetDescriptor.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "width": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "height": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "altText": {
+      "type": "string"
+    },
+    "caption": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "durationMs": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "text",
+    "media",
+    "width",
+    "height",
+    "altText",
+    "caption",
+    "label",
+    "durationMs"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "image"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "media": {
+            "$ref": "AssetDescriptor.json"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "audio"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "media": {
+            "$ref": "AssetDescriptor.json"
+          },
+          "durationMs": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  ]
+}

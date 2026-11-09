@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/ContentRevision.json",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "type": {
+      "enum": [
+        "track",
+        "module",
+        "template"
+      ]
+    },
+    "logicalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "RevisionKey.json"
+      }
+    },
+    "parent": {
+      "anyOf": [
+        {
+          "$ref": "RevisionKey.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "declaredVersion": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "type",
+    "logicalId",
+    "revision",
+    "digest",
+    "payload",
+    "dependencies",
+    "parent",
+    "declaredVersion"
+  ],
+  "additionalProperties": false
+}

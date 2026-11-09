@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/LocalReadState.json",
+  "type": "object",
+  "properties": {
+    "readerId": {
+      "type": "string"
+    },
+    "entryId": {
+      "type": "string"
+    },
+    "activationCycleId": {
+      "type": "string"
+    },
+    "textEnd": {
+      "type": "boolean"
+    },
+    "audio": {
+      "type": "object"
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "read": {
+      "type": "boolean"
+    },
+    "fingerprint": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "readerId",
+    "entryId",
+    "activationCycleId",
+    "textEnd",
+    "audio",
+    "page",
+    "read",
+    "fingerprint"
+  ],
+  "additionalProperties": false
+}

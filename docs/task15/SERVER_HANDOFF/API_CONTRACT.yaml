@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  title: Sulfi future provider logical contract
+  version: 0.1.0-task15
+  description: |
+    LOCAL CONTRACT ONLY; SERVER_READY NO. No live URL is configured.
+    Dart operations feed/publish/upload/{digest}/blob/{digest} correspond below.
+    Apps Script needs an explicit doGet/doPost envelope adapter; see ADAPTER.md.
+servers: []
+security:
+  - BearerIdentity: []
+paths:
+  /feed:
+    get:
+      operationId: feed
+      parameters:
+        - {in: query, name: page, schema: {type: string}}
+        - {in: query, name: since, schema: {type: string}}
+      responses:
+        '200':
+          description: Authorized immutable snapshot; closed/expired records retained in archive
+          headers: {ETag: {schema: {type: string}}}
+          content: {application/json: {schema: {$ref: 'JSON_SCHEMAS/Feed.json'}}}
+        '401': {description: Identity invalid}
+        '403': {description: Read grant missing}
+  /entries:
+    post:
+      operationId: publish
+      description: Author only. Snapshot is append-only. An edit does not implicitly create a new activation cycle.
+      parameters:
+        - {in: header, name: If-Match, required: true, schema: {type: string}}
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: 'JSON_SCHEMAS/DiaryPublication.json'}}}
+      responses:
+        '200':
+          description: Committed publication; replay returns the same receipt before checking stale If-Match
+          headers: {ETag: {schema: {type: string}}}
+        '401': {description: Authentication required}
+        '403': {description: Subject lacks author grant}
+        '409': {description: Same idempotency key with different operation/body}
+        '412': {description: Revision conflict; no auto-rebase}
+        '422': {description: Invalid manifest or missing verified media/content dependency}
+  /blobs/{digest}:
+    parameters:
+      - {in: path, name: digest, required: true, schema: {type: string, pattern: '^[a-f0-9]{64}$'}}
+    put:
+      operationId: upload
+      description: Author role + quota required. Immutable hash key, repeated bytes do not allocate again.
+      parameters:
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content: {application/octet-stream: {schema: {type: string, format: binary}}}
+      responses:
+        '201': {description: Verified blob exists}
+        '403': {description: Author grant missing}
+        '409': {description: Conflicting retry}
+        '413': {description: Payload too large}
+        '422': {description: SHA or size invalid}
+    get:
+      operationId: blob
+      description: Check publication or material entitlement for this subject on EVERY request. SHA is not authorization.
+      responses:
+        '200':
+          description: Verified immutable bytes; no private Drive URL
+          content: {application/octet-stream: {schema: {type: string, format: binary}}}
+        '403': {description: No readable reference or entitlement}
+        '404': {description: Missing authorized blob}
+  /author/drafts:
+    get:
+      operationId: privateDrafts
+      description: Future owner-only operation; not implemented by Task15 fake client.
+      responses:
+        '200': {description: Private owner drafts only}
+        '403': {description: Never readable by client role}
+  /catalog:
+    get:
+      operationId: catalog
+      description: Future exact content index. Task15 installation still uses existing verified ZIP LocalCatalogSource.
+      responses:
+        '200':
+          description: Authorized revision closure index
+          content: {application/json: {schema: {$ref: 'JSON_SCHEMAS/Catalog.json'}}}
+        '403': {description: Entitlement required}
+components:
+  securitySchemes:
+    BearerIdentity: {type: http, scheme: bearer, bearerFormat: externally verified identity}

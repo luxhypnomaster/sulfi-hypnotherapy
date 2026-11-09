@@ -61,9 +61,18 @@ ResolvedContent resolveContent(
 }
 
 class ContentInstallPlan {
-  ContentInstallPlan(this.closure, this.newBytes, this.missingDigests);
+  ContentInstallPlan(
+    this.closure,
+    this.newBytes,
+    this.missingDigests, {
+    this.stagingBytes = 0,
+    this.physicalWriteBytes = 0,
+    this.reserveBytes = 16 * 1024 * 1024,
+  });
   final ResolvedContent closure;
   final int newBytes;
+  final int stagingBytes, physicalWriteBytes, reserveBytes;
+  int get requiredFreeBytes => stagingBytes + physicalWriteBytes + reserveBytes;
   final Set<String> missingDigests;
 }
 
@@ -90,63 +99,7 @@ class LocalCatalogSource {
   ) async {
     final preview = await service.inspect(file);
     try {
-      final revisions = <ContentRevision>[];
-      final tracks = <String, ContentRevision>{},
-          modules = <String, ContentRevision>{};
-      for (final row in preview.records['audio_assets'] as List) {
-        final r = ContentRevision.create(
-          ContentKey(ContentType.track, row['id']),
-          Map<String, dynamic>.from(row),
-          declaredVersion: row['baseRevision'],
-        );
-        tracks[row['id']] = r;
-        revisions.add(r);
-      }
-      List<RevisionKey> audio(Iterable<SessionStep> steps) => steps
-          .map((s) => s.audioAssetId)
-          .whereType<String>()
-          .toSet()
-          .map((id) {
-            final r = tracks[id];
-            if (r == null) throw const FormatException('Нет точного аудио');
-            return r.key;
-          })
-          .toList();
-      for (final row in preview.records['module_definitions'] as List) {
-        final m = ModuleDefinition.fromMap(jsonDecode(row['payload']));
-        final r = ContentRevision.create(
-          ContentKey(ContentType.module, m.id),
-          m.toMap(),
-          dependencies: audio(m.items),
-          parent: m.parentRevision,
-          declaredVersion: m.version,
-        );
-        modules[m.id] = r;
-        revisions.add(r);
-      }
-      for (final row in preview.records['session_templates'] as List) {
-        final t = SessionTemplate.fromMap(jsonDecode(row['payload']));
-        final dependencies = <String, RevisionKey>{
-          for (final k in audio(t.plan.allSteps)) k.token: k,
-        };
-        for (final phase in t.plan.phases ?? <PhaseInstance>[]) {
-          for (final child in phase.children) {
-            final m = modules[child.definitionId];
-            if (m != null && m.declaredVersion == child.definitionVersion) {
-              dependencies[m.key.token] = m.key;
-            }
-          }
-        }
-        revisions.add(
-          ContentRevision.create(
-            ContentKey(ContentType.template, t.id),
-            t.toMap(),
-            dependencies: dependencies.values.toList(),
-            parent: t.parentRevision,
-            declaredVersion: t.version,
-          ),
-        );
-      }
+      final revisions = indexRecords(preview.records);
       return LocalCatalogSource._(
         service,
         preview,
@@ -156,6 +109,88 @@ class LocalCatalogSource {
       await preview.close();
       rethrow;
     }
+  }
+
+  /// Same canonical dependency index used by ZIP and author ContentLink picker.
+  static List<ContentRevision> indexRecords(Map<String, dynamic> records) {
+    final revisions = <ContentRevision>[];
+    final tracks = <String, ContentRevision>{},
+        modules = <String, ContentRevision>{};
+    for (final row in records['audio_assets'] as List) {
+      final r = ContentRevision.create(
+        ContentKey(ContentType.track, row['id']),
+        Map<String, dynamic>.from(row),
+        declaredVersion: row['baseRevision'],
+      );
+      tracks[row['id']] = r;
+      revisions.add(r);
+    }
+    List<RevisionKey> audio(Iterable<SessionStep> steps) =>
+        steps.map((s) => s.audioAssetId).whereType<String>().toSet().map((id) {
+          final r = tracks[id];
+          if (r == null) throw const FormatException('Нет точного аудио');
+          return r.key;
+        }).toList();
+    for (final row in records['module_definitions'] as List) {
+      final m = ModuleDefinition.fromMap(jsonDecode(row['payload']));
+      final r = ContentRevision.create(
+        ContentKey(ContentType.module, m.id),
+        m.toMap(),
+        dependencies: audio(m.items),
+        parent: m.parentRevision,
+        declaredVersion: m.version,
+      );
+      modules[m.id] = r;
+      revisions.add(r);
+    }
+    for (final row in records['session_templates'] as List) {
+      final t = SessionTemplate.fromMap(jsonDecode(row['payload']));
+      final dependencies = <String, RevisionKey>{
+        for (final k in audio(t.plan.allSteps)) k.token: k,
+      };
+      for (final phase in t.plan.phases ?? <PhaseInstance>[]) {
+        for (final child in phase.children) {
+          final m = modules[child.definitionId];
+          if (m != null && m.declaredVersion == child.definitionVersion) {
+            dependencies[m.key.token] = m.key;
+          }
+        }
+      }
+      revisions.add(
+        ContentRevision.create(
+          ContentKey(ContentType.template, t.id),
+          t.toMap(),
+          dependencies: dependencies.values.toList(),
+          parent: t.parentRevision,
+          declaredVersion: t.version,
+        ),
+      );
+    }
+    return List.unmodifiable(revisions);
+  }
+
+  static Future<List<ContentRevision>> currentIndex(
+    CapsuleService service,
+  ) async {
+    final records = <String, dynamic>{};
+    for (final table in [
+      'audio_assets',
+      'module_definitions',
+      'session_templates',
+    ]) {
+      records[table] = (await service.database.query(table))
+          .map((row) => Map<String, dynamic>.from(row))
+          .toList();
+    }
+    for (final row in records['audio_assets'] as List) {
+      if (row['contentHash'] == null) {
+        throw const FormatException(
+          'Для точной ссылки требуется проверенный SHA аудио',
+        );
+      }
+      row['filePath'] = 'capsule://${row['contentHash']}';
+    }
+    return indexRecords(records);
   }
 
   Future<void> close() => preview.close();
@@ -214,17 +249,36 @@ class LocalCatalogSource {
     final closure = resolveContent(root, revisions);
     final missing = <String>{};
     final sizes = <String, int>{};
+    final availableHashes = <String>{};
+    for (final asset in await service.library.repository.list()) {
+      try {
+        final file = service.library.fileFor(asset);
+        if (!await file.exists()) continue;
+        final hash = (await sha256.bind(file.openRead()).first).toString();
+        if (asset.contentHash == null || asset.contentHash == hash) {
+          availableHashes.add(hash);
+        }
+      } catch (_) {
+        /* Unreadable/corrupt files cannot count as reusable. */
+      }
+    }
+    var physicalWriteBytes = 0;
     for (final r in closure.revisions.where(
       (r) => r.key.content.type == ContentType.track,
     )) {
       final hash = r.payload['contentHash'] as String;
       sizes[hash] = r.payload['fileSizeBytes'];
-      if (!await installed(r)) missing.add(hash);
+      if (!availableHashes.contains(hash)) missing.add(hash);
+      if (!await installed(r)) {
+        physicalWriteBytes += r.payload['fileSizeBytes'] as int;
+      }
     }
     return ContentInstallPlan(
       closure,
       missing.fold<int>(0, (n, h) => n + sizes[h]!),
       Set.unmodifiable(missing),
+      stagingBytes: sizes.values.fold<int>(0, (n, size) => n + size) * 2,
+      physicalWriteBytes: physicalWriteBytes,
     );
   }
 
@@ -286,9 +340,8 @@ class LocalCatalogSource {
       manifest['id'] = CapsuleService.digest(manifest);
       onState?.call(ContentInstallState.staging);
       check();
-      final required =
-          files.fold<int>(0, (n, f) => n + (f['bytes'] as int)) * 3 +
-          16 * 1024 * 1024;
+      final freshPlan = await this.plan(actual.revisions.last.key);
+      final required = freshPlan.requiredFreeBytes;
       if (service.availableBytes != null &&
           await service.availableBytes!() < required) {
         throw const FormatException(

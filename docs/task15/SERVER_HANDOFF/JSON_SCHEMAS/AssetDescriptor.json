@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/AssetDescriptor.json",
+  "type": "object",
+  "properties": {
+    "assetId": {
+      "type": "string"
+    },
+    "mime": {
+      "enum": [
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "audio/mp4",
+        "audio/wav",
+        "audio/mpeg"
+      ]
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "assetId",
+    "mime",
+    "bytes",
+    "hash"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sulfi.invalid/task15/Publication.json",
+  "type": "object",
+  "properties": {
+    "categoryId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "priority": {
+      "enum": [
+        "normal",
+        "high"
+      ]
+    },
+    "urgent": {
+      "type": "boolean"
+    },
+    "activationCycleId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "activatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "authorClosed": {
+      "type": "boolean"
+    },
+    "validUntil": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "categoryId",
+    "priority",
+    "urgent",
+    "activationCycleId",
+    "activatedAt",
+    "authorClosed",
+    "validUntil"
+  ],
+  "additionalProperties": false
+}

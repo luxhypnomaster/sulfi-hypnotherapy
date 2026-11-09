@@ -94,6 +94,7 @@ class DiaryAudio extends ChangeNotifier {
   String? current, error;
   bool loading = false, _closed = false;
   int _generation = 0;
+  int seekEpoch = 0;
   bool get playing => transport.playing;
   Duration get position => transport.position;
   Duration? get duration => transport.duration;
@@ -180,6 +181,7 @@ class DiaryAudio extends ChangeNotifier {
 
   Future<void> seek(Duration p) async {
     if (_closed || duration == null) return;
+    seekEpoch++;
     await transport.seek(
       Duration(
         milliseconds: p.inMilliseconds.clamp(0, duration!.inMilliseconds),
