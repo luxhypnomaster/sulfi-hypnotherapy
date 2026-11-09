@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 
 import 'v4_migration.dart';
+import 'content_revision_store.dart';
 
 Future<Database> openAppDatabase(
   String path, {
@@ -10,7 +11,7 @@ Future<Database> openAppDatabase(
 }) => (factory ?? databaseFactory).openDatabase(
   path,
   options: OpenDatabaseOptions(
-    version: 8,
+    version: 9,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('PRAGMA secure_delete = ON');
@@ -30,6 +31,7 @@ Future<Database> openAppDatabase(
       await _addIdentity(db);
       await _addAccessSettings(db);
       await _addHistoryAttachments(db);
+      await _addContentRevisions(db);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -78,6 +80,7 @@ Future<Database> openAppDatabase(
       if (oldVersion < 6) await _addIdentity(db);
       if (oldVersion < 7) await _addAccessSettings(db);
       if (oldVersion < 8) await _addHistoryAttachments(db);
+      if (oldVersion < 9) await _addContentRevisions(db);
     },
   ),
 );
@@ -172,4 +175,19 @@ Future<void> _addHistoryAttachments(DatabaseExecutor db) async {
   await db.execute(
     'CREATE INDEX IF NOT EXISTS history_attachments_run ON history_attachments(runId)',
   );
+}
+
+Future<void> _addContentRevisions(DatabaseExecutor db) async {
+  await db.execute(
+    'CREATE TABLE IF NOT EXISTS content_revisions(id TEXT PRIMARY KEY, payload TEXT NOT NULL)',
+  );
+  for (final table in [
+    'audio_assets',
+    'module_definitions',
+    'session_templates',
+  ]) {
+    for (final row in await db.query(table)) {
+      await ContentRevisionStore.retainRow(db, table, row);
+    }
+  }
 }

@@ -365,7 +365,7 @@ void main() {
       'client',
     );
     expect(await db.query('history_attachments'), isEmpty);
-    expect(await db.getVersion(), 8);
+    expect(await db.getVersion(), 9);
     await db.close();
     await root.delete(recursive: true);
   });

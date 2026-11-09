@@ -85,6 +85,11 @@ void main() {
       c.draft = c.draft.copyWith(plan: p);
       expect(c.templateDiffersFromSource, false);
       expect(stepsComposition(m.items), stepsComposition(copy.items));
+      await c.modules.save(
+        ModuleDefinition(id: m.id, title: 'v2', version: 2, items: const []),
+      );
+      expect(c.moduleDiffersFromSource(changed), true);
+      expect(c.moduleDiffersFromSource(undo), false);
       c.dispose();
     },
   );

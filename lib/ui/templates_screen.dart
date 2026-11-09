@@ -139,6 +139,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
             version: t.version + 1,
             isDefault: t.isDefault,
             origin: t.origin,
+            parentRevision: t.parentRevision,
             baseRevision: t.baseRevision,
             author: t.author,
           ),
@@ -149,7 +150,12 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       await exportMaterial(context, c.capsules!, templateId: t.id);
     }
     if (action == 'copy') {
-      await c.saveAsTemplate('${t.name} — копия', t.description, plan: t.plan);
+      await c.saveAsTemplate(
+        '${t.name} — копия',
+        t.description,
+        plan: t.plan,
+        parent: t,
+      );
     }
     if (action == 'default') await c.repository.setDefault(t.id);
     if (action == 'delete') {

@@ -7,6 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 import '../models/modular_plan.dart';
+import '../models/content_revision.dart';
+import '../data/content_revision_store.dart';
 import '../models/session_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/diary_entry.dart';
@@ -68,6 +70,7 @@ class CapsuleService {
     'diary_author',
     'diary_public',
     'diary_removed',
+    'content_revisions',
   ];
   // Limits are checked BEFORE decompression; file streams avoid loading audio
   // into one Dart Uint8List. 4 GiB is the explicit format limit for this edition.
@@ -295,7 +298,7 @@ class CapsuleService {
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
         'schema': schema,
-        'databaseSchema': 8,
+        'databaseSchema': 9,
         'scope': trackId != null
             ? 'track'
             : templateId != null
@@ -407,13 +410,16 @@ class CapsuleService {
       final identity = Map<String, dynamic>.from(manifest)..remove('id');
       if (manifest['format'] != 'sulfi-capsule' ||
           manifest['schema'] != schema ||
-          ![6, 7, 8].contains(manifest['databaseSchema']) ||
+          ![6, 7, 8, 9].contains(manifest['databaseSchema']) ||
           digest(identity) != manifest['id']) {
         throw const FormatException(
           'Неизвестная версия или повреждённый манифест',
         );
       }
       final records = Map<String, dynamic>.from(manifest['records']);
+      if (manifest['databaseSchema'] < 9) {
+        records.putIfAbsent('content_revisions', () => []);
+      }
       if (manifest['databaseSchema'] < 8) {
         records.putIfAbsent('history_attachments', () => []);
       }
@@ -488,6 +494,14 @@ class CapsuleService {
           if (table != 'run_events' &&
               !seen.add(row[table == 'app_counters' ? 'name' : 'id'])) {
             throw const FormatException('Повторяющийся идентификатор');
+          }
+          if (table == 'content_revisions') {
+            final revision = ContentRevision.fromMap(
+              jsonDecode(row['payload']),
+            );
+            if (revision.key.token != row['id']) {
+              throw const FormatException('Несогласованная ревизия');
+            }
           }
           if (table == 'module_definitions') {
             final module = ModuleDefinition.fromMap(jsonDecode(row['payload']));
@@ -684,6 +698,7 @@ class CapsuleService {
     Map normalized(Map row) {
       final r = Map<String, dynamic>.from(row);
       if (table == 'audio_assets') r.remove('filePath');
+      if (table == 'content_revisions') r['payload'] = jsonDecode(r['payload']);
       if (table == 'session_runs') {
         r.remove('displayNumber');
         final payload = Map<String, dynamic>.from(jsonDecode(r['payload']));
@@ -843,6 +858,16 @@ class CapsuleService {
         }
       }
       for (final row in records['audio_assets'] as List) {
+        final previous = (local['audio_assets'] as List)
+            .where((r) => r['id'] == row['id'])
+            .firstOrNull;
+        if (previous != null &&
+            previous['contentHash'] != row['contentHash'] &&
+            choice != CapsuleConflictChoice.keepExisting) {
+          throw const FormatException(
+            'Изменённые аудиобайты требуют нового ID. Прежние зависимости истории сохранены.',
+          );
+        }
         if (skipped['audio_assets']!.contains(row['id'])) continue;
         if (!{'mp3', 'm4a', 'wav'}.contains(row['format'])) {
           throw const FormatException('Неизвестный формат аудио');
@@ -921,6 +946,32 @@ class CapsuleService {
         }
         for (final table in tables) {
           for (final row in records[table] as List) {
+            if (table == 'content_revisions') {
+              await ContentRevisionStore(tx)
+                  .put(ContentRevision.fromMap(jsonDecode(row['payload'])));
+              continue;
+            }
+            if (const [
+                  'audio_assets',
+                  'module_definitions',
+                  'session_templates',
+                ].contains(table) &&
+                !skipped[table]!.contains(row['id'])) {
+              for (final old in (local[table] as List).where(
+                (r) => r['id'] == row['id'],
+              )) {
+                await ContentRevisionStore.retainRow(
+                  tx,
+                  table,
+                  Map<String, Object?>.from(old),
+                );
+              }
+              await ContentRevisionStore.retainRow(
+                tx,
+                table,
+                Map<String, Object?>.from(row),
+              );
+            }
             if (table == 'run_events') {
               if (skipped['session_runs']!.contains(row['runId'])) continue;
               final event = Map<String, Object?>.from(row)..remove('id');

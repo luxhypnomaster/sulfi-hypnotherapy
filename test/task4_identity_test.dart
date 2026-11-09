@@ -6,6 +6,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sulfi_hypnotherapy/data/library_repository.dart';
 import 'package:sulfi_hypnotherapy/data/session_repository.dart';
 import 'package:sulfi_hypnotherapy/data/module_catalog.dart';
+import 'package:sulfi_hypnotherapy/data/content_revision_store.dart';
 import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
 import 'package:sulfi_hypnotherapy/models/modular_plan.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
@@ -98,6 +99,34 @@ void main() {
     return (await sessions.history()).single;
   }
 
+  test('Task14 personal template copy has new logical ID and exact retained parent, original stays intact', () async {
+    final before = template.toMap();
+    final copy = await c.saveAsTemplate(
+      'Моя копия',
+      'Описание',
+      plan: template.plan,
+      parent: template,
+    );
+    expect(copy.id, isNot(template.id));
+    expect(copy.origin, 'personal');
+    expect(copy.parentRevision!.content.id, template.id);
+    final parent = await ContentRevisionStore(audio.database)
+        .get(copy.parentRevision!);
+    expect(parent!.payload, before);
+    expect(
+      (await sessions.templates())
+          .singleWhere((t) => t.id == template.id)
+          .toMap(),
+      before,
+    );
+    expect(
+      (await sessions.templates())
+          .singleWhere((t) => t.id == copy.id)
+          .parentRevision!
+          .digest,
+      copy.parentRevision!.digest,
+    );
+  });
   test('definition updates linked current/template, pencil, but never frozen history or events', () async {
     final run = await history();
     final frozen = run.toMap().toString();

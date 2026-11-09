@@ -1,3 +1,5 @@
+import 'content_revision.dart';
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -313,6 +315,7 @@ class SessionTemplate {
     this.origin = 'personal',
     this.baseRevision = 1,
     this.author,
+    this.parentRevision,
   });
   final String id, name, description;
   final SessionPlan plan;
@@ -321,6 +324,7 @@ class SessionTemplate {
   final String origin;
   final int baseRevision;
   final String? author;
+  final RevisionKey? parentRevision;
   final DateTime createdAt, updatedAt;
   Map<String, Object?> toMap() => {
     'id': id,
@@ -332,6 +336,7 @@ class SessionTemplate {
     'origin': origin,
     'baseRevision': baseRevision,
     'author': author,
+    if (parentRevision != null) 'parentRevision': parentRevision!.toMap(),
     'createdAt': createdAt.toUtc().toIso8601String(),
     'updatedAt': updatedAt.toUtc().toIso8601String(),
   };
@@ -345,6 +350,9 @@ class SessionTemplate {
     origin: m['origin'] as String? ?? 'personal',
     baseRevision: m['baseRevision'] as int? ?? 1,
     author: m['author'] as String?,
+    parentRevision: m['parentRevision'] == null
+        ? null
+        : RevisionKey.fromMap(Map<String, dynamic>.from(m['parentRevision'])),
     createdAt: DateTime.parse(m['createdAt'] as String),
     updatedAt: DateTime.parse(m['updatedAt'] as String),
   );

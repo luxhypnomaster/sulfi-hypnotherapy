@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../models/audio_asset.dart';
+import '../data/content_revision_store.dart';
 import '../models/modular_plan.dart';
 import '../models/session_plan.dart';
 import '../models/plan_duration.dart';
@@ -129,6 +130,12 @@ class _ModuleEditorState extends State<ModuleEditor> {
           recommendedPhaseIds: old.recommendedPhaseIds,
           version: widget.creating || asNew ? 1 : old.version + 1,
           origin: asNew ? 'personal' : old.origin,
+          parentRevision: asNew
+              ? ContentRevisionStore.revisionForRow('module_definitions', {
+                  'id': old.id,
+                  'payload': jsonEncode(old.toMap()),
+                })!.key
+              : old.parentRevision,
           baseRevision: asNew ? 1 : old.baseRevision,
           author: asNew ? null : old.author,
           archived: archive || old.archived,

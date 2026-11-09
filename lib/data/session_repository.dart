@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/session_plan.dart';
+import 'content_revision_store.dart';
 import '../services/access_policy.dart';
 
 abstract interface class SessionRepository {
@@ -80,10 +81,22 @@ class SqliteSessionRepository implements SessionRepository {
         .firstOrNull;
     if (old != null) policy.requireOrigin(old.origin);
     policy.requireOrigin(template.origin);
-    await database.insert('session_templates', {
-      'id': template.id,
-      'payload': jsonEncode(template.toMap()),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await database.transaction((tx) async {
+      if (old != null) {
+        await ContentRevisionStore.retainRow(tx, 'session_templates', {
+          'id': old.id,
+          'payload': jsonEncode(old.toMap()),
+        });
+      }
+      await ContentRevisionStore.retainRow(tx, 'session_templates', {
+        'id': template.id,
+        'payload': jsonEncode(template.toMap()),
+      });
+      await tx.insert('session_templates', {
+        'id': template.id,
+        'payload': jsonEncode(template.toMap()),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 
   @override

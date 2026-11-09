@@ -271,7 +271,7 @@ void main() {
     );
     expect((await db.query('diary_author')).single['payload'], payload);
     expect(await file.readAsString(), 'private recording');
-    expect(await db.getVersion(), 8);
+    expect(await db.getVersion(), 9);
     expect(await db.query('diary_removed'), isEmpty);
   });
   test(

@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/audio_asset.dart';
 import 'app_database.dart';
+import 'content_revision_store.dart';
 
 abstract interface class LibraryRepository {
   Future<List<AudioAsset>> list();
@@ -31,13 +32,37 @@ class SqliteLibraryRepository implements LibraryRepository {
   @override
   Future<void> save(AudioAsset asset) async {
     await database.transaction((tx) async {
+      final next = asset.toMap();
+      for (final old in await tx.query(
+        'audio_assets',
+        where: 'id=?',
+        whereArgs: [asset.id],
+      )) {
+        if (old['contentHash'] != null &&
+            asset.contentHash != null &&
+            asset.contentHash != old['contentHash']) {
+          throw StateError(
+            'Новые аудиобайты требуют нового ID; прежняя история сохранена',
+          );
+        }
+        if (asset.contentHash == null &&
+            old['contentHash'] != null &&
+            old['filePath'] != asset.filePath) {
+          throw StateError('Изменённые аудиобайты требуют нового ID');
+        }
+        if (asset.contentHash == null && old['filePath'] == asset.filePath) {
+          next['contentHash'] = old['contentHash'];
+        }
+        await ContentRevisionStore.retainRow(tx, 'audio_assets', old);
+      }
+      await ContentRevisionStore.retainRow(tx, 'audio_assets', next);
       final count = await tx.update(
         'audio_assets',
-        asset.toMap(),
+        next,
         where: 'id = ?',
         whereArgs: [asset.id],
       );
-      if (count == 0) await tx.insert('audio_assets', asset.toMap());
+      if (count == 0) await tx.insert('audio_assets', next);
     });
   }
 
