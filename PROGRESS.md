@@ -16,7 +16,7 @@
 ## G1 — COMPLETE
 Читать TASK_RU.md §1 и acceptance UI-01…UI-13. Не переписывать уже работающий CapsuleService/плеер. Проверить гипотезу: editor.reload обновляет durationMs всем старым экземплярам, но источник хранит прежний кеш длительности; новая копия C не проходит этот refresh. Прежде фикса написать regression с такой metadata drift и реальным A/B/C, persistence и Undo. Сохранить существующий тест metadata refresh.
 
-G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: ACTIVE. G5–G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
+G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: COMPLETE local slice / K008 PARTIAL. G5: ACTIVE. G6: NOT STARTED. SERVER_READY: NO до завершения P0. Отчёты: https://drive.google.com/drive/folders/1rq9fFTwMDmayx8M6eNdbIiNJALYLJwmS
 
 ### G1 checkpoint
 - before_sha: 5177c62
@@ -50,3 +50,14 @@ G2: COMPLETE. G3: PARTIAL (safe slice committed; exact migration deferred). G4: 
 - next gate: G4. Read docs/task15/DIARY_AND_CLIENT.md and existing DiaryController/Reader/Editor/Audio; add reader-local state and publication metadata without live API changes.
 - next command: sed -n '145,180p' lib/main.dart
 - SERVER_READY: NO (P0 exact audio storage blocked).
+
+## G4 — COMPLETE local slice / DAY-20 PARTIAL
+- before_sha: b47132c
+- after_sha: c94f95d
+- PASS_IDs: DAY-01…19, DAY-21 local/unit/widget evidence (actual Android audio and live networking NOT_RUN). DAY-17 further two-store provider check onG5.
+- PARTIAL: DAY-20 author DiaryReader preview is real and side-effect-free; Home media preview BLOCKED by unapproved K008 layout. No new media design.
+- files/tables: DiaryPublication, DiaryReadStore app_settings namespace, DiaryController/Reader/Editor/Audio, exact picker, DiffPlan. No schema change; old root/readingState retained.
+- tests: g4-final 8 PASS; g4-retest 38 PASS including 30 legacy multimedia; analyze clean. Screenshot evidence g4-*.png; no actual private media.
+- next gate: G5, same-code client edition and independent stores FakeProvider; no live server. Add explicit clienttest Android suffix without changing author applicationId or signing. Keep provider injected, no HTTP default.
+- next command: cat .github/workflows/checks.yml; cat android/app/build.gradle.kts
+- SERVER_READY: NO (G3 + K008).
