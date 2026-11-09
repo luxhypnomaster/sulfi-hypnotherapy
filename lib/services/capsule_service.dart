@@ -516,11 +516,13 @@ class CapsuleService {
                     'filePath': payload['filePath'] ?? 'unavailable',
                   });
                   if (payload['filePath'] != null &&
-                      payload['filePath'] != 'capsule://${asset.contentHash}')
+                      payload['filePath'] != 'capsule://${asset.contentHash}') {
                     throw const FormatException('Путь аудиоревизии');
+                  }
                   if (asset.contentHash != null &&
-                      !RegExp(r'^[a-f0-9]{64}$').hasMatch(asset.contentHash!))
+                      !RegExp(r'^[a-f0-9]{64}$').hasMatch(asset.contentHash!)) {
                     throw const FormatException('Хеш аудиоревизии');
+                  }
                   if (asset.durationMs <= 0 ||
                       asset.fileSizeBytes <= 0 ||
                       !{'wav', 'm4a', 'mp3'}.contains(asset.format)) {

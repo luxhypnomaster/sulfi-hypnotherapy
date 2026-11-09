@@ -1574,6 +1574,14 @@ void main() {
       expect(find.byType(ModuleEditor), findsOneWidget);
       await modulePause(t);
       await saveModule(t);
+      for (
+        var i = 0;
+        i < 80 && find.byType(ModuleEditor).evaluate().isNotEmpty;
+        i++
+      ) {
+        await settleIo(t);
+        await t.pumpAndSettle();
+      }
       expect(
         c.modules.entries.singleWhere((m) => m.id == 'legacy-empty').items,
         hasLength(1),

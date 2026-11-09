@@ -838,6 +838,13 @@ void main() {
       await io(t);
       await t.tap(find.text('Начать повтор'));
       await io(t);
+      for (
+        var i = 0;
+        i < 80 && find.byType(RunScreen).evaluate().isEmpty;
+        i++
+      ) {
+        await io(t);
+      }
       expect(find.byType(RunScreen), findsOneWidget);
       final engine = t.widget<RunScreen>(find.byType(RunScreen)).engine;
       expect(engine.run!.id, isNot(run.id));
