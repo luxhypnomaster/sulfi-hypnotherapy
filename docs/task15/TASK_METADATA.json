@@ -1,0 +1,20 @@
+{
+  "project": "Sulfi — Self-Hypnosis",
+  "task": "TASK_015",
+  "stage": "PRE_SERVER_CLIENT_READINESS",
+  "date": "2026-11-09",
+  "baseline": {
+    "task14_commit": "9982df546aa032d014244df8f4483434294f350b",
+    "task13_commit": "64639bd627eb102781c69d78d9d8889b05646c2f",
+    "task14_result": "41_PASS_5_PARTIAL"
+  },
+  "acceptance_checks": 86,
+  "live_deployment_permitted": false,
+  "project_is_one_pass_per_milestone": false,
+  "generated_from": "owner-approved requirements and verified task14 reports",
+  "evidence": [
+    "android_2814_zip_contents.jpg",
+    "android_2819_library_shield_sheet.jpg",
+    "android_2817_library.jpg"
+  ]
+}
