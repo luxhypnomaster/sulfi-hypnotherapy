@@ -15,6 +15,7 @@ import 'design.dart';
 import 'preview_bar.dart';
 import 'backup_screen.dart';
 import 'content_export.dart';
+import 'content_catalog_screen.dart';
 import 'session_actions.dart';
 import '../services/access_policy.dart';
 
@@ -261,6 +262,24 @@ class _LibraryScreenState extends State<LibraryScreen>
                 ],
               ),
             ),
+            if (widget.controller?.capsules != null)
+              OutlinedButton.icon(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await Navigator.push<void>(
+                    this.context,
+                    MaterialPageRoute(
+                      builder: (_) => ContentCatalogScreen(
+                        controller: widget.controller!,
+                        player: widget.player,
+                      ),
+                    ),
+                  );
+                  if (mounted) await _load();
+                },
+                icon: const Icon(Icons.view_list_outlined),
+                label: const Text('Локальный каталог материалов'),
+              ),
             if (widget.controller?.capsules != null)
               OutlinedButton.icon(
                 onPressed: () async {

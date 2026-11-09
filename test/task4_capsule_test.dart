@@ -16,6 +16,10 @@ import 'package:sulfi_hypnotherapy/models/modular_plan.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
 import 'package:sulfi_hypnotherapy/services/library_service.dart';
 import 'package:sulfi_hypnotherapy/services/capsule_service.dart';
+import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
+import 'package:sulfi_hypnotherapy/models/content_revision.dart';
+import 'package:sulfi_hypnotherapy/data/content_revision_store.dart';
+import 'package:sulfi_hypnotherapy/data/app_database.dart';
 
 void main() {
   sqfliteFfiInit();
@@ -203,13 +207,14 @@ void main() {
             StepKind.silence,
           ]);
         }
-        if (scope == 'template')
+        if (scope == 'template') {
           expect(
             (await SqliteSessionRepository(
               b.database,
             ).templates()).single.plan.totalMs,
             5000,
           );
+        }
         final again = await destination.inspect(file);
         expect(again.alreadyImported, true);
         await destination.restore(again);
@@ -242,6 +247,184 @@ void main() {
       expect(await b.list(), isEmpty);
     },
   );
+  test('Task14 offline catalog indexes before install, selects exact template, omits private rows and retries idempotently', () async {
+    final local = await LocalCatalogSource.open(destination, zip);
+    expect(
+      local.revisions.where((r) => r.key.content.type == ContentType.track),
+      hasLength(2),
+    );
+    expect(await b.list(), isEmpty);
+    final template = local.revisions.singleWhere(
+      (r) => r.key.content.type == ContentType.template,
+    );
+    final plan = await local.plan(template.key);
+    expect(plan.closure.revisions, hasLength(3));
+    expect(plan.newBytes, 12);
+    final states = <ContentInstallState>[];
+    await local.install(plan, onState: states.add);
+    expect(states, [
+      ContentInstallState.planned,
+      ContentInstallState.staging,
+      ContentInstallState.verifying,
+      ContentInstallState.committing,
+      ContentInstallState.installed,
+    ]);
+    expect(await b.list(), hasLength(1));
+    expect(await b.database.query('session_runs'), isEmpty);
+    expect(await b.database.query('diary_author'), isEmpty);
+    expect(await local.installed(template), true);
+    expect((await local.plan(template.key)).newBytes, 0);
+    await local.install(await local.plan(template.key));
+    expect(await b.list(), hasLength(1));
+    expect(await target.directory.list().length, 1);
+    final revision = await ContentRevisionStore(b.database).get(template.key);
+    expect(revision!.key.digest, template.key.digest);
+    await local.close();
+  });
+  test('Task14 catalog cancel, commit failure, retry and corrupt staged source leave no partial content', () async {
+    final local = await LocalCatalogSource.open(destination, zip);
+    final root = local.revisions.singleWhere(
+      (r) => r.key.content.type == ContentType.template,
+    );
+    final plan = await local.plan(root.key);
+    var cancelled = false;
+    await expectLater(
+      local.install(
+        plan,
+        cancelled: () => cancelled,
+        onState: (s) {
+          if (s == ContentInstallState.verifying) cancelled = true;
+        },
+      ),
+      throwsFormatException,
+    );
+    expect(await b.list(), isEmpty);
+    await expectLater(
+      local.install(plan, beforeCommit: () async => throw StateError('fault')),
+      throwsStateError,
+    );
+    expect(await b.list(), isEmpty);
+    expect(await b.database.query('session_templates'), isEmpty);
+    expect(await target.directory.list().length, 0);
+    final hash = root.dependencies.firstWhere(
+      (k) => k.content.type == ContentType.track,
+    );
+    final track = local.revisions.singleWhere((r) => r.key.token == hash.token);
+    final file = File(
+      p.join(local.preview.staging.path, track.payload['contentHash']),
+    );
+    final original = await file.readAsBytes();
+    await file.writeAsBytes([9, 8, 7]);
+    await expectLater(local.install(plan), throwsFormatException);
+    expect(await b.list(), isEmpty);
+    await file.writeAsBytes(original);
+    await local.install(plan);
+    expect(await local.installed(root), true);
+    await local.close();
+  });
+  test('Task14 schema8 populated upgrade retains every table and media, then pins old definition after v2', () async {
+    final preview = await destination.inspect(zip);
+    await destination.restore(preview);
+    await preview.close();
+    await b.database.insert('app_settings', {
+      'name': 'owner-setting',
+      'value': 'kept',
+    });
+    await b.database.insert('diary_sync', {'id': 1, 'revision': 'kept'});
+    final tables = [
+      ...CapsuleService.tables.where((t) => t != 'content_revisions'),
+      'app_settings',
+      'diary_sync',
+    ];
+    final before = {for (final t in tables) t: await b.database.query(t)};
+    final bytes = {
+      for (final a in await target.repository.list())
+        a.filePath: await target.fileFor(a).readAsBytes(),
+    };
+    final path = b.database.path;
+    await b.database.execute('DROP TABLE content_revisions');
+    await b.database.execute('PRAGMA user_version=8');
+    await b.database.close();
+    final reopened = await openAppDatabase(path, factory: databaseFactoryFfi);
+    try {
+      expect(await reopened.getVersion(), 9);
+      for (final t in tables) {
+        expect(await reopened.query(t), before[t], reason: t);
+      }
+      for (final e in bytes.entries) {
+        expect(
+          await File(p.join(target.directory.path, e.key)).readAsBytes(),
+          e.value,
+        );
+      }
+      final store = ContentRevisionStore(reopened);
+      final old = (await store.list()).singleWhere(
+        (r) => r.key.content.type == ContentType.module,
+      );
+      final oldRun = await reopened.query('session_runs');
+      final modules = ModuleCatalog(reopened);
+      await modules.load();
+      final m = modules.entries.single;
+      await modules.save(
+        ModuleDefinition(id: m.id, title: 'v2', version: 2, items: m.items),
+      );
+      expect((await store.get(old.key))!.key.digest, old.key.digest);
+      expect(modules.source(m.id, 1)!.title, m.title);
+      expect(await reopened.query('session_runs'), oldRun);
+      expect(
+        (await store.list()).every((r) => r.parent == null),
+        true,
+      ); // No fabricated legacy parent.
+    } finally {
+      await reopened.close();
+    }
+  });
+  test('Task14 installer checks storage before writes, reconciles abandoned files, and reopens after restart', () async {
+    var free = 1 << 30;
+    final bounded = CapsuleService(
+      database: b.database,
+      library: target,
+      diaryDirectory: destination.diaryDirectory,
+      workspace: destination.workspace,
+      availableBytes: () async => free,
+    );
+    var local = await LocalCatalogSource.open(bounded, zip);
+    final r = local.revisions.singleWhere(
+      (r) => r.key.content.type == ContentType.template,
+    );
+    final plan = await local.plan(r.key);
+    free = 0;
+    await expectLater(local.install(plan), throwsFormatException);
+    expect(await b.list(), isEmpty);
+    free = 1 << 30;
+    await local.install(plan);
+    await local.close();
+    await File(p.join(target.directory.path, 'asset_capsule_abandoned.wav'))
+        .writeAsBytes([1, 2, 3]);
+    await CapsuleService.cleanWorkspace(destination.workspace);
+    await target.initialize();
+    expect(await target.directory.list().length, 1);
+    local = await LocalCatalogSource.open(bounded, zip);
+    final reopened = local.revisions.singleWhere(
+      (v) => v.key.token == r.key.token,
+    );
+    expect(await local.installed(reopened), true);
+    expect((await local.plan(reopened.key)).newBytes, 0);
+    await local.close();
+  });
+  test('Task14 immutable audio prevents package update silently replacing history dependencies', () async {
+    final preview = await destination.inspect(zip);
+    await destination.restore(preview);
+    await preview.close();
+    final before = await b.database.query('audio_assets');
+    final changed = AudioAsset.fromMap({
+      ...before.first,
+      'contentHash':
+          'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    });
+    await expectLater(b.save(changed), throwsStateError);
+    expect(await b.database.query('audio_assets'), before);
+  });
   test('full offline capsule restores IDs, bytes, plans, history, diary and survives restart', () async {
     final archive = ZipDecoder().decodeBytes(await zip.readAsBytes());
     expect(
