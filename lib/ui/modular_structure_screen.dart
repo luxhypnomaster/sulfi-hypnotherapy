@@ -714,7 +714,12 @@ class _ModularStructureScreenState extends State<ModularStructureScreen> {
                       fontSize: phase ? 15 : 13,
                       height: 1.12,
                       fontWeight: FontWeight.w700,
-                      color: !enabled
+                      fontStyle: !phase && c.moduleDiffersFromSource(child!)
+                          ? FontStyle.italic
+                          : FontStyle.normal,
+                      color: !phase && c.moduleDiffersFromSource(child!)
+                          ? neonPink
+                          : !enabled
                           ? Colors.grey
                           : phase && open
                           ? neonLime

@@ -11,6 +11,7 @@ import '../models/modular_plan.dart';
 import '../models/audio_asset.dart';
 import '../models/session_plan.dart';
 import '../models/execution_identity.dart';
+import '../models/composition_identity.dart';
 import 'library_service.dart';
 import 'capsule_service.dart';
 import 'access_policy.dart';
@@ -98,6 +99,26 @@ class SessionController extends ChangeNotifier {
   AudioAsset? asset(String? id) => assets.where((a) => a.id == id).firstOrNull;
   SessionTemplate? get baseTemplate =>
       templates.where((t) => t.id == draft.baseTemplateId).firstOrNull;
+
+  bool moduleDiffersFromSource(PhaseChild instance) {
+    if (!instance.isModule || instance.definitionVersion == null) return false;
+    final source = modules.entries
+        .where(
+          (x) =>
+              x.id == instance.definitionId &&
+              x.version == instance.definitionVersion,
+        )
+        .firstOrNull;
+    return source != null &&
+        stepsComposition(source.items) != stepsComposition(instance.items);
+  }
+
+  bool get templateDiffersFromSource {
+    final source = baseTemplate;
+    return source != null &&
+        draft.baseTemplateVersion == source.version &&
+        planComposition(source.plan) != planComposition(draft.plan);
+  }
 
   Future<void> initialize() async {
     if (!isEditor) await repository.interruptUnfinished();
