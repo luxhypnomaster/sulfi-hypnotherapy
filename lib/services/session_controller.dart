@@ -1,3 +1,7 @@
+import 'alchemist_identity_session.dart';
+import 'alchemist_catalog.dart';
+import 'alchemist_api.dart';
+
 import 'dart:convert';
 import 'dart:async';
 
@@ -86,6 +90,37 @@ class SessionController extends ChangeNotifier {
   final PreviewPlayer? preview;
   final DiaryController? diary;
   final SessionRepository repository;
+  AlchemistCatalog? _catalog;
+  AlchemistIdentitySession? _catalogIdentity;
+  AlchemistApi alchemistApi({bool authenticated = true}) {
+    const endpoint = String.fromEnvironment('SULFI_ALCHEMIST_API');
+    if (endpoint.isEmpty) {
+      throw const FormatException(
+        'Облачный сервер ещё не подключён в этой сборке. Локальные данные доступны.',
+      );
+    }
+    return AlchemistApi(
+      Uri.parse(endpoint),
+      credential: !authenticated
+          ? null
+          : () async {
+              final identity = diary?.identity;
+              if (identity == null) {
+                throw const FormatException('Вход Google ещё не настроен');
+              }
+              return (_catalogIdentity ??= AlchemistIdentitySession(
+                identity,
+              )).token();
+            },
+    );
+  }
+
+  AlchemistCatalog get catalog => _catalog ??= AlchemistCatalog(
+    this,
+    api: const String.fromEnvironment('SULFI_ALCHEMIST_API').isEmpty
+        ? null
+        : alchemistApi(),
+  );
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(
     plan: SessionPlan(steps: const []),

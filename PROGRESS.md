@@ -1,3 +1,13 @@
+# Current checkpoint — C1.6 / C3 vertical slice (2026-11-10)
+
+C0 remains COMPLETE, not repeated. Repository CLASPRC_JSON is present and LIVE read-only verification succeeded from trusted main: Actions run 42792367833, identity marker and script-list marker verified. The old AUTH_PENDING lines below are historical; current clasp authorization is VERIFIED, not missing.
+
+Implemented canonical cross-language content manifests, persistent deduplicated media aliases, lost-final-PUT reconciliation by preallocated Drive ID, author track/module/template publication editor and local outbox, client catalog with explicit selective install through existing LocalCatalog/CapsuleService. Durable download checkpoints now live outside disposable capsule workspace. Tokens cached only in RAM; concurrent chunk operations share one SDK login and logout invalidates pending login. No changes to RunScreen/art or destructive data migration.
+
+Verified: Node 14 PASS; Flutter cross-language integration and identity tests 2 PASS (real SQLite/Dart + production JS domain via local HTTP, injected Drive byte adapter). Includes track→module selective download, two pauses preserved, deduplicated upload, metadata-only edit, lost publish response/restart receipt, withdrawal with offline copy preserved. This is NOT a live Google Drive/Android E2E.
+
+In progress: Operations.js admin/sync/audit extension needs dedicated tests; full diary/video/package integration, full-suite CI/two APKs and production deployment remain unfinished. Additional configuration blocker: Android Google Sign-In web client ID is absent from repository build variables; clasp deploy OAuth is separate and must never be embedded in APK. Continue independent implementation. SERVER_LIVE=NO, FULL_CODE_IMPLEMENTED=NO, FULL_E2E=NO. No production source deployed or new GAS project created.
+
 # Latest resume — user continuation, repository OAuth now present
 
 Continue existing C1.5; do not repeat C0. User confirms completed clasp and repository-level CLASPRC_JSON. Secret NAME verified via gh secret list, not value. Auth check only workflow added to main via workflow-onlyPR18 (owner specifically requested trusted main execution); commit8bb3d2d4a52366c69fc248304b6194cb1a08c887. No server/app source merged into main. Manual check running; actual OAuth result must be recorded, not inferred from secret presence. No environment secret. All secret-bearing workflows now restricted manual main-only; production still blocked until complete source/tests/readback.

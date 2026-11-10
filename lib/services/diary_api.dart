@@ -301,7 +301,7 @@ class DiaryApi {
       request.followRedirects =
           false; // Never forward an author token to a redirect.
       headers.forEach(request.headers.set);
-      if (body != null) request.write(body);
+      if (body != null) request.add(utf8.encode(body));
       final response = await request.close().timeout(
         const Duration(seconds: 20),
       );

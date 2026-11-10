@@ -1,3 +1,6 @@
+import 'alchemist_catalog_screen.dart';
+import '../models/content_revision.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/modular_plan.dart';
@@ -104,6 +107,15 @@ class _ModulesScreenState extends State<ModulesScreen> {
                     tooltip: 'Действия модуля',
                     enabled: !busy,
                     onSelected: (value) async {
+                      if (value == 'publish') {
+                        await preparePublication(
+                          context,
+                          widget.controller,
+                          ContentType.module,
+                          m.id,
+                        );
+                        return;
+                      }
                       if (value == 'edit') {
                         await _edit(m);
                         return;
@@ -120,6 +132,12 @@ class _ModulesScreenState extends State<ModulesScreen> {
                       if (mounted) setState(() => busy = false);
                     },
                     itemBuilder: (_) => [
+                      if (widget.controller.capsules != null &&
+                          widget.controller.library.policy.isAuthor)
+                        const PopupMenuItem(
+                          value: 'publish',
+                          child: Text('Подготовить к публикации'),
+                        ),
                       const PopupMenuItem(
                         value: 'edit',
                         child: Text('Редактировать'),

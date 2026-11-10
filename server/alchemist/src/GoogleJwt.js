@@ -47,6 +47,8 @@ var AlchemistJwt = (function () {
         (claims.nbf !== undefined && (!Number.isInteger(claims.nbf) || claims.nbf > now)) ||
         claims.email_verified !== true || typeof claims.email !== 'string') AlchemistCatalog.fail(401);
     // Identity is verified above. Authority comes only from server-side subjects.
+    var revoked=JSON.parse(properties.getProperty('ALCHEMIST_REVOKED_SUBJECTS')||'{}');
+    if(Object.prototype.hasOwnProperty.call(revoked,claims.sub)&&revoked[claims.sub]===true)AlchemistCatalog.fail(401,'IDENTITY_REVOKED');
     var grants=JSON.parse(properties.getProperty('ALCHEMIST_GRANTS')||'{}');
     claims.roles=claims.sub===owner?['owner']:(Object.prototype.hasOwnProperty.call(grants,claims.sub)?grants[claims.sub]:['client']);
     if(!Array.isArray(claims.roles))AlchemistCatalog.fail(503,'INVALID_GRANTS');

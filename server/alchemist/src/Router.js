@@ -18,6 +18,8 @@ function doPost(e){
   var io=AlchemistGasFiles.create(folder,owner),store=AlchemistAtomicStore.create(io);
   function scriptLock(fn){var l=LockService.getScriptLock();if(!l.tryLock(10000))AlchemistCatalog.fail(503,'BUSY');try{return fn();}finally{l.releaseLock();}}
   var access=AlchemistAccess.create(store,function(){return Date.now();});
+  function canonical(v){if(Array.isArray(v))return '['+v.map(canonical).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(function(k){return JSON.stringify(k)+':'+canonical(v[k]);}).join(',')+'}';return JSON.stringify(v);}
+  if(request.operation==='content.registerManifest'){var manifests=AlchemistManifest.create(store,{lock:scriptLock,uuid:function(){return Utilities.getUuid();},canonical:canonical,digest:io.digest},access);return alchemistOutput({ok:true,status:200,result:manifests.execute(request.operation,actor,request.parameters)});}
   if(request.operation.indexOf('media.')===0){
     var blobFolder=properties.getProperty('ALCHEMIST_BLOB_FOLDER_ID');if(!blobFolder)AlchemistCatalog.fail(503,'STORAGE_NOT_BOOTSTRAPPED');
     var media=AlchemistMediaRuntime.create(store,AlchemistGasTransfer.create(blobFolder,owner),{lock:scriptLock,now:function(){return Date.now();},uuid:function(){return Utilities.getUuid();},decode:function(s){return Utilities.base64Decode(s);},encode:function(b){return Utilities.base64Encode(b);},digest:function(b){return AlchemistSha256.create().update(b).hex();}});
@@ -31,7 +33,10 @@ function doPost(e){
    validatePublication:access.validatePublication
   });
   if(request.operation==='feed.list'||request.operation.indexOf('entry.')===0){var diary=AlchemistDiary.create(core,store,{uuid:function(){return Utilities.getUuid();},now:function(){return new Date().toISOString();}});return alchemistOutput({ok:true,status:200,result:diary.execute(request.operation,actor,request.parameters)});}
-  return alchemistOutput({ok:true,status:200,result:core.execute(request.operation,actor,request.parameters)});
+  var operations=AlchemistOperations.create(store,core,{lock:scriptLock,now:function(){return new Date().toISOString();},digest:io.digest},properties);
+  var result=request.operation.indexOf('catalog.')===0?core.execute(request.operation,actor,request.parameters):operations.execute(request.operation,actor,request.parameters);
+  if(request.operation.indexOf('catalog.')===0&&request.parameters.requestId)operations.audit(actor,request.operation,200);
+  return alchemistOutput({ok:true,status:200,result:result});
  }catch(error){return alchemistOutput({ok:false,status:error.status||503,error:{code:error.code||'SERVER_UNAVAILABLE'}});}
 }
-function alchemistOutput(value){return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
+function alchemistOutput(value){value.requestId=Utilities.getUuid();value.serverTime=new Date().toISOString();return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}

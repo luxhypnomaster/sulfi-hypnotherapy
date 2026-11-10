@@ -1,3 +1,6 @@
+import 'alchemist_catalog_screen.dart';
+import '../models/content_revision.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -146,6 +149,10 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         );
       }
     }
+    if (action == 'publish' && mounted) {
+      await preparePublication(context, c, ContentType.template, t.id);
+      return;
+    }
     if (action == 'export' && mounted && c.capsules != null) {
       await exportMaterial(context, c.capsules!, templateId: t.id);
     }
@@ -277,6 +284,11 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                             }
                           },
                           itemBuilder: (_) => [
+                            if (c.capsules != null && c.library.policy.isAuthor)
+                              const PopupMenuItem(
+                                value: 'publish',
+                                child: Text('Подготовить к публикации'),
+                              ),
                             if (c.capsules != null)
                               const PopupMenuItem(
                                 value: 'export',
