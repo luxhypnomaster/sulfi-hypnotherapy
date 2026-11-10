@@ -1,0 +1,20 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import vm from 'node:vm';import {createHash} from 'node:crypto';
+const c=vm.createContext({});for(const f of ['Catalog','AtomicStore','Diary'])vm.runInContext(readFileSync(new URL('../src/'+f+'.js',import.meta.url),'utf8'),c);
+test('diary private draft, immutable public snapshot, idempotent retry, quiet edit/reannounce/close and private working revision',()=>{
+ let head=null,n=0;const files=new Map(),io={head:()=>head,read:k=>structuredClone(files.get(k)),writeVerified:v=>{let k=String(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:s=>createHash('sha256').update(s).digest('hex')};const store=c.AlchemistAtomicStore.create(io);
+ const core=c.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0).toISOString(),digest:v=>io.digest(JSON.stringify(v)),canReadAsset:()=>true,validatePublication:()=>{},encodeCursor:JSON.stringify,decodeCursor:JSON.parse});let uuid=0;
+ const diary=c.AlchemistDiary.create(core,store,{uuid:()=> 'id-'+(++uuid),now:()=>new Date(0).toISOString()}),owner={sub:'owner',roles:['owner']},entry={id:'one',title:'Название',message:'Послание',blocks:[{id:'text',type:'text',text:'Оригинальный текст'}]};
+ const draft=diary.execute('entry.createDraft',owner,{requestId:'create',entry,visibility:'public'});assert.equal(draft.status,'draft');assert.equal(diary.execute('entry.createDraft',owner,{requestId:'create',entry,visibility:'public'}).etag,draft.etag);
+ assert.equal(diary.execute('feed.list',null,{}).entries.length,0);
+ const published=diary.execute('entry.publish',owner,{entryId:'one',requestId:'publish',ifMatch:'1'});const cycle=published.publication.activationCycleId;
+ const patch=diary.execute('entry.patchDraft',owner,{entryId:'one',requestId:'patch',ifMatch:'2',entry:{...entry,blocks:[{id:'text',type:'text',text:'PRIVATE_NEW_WORKING_TEXT'}],publication:published.publication}});
+ assert.equal(patch.etag,'3');const publicData=JSON.stringify(diary.execute('feed.list',null,{}));assert.match(publicData,/Оригинальный текст/);assert.doesNotMatch(publicData,/PRIVATE_NEW_WORKING_TEXT/);
+ const safe=diary.execute('entry.updateMetadata',owner,{entryId:'one',requestId:'safe-quiet',ifMatch:'3',title:'Safe title'});assert.doesNotMatch(JSON.stringify(diary.execute('feed.list',null,{})),/PRIVATE_NEW_WORKING_TEXT/);
+ assert.throws(()=>core.execute('catalog.getRevision',null,{catalogItemId:'entry_one',etag:'3'}),/REVISION_NOT_AVAILABLE/);
+ diary.execute('entry.publish',owner,{entryId:'one',requestId:'publish2',ifMatch:'4'});
+ const quiet=diary.execute('entry.updateMetadata',owner,{entryId:'one',requestId:'quiet',ifMatch:'5',title:'Quiet'});assert.equal(quiet.publication.activationCycleId,cycle);
+ const again=diary.execute('entry.reannounce',owner,{entryId:'one',requestId:'again',ifMatch:'6'});assert.notEqual(again.publication.activationCycleId,cycle);
+ const retry=diary.execute('entry.reannounce',owner,{entryId:'one',requestId:'again',ifMatch:'6'});assert.equal(retry.publication.activationCycleId,again.publication.activationCycleId);
+ const closed=diary.execute('entry.close',owner,{entryId:'one',requestId:'close',ifMatch:'7'});assert.equal(closed.publication.authorClosed,true);
+ assert.throws(()=>diary.execute('entry.archive',{sub:'reader',roles:['client']},{entryId:'one',requestId:'malicious',ifMatch:'7'}),/AUTHOR_REQUIRED/);
+});

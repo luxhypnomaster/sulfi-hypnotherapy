@@ -8,6 +8,7 @@ var AlchemistCatalog = (function () {
   function hash(x) { if(typeof x!=='string'||!/^[a-f0-9]{64}$/.test(x))fail(422,'INVALID_SHA');return x; }
   function text(x,max,required) {if(typeof x!=='string'||x.length>max||(required&&!x.trim())) fail(422,'INVALID_TEXT');return x;}
   function author(actor) {if(!actor||!actor.sub||!actor.roles||!actor.roles.some(function(r){return r==='owner'||r==='author';}))fail(403,'AUTHOR_REQUIRED');}
+  function exposed(record,actor) {return record&&record.owner===(actor||{}).sub?record:record&&record.publishedRecord||record;}
   function readable(record,actor) {return !!record&&(record.owner===(actor||{}).sub||(record.state==='published'&&(record.card.visibility==='public'||(record.card.visibility==='restricted'&&record.readers.indexOf((actor||{}).sub)>=0))));}
   function own(record,actor) {author(actor);if(!record||record.owner!==actor.sub)fail(403,'NOT_OWNER');}
   function card(input) {
@@ -52,32 +53,33 @@ var AlchemistCatalog = (function () {
     }
     function projection(r) {return {catalogItemId:r.id,type:r.type,logicalContentId:r.logicalContentId,immutableRevisionId:r.contentRevision,metadataRevision:r.metadataRevision,etag:r.etag,card:clone(r.card),manifest:clone(r.manifest),updatedAt:r.updatedAt,publicationState:r.state};}
     return {
+      transactRecord:function(actor,request,operation,callback){return mutate(actor,Object.assign({},request,{_operation:operation}),function(){var record=env.store.item(id(request.catalogItemId));if(record)own(record,actor);if(record&&request.ifMatch!==record.etag)fail(412,'ETAG_CONFLICT');var next=callback(record?clone(record):null);safeManifest(next.manifest,0);if(next.state==='published')env.validatePublication(next,actor,dependencyPlan(next.manifest,actor,[]).dependencies);env.store.commit(next);return projection(next);});},
       execute:function(op,actor,q){q=Object.assign({},q||{},{_operation:op});
         if(op==='catalog.createDraft')return mutate(actor,q,function(){
           id(q.catalogItemId);if(types.indexOf(q.type)<0)fail(422,'INVALID_TYPE');if(env.store.item(q.catalogItemId))fail(409,'ITEM_EXISTS');
-          var r={id:q.catalogItemId,owner:actor.sub,type:q.type,logicalContentId:id(q.logicalContentId),contentRevision:id(q.immutableRevisionId),metadataRevision:1,etag:'1',state:'draft',card:card(q.card),manifest:safeManifest(q.manifest||{},0),readers:[],updatedAt:env.now()};
+          var r={id:q.catalogItemId,owner:actor.sub,type:q.type,logicalContentId:id(q.logicalContentId),contentRevision:id(q.immutableRevisionId),metadataRevision:1,etag:'1',state:'draft',card:card(q.card),manifest:safeManifest(q.manifest||{},0),publishedRecord:null,readers:[],updatedAt:env.now()};
           env.store.commit(r);return projection(r);
         });
         if(['catalog.patchDraft','catalog.updateMetadata','catalog.publish','catalog.withdraw','catalog.archive','catalog.restore'].indexOf(op)>=0)return mutate(actor,q,function(){
           var r=env.store.item(id(q.catalogItemId));own(r,actor);if(q.ifMatch!==r.etag)fail(412,'ETAG_CONFLICT');r=clone(r);
           if(op==='catalog.patchDraft'||op==='catalog.updateMetadata'){r.card=card(Object.assign({},r.card,q.card));r.metadataRevision++;}
-          if(op==='catalog.patchDraft'&&q.manifest){if(r.state==='published')fail(409,'CONTENT_REVISION_REQUIRED');r.manifest=safeManifest(q.manifest,0);r.contentRevision=id(q.immutableRevisionId);}
+          if(op==='catalog.patchDraft'&&q.manifest){r.manifest=safeManifest(q.manifest,0);r.contentRevision=id(q.immutableRevisionId);}
           if(op==='catalog.publish'){
             dependencyPlan(r.manifest,actor,[]);
 
-            if(!r.manifest.dependencyRefs||!r.manifest.dependencyRefs.length)fail(422,'EMPTY_CONTENT');
+            if((!r.manifest.dependencyRefs||!r.manifest.dependencyRefs.length)&&!(r.type==='diaryEntry'&&r.manifest.entry&&Array.isArray(r.manifest.entry.blocks)&&r.manifest.entry.blocks.some(function(b){return b.type==='text'&&typeof b.text==='string'&&b.text.trim();})))fail(422,'EMPTY_CONTENT');
             if(r.card.coverAssetId){var cover=env.store.cover(r.card.coverAssetId);if(!cover||!cover.verified||cover.owner!==actor.sub)fail(422,'INVALID_COVER');}
             r.state='published';r.readers=(q.readerSubjects||[]).map(function(s){return text(s,256,true);});
             // Asset grants are publication references, never Drive sharing ACL.
             env.validatePublication(r,actor,dependencyPlan(r.manifest,actor,[]).dependencies);
           }
           if(op==='catalog.withdraw')r.state='withdrawn';if(op==='catalog.archive')r.state='archived';if(op==='catalog.restore')r.state='draft';
-          r.etag=String(Number(r.etag)+1);r.updatedAt=env.now();env.store.commit(r);return projection(r);
+          r.etag=String(Number(r.etag)+1);r.updatedAt=env.now();if(op==='catalog.publish'||op==='catalog.updateMetadata'&&r.state==='published'){var snapshot=op==='catalog.updateMetadata'&&r.publishedRecord?clone(r.publishedRecord):clone(r);delete snapshot.publishedRecord;if(op==='catalog.updateMetadata'){snapshot.card=card(Object.assign({},snapshot.card,q.card));snapshot.etag=r.etag;snapshot.metadataRevision=r.metadataRevision;snapshot.updatedAt=r.updatedAt;}r.publishedRecord=snapshot;}if(op==='catalog.withdraw'||op==='catalog.archive')r.publishedRecord=null;env.store.commit(r);return projection(r);
         });
         if(op==='catalog.getRevision'){
-          var current=env.store.item(id(q.catalogItemId));if(!readable(current,actor))fail(404,'NOT_AVAILABLE');
+          var current=exposed(env.store.item(id(q.catalogItemId)),actor);if(!readable(current,actor))fail(404,'NOT_AVAILABLE');
           var historical=env.store.revision(id(q.catalogItemId),String(q.etag));if(!historical||historical.owner!==current.owner)fail(404,'REVISION_NOT_FOUND');
-          if(current.owner!==(actor||{}).sub&&historical.state!=='published')fail(404,'REVISION_NOT_AVAILABLE');return projection(historical);
+          if(current.owner!==(actor||{}).sub){if(!historical.publishedRecord||historical.publishedRecord.etag!==String(q.etag)||!readable(historical.publishedRecord,actor))fail(404,'REVISION_NOT_AVAILABLE');historical=historical.publishedRecord;}return projection(historical);
         }
         if(op==='catalog.diff'){
           var existing=env.store.item(id(q.catalogItemId));own(existing,actor);var before=dependencyPlan(existing.manifest,actor,[]),after=dependencyPlan(safeManifest(q.manifest||existing.manifest,0),actor,[]),known={};before.dependencies.forEach(function(d){known[d.sha256]=true;});return {newDependencies:after.dependencies.filter(function(d){return !known[d.sha256];}),metadataOnly:JSON.stringify(existing.manifest)===JSON.stringify(q.manifest||existing.manifest)};
@@ -90,13 +92,13 @@ var AlchemistCatalog = (function () {
         });
         if(op==='catalog.validateDependencies'){var draft=env.store.item(id(q.catalogItemId));own(draft,actor);return dependencyPlan(draft.manifest,actor,q.installed||[]);}
         if(op==='catalog.get'||op==='catalog.getInstallPlan'){
-          var r=env.store.item(id(q.catalogItemId));if(!readable(r,actor))fail(404,'NOT_AVAILABLE');
+          var r=exposed(env.store.item(id(q.catalogItemId)),actor);if(!readable(r,actor))fail(404,'NOT_AVAILABLE');
           return op==='catalog.get'?projection(r):dependencyPlan(r.manifest,actor,q.installed||[]);
         }
         if(op==='catalog.list'||op==='catalog.search'){
           var revision=env.store.indexRevision(),offset=0;
           if(q.cursor){var cursor=env.decodeCursor(q.cursor);if(cursor.revision!==revision||cursor.query!==env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null,state:q.state||null,subject:(actor||{}).sub||null}))fail(409,'SNAPSHOT_CHANGED');offset=cursor.offset;if(!Number.isSafeInteger(offset)||offset<0)fail(422,'INVALID_CURSOR');}
-          var items=env.store.items().filter(function(r){return readable(r,actor)&&(!q.type||r.type===q.type)&&(!q.state||r.state===q.state)&&(!q.search||(r.card.title+' '+r.card.shortAnnotation).toLowerCase().indexOf(q.search.toLowerCase())>=0)&&(!q.category||r.card.categoryIds.indexOf(q.category)>=0)&&(!q.tag||r.card.tags.indexOf(q.tag)>=0);}).sort(function(a,b){return a.id.localeCompare(b.id);});
+          var items=env.store.items().map(function(r){return exposed(r,actor);}).filter(function(r){return readable(r,actor)&&(!q.type||r.type===q.type)&&(!q.state||r.state===q.state)&&(!q.search||(r.card.title+' '+r.card.shortAnnotation).toLowerCase().indexOf(q.search.toLowerCase())>=0)&&(!q.category||r.card.categoryIds.indexOf(q.category)>=0)&&(!q.tag||r.card.tags.indexOf(q.tag)>=0);}).sort(function(a,b){return a.id.localeCompare(b.id);});
           var limit=q.limit===undefined?25:q.limit;if(!Number.isSafeInteger(limit)||limit<1||limit>50)fail(422,'INVALID_LIMIT');
           var end=offset+limit;return {items:items.slice(offset,end).map(projection),revision:revision,nextPage:end<items.length?env.encodeCursor({revision:revision,offset:end,query:env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null,state:q.state||null,subject:(actor||{}).sub||null})}):null};
         }
@@ -104,5 +106,5 @@ var AlchemistCatalog = (function () {
       }
     };
   }
-  return {create:create,fail:fail,readable:readable,types:types};
+  return {create:create,fail:fail,readable:readable,types:types,exposed:exposed};
 })();

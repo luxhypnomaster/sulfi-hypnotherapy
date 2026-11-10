@@ -30,6 +30,7 @@ function doPost(e){
    canReadAsset:access.canRead,
    validatePublication:access.validatePublication
   });
+  if(request.operation==='feed.list'||request.operation.indexOf('entry.')===0){var diary=AlchemistDiary.create(core,store,{uuid:function(){return Utilities.getUuid();},now:function(){return new Date().toISOString();}});return alchemistOutput({ok:true,status:200,result:diary.execute(request.operation,actor,request.parameters)});}
   return alchemistOutput({ok:true,status:200,result:core.execute(request.operation,actor,request.parameters)});
  }catch(error){return alchemistOutput({ok:false,status:error.status||503,error:{code:error.code||'SERVER_UNAVAILABLE'}});}
 }
