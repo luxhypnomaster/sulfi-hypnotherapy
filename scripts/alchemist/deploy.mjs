@@ -3,6 +3,7 @@ import {existsSync,readFileSync,writeFileSync,mkdirSync,readdirSync,rmSync} from
 import {resolve,join} from 'node:path';import {pathToFileURL} from 'node:url';
 import {execFile} from 'node:child_process';import {promisify} from 'node:util';import {createHash} from 'node:crypto';
 import {deployCore,SERVER_NAME,OLD_SCRIPT} from './deploy-core.mjs';
+import {verifiedDeployIdentity} from './deploy-identity.mjs';
 const run=promisify(execFile),sha=x=>createHash('sha256').update(x).digest('hex');
 const readiness=JSON.parse(readFileSync(new URL('../../server/alchemist/deployment-readiness.json',import.meta.url)));
 function abort(code){console.error(code);process.exit(78);}
@@ -22,9 +23,7 @@ try{
  const {getAuthorizedOAuth2Client}=await import(pathToFileURL(join(tool,'build/src/auth/auth.js')));
  const store=new FileCredentialStore(credential),saved=await store.load('default'),client=await getAuthorizedOAuth2Client(store,'default');
  await client.getAccessToken();
- const token=client.credentials.id_token||saved.id_token;if(!token)throw Error('CI_ID_TOKEN_UNAVAILABLE');
- const ticket=await client.verifyIdToken({idToken:token,audience:saved.client_id}),identity=ticket.getPayload();
- if(identity.email!=='luxhypnomaster@gmail.com'||identity.email_verified!==true||!identity.sub)throw Error('WRONG_DEPLOY_OWNER');
+ const {token,identity}=await verifiedDeployIdentity(client,saved);
  checkpoint({stage:'AUTH_VERIFIED'});
  const sourceSha=process.env.GITHUB_SHA;
  if(!/^[a-f0-9]{40}$/.test(sourceSha||''))throw Error('SOURCE_SHA_REQUIRED');
