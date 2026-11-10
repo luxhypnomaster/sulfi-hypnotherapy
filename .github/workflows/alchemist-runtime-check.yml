@@ -49,7 +49,13 @@ jobs:
               console.log('RUNTIME_'+mode+'_JSON='+(mime==='application/json'?'YES':'NO'));
               if(mime==='application/json'){
                 const v=JSON.parse(body);console.log('RUNTIME_'+mode+'_HEALTH_VERIFIED='+(v.ok===true&&v.result?.name==='Сервер Проекта Алхимик'&&v.result?.fullSourceReady===true?'YES':'NO'));
-              }else console.log('RUNTIME_'+mode+'_ACCESS_DENIED='+(body.includes('You need access')?'YES':'NO'));
+              }else {
+                console.log('RUNTIME_'+mode+'_ACCESS_DENIED='+(body.includes('You need access')?'YES':'NO'));
+                const visible=body.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ');
+                for(const [label,pattern] of Object.entries({AUTHORIZATION_REQUIRED:/Authorization is required|Требуется авторизац|Необходима авторизац/i,CONSENT:/authorize|authorization|авторизац|разрешени/i,FUNCTION_MISSING:/Script function not found/i,SYNTAX_ERROR:/SyntaxError/i,REFERENCE_ERROR:/ReferenceError/i,TYPE_ERROR:/TypeError/i,EXCEPTION:/Exception/i,QUOTA:/too many times|quota exceeded/i,SIGN_IN:/Sign in|Войти в аккаунт/i})){
+                  if(pattern.test(visible))console.log('RUNTIME_'+mode+'_MARKER='+label);
+                }
+              }
             }
             console.log('READ_ONLY_NO_BOOTSTRAP_NO_CLOUD_WRITE');
           }catch(e){console.error(/^[A-Z_]{1,80}$/.test(e.message)?e.message:'RUNTIME_DIAGNOSIS_FAILED_REDACTED');process.exitCode=1;}
