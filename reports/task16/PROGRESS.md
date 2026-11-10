@@ -1,3 +1,27 @@
+# Current checkpoint — C2 verified, full Flutter419 PASS, live retry/APK22 running (2026-11-10)
+
+Do not repeat C0. Existing feature feat/task16-alchemist-full-server. Runtime/version4/source766f178 + exact private41folders/replay/negative checks VERIFIED in deploy42872816006/recovery42876284145. One existing Script/deployment, old diary untouched.
+
+Full local Flutter419PASS/0FAIL/1SKIP success=true261798ms, source6f1c8b9 (new isolated Alchemist transport5min). Analyzer clean,33new Node+24old NodePASS. Earlier full attempt interrupted by environment restart is NOT a completed run. Actual opt-in live E2E first run42877004822 FAILED legacy20sec media.beginUpload timeout; sanitized recovered proof42878319267, zero bytes ACKed. Retry42878030592 is running from approvedsource6f1c8b9. No full E2E success yet.
+
+Both signed APK22 building from e4ed74b in checks42878716769; no endpoint/Web clientID embedded because native OAuth absent. Keep existing APK21 historical links until real22artifact proof. Public signing/package evidence42875871201; phone-only legitimate OAuth guide uploaded to existing reportfolder. Repository var/secret names checked: no Android Web client ID available. Never use clasp installed client ID in APK.
+
+Reports Task16 current matrix63PASS/80PARTIAL/3BLOCKED/1NOT_RUN, update after actual live/CI results. PREFLIGHT unchanged; no Task17; no APK on Drive. Handoff refreshed with source/tests/tooling114files, no InitialConfig/credentials/private data. Pending: actual live service loop, lawful Android client registration/config and final connected APKs, physical Android NOT_RUN.
+
+---
+# Historical checkpoints
+
+# Current checkpoint — real runtime C2 PASS; live transport correction (2026-11-10)
+
+Continue feat/task16-alchemist-full-server. C0 unchanged. Actual version4 deploy42872816006/source766f178 and metadata recovery42876284145 confirm DEPLOYED_STORAGE_VERIFIED: anonymous JSON health, exact41 owner-only folders, replay/no duplicates, live negative private/mutation/forged credential checks. Same Script/deployment, old diary untouched.
+
+Live services run42877004822 reached actual owner/ACL/storage preflight, then first publication hit legacy20second HTTP timeout before interrupted upload assertion. Not a live E2E pass. Isolated new AlchemistHttp allows bounded5min response execution, connection15/20s, body30s and2MB cap, redirects manual; legacy DiaryApi unchanged. Transport regression3PASS, analyzer clean. Re-pin reviewed app snapshot and rerun trusted-main real service test next. APK21 remains local, not cloud connected. Current full-suite attempt interrupted by execution-environment restart; prior418PASS retained as historical, do not label this run complete.
+
+Android public package/SHA1 evidence run42875871201 PASS, report ANDROID_OAUTH_SETUP_RU.md + JSON uploaded to existing Task16 reports. Legitimate Web client ID/two Android registrations still missing; no automated unsupported OAuth-client creation and no clasp audience in APK. Physical Android NOT_RUN. Reports current matrix63PASS/80PARTIAL/3BLOCKED/1NOT_RUN pending live results. APKs never Drive.
+
+---
+# Historical checkpoints
+
 # Current continuation — real C2 storage verified, 2026-11-10 18:14 UTC
 
 Public health now200JSON after owner consent. Existing protected deploy42872816006 SUCCESS: same pinned Script/deployment, source/version readback, private41folder bootstrap+replay, negative anonymous mutation/private missing asset/forged token checks. SDK compatibility fix in09425d6 (mainPR28/766f178),32Node PASS. Independent connected Drive verified one closed root under existing Alchemist project,7top+33children+root=41, exact prescribed names, rootowner-only. Old diary untouched; no duplicate server. Prior HTML runtime blocker RESOLVED, not current.

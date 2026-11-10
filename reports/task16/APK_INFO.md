@@ -19,3 +19,7 @@ Runtime consent подтверждён фактическим JSON, а не то
 Package author ru.sulfi.sulfi_hypnotherapy; client ru.sulfi.sulfi_hypnotherapy.clienttest. Закреплённый сертификат SHA256 0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6. CI реально проверил package/certificate. LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED — не выдавать за подключённую пару. Никаких токенов clasp в приложении.
 
 С телефона войти в свой GitHub → artifact → скачать ZIP → извлечь APK → установить. Пользовательский ZIP содержит только APK, техническая диагностика отдельно. Авторскую ставить обновлением поверх, не удалять старую; клиент ставится отдельно. Перед приёмкой — внешняя капсула. Факт обновления именно этой пары/сохранности личных данных на телефоне NOT_RUN. APK на Google Drive нет и не будет без отдельного согласования.
+
+## Текущая сборка22
+
+[CI42878716769](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769), sourcee4ed74b5fc4f262343df9af688f6fdef4e601762,0.4.14+22, обе редакции. Пока IN_PROGRESS, артефактов и успеха не предполагаем. Новый Alchemist HTTP5min включён в исходники; stable package/signing сохранены. Endpoint/Web ID отсутствуют, поэтому сборки не объявляются cloud-connected. APK только GitHub, не Google Drive.
