@@ -9,6 +9,7 @@ var AlchemistManifest=(function(){
    function portable(value,depth){if(depth>32)AlchemistCatalog.fail(422,'MANIFEST_DEPTH');if(value&&typeof value==='object')Object.keys(value).forEach(function(k){if(['localPath','driveFileId','folderId','privateLocation','token','credential','grants','readers'].indexOf(k)>=0)AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_FIELD');if(k==='filePath'&&(typeof value[k]!=='string'||!/^capsule:\/\/[a-f0-9]{64}$/.test(value[k])))AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_LOCATOR');portable(value[k],depth+1);});if(typeof value==='string'&&/^file:\/\/|drive\.google\.com/.test(value))AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_LOCATOR');}
    portable(r.payload,0);
    if(r.type==='track'&&(!Number.isSafeInteger(r.payload.durationMs)||r.payload.durationMs<0||r.dependencies.length))AlchemistCatalog.fail(422,'INVALID_TRACK_METADATA');
+   if(r.dependencies.some(function(d){return !d||['track','module'].indexOf(d.type)<0||r.type==='module'&&d.type!=='track';}))AlchemistCatalog.fail(422,'INVALID_DEPENDENCY_TYPE');
    var body={type:r.type,logicalId:r.logicalId,payload:r.payload,dependencies:r.dependencies,parent:r.parent,declaredVersion:r.declaredVersion};
    if(typeof q.canonicalBody!=='string'||typeof q.canonicalRevision!=='string'||services.canonical(JSON.parse(q.canonicalBody))!==services.canonical(body)||services.canonical(JSON.parse(q.canonicalRevision))!==services.canonical(r)||services.digest(q.canonicalBody)!==r.digest)AlchemistCatalog.fail(422,'MANIFEST_DIGEST_MISMATCH');
    return services.lock(function(){store.begin();try{

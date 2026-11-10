@@ -31,6 +31,8 @@ class DiaryController extends ChangeNotifier {
   final DiaryReadStore reads;
   final DateTime Function() clock;
   Timer? _expiry;
+  String _readScope = 'public';
+  VoidCallback? onAccountLogout;
   int _rotation = 0;
   final _readerAudio = <String, DiaryAudio>{};
   final _heard = <String, HeardAudio>{};
@@ -220,24 +222,35 @@ class DiaryController extends ChangeNotifier {
   List<DiaryEntry> published = [], drafts = [];
   bool syncing = false;
   String? error;
+  int _loadGeneration = 0;
   Future<void> load() async {
+    final generation = ++_loadGeneration, scope = api?.readerScope ?? 'public';
+    if (scope != _readScope) {
+      await reads.switchReader(scope == 'public' ? null : scope);
+      _readScope = scope;
+    }
     await reads.load();
+    final nextPublished = await repository.published(),
+        cached = await repository.revision();
+    final workspace = authorWorkspace;
+    final work = workspace ? await authorRepository!.entries() : <DiaryEntry>[];
+    if (generation != _loadGeneration ||
+        scope != (api?.readerScope ?? 'public')) {
+      return;
+    }
     final oldCycles = published
         .map((e) => '${e.id}:${DiaryPublication.of(e).cycle}')
         .toSet();
-    published = await repository.published();
-    if (published.any(
+    if (nextPublished.any(
       (e) => !oldCycles.contains('${e.id}:${DiaryPublication.of(e).cycle}'),
     )) {
       _rotation = 0;
     }
-    hasCache = await repository.revision() != null;
-    final work = authorWorkspace
-        ? await authorRepository!.entries()
-        : <DiaryEntry>[];
-    drafts = authorWorkspace ? work : [];
+    published = nextPublished;
+    hasCache = cached != null;
+    drafts = work;
     if (repository.invalidIds.isNotEmpty ||
-        (authorWorkspace && authorRepository!.invalidIds.isNotEmpty)) {
+        (workspace && authorRepository!.invalidIds.isNotEmpty)) {
       error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
     }
     _scheduleExpiry();
@@ -251,6 +264,7 @@ class DiaryController extends ChangeNotifier {
       notifyListeners();
       return;
     }
+    final syncScope = api!.readerScope;
     syncing = true;
     error = null;
     notifyListeners();
@@ -281,8 +295,10 @@ class DiaryController extends ChangeNotifier {
           throw const DiaryApiException('Ошибка страниц дневника');
         }
       } while (page != null);
+      if (syncScope != api!.readerScope) return;
       await repository.cache(entries, removed, revision);
       await load();
+      await api!.synchronizeReads(reads, published);
     } catch (e) {
       error = e is DiaryApiException ? e.message : 'Не удалось обновить дневник. Последний сохранённый каталог не изменён.';
     } finally {
@@ -317,6 +333,15 @@ class DiaryController extends ChangeNotifier {
       throw const DiaryApiException('Вход автора недоступен');
     }
     final generation = ++_authGeneration;
+    api?.clearSession();
+    onAccountLogout?.call();
+    published = published
+        .where(
+          (e) =>
+              e.extra['_alchemistScope'] == null ||
+              e.extra['_alchemistScope'] == 'public',
+        )
+        .toList();
     authorBusy = true;
     _session = null;
     notifyListeners();
@@ -339,9 +364,15 @@ class DiaryController extends ChangeNotifier {
           final session = await api!.authenticate(result.idToken);
           if (generation == _authGeneration) {
             _session = session;
-            await api!.flushPending(session);
+            await load();
+            try {
+              await api!.flushPending(session);
+              await load();
+              error = api!.queueError;
+            } catch (e) {
+              error = 'Вход подтверждён. Очередь пока не отправлена: $e';
+            }
           }
-          error = null;
         } catch (_) {
           error = 'Вход Google выполнен. Облачный сервер не подтвердил доступ; локальные черновики доступны.';
         }
@@ -360,14 +391,25 @@ class DiaryController extends ChangeNotifier {
 
   Future<void> logout() async {
     ++_authGeneration;
+    ++_loadGeneration;
     api?.clearSession();
+    published = published
+        .where(
+          (e) =>
+              e.extra['_alchemistScope'] == null ||
+              e.extra['_alchemistScope'] == 'public',
+        )
+        .toList();
+    onAccountLogout?.call();
     _session = null;
     _localAuthor = false;
     debugAuthor = false;
     if (identity != null) drafts = [];
     error = null;
     notifyListeners();
+    await pauseReaders();
     await identity?.signOut();
+    await load();
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {
@@ -388,6 +430,14 @@ class DiaryController extends ChangeNotifier {
       );
     }
     return _session!;
+  }
+
+  Future<int> flushCloudQueue() async {
+    final session = await _cloudSession();
+    final completed = await api!.flushPending(session);
+    await load();
+    await sync();
+    return completed;
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {

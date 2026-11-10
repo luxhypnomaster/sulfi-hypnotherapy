@@ -8,7 +8,7 @@ test('diary private draft, immutable public snapshot, idempotent retry, quiet ed
  assert.equal(diary.execute('feed.list',null,{}).entries.length,0);
  const published=diary.execute('entry.publish',owner,{entryId:'one',requestId:'publish',ifMatch:'1'});const cycle=published.publication.activationCycleId;
  const patch=diary.execute('entry.patchDraft',owner,{entryId:'one',requestId:'patch',ifMatch:'2',entry:{...entry,blocks:[{id:'text',type:'text',text:'PRIVATE_NEW_WORKING_TEXT'}],publication:published.publication}});
- assert.equal(patch.etag,'3');const publicData=JSON.stringify(diary.execute('feed.list',null,{}));assert.match(publicData,/Оригинальный текст/);assert.doesNotMatch(publicData,/PRIVATE_NEW_WORKING_TEXT/);
+ assert.equal(patch.etag,'3');const publicData=JSON.stringify(diary.execute('feed.list',null,{}));assert.match(publicData,/Оригинальный текст/);assert.doesNotMatch(publicData,/PRIVATE_NEW_WORKING_TEXT/);assert.doesNotMatch(JSON.stringify(diary.execute('feed.list',owner,{})),/PRIVATE_NEW_WORKING_TEXT/);assert.match(JSON.stringify(diary.execute('feed.list',owner,{ownedOnly:true})),/PRIVATE_NEW_WORKING_TEXT/);
  const safe=diary.execute('entry.updateMetadata',owner,{entryId:'one',requestId:'safe-quiet',ifMatch:'3',title:'Safe title'});assert.doesNotMatch(JSON.stringify(diary.execute('feed.list',null,{})),/PRIVATE_NEW_WORKING_TEXT/);
  assert.throws(()=>core.execute('catalog.getRevision',null,{catalogItemId:'entry_one',etag:'3'}),/REVISION_NOT_AVAILABLE/);
  diary.execute('entry.publish',owner,{entryId:'one',requestId:'publish2',ifMatch:'4'});

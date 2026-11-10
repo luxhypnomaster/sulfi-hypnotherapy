@@ -53,12 +53,14 @@ class CapsuleService {
     required this.diaryDirectory,
     required this.workspace,
     this.availableBytes,
+    this.videoProbe,
     DateTime Function()? clock,
   }) : clock = clock ?? DateTime.now;
   final Database database;
   final LibraryService library;
   final Directory diaryDirectory, workspace;
   final Future<int> Function()? availableBytes;
+  final DiaryVideoProbe? videoProbe;
   final DateTime Function() clock;
   static const schema = 1;
   static const tables = [
@@ -550,7 +552,13 @@ class CapsuleService {
                   }
                   if (asset.durationMs <= 0 ||
                       asset.fileSizeBytes <= 0 ||
-                      !{'wav', 'm4a', 'mp3'}.contains(asset.format)) {
+                      !{
+                        'wav',
+                        'm4a',
+                        'mp3',
+                        'aac',
+                        'ogg',
+                      }.contains(asset.format)) {
                     throw const FormatException('Аудиоревизия');
                   }
                 case ContentType.module:
@@ -606,7 +614,7 @@ class CapsuleService {
                 asset.fileSizeBytes !=
                     (await File(p.join(stage.path, asset.contentHash!))
                         .length()) ||
-                !{'mp3', 'm4a', 'wav'}.contains(asset.format)) {
+                !{'mp3', 'm4a', 'wav', 'aac', 'ogg'}.contains(asset.format)) {
               throw const FormatException('Неполное описание аудио');
             }
           }
@@ -659,9 +667,16 @@ class CapsuleService {
               Directory(p.join(stage.path, 'media-check')),
               pick: (_) async => null,
               probe: library.probe,
+              videoProbe: videoProbe,
             );
             final checked = await checker.importFile(a.block.type, (
-              name: 'attachment',
+              name: media.mime.startsWith('video/')
+                  ? (media.mime == 'video/webm'
+                        ? 'attachment.webm'
+                        : media.mime == 'video/quicktime'
+                        ? 'attachment.mov'
+                        : 'attachment.mp4')
+                  : 'attachment',
               path: file.path,
             ));
             if (checked.media!.mime != media.mime) {
@@ -931,7 +946,7 @@ class CapsuleService {
           );
         }
         if (skipped['audio_assets']!.contains(row['id'])) continue;
-        if (!{'mp3', 'm4a', 'wav'}.contains(row['format'])) {
+        if (!{'mp3', 'm4a', 'wav', 'aac', 'ogg'}.contains(row['format'])) {
           throw const FormatException('Неизвестный формат аудио');
         }
         row['filePath'] = p.basename(
@@ -958,6 +973,11 @@ class CapsuleService {
                 'audio/mpeg' => 'mp3',
                 'audio/wav' => 'wav',
                 'audio/mp4' => 'm4a',
+                'audio/aac' => 'aac',
+                'audio/ogg' => 'ogg',
+                'video/mp4' => 'mp4',
+                'video/quicktime' => 'mov',
+                'video/webm' => 'webm',
                 _ => throw const FormatException('Неизвестное вложение'),
               };
               m[k] = await materialize(m[k], mediaDestination, ext);

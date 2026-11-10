@@ -17,6 +17,9 @@ class DiaryMediaLimits {
       type == DiaryBlockType.image ? imageBytes : audioBytes;
 }
 
+typedef DiaryVideoProbe =
+    Future<({int width, int height, int durationMs})> Function(File file);
+
 typedef DiaryMediaPicker = Future<AudioSelection?> Function(
   DiaryBlockType type,
 );
@@ -31,12 +34,21 @@ class DiaryMediaStore {
     this.videoProbe,
   });
   final Directory directory;
-  final Future<({int width, int height, int durationMs})> Function(File)?
-  videoProbe;
+  final DiaryVideoProbe? videoProbe;
   Future<File?> Function(DiaryMedia)? remoteResolver;
   Future<File?> resolve(DiaryMedia? media) async {
     final local = file(media);
-    if (local != null && await local.exists()) return local;
+    if (local != null && await local.exists()) {
+      if (media?.hash == null ||
+          await local.length() == media!.bytes &&
+              (await sha256.bind(local.openRead()).first).toString() ==
+                  media.hash) {
+        return local;
+      }
+      if (remoteResolver == null) {
+        throw const FormatException('Файл вложения повреждён');
+      }
+    }
     if (media == null) return null;
     return remoteResolver?.call(media);
   }
@@ -154,13 +166,26 @@ class DiaryMediaStore {
         } else if (isAudioOnlyMp4(data)) {
           mime = 'audio/mp4';
           ext = 'm4a';
+        } else if (data.length > 2 &&
+            data[0] == 255 &&
+            (data[1] & 246) == 240) {
+          mime = 'audio/aac';
+          ext = 'aac';
         } else if (starts([73, 68, 51]) ||
             (data.length > 2 && data[0] == 255 && (data[1] & 224) == 224)) {
           mime = 'audio/mpeg';
           ext = 'mp3';
+        } else if (starts([79, 103, 103, 83])) {
+          mime = 'audio/ogg';
+          ext = 'ogg';
+        } else if (data.length > 2 &&
+            data[0] == 255 &&
+            (data[1] & 246) == 240) {
+          mime = 'audio/aac';
+          ext = 'aac';
         } else {
           throw const FormatException(
-            'Поддерживаются MP3, M4A и WAV. Видеоконтейнеры запрещены.',
+            'Поддерживаются MP3, M4A, WAV, AAC и OGG. Видеоконтейнеры запрещены.',
           );
         }
         // Some native decoders require the correct extension.

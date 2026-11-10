@@ -1,3 +1,6 @@
+import 'alchemist_sync_screen.dart';
+
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -18,28 +21,52 @@ class AlchemistStoreScreen extends StatefulWidget {
 
 class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   final query = TextEditingController();
+  final category = TextEditingController(), tag = TextEditingController();
   List<Map<String, dynamic>> cards = [];
   final installed = <String, String>{};
   String? error, cursor, kind, busyId;
   String progress = '';
   bool paused = false, loading = false, authenticated = false;
+  int _loadGeneration = 0;
+  String _scope = 'public';
+  void accountChanged() {
+    final current = widget.controller.diary?.api?.readerScope ?? 'public';
+    if (current == _scope) return;
+    _scope = current;
+    _loadGeneration++;
+    if (mounted) {
+      setState(() {
+        cards = [];
+        cursor = null;
+        authenticated = false;
+        loading = false;
+      });
+    }
+  }
+
   AlchemistApi get api =>
       widget.controller.alchemistApi(authenticated: authenticated);
   @override
   void initState() {
     super.initState();
+    _scope = widget.controller.diary?.api?.readerScope ?? 'public';
+    widget.controller.diary?.addListener(accountChanged);
     load();
   }
 
   @override
   void dispose() {
     paused = true;
+    widget.controller.diary?.removeListener(accountChanged);
     query.dispose();
+    category.dispose();
+    tag.dispose();
     super.dispose();
   }
 
   Future<void> load({bool more = false}) async {
     if (loading) return;
+    final generation = ++_loadGeneration;
     setState(() {
       loading = true;
       error = null;
@@ -47,7 +74,11 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
     try {
       final result = await api.call('catalog.list', {
         'search': query.text.trim(),
+        'state': 'published',
+        'readerView': true,
         'type': ?kind,
+        if (category.text.trim().isNotEmpty) 'category': category.text.trim(),
+        if (tag.text.trim().isNotEmpty) 'tag': tag.text.trim(),
         'limit': 25,
         if (more && cursor != null) 'cursor': cursor,
       });
@@ -61,7 +92,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
         final value = jsonDecode(r['value'] as String);
         installed[value['catalogItemId']] = value['immutableRevisionId'];
       }
-      if (mounted) {
+      if (mounted && generation == _loadGeneration) {
         setState(() {
           final items = (result['items'] as List).map(
             (x) => Map<String, dynamic>.from(x),
@@ -71,14 +102,23 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
         });
       }
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted && generation == _loadGeneration) {
+        setState(() => error = e.toString());
+      }
     } finally {
-      if (mounted) setState(() => loading = false);
+      if (mounted && generation == _loadGeneration) {
+        setState(() => loading = false);
+      }
     }
   }
 
   Future<void> install(Map<String, dynamic> c) async {
     final id = c['catalogItemId'] as String;
+    final detail = await api.call('catalog.get', {'catalogItemId': id});
+    if (detail['immutableRevisionId'] != c['immutableRevisionId']) {
+      throw const FormatException('Каталог изменился. Обновите список.');
+    }
+    c = detail;
     if (busyId != null) return;
     final plan = await api.call('catalog.getInstallPlan', {
       'catalogItemId': id,
@@ -137,133 +177,242 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   @override
   Widget build(BuildContext context) => LeatherScaffold(
     title: 'Облачный каталог',
-    child: Column(
-      children: [
-        Wrap(
-          spacing: 8,
-          children: [
-            if (widget.controller.policy.isAuthor)
-              TextButton.icon(
-                icon: const Icon(Icons.edit_note),
-                label: const Text('Мои публикации'),
-                onPressed: () => Navigator.push<void>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => AlchemistCatalogScreen(
-                      service: widget.controller.catalog,
+    child: RefreshIndicator(
+      onRefresh: load,
+      child: ListView(
+        children: [
+          Wrap(
+            spacing: 8,
+            children: [
+              if (widget.controller.policy.isAuthor)
+                TextButton.icon(
+                  icon: const Icon(Icons.edit_note),
+                  label: const Text('Мои публикации'),
+                  onPressed: () => Navigator.push<void>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AlchemistCatalogScreen(
+                        service: widget.controller.catalog,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            TextButton.icon(
-              icon: const Icon(Icons.account_circle_outlined),
-              label: Text(
-                authenticated
-                    ? 'Читать без входа'
-                    : 'Войти для личных материалов',
-              ),
-              onPressed: busyId != null
-                  ? null
-                  : () {
-                      setState(() => authenticated = !authenticated);
-                      load();
-                    },
-            ),
-          ],
-        ),
-        TextField(
-          controller: query,
-          decoration: InputDecoration(
-            labelText: 'Название или аннотация',
-            suffixIcon: IconButton(
-              onPressed: () => load(),
-              icon: const Icon(Icons.search),
-            ),
-          ),
-          onSubmitted: (_) => load(),
-        ),
-        DropdownButton<String?>(
-          value: kind,
-          isExpanded: true,
-          items: const [
-            DropdownMenuItem(value: null, child: Text('Все материалы')),
-            DropdownMenuItem(value: 'collection', child: Text('Сборки')),
-            DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
-            DropdownMenuItem(value: 'track', child: Text('Треки')),
-            DropdownMenuItem(value: 'module', child: Text('Модули')),
-            DropdownMenuItem(value: 'template', child: Text('Шаблоны')),
-          ],
-          onChanged: loading
-              ? null
-              : (v) {
-                  setState(() => kind = v);
-                  load();
-                },
-        ),
-        if (loading || busyId != null) const LinearProgressIndicator(),
-        if (progress.isNotEmpty) Text(progress),
-        if (busyId != null)
-          TextButton(
-            onPressed: () => setState(() => paused = true),
-            child: const Text('Приостановить'),
-          ),
-        if (error != null)
-          Text(error!, style: const TextStyle(color: neonPink)),
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: load,
-            child: ListView(
-              children: [
-                for (final c in cards)
-                  ListTile(
-                    title: Text(c['card']['title']),
-                    subtitle: Text(
-                      '${c['card']['shortAnnotation']}\n${c['type']} · '
-                      '${installed[c['catalogItemId']] == c['immutableRevisionId']
-                          ? 'Установлено'
-                          : installed.containsKey(c['catalogItemId'])
-                          ? 'Есть обновление'
-                          : 'Не скачано'}',
+              if (widget.controller.policy.isAuthor)
+                TextButton.icon(
+                  icon: const Icon(Icons.sync),
+                  label: const Text('Очередь передач'),
+                  onPressed: () => Navigator.push<void>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AlchemistSyncScreen(controller: widget.controller),
                     ),
-                    trailing:
-                        [
-                          'track',
-                          'module',
-                          'template',
-                          'collection',
-                          'package',
-                        ].contains(c['type'])
-                        ? IconButton(
-                            tooltip: 'Состав и установка',
-                            icon: const Icon(Icons.download_outlined),
-                            onPressed: busyId != null
-                                ? null
-                                : () async {
-                                    try {
-                                      await install(c);
-                                    } catch (e) {
-                                      if (mounted) {
-                                        setState(() => error = e.toString());
-                                      }
-                                    }
-                                  },
-                          )
-                        : null,
                   ),
-                if (!loading && cards.isEmpty && error == null)
-                  const ListTile(
-                    title: Text('Опубликованных материалов пока нет'),
-                  ),
-                if (cursor != null)
-                  TextButton(
-                    onPressed: loading ? null : () => load(more: true),
-                    child: const Text('Ещё'),
-                  ),
-              ],
-            ),
+                ),
+              TextButton.icon(
+                icon: const Icon(Icons.account_circle_outlined),
+                label: Text(
+                  authenticated
+                      ? 'Читать без входа'
+                      : 'Войти для личных материалов',
+                ),
+                onPressed: busyId != null
+                    ? null
+                    : () async {
+                        try {
+                          final target = !authenticated;
+                          if (!target) {
+                            await widget.controller.signOutAlchemist();
+                          } else {
+                            await widget.controller.signInAlchemistReader();
+                          }
+                          if (mounted) {
+                            setState(() => authenticated = target);
+                            await load();
+                          }
+                        } catch (e) {
+                          if (mounted) setState(() => error = e.toString());
+                        }
+                      },
+              ),
+            ],
           ),
-        ),
-      ],
+          TextField(
+            controller: query,
+            decoration: InputDecoration(
+              labelText: 'Название или аннотация',
+              suffixIcon: IconButton(
+                onPressed: () => load(),
+                icon: const Icon(Icons.search),
+              ),
+            ),
+            onSubmitted: (_) => load(),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: category,
+                  decoration: const InputDecoration(labelText: 'Категория'),
+                  onSubmitted: (_) => load(),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: tag,
+                  decoration: const InputDecoration(labelText: 'Тег'),
+                  onSubmitted: (_) => load(),
+                ),
+              ),
+            ],
+          ),
+          DropdownButton<String?>(
+            value: kind,
+            isExpanded: true,
+            items: const [
+              DropdownMenuItem(value: null, child: Text('Все материалы')),
+              DropdownMenuItem(value: 'collection', child: Text('Сборки')),
+              DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
+              DropdownMenuItem(value: 'track', child: Text('Треки')),
+              DropdownMenuItem(value: 'module', child: Text('Модули')),
+              DropdownMenuItem(value: 'template', child: Text('Шаблоны')),
+              DropdownMenuItem(value: 'session', child: Text('Сессии')),
+            ],
+            onChanged: loading
+                ? null
+                : (v) {
+                    setState(() => kind = v);
+                    load();
+                  },
+          ),
+          if (loading || busyId != null) const LinearProgressIndicator(),
+          if (progress.isNotEmpty) Text(progress),
+          if (busyId != null)
+            TextButton(
+              onPressed: () => setState(() => paused = true),
+              child: const Text('Приостановить'),
+            ),
+          if (error != null)
+            Text(error!, style: const TextStyle(color: neonPink)),
+          for (final c in cards)
+            ListTile(
+              leading: c['card']['coverAssetId'] == null
+                  ? null
+                  : SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: AlchemistCover(
+                        key: ValueKey(c['card']['coverAssetId']),
+                        controller: widget.controller,
+                        api: api,
+                        assetId: c['card']['coverAssetId'],
+                      ),
+                    ),
+              title: Text(c['card']['title']),
+              subtitle: Text(
+                '${c['card']['shortAnnotation']}\n${c['type']} · версия ${c['metadataRevision']} · файлы ${c['summary']?['downloadBytes'] ?? '—'} байт · '
+                '${installed[c['catalogItemId']] == c['immutableRevisionId']
+                    ? 'Установлено'
+                    : installed.containsKey(c['catalogItemId'])
+                    ? 'Есть обновление'
+                    : 'Не скачано'}',
+              ),
+              trailing:
+                  [
+                    'track',
+                    'module',
+                    'template',
+                    'collection',
+                    'package',
+                    'session',
+                  ].contains(c['type'])
+                  ? IconButton(
+                      tooltip: 'Состав и установка',
+                      icon: const Icon(Icons.download_outlined),
+                      onPressed: busyId != null
+                          ? null
+                          : () async {
+                              try {
+                                await install(c);
+                              } catch (e) {
+                                if (mounted) {
+                                  setState(() => error = e.toString());
+                                }
+                              }
+                            },
+                    )
+                  : null,
+            ),
+          if (!loading && cards.isEmpty && error == null)
+            const ListTile(title: Text('Опубликованных материалов пока нет')),
+          if (cursor != null)
+            TextButton(
+              onPressed: loading ? null : () => load(more: true),
+              child: const Text('Ещё'),
+            ),
+        ],
+      ),
     ),
   );
+}
+
+class AlchemistCover extends StatefulWidget {
+  const AlchemistCover({
+    super.key,
+    required this.controller,
+    required this.api,
+    required this.assetId,
+  });
+  final SessionController controller;
+  final AlchemistApi api;
+  final String assetId;
+  @override
+  State<AlchemistCover> createState() => _AlchemistCoverState();
+}
+
+class _AlchemistCoverState extends State<AlchemistCover> {
+  File? file;
+  bool loading = false;
+  Future<void> load() async {
+    if (loading) return;
+    setState(() => loading = true);
+    try {
+      final d = await widget.api.call('media.getDescriptor', {
+        'assetRevisionId': widget.assetId,
+      });
+      if (!(d['mime'] as String).startsWith('image/') ||
+          (d['byteLength'] as int) > 20 * 1024 * 1024) {
+        throw const FormatException('Обложка недоступна');
+      }
+      final f = await AlchemistInstall(
+        widget.controller.capsules!,
+        widget.api,
+      ).downloadAsset(d);
+      if (mounted) setState(() => file = f);
+    } catch (_) {
+      if (mounted) setState(() => file = null);
+    } finally {
+      if (mounted) setState(() => loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => loading
+      ? const Center(child: CircularProgressIndicator())
+      : file == null
+      ? IconButton(
+          tooltip: 'Загрузить обложку',
+          onPressed: load,
+          icon: const Icon(Icons.image_outlined),
+        )
+      : Image.file(
+          file!,
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => IconButton(
+            tooltip: 'Повторить загрузку обложки',
+            onPressed: load,
+            icon: const Icon(Icons.refresh),
+          ),
+        );
 }

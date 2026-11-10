@@ -24,7 +24,7 @@ const server=createServer(async(req,res)=>{try{
  else if(q.operation==='content.registerManifest')result=manifest.execute(q.operation,actor,q.parameters);
  else if(q.operation.startsWith('media.'))result=media[{'media.beginUpload':'begin','media.uploadChunk':'upload','media.commitUpload':'commit','media.getDescriptor':'descriptor','media.downloadChunk':'download','media.finalizeDownload':'finalize'}[q.operation]](actor,q.parameters);
  else if(q.operation==='feed.list'||q.operation.startsWith('entry.'))result=diary.execute(q.operation,actor,q.parameters);
- else if(q.operation.startsWith('auth.'))result=operations.execute(q.operation,actor,q.parameters);
+ else if(q.operation.startsWith('auth.')||q.operation.startsWith('sync.'))result=operations.execute(q.operation,actor,q.parameters);
  else result=catalog.execute(q.operation,actor,q.parameters);
  res.end(JSON.stringify({ok:true,status:200,result}));
  }catch(e){res.end(JSON.stringify({ok:false,status:e.status||503,error:{code:e.code||e.message}}));}});

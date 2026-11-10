@@ -90,8 +90,17 @@ class AlchemistApi {
       }, null);
     }
     if (response.status != 200) {
-      throw const DiaryApiException(
+      throw AlchemistApiException(
         'Сервер недоступен. Локальные данные сохранены.',
+        response.status,
+        'HTTP_SERVER_UNAVAILABLE',
+      );
+    }
+    final mime = response.headers['content-type'];
+    if (mime != null && mime.split(';').first.trim() != 'application/json') {
+      throw const DiaryApiException(
+        'Сервер вернул неподдерживаемый формат ответа',
+        DiaryFailure.invalidData,
       );
     }
     Map<String, dynamic> value;

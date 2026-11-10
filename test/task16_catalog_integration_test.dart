@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
+import 'package:sulfi_hypnotherapy/models/session_plan.dart';
+import 'package:sulfi_hypnotherapy/models/content_link.dart';
+import 'package:sulfi_hypnotherapy/services/diary_read_state.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_diary_api.dart';
 import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_api.dart';
@@ -197,6 +200,74 @@ void main() {
         isTrue,
       );
       expect(client.c.assets.length, 3);
+      author.c.draft = CurrentSessionDraft(
+        plan: SessionPlan(steps: module.items),
+        updatedAt: DateTime.utc(2026),
+        notes: 'PRIVATE NOTE NOT EXPORTED',
+      );
+      final sessionCard = await service.prepareCurrentSession();
+      expect(jsonEncode(sessionCard['root']).contains('PRIVATE NOTE'), isFalse);
+      sessionCard['card']['shortAnnotation'] = 'Состав текущей сессии';
+      sessionCard['card']['visibility'] = 'public';
+      await service.publish(sessionCard);
+      await installer.install(
+        await reader.call('catalog.get', {
+          'catalogItemId': sessionCard['catalogItemId'],
+        }),
+      );
+      final template = SessionTemplate(
+        id: 'template16',
+        name: 'Шаблон',
+        plan: author.c.draft.plan,
+        createdAt: DateTime.utc(2026),
+        updatedAt: DateTime.utc(2026),
+      );
+      await author.c.repository.saveTemplate(template);
+      final templateRoot = (await LocalCatalogSource.currentIndex(
+        author.c.capsules!,
+      )).singleWhere((r) => r.key.content.id == template.id);
+      final templateCard = await service.prepare(templateRoot);
+      templateCard['card']['shortAnnotation'] = 'Точный шаблон';
+      templateCard['card']['visibility'] = 'public';
+      await service.publish(templateCard);
+      await installer.install(
+        await reader.call('catalog.get', {
+          'catalogItemId': templateCard['catalogItemId'],
+        }),
+      );
+      expect(
+        await LocalCatalogSource.installedRevision(
+          client.c.capsules!,
+          templateRoot,
+        ),
+        isTrue,
+      );
+      final secondAuthor = await Fixture15.open();
+      try {
+        final remoteEditor = AlchemistCatalog(secondAuthor.c, api: ownerApi);
+        expect(await remoteEditor.synchronize(), greaterThanOrEqualTo(5));
+        final remoteCard = (await remoteEditor.drafts()).singleWhere(
+          (v) => v['catalogItemId'] == trackCard['catalogItemId'],
+        );
+        expect(remoteCard['remoteOnly'], isTrue);
+        expect(secondAuthor.c.assets, isEmpty);
+        final beforeMeta = await ownerApi.call('test.stats', {});
+        remoteCard['card']['shortAnnotation'] =
+            'Аннотация со второго устройства';
+        await remoteEditor.publish(remoteCard);
+        expect(
+          (await ownerApi.call('test.stats', {}))['uploaded'],
+          beforeMeta['uploaded'],
+        );
+        expect(
+          (await reader.call('catalog.get', {
+            'catalogItemId': trackCard['catalogItemId'],
+          }))['card']['shortAnnotation'],
+          'Аннотация со второго устройства',
+        );
+      } finally {
+        await secondAuthor.close();
+      }
       // Same new backend and existing diary models: durable offline intent,
       // actual multipart video bytes, no private path projection, offline cache.
       final authorMedia = DiaryMediaStore(
@@ -227,6 +298,11 @@ void main() {
       ));
       final entry = DiaryEntry(
         id: 'diary16',
+        extra: {
+          'contentLinks': [
+            ContentLink(moduleRoot.key, ContentLinkAction.install).toMap(),
+          ],
+        },
         title: 'Видео и текст',
         message: 'Аннотация дневника',
         blocks: [
@@ -280,6 +356,26 @@ void main() {
       final feed = await diaryReader.feed();
       final received = feed.entries.singleWhere((e) => e.id == entry.id);
       expect(received.blocks.last.type, DiaryBlockType.video);
+      expect(received.contentLinks.single.key.digest, moduleRoot.key.digest);
+      final exact = await reader.call('catalog.resolveReference', {
+        'logicalId': moduleRoot.key.content.id,
+        'revisionId': moduleRoot.key.revision,
+        'digest': moduleRoot.key.digest,
+      });
+      final linked = await Fixture15.open(client: true);
+      try {
+        await AlchemistInstall(linked.c.capsules!, reader).install(exact);
+        expect(
+          await LocalCatalogSource.installedRevision(
+            linked.c.capsules!,
+            moduleRoot,
+          ),
+          isTrue,
+        );
+      } finally {
+        await linked.close();
+      }
+
       expect(received.blocks.last.media!.localPath, isNull);
       final videoDescriptor = await reader.call('media.getDescriptor', {
         'assetRevisionId': received.blocks.last.media!.assetId,
@@ -308,6 +404,19 @@ void main() {
       );
       expect(await downloaded!.length(), await clip.length());
       expect(await downloaded.readAsBytes(), padded);
+      await diaryReader.authenticateReader('TEST_OWNER');
+      final readsA = DiaryReadStore(
+            author.db,
+            readerId: diaryAuthor.readerScope,
+          ),
+          readsB = DiaryReadStore(client.db, readerId: diaryReader.readerScope);
+      await readsA.load();
+      await readsB.load();
+      await readsA.progress(received, textEnd: true, page: 2);
+      await diaryAuthor.synchronizeReads(readsA, [received]);
+      await diaryReader.synchronizeReads(readsB, [received]);
+      expect(readsB.isRead(received), isTrue);
+      expect(readsB.state(received)['page'], 2);
       final prior = await ownerApi.call('entry.get', {'entryId': entry.id});
       final statsBefore = await ownerApi.call('test.stats', {});
       final changed = await diaryAuthor.publish(

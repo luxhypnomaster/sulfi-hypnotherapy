@@ -21,3 +21,19 @@ test('real transaction store links media to publications, persists replay, revok
  assert.equal(blobs.size,1);assert.equal(store.revision('card','2').state,'published');
  store=ctx.AlchemistAtomicStore.create(io);assert.equal(store.receipt('owner:publish').result.publicationState,'published');assert.equal(store.item('card').state,'withdrawn');
 });
+test('reader grants never authorize republication of foreign private bytes; source withdrawal revokes foreign links',()=>{
+ let head=null,n=0;const files=new Map();
+ const store=ctx.AlchemistAtomicStore.create({head:()=>head,read:k=>structuredClone(files.get(k)),writeVerified:v=>{const k=String(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:sha});
+ const access=ctx.AlchemistAccess.create(store,()=>0),bob={sub:'bob',roles:['author']},alice={sub:'alice',roles:['author']};
+ const asset={id:'blob',logicalId:'private-audio',revisionId:'v1',sha256:sha('bytes'),owner:'bob',verified:true,byteLength:5,mime:'audio/mpeg',dependencyRefs:[]},ref={logicalId:asset.logicalId,revisionId:asset.revisionId,sha256:asset.sha256};
+ store.begin();store.retainAsset(asset.logicalId,asset.revisionId,asset);store.put('media:'+asset.id,asset);store.commitTransaction();
+ const core=ctx.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0).toISOString(),digest:x=>sha(JSON.stringify(x)),canReadAsset:access.canRead,validatePublication:access.validatePublication,encodeCursor:JSON.stringify,decodeCursor:JSON.parse});
+ function draft(who,id){return core.execute('catalog.createDraft',who,{requestId:'create-'+id,catalogItemId:id,type:'track',logicalContentId:asset.logicalId,immutableRevisionId:asset.revisionId,card:{title:id,shortAnnotation:'fixture',visibility:who.sub==='bob'?'restricted':'public'},manifest:{dependencyRefs:[ref]}});}
+ draft(bob,'bob-source');core.execute('catalog.publish',bob,{requestId:'publish-bob',catalogItemId:'bob-source',ifMatch:'1',readerSubjects:['alice']});
+ assert.equal(access.canRead(asset,alice),true);assert.equal(access.canRead(asset,null),false);
+ draft(alice,'alice-copy');assert.throws(()=>core.execute('catalog.publish',alice,{requestId:'bad-publish',catalogItemId:'alice-copy',ifMatch:'1'}),/PRIVATE_FOREIGN/);
+ core.execute('catalog.updateMetadata',bob,{requestId:'make-public',catalogItemId:'bob-source',ifMatch:'2',card:{visibility:'public'}});
+ core.execute('catalog.publish',alice,{requestId:'allowed-link',catalogItemId:'alice-copy',ifMatch:'1'});assert.equal(access.canRead(asset,null),true);
+ core.execute('catalog.withdraw',bob,{requestId:'withdraw-source',catalogItemId:'bob-source',ifMatch:'3'});
+ assert.equal(access.canRead(asset,null),false);assert.equal(access.canRead(asset,alice),false);assert.equal(access.canRead(asset,bob),true);
+});

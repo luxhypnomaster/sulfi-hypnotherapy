@@ -1,3 +1,6 @@
+import 'diary_read_state.dart';
+import 'alchemist_content_upload.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -27,6 +30,32 @@ class AlchemistDiaryApi extends DiaryApi {
   final DiaryMediaStore media;
   final DiaryRequest? connection;
   String? _token;
+  String? _queueError;
+  @override
+  String? get queueError => _queueError;
+  String? _subject;
+  int _accountGeneration = 0;
+  @override
+  String get readerScope => _subject == null ? 'public' : 'google:$_subject';
+  @override
+  Future<void> authenticateReader(String token) async {
+    clearSession();
+    final generation = _accountGeneration;
+    final identity = await AlchemistApi(
+      base,
+      connection: connection,
+      credential: () async => token,
+    ).call('auth.whoami', {});
+    if (generation != _accountGeneration) {
+      throw const DiaryApiException(
+        'Вход отменён выходом из аккаунта',
+        DiaryFailure.authorization,
+      );
+    }
+    _subject = identity['subject'] as String;
+    _token = token;
+  }
+
   Database get db => capsules.database;
   AlchemistApi get public => AlchemistApi(base, connection: connection);
   AlchemistApi get author => AlchemistApi(
@@ -39,11 +68,15 @@ class AlchemistDiaryApi extends DiaryApi {
   bool get supportsAdvancedPublication => true;
   @override
   void clearSession() {
+    _accountGeneration++;
     _token = null;
+    _subject = null;
   }
 
   @override
   Future<DiaryAuthorSession> authenticate(String token) async {
+    clearSession();
+    final generation = _accountGeneration;
     final api = AlchemistApi(
       base,
       connection: connection,
@@ -65,36 +98,80 @@ class AlchemistDiaryApi extends DiaryApi {
     if (!until.isAfter(DateTime.now().toUtc())) {
       throw const DiaryApiException('Вход истёк');
     }
+    if (generation != _accountGeneration) {
+      throw const DiaryApiException(
+        'Вход отменён выходом из аккаунта',
+        DiaryFailure.authorization,
+      );
+    }
     _token = token;
+    _subject = identity['subject'] as String;
     return DiaryAuthorSession.verified(token, until);
   }
 
   DiaryEntry _entry(Map<String, dynamic> result) {
     final raw = Map<String, dynamic>.from(result['entry']);
     raw['publication'] = result['publication'];
+    raw['_alchemistScope'] = result['visibility'] == 'public'
+        ? 'public'
+        : readerScope;
     return DiaryEntry.fromMap(raw);
   }
 
   @override
   Future<DiaryPage> feed({String? since, String? page}) async {
-    final result = await public.call('feed.list', {
+    final scope = readerScope, generation = _accountGeneration;
+    final result = await (_token == null ? public : author).call('feed.list', {
       'cursor': ?page,
       'limit': 50,
     });
+    if (scope != readerScope || generation != _accountGeneration) {
+      throw const DiaryApiException(
+        'Аккаунт изменился. Обновите дневник.',
+        DiaryFailure.authorization,
+      );
+    }
     final entries = (result['entries'] as List)
         .map((v) => _entry(Map<String, dynamic>.from(v)))
         .where((e) => e.status == DiaryStatus.published)
         .toList();
     // Tombstones are explicit; absence from a page never implies deletion.
-    final changes = await public.call('catalog.changes', {
-      'sinceRevision': int.tryParse(since ?? '') ?? 0,
-    });
-    final removed = (changes['items'] as List)
-        .where((v) => v['tombstone'] == true)
-        .map((v) => v['catalogItemId'] as String)
-        .where((id) => id.startsWith('entry_'))
-        .map((id) => id.substring(6))
-        .toSet();
+    final removed = <String>{};
+    if (page == null) {
+      int? offset;
+      int? snapshot;
+      do {
+        final changes = await (_token == null ? public : author).call(
+          'catalog.changes',
+          {
+            'sinceRevision': int.tryParse(since ?? '') ?? 0,
+            'offset': ?offset,
+            'snapshotRevision': ?snapshot,
+          },
+        );
+        snapshot = changes['revision'] as int;
+        if (snapshot != result['revision']) {
+          throw const DiaryApiException(
+            'Снимок дневника изменился. Повторите обновление.',
+            DiaryFailure.conflict,
+          );
+        }
+        removed.addAll(
+          (changes['items'] as List)
+              .where((v) => v['tombstone'] == true)
+              .map((v) => v['catalogItemId'] as String)
+              .where((id) => id.startsWith('entry_'))
+              .map((id) => id.substring(6)),
+        );
+        offset = changes['nextOffset'] as int?;
+      } while (offset != null);
+    }
+    if (scope != readerScope || generation != _accountGeneration) {
+      throw const DiaryApiException(
+        'Аккаунт изменился. Обновите дневник.',
+        DiaryFailure.authorization,
+      );
+    }
     return DiaryPage(
       entries: entries,
       removedIds: removed,
@@ -163,6 +240,13 @@ class AlchemistDiaryApi extends DiaryApi {
   }
 
   Future<Map<String, dynamic>> _document(DiaryEntry e) async {
+    if (e.contentLinks.isNotEmpty) {
+      await registerAlchemistContent(
+        capsules,
+        author,
+        e.contentLinks.map((l) => l.key).toList(),
+      );
+    }
     final blocks = <Map<String, dynamic>>[];
     for (final b in e.blocks) {
       if (b.type == DiaryBlockType.text) {
@@ -305,6 +389,7 @@ class AlchemistDiaryApi extends DiaryApi {
     do {
       final page = await author.call('feed.list', {
         'cursor': ?cursor,
+        'ownedOnly': true,
         'limit': 50,
       });
       result.addAll(
@@ -358,13 +443,51 @@ class AlchemistDiaryApi extends DiaryApi {
     return rows.firstOrNull?['value'] as String?;
   }
 
+  String _editable(DiaryEntry e) => canonicalContent({
+    'title': e.title,
+    'version': e.version,
+    'status': e.status.name,
+    'message': e.message,
+    'blocks': e.blocks.map((b) => b.toMap()).toList(),
+    'order': e.order,
+    'extra': {
+      for (final v in e.extra.entries)
+        if (v.key != '_alchemistScope') v.key: v.value,
+    },
+  });
   Future<void> _commitLocal(DiaryEntry result, String? queued) async {
+    var conflict = false;
     await db.transaction((tx) async {
-      await tx.insert('diary_author', {
-        'id': result.id,
-        'updatedAt': result.updatedAt.toUtc().toIso8601String(),
-        'payload': jsonEncode(result.toMap()),
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      if (queued != null) {
+        final sent = DiaryEntry.fromMap(
+          Map<String, dynamic>.from(jsonDecode(queued)['entry']),
+        );
+        final rows = await tx.query(
+          'diary_author',
+          where: 'id=?',
+          whereArgs: [result.id],
+        );
+        if (rows.isNotEmpty) {
+          final current = DiaryEntry.fromMap(
+            Map<String, dynamic>.from(
+              jsonDecode(rows.single['payload'] as String),
+            ),
+          );
+          conflict = _editable(current) != _editable(sent);
+        }
+      }
+      if (conflict) {
+        await tx.insert('app_settings', {
+          'name': 'alchemist_diary_conflict:${result.id}',
+          'value': jsonEncode(result.toMap()),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      } else {
+        await tx.insert('diary_author', {
+          'id': result.id,
+          'updatedAt': result.updatedAt.toUtc().toIso8601String(),
+          'payload': jsonEncode(result.toMap()),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
       if (queued != null) {
         await tx.delete(
           'app_settings',
@@ -373,10 +496,17 @@ class AlchemistDiaryApi extends DiaryApi {
         );
       }
     });
+    if (conflict) {
+      throw const DiaryApiException(
+        'Сохранённая версия отправлена на сервер. Более поздние правки остались на телефоне; проверьте конфликт.',
+        DiaryFailure.conflict,
+      );
+    }
   }
 
   @override
   Future<int> flushPending(DiaryAuthorSession session) async {
+    _queueError = null;
     var completed = 0;
     for (final row in await db.query(
       'app_settings',
@@ -385,6 +515,31 @@ class AlchemistDiaryApi extends DiaryApi {
     )) {
       final q = jsonDecode(row['value'] as String),
           entry = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
+      final current = await db.query(
+        'diary_author',
+        where: 'id=?',
+        whereArgs: [entry.id],
+      );
+      if (current.isNotEmpty &&
+          _editable(
+                DiaryEntry.fromMap(
+                  Map<String, dynamic>.from(
+                    jsonDecode(current.single['payload'] as String),
+                  ),
+                ),
+              ) !=
+              _editable(entry)) {
+        _queueError = 'В очереди есть запись с новыми локальными правками. Откройте её и подтвердите публикацию ещё раз.';
+        q['status'] = 'localConflict';
+        q['error'] = 'После постановки в очередь появились новые правки. Требуется явная повторная публикация.';
+        await db.update(
+          'app_settings',
+          {'value': jsonEncode(q)},
+          where: 'name=?',
+          whereArgs: [row['name']],
+        );
+        continue;
+      }
       final result = q['published'] == null
           ? await saveAuthorDraft(entry, session)
           : await publish(entry, session, published: q['published']);
@@ -397,6 +552,56 @@ class AlchemistDiaryApi extends DiaryApi {
       completed++;
     }
     return completed;
+  }
+
+  @override
+  Future<void> synchronizeReads(
+    DiaryReadStore reads,
+    List<DiaryEntry> entries,
+  ) async {
+    if (_token == null || reads.readerId != readerScope) return;
+    final name = 'alchemist_read_sync_queue:$readerScope';
+    final pending = (await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: [name],
+    )).firstOrNull;
+    if (pending != null) {
+      try {
+        await author.call(
+          'sync.push',
+          Map<String, dynamic>.from(jsonDecode(pending['value'] as String)),
+        );
+      } on AlchemistApiException catch (e) {
+        if (e.status != 412) rethrow;
+      }
+      await db.delete('app_settings', where: 'name=?', whereArgs: [name]);
+    }
+    final remote = await author.call('sync.pull', {'readerStateOnly': true});
+    final state = remote['readerState'];
+    for (final raw in state['entries'] as List) {
+      final e = entries.where((e) => e.id == raw['entryId']).firstOrNull;
+      if (e != null) await reads.mergeSynced(e, Map<String, dynamic>.from(raw));
+    }
+    final local = reads.syncSnapshot(entries),
+        merged = <String, Map<String, dynamic>>{
+          for (final raw in state['entries'] as List)
+            '${raw['entryId']}:${raw['cycle']}': Map<String, dynamic>.from(raw),
+          for (final raw in local) '${raw['entryId']}:${raw['cycle']}': raw,
+        };
+    final values = merged.values.toList();
+    if (canonicalContent(values) == canonicalContent(state['entries'])) return;
+    final q = {
+      'requestId': newId(),
+      'ifMatch': state['etag'],
+      'entries': values,
+    };
+    await db.insert('app_settings', {
+      'name': name,
+      'value': jsonEncode(q),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await author.call('sync.push', q);
+    await db.delete('app_settings', where: 'name=?', whereArgs: [name]);
   }
 
   Future<File?> resolveMedia(DiaryMedia m) async {

@@ -19,6 +19,7 @@ class AlchemistMediaTransfer {
     required String revisionId,
     required String mime,
     String? expectedHash,
+    bool restartExpired = true,
     bool Function()? interrupted,
     void Function(int, int)? progress,
   }) async {
@@ -70,6 +71,9 @@ class AlchemistMediaTransfer {
         'byteLength': size,
         'mime': mime,
       });
+      state['sessionId'] = start['sessionId'];
+      state['localPath'] = file.path;
+      await checkpoint();
       var offset = start['offset'] as int;
       if (offset < 0 || offset > size) {
         throw const FormatException('Некорректная позиция передачи');
@@ -119,6 +123,21 @@ class AlchemistMediaTransfer {
       await checkpoint();
       return result;
     } catch (e) {
+      if (e is AlchemistApiException && e.status == 410 && restartExpired) {
+        state['requestId'] = newId();
+        state['state'] = 'expired';
+        await checkpoint();
+        return upload(
+          file,
+          logicalId: logicalId,
+          revisionId: revisionId,
+          mime: mime,
+          expectedHash: expectedHash,
+          restartExpired: false,
+          interrupted: interrupted,
+          progress: progress,
+        );
+      }
       state['state'] = interrupted?.call() == true ? 'paused' : 'failed';
       state['error'] = e.toString();
       await checkpoint();

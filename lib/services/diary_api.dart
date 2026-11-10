@@ -1,3 +1,5 @@
+import 'diary_read_state.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -68,7 +70,15 @@ class DiaryApi {
       throw const DiaryApiException('Для дневника нужен HTTPS адрес сервера');
     }
   }
+  Future<void> synchronizeReads(
+    DiaryReadStore reads,
+    List<DiaryEntry> entries,
+  ) async {}
+  String? get queueError => null;
   bool get supportsAdvancedPublication => false;
+  String get readerScope => 'public';
+  Future<void> authenticateReader(String token) async =>
+      throw const DiaryApiException('Личный сервер не подключён');
   void clearSession() {}
   Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {}
   Future<int> flushPending(DiaryAuthorSession session) async => 0;
@@ -324,6 +334,8 @@ class DiaryApi {
         headers: {
           if (response.headers.value('location') case final String location)
             'location': location,
+          if (response.headers.contentType?.mimeType case final String mime)
+            'content-type': mime,
         },
       );
     } finally {

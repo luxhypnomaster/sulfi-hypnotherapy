@@ -2,11 +2,12 @@
 var AlchemistAtomicStore=(function(){
  'use strict';
  function create(io){
-  var transaction=null;
-  function root(){return io.head()?io.read(io.head()):{schemaVersion:1,revision:0,shards:{}};}
+  var transaction=null,cache={},cacheOrder=[];
+  function load(id){if(!Object.prototype.hasOwnProperty.call(cache,id)){cache[id]=JSON.stringify(io.read(id));cacheOrder.push(id);if(cacheOrder.length>32)delete cache[cacheOrder.shift()];}return JSON.parse(cache[id]);}
+  function root(){return io.head()?load(io.head()):{schemaVersion:1,revision:0,shards:{}};}
   function shard(key){return io.digest(key).slice(0,2);}
-  function read(key){var r=transaction?transaction.root:root(),s=shard(key);var map=transaction&&transaction.maps[s]|| (r.shards[s]?io.read(r.shards[s]):{});return map[key]===undefined?null:JSON.parse(JSON.stringify(map[key]));}
-  function put(key,value){if(!transaction)throw new Error('TRANSACTION_REQUIRED');var s=shard(key);if(!transaction.maps[s])transaction.maps[s]=transaction.root.shards[s]?io.read(transaction.root.shards[s]):{};transaction.maps[s][key]=JSON.parse(JSON.stringify(value));}
+  function read(key){var r=transaction?transaction.root:root(),s=shard(key);var map=transaction&&transaction.maps[s]|| (r.shards[s]?load(r.shards[s]):{});return map[key]===undefined?null:JSON.parse(JSON.stringify(map[key]));}
+  function put(key,value){if(!transaction)throw new Error('TRANSACTION_REQUIRED');var s=shard(key);if(!transaction.maps[s])transaction.maps[s]=transaction.root.shards[s]?load(transaction.root.shards[s]):{};transaction.maps[s][key]=JSON.parse(JSON.stringify(value));}
   return {
    begin:function(){if(transaction)throw new Error('NESTED_TRANSACTION');transaction={root:root(),maps:{}};},
    rollback:function(){transaction=null;},
@@ -16,8 +17,10 @@ var AlchemistAtomicStore=(function(){
    saveReceipt:function(key,v){put('receipt:'+key,v);},commit:function(r){var key='catalog-revision:'+r.id+':'+r.etag,old=read(key);if(old&&JSON.stringify(old)!==JSON.stringify(r))throw Error('IMMUTABLE_REVISION_CONFLICT');put(key,r);put('item:'+r.id,r);transaction.catalogChanged=true;},revision:function(id,etag){return read('catalog-revision:'+id+':'+etag);},
    asset:function(id,revision){return read('asset:'+id+':'+revision);},cover:function(id){return read('cover:'+id);},
    retainAsset:function(id,revision,value){put('asset:'+id+':'+revision,value);},
+   sequence:function(){return (transaction?transaction.root:root()).revision;},
+   scan:function(prefix){var r=transaction?transaction.root:root(),result=[];Object.keys(r.shards).forEach(function(s){var map=transaction&&transaction.maps[s]||load(r.shards[s]);Object.keys(map).filter(function(k){return k.indexOf(prefix)===0;}).forEach(function(k){result.push(JSON.parse(JSON.stringify(map[k])));});});return result;},
    indexRevision:function(){return (transaction?transaction.root:root()).catalogRevision||0;},
-   items:function(){var r=transaction?transaction.root:root(),result=[];Object.keys(r.shards).forEach(function(s){var map=transaction&&transaction.maps[s]||io.read(r.shards[s]);Object.keys(map).filter(function(k){return k.indexOf('item:')===0;}).forEach(function(k){result.push(map[k]);});});return result;}
+   items:function(){var r=transaction?transaction.root:root(),result=[];Object.keys(r.shards).forEach(function(s){var map=transaction&&transaction.maps[s]||load(r.shards[s]);Object.keys(map).filter(function(k){return k.indexOf('item:')===0;}).forEach(function(k){result.push(map[k]);});});return result;}
   };
  }
  return {create:create};

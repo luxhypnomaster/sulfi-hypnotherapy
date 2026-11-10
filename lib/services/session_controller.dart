@@ -35,6 +35,12 @@ class SessionController extends ChangeNotifier {
     this.preview,
   }) : modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
+    if (diary != null && diary!.onAccountLogout == null) {
+      diary!.onAccountLogout = () {
+        _catalogIdentity?.invalidate();
+        if (preview != null) unawaited(preview!.stop());
+      };
+    }
   }
   AccessPolicy get policy => library.policy;
   SessionController? _editorSource;
@@ -92,6 +98,24 @@ class SessionController extends ChangeNotifier {
   final SessionRepository repository;
   AlchemistCatalog? _catalog;
   AlchemistIdentitySession? _catalogIdentity;
+  Future<void> signInAlchemistReader() async {
+    final identity = diary?.identity;
+    if (identity == null) {
+      throw const FormatException('Вход Google не настроен');
+    }
+    final token = await (_catalogIdentity ??= AlchemistIdentitySession(
+      identity,
+    )).token();
+    await diary!.api?.authenticateReader(token);
+    await diary!.load();
+    await diary!.sync();
+  }
+
+  Future<void> signOutAlchemist() async {
+    await diary?.logout();
+    _catalogIdentity?.invalidate();
+  }
+
   AlchemistApi alchemistApi({bool authenticated = true}) {
     const endpoint = String.fromEnvironment('SULFI_ALCHEMIST_API');
     if (endpoint.isEmpty) {

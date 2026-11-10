@@ -100,6 +100,11 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
         await widget.service.publish(
           draft,
           interrupted: () => paused || !mounted,
+          onStage: (_) {
+            if (mounted) {
+              setState(() => progress = 'Ожидаем подтверждение сервера');
+            }
+          },
           progress: (n, total) {
             if (mounted) setState(() => progress = '$n / $total байт');
           },
@@ -167,43 +172,42 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   }
 
   @override
-  Widget build(BuildContext context) => LeatherScaffold(
-    title: 'Карточка публикации',
-    child: Column(
-      children: [
-        if (error != null)
-          Text(error!, style: const TextStyle(color: neonPink)),
-        Text(
-          'Статус: ${draft['status'] == 'published'
-              ? 'Опубликовано'
-              : draft['status'] == 'failed'
-              ? 'Сбой — можно повторить'
-              : 'Черновик на телефоне'}',
-        ),
-        if (busy) const LinearProgressIndicator(),
-        if (busy)
-          TextButton(
-            onPressed: () => setState(() => paused = true),
-            child: const Text('Приостановить'),
-          ),
-        if (progress.isNotEmpty) Text(progress),
-        Expanded(
+  Widget build(BuildContext context) =>
+      !widget.service.controller.policy.isAuthor
+      ? const Scaffold(
+          body: Center(child: Text('Авторские возможности недоступны')),
+        )
+      : LeatherScaffold(
+          title: 'Карточка публикации',
           child: ListView(
             children: [
+              if (error != null)
+                Text(error!, style: const TextStyle(color: neonPink)),
+              Text(
+                'Статус: ${const {'draft': 'Черновик на телефоне', 'uploading': 'Передача файлов', 'publishing': 'Ожидаем ответ сервера', 'published': 'Опубликовано', 'failed': 'Сбой — можно повторить', 'paused': 'Приостановлено', 'archived': 'Архив', 'withdrawn': 'Публикация снята'}[draft['status']] ?? draft['status']}',
+              ),
+              if (busy) const LinearProgressIndicator(),
+              if (busy && draft['status'] != 'publishing')
+                TextButton(
+                  onPressed: () => setState(() => paused = true),
+                  child: const Text('Приостановить'),
+                ),
+              if (progress.isNotEmpty) Text(progress),
               Text(
                 'Тип: ${draft['type']} · версия ${draft['etag'] ?? 'локальная'}',
               ),
               for (final root in draft['roots'] as List? ?? [draft['root']])
-                ListTile(
-                  title: Text(
-                    root['payload']['title'] ??
-                        root['payload']['name'] ??
-                        'Материал',
+                if (root != null)
+                  ListTile(
+                    title: Text(
+                      root['payload']['title'] ??
+                          root['payload']['name'] ??
+                          'Материал',
+                    ),
+                    subtitle: Text(
+                      'Точных зависимостей: ${(root['dependencies'] as List).length}',
+                    ),
                   ),
-                  subtitle: Text(
-                    'Точных зависимостей: ${(root['dependencies'] as List).length}',
-                  ),
-                ),
               TextButton.icon(
                 onPressed: busy ? null : cover,
                 icon: const Icon(Icons.image_outlined),
@@ -220,7 +224,9 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                       : () => setState(() => card['coverAssetId'] = null),
                   child: const Text('Убрать обложку'),
                 ),
-              if (draft['type'] != 'package')
+              if (draft['type'] != 'package' &&
+                  draft['embeddedRoot'] != true &&
+                  draft['remoteOnly'] != true)
                 TextButton(
                   onPressed: busy
                       ? null
@@ -281,16 +287,25 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                   ),
                 ),
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 initialValue: card['visibility'] as String? ?? 'private',
                 decoration: const InputDecoration(labelText: 'Видимость'),
                 items: const [
                   DropdownMenuItem(
                     value: 'private',
-                    child: Text('Личный материал'),
+                    child: Text(
+                      'Личный материал',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   DropdownMenuItem(
                     value: 'public',
-                    child: Text('Для всех читателей'),
+                    child: Text(
+                      'Для всех читателей',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
                 onChanged: busy ? null : (v) => card['visibility'] = v,
@@ -301,42 +316,43 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                   'Публикация выполняется только после проверки файлов и ответа сервера. Сохранение черновика не публикует материал.',
                 ),
               ),
-            ],
-          ),
-        ),
-        Wrap(
-          spacing: 8,
-          children: [
-            TextButton(
-              onPressed: busy ? null : () => save(),
-              child: const Text('Сохранить черновик'),
-            ),
-            if (draft['etag'] != null) ...[
-              if (draft['status'] == 'published')
-                TextButton(
-                  onPressed: busy ? null : () => transition('withdraw'),
-                  child: const Text('Снять публикацию'),
-                ),
-              TextButton(
-                onPressed: busy
-                    ? null
-                    : () => transition(
-                        draft['status'] == 'archived' ? 'restore' : 'archive',
+              Wrap(
+                spacing: 8,
+                children: [
+                  TextButton(
+                    onPressed: busy ? null : () => save(),
+                    child: const Text('Сохранить черновик'),
+                  ),
+                  if (draft['etag'] != null) ...[
+                    if (draft['status'] == 'published')
+                      TextButton(
+                        onPressed: busy ? null : () => transition('withdraw'),
+                        child: const Text('Снять публикацию'),
                       ),
-                child: Text(
-                  draft['status'] == 'archived' ? 'Восстановить' : 'В архив',
-                ),
+                    TextButton(
+                      onPressed: busy
+                          ? null
+                          : () => transition(
+                              draft['status'] == 'archived'
+                                  ? 'restore'
+                                  : 'archive',
+                            ),
+                      child: Text(
+                        draft['status'] == 'archived'
+                            ? 'Восстановить'
+                            : 'В архив',
+                      ),
+                    ),
+                  ],
+                  FilledButton(
+                    onPressed: busy ? null : () => save(publish: true),
+                    child: const Text('Опубликовать'),
+                  ),
+                ],
               ),
             ],
-            FilledButton(
-              onPressed: busy ? null : () => save(publish: true),
-              child: const Text('Опубликовать'),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+          ),
+        );
 }
 
 class AlchemistCatalogScreen extends StatefulWidget {
@@ -457,49 +473,78 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => LeatherScaffold(
-    title: 'Каталог публикаций',
-    child: Column(
-      children: [
-        Wrap(
-          spacing: 8,
-          children: [
-            TextButton.icon(
-              onPressed: createCollection,
-              icon: const Icon(Icons.add),
-              label: const Text('Создать сборку'),
-            ),
-            TextButton.icon(
-              onPressed: createPackage,
-              icon: const Icon(Icons.folder_zip_outlined),
-              label: const Text('Подготовить ZIP'),
-            ),
-          ],
-        ),
-        Wrap(
-          children: [
-            for (final t in const {
-              'draft': 'Черновики',
-              'published': 'Опубликовано',
-              'archived': 'Архив',
-            }.entries)
-              ChoiceChip(
-                label: Text(t.value),
-                selected: filter == t.key,
-                onSelected: (_) => setState(() => filter = t.key),
-              ),
-          ],
-        ),
-        TextField(
-          decoration: const InputDecoration(labelText: 'Поиск публикаций'),
-          onChanged: (v) => setState(() => query = v.toLowerCase()),
-        ),
-        if (error != null) Text(error!),
-        Expanded(
+  Widget build(BuildContext context) =>
+      !widget.service.controller.policy.isAuthor
+      ? const Scaffold(
+          body: Center(child: Text('Авторские возможности недоступны')),
+        )
+      : LeatherScaffold(
+          title: 'Каталог публикаций',
           child: RefreshIndicator(
             onRefresh: load,
             child: ListView(
               children: [
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () async {
+                        try {
+                          await openDraft(
+                            await widget.service.prepareCurrentSession(),
+                          );
+                        } catch (e) {
+                          if (mounted) setState(() => error = e.toString());
+                        }
+                      },
+                      icon: const Icon(Icons.playlist_add),
+                      label: const Text('Текущая сессия'),
+                    ),
+                    TextButton.icon(
+                      onPressed: createCollection,
+                      icon: const Icon(Icons.add),
+                      label: const Text('Создать сборку'),
+                    ),
+                    TextButton.icon(
+                      onPressed: createPackage,
+                      icon: const Icon(Icons.folder_zip_outlined),
+                      label: const Text('Подготовить ZIP'),
+                    ),
+                    TextButton.icon(
+                      onPressed: () async {
+                        try {
+                          await widget.service.synchronize();
+                          await load();
+                        } catch (e) {
+                          if (mounted) setState(() => error = e.toString());
+                        }
+                      },
+                      icon: const Icon(Icons.sync),
+                      label: const Text('Синхронизировать каталог'),
+                    ),
+                  ],
+                ),
+                Wrap(
+                  children: [
+                    for (final t in const {
+                      'draft': 'Черновики',
+                      'published': 'Опубликовано',
+                      'archived': 'Архив',
+                    }.entries)
+                      ChoiceChip(
+                        label: Text(t.value),
+                        selected: filter == t.key,
+                        onSelected: (_) => setState(() => filter = t.key),
+                      ),
+                  ],
+                ),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Поиск публикаций',
+                  ),
+                  onChanged: (v) => setState(() => query = v.toLowerCase()),
+                ),
+                if (error != null) Text(error!),
                 for (final c in cards.where(
                   (c) =>
                       (filter == 'draft'
@@ -538,8 +583,5 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
               ],
             ),
           ),
-        ),
-      ],
-    ),
-  );
+        );
 }

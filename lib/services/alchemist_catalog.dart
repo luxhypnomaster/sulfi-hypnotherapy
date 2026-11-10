@@ -1,3 +1,5 @@
+import 'alchemist_content_upload.dart';
+
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
@@ -60,6 +62,7 @@ class AlchemistCatalog {
         'authorDisplayName': '',
         'visibility': 'private',
         'releaseNotes': '',
+        'coverAssetId': null,
       },
     };
     await save(draft);
@@ -139,39 +142,153 @@ class AlchemistCatalog {
     }
   }
 
+  Future<Map<String, dynamic>> prepareCurrentSession() async {
+    if (controller.draft.plan.allSteps.isEmpty ||
+        controller.draft.unavailableStepIds.isNotEmpty) {
+      throw const FormatException(
+        'В текущей конфигурации нет доступного состава',
+      );
+    }
+    final index = await LocalCatalogSource.currentIndex(controller.capsules!);
+    final template = SessionTemplate(
+      id: newId(),
+      name: controller.draft.baseTemplateName ?? 'Сессия',
+      plan: controller.draft.plan,
+      createdAt: DateTime.now().toUtc(),
+      updatedAt: DateTime.now().toUtc(),
+    );
+    final records = <String, dynamic>{
+      'audio_assets': index
+          .where((r) => r.key.content.type == ContentType.track)
+          .map((r) => Map<String, dynamic>.from(r.payload))
+          .toList(),
+      'module_definitions': index
+          .where((r) => r.key.content.type == ContentType.module)
+          .map(
+            (r) => {'id': r.key.content.id, 'payload': jsonEncode(r.payload)},
+          )
+          .toList(),
+      'session_templates': [
+        {'id': template.id, 'payload': jsonEncode(template.toMap())},
+      ],
+    };
+    final root = LocalCatalogSource.indexRecords(records)
+        .singleWhere((r) => r.key.content.id == template.id);
+    final draft = await prepare(root);
+    draft['type'] = 'session';
+    draft['embeddedRoot'] = true;
+    await save(draft);
+    return draft;
+  }
+
+  Future<int> synchronize() async {
+    var count = 0;
+    String? cursor;
+    final locals = {for (final d in await drafts()) d['catalogItemId']: d};
+    do {
+      final page = await remote.call('catalog.list', {
+        'ownedOnly': true,
+        'cursor': ?cursor,
+        'limit': 50,
+      });
+      for (final raw in page['items'] as List) {
+        if (raw['type'] == 'diaryEntry') continue;
+        final item = await remote.call('catalog.get', {
+          'catalogItemId': raw['catalogItemId'],
+        });
+        final existing = locals[item['catalogItemId']];
+        if (existing != null) {
+          final root = existing['root'];
+          final localRevision = existing['type'] == 'package'
+              ? existing['packageHash']
+              : existing['type'] == 'collection'
+              ? contentDigest({
+                  'roots': (existing['roots'] as List)
+                      .map(
+                        (v) => ContentRevision.fromMap(
+                          Map<String, dynamic>.from(v),
+                        ).key.toMap(),
+                      )
+                      .toList(),
+                })
+              : root?['revision'];
+          final dirty =
+              canonicalContent(existing['card']) !=
+                  canonicalContent(existing['syncedCard']) ||
+              ![
+                'published',
+                'withdrawn',
+                'archived',
+              ].contains(existing['status']) ||
+              existing['remoteOnly'] != true &&
+                  localRevision != existing['remoteRevision'];
+          if (dirty) {
+            if (existing['etag'] != item['etag']) {
+              existing['remoteConflict'] = true;
+              await save(existing);
+            }
+            continue;
+          }
+        }
+        final changed =
+            existing != null &&
+            existing['remoteRevision'] != item['immutableRevisionId'];
+        final draft = <String, dynamic>{
+          ...?existing,
+          'catalogItemId': item['catalogItemId'],
+          'type': item['type'],
+          'logicalId': item['logicalContentId'],
+          'card': item['card'],
+          'syncedCard': item['card'],
+          'etag': item['etag'],
+          'remoteRevision': item['immutableRevisionId'],
+          'publishedRevision': item['immutableRevisionId'],
+          'status': item['publicationState'],
+          'remoteStatus': item['publicationState'],
+          if (existing == null || changed) 'remoteOnly': true,
+        };
+        await save(draft);
+        count++;
+      }
+      cursor = page['nextPage'];
+    } while (cursor != null);
+    return count;
+  }
+
+  Future<void> _publishRemoteMetadata(
+    Map<String, dynamic> draft,
+    Map<String, dynamic> card,
+  ) async {
+    if (canonicalContent(draft['syncedCard']) != canonicalContent(card)) {
+      await _mutation(draft, 'catalog.updateMetadata', {
+        'catalogItemId': draft['catalogItemId'],
+        'ifMatch': draft['etag'],
+        'card': card,
+      });
+    }
+    if (draft['remoteStatus'] != 'published') {
+      await _mutation(draft, 'catalog.publish', {
+        'catalogItemId': draft['catalogItemId'],
+        'ifMatch': draft['etag'],
+      });
+    }
+    final checked = await remote.call('catalog.get', {
+      'catalogItemId': draft['catalogItemId'],
+    });
+    if (checked['publicationState'] != 'published' ||
+        checked['etag'] != draft['etag']) {
+      throw const FormatException('Публикация не подтверждена сервером');
+    }
+    draft['status'] = 'published';
+    draft.remove('error');
+    await save(draft);
+  }
+
   AlchemistApi get remote =>
       api ??
       (throw const FormatException(
         'Сервер ещё не подключён. Черновик сохранён на телефоне.',
       ));
-  Future<Map<String, dynamic>> _upload(
-    ContentRevision r,
-    void Function(int, int)? progress,
-    bool Function()? interrupted,
-  ) async {
-    final asset = controller.asset(r.key.content.id);
-    if (asset == null || asset.contentHash == null) {
-      throw const FormatException('Для публикации нужен проверенный аудиофайл');
-    }
-    final mime = switch (asset.format.toLowerCase()) {
-      'mp3' => 'audio/mpeg',
-      'm4a' => 'audio/mp4',
-      'aac' => 'audio/aac',
-      'wav' => 'audio/wav',
-      'ogg' => 'audio/ogg',
-      _ => throw const FormatException('Неподдерживаемый формат'),
-    };
-    return AlchemistMediaTransfer(db, remote).upload(
-      controller.library.fileFor(asset),
-      logicalId: asset.id,
-      revisionId: r.key.revision,
-      mime: mime,
-      expectedHash: asset.contentHash,
-      progress: progress,
-      interrupted: interrupted,
-    );
-  }
-
   Future<Map<String, dynamic>> _mutation(
     Map<String, dynamic> draft,
     String operation,
@@ -224,11 +341,14 @@ class AlchemistCatalog {
     Map<String, dynamic> draft, {
     void Function(int, int)? progress,
     bool Function()? interrupted,
+    void Function(String)? onStage,
   }) async {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');
     }
-    final card = Map<String, dynamic>.from(draft['card']);
+    final card = Map<String, dynamic>.from(draft['card'])
+      ..putIfAbsent('coverAssetId', () => null);
+    draft['card'] = card;
     if ((card['title'] as String).trim().isEmpty ||
         (card['shortAnnotation'] as String).trim().isEmpty) {
       throw const FormatException('Заполните название и аннотацию');
@@ -240,6 +360,13 @@ class AlchemistCatalog {
         throw const FormatException('Публикация приостановлена');
       }
       if (draft['pending'] != null) await _recover(draft);
+      if (draft['remoteOnly'] == true) {
+        draft['status'] = 'publishing';
+        await save(draft);
+        onStage?.call('publishing');
+        await _publishRemoteMetadata(draft, card);
+        return;
+      }
       final roots = (draft['roots'] as List? ?? [draft['root']])
           .map((v) => ContentRevision.fromMap(Map<String, dynamic>.from(v)))
           .toList();
@@ -290,32 +417,14 @@ class AlchemistCatalog {
             await _mutation(draft, 'catalog.patchDraft', parameters);
           }
         } else {
-          final index = await LocalCatalogSource.currentIndex(
+          final refs = await registerAlchemistContent(
             controller.capsules!,
-          );
-          final closure = resolveContentRoots(
+            remote,
             roots.map((r) => r.key).toList(),
-            index,
+            embedded: draft['embeddedRoot'] == true ? [root] : [],
+            interrupted: interrupted,
+            progress: progress,
           );
-          final refs = <String, Map<String, dynamic>>{};
-          for (final r in closure.revisions) {
-            if (r.key.content.type == ContentType.track) {
-              await _upload(r, progress, interrupted);
-            }
-            final body = {
-              'type': r.key.content.type.name,
-              'logicalId': r.key.content.id,
-              'payload': r.payload,
-              'dependencies': r.dependencies.map((d) => d.toMap()).toList(),
-              'parent': r.parent?.toMap(),
-              'declaredVersion': r.declaredVersion,
-            };
-            refs[r.key.token] = await remote.call('content.registerManifest', {
-              'revision': r.toMap(),
-              'canonicalBody': canonicalContent(body),
-              'canonicalRevision': canonicalContent(r.toMap()),
-            });
-          }
           final parameters = <String, dynamic>{
             'catalogItemId': draft['catalogItemId'],
             'card': card,
@@ -339,6 +448,9 @@ class AlchemistCatalog {
           }
         }
       }
+      if (interrupted?.call() == true) {
+        throw const FormatException('Публикация приостановлена');
+      }
       if (canonicalContent(draft['syncedCard']) != canonicalContent(card)) {
         await _mutation(draft, 'catalog.updateMetadata', {
           'catalogItemId': draft['catalogItemId'],
@@ -346,6 +458,12 @@ class AlchemistCatalog {
           'card': card,
         });
       }
+      if (interrupted?.call() == true) {
+        throw const FormatException('Публикация приостановлена');
+      }
+      draft['status'] = 'publishing';
+      await save(draft);
+      onStage?.call('publishing');
       if (draft['remoteStatus'] != 'published' ||
           draft['publishedRevision'] != contentRevision) {
         await _mutation(draft, 'catalog.publish', {

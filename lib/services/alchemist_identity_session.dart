@@ -46,6 +46,12 @@ class AlchemistIdentitySession {
     return _token!;
   }
 
+  void invalidate() {
+    _generation++;
+    _token = null;
+    _until = null;
+  }
+
   Future<void> logout() async {
     _generation++;
     _token = null;

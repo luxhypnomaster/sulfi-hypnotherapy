@@ -3,5 +3,5 @@
   "projectName": "Сервер Проекта Алхимик",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "C1 persistent GAS adapters and C3 clients not complete; cannot deploy partial source"
+  "reason": "Final full-source test gate pending; real deployment adapter implemented. Runtime storage consent and Android web OAuth audience remain unverified."
 }

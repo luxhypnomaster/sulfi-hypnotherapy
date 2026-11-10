@@ -1,3 +1,5 @@
+import '../services/alchemist_install.dart';
+
 import 'package:flutter/material.dart';
 
 import '../data/content_revision_store.dart';
@@ -109,6 +111,42 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
         );
         return;
       }
+      if (const String.fromEnvironment('SULFI_ALCHEMIST_API').isNotEmpty) {
+        final c = scope!.controller,
+            api = c.alchemistApi(authenticated: false),
+            key = widget.link.key;
+        final card = await api.call('catalog.resolveReference', {
+          'logicalId': key.content.id,
+          'revisionId': key.revision,
+          'digest': key.digest,
+        });
+        if (!mounted) return;
+        final accepted = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(card['card']['title']),
+            content: Text(
+              'Установить точную ревизию ${key.revision.substring(0, 8)}? Недостающие файлы будут скачаны после подтверждения.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Отмена'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Установить'),
+              ),
+            ],
+          ),
+        );
+        if (accepted == true) {
+          await AlchemistInstall(c.capsules!, api).install(card);
+          await c.reload();
+          if (mounted) await refresh();
+        }
+        return;
+      }
       // Opening the local selector is not installing anything. It will require
       // the exact requested key and report a missing source explicitly.
       await Navigator.push<void>(
@@ -138,7 +176,9 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
     subtitle: Text(
       problem ??
           (installed == null
-              ? 'Точная ревизия. Для установки нужен локальный пакет.'
+              ? (const String.fromEnvironment('SULFI_ALCHEMIST_API').isEmpty
+                    ? 'Точная ревизия. Для установки нужен локальный пакет.'
+                    : 'Точная ревизия. Доступна выборочная установка с сервера.')
               : 'Установлено · точная ревизия'),
     ),
     trailing: TextButton(

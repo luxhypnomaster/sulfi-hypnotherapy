@@ -58,6 +58,30 @@ jobs:
             console.log('CLASP_READ_ONLY_API_VERIFIED');
           } catch { console.error('CLASP_READ_ONLY_RESPONSE_INVALID'); process.exit(1); }
           JS
+          node --input-type=module <<'JS'
+          import {pathToFileURL} from 'node:url';
+          const root=process.env.RUNNER_TEMP+'/clasp-tool/node_modules/@google/clasp/build/src/auth/';
+          try {
+            const {FileCredentialStore}=await import(pathToFileURL(root+'file_credential_store.js'));
+            const {getAuthorizedOAuth2Client}=await import(pathToFileURL(root+'auth.js'));
+            const store=new FileCredentialStore(process.env.RUNNER_TEMP+'/alchemist-auth.json');
+            const saved=await store.load('default');
+            const client=await getAuthorizedOAuth2Client(store,'default');
+            const access=await client.getAccessToken();
+            if(!access.token)throw Error();
+            const info=await client.getTokenInfo(access.token);
+            const scope=new Set(info.scopes);
+            for(const [label,value] of Object.entries({SCRIPT_PROJECTS:'https://www.googleapis.com/auth/script.projects',SCRIPT_DEPLOYMENTS:'https://www.googleapis.com/auth/script.deployments',WEBAPP_DEPLOY:'https://www.googleapis.com/auth/script.webapp.deploy',DRIVE_FULL:'https://www.googleapis.com/auth/drive',DRIVE_FILE:'https://www.googleapis.com/auth/drive.file'})) {
+              console.log('OAUTH_SCOPE_'+label+'='+(scope.has(value)?'YES':'NO'));
+            }
+            // Optional CI bootstrap ID token: verify; never print its value/claims.
+            const token=client.credentials.id_token||saved.id_token;
+            let verified=false;
+            if(token){try{await client.verifyIdToken({idToken:token,audience:saved.client_id});verified=true;}catch{}}
+            console.log('CI_GOOGLE_ID_TOKEN_VERIFIED='+(verified?'YES':'NO'));
+            console.log('OAUTH_SCOPE_METADATA_VERIFIED_NO_CLOUD_WRITES');
+          }catch{console.error('OAUTH_SCOPE_CHECK_FAILED');process.exit(1);}
+          JS
           echo 'AUTH_VERIFIED_NO_DEPLOY_NO_CLOUD_WRITES' >> "$GITHUB_STEP_SUMMARY"
       - name: Remove credential and private results
         if: always()

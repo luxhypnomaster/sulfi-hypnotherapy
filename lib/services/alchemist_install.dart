@@ -17,7 +17,29 @@ class AlchemistInstall {
   AlchemistInstall(this.service, this.api);
   final CapsuleService service;
   final AlchemistApi api;
+  static final _active = <String, Future<File>>{};
   Future<File> downloadAsset(
+    Map<String, dynamic> asset, {
+    bool Function()? interrupted,
+    void Function(int, int)? progress,
+  }) {
+    final key = '${service.library.directory.parent.path}:${asset['sha256']}';
+    final existing = _active[key];
+    if (existing != null) return existing;
+    late Future<File> pending;
+    pending =
+        _downloadAsset(
+          asset,
+          interrupted: interrupted,
+          progress: progress,
+        ).whenComplete(() {
+          if (identical(_active[key], pending)) _active.remove(key);
+        });
+    _active[key] = pending;
+    return pending;
+  }
+
+  Future<File> _downloadAsset(
     Map<String, dynamic> asset, {
     bool Function()? interrupted,
     void Function(int, int)? progress,
