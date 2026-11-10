@@ -42,3 +42,9 @@ C1 ACTIVE: catalog/storage backend +tests. C2–C5 NOT STARTED. FULL_CODE_IMPLEM
 
 ## Auth continuation verified
 Read-only workflow42792367833 SUCCESS onmain8bb3d2d. Both actual runtime markers verified: owner identity and list-scripts API. No credential/ID output and no cloudwrites. Repository secret confirmed valid for these read operations; write/deploy scopes not yet exercised. AUTH_LOGIN_VERIFIED=YES; previous missing-secret blocker resolved. Server/code readiness stillnotcomplete; no prematuredeployment.
+
+## C1.6 — resumed after verified repository OAuth
+- before_sha:6d5f3b2; auth-only PR18 merged ONLY workflow into main under explicit owner instruction; main app/server untouched. Manual-main read-only auth workflow42792367833 SUCCESS; repository CLASPRC_JSON verified without exposing value. Not environment secret. Actual markers verified, no cloud writes/deploy.
+- Added AlchemistMediaRuntime persistent session/request/chunk/asset bindings to AtomicStore. Publication-reference ACL rechecked for descriptor/chunks; withdrawal blocks new bytes but retains blobs. Added immutable catalog revision snapshots/getRevision/diff/checkUpdates/attachAsset and operation-bound idempotency digest.
+- Node12PASS including integrated REAL domain+transaction-store test (not live Google): upload->private->publish->anonymousbytes->withdraw->deny->reopen/receipt/history. Source test does not substitute for live E2E.
+- Next: Drive final PUT response-loss reconciliation and persistent dedup; complete diary/package/sync/auth operations; Flutter author annotations/client selective installer/video. C1 stillACTIVE, scope147 preserved; no full-code/deploy claim. C0 not repeated. AUTH check is complete; no owner re-login required.

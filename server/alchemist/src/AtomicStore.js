@@ -13,7 +13,7 @@ var AlchemistAtomicStore=(function(){
    commitTransaction:function(){if(!transaction)throw new Error('NO_TRANSACTION');try{var r=transaction.root;Object.keys(transaction.maps).forEach(function(s){r.shards[s]=io.writeVerified(transaction.maps[s]);});r.revision++;if(transaction.catalogChanged)r.catalogRevision=(r.catalogRevision||0)+1;var next=io.writeVerified(r);io.setHead(next);}finally{transaction=null;}},
    get:read,put:put,
    item:function(id){return read('item:'+id);},receipt:function(key){return read('receipt:'+key);},
-   saveReceipt:function(key,v){put('receipt:'+key,v);},commit:function(r){put('item:'+r.id,r);transaction.catalogChanged=true;},
+   saveReceipt:function(key,v){put('receipt:'+key,v);},commit:function(r){var key='catalog-revision:'+r.id+':'+r.etag,old=read(key);if(old&&JSON.stringify(old)!==JSON.stringify(r))throw Error('IMMUTABLE_REVISION_CONFLICT');put(key,r);put('item:'+r.id,r);transaction.catalogChanged=true;},revision:function(id,etag){return read('catalog-revision:'+id+':'+etag);},
    asset:function(id,revision){return read('asset:'+id+':'+revision);},cover:function(id){return read('cover:'+id);},
    retainAsset:function(id,revision,value){put('asset:'+id+':'+revision,value);},
    indexRevision:function(){return (transaction?transaction.root:root()).catalogRevision||0;},

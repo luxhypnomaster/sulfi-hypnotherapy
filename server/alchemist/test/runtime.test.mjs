@@ -1,0 +1,23 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import vm from 'node:vm';import {createHash} from 'node:crypto';
+const ctx=vm.createContext({});for(const file of ['AtomicStore','Catalog','Access','Transfer','MediaRuntime'])vm.runInContext(readFileSync(new URL('../src/'+file+'.js',import.meta.url),'utf8'),ctx);
+const sha=x=>createHash('sha256').update(x).digest('hex'),json=x=>JSON.parse(JSON.stringify(x)),owner={sub:'owner',roles:['owner']};
+test('real transaction store links media to publications, persists replay, revokes each chunk on withdrawal',()=>{
+ let head=null,n=0;const files=new Map(),blobs=new Map();
+ const io={head:()=>head,read:k=>structuredClone(files.get(k)),writeVerified:v=>{const k=String(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:sha};
+ let store=ctx.AlchemistAtomicStore.create(io);
+ const access=ctx.AlchemistAccess.create(store,()=>0),services={lock:f=>f(),uuid:()=> 'asset-'+(++n),now:()=>0,encode:b=>Buffer.from(b).toString('base64'),decode:s=>Buffer.from(s,'base64'),digest:sha};
+ const drive={begin:()=>({url:'PRIVATE'}),write:(s,o,b)=>{blobs.set(s.id,Buffer.from(b));return b.length;},verify:s=>({sha256:sha(blobs.get(s.id)),byteLength:blobs.get(s.id).length,privateFileId:s.id}),read:(a,o,n)=>blobs.get(a.id).subarray(o,o+n)};
+ const media=ctx.AlchemistMediaRuntime.create(store,drive,services),bytes=Buffer.from('media fixture');
+ const request={requestId:'upload-1',logicalId:'track-1',revisionId:'r1',byteLength:bytes.length,mime:'audio/mpeg',sha256:sha(bytes)};
+ const started=media.begin(owner,request);media.upload(owner,{sessionId:started.sessionId,offset:0,base64:bytes.toString('base64')});const committed=media.commit(owner,{sessionId:started.sessionId});
+ assert.throws(()=>media.descriptor(null,{assetRevisionId:committed.assetRevisionId}),/NOT_AVAILABLE/);
+ const core=ctx.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0).toISOString(),digest:x=>sha(JSON.stringify(x)),canReadAsset:access.canRead,validatePublication:access.validatePublication,encodeCursor:JSON.stringify,decodeCursor:JSON.parse});
+ core.execute('catalog.createDraft',owner,{requestId:'create',catalogItemId:'card',type:'track',logicalContentId:'track-1',immutableRevisionId:'r1',card:{title:'Трек',shortAnnotation:'Аннотация',visibility:'public'},manifest:{dependencyRefs:[{logicalId:'track-1',revisionId:'r1',sha256:sha(bytes)}]}});
+ core.execute('catalog.publish',owner,{requestId:'publish',catalogItemId:'card',ifMatch:'1'});
+ assert.equal(Buffer.from(media.download(null,{assetRevisionId:committed.assetRevisionId,offset:0,length:bytes.length}).base64,'base64').toString(),bytes.toString());
+ assert.throws(()=>core.execute('catalog.withdraw',owner,{requestId:'publish',catalogItemId:'card',ifMatch:'1'}),/IDEMPOTENCY/);
+ core.execute('catalog.withdraw',owner,{requestId:'withdraw',catalogItemId:'card',ifMatch:'2'});
+ assert.throws(()=>media.download(null,{assetRevisionId:committed.assetRevisionId,offset:0,length:1}),/NOT_AVAILABLE/);
+ assert.equal(blobs.size,1);assert.equal(store.revision('card','2').state,'published');
+ store=ctx.AlchemistAtomicStore.create(io);assert.equal(store.receipt('owner:publish').result.publicationState,'published');assert.equal(store.item('card').state,'withdrawn');
+});
