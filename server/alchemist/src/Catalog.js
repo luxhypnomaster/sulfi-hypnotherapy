@@ -16,6 +16,15 @@ var AlchemistCatalog = (function () {
     ['categoryIds','tags'].forEach(function(k){var list=input[k]||[];if(!Array.isArray(list)||list.length>100)fail(422,'INVALID_TAGS');c[k]=list.map(function(v){return text(v,128,true);});});
     if(c.coverAssetId)id(c.coverAssetId);return c;
   }
+  function safeManifest(value,depth) {
+    if(depth>32)fail(422,'MANIFEST_DEPTH');
+    if(value&&typeof value==='object')Object.keys(value).forEach(function(k){
+      if(['__proto__','constructor','prototype','filePath','localPath','driveFileId','folderId','privateLocation','token','credential','grants','readers','owner'].indexOf(k)>=0)fail(422,'PRIVATE_MANIFEST_FIELD');
+      safeManifest(value[k],depth+1);
+    });
+    if(typeof value==='string'&&(/drive\.google\.com|^file:\/\//.test(value)))fail(422,'PRIVATE_MANIFEST_LOCATOR');
+    return clone(value);
+  }
   function create(env) {
     function mutate(actor,request,operation) {
       author(actor);id(request.requestId);
@@ -46,15 +55,16 @@ var AlchemistCatalog = (function () {
       execute:function(op,actor,q){q=q||{};
         if(op==='catalog.createDraft')return mutate(actor,q,function(){
           id(q.catalogItemId);if(types.indexOf(q.type)<0)fail(422,'INVALID_TYPE');if(env.store.item(q.catalogItemId))fail(409,'ITEM_EXISTS');
-          var r={id:q.catalogItemId,owner:actor.sub,type:q.type,logicalContentId:id(q.logicalContentId),contentRevision:id(q.immutableRevisionId),metadataRevision:1,etag:'1',state:'draft',card:card(q.card),manifest:clone(q.manifest||{}),readers:[],updatedAt:env.now()};
+          var r={id:q.catalogItemId,owner:actor.sub,type:q.type,logicalContentId:id(q.logicalContentId),contentRevision:id(q.immutableRevisionId),metadataRevision:1,etag:'1',state:'draft',card:card(q.card),manifest:safeManifest(q.manifest||{},0),readers:[],updatedAt:env.now()};
           env.store.commit(r);return projection(r);
         });
         if(['catalog.patchDraft','catalog.updateMetadata','catalog.publish','catalog.withdraw','catalog.archive','catalog.restore'].indexOf(op)>=0)return mutate(actor,q,function(){
           var r=env.store.item(id(q.catalogItemId));own(r,actor);if(q.ifMatch!==r.etag)fail(412,'ETAG_CONFLICT');r=clone(r);
           if(op==='catalog.patchDraft'||op==='catalog.updateMetadata'){r.card=card(Object.assign({},r.card,q.card));r.metadataRevision++;}
-          if(op==='catalog.patchDraft'&&q.manifest){if(r.state==='published')fail(409,'CONTENT_REVISION_REQUIRED');r.manifest=clone(q.manifest);r.contentRevision=id(q.immutableRevisionId);}
+          if(op==='catalog.patchDraft'&&q.manifest){if(r.state==='published')fail(409,'CONTENT_REVISION_REQUIRED');r.manifest=safeManifest(q.manifest,0);r.contentRevision=id(q.immutableRevisionId);}
           if(op==='catalog.publish'){
             dependencyPlan(r.manifest,actor,[]);
+            if(r.card.visibility==='public')dependencyPlan(r.manifest,null,[]);
             if(!r.manifest.dependencyRefs||!r.manifest.dependencyRefs.length)fail(422,'EMPTY_CONTENT');
             if(r.card.coverAssetId){var cover=env.store.cover(r.card.coverAssetId);if(!cover||!cover.verified||cover.owner!==actor.sub)fail(422,'INVALID_COVER');}
             r.state='published';r.readers=(q.readerSubjects||[]).map(function(s){return text(s,256,true);});

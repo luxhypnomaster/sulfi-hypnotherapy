@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --test server/alchemist/test/*.test.mjs
+      - run: node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"
       - name: Deploy must fail closed without OAuth
         run: |
           set +e

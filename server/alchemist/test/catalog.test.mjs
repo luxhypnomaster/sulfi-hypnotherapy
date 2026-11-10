@@ -33,7 +33,7 @@ test('idempotence, stale etag, missing/corrupt/private dependency, cursor consis
  assert.throws(()=>f.c.execute('catalog.publish',actor,{requestId:'p',catalogItemId:'card1',ifMatch:'0'}),/ETAG/);
  assert.throws(()=>f.c.execute('catalog.publish',actor,{requestId:'p2',catalogItemId:'card1',ifMatch:'1'}),/MISSING/);
  assert.equal(f.items.get('card1').state,'draft');
- f.assets.set('track1:v1',{owner:'owner',public:false,verified:true,sha256:hash,byteLength:100});assert.throws(()=>f.c.execute('catalog.publish',actor,{requestId:'p3',catalogItemId:'card1',ifMatch:'1'}),/PRIVATE_DEPENDENCY/);
+ f.assets.set('track1:v1',{owner:'owner',public:false,verified:true,sha256:hash,byteLength:100});assert.throws(()=>f.c.execute('catalog.publish',actor,{requestId:'p3',catalogItemId:'card1',ifMatch:'1'}),/PRIVATE_DEPENDENCY|DEPENDENCY_DENIED/);
  assert.equal(f.items.get('card1').state,'draft');
 });
 test('storage bootstrap exact tree replay and unsafe/ambiguous ACL fail closed',()=>{
