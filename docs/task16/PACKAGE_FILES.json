@@ -1,0 +1,83 @@
+{
+  "revision": "production-github-actions-catalog-storage-preflight-2026-11-10",
+  "declared_criteria": 147,
+  "declared_files_excluding_manifest": 19,
+  "files": {
+    "ACCEPTANCE_MATRIX.md": {
+      "bytes": 14729,
+      "sha256": "9c785f2c74343772811c57227e53f0bf69949f8946be2d02f0845474999b7737"
+    },
+    "BASELINE_AND_SCOPE.md": {
+      "bytes": 3072,
+      "sha256": "637d4dd23fdd9ea1874c42bb31167d0d6ce9abeb3dc4786f185c6270eb7b59f5"
+    },
+    "CHECKPOINTS.md": {
+      "bytes": 3898,
+      "sha256": "3d32d035bd373865f40fff55662cdbec1a5cb5b34aa6a9d089a25f47082c5712"
+    },
+    "CODEX_COMMAND.txt": {
+      "bytes": 3852,
+      "sha256": "637dfba28bc61466337c8e2eb72ad58172e5d8fe7037da82528ff47130c05964"
+    },
+    "CONTENT_CATALOG_AND_STORAGE.md": {
+      "bytes": 18894,
+      "sha256": "6aa7a8fa6df31f86c6b5975f5dd4302cc084302bb39e6396e3b6d9459625c23b"
+    },
+    "DATA_AND_REVISIONS.md": {
+      "bytes": 4800,
+      "sha256": "e1c95109d4922fc39f6b3b05e83e6c6ddcca3124898ece2bbfd9d059a122c2d5"
+    },
+    "DEPLOYMENT_AND_PERMISSIONS.md": {
+      "bytes": 7457,
+      "sha256": "46bc33c4b02bc260f869439ddad5c1cdf3e8839ee9000ee8405dda7727af0e25"
+    },
+    "FLUTTER_ADAPTER.md": {
+      "bytes": 6909,
+      "sha256": "4cae9309abdb03d623f7fbf7cca122241aa1a6ccc316760d6e75cab2a294fe2f"
+    },
+    "GITHUB_ACTIONS_DEPLOYMENT.md": {
+      "bytes": 12066,
+      "sha256": "1b0b6a948e9923d63eeb1069b5cff4395a28df9bade0132fa5e0b5dca3a62ea7"
+    },
+    "MEDIA_AND_PACKAGES.md": {
+      "bytes": 9046,
+      "sha256": "09df1144658ee8e7e7cafdd63816915521ee3f10f934694206b3e19bc18bb093"
+    },
+    "PREFLIGHT_AUDIT.md": {
+      "bytes": 12333,
+      "sha256": "a9576586d78f8d91f0ceb7ef0f1343ecb6242a19c43814c2d13e5b0111182772"
+    },
+    "REPORTING.md": {
+      "bytes": 4383,
+      "sha256": "54f2ceaab914e267d48961ca013d6bd369d9b48b62fcfd6ba9caa387c10c28b8"
+    },
+    "RESUME_INSTRUCTIONS.md": {
+      "bytes": 1953,
+      "sha256": "e8fbbd1f1bbc51f76eed890d1712da32eaca9f9c21e8c09e4224143f42d22441"
+    },
+    "SECURITY_AND_IDENTITY.md": {
+      "bytes": 5785,
+      "sha256": "4e7e51abec19019d619d3f1f300e6abcf2945450b08206f16a3561a4362ca015"
+    },
+    "SERVER_REQUIREMENTS.md": {
+      "bytes": 10427,
+      "sha256": "b690740f82b1fece4520688ab934e5b1a7518fb9b9395d08de8331d95a967cd0"
+    },
+    "SOURCE_MAP.md": {
+      "bytes": 2455,
+      "sha256": "f4f8add7cc789ffc8a425c793b066afa567e9a53e62f38ed704ce50b612d080b"
+    },
+    "START_HERE.md": {
+      "bytes": 8630,
+      "sha256": "9922c6a8aa1d454b1468b0a3949b2a8303184bfa8d4fd38d773d810c78095916"
+    },
+    "TASK_METADATA.json": {
+      "bytes": 977,
+      "sha256": "9c5b71186493bae4bcc33edb225ee9a4d45ee16baddc0324013c43e427204a1a"
+    },
+    "TASK_RU.md": {
+      "bytes": 21771,
+      "sha256": "782b042aaeff21ac79a95f2913d112e2e00723de774d926024ff45f1ab43b526"
+    }
+  }
+}
