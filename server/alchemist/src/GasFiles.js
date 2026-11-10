@@ -1,17 +1,18 @@
 /* GAS private adapter. CI uses controlled Google SDK doubles; live readback required. */
 var AlchemistGasFiles=(function(){
  'use strict';
+ function permissionPage(id,page){var options={fields:'permissions(type,role,emailAddress),nextPageToken'};if(page)options.pageToken=page;return Drive.Permissions.list(id,options);}
  function privateFolder(folderId,ownerEmail){
   var f=Drive.Files.get(folderId,{fields:'id,mimeType,parents,owners(emailAddress),trashed'});
   if(f.trashed||f.mimeType!=='application/vnd.google-apps.folder'||!f.owners||f.owners.length!==1||f.owners[0].emailAddress!==ownerEmail)throw Error('UNSAFE_FOLDER_OWNER');
-  var page,permissions=[];do{var p=Drive.Permissions.list(folderId,{fields:'permissions(type,role,emailAddress),nextPageToken',pageToken:page});permissions=permissions.concat(p.permissions||[]);page=p.nextPageToken;}while(page);
+  var page,permissions=[];do{var p=permissionPage(folderId,page);permissions=permissions.concat(p.permissions||[]);page=p.nextPageToken;}while(page);
   if(permissions.length!==1||permissions[0].role!=='owner'||permissions[0].emailAddress!==ownerEmail)throw Error('UNSAFE_FOLDER_ACL');
   return f;
  }
  function privateFile(id,ownerEmail){
   var f=Drive.Files.get(id,{fields:'id,mimeType,parents,owners(emailAddress),size,trashed'});
   if(f.trashed||!f.owners||f.owners.length!==1||f.owners[0].emailAddress!==ownerEmail)throw Error('UNSAFE_FILE_OWNER');
-  var page,permissions=[];do{var p=Drive.Permissions.list(id,{fields:'permissions(type,role,emailAddress),nextPageToken',pageToken:page});permissions=permissions.concat(p.permissions||[]);page=p.nextPageToken;}while(page);
+  var page,permissions=[];do{var p=permissionPage(id,page);permissions=permissions.concat(p.permissions||[]);page=p.nextPageToken;}while(page);
   if(permissions.length!==1||permissions[0].type!=='user'||permissions[0].role!=='owner'||permissions[0].emailAddress!==ownerEmail)throw Error('UNSAFE_FILE_ACL');return f;
  }
  function create(folderId,ownerEmail){

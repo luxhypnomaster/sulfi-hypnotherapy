@@ -5,3 +5,8 @@ test('bootstrap binds only signed configured CI owner, immutable owner and no pr
  for(const f of ['Catalog','Bootstrap'])vm.runInContext(readFileSync(new URL('../src/'+f+'.js',import.meta.url),'utf8'),ctx);
  assert.equal(ctx.AlchemistBootstrap.initialize('SIGNED_FIXTURE').verifiedFolderCount,41);values.ALCHEMIST_STORE_HEAD='retained';ctx.AlchemistBootstrap.initialize('SIGNED_FIXTURE');assert.equal(values.ALCHEMIST_STORE_HEAD,'retained');assert.equal(calls,2);actor={sub:'other',email:'owner@example.test',roles:['client']};assert.throws(()=>ctx.AlchemistBootstrap.initialize('SIGNED_FIXTURE'),/OWNER/);assert.equal(calls,2);actor={sub:'owner',email:'owner@example.test',roles:['owner']};values.ALCHEMIST_OWNER_SUB='different';assert.throws(()=>ctx.AlchemistBootstrap.initialize('SIGNED_FIXTURE'),/IMMUTABLE/);assert.equal(calls,2);
 });
+test('bootstrap reports bounded stage code without leaking raw Google error, token or private locator',()=>{
+ const ctx=vm.createContext({AlchemistInitialConfig:{fullSourceVerified:true,ownerSubject:'fixture',ownerEmail:'owner@example.test',ciAudience:'fixture.apps.googleusercontent.com',projectFolderId:'private'},AlchemistJwt:{verify:()=>{throw Error('private token ya29.SHOULD_NOT_APPEAR');}}});
+ for(const f of ['Catalog','Bootstrap'])vm.runInContext(readFileSync(new URL('../src/'+f+'.js',import.meta.url),'utf8'),ctx);
+ assert.throws(()=>ctx.AlchemistBootstrap.initialize('SIGNED_FIXTURE'),e=>e.status===503&&e.code==='BOOTSTRAP_IDENTITY_FAILED'&&!/ya29|private/.test(e.message));
+});
