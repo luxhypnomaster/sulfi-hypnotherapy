@@ -1,0 +1,66 @@
+name: Alchemist clasp authorization check (no deploy)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: alchemist-auth-check
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # No checkout: untrusted application code never executes with this secret.
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Install pinned Google clasp without credentials
+        run: npm install --prefix "$RUNNER_TEMP/clasp-tool" --ignore-scripts --no-audit --no-fund @google/clasp@3.4.1
+      - name: Verify repository OAuth credential (read only)
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          node <<'JS'
+          const fs = require('fs');
+          if (!process.env.CLASPRC_JSON) { console.error('GITHUB_SECRET_MISSING'); process.exit(1); }
+          try { JSON.parse(process.env.CLASPRC_JSON); }
+          catch { console.error('AUTH_CONFIG_INVALID_JSON'); process.exit(1); }
+          fs.writeFileSync(process.env.RUNNER_TEMP + '/alchemist-auth.json', process.env.CLASPRC_JSON, {mode:0o600});
+          JS
+          unset CLASPRC_JSON
+          clasp_cli="$RUNNER_TEMP/clasp-tool/node_modules/.bin/clasp"
+          if ! "$clasp_cli" -A "$RUNNER_TEMP/alchemist-auth.json" --json show-authorized-user > "$RUNNER_TEMP/auth-result.json" 2> "$RUNNER_TEMP/auth-error.txt"; then
+            echo 'CLASP_IDENTITY_CHECK_FAILED'
+            exit 1
+          fi
+          node <<'JS'
+          const fs=require('fs');
+          try {
+            const result=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/auth-result.json','utf8'));
+            if(result.loggedIn!==true || result.email!=='luxhypnomaster@gmail.com') throw Error();
+            console.log('CLASP_OWNER_IDENTITY_VERIFIED');
+          } catch { console.error('CLASP_OWNER_IDENTITY_NOT_VERIFIED'); process.exit(1); }
+          JS
+          if ! "$clasp_cli" -A "$RUNNER_TEMP/alchemist-auth.json" --json list-scripts > "$RUNNER_TEMP/scripts-result.json" 2> "$RUNNER_TEMP/scripts-error.txt"; then
+            echo 'CLASP_READ_ONLY_API_CHECK_FAILED'
+            exit 1
+          fi
+          node <<'JS'
+          const fs=require('fs');
+          try {
+            const result=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/scripts-result.json','utf8'));
+            if(!Array.isArray(result)) throw Error();
+            console.log('CLASP_READ_ONLY_API_VERIFIED');
+          } catch { console.error('CLASP_READ_ONLY_RESPONSE_INVALID'); process.exit(1); }
+          JS
+          echo 'AUTH_VERIFIED_NO_DEPLOY_NO_CLOUD_WRITES' >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove credential and private results
+        if: always()
+        shell: bash
+        run: |
+          rm -f "$RUNNER_TEMP/alchemist-auth.json" "$RUNNER_TEMP/auth-result.json" "$RUNNER_TEMP/auth-error.txt" "$RUNNER_TEMP/scripts-result.json" "$RUNNER_TEMP/scripts-error.txt"
