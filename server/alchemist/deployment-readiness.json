@@ -1,0 +1,7 @@
+{
+  "fullSourceVerified": true,
+  "projectName": "Сервер Проекта Алхимик",
+  "claspVersionVerified": "3.4.1",
+  "live": false,
+  "reason": "Production server source gate passed: Node27, Flutter CI418 plus namespace/cover/install regression2 and analyzer. Live runtime consent, Drive bootstrap and Android OAuth are separate unverified gates."
+}
