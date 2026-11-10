@@ -1,0 +1,51 @@
+name: Alchemist recover deployment checkpoint (read only)
+on:
+  workflow_dispatch:
+permissions:
+  actions: read
+concurrency:
+  group: alchemist-checkpoint-read
+  cancel-in-progress: false
+jobs:
+  read:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read known trusted-main create-once evidence without OAuth
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42818493644 > "$RUNNER_TEMP/prior-run.json"
+          python3 - <<'PY'
+          import os,json
+          r=json.load(open(os.environ['RUNNER_TEMP']+'/prior-run.json'))
+          assert r['head_branch']=='main' and r['event']=='workflow_dispatch'
+          assert r['head_sha']=='5294fc5a97e1f87f5725af0a1d53c3664aa335d0'
+          assert r['path']=='.github/workflows/alchemist-server-deploy.yml'
+          PY
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/13764933709 > "$RUNNER_TEMP/artifact.json"
+          python3 - <<'PY'
+          import os,json
+          a=json.load(open(os.environ['RUNNER_TEMP']+'/artifact.json'))
+          assert a['workflow_run']['id']==42818493644 and not a['expired']
+          assert a['name']=='alchemist-deployment-evidence-5294fc5a97e1f87f5725af0a1d53c3664aa335d0'
+          PY
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/13764933709/zip > "$RUNNER_TEMP/checkpoint.zip"
+          python3 - <<'PY'
+          import os,json,zipfile,re
+          with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/checkpoint.zip') as z:
+            f=z.getinfo('DEPLOYMENT.json')
+            assert f.file_size<16384
+            r=json.loads(z.read(f))
+          assert re.fullmatch(r'[A-Za-z0-9_-]{20,200}',r['scriptId'])
+          assert r['stage']=='BLOCKED' and r['reason']=='DRIVE_PATCH_403_APPNOTAUTHORIZEDTOFILE'
+          print('RECOVERED_CREATE_ONCE_SCRIPT_ID='+r['scriptId'])
+          print('NO_CREDENTIAL_OR_CLOUD_WRITE')
+          PY
+      - name: Remove transient metadata
+        if: always()
+        run: rm -f "$RUNNER_TEMP/prior-run.json" "$RUNNER_TEMP/artifact.json" "$RUNNER_TEMP/checkpoint.zip"
