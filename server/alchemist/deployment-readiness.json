@@ -3,9 +3,9 @@
   "projectName": "Сервер Проекта Алхимик",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "Full source gate verified: CI42878716769 (419Flutter/33Node/both signed22APK). Existing GAS version4/source766f178 has real anonymous JSON health and owner-only41-folder bootstrap/replay verified by42872816006/42876284145. Live-service retry42878030592 still running; independent actual WAV/AAC/ZIP private Drive readback recorded. Owner confirms Android Web OAuth client not created; native SDK/physical Android NOT_RUN. live=false is retained for full integrated readiness, not a claim that runtime health is blocked.",
+  "reason": "Verified full source gate, runtime/version4/private41-folder bootstrap/replay. Actual Flutter-service E2E42878030592 SUCCESS:6540746bytes each way,10phases, hashes/resume/private/withdraw. CI42878716769 both signed22APK+419Flutter/33newNode/24oldNode PASS. Android OAuth Web+Android clients not created (owner confirmed); APK22 unconfigured and physical SDK/device NOT_RUN. live=false retains integrated two-APK readiness gate; runtime/service gates are true.",
   "runtimeHealthVerified": true,
   "privateStorageVerified": true,
-  "fullServiceE2EVerified": false,
+  "fullServiceE2EVerified": true,
   "androidOAuthConfigured": false
 }
