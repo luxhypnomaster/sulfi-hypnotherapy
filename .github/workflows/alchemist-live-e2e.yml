@@ -33,11 +33,13 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: flutter/flutter
-          ref: c197ca5199e9ee5661e865596c9c07294dfab51c
+          ref: '3.47.9'
           path: .tooling/flutter
           persist-credentials: false
       - name: Prepare SDK and native codec probes before OAuth
         run: |
+          test "$(git -C .tooling/flutter rev-parse HEAD)" = c197ca5199e9ee5661e865596c9c07294dfab51c
+          git -C .tooling/flutter switch --create stable
           echo "$GITHUB_WORKSPACE/.tooling/flutter/bin" >> "$GITHUB_PATH"
           .tooling/flutter/bin/flutter config --no-analytics
           if ! command -v ffprobe; then
