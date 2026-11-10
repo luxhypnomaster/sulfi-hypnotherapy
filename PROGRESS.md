@@ -1,3 +1,7 @@
+# Latest resume — user continuation, repository OAuth now present
+
+Continue existing C1.5; do not repeat C0. User confirms completed clasp and repository-level CLASPRC_JSON. Secret NAME verified via gh secret list, not value. Auth check only workflow added to main via workflow-onlyPR18 (owner specifically requested trusted main execution); commit8bb3d2d4a52366c69fc248304b6194cb1a08c887. No server/app source merged into main. Manual check running; actual OAuth result must be recorded, not inferred from secret presence. No environment secret. All secret-bearing workflows now restricted manual main-only; production still blocked until complete source/tests/readback.
+
 # TASK16 checkpoints
 
 C0 COMPLETE; база b599df6, ветка feat/task16-alchemist-full-server. См. PREFLIGHT.md (сохранён ДО моделей). Архив20/147verified. Node24PASS, baselineCI411PASSverified. AUTH_PENDING: repo CLASPRC_JSON отсутствует, environment отсутствует. Ни нового Script/Drive root/deployment, ни secret/OAuth actions не выполнялось. Старый дневник не тронут.
@@ -35,3 +39,6 @@ C1 ACTIVE: catalog/storage backend +tests. C2–C5 NOT STARTED. FULL_CODE_IMPLEM
 - AlchemistApi Dart consumer protocol implemented separately from legacy diary: no default/fake endpoint; POST credential envelope, allowlisted Google redirect without token forwarding, logical errors/HTML denied, sanitized error codes. Flutter2PASS, analyzerclean; not wired to main/UI yet, so C3 NOT_COMPLETE.
 - Node11PASS, CI no-secret server workflow runs on pushed checkpoints. Full Flutter/dualAPK not rerun on this unfinished intermediate app integration. Old diary source/RunScreen/assets unchanged, SQLite9/signing/version untouched.
 - NEXT C1: persistent upload sessions+chunk receipt transactions, reconcile final Drive PUT lost response, asset publication-reference ACL after withdrawal/shared dependencies, all required catalog revisions/diff/update/attach methods, diary/package routes. Then C2 complete clasp create-once/readback/deploy; C3 full author editor/client installer/video; C4 live only after OAuth. READ server/alchemist/IMPLEMENTATION_STATUS.md. Do NOT deploy partial source or call workflow ready.
+
+## Auth continuation verified
+Read-only workflow42792367833 SUCCESS onmain8bb3d2d. Both actual runtime markers verified: owner identity and list-scripts API. No credential/ID output and no cloudwrites. Repository secret confirmed valid for these read operations; write/deploy scopes not yet exercised. AUTH_LOGIN_VERIFIED=YES; previous missing-secret blocker resolved. Server/code readiness stillnotcomplete; no prematuredeployment.

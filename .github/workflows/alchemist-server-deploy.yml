@@ -9,8 +9,7 @@ concurrency:
 jobs:
   deploy:
     # Feature branches and PR code never receive production credentials.
-    if: github.ref == 'refs/heads/develop'
-    environment: alchemist-production
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
