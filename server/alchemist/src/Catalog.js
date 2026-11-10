@@ -20,9 +20,11 @@ var AlchemistCatalog = (function () {
     function mutate(actor,request,operation) {
       author(actor);id(request.requestId);
       return env.lock(function(){
-        var key=actor.sub+':'+request.requestId, digest=env.digest(request), receipt=env.store.receipt(key);
-        if(receipt){if(receipt.digest!==digest)fail(409,'IDEMPOTENCY_CONFLICT');return clone(receipt.result);}
-        var result=operation();env.store.saveReceipt(key,{digest:digest,result:clone(result)});return result;
+        env.store.begin();
+        try { var key=actor.sub+':'+request.requestId, digest=env.digest(request), receipt=env.store.receipt(key);
+        if(receipt){if(receipt.digest!==digest)fail(409,'IDEMPOTENCY_CONFLICT');env.store.rollback();return clone(receipt.result);}
+        var result=operation();env.store.saveReceipt(key,{digest:digest,result:clone(result)});env.store.commitTransaction();return result;
+        } catch(error) {env.store.rollback();throw error;}
       });
     }
     function dependencyPlan(manifest,actor,installed) {

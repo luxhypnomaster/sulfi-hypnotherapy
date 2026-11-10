@@ -1,0 +1,30 @@
+name: Alchemist production deploy (manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: alchemist-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    # Feature branches and PR code never receive production credentials.
+    if: github.ref == 'refs/heads/develop'
+    environment: alchemist-production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test server/alchemist/test/*.test.mjs
+      - name: Production readiness and owner authorization gate
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+        run: node scripts/alchemist/deploy.mjs
+      - name: Remove transient credential
+        if: always()
+        run: rm -f "$RUNNER_TEMP/alchemist.clasprc.json"

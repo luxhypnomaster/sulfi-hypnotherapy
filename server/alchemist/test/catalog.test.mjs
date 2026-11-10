@@ -11,7 +11,7 @@ function fixture(){
  let revision=0;const items=new Map(),receipts=new Map(),assets=new Map();
  const env={digest:x=>createHash('sha256').update(JSON.stringify(x)).digest('hex'),now:()=>new Date(0).toISOString(),lock:f=>f(),canReadAsset:(a,p)=>a.owner===p?.sub||a.public,
  validatePublication:r=>{for(const ref of r.manifest.dependencyRefs){const a=assets.get(ref.logicalId+':'+ref.revisionId);if(r.card.visibility==='public'&&!a.public)throw new Error('PRIVATE_DEPENDENCY');}},
- store:{item:id=>items.get(id),items:()=>[...items.values()],indexRevision:()=>revision,asset:(id,r)=>assets.get(id+':'+r),cover:()=>null,receipt:k=>receipts.get(k),saveReceipt:(k,v)=>receipts.set(k,v),commit:r=>{items.set(r.id,plain(r));revision++;}},encodeCursor:x=>JSON.stringify(x),decodeCursor:x=>JSON.parse(x)};
+ store:{begin:()=>{},rollback:()=>{},commitTransaction:()=>{},item:id=>items.get(id),items:()=>[...items.values()],indexRevision:()=>revision,asset:(id,r)=>assets.get(id+':'+r),cover:()=>null,receipt:k=>receipts.get(k),saveReceipt:(k,v)=>receipts.set(k,v),commit:r=>{items.set(r.id,plain(r));revision++;}},encodeCursor:x=>JSON.stringify(x),decodeCursor:x=>JSON.parse(x)};
  const c=context.AlchemistCatalog.create(env);return {c,assets,items,receipts};
 }
 const hash='a'.repeat(64),ref={logicalId:'track1',revisionId:'v1',sha256:hash};

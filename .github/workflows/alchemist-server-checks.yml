@@ -1,0 +1,30 @@
+name: Alchemist server checks (no cloud credentials)
+on:
+  push:
+    branches: [feat/task16-alchemist-full-server]
+    paths: ['server/alchemist/**', 'scripts/alchemist/**', '.github/workflows/alchemist-server-*.yml']
+  pull_request:
+    paths: ['server/alchemist/**', 'scripts/alchemist/**', '.github/workflows/alchemist-server-*.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test server/alchemist/test/*.test.mjs
+      - name: Deploy must fail closed without OAuth
+        run: |
+          set +e
+          node scripts/alchemist/deploy.mjs > "$RUNNER_TEMP/no-auth.txt" 2>&1
+          result=$?
+          set -e
+          test "$result" -eq 78
+          grep -q GITHUB_SECRET_MISSING "$RUNNER_TEMP/no-auth.txt"

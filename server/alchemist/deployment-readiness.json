@@ -1,0 +1,7 @@
+{
+  "fullSourceVerified": false,
+  "projectName": "Сервер Проекта Алхимик",
+  "claspVersionVerified": "3.4.1",
+  "live": false,
+  "reason": "C1 persistent GAS adapters and C3 clients not complete; cannot deploy partial source"
+}
