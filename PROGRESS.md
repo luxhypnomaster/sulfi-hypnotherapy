@@ -1,3 +1,50 @@
+# Report delivery checkpoint — 10.11.2026
+
+Task16 reports23files are saved and listed back in existing For_Codex/Отчёты — Задание16. Existing RESULT.md/TESTS.md/PROGRESS.md updated in place, preserving IDs. RESULT and full147-row TESTS downloaded as text and verified byte-for-byte against local SHA256. Original C0 PREFLIGHT and historical logs retained. Current logs, two genuine UI render PNGs and complete SERVER_HANDOFF_TASK16.zip (no APK, InitialConfig or credentials) uploaded; local Drive index lists exact returned file IDs/URLs.
+
+Both signed21APK artifacts stay only on GitHub, CI42819404870 SUCCESS. Actual server source/version2/deployment verified but runtime JSON remains blocked (anonymous403HTML, owner200consent HTML); Drive bootstrap/liveE2E NOT_RUN. Existing clasp OAuth works, Android web OAuth client ID absent. No successful full task16 closure or147PASS claim. Continue existing project/branch from precise runtime gate below; no C0 repetition and no Task17.
+
+---
+# Current checkpoint — C2 version2 deployed; Google runtime consent/access BLOCKED (2026-11-10 13:14 UTC)
+
+Continue feat/task16-alchemist-full-server. Last executable-source/tool checkpoint ae18d11; C0 COMPLETE, not repeated; no Task17. C1 full server source gate complete; C3 implemented apps/local integration; C4 live E2E BLOCKED; C5 evidence/report delivery. Do not report all147PASS.
+
+VERIFIED: full local Flutter418 PASS, analyzer clean; new server30 Node PASS, old backend24 PASS. Controlled Dart+SQLite→production JS domain→client tests include track/module/template/session/collection/ZIP, exact ContentLink, video>2MB resume, quiet metadata, private cache/logout/read sync; these are NOT Google/Android E2E. True Flutter renders included; physical NOT_RUN.
+
+BOTH latest APKs0.4.14+21 SUCCESS: app source953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822, run42819404870 (418Flutter+29Node+24old backend, schemas/fixedCLIENT/signing/package gates). Author artifact13766302782, SHA b4c3691e9651c98ff983a2128a894952aa72deae0d6f0765527ab408094bfe07. Client13766317817, SHA57c41b29f7e9f47bf4d3ef12622004a79e722459e4dde2085f95cecbcd2299a7. Stable packages/key; no endpoint embedded (LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED), no APK on Drive. Later backend/tool/test/docs changes have separate SHAs; don't call them embedded in these APKs. CI37cf run42817913654 CANCELLED, not success.
+
+Clasp repository OAuth LIVE VERIFIED auth42792367833/42799396321, script projects/deployment/webapp+drive.file scopes. No re-login requested. Missing/expired CI ID token resolved by SDK refresh through existing grant, signature/audience/owner rechecked. Drive appProperties PATCH403 didn't permit marker; one project already CREATED. Safe recovery42819515525 recovered actual ID, no duplicate. Pinned production-target.json; Script API title/creator+actual Drive GET owner-only ACL verified, independent connector confirmed sole owner/private. Old diary untouched.
+
+New Script:1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc, exact «Сервер Проекта Алхимик». Deploy42820498828 from trusted-main64893b3eecedec2fa00cbb34cf9e9da06cbc7def verified SOURCE_PUSHED/SHA readback, VERSION_VERIFIED2, DEPLOYMENT_CREATED/DEPLOYED with owner execution+ANYONE_ANONYMOUS. Deployment ID AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg. URL https://script.google.com/macros/s/AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg/exec . Read-only recovery42821006643 confirms all metadata. Artifact13766691348 contains hashes/DEPLOYMENT, no credentials.
+
+RUNTIME BLOCKER (not missing clasp): delayed independent GET403 HTML Google Access Denied/You need access; trusted-main diagnosis42822511730 anonymous403HTML, owner-OAuth200HTML with CONSENT marker, neither JSON. No syntax/reference/type/exception markers. Diagnose workflow SUCCESS means observations recorded, NOT health verified. No lawful runtime completion is proven; no bootstrap/41folder tree/private-content writes/liveE2E yet. Don't assert exact final consent remedy without evidence. Reuse existing project/deployment, never recreate. Owner action, if Google supports it, is first consent for NEW Web App on phone; no editor/PC/code transfer/repeated clasp login. Distinct Android Google web OAuth client ID absent; never copy clasp installed-client identity into APK.
+
+Main only changed via authorized narrowly scoped PR18/19 auth,20server/tooling,21OAuth refresh,22recovery,23pin,24stage evidence,25metadata recovery,26/27read-only runtime diagnosis. Last main c48d4881cd5f82e510d561694e5d6f12e5e47ae7. Main application source remains unchanged. All secret-bearing jobs manual exact-main/repo, no environment secret/PR/fork grants; transient credentials removed.
+
+NEXT after genuine JSON health: owner bootstrap41+replay/privateACL, actual synthetic PNG/multiMBaudio/video/ZIP live hashes/resume/negatives, master-service→server→Drive→client exact install, legitimate Android web audience then connected APKs and owner hardware QA. G3 legacy same-ID changed-audio remains authorized FAIL-CLOSED; don't overwrite old bytes. SERVER_LIVE=NO; FULL_E2E=NO; no current quota excuse/old AUTH_PENDING.
+
+All147 criteria uniquely reported in reports/task16/TESTS.md:53PASS/81PARTIAL/12BLOCKED/1NOT_RUN. PARTIAL explicitly distinguishes controlled tests from live/phone, including final-HEAD combined CI limitation. Reportfolder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z inside ForCodex. Existing PROGRESS ID1Je2aK9bPTGL9P4OtXGOl-8Ij1vDLCiVM, RESULT1PmB6facOTBAyAzNB0MVMtSUyMpvWKclb, TESTS1xvpLIDLYssSbihhoDfpGoP-ylA85yOR3. Update in place; don't leave old C1.5 reports. ForCodex is shared writer by owner choice; no token/owner sub/InitialConfig/private user files there. APKs only GitHub.
+
+---
+# Historical checkpoints (latest above takes precedence)
+
+# Current checkpoint — C2 production source pushed; version/deploy diagnosis (2026-11-10 13:00 UTC)
+
+Continue feat/task16-alchemist-full-server, code8682c6d. C0 complete, do NOT repeat; no Task17. Node30 PASS, old backend24 PASS, full local Flutter418 PASS/analyzer clean. Optional actual Flutter screenshots rendered (author annotation200%, module3 dependencies), not phone. Local tests use production JS with controlled Drive; NOT live E2E.
+
+Clasp repository OAuth is verified (auth42792367833/42799396321); no reauthorization required. First deploy42818152910 CI_ID_TOKEN_UNAVAILABLE resolved by SDK refresh of existing lawful grant (PR21). Second deploy42818493644 AUTH_VERIFIED and CREATE_ONCE then DRIVE_PATCH_403_APPNOTAUTHORIZEDTOFILE: one new project WAS CREATED. Never create another. Recovery workflow42819515525 SUCCESS (PR22) read exact trusted artifact without Google secret.
+
+Pinned new Script ID:1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc; exact name «Сервер Проекта Алхимик». Independent Drive metadata2026-11-10T12:54:07Z confirmed shared=false, sole owner luxhypnomaster@gmail.com, creation12:46:11.546Z. Persisted server/alchemist/production-target.json. PR23 binds exact ID/title/creator; Drive GET ACL is attempted live; narrowly scoped fallback requires fresh independently observed owner-only proof (30min max). Bootstrap checks actual Script ACL itself before storage writes. No credential extraction/scope bypass/second project. Old diary untouched.
+
+Third deploy42820004958 from main e57fb95: AUTH_VERIFIED, SOURCE_PUSHED with full source SHA readback SUCCESS; then SCRIPT_GET_404_NOTFOUND (resource not yet distinguished). New code8682c6d adds precise Script resource error labels and version/deployment checkpoints/strict IDs. Next narrow main PR (fix/task16-deploy-stage-evidence, worktree/dev/shm/task16-auth-main) must finish tests/merge/manual rerun. This PR is server/tooling only, no main Flutter merge. Main changes through authorized PR20/21/22/23 only.
+
+Apps: source0.4.14+21 at953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822 is building in CI42819404870. Application source unchanged by later backend/tool/test-only commits. Last complete pair APK20 fd74e76/run42815250637 SUCCESS (418Flutter). Source37cf CI42817913654 cancelled by next manual run, don't claim SUCCESS. Final both21APK artifacts must be checked before report. Package IDs/stable signing retained; APKs never Drive.
+
+Distinct Android blocker: SULFI_GOOGLE_WEB_CLIENT_ID absent. No clasp installed-client identity in APK. No live backend URL embedded until actual verified deployment/storage. SERVER_LIVE=NO; FULL_E2E=NO; Drive bootstrap NOT_RUN; physical Android NOT_RUN. Continue independent tests/reporting. Exact147criterion report generator prepared/dev/shm/task16-generate-reports.py; write context JSON then generate reports/task16/*.md; update existing Drive RESULT/TESTS/PROGRESS (old RESULT/TESTS stale C1.5). Drive reportfolder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z inside ForCodex. Do not place private owner sub/token/InitialConfig there (shared writer folder). New Script remains private.
+
+---
+# Historical checkpoints (latest above takes precedence)
+
 # Current checkpoint — C1.9 full server source gate (2026-11-10)
 
 C0 remains complete, not repeated. Continue feat/task16-alchemist-full-server. Verified clasp auth/scope runs42792367833 /42799396321 remain valid evidence; no repeat owner authorization requested. Repository secret only, not environment. Old diary project is forbidden.

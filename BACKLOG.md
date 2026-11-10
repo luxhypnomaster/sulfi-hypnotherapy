@@ -2,10 +2,12 @@
 
 - [x] C0 независимый аудит и сверка20файлов/147критериев (не повторять).
 - [x] Реальная проверка repository clasp OAuth из доверенного main без публикации/секретов в PR.
-- [x] Разработаны GAS хранение, каталоги, дневник, медиа, точные ревизии, grants/sync/audit; Node26PASS.
+- [x] Разработаны GAS хранение, каталоги, дневник, медиа, точные ревизии, grants/sync/audit; Node30PASS.
 - [x] Flutter автор/клиент: публикации, выборочная установка, видео, очереди, private-cache/read-state; целевые7PASS.
-- [ ] Итоговый полный прогон и обе APK последнего исходника.
-- [ ] Новый production Script, private Drive bootstrap, реальное сквозное испытание и147критериев с доказательствами.
+- [x] Flutter418/analyzer,30Node/24old backend; обе signedAPK0.4.14+21/source953d5bc/CI42819404870 SUCCESS (поздние server/tool changes отдельно).
+- [x] Новый private Script, полный source SHA readback, immutableversion2 и real deployment metadata.
+- [x] Текущая матрица147критериев и отчёты;53PASS/81PARTIAL/12BLOCKED/1NOT_RUN.
+- [ ] Рабочий runtime JSON health (Google consent/access HTML), private Drive bootstrap и реальные сквозные испытания.
 - [ ] Настроенный Android Google web OAuth client ID; физическая Android-приёмка остаётся NOT_RUN.
 
 # Задание 14 · 09.11.2026 · 0.4.12+17

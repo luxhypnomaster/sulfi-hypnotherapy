@@ -1,0 +1,26 @@
+{
+  "source": "Google Script/Drive API and trusted manual main Actions",
+  "deployRun": 42820498828,
+  "metadataRecoveryRun": 42821006643,
+  "runtimeReadRun": 42822511730,
+  "scriptId": "1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc",
+  "version": 2,
+  "sourceSha": "64893b3eecedec2fa00cbb34cf9e9da06cbc7def",
+  "deploymentId": "AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg",
+  "sourceAndVersionReadback": true,
+  "privateScriptAclReadback": true,
+  "anonymous": {
+    "http": 403,
+    "json": false,
+    "googleAccessDenied": true
+  },
+  "ownerOAuth": {
+    "http": 200,
+    "json": false,
+    "consentMarker": true
+  },
+  "serverLive": false,
+  "bootstrapInvoked": false,
+  "fullE2E": false,
+  "physicalAndroid": "NOT_RUN"
+}

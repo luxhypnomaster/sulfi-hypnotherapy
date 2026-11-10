@@ -3,5 +3,5 @@
   "projectName": "Сервер Проекта Алхимик",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "Production server source gate passed: Node27, Flutter CI418 plus namespace/cover/install regression2 and analyzer. Live runtime consent, Drive bootstrap and Android OAuth are separate unverified gates."
+  "reason": "Full server source gate passed: Node30; Flutter418/analyzer and both signed21 APKs verified at disclosed source SHAs. Actual version2 exists; runtime HTTP fails before JSON, so no bootstrap/live E2E. Android web OAuth audience absent."
 }

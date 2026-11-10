@@ -1,0 +1,17 @@
+{
+  "run": 42819404870,
+  "conclusion": "success",
+  "sourceSha": "953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822",
+  "version": "0.4.14+21",
+  "flutterPass": 418,
+  "sourceNodePass": 29,
+  "laterServerNodePass": 30,
+  "oldBackendPass": 24,
+  "cloudEndpointConfigured": false,
+  "authorArtifact": 13766302782,
+  "clientArtifact": 13766317817,
+  "authorSha256": "b4c3691e9651c98ff983a2128a894952aa72deae0d6f0765527ab408094bfe07",
+  "clientSha256": "57c41b29f7e9f47bf4d3ef12622004a79e722459e4dde2085f95cecbcd2299a7",
+  "certificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "physicalAndroid": "NOT_RUN"
+}
