@@ -1,0 +1,36 @@
+{
+  "observations": [
+    {
+      "observedUtc": "2026-11-10T18:51:32.357061+00:00",
+      "operation": "catalog.list",
+      "authenticated": false,
+      "http": 200,
+      "ok": true,
+      "logicalStatus": 200,
+      "code": null,
+      "mime": "application/json",
+      "elapsedSeconds": 3.494,
+      "resultKeys": [
+        "items",
+        "nextPage",
+        "revision"
+      ],
+      "publishedItemCount": 0,
+      "contentIncludedInReport": false,
+      "physicalAndroid": "NOT_RUN"
+    },
+    {
+      "observedUtc": "2026-11-10T18:54:52.789389+00:00",
+      "operation": "catalog.list",
+      "authenticated": false,
+      "http": 200,
+      "ok": true,
+      "logicalStatus": 200,
+      "code": null,
+      "elapsedSeconds": 3.838,
+      "publishedItemCount": 1,
+      "contentIncludedInReport": false,
+      "physicalAndroid": "NOT_RUN"
+    }
+  ]
+}

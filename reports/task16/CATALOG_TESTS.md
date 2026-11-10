@@ -21,4 +21,4 @@ Runtime consent подтверждён фактическим JSON, а не то
 
 `task16_catalog_ui_test.dart`: сохранение аннотации офлайн при200%/360×640 с клавиатурой; module composition; fixed client без авторского редактора. PNG в комплекте — настоящие Flutter render на синтетических данных, не телефон и не успешная облачная публикация.
 
-LIVE annotated track→module→Drive→Android client: BLOCKED: GOOGLE_RUNTIME_HTTP403_ANONYMOUS_OWNER_HTTP200_CONSENT_HTML.
+Live runtime/bootstrap PASS. Actual annotated track/module service loop42878030592 выполняется после исправления20sec timeout; Android SDK/physical client отдельно NOT_RUN. Публичный catalog.list независимо вернул200JSON, затем1опубликованную карточку; этого недостаточно для объявления полной установки.

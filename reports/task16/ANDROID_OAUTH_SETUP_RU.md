@@ -24,3 +24,5 @@ Google требует создавать OAuth clients в официальной
 [Read-only CI 42875871201](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42875871201) сверил существующие APK21 diagnostics с исходным успешным run42819404870 и закреплённым SHA-256 сертификата `0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6`. Keystore и Google secrets этот workflow не читает. Публичный JSON приложен отдельно.
 
 Google: https://developers.google.com/identity/protocols/oauth2/resources/best-practices (manual client creation); https://support.google.com/cloud/answer/15549257?hl=en (Android package и SHA-1).
+
+Повторная проверка среды после её возобновления: executor `ccarenv_b64_Y2NhcmVudl8yNDc1NTRmMzBkNjA4MTkxYTAxOWExM2Y2N2I3MDUzMg`, connected/running/current, capabilities=[]; browser/computer-use/desktop control tool не предоставлен. Доступ к owner Console session не подтверждён. Repository vars=[]; среди имён Secrets есть только clasp и существующая APK-подпись, Android Web client config нет. Значения секретов не извлекались.

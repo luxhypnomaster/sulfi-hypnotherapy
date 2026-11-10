@@ -11,6 +11,6 @@ Runtime consent подтверждён фактическим JSON, а не то
 
 Dart integration: H264/MP4 test fixture test/fixtures/task16_video.mp4 с расширением >2MB, SHA на обеих сторонах; resume download после262144bytes, без повторной полной передачи. Byte input synthetic; native playback probe контролируемый. PNG/AAC/audio/ZIP and exact manifests имеют local import/export/CRC/SHA/selection tests, selective package scanner rejects zip-slip/bomb/manifest mismatch. Это не многомегабайтное живое аудио с Android.
 
-Live image/audio/video/ZIP bytes + hashes: NOT_VERIFIED (GOOGLE_RUNTIME_HTTP403_ANONYMOUS_OWNER_HTTP200_CONSENT_HTML). В отсутствие bootstrap ни synthetic audio, ни пользовательские данные не загружаются в незащищённое место. Живые размеры/контрольные суммы не подменяются суммами локальных fixtures.
+Live runtime/private bootstrap PASS. Actual media transfer+hash+resume проверяются в42878030592; до финального результата полный media E2E NOT_VERIFIED. Первый run42877004822 FAILED20sec media.beginUpload, ACKbytes0; новый transport исправлен, regression3PASS. В реальном каталоге появилась контрольная публикация; это не доказательство всех byte checks.
 
 Android: video_player2.14.1, native codec probe, реальный file player/pause/seek/lifecycle, конфликт с активной гипносессией блокируется. Реальные кодеки/звук/блокировка/длинные файлы/сеть на устройстве: NOT_RUN. Flutter использует streamed hash/copy, persistent .part и free-space preflight; по256KiB, без загрузки фильма целиком в память. Неподдерживаемый codec и лимит/квота показываются как ошибка, не Published.
