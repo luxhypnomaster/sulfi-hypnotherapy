@@ -1,3 +1,18 @@
+# Delivery checkpoint — Task16 runtime/service complete, native OAuth pending (2026-11-10)
+
+Existing branch feat/task16-alchemist-full-server; C0/PREFLIGHT458e8a8 unchanged. Same sole server/version4/source766f178/deployment/private41folders, old diary untouched. Real service E2E42878030592 SUCCESS (51:42), recovery42887239597,6540746B bothways,10phases. Actual source/client/directDrive SHA/CRC/codecs/resume/missing-only/metadata-only/receipt/private/withdraw/offline-copy PASS. Post-E2E anonymous health200JSON and catalog0 control publications, source blobs retainedprivate. NoTask17, no APK Drive.
+
+Both signedAPK22 sourcee4ed74b/run42878716769 SUCCESS;419Flutter/33newNode/24oldNode/13schemas/analyzer/formatter/fixedCLIENT/signing. Author13794725587 / client13792599633. Stable packages/certificate retained. Both LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED, not connectedAPKs. Native Google OAuth Web+twoAndroid clients not created (owner confirmed), official phone-only guide/SHA1 prepared, no browser capability here. No repeated clasp login/PC/manual JS copy/connector OAuth extraction.
+
+Final147matrix97PASS/46PARTIAL/3BLOCKED/1NOT_RUN. Service pipeline PASS is NOT fulltwoAPK/device QA. G3 same-ID changedaudio failclosed; optimization of slowDrive metadata RPC notdone (publishmax67.910s); largeGB/nativebackground/codecs/upgradewithpersonaldata NOT_RUN. All remaining scopes in ISSUES_AND_NEXT.md/PERFORMANCE_AND_LIMITS.md. Continue only Task16 once legitimate publicWebID+twoAndroid registrations exist; configure publicvars/sameServer audience, checkeddeploy/bootstrap, bothconnectedAPKs(nextversionCode), physicalQA. Do not rerun C0 or completed service suite for docs.
+
+Trustedmain metadata PR34 merged2d72484b9288e409d4321af80852c079f26b161d after33Node checks: runtimeHealth/privateStorage/fullServiceE2E true, integrated live false/nativeOAuth false; no redeploy or appmerge. PR17 staysdraft, basefeat/task15. Actual current source code lib/test/android/pubspec equals tested APK22 sourcee4; later changes metadata/reports only.
+
+Delivery: existing ForCodex/Task16reportfolder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z. All core reports updatedinplace; liveJSON/timeline/log/directDrive receipts/performance/officialOAuthguide added; RESULT/TESTS/APK_INFO rawdownloadbyteequal verified REPORT_READBACK.json. Finalhandoff/index uploads and checkpoint commit complete this stage; no secrets/InitialConfig/privateSQLite/APKs in reportzip. Future resume should use latest gitcommit/this checkpoint and preserve proof.
+
+---
+# Historical checkpoints
+
 # Current checkpoint — REAL SERVICE E2E SUCCESS; native OAuth still uncreated (2026-11-10)
 
 Continue Task16, feature feat/task16-alchemist-full-server. C0/PREFLIGHT unchanged. Existing sole Script1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc/version4/source766f178/deployment unchanged. Private41folders/bootstrap/replay/anonymous health and negatives PASS42872816006/readback42876284145. Old diary untouched, noTask17.

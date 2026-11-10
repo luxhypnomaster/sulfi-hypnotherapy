@@ -2,9 +2,9 @@
 
 - [x] C0 независимый аудит и сверка20файлов/147критериев (не повторять).
 - [x] Реальная проверка repository clasp OAuth из доверенного main без публикации/секретов в PR.
-- [x] Разработаны GAS хранение, каталоги, дневник, медиа, точные ревизии, grants/sync/audit; Node30PASS.
+- [x] Разработаны GAS хранение, каталоги, дневник, медиа, точные ревизии, grants/sync/audit; Node33PASS.
 - [x] Flutter автор/клиент: публикации, выборочная установка, видео, очереди, private-cache/read-state; целевые7PASS.
-- [x] Flutter418/analyzer,30Node/24old backend; обе signedAPK0.4.14+22/sourcee4ed74b/CI42878716769 SUCCESS (поздние server/tool changes отдельно).
+- [x] Flutter419/analyzer,33Node/24old backend; обе signedAPK0.4.14+22/sourcee4ed74b/CI42878716769 SUCCESS (поздние server/tool changes отдельно).
 - [x] Новый private Script, полный source SHA readback, immutableversion4 и real deployment/readback metadata.
 - [x] Текущая матрица147критериев и отчёты;97PASS/46PARTIAL/3BLOCKED/1NOT_RUN.
 - [x] Настоящий anonymous runtime JSON health, private bootstrap41/replay и live negative checks; deploy42872816006 SUCCESS.

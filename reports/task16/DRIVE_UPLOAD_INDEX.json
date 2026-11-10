@@ -1,7 +1,37 @@
 {
   "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
-  "verifiedReports": 31,
+  "verifiedReports": 37,
   "files": [
+    {
+      "name": "REPORT_READBACK.json",
+      "id": "1KN3d4Z5CZtNK9W65Ib8nhCVMS0i6XS8X",
+      "url": "https://drive.google.com/file/d/1KN3d4Z5CZtNK9W65Ib8nhCVMS0i6XS8X/view?usp=drivesdk"
+    },
+    {
+      "name": "POST_E2E_READBACK.json",
+      "id": "1-hNpXE6sNDcIYX8H35QjI74LufK6mon-",
+      "url": "https://drive.google.com/file/d/1-hNpXE6sNDcIYX8H35QjI74LufK6mon-/view?usp=drivesdk"
+    },
+    {
+      "name": "PERFORMANCE_AND_LIMITS.md",
+      "id": "1n2cvPAC-FImUWESkY27hRFd5e1iIRc9o",
+      "url": "https://drive.google.com/file/d/1n2cvPAC-FImUWESkY27hRFd5e1iIRc9o/view?usp=drivesdk"
+    },
+    {
+      "name": "LIVE_SERVICE_TEST.log",
+      "id": "1Rif-X8ZfYhAU16-hKDsXwcASRV9CM23I",
+      "url": "https://drive.google.com/file/d/1Rif-X8ZfYhAU16-hKDsXwcASRV9CM23I/view?usp=drivesdk"
+    },
+    {
+      "name": "LIVE_TIMELINE.json",
+      "id": "1OfxA5hHyFbQ5LvyblsPMGqZ_6WCy1y5V",
+      "url": "https://drive.google.com/file/d/1OfxA5hHyFbQ5LvyblsPMGqZ_6WCy1y5V/view?usp=drivesdk"
+    },
+    {
+      "name": "LIVE_SERVICE_E2E.json",
+      "id": "1YGje2ZyIX9p8M0OBpi9UStxXNxsMm3cS",
+      "url": "https://drive.google.com/file/d/1YGje2ZyIX9p8M0OBpi9UStxXNxsMm3cS/view?usp=drivesdk"
+    },
     {
       "name": "task16-author-module-composition.png",
       "id": "1y4UNA1Y1UlWUVZY5dgHQyAsXVy9lqgPj",
@@ -158,5 +188,5 @@
       "url": "https://drive.google.com/file/d/1WcpBoXhGCn4Jtey9Qvqq1413whcGJzQ6/view?usp=drivesdk"
     }
   ],
-  "purpose": "Stable file IDs/URLs; updates preserve IDs. New runtime/private bootstrap proof replaces earlier consent blocker. APKs never included."
+  "purpose": "Current deliverables with stable Drive IDs. Runtime/service E2E PASS, native OAuth/physical QA pending; no APK/credentials/private SQLite included."
 }
