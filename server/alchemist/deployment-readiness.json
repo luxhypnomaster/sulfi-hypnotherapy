@@ -1,7 +1,11 @@
 {
   "fullSourceVerified": true,
-  "projectName": "\u0421\u0435\u0440\u0432\u0435\u0440 \u041f\u0440\u043e\u0435\u043a\u0442\u0430 \u0410\u043b\u0445\u0438\u043c\u0438\u043a",
+  "projectName": "Сервер Проекта Алхимик",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "Complete source gate verified. Actual existing version4/source766f178, public JSON health and private41-folder bootstrap/replay verified in run42872816006. Full service E2E not yet passed: real20s HTTP timeout corrected in isolated new transport; live retry42878030592 running. Android Web OAuth audience absent; physical Android NOT_RUN."
+  "reason": "Full source gate verified: CI42878716769 (419Flutter/33Node/both signed22APK). Existing GAS version4/source766f178 has real anonymous JSON health and owner-only41-folder bootstrap/replay verified by42872816006/42876284145. Live-service retry42878030592 still running; independent actual WAV/AAC/ZIP private Drive readback recorded. Owner confirms Android Web OAuth client not created; native SDK/physical Android NOT_RUN. live=false is retained for full integrated readiness, not a claim that runtime health is blocked.",
+  "runtimeHealthVerified": true,
+  "privateStorageVerified": true,
+  "fullServiceE2EVerified": false,
+  "androidOAuthConfigured": false
 }
