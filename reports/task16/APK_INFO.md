@@ -1,25 +1,16 @@
-# APK для владельца
+# APK для владельца —0.4.14+22
 
-Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Текущая контрольная точка: de27d86.
+[CI42878716769 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769), общий sourcee4ed74b5fc4f262343df9af688f6fdef4e601762.419Flutter PASS/1opt-inSKIP,33новых/24прежних Node PASS,13schemas, formatter/analyzer, fixedCLIENT и package/certificate gates PASS.
 
-Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
+- [Скачать авторскую APK22](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769/artifacts/13794725587). Artifact ZIP109544312bytes, APK SHA-256`ed5a0b4fdaffa0aca367b966bbbac620cfcbee81c5962c917f0ecaa5cb3cc891`.
+- [Скачать клиентскую APK22](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769/artifacts/13792599633). Artifact ZIP109544005bytes, APK SHA-256`18f29ed9191f7ff6310a69a07dcd535cae57885f8b9c23c8a54867416ed0b4a4`.
 
-Последние APK21: source953d5bc, CI42819404870 SUCCESS, 418Flutter PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
+В пользовательских ZIP только APK; техническая диагностика отдельно13794865344/13794006462. Хранение14дней с10.11.2026. Открыть GitHub под своим аккаунтом → скачать ZIP → извлечь APK → установить. APK на Google Drive не загружались.
 
+Авторский package`ru.sulfi.sulfi_hypnotherapy`, клиентский`ru.sulfi.sulfi_hypnotherapy.clienttest`. Прежний закреплённый сертификат SHA-256`0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6` проверен apksigner для ОБЕИХ сборок. Авторскую ставить обновлением поверх, не удалять прежнее приложение; клиент ставится отдельно. Проверка конкретного обновления с личной библиотекой на телефоне пока NOT_RUN; при конфликте подписи не удалять личные данные.
 
-Актуальные APK0.4.14+21, source953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822, CI42819404870 SUCCESS (418Flutter):
+В22 добавлен изолированный HTTP-транспорт Алхимика с bounded5min Drive-response timeout, лимитом ответа и безопасными redirect. Legacy diary HTTP, package/key/SQLite/файлы/RunScreen не менялись.
 
-- [Авторская APK](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42819404870/artifacts/13766302782), SHA256 b4c3691e9651c98ff983a2128a894952aa72deae0d6f0765527ab408094bfe07.
-- [Клиентская APK](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42819404870/artifacts/13766317817), SHA256 57c41b29f7e9f47bf4d3ef12622004a79e722459e4dde2085f95cecbcd2299a7.
+**Сборки пока локальные:** CI явно вывел LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED. Android Web client ID и две Android registrations ещё не готовы; не подставляем clasp identity. Это НЕ две cloud-connected APK. Существующий сервер/version4/runtime/private bootstrap уже проверены отдельно; live service E2E42878030592 выполняется. Настройка с телефона — ANDROID_OAUTH_SETUP_RU.md.
 
-Артефакты созданы10.11.2026, retention14дней. Авторский ZIP109538156bytes; клиентский109538359bytes. APK-only внутри, диагностика отдельно:13766272837/13767162082. Данные неизменной подписи и package проверены успешными CI-gates. Endpoint НЕ внедрён: LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED. Это сборки для локальной приёмки, не две доказанно подключённые к cloud APK.
-
-Историческая пара20 прошла CI42815250637; текущая пара21 приведена выше. Старые APK не предлагаются как актуальные.
-
-Package author ru.sulfi.sulfi_hypnotherapy; client ru.sulfi.sulfi_hypnotherapy.clienttest. Закреплённый сертификат SHA256 0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6. CI реально проверил package/certificate. LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED — не выдавать за подключённую пару. Никаких токенов clasp в приложении.
-
-С телефона войти в свой GitHub → artifact → скачать ZIP → извлечь APK → установить. Пользовательский ZIP содержит только APK, техническая диагностика отдельно. Авторскую ставить обновлением поверх, не удалять старую; клиент ставится отдельно. Перед приёмкой — внешняя капсула. Факт обновления именно этой пары/сохранности личных данных на телефоне NOT_RUN. APK на Google Drive нет и не будет без отдельного согласования.
-
-## Текущая сборка22
-
-[CI42878716769](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769), sourcee4ed74b5fc4f262343df9af688f6fdef4e601762,0.4.14+22, обе редакции. Пока IN_PROGRESS, артефактов и успеха не предполагаем. Новый Alchemist HTTP5min включён в исходники; stable package/signing сохранены. Endpoint/Web ID отсутствуют, поэтому сборки не объявляются cloud-connected. APK только GitHub, не Google Drive.
+Историческая пара21/source953d5bc/CI42819404870 была собрана ранее, актуальная пара —22. Физические Google Sign-In, media playback/background, lock/reconnect/low-space и сохранность при обновлении остаются NOT_RUN.

@@ -1,3 +1,16 @@
+# Current checkpoint — signed APK22 SUCCESS, actual Drive WAV SHA verified (2026-11-10)
+
+Continue Task16 feature branch; C0 must NOT repeat. Existing Script/version4/source766f178/deploy42872816006/recovery42876284145 remain runtime/private-bootstrap verified. Same Script/deployment/root41 folders, old diary untouched.
+
+Both signed APK22/sourcee4ed74b5fc4f262343df9af688f6fdef4e601762, CI42878716769 SUCCESS.419FlutterPASS/1opt-inSKIP,33new+24oldNodePASS,13schemas, formatter/analyzer/fixedCLIENT/package/certificatePASS. Authorartifact13794725587 SHA256ed5a0b4fdaffa0aca367b966bbbac620cfcbee81c5962c917f0ecaa5cb3cc891; client13792599633 SHA25618f29ed9191f7ff6310a69a07dcd535cae57885f8b9c23c8a54867416ed0b4a4. Both remain LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED, not cloud-connected. No APK Drive upload.
+
+Live service E2E42878030592 still RUNNING (approvedsource6f1c8b9, bounded5min Alchemist HTTP). First42877004822 failed20sec media.beginUpload, not Google consent; corrected transport3regressionsPASS. Independent anonymous catalog.list200JSON showed0→1publishedcard. Independent private Drive readback confirms3blobsWAV+2AAC, soleowner/sharedfalse. Downloaded actual WAV2205044bytes through connector; exact deterministic source SHA25697cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9; ffprobe50secPCM16LE/22050Hz/mono. This is NOT final client-install/MP4/ZIP evidence. Wait actual workflow, recover sanitized evidence with existing main alchemist-checkpoint-read.yml run_id=42878030592. No repeat deployment needed unless new backend defect is proven.
+
+Native Android OAuth remains distinct blocker: no repository WebclientID or two Android registrations. Browser/desktop tools missing; environment connected/current capabilities[]. Official Console-only creation, phone-only guide+exact existing cert prepared. Never use clasp installed-client audience in APK or undocumented APIs. Physical Android NOT_RUN. Matrix64PASS/79PARTIAL/3BLOCKED/1NOT_RUN pending actual E2E. Reports continuously updated in existingTask16folder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z; originalPREFLIGHT untouched, noTask17.
+
+---
+# Historical checkpoints
+
 # Current checkpoint — C2 verified, full Flutter419 PASS, live retry/APK22 running (2026-11-10)
 
 Do not repeat C0. Existing feature feat/task16-alchemist-full-server. Runtime/version4/source766f178 + exact private41folders/replay/negative checks VERIFIED in deploy42872816006/recovery42876284145. One existing Script/deployment, old diary untouched.

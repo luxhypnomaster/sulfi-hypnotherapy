@@ -6,7 +6,7 @@
 
 Живой тест Flutter-сервисов выявил20sec timeout: добавлен отдельный bounded5min Alchemist transport, regression3PASS/analyzer clean; повторный E2E42878030592 выполняется. Android Web OAuth client ID и две Android registrations пока не настроены; [законная настройка с телефона](reports/task16/ANDROID_OAUTH_SETUP_RU.md). Физический Android NOT_RUN.
 
-[Отчёты/147критериев](reports/task16/RESULT.md) · [Последние APK0.4.14+21](reports/task16/APK_INFO.md): CI42819404870 SUCCESS, обе подписаны стабильным ключом, пока без облачного endpoint. Пользовательские файлы не удалялись; APK не загружаются на Google Drive.
+[Отчёты/147критериев](reports/task16/RESULT.md) · [Последние APK0.4.14+22](reports/task16/APK_INFO.md): CI42878716769 SUCCESS, обе подписаны стабильным ключом, пока без облачного endpoint. Пользовательские файлы не удалялись; APK не загружаются на Google Drive.
 
 # Задание 14 · локальный перенос и каталог · 0.4.12+17
 

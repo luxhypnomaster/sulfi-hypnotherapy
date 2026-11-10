@@ -4,7 +4,7 @@
 
 Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
 
-Последние APK21: source953d5bc, CI42819404870 SUCCESS, 418Flutter PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
+Последние APK22: sourcee4ed74b, CI42878716769 SUCCESS,419Flutter PASS,33new/24oldNode PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
 
 
 | Факт | Результат |
@@ -16,7 +16,7 @@ Runtime consent подтверждён фактическим JSON, а не то
 | SERVER_LIVE | YES — anonymous JSON health, version4, actual bootstrap/replay |
 | DRIVE_TREE_LIVE | PASS — exact41 owner-only folders, replay/readback |
 | FULL_E2E | NO / NOT_VERIFIED — нет доказанной цепочки двух APK через живой Drive |
-| APK_BUILT | YES — обе0.4.14+21, CI42819404870 SUCCESS, общий source953d5bc |
+| APK_BUILT | YES — обе0.4.14+22, CI42878716769 SUCCESS, общий sourcee4ed74b |
 | ANDROID_NOT_RUN | YES — физического устройства нет |
 
 Реализованы авторский каталог карточек трека/модуля/шаблона/сессии/сборки/ZIP, аннотации и обложки, точные manifests, реальная очередь, upload/commit/readback, клиентский каталог и выборочная установка через прежний LocalCatalog/CapsuleService. Дневник: текст/изображения/звук/видео/ContentLink, офлайн-очередь, quiet edit/reannounce/close/expiry, изолированный личный cache и read-state. Сохранены старые локальные файлы, история, SQLite, package IDs, ключ подписи и принятый плеер.
