@@ -14,6 +14,7 @@ import 'package:sulfi_hypnotherapy/services/alchemist_api.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_catalog.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_diary_api.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_install.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_http.dart';
 import 'package:sulfi_hypnotherapy/services/diary_api.dart';
 import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 import 'package:sulfi_hypnotherapy/services/local_content_catalog.dart';
@@ -86,7 +87,12 @@ void main() {
         await persist();
         final watch = Stopwatch()..start();
         if (op != null) metrics[op] = (metrics[op] ?? 0) + 1;
-        final response = await DiaryApi.httpRequest(method, uri, headers, body);
+        final response = await const AlchemistHttp().request(
+          method,
+          uri,
+          headers,
+          body,
+        );
         watch.stop();
         if (op != null &&
             watch.elapsedMilliseconds > (maxResponseMs[op] ?? 0)) {

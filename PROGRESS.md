@@ -1,3 +1,14 @@
+# Current checkpoint — real runtime C2 PASS; live transport correction (2026-11-10)
+
+Continue feat/task16-alchemist-full-server. C0 unchanged. Actual version4 deploy42872816006/source766f178 and metadata recovery42876284145 confirm DEPLOYED_STORAGE_VERIFIED: anonymous JSON health, exact41 owner-only folders, replay/no duplicates, live negative private/mutation/forged credential checks. Same Script/deployment, old diary untouched.
+
+Live services run42877004822 reached actual owner/ACL/storage preflight, then first publication hit legacy20second HTTP timeout before interrupted upload assertion. Not a live E2E pass. Isolated new AlchemistHttp allows bounded5min response execution, connection15/20s, body30s and2MB cap, redirects manual; legacy DiaryApi unchanged. Transport regression3PASS, analyzer clean. Re-pin reviewed app snapshot and rerun trusted-main real service test next. APK21 remains local, not cloud connected. Current full-suite attempt interrupted by execution-environment restart; prior418PASS retained as historical, do not label this run complete.
+
+Android public package/SHA1 evidence run42875871201 PASS, report ANDROID_OAUTH_SETUP_RU.md + JSON uploaded to existing Task16 reports. Legitimate Web client ID/two Android registrations still missing; no automated unsupported OAuth-client creation and no clasp audience in APK. Physical Android NOT_RUN. Reports current matrix63PASS/80PARTIAL/3BLOCKED/1NOT_RUN pending live results. APKs never Drive.
+
+---
+# Historical checkpoints
+
 # Current continuation — real C2 storage verified, 2026-11-10 18:14 UTC
 
 Public health now200JSON after owner consent. Existing protected deploy42872816006 SUCCESS: same pinned Script/deployment, source/version readback, private41folder bootstrap+replay, negative anonymous mutation/private missing asset/forged token checks. SDK compatibility fix in09425d6 (mainPR28/766f178),32Node PASS. Independent connected Drive verified one closed root under existing Alchemist project,7top+33children+root=41, exact prescribed names, rootowner-only. Old diary untouched; no duplicate server. Prior HTML runtime blocker RESOLVED, not current.

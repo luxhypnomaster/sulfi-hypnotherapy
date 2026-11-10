@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'apps_script_diary_transport.dart';
+import 'alchemist_http.dart';
 import 'diary_api.dart';
 
 class AlchemistApiException extends DiaryApiException {
@@ -24,7 +25,7 @@ class AlchemistApi {
     DiaryRequest? connection,
     this.credential,
     this.maxAttempts = 3,
-  }) : connection = connection ?? DiaryApi.httpRequest {
+  }) : connection = connection ?? const AlchemistHttp().request {
     if (!AppsScriptDiaryTransport.supports(endpoint)) {
       throw const FormatException('Требуется проверенный адрес сервера /exec');
     }
