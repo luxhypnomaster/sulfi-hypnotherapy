@@ -20,5 +20,14 @@
       "sha256": "59e653371f9ad08cfb289e529eb995fa9364d2013731e142e1a5535054f0c046",
       "uploadedBytesReadbackEqual": true
     }
-  ]
+  ],
+  "serverHandoffReadback": {
+    "observedUtc": "2026-11-10T21:33:38.479784+00:00",
+    "bytes": 426632,
+    "sha256": "f476478a0b4bce8745765708d06a2c2644ba8a76fc9afb329181f873659af635",
+    "driveRawBytesEqual": true,
+    "crcVerified": true,
+    "memberHashCount": 126,
+    "memberShaVerified": true
+  }
 }

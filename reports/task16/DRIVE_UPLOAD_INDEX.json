@@ -188,5 +188,9 @@
       "url": "https://drive.google.com/file/d/1WcpBoXhGCn4Jtey9Qvqq1413whcGJzQ6/view?usp=drivesdk"
     }
   ],
-  "purpose": "Current deliverables with stable Drive IDs. Runtime/service E2E PASS, native OAuth/physical QA pending; no APK/credentials/private SQLite included."
+  "purpose": "Current deliverables with stable Drive IDs. Runtime/service E2E PASS, native OAuth/physical QA pending; no APK/credentials/private SQLite included.",
+  "serverHandoffSha256": "f476478a0b4bce8745765708d06a2c2644ba8a76fc9afb329181f873659af635",
+  "serverHandoffBytes": 426632,
+  "serverHandoffRawReadbackEqual": true,
+  "coreReportsRawReadbackEqual": true
 }
