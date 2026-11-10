@@ -13,10 +13,14 @@ export async function deployCore(api,source){
  await api.pushSource(id,source.files);await api.compareSource(id,source.files);
  await api.checkpoint({stage:'SOURCE_PUSHED',scriptId:id,sourceSha:source.sha});
  const versions=await api.versions(id);let version=versions.find(v=>v.description===source.description)?.versionNumber;
- if(version){await api.compareVersion(id,version,source.files);}else{version=await api.createVersion(id,source.description);await api.compareVersion(id,version,source.files);}
+ if(version){await api.compareVersion(id,version,source.files);}else{version=await api.createVersion(id,source.description);if(!Number.isSafeInteger(version)||version<1)throw Error('INVALID_CREATED_VERSION');await api.compareVersion(id,version,source.files);}
+ if(!Number.isSafeInteger(version)||version<1)throw Error('INVALID_CREATED_VERSION');
+ await api.checkpoint({stage:'VERSION_VERIFIED',scriptId:id,version});
  const deployments=(await api.deployments(id)).filter(d=>d.description?.startsWith('alchemist-production:'));
  if(deployments.length>1)throw Error('AMBIGUOUS_DEPLOYMENTS');
  const deployed=await api.deployVersion(id,version,deployments[0]?.deploymentId,source.description);
+ if(typeof deployed.id!=='string'||!deployed.id)throw Error('INVALID_CREATED_DEPLOYMENT');
+ await api.checkpoint({stage:'DEPLOYMENT_CREATED',scriptId:id,version,deploymentId:deployed.id});
  await api.verifyDeployment(id,deployed,version);
  await api.checkpoint({stage:'DEPLOYED',scriptId:id,version,deploymentId:deployed.id,endpoint:deployed.endpoint});
  await api.health(deployed.endpoint);
