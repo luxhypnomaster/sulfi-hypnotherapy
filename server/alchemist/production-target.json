@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scriptId": "1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc",
+  "name": "Сервер Проекта Алхимик",
+  "creationRun": 42818493644,
+  "recoveryRun": 42819515525,
+  "privateAclReadback": {
+    "checkedAt": "2026-11-10T12:54:07Z",
+    "source": "connected-drive-files-get",
+    "shared": false,
+    "permissions": [{"type": "user", "role": "owner", "emailAddress": "luxhypnomaster@gmail.com"}]
+  }
+}

@@ -66,12 +66,13 @@ void main() {
             index.firstWhere((r) => r.key.content.type == ContentType.module),
           );
         }))!;
+        await t.pumpWidget(const SizedBox());
         await show15(
           t,
           f,
           CatalogCardEditor(service: f.c.catalog, draft: moduleDraft),
         );
-        expect(find.text('Сохранить черновик'), findsOneWidget);
+        expect(find.text('Точных зависимостей: 3'), findsOneWidget);
         await capture15(t, 'task16-author-module-composition');
         expect(t.takeException(), isNull);
         await t.pumpWidget(const SizedBox());
