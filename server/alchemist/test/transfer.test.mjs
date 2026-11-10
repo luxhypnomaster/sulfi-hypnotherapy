@@ -1,0 +1,16 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+const ctx=vm.createContext({});for(const file of ['Catalog','Transfer'])vm.runInContext(readFileSync(new URL('../src/'+file+'.js',import.meta.url),'utf8'),ctx);
+const hash=b=>createHash('sha256').update(b).digest('hex'),actor={sub:'author',roles:['author']};
+function fixture(){let data=Buffer.alloc(0),allowed=true;const sessions=new Map(),assets=new Map();const env={now:()=>0,uuid:()=>String(sessions.size+1),lock:f=>f(),encode:b=>Buffer.from(b).toString('base64'),decode:s=>Buffer.from(s,'base64'),digest:hash,
+ sessions:{get:id=>sessions.get(id),byRequest:(sub,id)=>[...sessions.values()].find(s=>s.owner===sub&&s.requestId===id),put:s=>sessions.set(s.id,structuredClone(s))},drive:{begin:()=>({secret:'never-public'}),write:(s,offset,b)=>{data=Buffer.concat([data.subarray(0,offset),b]);return data.length;},chunkHash:(s,o,n)=>hash(data.subarray(o,o+n)),verify:()=>({byteLength:data.length,sha256:hash(data)}),read:(s,o,n)=>data.subarray(o,o+n)},assets:{retain:(s,v)=>{assets.set(s.id,{...v,id:s.id});return s.id;},get:id=>assets.get(id),canRead:()=>allowed}};return {t:ctx.AlchemistTransfer.create(env),env,revoke:()=>allowed=false};}
+test('multi-chunk video resume/retry, exact hash, per-range revocation, never leak private location',()=>{const f=fixture(),bytes=Buffer.alloc(262144*2+42,17),request={requestId:'request',byteLength:bytes.length,sha256:hash(bytes),mime:'video/mp4'};const s=f.t.begin(actor,request);assert.equal(JSON.stringify(s).includes('secret'),false);
+ assert.equal(f.t.begin(actor,request).sessionId,s.sessionId);
+ for(let offset=0;offset<bytes.length;offset+=262144){const chunk=bytes.subarray(offset,Math.min(bytes.length,offset+262144));const q={sessionId:s.sessionId,offset,base64:chunk.toString('base64')};f.t.upload(actor,q);assert.equal(f.t.upload(actor,q).offset,offset+chunk.length);}
+ const committed=f.t.commit(actor,{sessionId:s.sessionId});assert.equal(committed.sha256,request.sha256);const received=[];for(let offset=0;offset<bytes.length;offset+=262144)received.push(Buffer.from(f.t.download(null,{assetRevisionId:committed.assetRevisionId,offset,length:262144}).base64,'base64'));assert.equal(hash(Buffer.concat(received)),request.sha256);
+ f.revoke();assert.throws(()=>f.t.download(null,{assetRevisionId:committed.assetRevisionId,offset:0,length:1}),/NOT_AVAILABLE/);assert.throws(()=>f.t.abort(actor,{sessionId:s.sessionId}),/RETAINED/);
+});
+test('wrong actor, misalignment, corrupt final hash, incomplete transfer reject',()=>{const f=fixture(),s=f.t.begin(actor,{requestId:'x',byteLength:262145,sha256:'a'.repeat(64),mime:'application/zip'});
+ assert.throws(()=>f.t.upload({sub:'other',roles:['author']},{sessionId:s.sessionId,offset:0,base64:'AA=='}),/NOT_AVAILABLE/);
+ assert.throws(()=>f.t.upload(actor,{sessionId:s.sessionId,offset:0,base64:'AA=='}),/ALIGNMENT/);assert.throws(()=>f.t.commit(actor,{sessionId:s.sessionId}),/INCOMPLETE/);
+ f.t.upload(actor,{sessionId:s.sessionId,offset:0,base64:Buffer.alloc(262144).toString('base64')});f.t.upload(actor,{sessionId:s.sessionId,offset:262144,base64:'AA=='});assert.throws(()=>f.t.commit(actor,{sessionId:s.sessionId}),/VERIFICATION/);
+});
