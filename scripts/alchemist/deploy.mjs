@@ -4,6 +4,7 @@ import {resolve,join} from 'node:path';import {pathToFileURL} from 'node:url';
 import {execFile} from 'node:child_process';import {promisify} from 'node:util';import {createHash} from 'node:crypto';
 import {deployCore,SERVER_NAME,OLD_SCRIPT} from './deploy-core.mjs';
 import {verifiedDeployIdentity} from './deploy-identity.mjs';
+import {verifyPinnedTarget,freshPrivateAcl} from './deploy-target.mjs';
 const run=promisify(execFile),sha=x=>createHash('sha256').update(x).digest('hex');
 const readiness=JSON.parse(readFileSync(new URL('../../server/alchemist/deployment-readiness.json',import.meta.url)));
 function abort(code){console.error(code);process.exit(78);}
@@ -51,13 +52,14 @@ try{
  async function broker(endpoint,body){let response=await fetch(endpoint,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,redirect:'manual',signal:AbortSignal.timeout(300000)});
    for(let i=0;response.status===302||response.status===303;i++){const u=new URL(response.headers.get('location'));if(i>=3||u.protocol!=='https:'||u.host!=='script.googleusercontent.com'||u.username||u.password)throw Error('CLOUD_RUNTIME_CONSENT_OR_ACCESS_REQUIRED');response=await fetch(u,{redirect:'manual',signal:AbortSignal.timeout(300000)});}
    if(response.status!==200||!response.headers.get('content-type')?.includes('application/json'))throw Error('CLOUD_RUNTIME_NOT_EXECUTABLE');return response.json();}
+ const target=JSON.parse(readFileSync(new URL('../../server/alchemist/production-target.json',import.meta.url)));
  const adapter={checkpoint,
-  async findProjects(title){const q="mimeType='application/vnd.google-apps.script' and name='"+title+"' and trashed=false";
-    const matches=await pages('https://www.googleapis.com/drive/v3/files?q='+encodeURIComponent(q)+'&fields=files(id,name,owners(emailAddress),appProperties),nextPageToken','files');
-    return matches.map(f=>({id:f.id,title:f.name,owned:f.owners?.length===1&&f.owners[0].emailAddress===identity.email,marker:f.appProperties?.alchemistTask16}));},
+  async findProjects(title){const project=await google('GET',scriptApi(target.scriptId));return [verifyPinnedTarget(target,project,identity.email)];},
   async createProject(title){await clasp(['create-script','--type','standalone','--title',title,'--rootDir',join(work,'source')]);return JSON.parse(readFileSync(join(work,'.clasp.json'))).scriptId;},
   async markProject(id){await google('PATCH',driveApi(id),{appProperties:{alchemistTask16:'task16-production'}});},
-  async inspectProject(id){const project=await google('GET',scriptApi(id)),f=await google('GET',driveApi(id)+'?fields=id,owners(emailAddress),permissions(type,role,emailAddress),trashed');
+  async inspectProject(id){const project=await google('GET',scriptApi(id));verifyPinnedTarget(target,project,identity.email);
+    let f;try{f=await google('GET',driveApi(id)+'?fields=id,owners(emailAddress),permissions(type,role,emailAddress),trashed');}
+    catch(e){if(e.message!=='DRIVE_GET_403_APPNOTAUTHORIZEDTOFILE')throw e;freshPrivateAcl(target,identity.email);checkpoint({stage:'SCRIPT_ACL_VERIFIED_EXTERNAL_READBACK',scriptId:id});return {title:project.title,owned:true,private:true};}
     return {title:project.title,owned:!f.trashed&&f.owners?.length===1&&f.owners[0].emailAddress===identity.email,private:f.permissions?.length===1&&f.permissions[0].type==='user'&&f.permissions[0].role==='owner'&&f.permissions[0].emailAddress===identity.email};},
   async pushSource(id,expected){for(const f of readdirSync(join(work,'source')))rmSync(join(work,'source',f),{force:true});for(const f of expected)writeFileSync(join(work,'source',f.name+(f.type==='JSON'?'.json':'.js')),f.source);bind(id);await clasp(['push','--force']);},compareSource:(id,v)=>compare(id,v),compareVersion:(id,n,v)=>compare(id,v,n),
   versions:id=>pages(scriptApi(id)+'/versions','versions'),

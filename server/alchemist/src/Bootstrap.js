@@ -17,6 +17,7 @@ var AlchemistBootstrap=(function(){
      ALCHEMIST_PROJECT_FOLDER_ID:c.projectFolderId,ALCHEMIST_GOOGLE_AUDIENCES:JSON.stringify(audiences),ALCHEMIST_SOURCE_SHA:c.sourceSha});
    if(p.getProperty('ALCHEMIST_OWNER_SUB')!==c.ownerSubject||p.getProperty('ALCHEMIST_GOOGLE_AUDIENCES')!==JSON.stringify(audiences))AlchemistCatalog.fail(503,'CONFIG_READBACK_FAILED');
   }finally{lock.releaseLock();}
+  AlchemistGasFiles.privateFile(ScriptApp.getScriptId(),c.ownerEmail);
   return AlchemistGasFolders.bootstrap(actor);
  }
  return {initialize:initialize};
