@@ -1,3 +1,8 @@
+# Latest delivery/continuation — 2026-11-10 16:31 UTC
+
+Resumed after owner quota reset, not a task restart. All23 Task16 report files uploaded/read back; RESULT/full147-row TESTS byte hashes match local. Checkpoints de879bd/772057c preserve source reports and sanitized logs. Both21APK source953d5bc/CI42819404870 SUCCESS still current; binaries only GitHub. Anonymous production health re-probed16:31:24UTC remains403HTML Google Access Denied, no JSON. No new credentials requested, no new Script, no bootstrap/liveE2E claim. Runtime consent/access and legitimate Android web OAuth client configuration remain precise next gates; physical NOT_RUN. C0 not repeated; continue Task16, not17.
+
+---
 # Report delivery checkpoint — 10.11.2026
 
 Task16 reports23files are saved and listed back in existing For_Codex/Отчёты — Задание16. Existing RESULT.md/TESTS.md/PROGRESS.md updated in place, preserving IDs. RESULT and full147-row TESTS downloaded as text and verified byte-for-byte against local SHA256. Original C0 PREFLIGHT and historical logs retained. Current logs, two genuine UI render PNGs and complete SERVER_HANDOFF_TASK16.zip (no APK, InitialConfig or credentials) uploaded; local Drive index lists exact returned file IDs/URLs.

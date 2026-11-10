@@ -22,5 +22,12 @@
   "serverLive": false,
   "bootstrapInvoked": false,
   "fullE2E": false,
-  "physicalAndroid": "NOT_RUN"
+  "physicalAndroid": "NOT_RUN",
+  "latestAnonymousProbe": {
+    "timeUtc": "2026-11-10T16:31:24Z",
+    "http": 403,
+    "mime": "text/html",
+    "json": false,
+    "googleAccessDenied": true
+  }
 }

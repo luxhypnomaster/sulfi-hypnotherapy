@@ -30,3 +30,5 @@ Android web OAuth client ID отсутствует в конфигурации. 
 Независимый HTTP из текущего окружения после задержки:403 text/html, Google Access Denied / You need access. [Диагностика42822511730](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42822511730) после обновления существующего lawful grant: anonymous403HTML; owner OAuth200HTML, marker CONSENT; JSON=NO для обоих. SyntaxError/ReferenceError/TypeError/Exception markers не найдены. SUCCESS этого read-only workflow означает, что диагностика выполнена, а не что сервер стал рабочим. Bootstrap не вызывался, private data не записывались.
 
 Точная причина отказа анонимного frontend и законный путь завершения первого runtime consent ещё требуют подтверждения; не выдаём HTML-marker за успешно пройденное согласие. [Документация Google о разрешениях исполнения](https://developers.google.com/apps-script/guides/services/authorization). Повторять clasp login не требуется.
+
+Повтор после возобновления лимитов10.11.2026 16:31:24UTC: anonymous health всё ещё403 text/html, JSON=NO, Google Access Denied. Простое ожидание после deploy блокер не сняло.
