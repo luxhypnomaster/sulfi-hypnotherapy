@@ -38,6 +38,7 @@ void main() {
           find.byKey(const ValueKey('catalog-shortAnnotation')),
           'Аннотация офлайн',
         );
+        await capture15(t, 'task16-author-annotation-200pct');
         await t.showKeyboard(
           find.byKey(const ValueKey('catalog-shortAnnotation')),
         );
@@ -58,6 +59,20 @@ void main() {
         final saved = (await t.runAsync(() => f.c.catalog.drafts()))!;
         expect(saved.single['card']['shortAnnotation'], 'Аннотация офлайн');
         expect(saved.single['status'], 'draft');
+        expect(t.takeException(), isNull);
+        final moduleDraft = (await t.runAsync(() async {
+          final index = await LocalCatalogSource.currentIndex(f.c.capsules!);
+          return f.c.catalog.prepare(
+            index.firstWhere((r) => r.key.content.type == ContentType.module),
+          );
+        }))!;
+        await show15(
+          t,
+          f,
+          CatalogCardEditor(service: f.c.catalog, draft: moduleDraft),
+        );
+        expect(find.text('Сохранить черновик'), findsOneWidget);
+        await capture15(t, 'task16-author-module-composition');
         expect(t.takeException(), isNull);
         await t.pumpWidget(const SizedBox());
       } finally {
