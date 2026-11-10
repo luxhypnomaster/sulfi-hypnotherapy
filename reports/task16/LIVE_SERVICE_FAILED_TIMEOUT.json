@@ -1,0 +1,20 @@
+{
+  "run": 42877004822,
+  "recoveryRun": 42878319267,
+  "result": "FAILED_LEGACY_20SEC_TIMEOUT",
+  "evidence": {
+    "kind": "REAL_GOOGLE_DRIVE_FLUTTER_SERVICES",
+    "physicalAndroid": "NOT_RUN",
+    "androidSdkLogin": "NOT_RUN_CI_IDENTITY",
+    "prefix": "task16e2e_42877004822_1",
+    "phases": [
+      "STARTED"
+    ],
+    "uploadedBytes": 0,
+    "downloadedBytes": 0,
+    "requests": {},
+    "maxResponseMs": {},
+    "lastOperation": "media.beginUpload",
+    "artifacts": {}
+  }
+}

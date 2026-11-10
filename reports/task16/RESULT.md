@@ -1,10 +1,10 @@
 # Задание 16 — фактический результат
 
-Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Контрольная точка отчёта: ae18d11bb0208bb7461574df152fa98b55c2fe2d.
+Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Текущая контрольная точка: de27d86.
 
-Приложение/APK source: 953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822. [CI 42819404870](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42819404870). [Настоящий deploy 42820498828](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42820498828), стадия VERSION_2_DEPLOYED_RUNTIME_CONSENT_NOT_VERIFIED. Ошибка/ограничение: `GOOGLE_RUNTIME_HTTP403_ANONYMOUS_OWNER_HTTP200_CONSENT_HTML`. Старый «Сульфи — дневник» не изменялся.
+Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
 
-Полный локальный Flutter: 418 PASS, анализ без замечаний. Node нового сервера: 30 PASS; старого:24 PASS. Контролируемый Drive-адаптер в Node/localhost НЕ является живым Google Drive. Снимки UI — рендер Flutter, не установленный Android.
+Последние APK21: source953d5bc, CI42819404870 SUCCESS, 418Flutter PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
 
 
 | Факт | Результат |
@@ -13,8 +13,8 @@
 | FULL_CODE_IMPLEMENTED | YES — код серверных и Flutter-потоков реализован; Серверные и Flutter-потоки реализованы; это не означает147PASS. Конфликтные G3 замены аудио закрыты, миграция не заявлена законченной |
 | CLASP_LOGIN_COMPLETED | YES — два реальных main-run, scope и owner verification |
 | GITHUB_SECRET_MISSING | NO — repository CLASPRC_JSON; значение не извлекалось/не выводилось |
-| SERVER_LIVE | NO — GOOGLE_RUNTIME_HTTP403_ANONYMOUS_OWNER_HTTP200_CONSENT_HTML |
-| DRIVE_TREE_LIVE | NOT_VERIFIED |
+| SERVER_LIVE | YES — anonymous JSON health, version4, actual bootstrap/replay |
+| DRIVE_TREE_LIVE | PASS — exact41 owner-only folders, replay/readback |
 | FULL_E2E | NO / NOT_VERIFIED — нет доказанной цепочки двух APK через живой Drive |
 | APK_BUILT | YES — обе0.4.14+21, CI42819404870 SUCCESS, общий source953d5bc |
 | ANDROID_NOT_RUN | YES — физического устройства нет |
@@ -25,4 +25,4 @@
 
 Повторную авторизацию clasp, компьютер и ручной перенос кода не запрашивал. Android Google web OAuth client ID не настроен и не подменяется клиентом clasp. Подробности — CLOUD_ACCESS.md, TESTS.md (147строк), APK_INFO.md и ISSUES_AND_NEXT.md. APK на Google Drive не загружались.
 
-Задание16 в целом НЕ закрыто. C1 source gate завершён, C2 дошёл до реальной version2/deployment с readback, C3 код/локальные tests/две APK готовы, C4 live E2E BLOCKED, C5 текущие факты и доказательства подготовлены. Не объявляем работающее облако или147PASS.
+Задание16 в целом НЕ закрыто. C2 runtime/private bootstrap завершён. C4 live service E2E выполняется; native Android OAuth и физическая проверка обеих APK ещё не завершены. Не объявляем147PASS.

@@ -1,6 +1,6 @@
 {
   "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
-  "verifiedReports": 23,
+  "verifiedReports": 25,
   "files": [
     {
       "name": "task16-author-module-composition.png",
@@ -116,7 +116,17 @@
       "name": "APK_CI_EVIDENCE.json",
       "id": "14alWf1MxNnGUyAzny9qadHivLT76Hmqg",
       "url": "https://drive.google.com/file/d/14alWf1MxNnGUyAzny9qadHivLT76Hmqg/view?usp=drivesdk"
+    },
+    {
+      "name": "ANDROID_OAUTH_SETUP_RU.md",
+      "id": "18cQfLUK-mzsmxESsNwwsZ9DCriheywco",
+      "url": "https://drive.google.com/file/d/18cQfLUK-mzsmxESsNwwsZ9DCriheywco/view?usp=drivesdk"
+    },
+    {
+      "name": "ANDROID_OAUTH_PUBLIC_CONFIG.json",
+      "id": "16s5s0rKsXWFhOLgZiICUUStwRiPbWlWO",
+      "url": "https://drive.google.com/file/d/16s5s0rKsXWFhOLgZiICUUStwRiPbWlWO/view?usp=drivesdk"
     }
   ],
-  "purpose": "Stable file IDs/URLs; contents can be updated in place. Report23 snapshot verified before final delivery update."
+  "purpose": "Stable file IDs/URLs; updates preserve IDs. New runtime/private bootstrap proof replaces earlier consent blocker. APKs never included."
 }

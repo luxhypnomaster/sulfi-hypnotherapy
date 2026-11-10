@@ -1,33 +1,59 @@
 {
-  "source": "Google Script/Drive API and trusted manual main Actions",
-  "deployRun": 42820498828,
-  "metadataRecoveryRun": 42821006643,
-  "runtimeReadRun": 42822511730,
+  "source": "Anonymous direct HTTP and trusted-main deployment/Drive API readback",
+  "observedUtc": "2026-11-10T18:38:06.783643+00:00",
+  "deployRun": 42872816006,
+  "metadataRecoveryRun": 42876284145,
   "scriptId": "1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc",
-  "version": 2,
-  "sourceSha": "64893b3eecedec2fa00cbb34cf9e9da06cbc7def",
+  "version": 4,
+  "sourceSha": "766f178d8c0c95a270467b0d117f77105d6eef56",
   "deploymentId": "AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg",
+  "endpoint": "https://script.google.com/macros/s/AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg/exec",
   "sourceAndVersionReadback": true,
   "privateScriptAclReadback": true,
   "anonymous": {
-    "http": 403,
-    "json": false,
-    "googleAccessDenied": true
-  },
-  "ownerOAuth": {
     "http": 200,
-    "json": false,
-    "consentMarker": true
+    "mime": "application/json",
+    "health": {
+      "ok": true,
+      "status": 200,
+      "result": {
+        "name": "Сервер Проекта Алхимик",
+        "schemaVersion": 1,
+        "fullSourceReady": true,
+        "mediaTransferReady": true,
+        "liveVerified": false,
+        "chunkBytes": 262144,
+        "media": [
+          "image/png",
+          "image/jpeg",
+          "image/webp",
+          "audio/mpeg",
+          "audio/mp4",
+          "audio/aac",
+          "audio/wav",
+          "audio/ogg",
+          "video/mp4",
+          "video/webm",
+          "video/quicktime",
+          "application/zip"
+        ],
+        "transfer": "authenticated-json-chunks",
+        "httpRangeOnWebApp": false
+      },
+      "requestId": "0029152d-0038-49b9-931a-9f559cb0e89d",
+      "serverTime": "2026-11-10T18:38:06.400Z"
+    }
   },
-  "serverLive": false,
-  "bootstrapInvoked": false,
+  "serverLive": true,
+  "bootstrapInvoked": true,
+  "bootstrapReplayVerified": true,
+  "verifiedFolderCount": 41,
+  "ownerOnly": true,
+  "anonymousMutationDenied": true,
+  "missingPrivateAssetHidden": true,
+  "forgedCredentialDenied": true,
   "fullE2E": false,
-  "physicalAndroid": "NOT_RUN",
-  "latestAnonymousProbe": {
-    "timeUtc": "2026-11-10T16:31:24Z",
-    "http": 403,
-    "mime": "text/html",
-    "json": false,
-    "googleAccessDenied": true
-  }
+  "serviceE2ERun": 42877004822,
+  "serviceE2E": "IN_PROGRESS",
+  "physicalAndroid": "NOT_RUN"
 }

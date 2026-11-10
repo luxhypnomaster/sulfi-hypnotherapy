@@ -1,3 +1,23 @@
+# Current continuation — real C2 storage verified, 2026-11-10 18:14 UTC
+
+Public health now200JSON after owner consent. Existing protected deploy42872816006 SUCCESS: same pinned Script/deployment, source/version readback, private41folder bootstrap+replay, negative anonymous mutation/private missing asset/forged token checks. SDK compatibility fix in09425d6 (mainPR28/766f178),32Node PASS. Independent connected Drive verified one closed root under existing Alchemist project,7top+33children+root=41, exact prescribed names, rootowner-only. Old diary untouched; no duplicate server. Prior HTML runtime blocker RESOLVED, not current.
+
+Real Flutter service E2E test at approved source0f17c7d (manifest hashes) and protected main orchestration in438d93c/PR29. SDK/pubget/analyze/source hashes before OAuth; Node retains refresh grant, unlinks credential/env before reviewed Dart gets one transient ID token; artifacts only sanitized synthetic results.33Node PASS. Test uses actual app services/SQLite/installer and ffprobe; physicalAndroid/SDKGooglelogin NOT_RUN. First live CI42876059637 stopped BEFORE secret on shallowSDK version0.0.0-unknown. Fix tag3.47.9+verifyc197ca+stable as existing working SDK setup; do not rerun C0/bootstrap as a workaround.
+
+Public Android certificate proof42875871201 SUCCESS: both21APKs signer SHA1 8E:B9:95:F1:4B:65:67:6F:DF:F3:05:48:CE:36:1A:EC:1F:47:92:56, SHA256 unchanged0b743568.... Google officially requires Console creation of OAuth clients; no desktop/computer tools/capability attached. ExistingWebID optional question pending; do not reuse clasp ID or request secrets/PC. Prepare public config + phone guide while testing real data.
+
+NEXT: main-only SDK workflow fix, manual live E2E; exact pipeline failures fixed as found. Real data chain stillNOT_VERIFIED until test passes. Both APK21 are still prior local/noendpoint builds. Complete OAuth/connected builds where legally configured; update all147 reports in existing Task16 folder, not17.
+
+---
+# Current continuation — owner consent completed, 2026-11-10 18:03 UTC
+
+C0 remains complete, not repeated. Owner reports successful consent +405 JSON. Independent anonymous GET health now200 application/json, exact name/schema/fullSourceReady/mediaTransferReady verified. Prior runtime HTML blocker is resolved for public health only, not full API.
+
+Protected existing deploy42871419041 reused pinned Script/deployment, source readback/version verified, owner bootstrap reached server but returned BOOTSTRAP_SERVER_UNAVAILABLE. No full bootstrap/E2E claim. Adding bounded stage diagnostics and real Advanced Drive SDK signature/null/omitted optional-parameter regression tests.32Node PASS. No old diary/new duplicate Script.
+
+Android web client remains absent; official Google documentation requires OAuth clients configured through Google Auth Platform console. No desktop control capability/tool is attached to this environment. Asked only for an existing public Web client ID; no secret/reauth/PC requested. Continue independent live tests and prepare exact package/SHA1 instructions.
+
+---
 # Latest delivery/continuation — 2026-11-10 16:31 UTC
 
 Resumed after owner quota reset, not a task restart. All23 Task16 report files uploaded/read back; RESULT/full147-row TESTS byte hashes match local. Checkpoints de879bd/772057c preserve source reports and sanitized logs. Both21APK source953d5bc/CI42819404870 SUCCESS still current; binaries only GitHub. Anonymous production health re-probed16:31:24UTC remains403HTML Google Access Denied, no JSON. No new credentials requested, no new Script, no bootstrap/liveE2E claim. Runtime consent/access and legitimate Android web OAuth client configuration remain precise next gates; physical NOT_RUN. C0 not repeated; continue Task16, not17.

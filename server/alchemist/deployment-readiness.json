@@ -1,7 +1,7 @@
 {
   "fullSourceVerified": true,
-  "projectName": "Сервер Проекта Алхимик",
+  "projectName": "\u0421\u0435\u0440\u0432\u0435\u0440 \u041f\u0440\u043e\u0435\u043a\u0442\u0430 \u0410\u043b\u0445\u0438\u043c\u0438\u043a",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "Full server source gate passed: Node30; Flutter418/analyzer and both signed21 APKs verified at disclosed source SHAs. Actual version2 exists; runtime HTTP fails before JSON, so no bootstrap/live E2E. Android web OAuth audience absent."
+  "reason": "Complete source gate verified. Actual existing version4/source766f178, public JSON health and private41-folder bootstrap/replay verified in run42872816006. Full service E2E not yet passed: real20s HTTP timeout corrected in isolated new transport; live retry42878030592 running. Android Web OAuth audience absent; physical Android NOT_RUN."
 }

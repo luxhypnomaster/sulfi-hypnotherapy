@@ -1,0 +1,19 @@
+{
+  "evidenceRun": 42875871201,
+  "artifact": 13791327773,
+  "credentialsIncluded": false,
+  "clients": {
+    "author": {
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "sha1": "8E:B9:95:F1:4B:65:67:6F:DF:F3:05:48:CE:36:1A:EC:1F:47:92:56",
+      "sha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "apkVersionCode": 21
+    },
+    "client": {
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "sha1": "8E:B9:95:F1:4B:65:67:6F:DF:F3:05:48:CE:36:1A:EC:1F:47:92:56",
+      "sha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "apkVersionCode": 21
+    }
+  }
+}

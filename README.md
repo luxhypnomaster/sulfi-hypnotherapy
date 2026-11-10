@@ -2,9 +2,11 @@
 
 Ветка `feat/task16-alchemist-full-server`. [Контрольная точка и ограничения](PROGRESS.md), [первоначальный аудит](PREFLIGHT.md), [актуальное ТЗ](docs/task16/START_HERE.md).
 
-Реализованы серверные GAS/Drive адаптеры и интеграция каталога/дневника/медиа. Создан ровно один новый private Script «Сервер Проекта Алхимик», полный source/version2/deployment подтверждены API readback. Исполнение Web App пока BLOCKED: анонимно403HTML, владельцу200HTML с consent marker вместо JSON. Clasp авторизация работает; повторный login не требуется. Drive bootstrap/live E2E не выполнялись, Android web OAuth client ID отсутствует.
+Реализованы серверные GAS/Drive адаптеры и Flutter-интеграция каталога/дневника/медиа. Существующий единственный Script «Сервер Проекта Алхимик» реально выполняется: anonymous JSON health, version4, приватное дерево41папки/replay и live negative checks подтверждены deploy42872816006/readback42876284145. Старый дневник не изменён. C0 не повторялся.
 
-[Актуальные отчёты/147критериев](reports/task16/RESULT.md) · [APK0.4.14+21](reports/task16/APK_INFO.md): обе успешно собраны и подписаны в CI42819404870; пока локальные, без облачного endpoint.418Flutter PASS,30Node нового/24старого сервера PASS, анализ чистый. Package/key и пользовательские файлы сохранены; удалять приложение для обновления не нужно. Физический Android NOT_RUN.
+Живой тест Flutter-сервисов выявил20sec timeout: добавлен отдельный bounded5min Alchemist transport, regression3PASS/analyzer clean; повторный E2E42878030592 выполняется. Android Web OAuth client ID и две Android registrations пока не настроены; [законная настройка с телефона](reports/task16/ANDROID_OAUTH_SETUP_RU.md). Физический Android NOT_RUN.
+
+[Отчёты/147критериев](reports/task16/RESULT.md) · [Последние APK0.4.14+21](reports/task16/APK_INFO.md): CI42819404870 SUCCESS, обе подписаны стабильным ключом, пока без облачного endpoint. Пользовательские файлы не удалялись; APK не загружаются на Google Drive.
 
 # Задание 14 · локальный перенос и каталог · 0.4.12+17
 
