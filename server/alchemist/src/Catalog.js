@@ -64,26 +64,27 @@ var AlchemistCatalog = (function () {
           if(op==='catalog.patchDraft'&&q.manifest){if(r.state==='published')fail(409,'CONTENT_REVISION_REQUIRED');r.manifest=safeManifest(q.manifest,0);r.contentRevision=id(q.immutableRevisionId);}
           if(op==='catalog.publish'){
             dependencyPlan(r.manifest,actor,[]);
-            if(r.card.visibility==='public')dependencyPlan(r.manifest,null,[]);
+
             if(!r.manifest.dependencyRefs||!r.manifest.dependencyRefs.length)fail(422,'EMPTY_CONTENT');
             if(r.card.coverAssetId){var cover=env.store.cover(r.card.coverAssetId);if(!cover||!cover.verified||cover.owner!==actor.sub)fail(422,'INVALID_COVER');}
             r.state='published';r.readers=(q.readerSubjects||[]).map(function(s){return text(s,256,true);});
             // Asset grants are publication references, never Drive sharing ACL.
-            env.validatePublication(r,actor);
+            env.validatePublication(r,actor,dependencyPlan(r.manifest,actor,[]).dependencies);
           }
           if(op==='catalog.withdraw')r.state='withdrawn';if(op==='catalog.archive')r.state='archived';if(op==='catalog.restore')r.state='draft';
           r.etag=String(Number(r.etag)+1);r.updatedAt=env.now();env.store.commit(r);return projection(r);
         });
+        if(op==='catalog.validateDependencies'){var draft=env.store.item(id(q.catalogItemId));own(draft,actor);return dependencyPlan(draft.manifest,actor,q.installed||[]);}
         if(op==='catalog.get'||op==='catalog.getInstallPlan'){
           var r=env.store.item(id(q.catalogItemId));if(!readable(r,actor))fail(404,'NOT_AVAILABLE');
           return op==='catalog.get'?projection(r):dependencyPlan(r.manifest,actor,q.installed||[]);
         }
         if(op==='catalog.list'||op==='catalog.search'){
           var revision=env.store.indexRevision(),offset=0;
-          if(q.cursor){var cursor=env.decodeCursor(q.cursor);if(cursor.revision!==revision||cursor.query!==env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null}))fail(409,'SNAPSHOT_CHANGED');offset=cursor.offset;if(!Number.isSafeInteger(offset)||offset<0)fail(422,'INVALID_CURSOR');}
-          var items=env.store.items().filter(function(r){return readable(r,actor)&&(!q.type||r.type===q.type)&&(!q.search||(r.card.title+' '+r.card.shortAnnotation).toLowerCase().indexOf(q.search.toLowerCase())>=0)&&(!q.category||r.card.categoryIds.indexOf(q.category)>=0)&&(!q.tag||r.card.tags.indexOf(q.tag)>=0);}).sort(function(a,b){return a.id.localeCompare(b.id);});
+          if(q.cursor){var cursor=env.decodeCursor(q.cursor);if(cursor.revision!==revision||cursor.query!==env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null,state:q.state||null,subject:(actor||{}).sub||null}))fail(409,'SNAPSHOT_CHANGED');offset=cursor.offset;if(!Number.isSafeInteger(offset)||offset<0)fail(422,'INVALID_CURSOR');}
+          var items=env.store.items().filter(function(r){return readable(r,actor)&&(!q.type||r.type===q.type)&&(!q.state||r.state===q.state)&&(!q.search||(r.card.title+' '+r.card.shortAnnotation).toLowerCase().indexOf(q.search.toLowerCase())>=0)&&(!q.category||r.card.categoryIds.indexOf(q.category)>=0)&&(!q.tag||r.card.tags.indexOf(q.tag)>=0);}).sort(function(a,b){return a.id.localeCompare(b.id);});
           var limit=q.limit===undefined?25:q.limit;if(!Number.isSafeInteger(limit)||limit<1||limit>50)fail(422,'INVALID_LIMIT');
-          var end=offset+limit;return {items:items.slice(offset,end).map(projection),revision:revision,nextPage:end<items.length?env.encodeCursor({revision:revision,offset:end,query:env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null})}):null};
+          var end=offset+limit;return {items:items.slice(offset,end).map(projection),revision:revision,nextPage:end<items.length?env.encodeCursor({revision:revision,offset:end,query:env.digest({type:q.type||null,search:q.search||'',category:q.category||null,tag:q.tag||null,state:q.state||null,subject:(actor||{}).sub||null})}):null};
         }
         fail(404,'UNKNOWN_OPERATION');
       }

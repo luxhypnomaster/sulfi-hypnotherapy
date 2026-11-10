@@ -7,3 +7,8 @@ test('crash before atomic head publication leaves both item AND receipt invisibl
  s=c.AlchemistAtomicStore.create(io);assert.equal(s.item('a').title,'old');assert.equal(s.receipt('owner:2'),null);
  crash=false;s.begin();s.commit({id:'a',title:'new'});s.saveReceipt('owner:2',{result:'new'});s.commitTransaction();s=c.AlchemistAtomicStore.create(io);assert.equal(s.item('a').title,'new');assert.equal(s.receipt('owner:2').result,'new');assert.equal(s.items().length,1);
 });
+test('media/checkpoint writes do not invalidate catalog pagination revision',()=>{
+ let head=null;const files=new Map(),io={head:()=>head,read:id=>structuredClone(files.get(id)),digest:s=>createHash('sha256').update(s).digest('hex'),writeVerified:o=>{const id=String(files.size+1);files.set(id,structuredClone(o));return id;},setHead:id=>head=id};
+ const s=c.AlchemistAtomicStore.create(io);s.begin();s.commit({id:'card'});s.commitTransaction();const revision=s.indexRevision();
+ s.begin();s.put('upload:session',{offset:262144});s.commitTransaction();assert.equal(s.indexRevision(),revision);
+});

@@ -11,6 +11,7 @@ function doPost(e){
   request=JSON.parse(e.postData.contents);
   if(request.version!==1||typeof request.operation!=='string'||!request.parameters||typeof request.parameters!=='object')AlchemistCatalog.fail(422,'INVALID_ENVELOPE');
   var actor=request.credential?AlchemistJwt.verify(request.credential):null;
+  if(request.operation==='storage.bootstrap')return alchemistOutput({ok:true,status:200,result:AlchemistGasFolders.bootstrap(actor)});
   var properties=PropertiesService.getScriptProperties();
   var folder=properties.getProperty('ALCHEMIST_REGISTRY_FOLDER_ID'),owner=properties.getProperty('ALCHEMIST_OWNER_EMAIL');
   if(!folder||!owner)AlchemistCatalog.fail(503,'STORAGE_NOT_BOOTSTRAPPED');
@@ -19,7 +20,7 @@ function doPost(e){
    lock:function(fn){var l=LockService.getScriptLock();if(!l.tryLock(10000))AlchemistCatalog.fail(503,'BUSY');try{return fn();}finally{l.releaseLock();}},
    encodeCursor:function(v){return Utilities.base64EncodeWebSafe(JSON.stringify(v));},decodeCursor:function(v){return JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(v)).getDataAsString('UTF-8'));},
    canReadAsset:function(asset,a){return asset.owner===(a||{}).sub||asset.public===true;},
-   validatePublication:function(r){r.manifest.dependencyRefs.forEach(function(ref){var asset=store.asset(ref.logicalId,ref.revisionId);if(r.card.visibility==='public'&&!asset.public)AlchemistCatalog.fail(403,'PRIVATE_DEPENDENCY');});}
+   validatePublication:function(r,a,closure){closure.forEach(function(ref){var asset=store.asset(ref.logicalId,ref.revisionId);if(asset.owner!==a.sub&&!asset.public)AlchemistCatalog.fail(403,'PRIVATE_DEPENDENCY');});}
   });
   return alchemistOutput({ok:true,status:200,result:core.execute(request.operation,actor,request.parameters)});
  }catch(error){return alchemistOutput({ok:false,status:error.status||503,error:{code:error.code||'SERVER_UNAVAILABLE'}});}
