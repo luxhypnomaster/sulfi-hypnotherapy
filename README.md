@@ -4,7 +4,7 @@
 
 Реализованы серверные GAS/Drive адаптеры и Flutter-интеграция каталога/дневника/медиа. Существующий единственный Script «Сервер Проекта Алхимик» реально выполняется: anonymous JSON health, version4, приватное дерево41папки/replay и live negative checks подтверждены deploy42872816006/readback42876284145. Старый дневник не изменён. C0 не повторялся.
 
-Живой тест Flutter-сервисов выявил20sec timeout: добавлен отдельный bounded5min Alchemist transport, regression3PASS/analyzer clean; повторный E2E42878030592 выполняется. Android Web OAuth client ID и две Android registrations пока не настроены; [законная настройка с телефона](reports/task16/ANDROID_OAUTH_SETUP_RU.md). Физический Android NOT_RUN.
+Живой тест Flutter-сервисов выявил20sec timeout: добавлен отдельный bounded5min Alchemist transport, regression3PASS/analyzer clean; реальный E2E42878030592 SUCCESS (6540746B uploaded/downloaded, SHA/resume/withdraw). Android Web OAuth client ID и две Android registrations пока не настроены; [законная настройка с телефона](reports/task16/ANDROID_OAUTH_SETUP_RU.md). Физический Android NOT_RUN.
 
 [Отчёты/147критериев](reports/task16/RESULT.md) · [Последние APK0.4.14+22](reports/task16/APK_INFO.md): CI42878716769 SUCCESS, обе подписаны стабильным ключом, пока без облачного endpoint. Пользовательские файлы не удалялись; APK не загружаются на Google Drive.
 

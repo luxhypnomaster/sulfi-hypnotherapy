@@ -1,6 +1,6 @@
 {
   "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
-  "verifiedReports": 30,
+  "verifiedReports": 31,
   "files": [
     {
       "name": "task16-author-module-composition.png",
@@ -151,6 +151,11 @@
       "name": "DRIVE_ZIP_READBACK.json",
       "id": "1KcdDyOmPtsx5Zpzjb16YjNCYkOK6Y5Mh",
       "url": "https://drive.google.com/file/d/1KcdDyOmPtsx5Zpzjb16YjNCYkOK6Y5Mh/view?usp=drivesdk"
+    },
+    {
+      "name": "DRIVE_DIARY_MEDIA_READBACK.json",
+      "id": "1WcpBoXhGCn4Jtey9Qvqq1413whcGJzQ6",
+      "url": "https://drive.google.com/file/d/1WcpBoXhGCn4Jtey9Qvqq1413whcGJzQ6/view?usp=drivesdk"
     }
   ],
   "purpose": "Stable file IDs/URLs; updates preserve IDs. New runtime/private bootstrap proof replaces earlier consent blocker. APKs never included."

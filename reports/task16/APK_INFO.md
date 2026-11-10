@@ -11,6 +11,6 @@
 
 В22 добавлен изолированный HTTP-транспорт Алхимика с bounded5min Drive-response timeout, лимитом ответа и безопасными redirect. Legacy diary HTTP, package/key/SQLite/файлы/RunScreen не менялись.
 
-**Сборки пока локальные:** CI явно вывел LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED. Android Web client ID и две Android registrations ещё не готовы; не подставляем clasp identity. Это НЕ две cloud-connected APK. Существующий сервер/version4/runtime/private bootstrap уже проверены отдельно; live service E2E42878030592 выполняется. Настройка с телефона — ANDROID_OAUTH_SETUP_RU.md.
+**Сборки пока локальные:** CI явно вывел LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED. Android Web client ID и две Android registrations ещё не готовы; не подставляем clasp identity. Это НЕ две cloud-connected APK. Существующий сервер/version4/runtime/private bootstrap уже проверены отдельно; live service E2E42878030592 SUCCESS,51:42; реальные6540746B source/client matched. Настройка с телефона — ANDROID_OAUTH_SETUP_RU.md.
 
 Историческая пара21/source953d5bc/CI42819404870 была собрана ранее, актуальная пара —22. Физические Google Sign-In, media playback/background, lock/reconnect/low-space и сохранность при обновлении остаются NOT_RUN.

@@ -1,3 +1,20 @@
+# Current checkpoint — REAL SERVICE E2E SUCCESS; native OAuth still uncreated (2026-11-10)
+
+Continue Task16, feature feat/task16-alchemist-full-server. C0/PREFLIGHT unchanged. Existing sole Script1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc/version4/source766f178/deployment unchanged. Private41folders/bootstrap/replay/anonymous health and negatives PASS42872816006/readback42876284145. Old diary untouched, noTask17.
+
+ACTUAL live workflow42878030592 SUCCESS,51:42, source6f1c8b9 (same lib/test as signedAPK22/e4; version metadata only changed). Recovery42887239597 SUCCESS, artifact13797585085; LIVE_SERVICE_E2E.json has10phases,6540746bytes uploaded and downloaded, matchingWAV/ZIP/MP4 SHA plus PNG/AAC. Track install, module3tracks+2pauses only10020missingbytes, lost-reply receipt recovery, metadata-only0upload, template+ZIP, diary image/audio/video/exact ContentLink, new-downloader resume, private404/anonymous403, withdrawal404/offline copy retained ALL PASS. No physical Android claim. All synthetic public entries unpublished/archived, private blobs retained. Independent raw Drive checks all7blobs soleowner/sharedfalse, SHA/CRC/codecs valid.
+
+CI42878716769 SUCCESS: both signedAPK22/sourcee4ed74b5fc4f262343df9af688f6fdef4e601762,419Flutter/33newNode/24oldNode/13schemas/analyzer/formatter/fixedCLIENT/package/signing. Authorartifact13794725587; client13792599633; hashes APK_CI_EVIDENCE.json. Both LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED. APKs GitHub only.
+
+OWNER CONFIRMED OAuth Web client NOT CREATED. Official Web+twoAndroid clients (same owned Cloud project/package/SHA1) still absent. Guide+public signing proof in reportfolder. No desktop/browser capability; do not use undocumented Google API/clasp client credentials in APK, do not require PC/re-login/manual Apps Script copy. After legitimate publicWebID+Android registrations: publicvars/audience allowlist sameServer, checked deploy/bootstrap and bothconnectedAPKs with increasedversionCode, then ownerphysicalQA.
+
+Current147matrix97PASS/46PARTIAL/3BLOCKED/1NOT_RUN. FulltwoAPK E2E NOT_VERIFIED. Performance concrete: mixed193logicalAPI/386HTTPlegs/6.54MBeachway51:42; publishmax67.910s, writechunk31.792s. Timeout fixed, metadataRPC acceleration NOTdone; actuallargeGB/nativebackground NOT_RUN. G3 changedsame-IDaudio remains fail-closed. No new functional API defect in completed live scenario.
+
+NEXT: checkpoint commit; narrow main metadata-only approval fullServiceE2E=true (no redeploy); upload all final reports/evidence/handoff+readback to existing Task16folder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z, updatePR17. Final APK22 links and remainingOAuth/device/perf limitations in Russian. Do not rerun completed service E2E/C0 merely for docs. Temporary report generators/dev/shm/task16-finalize-live-reports.py and close-report-state.py should NOT be rerun blindly after edits; handoff script/dev/shm/task16-refresh-handoff.py addlatest proofs before finalzip.
+
+---
+# Historical checkpoints
+
 # Current checkpoint — real WAV/AAC/ZIP Drive receipts; owner confirms OAuth client absent (2026-11-10)
 
 Do not redo C0. Continue Task16, same featurebranch and sole Script/version4/deployment/private41folder root. Live Flutter-service run42878030592 is still RUNNING; original timeout42877004822 corrected in Alchemist-only transport. No final E2E claim. Both signed APK22/sourcee4ed74b/run42878716769 SUCCESS,419Flutter/33newNode/24oldNode/schemas/analyzer PASS; code since then docs-only. Both APKs still local/unconfigured; native Google login not proven.

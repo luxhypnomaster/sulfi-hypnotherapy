@@ -54,10 +54,13 @@
   "forgedCredentialDenied": true,
   "fullE2E": false,
   "serviceE2ERun": 42878030592,
-  "serviceE2E": "IN_PROGRESS",
+  "serviceE2E": "PASS_REAL_GOOGLE_DRIVE_FLUTTER_SERVICES",
   "physicalAndroid": "NOT_RUN",
   "serviceE2EFirstRun": 42877004822,
   "serviceE2EFirstResult": "FAILED20SEC_TIMEOUT",
   "independentDriveWavShaVerified": true,
-  "driveWavReadbackFile": "DRIVE_WAV_READBACK.json"
+  "driveWavReadbackFile": "DRIVE_WAV_READBACK.json",
+  "serviceE2EVerified": true,
+  "serviceEvidence": "LIVE_SERVICE_E2E.json",
+  "nativeAndroidOAuth": "NOT_CONFIGURED_OWNER_CONFIRMED"
 }

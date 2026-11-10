@@ -1,28 +1,25 @@
-# Задание 16 — фактический результат
+# Задание16 — фактический итог текущего этапа
 
-Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Текущая контрольная точка: de27d86.
+Дата:10.11.2026 UTC. Ветка feat/task16-alchemist-full-server. APK/sourcee4ed74b, service-test source6f1c8b9 (тот же lib/test код; версия21→22), GAS/version4/source766f178. Старый «Сульфи — дневник» не менялся. C0/PREFLIGHT сохранён, не повторялся.
 
-Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
+[Real service E2E42878030592 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592): авторские Flutter-сервисы → существующий GAS → private Drive → отдельный клиентский SQLite/installer.6540746B загружено и6540746B скачано, WAV/AAC/PNG/MP4/ZIP и SHA проверены. Recovery42887239597, artifact13797585085; протокол LIVE_SERVICE_E2E.json и LIVE_TIMELINE.json. Это НЕ испытание двух установленных Android APK.
 
-Последние APK22: sourcee4ed74b, CI42878716769 SUCCESS,419Flutter PASS,33new/24oldNode PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
+[Deploy42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006)/readback42876284145: anonymous JSON health, exact41 private folders/replay/live negatives PASS. [Обе APK22/CI42878716769 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769):419Flutter/33newNode/24oldNode/13schemas/formatter/analyzer/fixedCLIENT/package/signing PASS. Пока LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED: владелец подтвердил, что Web OAuth client ещё не создан. Нужны официальные Web+две Android регистрации, см. ANDROID_OAUTH_SETUP_RU.md; clasp повторно авторизовывать не нужно. Физический Android NOT_RUN.
 
-
-| Факт | Результат |
+| Контрольная точка | Факт |
 |---|---|
-| C0 | COMPLETE, исходный PREFLIGHT сохранён; не повторялся |
-| FULL_CODE_IMPLEMENTED | YES — код серверных и Flutter-потоков реализован; Серверные и Flutter-потоки реализованы; это не означает147PASS. Конфликтные G3 замены аудио закрыты, миграция не заявлена законченной |
-| CLASP_LOGIN_COMPLETED | YES — два реальных main-run, scope и owner verification |
-| GITHUB_SECRET_MISSING | NO — repository CLASPRC_JSON; значение не извлекалось/не выводилось |
-| SERVER_LIVE | YES — anonymous JSON health, version4, actual bootstrap/replay |
-| DRIVE_TREE_LIVE | PASS — exact41 owner-only folders, replay/readback |
-| FULL_E2E | NO / NOT_VERIFIED — нет доказанной цепочки двух APK через живой Drive |
-| APK_BUILT | YES — обе0.4.14+22, CI42878716769 SUCCESS, общий sourcee4ed74b |
-| ANDROID_NOT_RUN | YES — физического устройства нет |
+| C0 | COMPLETE; первоначальный PREFLIGHT неизменён |
+| C1 | Полный серверный код/Flutter-потоки реализованы; G3 конфликтная замена аудио остаётся fail-closed по разрешённой ТЗ политике |
+| C2/runtime | PASS: existing sole Script/version4, публичный JSON, private41-folder bootstrap/replay/security |
+| C3 | Код и обе подписанные APK22 готовы; native OAuth/endpoint ещё не настроены |
+| C4/service | PASS: реальные Flutter-сервисы/Google Drive,10checkpoint phases, hashes/resume/metadata-only/missing-only install/private denial/withdraw/offline retention |
+| FULL_E2E two APK | NOT_VERIFIED: APK пока не connected; Android SDK/телефон NOT_RUN |
+| C5 | Фактические отчёты/147строк/комплект SERVER_HANDOFF/ссылки APK в существующей папке №16 |
 
-Реализованы авторский каталог карточек трека/модуля/шаблона/сессии/сборки/ZIP, аннотации и обложки, точные manifests, реальная очередь, upload/commit/readback, клиентский каталог и выборочная установка через прежний LocalCatalog/CapsuleService. Дневник: текст/изображения/звук/видео/ContentLink, офлайн-очередь, quiet edit/reannounce/close/expiry, изолированный личный cache и read-state. Сохранены старые локальные файлы, история, SQLite, package IDs, ключ подписи и принятый плеер.
+Исправления после consent: настоящий Advanced Drive adapter(create resource/null/options, без undefined pageToken, empty ACL fail-closed), безопасный bootstrap/replay и диагностика стадий; отдельный Alchemist HTTP transport с bounded5min response timeout после настоящего сбоя20sec media.beginUpload. Legacy DiaryApi не менялся.
 
-Сервер: V8 doGet/doPost, проверка Google JWT/ролей, private Drive snapshots/atomic head, namespace shards, курсоры/ETag/idempotency, grants/revoke/audit/sync, защищённый256KiB broker, resumableDrivePUT/RangeGET, SHA/MIME, immutable revisions и bootstrap41папки. Закрытие публикации прекращает новые загрузки, не удаляя используемые байты.
+Live сценарий: пауза upload после262144B и resume без лишних ACKbytes; публикация/установка annotated WAV; модуль3точных трека+2паузы, скачаны только2отсутствующих AAC (10020B); восстановление receipt после потерянного ответа уже выполненного publish; annotation-only без повторной передачи; шаблон и реальный ZIP; дневник с PNG/AAC/MP4 и exact ContentLink; возобновление video download новым downloader; private entry404/anonymous mutation403; unpublish/archive прекращают новые downloads, установленная копия сохраняется.
 
-Повторную авторизацию clasp, компьютер и ручной перенос кода не запрашивал. Android Google web OAuth client ID не настроен и не подменяется клиентом clasp. Подробности — CLOUD_ACCESS.md, TESTS.md (147строк), APK_INFO.md и ISSUES_AND_NEXT.md. APK на Google Drive не загружались.
+Материальное ограничение: полный смешанный live сценарий занял51:42. Максимальный HTTP-leg publish67910ms, uploadChunk31792ms, commit26041ms; старые20секунд действительно недостаточны. Это не low-latency сервер и не проверка многочасового фильма; размеры около2.1–2.2MB, видео1secH264 с допустимым2MiB free atom. См. PERFORMANCE_AND_LIMITS.md. Не обещаем скорость/квоты вне измеренного.
 
-Задание16 в целом НЕ закрыто. C2 runtime/private bootstrap завершён. C4 live service E2E выполняется; native Android OAuth и физическая проверка обеих APK ещё не завершены. Не объявляем147PASS.
+Task16 целиком НЕ закрыто: владелец ещё не создал Web OAuth client/две Android registrations; нет настройки обеих APK и физического QA. Продолжать №16, не создавать №17. Повторного server create/bootstrap-from-scratch/C0 не требуется. Личные файлы/история/плеер не удалялись; APK только GitHub, не Drive.

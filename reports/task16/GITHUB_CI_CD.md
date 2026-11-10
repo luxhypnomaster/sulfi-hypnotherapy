@@ -1,10 +1,10 @@
 # GitHub CI/CD
 
-Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Текущая контрольная точка: de27d86.
+Дата:10.11.2026 UTC. Ветка feat/task16-alchemist-full-server. APK/sourcee4ed74b, service-test source6f1c8b9 (тот же lib/test код; версия21→22), GAS/version4/source766f178. Старый «Сульфи — дневник» не менялся. C0/PREFLIGHT сохранён, не повторялся.
 
-Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
+[Real service E2E42878030592 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592): авторские Flutter-сервисы → существующий GAS → private Drive → отдельный клиентский SQLite/installer.6540746B загружено и6540746B скачано, WAV/AAC/PNG/MP4/ZIP и SHA проверены. Recovery42887239597, artifact13797585085; протокол LIVE_SERVICE_E2E.json и LIVE_TIMELINE.json. Это НЕ испытание двух установленных Android APK.
 
-Последние APK22: sourcee4ed74b, CI42878716769 SUCCESS,419Flutter PASS,33new/24oldNode PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
+[Deploy42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006)/readback42876284145: anonymous JSON health, exact41 private folders/replay/live negatives PASS. [Обе APK22/CI42878716769 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769):419Flutter/33newNode/24oldNode/13schemas/formatter/analyzer/fixedCLIENT/package/signing PASS. Пока LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED: владелец подтвердил, что Web OAuth client ещё не создан. Нужны официальные Web+две Android регистрации, см. ANDROID_OAUTH_SETUP_RU.md; clasp повторно авторизовывать не нужно. Физический Android NOT_RUN.
 
 
 - AUTH main run42792367833: owner и read-only Script list подтверждены.
@@ -27,6 +27,14 @@ CI42819404870 SUCCESS:418Flutter,29Node на этом APK-source, old backend24,
 
 PR28 — реальная совместимость Advanced Drive, строгая проверка empty ACL. Deploy42872816006 SUCCESS/version4/source766f178, owner bootstrap41/replay/live negatives. Readback42876284145 подтвердил DEPLOYED_STORAGE_VERIFIED.
 
-PR29/30 — main-reviewed immutable app snapshot для manual live service validation, SDK tag+exact hash/stable, analyzer/compile/dependency checks до identity. PR31 обновил snapshot на6f1c8b9 после реального20sec timeout. Новый Alchemist transport5min bounded response, старый diary без изменений. E2E42877004822 FAILED timeout; повтор42878030592 выполняется. PR32 позволяет безопасно читать только whitelisted evidence полей из exact main workflow artifacts, без Google secret.
+PR29/30 — main-reviewed immutable app snapshot для manual live service validation, SDK tag+exact hash/stable, analyzer/compile/dependency checks до identity. PR31 обновил snapshot на6f1c8b9 после реального20sec timeout. Новый Alchemist transport5min bounded response, старый diary без изменений. E2E42877004822 FAILED timeout; повтор42878030592 SUCCESS. PR32 позволяет безопасно читать только whitelisted evidence полей из exact main workflow artifacts, без Google secret.
 
 Read-only public certificate run42875871201 SUCCESS; package/SHA-1 взяты из двух реально собранных APK21 diagnostics, не из keystore. Google Web client ID в repository vars отсутствует. Автоматизированный CI не подменяет официальный Console client registration.
+
+## Завершение текущего сервисного прогона
+
+Main-only PR30 исправил SDK tag/stable identity. PR31 закрепил reviewedsource6f1c8b9 с изолированным Alchemist timeout. PR32 добавил read-only recovery только whitelisted evidence. PR33 обновил метаданные runtime/private-bootstrap, без публикации. Все соответствующие checks PASS; main Flutter app source не заменялся.
+
+Manual-main live42878030592 SUCCESS,51:42; recovery42887239597 PASS, artifact13797585085. Истинный token только RAM/0600temporary file, refresh grant не попадал child/fixture. Cleanup performed.193logical API/386HTTPlegs incl redirects; realbytes6540746eachway. Runtime/version4/source766f178; identical lib/test business code6f vs APK22/e4.
+
+Manual app CI42878716769 SUCCESS:419Flutter/33newNode/24oldNode/13schemas/fixedCLIENT/analyzer/formatter/package+signing, author13794725587/client13792599633. Публичные SHA — APK_CI_EVIDENCE.json. Оба LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED, owner confirmed missing Web OAuth client. Physical Android NOT_RUN.

@@ -6,9 +6,9 @@
 - [x] Flutter автор/клиент: публикации, выборочная установка, видео, очереди, private-cache/read-state; целевые7PASS.
 - [x] Flutter418/analyzer,30Node/24old backend; обе signedAPK0.4.14+22/sourcee4ed74b/CI42878716769 SUCCESS (поздние server/tool changes отдельно).
 - [x] Новый private Script, полный source SHA readback, immutableversion4 и real deployment/readback metadata.
-- [x] Текущая матрица147критериев и отчёты;64PASS/79PARTIAL/3BLOCKED/1NOT_RUN.
+- [x] Текущая матрица147критериев и отчёты;97PASS/46PARTIAL/3BLOCKED/1NOT_RUN.
 - [x] Настоящий anonymous runtime JSON health, private bootstrap41/replay и live negative checks; deploy42872816006 SUCCESS.
-- [ ] Реальные полные Flutter-service E2E: первый run выявил20sec timeout, исправление regression3PASS; повтор42878030592 выполняется.
+- [x] Real Flutter-service E2E42878030592 SUCCESS,6540746B в каждую сторону,10checkpoints; source/client SHA/resume/missing-only/receipt/metadata-only/private/withdraw/offline-copy PASS.
 - [ ] Настроенный Android Google web OAuth client ID; физическая Android-приёмка остаётся NOT_RUN.
 
 # Задание 14 · 09.11.2026 · 0.4.12+17

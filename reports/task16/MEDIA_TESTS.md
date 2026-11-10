@@ -1,18 +1,22 @@
-# Медиа и перенос
+# Медиа и пакеты — реальные доказательства
 
-Дата: 10.11.2026 UTC. Ветка: feat/task16-alchemist-full-server. Текущая контрольная точка: de27d86.
+Дата:10.11.2026 UTC. Ветка feat/task16-alchemist-full-server. APK/sourcee4ed74b, service-test source6f1c8b9 (тот же lib/test код; версия21→22), GAS/version4/source766f178. Старый «Сульфи — дневник» не менялся. C0/PREFLIGHT сохранён, не повторялся.
 
-Runtime consent подтверждён фактическим JSON, а не только ответом владельца. [Deploy 42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006) SUCCESS: existing Script/version4/source766f178, private bootstrap41, replay и отрицательные проверки. [Readback42876284145](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42876284145) подтверждает DEPLOYED_STORAGE_VERIFIED. Независимый anonymous HTTP200 application/json health повторно проверен; raw health.liveVerified=false — константа, не доказательство сквозной готовности. Старый «Сульфи — дневник» не изменялся.
+[Real service E2E42878030592 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592): авторские Flutter-сервисы → существующий GAS → private Drive → отдельный клиентский SQLite/installer.6540746B загружено и6540746B скачано, WAV/AAC/PNG/MP4/ZIP и SHA проверены. Recovery42887239597, artifact13797585085; протокол LIVE_SERVICE_E2E.json и LIVE_TIMELINE.json. Это НЕ испытание двух установленных Android APK.
 
-Последние APK22: sourcee4ed74b, CI42878716769 SUCCESS,419Flutter PASS,33new/24oldNode PASS. Они пока без endpoint; подключёнными APK их не называем. Текущий Node33 PASS. [Первый live E2E42877004822](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42877004822) FAILED: media.beginUpload превысил20sec timeout. Изолированный новый transport исправлен,3regressionPASS. [Повтор42878030592](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592) выполняется, результат не предполагается. Android OAuth Web client ID отсутствует; законная настройка описана в ANDROID_OAUTH_SETUP_RU.md. Физический Android NOT_RUN.
+[Deploy42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006)/readback42876284145: anonymous JSON health, exact41 private folders/replay/live negatives PASS. [Обе APK22/CI42878716769 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769):419Flutter/33newNode/24oldNode/13schemas/formatter/analyzer/fixedCLIENT/package/signing PASS. Пока LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED: владелец подтвердил, что Web OAuth client ещё не создан. Нужны официальные Web+две Android регистрации, см. ANDROID_OAUTH_SETUP_RU.md; clasp повторно авторизовывать не нужно. Физический Android NOT_RUN.
 
+| Образец | Размер bytes | Проверка |
+|---|---:|---|
+| WAV |2205044| source/client/direct-Drive SHA equal; PCM16LE22050Hz/mono/50sec |
+| AAC variants |5010×2| exact SHA,12secAAC each; module missing-only install |
+| ZIP |2220602| source/client/direct-Drive SHA equal; CRC/safe paths; embedded WAV exact; installer PASS |
+| Diary PNG |68| source/client equal; independently decoded2×2RGBA |
+| Diary AAC |5001| source/client equal, exact original fixture |
+| Diary MP4 |2100011| source/client/direct-Drive SHA equal; H26464×48/1sec + valid2MiB free atom, Linux decodePASS |
 
-Контролируемые серверные тесты: SHA256 соответствует native crypto на padding boundaries, multiMB и serialized checkpoint; реальный GAS adapter исполняется с контролируемыми Drive HTTP responses (resumable PUT/Range, preallocated-ID final reply loss). Corrupt hash/short read/wrong actor/unaligned chunks/MIME spoof/incomplete commit/expired or revoked grant отвергаются. Ни owner OAuth, ни session URL не возвращаются.
+WAV SHA97cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9; ZIP5f1de5aa7861be368db52e6c550b5c9cf2d0aeadf1da7afc5cb4dc729f0bdec7; MP4ff6ba84c2b76cb94d31d9addc480d019af8b6a97b6aaa273ea686d6393a8e0f1. Подробные direct readbacks — DRIVE_WAV/AAC/ZIP/DIARY_MEDIA_READBACK.json. Все7actual blobs проверены sole-owner/sharedfalse, публичный Drive ACL не включался.
 
-Dart integration: H264/MP4 test fixture test/fixtures/task16_video.mp4 с расширением >2MB, SHA на обеих сторонах; resume download после262144bytes, без повторной полной передачи. Byte input synthetic; native playback probe контролируемый. PNG/AAC/audio/ZIP and exact manifests имеют local import/export/CRC/SHA/selection tests, selective package scanner rejects zip-slip/bomb/manifest mismatch. Это не многомегабайтное живое аудио с Android.
+LIVE service: upload stop262144/resume exact; download video stop262144/new downloader resume; metadata edit0upload; broker reader не имеет Drive OAuth credentials. Реальный token/Drive session URL/fileId не передаётся читателю. Последующий unpublish+archive даёт404 на новые bytes; offline module remains installed. Удалений source blobs/личных файлов не выполнялось.
 
-Live runtime/private bootstrap PASS. Actual media transfer+hash+resume проверяются в42878030592; до финального результата полный media E2E NOT_VERIFIED. Первый run42877004822 FAILED20sec media.beginUpload, ACKbytes0; новый transport исправлен, regression3PASS. В реальном каталоге появилась контрольная публикация; это не доказательство всех byte checks.
-
-Android: video_player2.14.1, native codec probe, реальный file player/pause/seek/lifecycle, конфликт с активной гипносессией блокируется. Реальные кодеки/звук/блокировка/длинные файлы/сеть на устройстве: NOT_RUN. Flutter использует streamed hash/copy, persistent .part и free-space preflight; по256KiB, без загрузки фильма целиком в память. Неподдерживаемый codec и лимит/квота показываются как ошибка, не Published.
-
-Независимый actual Drive readback: DRIVE_WAV_READBACK.json. Uploaded WAV2205044bytes получен через подключённый Drive connector и совпал с независимо рассчитанным source SHA-25697cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9. ffprobe: PCM16LE/22050Hz/mono/50sec. Private ACL3actual blobs (WAV+2AAC), sole owner/sharedfalse. Это не подмена теста клиентского установщика и не Android playback; полная цепочка ещё выполняется.
+Native playback/background/restart/low-space/кодеки на телефоне NOT_RUN. Capsule corruption/zip-slip/bomb/CRC/SHA/faults и process-like persistence проверены локальными тестами, не выдаются за физическую Android QA. Время/квоты/размеры — PERFORMANCE_AND_LIMITS.md.
