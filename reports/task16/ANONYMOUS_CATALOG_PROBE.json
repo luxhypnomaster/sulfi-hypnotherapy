@@ -31,6 +31,19 @@
       "publishedItemCount": 1,
       "contentIncludedInReport": false,
       "physicalAndroid": "NOT_RUN"
+    },
+    {
+      "observedUtc": "2026-11-10T19:08:50.613072+00:00",
+      "operation": "catalog.list",
+      "authenticated": false,
+      "http": 200,
+      "ok": true,
+      "logicalStatus": 200,
+      "code": null,
+      "elapsedSeconds": 7.625,
+      "publishedItemCount": 3,
+      "contentIncludedInReport": false,
+      "physicalAndroid": "NOT_RUN"
     }
   ]
 }

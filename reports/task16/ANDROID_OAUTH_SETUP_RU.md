@@ -26,3 +26,5 @@ Google требует создавать OAuth clients в официальной
 Google: https://developers.google.com/identity/protocols/oauth2/resources/best-practices (manual client creation); https://support.google.com/cloud/answer/15549257?hl=en (Android package и SHA-1).
 
 Повторная проверка среды после её возобновления: executor `ccarenv_b64_Y2NhcmVudl8yNDc1NTRmMzBkNjA4MTkxYTAxOWExM2Y2N2I3MDUzMg`, connected/running/current, capabilities=[]; browser/computer-use/desktop control tool не предоставлен. Доступ к owner Console session не подтверждён. Repository vars=[]; среди имён Secrets есть только clasp и существующая APK-подпись, Android Web client config нет. Значения секретов не извлекались.
+
+Подтверждение владельца10.11.2026: OAuth Web client ещё НЕ создан. Это подтверждённая отдельная конфигурационная незавершённость, не повторная авторизация clasp и не runtime consent. Продолжать независимые server/Drive/CI проверки.

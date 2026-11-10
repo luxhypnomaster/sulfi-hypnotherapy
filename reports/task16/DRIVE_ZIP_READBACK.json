@@ -1,0 +1,16 @@
+{
+  "observedUtc": "2026-11-10T19:14:21.858856+00:00",
+  "liveRun": 42878030592,
+  "source": "Independent raw Drive readback of generated selective package",
+  "byteLength": 2220602,
+  "sha256": "5f1de5aa7861be368db52e6c550b5c9cf2d0aeadf1da7afc5cb4dc729f0bdec7",
+  "zipCrcVerified": true,
+  "safePathsVerified": true,
+  "containsApk": false,
+  "manifestCount": 1,
+  "entryCount": 5,
+  "embeddedWavMatchesSourceSha256": "97cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9",
+  "physicalAndroid": "NOT_RUN",
+  "clientInstaller": "Separate actual Flutter service workflow still running",
+  "ownerOnlyAclReadback": true
+}

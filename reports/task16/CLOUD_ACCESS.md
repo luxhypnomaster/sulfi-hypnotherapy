@@ -20,3 +20,5 @@ Runtime consent подтверждён фактическим JSON, а не то
 Android Google Web client ID отсутствует в публичной конфигурации. Официальная процедура и доказанные package/SHA-1 — ANDROID_OAUTH_SETUP_RU.md/ANDROID_OAUTH_PUBLIC_CONFIG.json. Нужны Web client и два Android clients в принадлежащем владельцу Cloud project. Google не разрешает программное создание обычных OAuth clients; браузерной сессии владельца здесь нет. Не извлекать credentials коннектора и не передавать clasp refresh token в APK.
 
 For_Codex/отчёты остаются с ранее выбранным владельцем sharing; private state/SQLite/owner sub/токены/InitialConfig туда не помещаются. APK только GitHub. Старый Apps Script «Сульфи — дневник» не менялся.
+
+Подтверждение владельца10.11.2026: OAuth Web client ещё НЕ создан. Это подтверждённая отдельная конфигурационная незавершённость, не повторная авторизация clasp и не runtime consent. Продолжать независимые server/Drive/CI проверки.

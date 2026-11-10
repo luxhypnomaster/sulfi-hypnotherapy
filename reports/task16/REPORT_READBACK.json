@@ -1,0 +1,23 @@
+{
+  "observedUtc": "2026-11-10T19:12:31.562855+00:00",
+  "files": [
+    {
+      "name": "RESULT.md",
+      "bytes": 4889,
+      "sha256": "63ed5e3550742984b5c5f48776c14364da562db2b1dd387d82e78493915855ec",
+      "uploadedBytesReadbackEqual": true
+    },
+    {
+      "name": "TESTS.md",
+      "bytes": 41378,
+      "sha256": "909c3cf7a2d24294733a2891186af5bc86f0672494b03586da46640c35e8d4cb",
+      "uploadedBytesReadbackEqual": true
+    },
+    {
+      "name": "APK_INFO.md",
+      "bytes": 3043,
+      "sha256": "c70a9eff9ec08efacfe52faab5867a3e8fe832f25654d024a748f87743da4edd",
+      "uploadedBytesReadbackEqual": true
+    }
+  ]
+}

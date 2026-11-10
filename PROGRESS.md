@@ -1,3 +1,16 @@
+# Current checkpoint — real WAV/AAC/ZIP Drive receipts; owner confirms OAuth client absent (2026-11-10)
+
+Do not redo C0. Continue Task16, same featurebranch and sole Script/version4/deployment/private41folder root. Live Flutter-service run42878030592 is still RUNNING; original timeout42877004822 corrected in Alchemist-only transport. No final E2E claim. Both signed APK22/sourcee4ed74b/run42878716769 SUCCESS,419Flutter/33newNode/24oldNode/schemas/analyzer PASS; code since then docs-only. Both APKs still local/unconfigured; native Google login not proven.
+
+Owner answered async question: OAuth Web client has NOT been created. Confirmed external config gate, no need for clasp reauthorization/runtime re-consent. Official phone-only Console Web+two Android clients guide is prepared; exact pinned package/SHA1 evidence42875871201. Environment capabilities=[]; no browser/computer control or owner Console session. Never use installed clasp client in APK, do not extract connector OAuth.
+
+Actual private Drive now has WAV2205044B, twoAAC5010B each and ZIP2220602B. Independent raw downloads: WAV SHA97cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9 /50secPCM; AAC hashes in DRIVE_AAC_READBACK.json /12secAAC each; ZIP SHA5f1de5aa7861be368db52e6c550b5c9cf2d0aeadf1da7afc5cb4dc729f0bdec7, CRC+safe paths+embedded WAV exact. All4blobs sole owner/sharedfalse. Independent catalog.list200JSON grew0→1→3publishedcards. These independent receipts are NOT proof of physical Android or all remaining live assertions.
+
+Current matrix64PASS/79PARTIAL/3BLOCKED/1NOT_RUN. Final live result, images/video/ContentLink/private/withdraw assertions still pending workflow. Use manualmain alchemist-checkpoint-read.yml run_id=42878030592 AFTER completion; sanitized fixed-schema evidence only. No new server/Task17/old-diary writes. Reports existingfolder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z; APKs GitHub only. Handoff refresh temp script/dev/shm/task16-refresh-handoff.py; add latest sanitized receipts before final zip replacement. Original auditPREFLIGHT unchanged.
+
+---
+# Historical checkpoints
+
 # Current checkpoint — signed APK22 SUCCESS, actual Drive WAV SHA verified (2026-11-10)
 
 Continue Task16 feature branch; C0 must NOT repeat. Existing Script/version4/source766f178/deploy42872816006/recovery42876284145 remain runtime/private-bootstrap verified. Same Script/deployment/root41 folders, old diary untouched.
