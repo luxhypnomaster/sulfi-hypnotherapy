@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       run_id:
-        description: Trusted main Alchemist production deploy run
+        description: Trusted main Alchemist deploy or real-service validation run
         required: true
         default: '42820498828'
 permissions:
@@ -33,10 +33,11 @@ jobs:
           r=json.load(open(os.environ['RUNNER_TEMP']+'/prior-run.json'))
           assert r['head_branch']=='main' and r['event']=='workflow_dispatch'
           assert r['repository']['full_name']=='luxhypnomaster/sulfi-hypnotherapy'
-          assert r['path']=='.github/workflows/alchemist-server-deploy.yml'
+          assert r['path'] in ['.github/workflows/alchemist-server-deploy.yml','.github/workflows/alchemist-live-e2e.yml']
           assert re.fullmatch('[a-f0-9]{40}',r['head_sha'])
           a=json.load(open(os.environ['RUNNER_TEMP']+'/artifacts.json'))['artifacts']
-          matches=[x for x in a if x['name']=='alchemist-deployment-evidence-'+r['head_sha'] and not x['expired']]
+          name='alchemist-deployment-evidence-'+r['head_sha'] if r['path'].endswith('alchemist-server-deploy.yml') else 'alchemist-live-service-evidence-'+str(r['id'])
+          matches=[x for x in a if x['name']==name and not x['expired']]
           assert len(matches)==1 and isinstance(matches[0]['id'],int)
           print(matches[0]['id'])
           PY
@@ -46,6 +47,32 @@ jobs:
           import os,json,zipfile,re
           from urllib.parse import urlparse
           with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/checkpoint.zip') as z:
+            if 'FLUTTER_LIVE_E2E.json' in z.namelist():
+              f=z.getinfo('FLUTTER_LIVE_E2E.json');assert f.file_size<65536
+              v=json.loads(z.read(f));out={}
+              assert v['kind']=='REAL_GOOGLE_DRIVE_FLUTTER_SERVICES'
+              out['kind']=v['kind'];out['physicalAndroid']='NOT_RUN';out['androidSdkLogin']='NOT_RUN_CI_IDENTITY'
+              assert re.fullmatch(r'task16e2e_[0-9_]{1,60}',v['prefix']);out['prefix']=v['prefix']
+              assert isinstance(v['phases'],list) and len(v['phases'])<100
+              assert all(isinstance(x,str) and re.fullmatch(r'[A-Z0-9_]{1,120}',x) for x in v['phases']);out['phases']=v['phases']
+              for key in ['uploadedBytes','downloadedBytes']:
+                assert isinstance(v[key],int) and 0<=v[key]<10**12;out[key]=v[key]
+              for key in ['requests','maxResponseMs']:
+                assert isinstance(v[key],dict) and len(v[key])<100
+                assert all(re.fullmatch(r'[a-zA-Z.]{1,80}',k) and isinstance(n,int) and 0<=n<10**9 for k,n in v[key].items());out[key]=v[key]
+              if v['lastOperation'] is not None:assert re.fullmatch(r'[a-zA-Z.]{1,80}',v['lastOperation'])
+              out['lastOperation']=v['lastOperation'];out['artifacts']={}
+              for key,item in v['artifacts'].items():
+                assert key in ['wav','zip','video'] and isinstance(item,dict)
+                clean={}
+                for k,value in item.items():
+                  assert k in ['sha256','bytes','durationMs']
+                  assert (isinstance(value,str) and re.fullmatch(r'[a-f0-9]{64}',value)) if k=='sha256' else (isinstance(value,(int,float)) and 0<=value<10**12)
+                  clean[k]=value
+                out['artifacts'][key]=clean
+              print('RECOVERED_LIVE_SERVICE_EVIDENCE='+json.dumps(out,separators=(',',':')))
+              print('NO_CREDENTIAL_OR_CLOUD_WRITE')
+              raise SystemExit(0)
             f=z.getinfo('DEPLOYMENT.json')
             assert f.file_size<16384
             r=json.loads(z.read(f))
