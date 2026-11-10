@@ -10,7 +10,7 @@ var AlchemistStorage=(function(){
     '50_Каталог':['publications','index_shards','snapshots','tombstones'],
     '90_Техническое':['pending_uploads','quarantine','temp','gc_candidates']};
   function bootstrap(drive,registry,parent,owner){
-    function verified(id,p){var f=drive.get(id);if(!f||f.mimeType!=='application/vnd.google-apps.folder'||(p&&f.parent!==p)||f.owner!==owner||!f.permissions||f.permissions.some(function(x){return x.role!=='owner'||x.subject!==owner;}))throw new Error('UNSAFE_FOLDER_ACL');return f;}
+    function verified(id,p){var f=drive.get(id);if(!f||f.mimeType!=='application/vnd.google-apps.folder'||(p&&f.parent!==p)||f.owner!==owner||!f.permissions||f.permissions.length!==1||f.permissions.some(function(x){return x.role!=='owner'||x.subject!==owner;}))throw new Error('UNSAFE_FOLDER_ACL');return f;}
     verified(parent,null);
     function ensure(key,name,p){
       var stored=registry.get(key),f;
