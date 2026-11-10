@@ -1,3 +1,18 @@
+# Current checkpoint — C1.9 full server source gate (2026-11-10)
+
+C0 remains complete, not repeated. Continue feat/task16-alchemist-full-server. Verified clasp auth/scope runs42792367833 /42799396321 remain valid evidence; no repeat owner authorization requested. Repository secret only, not environment. Old diary project is forbidden.
+
+Source gate now true after Node27 PASS; Flutter CI418 PASS + both signed APK20 at fd74e76/run42815250637; namespace/card/cover/selective-install regression2 PASS and analyzer clean. Local full suite running; do not infer completion until final done event.
+
+C1.9 adds namespace2 immutable shards, catalog candidate indexes and direct per-asset publication grants (including covers); 10,000 chunk-receipt regression confirms bounded reads. Full manifest projection is recovered for feed/resolve/update. This first production store has no existing user cloud data; unsupported schema heads fail closed. No SQLite/schema/audio destruction.
+
+NEXT: narrowly scoped server+deploy-workflow PR to trusted main under explicit owner deployment instruction, tests before secret, actual clasp create/push/readback/deployment/private bootstrap. Main application source remains unchanged. SERVER_LIVE=NO; FULL_E2E=NO until actual Google proof. Android Google web OAuth client ID is absent; never copy clasp installed-client audience into APK. Physical Android NOT_RUN.
+
+Last verified APK20 links: author Actions42815250637/artifacts13765172105, client/artifacts13764677306. Both LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED; preserve package IDs/stable certificate. APKs never go to Google Drive. Final source APKs must be rebuilt after this checkpoint.
+
+---
+# Historical checkpoints (latest above takes precedence)
+
 # Current checkpoint — C1.8 / C3 hardened integration (2026-11-10)
 
 Continue feat/task16-alchemist-full-server. C0 is COMPLETE and has NOT been repeated. No Task17. All older AUTH_PENDING/missing-secret notes below are historical. CLASPRC_JSON repository OAuth is LIVE VERIFIED in trusted-main runs42792367833 and42799396321; scopes projects/deployments/webapp/drive.file present, full Drive scope absent, CI Google ID token verified. Main changed only through workflow-only PR18/19; no application/server source merged to main yet.

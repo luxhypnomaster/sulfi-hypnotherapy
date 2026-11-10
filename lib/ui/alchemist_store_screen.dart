@@ -345,7 +345,13 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                   : null,
             ),
           if (!loading && cards.isEmpty && error == null)
-            const ListTile(title: Text('Опубликованных материалов пока нет')),
+            ListTile(
+              title: Text(
+                cursor == null
+                    ? 'Опубликованных материалов пока нет'
+                    : 'На этой странице совпадений нет. Нажмите «Ещё».',
+              ),
+            ),
           if (cursor != null)
             TextButton(
               onPressed: loading ? null : () => load(more: true),

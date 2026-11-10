@@ -37,3 +37,21 @@ test('reader grants never authorize republication of foreign private bytes; sour
  core.execute('catalog.withdraw',bob,{requestId:'withdraw-source',catalogItemId:'bob-source',ifMatch:'3'});
  assert.equal(access.canRead(asset,null),false);assert.equal(access.canRead(asset,alice),false);assert.equal(access.canRead(asset,bob),true);
 });
+test('indexed ACL and catalog ignore thousands of transfer receipts; cover grants and complete manifests survive reopen',()=>{
+ let head=null,n=0,reads=0;const files=new Map();
+ const io={head:()=>head,read:k=>{reads++;return structuredClone(files.get(k));},writeVerified:v=>{const k=String(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:sha};
+ let store=ctx.AlchemistAtomicStore.create(io);
+ const image={id:'cover',logicalId:'image',revisionId:'v1',sha256:sha('png'),owner:'owner',verified:true,byteLength:3,mime:'image/png',dependencyRefs:[]};
+ store.begin();store.retainAsset('image','v1',image);store.put('cover:cover',image);for(let i=0;i<10000;i++)store.put('chunk:large:'+i,{offset:i});store.commitTransaction();
+ let access=ctx.AlchemistAccess.create(store,()=>0);
+ function catalog(){return ctx.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0).toISOString(),digest:x=>sha(JSON.stringify(x)),canReadAsset:access.canRead,validatePublication:access.validatePublication,encodeCursor:JSON.stringify,decodeCursor:JSON.parse});}
+ let core=catalog();core.execute('catalog.createDraft',owner,{requestId:'create',catalogItemId:'card',type:'diaryEntry',logicalContentId:'entry',immutableRevisionId:'v1',card:{title:'Full diary',shortAnnotation:'Approved',visibility:'public',coverAssetId:'cover'},manifest:{dependencyRefs:[],entry:{blocks:[{id:'text',type:'text',text:'COMPLETE BODY'}]}}});
+ core.execute('catalog.publish',owner,{requestId:'publish',catalogItemId:'card',ifMatch:'1'});
+ store=ctx.AlchemistAtomicStore.create(io);access=ctx.AlchemistAccess.create(store,()=>0);core=catalog();reads=0;
+ assert.equal(access.canRead(image,null),true);assert.ok(reads<=2,`range ACL read ${reads} files`);
+ const page=core.execute('catalog.list',null,{includeManifest:true,readerView:true});assert.equal(page.items[0].manifest.entry.blocks[0].text,'COMPLETE BODY');assert.ok(reads<=5,`page read ${reads} files`);
+ assert.equal(core.execute('catalog.resolveReference',null,{logicalId:'entry',revisionId:'v1'}).manifest.entry.blocks[0].text,'COMPLETE BODY');
+ assert.equal(core.execute('catalog.checkUpdates',null,{installed:[{catalogItemId:'card',immutableRevisionId:'old'}]}).updates[0].manifest.entry.blocks[0].text,'COMPLETE BODY');
+ core.execute('catalog.withdraw',owner,{requestId:'withdraw',catalogItemId:'card',ifMatch:'2'});assert.equal(access.canRead(image,null),false);
+ assert.equal(core.execute('catalog.list',null,{}).items.length,0);assert.equal(store.scan('chunk:').length,10000);
+});

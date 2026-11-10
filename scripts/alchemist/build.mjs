@@ -5,7 +5,9 @@ const inputs=readdirSync('server/alchemist/src').filter(f=>f.endsWith('.js')).ma
 inputs.push(['server/google_apps_script/vendor/jsrsasign.js','RsaVendor.js']);
 const manifest={timeZone:'Etc/UTC',runtimeVersion:'V8',webapp:{executeAs:'USER_DEPLOYING',access:'ANYONE_ANONYMOUS'},dependencies:{enabledAdvancedServices:[{userSymbol:'Drive',version:'v3',serviceId:'drive'}]},oauthScopes:['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/script.external_request']};
 const hashes={};
+const readiness=JSON.parse(readFileSync('server/alchemist/deployment-readiness.json','utf8'));
+
 for(const [path,name] of inputs){let text=readFileSync(path,'utf8');if(name==='RsaVendor.js')text=text.replaceAll('SulfiRsa','AlchemistRsa');writeFileSync(resolve(out,name),text);hashes[name]=createHash('sha256').update(text).digest('hex');}
 writeFileSync(resolve(out,'appsscript.json'),JSON.stringify(manifest,null,2)+'\n');
-writeFileSync(resolve(out,'SOURCE_HASHES.json'),JSON.stringify({fullSourceReady:false,files:hashes},null,2)+'\n');
-console.log('GAS source assembled; NOT deploy-ready, no cloud operations');
+writeFileSync(resolve(out,'SOURCE_HASHES.json'),JSON.stringify({fullSourceReady:readiness.fullSourceVerified===true,files:hashes},null,2)+'\n');
+console.log('GAS source assembled; source gate='+String(readiness.fullSourceVerified===true)+'; no cloud operations');

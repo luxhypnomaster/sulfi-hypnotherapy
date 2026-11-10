@@ -1,7 +1,9 @@
-# Task16 implementation checkpoint C1.8
+# Task16 source gate C1.9
 
-Production GAS source and real Drive/identity/transaction adapters exist in src; pinned-clasp deployment adapter implements guarded create-once, source/version readback, stable deployment, private bootstrap replay and negative probes. Twenty-six Node tests execute actual domain/adapter code under controlled Google SDK doubles, including RSA verification, ACL, cross-owner read/republication, MIME, failure injection and deploy replay. These are NOT live Google evidence.
+Production GAS source gate passed. Source implements private Drive storage, namespace-separated immutable metadata shards, atomically published head/receipts, bounded card pages, direct publication asset/cover grants, exact manifests, all catalog/diary/media/package/admin/sync routes, Google JWT verification and guarded pinned-clasp deployment.
 
-Flutter author/client integration, immutable canonical manifests, exact ContentLink/collection/package installation, video and private reader queues are implemented and tested locally. Full-source verification flag remains false pending final comprehensive gate. No production project/source/deployment/storage has been created by this task yet. Android web OAuth audience configuration is still absent; CI clasp OAuth is independently live verified and must never be copied into APK.
+Node27 PASS includes 10,000 transfer receipts, bounded metadata reads, cover grants, immutable full diary manifest recovery, cross-owner source revocation and source/version deployment replay. Flutter CI418 PASS at fd74e76; two signed 0.4.14+20 APKs built by run42815250637. Targeted namespace/store integration2 PASS and analyzer clean after the index change. These controlled tests are NOT live Google or physical Android evidence.
 
-Old server/google_apps_script and old live diary are untouched. G3 conflicting audio writes stay fail-closed; physical Android is NOT_RUN. See root PROGRESS.md for exact checkpoint/evidence and remaining C2-C5 work.
+First production metadata store schema2 rejects unsupported heads without modification. No prior Task16 live store exists. Existing app SQLite, local audio, RunScreen and old diary source remain untouched; G3 conflicting same-ID audio writes remain fail-closed.
+
+The source readiness gate is now true; SERVER_LIVE and FULL_E2E remain false until actual production readbacks. Android web OAuth client ID is absent, separate from independently verified repository clasp authorization. See root PROGRESS.md for C2 and later evidence.

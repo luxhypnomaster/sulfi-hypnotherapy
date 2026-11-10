@@ -38,7 +38,7 @@ try{
  const files=readdirSync(join(work,'source')).filter(n=>n.endsWith('.js')||n==='appsscript.json').map(name=>({name:name.replace(/\.js$|\.json$/,''),type:name.endsWith('.js')?'SERVER_JS':'JSON',source:readFileSync(join(work,'source',name),'utf8')}));
  const description='alchemist-production:'+sourceSha;
  async function google(method,url,data){try{return (await client.request({method,url,data})).data;}catch(e){const status=e.response?.status||503,raw=e.response?.data?.error?.errors?.[0]?.reason,reason=/^[A-Za-z_]{1,64}$/.test(raw||'')?raw.toUpperCase():'UNSPECIFIED';throw Error((url.includes('script.googleapis.com')?'SCRIPT':'DRIVE')+'_'+method+'_'+status+'_'+reason);}}
- async function clasp(args){try{const r=await run(cli,['-A',credential,'--json',...args],{cwd:work,env:{...process.env,DEBUG:''},timeout:180000,maxBuffer:2*1024*1024});return args[0]==='push'?null:r.stdout.trim()?JSON.parse(r.stdout):null;}catch(e){if(/^(GOOGLE_|CLASP_)/.test(e.message))throw e;throw Error('CLASP_COMMAND_FAILED');}}
+ async function clasp(args){try{const r=await run(cli,['-A',credential,'--json',...args],{cwd:work,env:{...process.env,DEBUG:''},timeout:180000,maxBuffer:2*1024*1024});return args[0]==='push'?null:r.stdout.trim()?JSON.parse(r.stdout):null;}catch(e){if(/^(GOOGLE_|CLASP_)/.test(e.message))throw e;throw Error('CLASP_'+args[0].replaceAll('-','_').toUpperCase()+'_FAILED');}}
  function bind(id){writeFileSync(join(work,'.claspignore'),'SOURCE_HASHES.json\n**/.*\n**/node_modules/**\n');if(!id||id===OLD_SCRIPT||!/^[\w-]+$/.test(id))throw Error('UNSAFE_TARGET_SCRIPT');writeFileSync(join(work,'.clasp.json'),JSON.stringify({scriptId:id,rootDir:join(work,'source')}));}
  async function pages(url,key){const all=[];let pageToken;do{const response=await google('GET',url+(url.includes('?')?'&':'?')+(pageToken?'pageToken='+encodeURIComponent(pageToken):''));all.push(...(response[key]||[]));pageToken=response.nextPageToken;}while(pageToken);return all;}
  const scriptApi=id=>'https://script.googleapis.com/v1/projects/'+encodeURIComponent(id);
@@ -49,8 +49,8 @@ try{
     const same=f.type==='JSON'?JSON.stringify(JSON.parse(actual.source))===JSON.stringify(JSON.parse(f.source)):sha(actual.source)===sha(f.source);
     if(!same)throw Error('SOURCE_READBACK_MISMATCH');}
    writeFileSync(join(evidence,'SOURCE_HASHES.json'),JSON.stringify({sourceSha,files:expected.map(f=>({name:f.name,sha256:sha(f.source)}))},null,2));}
- async function broker(endpoint,body){let response=await fetch(endpoint,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,redirect:'manual',signal:AbortSignal.timeout(60000)});
-   for(let i=0;response.status===302||response.status===303;i++){const u=new URL(response.headers.get('location'));if(i>=3||u.protocol!=='https:'||u.host!=='script.googleusercontent.com'||u.username||u.password)throw Error('CLOUD_RUNTIME_CONSENT_OR_ACCESS_REQUIRED');response=await fetch(u,{redirect:'manual',signal:AbortSignal.timeout(60000)});}
+ async function broker(endpoint,body){let response=await fetch(endpoint,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,redirect:'manual',signal:AbortSignal.timeout(300000)});
+   for(let i=0;response.status===302||response.status===303;i++){const u=new URL(response.headers.get('location'));if(i>=3||u.protocol!=='https:'||u.host!=='script.googleusercontent.com'||u.username||u.password)throw Error('CLOUD_RUNTIME_CONSENT_OR_ACCESS_REQUIRED');response=await fetch(u,{redirect:'manual',signal:AbortSignal.timeout(300000)});}
    if(response.status!==200||!response.headers.get('content-type')?.includes('application/json'))throw Error('CLOUD_RUNTIME_NOT_EXECUTABLE');return response.json();}
  const adapter={checkpoint,
   async findProjects(title){const q="mimeType='application/vnd.google-apps.script' and name='"+title+"' and trashed=false";
