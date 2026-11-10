@@ -1,6 +1,11 @@
 name: Alchemist recover deployment checkpoint (read only)
 on:
   workflow_dispatch:
+    inputs:
+      run_id:
+        description: Trusted main Alchemist production deploy run
+        required: true
+        default: '42820498828'
 permissions:
   actions: read
 concurrency:
@@ -12,40 +17,56 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Read known trusted-main create-once evidence without OAuth
+      - name: Read trusted-main deployment metadata without Google OAuth
         env:
           GH_TOKEN: ${{ github.token }}
+          RECOVERY_RUN: ${{ inputs.run_id }}
         shell: bash
         run: |
           set -euo pipefail
           umask 077
-          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42818493644 > "$RUNNER_TEMP/prior-run.json"
-          python3 - <<'PY'
-          import os,json
+          [[ "$RECOVERY_RUN" =~ ^[0-9]{1,20}$ ]]
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/$RECOVERY_RUN" > "$RUNNER_TEMP/prior-run.json"
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/$RECOVERY_RUN/artifacts" > "$RUNNER_TEMP/artifacts.json"
+          artifact_id=$(python3 - <<'PY'
+          import os,json,re
           r=json.load(open(os.environ['RUNNER_TEMP']+'/prior-run.json'))
           assert r['head_branch']=='main' and r['event']=='workflow_dispatch'
-          assert r['head_sha']=='5294fc5a97e1f87f5725af0a1d53c3664aa335d0'
+          assert r['repository']['full_name']=='luxhypnomaster/sulfi-hypnotherapy'
           assert r['path']=='.github/workflows/alchemist-server-deploy.yml'
+          assert re.fullmatch('[a-f0-9]{40}',r['head_sha'])
+          a=json.load(open(os.environ['RUNNER_TEMP']+'/artifacts.json'))['artifacts']
+          matches=[x for x in a if x['name']=='alchemist-deployment-evidence-'+r['head_sha'] and not x['expired']]
+          assert len(matches)==1 and isinstance(matches[0]['id'],int)
+          print(matches[0]['id'])
           PY
-          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/13764933709 > "$RUNNER_TEMP/artifact.json"
-          python3 - <<'PY'
-          import os,json
-          a=json.load(open(os.environ['RUNNER_TEMP']+'/artifact.json'))
-          assert a['workflow_run']['id']==42818493644 and not a['expired']
-          assert a['name']=='alchemist-deployment-evidence-5294fc5a97e1f87f5725af0a1d53c3664aa335d0'
-          PY
-          gh api repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/13764933709/zip > "$RUNNER_TEMP/checkpoint.zip"
+          )
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/$artifact_id/zip" > "$RUNNER_TEMP/checkpoint.zip"
           python3 - <<'PY'
           import os,json,zipfile,re
+          from urllib.parse import urlparse
           with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/checkpoint.zip') as z:
             f=z.getinfo('DEPLOYMENT.json')
             assert f.file_size<16384
             r=json.loads(z.read(f))
           assert re.fullmatch(r'[A-Za-z0-9_-]{20,200}',r['scriptId'])
-          assert r['stage']=='BLOCKED' and r['reason']=='DRIVE_PATCH_403_APPNOTAUTHORIZEDTOFILE'
           print('RECOVERED_CREATE_ONCE_SCRIPT_ID='+r['scriptId'])
+          for key in ['stage','reason','sourceSha']:
+            if key in r:
+              assert isinstance(r[key],str) and re.fullmatch(r'[A-Za-z0-9_: -]{1,160}',r[key])
+              print('RECOVERED_'+key.upper()+'='+r[key])
+          if 'version' in r:
+            assert isinstance(r['version'],int) and r['version']>0
+            print('RECOVERED_VERSION='+str(r['version']))
+          if 'deploymentId' in r:
+            assert re.fullmatch(r'[A-Za-z0-9_-]{20,200}',r['deploymentId'])
+            print('RECOVERED_DEPLOYMENT_ID='+r['deploymentId'])
+          if 'endpoint' in r:
+            u=urlparse(r['endpoint'])
+            assert u.scheme=='https' and u.netloc=='script.google.com' and re.fullmatch(r'/macros/s/[A-Za-z0-9_-]+/exec',u.path) and not u.query and not u.fragment
+            print('RECOVERED_EXEC_URL='+r['endpoint'])
           print('NO_CREDENTIAL_OR_CLOUD_WRITE')
           PY
       - name: Remove transient metadata
         if: always()
-        run: rm -f "$RUNNER_TEMP/prior-run.json" "$RUNNER_TEMP/artifact.json" "$RUNNER_TEMP/checkpoint.zip"
+        run: rm -f "$RUNNER_TEMP/prior-run.json" "$RUNNER_TEMP/artifacts.json" "$RUNNER_TEMP/checkpoint.zip"
