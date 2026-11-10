@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
 import 'package:sulfi_hypnotherapy/models/content_link.dart';
@@ -391,7 +390,11 @@ void main() {
           videoProbe: (_) async => (width: 64, height: 48, durationMs: 1000),
         );
         final png = File('${author.root.path}/pixel.png');
-        await png.writeAsBytes(img.encodePng(img.Image(width: 2, height: 2)));
+        await png.writeAsBytes(
+          base64Decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAC0lEQVR4nGNgQAcAABIAAXfx+gAAAAAASUVORK5CYII=',
+          ),
+        );
         final image = await media.importFile(DiaryBlockType.image, (
           path: png.path,
           name: 'pixel.png',
