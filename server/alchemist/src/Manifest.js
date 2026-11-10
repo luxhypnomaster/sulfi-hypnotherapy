@@ -6,6 +6,9 @@ var AlchemistManifest=(function(){
    if(!actor||!actor.roles.some(function(r){return r==='owner'||r==='author';}))AlchemistCatalog.fail(403,'AUTHOR_REQUIRED');
    var r=q.revision;
    if(!r||r.schema!==1||['track','module','template'].indexOf(r.type)<0||typeof r.logicalId!=='string'||! /^[\w-]{1,128}$/.test(r.logicalId)||!/^[a-f0-9]{64}$/.test(r.revision)||r.digest!==r.revision||!Array.isArray(r.dependencies))AlchemistCatalog.fail(422,'INVALID_MANIFEST');
+   function portable(value,depth){if(depth>32)AlchemistCatalog.fail(422,'MANIFEST_DEPTH');if(value&&typeof value==='object')Object.keys(value).forEach(function(k){if(['localPath','driveFileId','folderId','privateLocation','token','credential','grants','readers'].indexOf(k)>=0)AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_FIELD');if(k==='filePath'&&(typeof value[k]!=='string'||!/^capsule:\/\/[a-f0-9]{64}$/.test(value[k])))AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_LOCATOR');portable(value[k],depth+1);});if(typeof value==='string'&&/^file:\/\/|drive\.google\.com/.test(value))AlchemistCatalog.fail(422,'PRIVATE_MANIFEST_LOCATOR');}
+   portable(r.payload,0);
+   if(r.type==='track'&&(!Number.isSafeInteger(r.payload.durationMs)||r.payload.durationMs<0||r.dependencies.length))AlchemistCatalog.fail(422,'INVALID_TRACK_METADATA');
    var body={type:r.type,logicalId:r.logicalId,payload:r.payload,dependencies:r.dependencies,parent:r.parent,declaredVersion:r.declaredVersion};
    if(typeof q.canonicalBody!=='string'||typeof q.canonicalRevision!=='string'||services.canonical(JSON.parse(q.canonicalBody))!==services.canonical(body)||services.canonical(JSON.parse(q.canonicalRevision))!==services.canonical(r)||services.digest(q.canonicalBody)!==r.digest)AlchemistCatalog.fail(422,'MANIFEST_DIGEST_MISMATCH');
    return services.lock(function(){store.begin();try{

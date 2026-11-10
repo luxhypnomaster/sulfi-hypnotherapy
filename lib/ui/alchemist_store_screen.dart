@@ -187,6 +187,8 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
           isExpanded: true,
           items: const [
             DropdownMenuItem(value: null, child: Text('Все материалы')),
+            DropdownMenuItem(value: 'collection', child: Text('Сборки')),
+            DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
             DropdownMenuItem(value: 'track', child: Text('Треки')),
             DropdownMenuItem(value: 'module', child: Text('Модули')),
             DropdownMenuItem(value: 'template', child: Text('Шаблоны')),
@@ -224,7 +226,13 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                           : 'Не скачано'}',
                     ),
                     trailing:
-                        ['track', 'module', 'template'].contains(c['type'])
+                        [
+                          'track',
+                          'module',
+                          'template',
+                          'collection',
+                          'package',
+                        ].contains(c['type'])
                         ? IconButton(
                             tooltip: 'Состав и установка',
                             icon: const Icon(Icons.download_outlined),

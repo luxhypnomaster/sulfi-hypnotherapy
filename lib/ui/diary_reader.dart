@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'diary_video.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -234,6 +238,11 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                                     height: f.height,
                                     child: f.block.type == DiaryBlockType.image
                                         ? DiaryImage(
+                                            block: f.block,
+                                            diary: widget.diary,
+                                          )
+                                        : f.block.type == DiaryBlockType.video
+                                        ? DiaryVideo(
                                             block: f.block,
                                             diary: widget.diary,
                                           )
@@ -491,13 +500,42 @@ class DiaryImage extends StatefulWidget {
 
 class _DiaryImageState extends State<DiaryImage> {
   int retry = 0;
+  File? loaded;
+  @override
+  void initState() {
+    super.initState();
+    unawaited(load());
+  }
+
+  @override
+  void didUpdateWidget(covariant DiaryImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.block.media?.hash != widget.block.media?.hash ||
+        oldWidget.block.media?.assetId != widget.block.media?.assetId) {
+      loaded = null;
+      unawaited(load());
+    }
+  }
+
+  Future<void> load() async {
+    try {
+      final file = await widget.diary?.mediaStore?.resolve(widget.block.media);
+      if (mounted) setState(() => loaded = file);
+    } catch (_) {
+      if (mounted) setState(() => loaded = null);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final block = widget.block,
-        file = widget.diary?.mediaStore?.file(widget.block.media);
+        file = loaded ?? widget.diary?.mediaStore?.file(widget.block.media);
     Widget unavailable() => Center(
       child: TextButton.icon(
-        onPressed: () => setState(() => retry++),
+        onPressed: () {
+          setState(() => retry++);
+          unawaited(load());
+        },
         icon: const Icon(Icons.refresh),
         label: const Text('Изображение недоступно · повторить'),
       ),

@@ -1,20 +1,59 @@
 import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 import 'apps_script_diary_transport.dart';
 import 'diary_api.dart';
 
+class AlchemistApiException extends DiaryApiException {
+  const AlchemistApiException(
+    super.message,
+    this.status,
+    this.code, [
+    super.kind,
+  ]);
+  final int status;
+  final String code;
+}
+
 /// New-project protocol. Legacy diary transport and credentials are untouched.
 class AlchemistApi {
-  AlchemistApi(this.endpoint, {DiaryRequest? connection, this.credential})
-    : connection = connection ?? DiaryApi.httpRequest {
+  AlchemistApi(
+    this.endpoint, {
+    DiaryRequest? connection,
+    this.credential,
+    this.maxAttempts = 3,
+  }) : connection = connection ?? DiaryApi.httpRequest {
     if (!AppsScriptDiaryTransport.supports(endpoint)) {
       throw const FormatException('Требуется проверенный адрес сервера /exec');
     }
   }
+  final int maxAttempts;
   final Uri endpoint;
   final DiaryRequest connection;
   final Future<String?> Function()? credential;
   Future<Map<String, dynamic>> call(
+    String operation,
+    Map<String, dynamic> parameters,
+  ) async {
+    for (var attempt = 0; ; attempt++) {
+      try {
+        return await _once(operation, parameters);
+      } catch (e) {
+        final retryable =
+            e is SocketException ||
+            e is TimeoutException ||
+            e is AlchemistApiException && [429, 503].contains(e.status);
+        if (!retryable || attempt + 1 >= maxAttempts) rethrow;
+        await Future<void>.delayed(
+          Duration(milliseconds: (250 << attempt) + Random().nextInt(200)),
+        );
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>> _once(
     String operation,
     Map<String, dynamic> parameters,
   ) async {
@@ -74,8 +113,10 @@ class AlchemistApi {
           rawCode is String && RegExp(r'^[A-Z0-9_]{1,64}$').hasMatch(rawCode)
           ? rawCode
           : 'REQUEST_REJECTED';
-      throw DiaryApiException(
+      throw AlchemistApiException(
         'Сервер отклонил запрос: $code',
+        status,
+        code,
         status == 401 || status == 403
             ? DiaryFailure.authorization
             : status == 409 || status == 412

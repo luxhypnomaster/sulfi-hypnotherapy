@@ -1,3 +1,10 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+
+import '../services/alchemist_media_transfer.dart';
+import '../models/diary_entry.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/content_revision.dart';
@@ -49,6 +56,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   bool busy = false;
   String? error;
   String progress = '';
+  bool paused = false;
   @override
   void initState() {
     super.initState();
@@ -72,7 +80,10 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
 
   Future<void> save({bool publish = false}) async {
     if (busy) return;
-    setState(() => busy = true);
+    setState(() {
+      busy = true;
+      paused = false;
+    });
     try {
       for (final f in fields.entries) {
         card[f.key] = ['tags', 'categoryIds'].contains(f.key)
@@ -88,6 +99,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
       if (publish) {
         await widget.service.publish(
           draft,
+          interrupted: () => paused || !mounted,
           progress: (n, total) {
             if (mounted) setState(() => progress = '$n / $total байт');
           },
@@ -101,8 +113,53 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
     }
   }
 
+  Future<void> transition(String action) async {
+    setState(() => busy = true);
+    try {
+      await widget.service.transition(draft, action);
+      if (mounted) setState(() => error = null);
+    } catch (e) {
+      if (mounted) setState(() => error = e.toString());
+    } finally {
+      if (mounted) setState(() => busy = false);
+    }
+  }
+
+  Future<void> cover() async {
+    setState(() => busy = true);
+    try {
+      final store = widget.service.controller.diary?.mediaStore;
+      if (store == null) {
+        throw const FormatException('Импорт изображений недоступен');
+      }
+      final block = await store.import(DiaryBlockType.image);
+      if (block == null) return;
+      final m = block.media!;
+      final receipt =
+          await AlchemistMediaTransfer(
+            widget.service.db,
+            widget.service.remote,
+          ).upload(
+            store.file(m)!,
+            logicalId: m.assetId,
+            revisionId: m.hash!,
+            mime: m.mime,
+            expectedHash: m.hash,
+          );
+      card['coverAssetId'] = receipt['assetRevisionId'];
+      draft['card'] = card;
+      await widget.service.save(draft);
+      if (mounted) setState(() => error = null);
+    } catch (e) {
+      if (mounted) setState(() => error = e.toString());
+    } finally {
+      if (mounted) setState(() => busy = false);
+    }
+  }
+
   @override
   void dispose() {
+    paused = true;
     for (final f in fields.values) {
       f.dispose();
     }
@@ -124,10 +181,82 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
               : 'Черновик на телефоне'}',
         ),
         if (busy) const LinearProgressIndicator(),
+        if (busy)
+          TextButton(
+            onPressed: () => setState(() => paused = true),
+            child: const Text('Приостановить'),
+          ),
         if (progress.isNotEmpty) Text(progress),
         Expanded(
           child: ListView(
             children: [
+              Text(
+                'Тип: ${draft['type']} · версия ${draft['etag'] ?? 'локальная'}',
+              ),
+              for (final root in draft['roots'] as List? ?? [draft['root']])
+                ListTile(
+                  title: Text(
+                    root['payload']['title'] ??
+                        root['payload']['name'] ??
+                        'Материал',
+                  ),
+                  subtitle: Text(
+                    'Точных зависимостей: ${(root['dependencies'] as List).length}',
+                  ),
+                ),
+              TextButton.icon(
+                onPressed: busy ? null : cover,
+                icon: const Icon(Icons.image_outlined),
+                label: Text(
+                  card['coverAssetId'] == null
+                      ? 'Добавить обложку'
+                      : 'Заменить обложку',
+                ),
+              ),
+              if (card['coverAssetId'] != null)
+                TextButton(
+                  onPressed: busy
+                      ? null
+                      : () => setState(() => card['coverAssetId'] = null),
+                  child: const Text('Убрать обложку'),
+                ),
+              if (draft['type'] != 'package')
+                TextButton(
+                  onPressed: busy
+                      ? null
+                      : () async {
+                          try {
+                            final index = await LocalCatalogSource.currentIndex(
+                              widget.service.controller.capsules!,
+                            );
+                            final old =
+                                draft['roots'] as List? ?? [draft['root']];
+                            final next = old
+                                .map(
+                                  (r) => index
+                                      .singleWhere(
+                                        (v) =>
+                                            v.key.content.id ==
+                                                r['logicalId'] &&
+                                            v.key.content.type.name ==
+                                                r['type'],
+                                      )
+                                      .toMap(),
+                                )
+                                .toList();
+                            if (draft['roots'] != null) {
+                              draft['roots'] = next;
+                            } else {
+                              draft['root'] = next.single;
+                            }
+                            await widget.service.save(draft);
+                            if (mounted) setState(() => error = null);
+                          } catch (e) {
+                            if (mounted) setState(() => error = e.toString());
+                          }
+                        },
+                  child: const Text('Обновить состав из библиотеки'),
+                ),
               for (final item in const {
                 'title': 'Название',
                 'shortAnnotation': 'Аннотация',
@@ -182,6 +311,23 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
               onPressed: busy ? null : () => save(),
               child: const Text('Сохранить черновик'),
             ),
+            if (draft['etag'] != null) ...[
+              if (draft['status'] == 'published')
+                TextButton(
+                  onPressed: busy ? null : () => transition('withdraw'),
+                  child: const Text('Снять публикацию'),
+                ),
+              TextButton(
+                onPressed: busy
+                    ? null
+                    : () => transition(
+                        draft['status'] == 'archived' ? 'restore' : 'archive',
+                      ),
+                child: Text(
+                  draft['status'] == 'archived' ? 'Восстановить' : 'В архив',
+                ),
+              ),
+            ],
             FilledButton(
               onPressed: busy ? null : () => save(publish: true),
               child: const Text('Опубликовать'),
@@ -219,11 +365,117 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
     }
   }
 
+  Future<void> openDraft(Map<String, dynamic> draft) async {
+    if (!mounted) return;
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            CatalogCardEditor(service: widget.service, draft: draft),
+      ),
+    );
+    await load();
+  }
+
+  Future<void> createCollection() async {
+    try {
+      final index = await LocalCatalogSource.currentIndex(
+        widget.service.controller.capsules!,
+      );
+      if (!mounted) return;
+      final selected = <String>{};
+      final chosen = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => StatefulBuilder(
+          builder: (ctx, refresh) => AlertDialog(
+            title: const Text('Выберите состав сборки'),
+            content: SizedBox(
+              width: 340,
+              height: 360,
+              child: ListView(
+                children: [
+                  for (final r in index)
+                    CheckboxListTile(
+                      value: selected.contains(r.key.token),
+                      title: Text(
+                        r.payload['title'] ??
+                            r.payload['name'] ??
+                            r.key.content.id,
+                      ),
+                      subtitle: Text(r.key.content.type.name),
+                      onChanged: (v) => refresh(() {
+                        if (v == true) {
+                          selected.add(r.key.token);
+                        } else {
+                          selected.remove(r.key.token);
+                        }
+                      }),
+                    ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Отмена'),
+              ),
+              FilledButton(
+                onPressed: selected.isEmpty
+                    ? null
+                    : () => Navigator.pop(ctx, true),
+                child: const Text('Создать сборку'),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (chosen == true) {
+        await openDraft(
+          await widget.service.prepareCollection(
+            index.where((r) => selected.contains(r.key.token)).toList(),
+            'Новая сборка',
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) setState(() => error = e.toString());
+    }
+  }
+
+  Future<void> createPackage() async {
+    try {
+      final f = await FilePicker.pickFile(
+        type: FileType.custom,
+        allowedExtensions: ['zip'],
+      );
+      if (f?.path != null) {
+        await openDraft(await widget.service.preparePackage(File(f!.path!)));
+      }
+    } catch (e) {
+      if (mounted) setState(() => error = e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) => LeatherScaffold(
     title: 'Каталог публикаций',
     child: Column(
       children: [
+        Wrap(
+          spacing: 8,
+          children: [
+            TextButton.icon(
+              onPressed: createCollection,
+              icon: const Icon(Icons.add),
+              label: const Text('Создать сборку'),
+            ),
+            TextButton.icon(
+              onPressed: createPackage,
+              icon: const Icon(Icons.folder_zip_outlined),
+              label: const Text('Подготовить ZIP'),
+            ),
+          ],
+        ),
         Wrap(
           children: [
             for (final t in const {

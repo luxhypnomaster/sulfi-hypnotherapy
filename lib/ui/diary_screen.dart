@@ -227,6 +227,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                   DiaryBlockType.text => 'Текст',
                                   DiaryBlockType.image => 'Изображение',
                                   DiaryBlockType.audio => 'Аудио',
+                                  DiaryBlockType.video => 'Видео',
                                 },
                                 style: const TextStyle(
                                   color: neonLime,
@@ -436,6 +437,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         'Текст',
                         'Изображение',
                         'Аудио',
+                        'Видео',
                       ])
                         Align(
                           alignment: Alignment.centerLeft,
@@ -459,6 +461,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                             DiaryBlockType.text => 'Текст',
                             DiaryBlockType.image => 'Изображение',
                             DiaryBlockType.audio => 'Аудио',
+                            DiaryBlockType.video => 'Видео',
                           }),
                         ),
                     ],

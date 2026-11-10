@@ -38,6 +38,8 @@ class DiaryAuthorSession {
   DiaryAuthorSession._(this._token, this.expiresAt);
   final String _token;
   final DateTime expiresAt;
+  factory DiaryAuthorSession.verified(String token, DateTime expiresAt) =>
+      DiaryAuthorSession._(token, expiresAt);
   bool get valid => expiresAt.isAfter(DateTime.now().toUtc());
 }
 
@@ -66,6 +68,10 @@ class DiaryApi {
       throw const DiaryApiException('Для дневника нужен HTTPS адрес сервера');
     }
   }
+  bool get supportsAdvancedPublication => false;
+  void clearSession() {}
+  Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {}
+  Future<int> flushPending(DiaryAuthorSession session) async => 0;
   final Uri base;
   final DiaryRequest _request;
   Uri _uri(String path, [Map<String, String>? query]) => base.replace(

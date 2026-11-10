@@ -128,7 +128,7 @@ class DiaryAudio extends ChangeNotifier {
       }
       if (current != block.id || retry) {
         await pause(invalidate: false);
-        final file = store.file(block.media);
+        final file = await store.resolve(block.media);
         if (file == null || !await file.exists()) {
           throw const FormatException(
             'Аудио недоступно офлайн. Нажмите для повтора.',

@@ -60,16 +60,37 @@ ResolvedContent resolveContent(
   return ResolvedContent(List.unmodifiable(order));
 }
 
+ResolvedContent resolveContentRoots(
+  List<RevisionKey> roots,
+  Iterable<ContentRevision> catalog,
+) {
+  if (roots.isEmpty) throw const FormatException('Не выбраны материалы');
+  final revisions = <String, ContentRevision>{}, logical = <String, String>{};
+  for (final root in roots) {
+    for (final r in resolveContent(root, catalog).revisions) {
+      final old = logical[r.key.content.token];
+      if (old != null && old != r.key.revision) {
+        throw const FormatException('Несовместимые ревизии в сборке');
+      }
+      logical[r.key.content.token] = r.key.revision;
+      revisions[r.key.token] = r;
+    }
+  }
+  return ResolvedContent(List.unmodifiable(revisions.values));
+}
+
 class ContentInstallPlan {
   ContentInstallPlan(
     this.closure,
     this.newBytes,
     this.missingDigests, {
+    this.selectedRoots,
     this.stagingBytes = 0,
     this.physicalWriteBytes = 0,
     this.reserveBytes = 16 * 1024 * 1024,
   });
   final ResolvedContent closure;
+  final List<RevisionKey>? selectedRoots;
   final int newBytes;
   final int stagingBytes, physicalWriteBytes, reserveBytes;
   int get requiredFreeBytes => stagingBytes + physicalWriteBytes + reserveBytes;
@@ -245,8 +266,9 @@ class LocalCatalogSource {
     return canonicalContent(payload) == canonicalContent(r.payload);
   }
 
-  Future<ContentInstallPlan> plan(RevisionKey root) async {
-    final closure = resolveContent(root, revisions);
+  Future<ContentInstallPlan> plan(RevisionKey root) => planRoots([root]);
+  Future<ContentInstallPlan> planRoots(List<RevisionKey> roots) async {
+    final closure = resolveContentRoots(roots, revisions);
     final missing = <String>{};
     final sizes = <String, int>{};
     final availableHashes = <String>{};
@@ -277,6 +299,7 @@ class LocalCatalogSource {
       closure,
       missing.fold<int>(0, (n, h) => n + sizes[h]!),
       Set.unmodifiable(missing),
+      selectedRoots: List.unmodifiable(roots),
       stagingBytes: sizes.values.fold<int>(0, (n, size) => n + size) * 2,
       physicalWriteBytes: physicalWriteBytes,
     );
@@ -300,7 +323,8 @@ class LocalCatalogSource {
       onState?.call(ContentInstallState.planned);
       check();
       // Fresh resolution prevents callers from fabricating a dependency closure.
-      final actual = resolveContent(plan.closure.revisions.last.key, revisions);
+      final roots = plan.selectedRoots ?? [plan.closure.revisions.last.key];
+      final actual = resolveContentRoots(roots, revisions);
       final records = <String, dynamic>{
         for (final t in CapsuleService.tables) t: <dynamic>[],
       };
@@ -340,7 +364,7 @@ class LocalCatalogSource {
       manifest['id'] = CapsuleService.digest(manifest);
       onState?.call(ContentInstallState.staging);
       check();
-      final freshPlan = await this.plan(actual.revisions.last.key);
+      final freshPlan = await planRoots(roots);
       final required = freshPlan.requiredFreeBytes;
       if (service.availableBytes != null &&
           await service.availableBytes!() < required) {

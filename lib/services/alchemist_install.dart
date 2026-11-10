@@ -17,7 +17,7 @@ class AlchemistInstall {
   AlchemistInstall(this.service, this.api);
   final CapsuleService service;
   final AlchemistApi api;
-  Future<File> _bytes(
+  Future<File> downloadAsset(
     Map<String, dynamic> asset, {
     bool Function()? interrupted,
     void Function(int, int)? progress,
@@ -113,6 +113,41 @@ class AlchemistInstall {
     if (fresh['immutableRevisionId'] != card['immutableRevisionId']) {
       throw const FormatException('Версия изменилась. Обновите каталог.');
     }
+    if (card['type'] == 'package') {
+      final package = fresh['manifest']['package'];
+      final plan = await api.call('catalog.getInstallPlan', {
+        'catalogItemId': card['catalogItemId'],
+        'installed': [],
+      });
+      final dependency = (plan['dependencies'] as List).single;
+      final descriptor = await api.call('media.getDescriptor', {
+        'assetRevisionId': dependency['assetRevisionId'],
+      });
+      if (descriptor['mime'] != 'application/zip' ||
+          descriptor['sha256'] != package['sha256'] ||
+          descriptor['byteLength'] != package['byteLength']) {
+        throw const FormatException(
+          'ZIP не соответствует опубликованному пакету',
+        );
+      }
+      final zip = await downloadAsset(
+        descriptor,
+        interrupted: interrupted,
+        progress: progress,
+      );
+      final local = await LocalCatalogSource.open(service, zip);
+      try {
+        final roots = (package['selectionRoots'] as List)
+            .map((v) => RevisionKey.fromMap(Map<String, dynamic>.from(v)))
+            .toList();
+        final selection = await local.planRoots(roots);
+        await local.install(selection, cancelled: interrupted);
+        await _receipt(card);
+      } finally {
+        await local.close();
+      }
+      return;
+    }
     final plan = await api.call('catalog.getInstallPlan', {
       'catalogItemId': card['catalogItemId'],
       'installed': <String>[],
@@ -158,12 +193,27 @@ class AlchemistInstall {
         sizes[d['sha256']] = d['byteLength'];
       }
     }
-    final root = revisions.singleWhere(
-      (r) =>
-          r.key.content.id == card['logicalContentId'] &&
-          r.key.revision == card['immutableRevisionId'],
-    );
-    final closure = resolveContent(root.key, revisions);
+    final List<RevisionKey> roots;
+    if (card['type'] == 'collection') {
+      roots = (fresh['manifest']['roots'] as List)
+          .map((v) => RevisionKey.fromMap(Map<String, dynamic>.from(v)))
+          .toList();
+      if (contentDigest({'roots': roots.map((r) => r.toMap()).toList()}) !=
+          card['immutableRevisionId']) {
+        throw const FormatException('Ревизия сборки не совпала');
+      }
+    } else {
+      roots = [
+        revisions
+            .singleWhere(
+              (r) =>
+                  r.key.content.id == card['logicalContentId'] &&
+                  r.key.revision == card['immutableRevisionId'],
+            )
+            .key,
+      ];
+    }
+    final closure = resolveContentRoots(roots, revisions);
     final needed =
         sizes.values.fold<int>(0, (n, s) => n + s) * 4 + 16 * 1024 * 1024;
     if (service.availableBytes != null &&
@@ -174,7 +224,7 @@ class AlchemistInstall {
       (r) => r.key.content.type == ContentType.track,
     )) {
       check();
-      files[r.payload['contentHash']] = await _bytes(
+      files[r.payload['contentHash']] = await downloadAsset(
         descriptors[r.key.token]!,
         interrupted: interrupted,
         progress: progress,
@@ -234,17 +284,21 @@ class AlchemistInstall {
         await zip.close();
       }
       local = await LocalCatalogSource.open(service, zipFile);
-      final selection = await local.plan(root.key);
+      final selection = await local.planRoots(roots);
       check();
       await local.install(selection, cancelled: interrupted);
       // Install receipt is written only after the existing importer verifies all records.
-      await service.database.insert('app_settings', {
-        'name': 'alchemist_installed:${card['catalogItemId']}',
-        'value': jsonEncode(card),
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await _receipt(card);
     } finally {
       await local?.close();
       await stage.delete(recursive: true);
     }
   }
+
+  Future<void> _receipt(Map<String, dynamic> card) => service.database
+      .insert('app_settings', {
+        'name': 'alchemist_installed:${card['catalogItemId']}',
+        'value': jsonEncode(card),
+      }, conflictAlgorithm: ConflictAlgorithm.replace)
+      .then((_) {});
 }

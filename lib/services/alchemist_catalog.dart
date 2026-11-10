@@ -1,6 +1,12 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:path/path.dart' as p;
+
+import 'alchemist_media_transfer.dart';
+
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 
 import '../models/content_revision.dart';
@@ -60,6 +66,79 @@ class AlchemistCatalog {
     return draft;
   }
 
+  Future<Map<String, dynamic>> prepareCollection(
+    List<ContentRevision> roots,
+    String title,
+  ) async {
+    if (roots.isEmpty) {
+      throw const FormatException('Выберите материалы для сборки');
+    }
+    resolveContentRoots(
+      roots.map((r) => r.key).toList(),
+      await LocalCatalogSource.currentIndex(controller.capsules!),
+    );
+    final draft = await prepare(roots.first);
+    draft['type'] = 'collection';
+    draft['logicalId'] = newId();
+    draft['roots'] = roots.map((r) => r.toMap()).toList();
+    draft['card']['title'] = title;
+    await save(draft);
+    return draft;
+  }
+
+  Future<Map<String, dynamic>> preparePackage(File source) async {
+    final local = await LocalCatalogSource.open(controller.capsules!, source);
+    try {
+      for (final table in local.preview.records.entries) {
+        if (![
+              'audio_assets',
+              'module_definitions',
+              'session_templates',
+              'content_revisions',
+            ].contains(table.key) &&
+            (table.value as List).isNotEmpty) {
+          throw const FormatException(
+            'Для публикации нужен выборочный ZIP без личной истории и дневника',
+          );
+        }
+      }
+      final children = {
+        for (final r in local.revisions)
+          for (final d in r.dependencies) d.token,
+      };
+      final roots = local.revisions
+          .where((r) => !children.contains(r.key.token))
+          .toList();
+      if (roots.isEmpty) {
+        throw const FormatException(
+          'ZIP не содержит устанавливаемых материалов',
+        );
+      }
+      final hash = (await sha256.bind(source.openRead()).first).toString();
+      final folder = Directory(
+        p.join(controller.library.directory.parent.path, 'alchemist_packages'),
+      );
+      await folder.create(recursive: true);
+      final target = File(p.join(folder.path, '$hash.zip'));
+      if (!await target.exists()) await source.copy(target.path);
+      if ((await sha256.bind(target.openRead()).first).toString() != hash) {
+        throw const FormatException('ZIP изменился');
+      }
+      final draft = await prepare(roots.first);
+      draft['type'] = 'package';
+      draft['logicalId'] = newId();
+      draft['zipPath'] = target.path;
+      draft['packageHash'] = hash;
+      draft['packageBytes'] = await target.length();
+      draft['packageRoots'] = roots.map((r) => r.key.toMap()).toList();
+      draft['card']['title'] = p.basenameWithoutExtension(source.path);
+      await save(draft);
+      return draft;
+    } finally {
+      await local.close();
+    }
+  }
+
   AlchemistApi get remote =>
       api ??
       (throw const FormatException(
@@ -68,16 +147,11 @@ class AlchemistCatalog {
   Future<Map<String, dynamic>> _upload(
     ContentRevision r,
     void Function(int, int)? progress,
+    bool Function()? interrupted,
   ) async {
     final asset = controller.asset(r.key.content.id);
     if (asset == null || asset.contentHash == null) {
       throw const FormatException('Для публикации нужен проверенный аудиофайл');
-    }
-    final file = controller.library.fileFor(asset), size = await file.length();
-    if (size != asset.fileSizeBytes ||
-        (await sha256.bind(file.openRead()).first).toString() !=
-            asset.contentHash) {
-      throw const FormatException('Аудиофайл изменён. Публикация остановлена.');
     }
     final mime = switch (asset.format.toLowerCase()) {
       'mp3' => 'audio/mpeg',
@@ -87,63 +161,15 @@ class AlchemistCatalog {
       'ogg' => 'audio/ogg',
       _ => throw const FormatException('Неподдерживаемый формат'),
     };
-    final key = 'alchemist_upload:${r.key.token}';
-    var saved = (await db.query(
-      'app_settings',
-      where: 'name=?',
-      whereArgs: [key],
-    )).firstOrNull;
-    final requestId = saved == null
-        ? newId()
-        : jsonDecode(saved['value'] as String)['requestId'] as String;
-    await db.insert('app_settings', {
-      'name': key,
-      'value': jsonEncode({'requestId': requestId}),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
-    final start = await remote.call('media.beginUpload', {
-      'requestId': requestId,
-      'logicalId': asset.id,
-      'revisionId': r.key.revision,
-      'sha256': asset.contentHash,
-      'byteLength': size,
-      'mime': mime,
-    });
-    var offset = start['offset'] as int;
-    final input = await file.open();
-    try {
-      await input.setPosition(offset);
-      while (offset < size) {
-        final bytes = await input.read(262144);
-        if (bytes.isEmpty) throw const FormatException('Файл оборвался');
-        final result = await remote.call('media.uploadChunk', {
-          'sessionId': start['sessionId'],
-          'offset': offset,
-          'base64': base64Encode(bytes),
-        });
-        offset = result['offset'] as int;
-        await input.setPosition(offset);
-        progress?.call(offset, size);
-      }
-    } finally {
-      await input.close();
-    }
-    Map<String, dynamic> result;
-    do {
-      result = await remote.call('media.commitUpload', {
-        'sessionId': start['sessionId'],
-      });
-      if (result['state'] == 'verifying') {
-        progress?.call(result['verifiedBytes'] as int, size);
-      }
-    } while (result['state'] == 'verifying');
-    if (result['sha256'] != asset.contentHash || result['byteLength'] != size) {
-      throw const FormatException('Сервер не подтвердил байты аудио');
-    }
-    return {
-      'logicalId': result['logicalId'],
-      'revisionId': result['revisionId'],
-      'sha256': result['sha256'],
-    };
+    return AlchemistMediaTransfer(db, remote).upload(
+      controller.library.fileFor(asset),
+      logicalId: asset.id,
+      revisionId: r.key.revision,
+      mime: mime,
+      expectedHash: asset.contentHash,
+      progress: progress,
+      interrupted: interrupted,
+    );
   }
 
   Future<Map<String, dynamic>> _mutation(
@@ -197,6 +223,7 @@ class AlchemistCatalog {
   Future<void> publish(
     Map<String, dynamic> draft, {
     void Function(int, int)? progress,
+    bool Function()? interrupted,
   }) async {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');
@@ -209,52 +236,107 @@ class AlchemistCatalog {
     draft['status'] = 'uploading';
     await save(draft);
     try {
+      if (interrupted?.call() == true) {
+        throw const FormatException('Публикация приостановлена');
+      }
       if (draft['pending'] != null) await _recover(draft);
-      final root = ContentRevision.fromMap(
-        Map<String, dynamic>.from(draft['root']),
-      );
-      if (draft['remoteRevision'] != root.key.revision) {
-        final index = await LocalCatalogSource.currentIndex(
-          controller.capsules!,
-        );
-        final closure = resolveContent(root.key, index);
-        final refs = <String, Map<String, dynamic>>{};
-        for (final r in closure.revisions) {
-          if (r.key.content.type == ContentType.track) {
-            await _upload(r, progress);
-          }
-          final body = {
-            'type': r.key.content.type.name,
-            'logicalId': r.key.content.id,
-            'payload': r.payload,
-            'dependencies': r.dependencies.map((d) => d.toMap()).toList(),
-            'parent': r.parent?.toMap(),
-            'declaredVersion': r.declaredVersion,
+      final roots = (draft['roots'] as List? ?? [draft['root']])
+          .map((v) => ContentRevision.fromMap(Map<String, dynamic>.from(v)))
+          .toList();
+      final root = roots.first;
+      final contentRevision = draft['type'] == 'package'
+          ? draft['packageHash'] as String
+          : draft['type'] == 'collection'
+          ? contentDigest({'roots': roots.map((r) => r.key.toMap()).toList()})
+          : root.key.revision;
+      if (draft['remoteRevision'] != contentRevision) {
+        if (draft['type'] == 'package') {
+          final uploaded = await AlchemistMediaTransfer(db, remote).upload(
+            File(draft['zipPath']),
+            logicalId: draft['logicalId'],
+            revisionId: contentRevision,
+            mime: 'application/zip',
+            expectedHash: contentRevision,
+            progress: progress,
+          );
+          final parameters = <String, dynamic>{
+            'catalogItemId': draft['catalogItemId'],
+            'card': card,
+            'immutableRevisionId': contentRevision,
+            'manifest': {
+              'schemaVersion': 1,
+              'dependencyRefs': [
+                {
+                  'logicalId': uploaded['logicalId'],
+                  'revisionId': uploaded['revisionId'],
+                  'sha256': uploaded['sha256'],
+                },
+              ],
+              'package': {
+                'sha256': uploaded['sha256'],
+                'byteLength': uploaded['byteLength'],
+                'selectionRoots': draft['packageRoots'],
+              },
+            },
           };
-          refs[r.key.token] = await remote.call('content.registerManifest', {
-            'revision': r.toMap(),
-            'canonicalBody': canonicalContent(body),
-            'canonicalRevision': canonicalContent(r.toMap()),
-          });
-        }
-        final parameters = <String, dynamic>{
-          'catalogItemId': draft['catalogItemId'],
-          'card': card,
-          'immutableRevisionId': root.key.revision,
-          'manifest': {
-            'schemaVersion': 1,
-            'dependencyRefs': [refs[root.key.token]],
-          },
-        };
-        if (draft['etag'] == null) {
-          parameters.addAll({
-            'type': draft['type'],
-            'logicalContentId': root.key.content.id,
-          });
-          await _mutation(draft, 'catalog.createDraft', parameters);
+          if (draft['etag'] == null) {
+            parameters.addAll({
+              'type': 'package',
+              'logicalContentId': draft['logicalId'],
+            });
+            await _mutation(draft, 'catalog.createDraft', parameters);
+          } else {
+            parameters['ifMatch'] = draft['etag'];
+            await _mutation(draft, 'catalog.patchDraft', parameters);
+          }
         } else {
-          parameters['ifMatch'] = draft['etag'];
-          await _mutation(draft, 'catalog.patchDraft', parameters);
+          final index = await LocalCatalogSource.currentIndex(
+            controller.capsules!,
+          );
+          final closure = resolveContentRoots(
+            roots.map((r) => r.key).toList(),
+            index,
+          );
+          final refs = <String, Map<String, dynamic>>{};
+          for (final r in closure.revisions) {
+            if (r.key.content.type == ContentType.track) {
+              await _upload(r, progress, interrupted);
+            }
+            final body = {
+              'type': r.key.content.type.name,
+              'logicalId': r.key.content.id,
+              'payload': r.payload,
+              'dependencies': r.dependencies.map((d) => d.toMap()).toList(),
+              'parent': r.parent?.toMap(),
+              'declaredVersion': r.declaredVersion,
+            };
+            refs[r.key.token] = await remote.call('content.registerManifest', {
+              'revision': r.toMap(),
+              'canonicalBody': canonicalContent(body),
+              'canonicalRevision': canonicalContent(r.toMap()),
+            });
+          }
+          final parameters = <String, dynamic>{
+            'catalogItemId': draft['catalogItemId'],
+            'card': card,
+            'immutableRevisionId': contentRevision,
+            'manifest': {
+              'schemaVersion': 1,
+              'dependencyRefs': roots.map((r) => refs[r.key.token]).toList(),
+              if (draft['type'] == 'collection')
+                'roots': roots.map((r) => r.key.toMap()).toList(),
+            },
+          };
+          if (draft['etag'] == null) {
+            parameters.addAll({
+              'type': draft['type'],
+              'logicalContentId': draft['logicalId'] ?? root.key.content.id,
+            });
+            await _mutation(draft, 'catalog.createDraft', parameters);
+          } else {
+            parameters['ifMatch'] = draft['etag'];
+            await _mutation(draft, 'catalog.patchDraft', parameters);
+          }
         }
       }
       if (canonicalContent(draft['syncedCard']) != canonicalContent(card)) {
@@ -265,7 +347,7 @@ class AlchemistCatalog {
         });
       }
       if (draft['remoteStatus'] != 'published' ||
-          draft['publishedRevision'] != root.key.revision) {
+          draft['publishedRevision'] != contentRevision) {
         await _mutation(draft, 'catalog.publish', {
           'catalogItemId': draft['catalogItemId'],
           'ifMatch': draft['etag'],
@@ -280,12 +362,12 @@ class AlchemistCatalog {
           'Публикация не подтверждена чтением с сервера',
         );
       }
-      draft['publishedRevision'] = root.key.revision;
+      draft['publishedRevision'] = contentRevision;
       draft['status'] = 'published';
       draft.remove('error');
       await save(draft);
     } catch (e) {
-      draft['status'] = 'failed';
+      draft['status'] = interrupted?.call() == true ? 'paused' : 'failed';
       draft['error'] = e.toString();
       await save(draft);
       rethrow;

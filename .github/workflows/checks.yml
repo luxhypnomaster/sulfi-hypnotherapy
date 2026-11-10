@@ -18,7 +18,10 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
+    env:
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,6 +36,8 @@ jobs:
           python3 -m pip install -r scripts/task15-contract-requirements.txt
           python3 scripts/task15_contract_check.py
       - run: node --test server/google_apps_script/test/backend.test.mjs
+      - run: node --test server/alchemist/test/*.test.mjs
+      - run: node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-source"
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos
@@ -55,6 +60,9 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
       - run: flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client
+      - name: Verify configured cloud endpoint before embedding it
+        run: |
+          node scripts/alchemist/check-build-config.mjs
       - name: Restore persistent user-test signing key
         env:
           SULFI_TEST_KEYSTORE_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
@@ -62,7 +70,8 @@ jobs:
           test -n "$SULFI_TEST_KEYSTORE_BASE64" || { echo 'Missing persistent test signing key. Refusing a newly signed APK.'; exit 1; }
           printf '%s' "$SULFI_TEST_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
           chmod 600 "$RUNNER_TEMP/sulfi-test.keystore"
-      - run: flutter build apk --debug
+      - name: Build author APK (explicit configuration, no invented endpoint)
+        run: flutter build apk --debug --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
         env:
           SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
           SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
@@ -94,7 +103,7 @@ jobs:
           retention-days: 14
 
       - name: Build separate client test APK (same code and persistent key)
-        run: flutter build apk --debug --dart-define=SULFI_EDITION=client
+        run: flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
         env:
           SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
           SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}

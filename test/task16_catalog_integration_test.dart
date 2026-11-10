@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/content_revision.dart';
+import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_diary_api.dart';
+import 'package:sulfi_hypnotherapy/services/diary_media_store.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_api.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_catalog.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_install.dart';
@@ -58,6 +61,7 @@ void main() {
       endpoint,
       connection: connection,
       credential: () async => 'TEST_OWNER',
+      maxAttempts: 1,
     );
     final reader = AlchemistApi(endpoint, connection: connection);
     final author = await Fixture15.open(),
@@ -158,6 +162,175 @@ void main() {
         ),
         isTrue,
         reason: 'withdrawal never deletes an offline installed copy',
+      );
+      final collection = await service.prepareCollection([
+        track,
+        moduleRoot,
+      ], 'Набор расслабления');
+      collection['card']['shortAnnotation'] =
+          'Модуль и трек без повторного скачивания';
+      collection['card']['visibility'] = 'public';
+      await service.publish(collection);
+      final collectionCard = await reader.call('catalog.get', {
+        'catalogItemId': collection['catalogItemId'],
+      });
+      final statsCollection = await ownerApi.call('test.stats', {});
+      await installer.install(collectionCard);
+      expect(
+        (await ownerApi.call('test.stats', {}))['downloaded'],
+        statsCollection['downloaded'],
+      );
+      final capsule = await author.c.capsules!.export(moduleId: module.id);
+      final package = await service.preparePackage(capsule);
+      package['card']['shortAnnotation'] = 'Проверенный переносимый ZIP';
+      package['card']['visibility'] = 'public';
+      await service.publish(package);
+      final packageCard = await reader.call('catalog.get', {
+        'catalogItemId': package['catalogItemId'],
+      });
+      await installer.install(packageCard);
+      expect(
+        await LocalCatalogSource.installedRevision(
+          client.c.capsules!,
+          moduleRoot,
+        ),
+        isTrue,
+      );
+      expect(client.c.assets.length, 3);
+      // Same new backend and existing diary models: durable offline intent,
+      // actual multipart video bytes, no private path projection, offline cache.
+      final authorMedia = DiaryMediaStore(
+        Directory('${author.root.path}/diary'),
+        pick: (_) async => null,
+        probe: (_) async => const Duration(seconds: 1),
+        videoProbe: (_) async => (width: 64, height: 48, durationMs: 1000),
+      );
+      final clip = File('${author.root.path}/large.mp4');
+      final videoBytes = await File('test/fixtures/task16_video.mp4')
+          .readAsBytes();
+      final padded = <int>[
+        ...videoBytes,
+        0,
+        32,
+        0,
+        0,
+        102,
+        114,
+        101,
+        101,
+        ...List.filled(2 * 1024 * 1024 - 8, 0),
+      ];
+      await clip.writeAsBytes(padded);
+      final video = await authorMedia.importFile(DiaryBlockType.video, (
+        path: clip.path,
+        name: 'large.mp4',
+      ));
+      final entry = DiaryEntry(
+        id: 'diary16',
+        title: 'Видео и текст',
+        message: 'Аннотация дневника',
+        blocks: [
+          const DiaryBlock(
+            id: 'text',
+            type: DiaryBlockType.text,
+            text: 'Точный текст',
+          ),
+          video,
+        ],
+        createdAt: DateTime.utc(2026),
+        updatedAt: DateTime.utc(2026),
+      );
+      final diaryAuthor = AlchemistDiaryApi(
+        endpoint,
+        capsules: author.c.capsules!,
+        media: authorMedia,
+        connection: connection,
+      );
+      await diaryAuthor.enqueuePublication(entry, published: true);
+      expect(
+        (await author.db.query(
+          'app_settings',
+          where: 'name LIKE ?',
+          whereArgs: ['alchemist_diary_queue:%'],
+        )).length,
+        1,
+      );
+      final session = await diaryAuthor.authenticate('TEST_OWNER');
+      expect(await diaryAuthor.flushPending(session), 1);
+      final localRow = (await author.db.query(
+        'diary_author',
+        where: 'id=?',
+        whereArgs: [entry.id],
+      )).single;
+      final publishedDiary = DiaryEntry.fromMap(
+        Map<String, dynamic>.from(jsonDecode(localRow['payload'] as String)),
+      );
+      expect(publishedDiary.status, DiaryStatus.published);
+      final clientMedia = DiaryMediaStore(
+        Directory('${client.root.path}/diary'),
+        pick: (_) async => null,
+        probe: (_) async => null,
+      );
+      final diaryReader = AlchemistDiaryApi(
+        endpoint,
+        capsules: client.c.capsules!,
+        media: clientMedia,
+        connection: connection,
+      );
+      final feed = await diaryReader.feed();
+      final received = feed.entries.singleWhere((e) => e.id == entry.id);
+      expect(received.blocks.last.type, DiaryBlockType.video);
+      expect(received.blocks.last.media!.localPath, isNull);
+      final videoDescriptor = await reader.call('media.getDescriptor', {
+        'assetRevisionId': received.blocks.last.media!.assetId,
+      });
+      var interrupted = false;
+      await expectLater(
+        AlchemistInstall(client.c.capsules!, reader).downloadAsset(
+          videoDescriptor,
+          interrupted: () => interrupted,
+          progress: (n, total) {
+            if (n >= 262144) interrupted = true;
+          },
+        ),
+        throwsFormatException,
+      );
+      final pausedStats = await ownerApi.call('test.stats', {});
+      final downloaded = await diaryReader.resolveMedia(
+        received.blocks.last.media!,
+      );
+      final resumedStats = await ownerApi.call('test.stats', {});
+      expect(
+        (resumedStats['downloaded'] as int) -
+            (pausedStats['downloaded'] as int),
+        await clip.length() - 262144,
+        reason: 'new downloader resumes persisted aligned checkpoint',
+      );
+      expect(await downloaded!.length(), await clip.length());
+      expect(await downloaded.readAsBytes(), padded);
+      final prior = await ownerApi.call('entry.get', {'entryId': entry.id});
+      final statsBefore = await ownerApi.call('test.stats', {});
+      final changed = await diaryAuthor.publish(
+        publishedDiary.copyWith(message: 'Только аннотация'),
+        session,
+        published: true,
+      );
+      final later = await ownerApi.call('entry.get', {'entryId': entry.id});
+      expect(
+        later['revision'],
+        prior['revision'],
+        reason: 'metadata edit preserves immutable body',
+      );
+      expect(
+        (await ownerApi.call('test.stats', {}))['uploaded'],
+        statsBefore['uploaded'],
+      );
+      await diaryAuthor.publish(changed, session, published: false);
+      expect((await diaryReader.feed()).entries, isEmpty);
+      expect(
+        await downloaded.exists(),
+        isTrue,
+        reason: 'withdrawal preserves verified offline bytes',
       );
       expect(errors, isEmpty);
     } finally {

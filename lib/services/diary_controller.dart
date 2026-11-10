@@ -337,7 +337,10 @@ class DiaryController extends ChangeNotifier {
       } else {
         try {
           final session = await api!.authenticate(result.idToken);
-          if (generation == _authGeneration) _session = session;
+          if (generation == _authGeneration) {
+            _session = session;
+            await api!.flushPending(session);
+          }
           error = null;
         } catch (_) {
           error = 'Вход Google выполнен. Облачный сервер не подтвердил доступ; локальные черновики доступны.';
@@ -349,8 +352,15 @@ class DiaryController extends ChangeNotifier {
     }
   }
 
+  Future<void> pauseReaders() async {
+    for (final audio in _readerAudio.values) {
+      await audio.pause();
+    }
+  }
+
   Future<void> logout() async {
     ++_authGeneration;
+    api?.clearSession();
     _session = null;
     _localAuthor = false;
     debugAuthor = false;
@@ -381,12 +391,14 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {
-    if (entry.extra.containsKey('contentLinks') ||
-        entry.extra.containsKey('publication')) {
+    if (!(api?.supportsAdvancedPublication ?? false) &&
+        (entry.extra.containsKey('contentLinks') ||
+            entry.extra.containsKey('publication'))) {
       throw const DiaryApiException(
         'Ссылки на материалы пока сохраняются только локально. Серверный контракт не подтверждён.',
       );
     }
+    await api?.enqueuePublication(entry);
     final session = await _cloudSession();
     final result = await api!.saveAuthorDraft(entry, session);
     await authorRepository!.save(result);
@@ -405,12 +417,14 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
-    if (entry.extra.containsKey('contentLinks') ||
-        entry.extra.containsKey('publication')) {
+    if (!(api?.supportsAdvancedPublication ?? false) &&
+        (entry.extra.containsKey('contentLinks') ||
+            entry.extra.containsKey('publication'))) {
       throw const DiaryApiException(
         'Публикация ссылок на материалы пока недоступна. Локальная запись сохранена.',
       );
     }
+    await api?.enqueuePublication(entry, published: published);
     final session = await _cloudSession();
     final result = await api!.publish(entry, session, published: published);
     await authorRepository!.save(result);
