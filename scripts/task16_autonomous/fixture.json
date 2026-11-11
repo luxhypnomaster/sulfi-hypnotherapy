@@ -1,0 +1,74 @@
+{
+  "audio": {
+    "id": "emulator-fixture",
+    "title": "EMU AAC fixture",
+    "filePath": "asset_emulator_fixture.m4a",
+    "durationMs": 12000,
+    "format": "m4a",
+    "createdAt": "2026-11-11T00:00:00.000Z",
+    "category": "exit",
+    "fileSizeBytes": 5001,
+    "description": "Synthetic test fixture, not therapy",
+    "section": "personal",
+    "tags": "[]",
+    "source": "imported",
+    "origin": "personal",
+    "contentHash": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+    "baseRevision": 1,
+    "author": null,
+    "authorManaged": 0
+  },
+  "draft": {
+    "plan": {
+      "steps": [
+        {
+          "id": "emu-step",
+          "kind": "audio",
+          "title": "EMU AAC fixture",
+          "audioAssetId": "emulator-fixture",
+          "groupId": null,
+          "description": "",
+          "delayBeforeSeconds": 0,
+          "durationMs": 12000
+        }
+      ],
+      "groups": [],
+      "exitStepId": "emu-step"
+    },
+    "updatedAt": "2026-11-11T00:00:00.000Z",
+    "baseTemplateId": null,
+    "baseTemplateVersion": null,
+    "baseTemplateName": null,
+    "baseFingerprint": null,
+    "topicText": "",
+    "notes": "EMULATOR ONLY"
+  },
+  "template": {
+    "id": "emu-template",
+    "name": "EMU template",
+    "description": "",
+    "plan": {
+      "steps": [
+        {
+          "id": "emu-step",
+          "kind": "audio",
+          "title": "EMU AAC fixture",
+          "audioAssetId": "emulator-fixture",
+          "groupId": null,
+          "description": "",
+          "delayBeforeSeconds": 0,
+          "durationMs": 12000
+        }
+      ],
+      "groups": [],
+      "exitStepId": "emu-step"
+    },
+    "version": 1,
+    "isDefault": false,
+    "origin": "personal",
+    "baseRevision": 1,
+    "author": null,
+    "createdAt": "2026-11-11T00:00:00.000Z",
+    "updatedAt": "2026-11-11T00:00:00.000Z"
+  }
+}

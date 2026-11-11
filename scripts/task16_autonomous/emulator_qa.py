@@ -80,27 +80,35 @@ def diagnostics(pkg):
  details['fatalLines']=[l[-300:] for l in raw.splitlines() if 'FATAL' in l or 'UnsatisfiedLinkError' in l or 'flutter' in l.lower() and ('error' in l.lower() or 'exception' in l.lower())][-8:]
  print('EMULATOR_DIAGNOSTIC='+json.dumps(details),flush=True)
  return details
+def require_home():
+ for _ in range(4):
+  if any('Библиотека' in label(n) for n in tree()):return
+  time.sleep(1)
+ raise AssertionError('APPLICATION_UI_NOT_READY_AFTER_BOOTSTRAP')
+def return_home():
+ if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in tree()):return
+ adb('shell','input','keyevent','4');time.sleep(1);require_home()
 def install23():
- assert 'Success' in adb('install','-r',str(APK/'master23.apk'));launch();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
+ assert 'Success' in adb('install','-r',str(APK/'master23.apk'));launch();require_home();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
  screenshot('master23-start');return {'versionCode':23,'launched':bool(adb('shell','pidof',PKG).strip())}
 def seed():
  adb('shell','am','force-stop',PKG);t,c=dbcopy();now='2026-11-11T00:00:00.000Z'
  data=pathlib.Path('test/fixtures/android_aac_isom.m4a').read_bytes();digest=hashlib.sha256(data).hexdigest()
- row={'id':'emulator-fixture','title':'EMU AAC fixture','filePath':'asset_emulator_fixture.m4a','durationMs':12000,'format':'m4a','createdAt':now,'category':'exit','fileSizeBytes':len(data),'description':'Synthetic test fixture, not therapy','section':'personal','tags':'[]','source':'imported','origin':'personal','contentHash':digest,'baseRevision':1,'authorManaged':0}
+ fixture=json.loads(pathlib.Path('scripts/task16_autonomous/fixture.json').read_text())
+ row=fixture['audio'];assert row['contentHash']==digest and row['fileSizeBytes']==len(data)
  columns={r[1] for r in c.execute('pragma table_info(audio_assets)')};row={k:v for k,v in row.items() if k in columns}
  c.execute('insert or replace into audio_assets ('+','.join(row)+') values ('+','.join('?' for _ in row)+')',list(row.values()))
- plan={'steps':[{'id':'emu-step','kind':'audio','title':'EMU AAC fixture','audioAssetId':row['id'],'durationMs':12000,'enabled':True,'delayBeforeSeconds':0}], 'groups':[], 'exitStepId':'emu-step'}
- c.execute('insert or replace into current_draft values (1,?)',(json.dumps({'plan':plan,'updatedAt':now,'notes':'EMULATOR ONLY'}),))
- c.execute('insert or replace into session_templates values (?,?)',('emu-template',json.dumps({'id':'emu-template','name':'EMU template','plan':plan,'createdAt':now,'updatedAt':now,'version':1,'origin':'personal'})))
+ c.execute('insert or replace into current_draft values (1,?)',(json.dumps(fixture['draft']),))
+ c.execute('insert or replace into session_templates values (?,?)',('emu-template',json.dumps(fixture['template'])))
  c.commit();c.execute('pragma wal_checkpoint(truncate)');c.close()
  adb('shell',f'run-as {PKG} sh -c '+shlex.quote('for suffix in -wal -shm; do if [ -f files/library.sqlite$suffix ]; then mv files/library.sqlite$suffix files/qa-preseed$suffix; fi; done'));
  adb('push',str(pathlib.Path(t.name)/'library.sqlite'),'/data/local/tmp/emu-library.sqlite');adb('shell',f'cat /data/local/tmp/emu-library.sqlite | run-as {PKG} sh -c "cat > files/library.sqlite"')
  adb('push','test/fixtures/android_aac_isom.m4a','/data/local/tmp/emu-fixture.m4a');adb('shell','run-as',PKG,'mkdir','-p','files/audio');adb('shell',f'cat /data/local/tmp/emu-fixture.m4a | run-as {PKG} sh -c "cat > files/audio/{row["filePath"]}"');t.cleanup()
  assert hashlib.sha256(adb('exec-out','run-as',PKG,'cat','files/audio/'+row['filePath'],binary=True)).hexdigest()==digest
- launch();adb('shell','am','force-stop',PKG)
+ launch();require_home();adb('shell','am','force-stop',PKG)
  global original;original=inspect();assert any(a[0]=='emulator-fixture' for a in original['audio']),'SEEDED_AUDIO_MISSING';return {'rowsSeeded':1,'sha256':digest,'schema':original['schema'],'seedMethod':'controlled SQLite precondition, not UI import'}
 def upgrade():
- assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();adb('shell','am','force-stop',PKG);after=inspect();assert after==original,'DATA_CHANGED_ON_UPDATE'
+ assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();require_home();adb('shell','am','force-stop',PKG);after=inspect();assert after==original,'DATA_CHANGED_ON_UPDATE'
  assert hashlib.sha256(adb('exec-out','run-as',PKG,'cat','files/audio/asset_emulator_fixture.m4a',binary=True)).hexdigest()==original['audio'][0][1]
  launch();screenshot('master24-updated');return {'versionCode':24,'dataPreserved':True,'sqliteIntegrity':'ok'}
 def native_playing(audio):
@@ -130,12 +138,12 @@ def session_play():
  assert native_playing(audio),'BACKGROUND_PLAYBACK_NOT_OBSERVED'
  adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard');return {'screenOffPlaybackObserved':True,'physicalPhone':'NOT_RUN'}
 def client_isolation():
- assert 'Success' in adb('install','-r',str(APK/'client24.apk'));launch(CLIENT);screenshot('client24-guest');adb('shell','am','force-stop',CLIENT)
+ assert 'Success' in adb('install','-r',str(APK/'client24.apk'));launch(CLIENT);require_home();screenshot('client24-guest');adb('shell','am','force-stop',CLIENT)
  state=inspect(CLIENT);assert not state['audio'] and not state['templates'],'CLIENT_PACKAGE_NOT_ISOLATED';return {'distinctPackageSqlite':True,'emptyOwnLibrary':True,'schema':state['schema']}
 def guest_state():
- adb('shell','am','force-stop',PKG);launch();click('Дневник');click('Подключение и права');assert any('Гость' in label(n) for n in tree()),'GUEST_NOT_SHOWN';screenshot('guest-authorization');return {'guestVisible':True,'authenticatedLogout':'NOT_RUN_NO_GOOGLE_ACCOUNT','rolesNotInjected':True}
+ adb('shell','am','force-stop',PKG);launch();return_home();click('Дневник');click('Подключение и права');assert any('Гость' in label(n) for n in tree()),'GUEST_NOT_SHOWN';screenshot('guest-authorization');return {'guestVisible':True,'authenticatedLogout':'NOT_RUN_NO_GOOGLE_ACCOUNT','rolesNotInjected':True}
 def capsule_export():
- adb('shell','am','force-stop',PKG);launch();click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');screenshot('capsule-controls')
+ adb('shell','am','force-stop',PKG);launch();return_home();click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');screenshot('capsule-controls')
  # UI routes can differ; require actual available export rather than a fabricated success.
  for text in ['Создать резервную копию','Экспортировать','Сохранить копию']:
   try:click(text);break
@@ -174,11 +182,12 @@ adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
 adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
 for name,work in [('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]:case(name,work)
 print('EMULATOR_QA_COMPLETE; NO_REAL_GOOGLE_IDENTITIES',flush=True)
+# Native low-resolution capture needs no image package or artifact allocation.
 try:
- from PIL import Image
- sample=next((OUT/n for n in ['capsule-exported.png','library-fixture.png','master24-updated.png'] if (OUT/n).exists()),None)
- if sample:
-  thumb=Image.open(sample);thumb.thumbnail((360,640));b=io.BytesIO();thumb.save(b,format='PNG',optimize=True)
-  if len(b.getvalue())<180000:print('EMULATOR_SYNTHETIC_SCREENSHOT_PNG='+base64.b64encode(b.getvalue()).decode(),flush=True)
-except ImportError:print('EMULATOR_SCREENSHOT_INLINE=NOT_AVAILABLE',flush=True)
+ adb('shell','wm','size','360x640');adb('shell','wm','density','140')
+ adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity');time.sleep(3)
+ data=adb('exec-out','screencap','-p',binary=True)
+ if len(data)<180000:print('EMULATOR_SYNTHETIC_SCREENSHOT_PNG='+base64.b64encode(data).decode(),flush=True)
+ else:print('EMULATOR_SCREENSHOT_INLINE=OVER_SIZE_LIMIT',flush=True)
+except Exception:print('EMULATOR_SCREENSHOT_INLINE=NOT_AVAILABLE',flush=True)
 if any(r['status']!='PASS' for r in results if r['case'] in ['install23_launch','synthetic_local_fixture','update23_to24_preserves_data','client24_package_isolation']): raise SystemExit(1)
