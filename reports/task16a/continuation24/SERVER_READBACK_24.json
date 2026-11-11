@@ -1,0 +1,17 @@
+{
+  "kind": "SANITIZED_TRUSTED_MAIN_READBACK",
+  "runId": 43079763564,
+  "runtimeVersion": 6,
+  "runtimeSource": "1a0cf8e5a60144075eec793767953586bfa319a2",
+  "observed": {
+    "runtimeHealthVerified": true,
+    "webAudienceConfigured": true,
+    "privateVerified": true,
+    "completePermissions": true,
+    "distinctAccounts": false
+  },
+  "masterProofPresent": false,
+  "clientProofPresent": false,
+  "realTwoAccountAcceptance": "PENDING_REAL_ACCOUNTS",
+  "physicalTwoPhones": "NOT_RUN"
+}

@@ -1,3 +1,9 @@
+# №16/16-А · две сборки для приёмки · 0.4.16+24
+
+[Новый результат](reports/task16a/continuation24/RESULT_CONTINUATION_24.md) · [147критериев](reports/task16a/continuation24/ACCEPTANCE_CURRENT_24.md) · [точные шаги Android](reports/task16a/continuation24/PHONE_QA_24.md).
+
+Обе подписанные QA APK24 из одного source cbe0524 собраны в CI43072088028 и независимо скачаны/проверены. Server6/endpoint прежний. CI424Flutter/43Node/24legacy PASS. Исправлены состояние Google-входа каталога и перенос официальных меток через капсулу, с сохранением локального режима. **Реальный вход двух Google-пользователей и два телефона ещё не проверены; задача не закрыта.** Отчёты в прежней папке №16; APK только private GitHub draft/файлы, не Drive. История ниже сохранена.
+
 # Дополнение №16-А · текущая работа
 
 [Утверждённое дополнение](docs/task16a/TASK_RU.md) · [результаты и препятствия](reports/task16a/RESULT_16A_AUTH.md) · [проверки](reports/task16a/TESTS_16A_AUTH.md).
