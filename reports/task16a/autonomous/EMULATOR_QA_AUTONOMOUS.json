@@ -1,0 +1,199 @@
+{
+  "scope": "real Android35 KVM emulator, existing immutable APKs, synthetic local data only",
+  "runId": 43108347041,
+  "harnessSource": "e777d851ef0b2e40953f8884446b36c01485950c",
+  "apkSource": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "workflowConclusion": "success",
+  "caseCounts": {
+    "PASS": 7,
+    "BLOCKED": 1
+  },
+  "cases": [
+    {
+      "case": "install23_launch",
+      "status": "PASS",
+      "details": {
+        "versionCode": 23,
+        "launched": true
+      }
+    },
+    {
+      "case": "synthetic_local_fixture",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "update23_to24_preserves_data",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "dataPreserved": true,
+        "sqliteIntegrity": "ok"
+      }
+    },
+    {
+      "case": "library_native_preview",
+      "status": "BLOCKED",
+      "error": "AssertionError:NATIVE_PLAYBACK_NOT_OBSERVED"
+    },
+    {
+      "case": "session_screen_off_playback",
+      "status": "PASS",
+      "details": {
+        "screenOffPlaybackObserved": true,
+        "physicalPhone": "NOT_RUN"
+      }
+    },
+    {
+      "case": "client24_package_isolation",
+      "status": "PASS",
+      "details": {
+        "distinctPackageSqlite": true,
+        "emptyOwnLibrary": true,
+        "schema": 9
+      }
+    },
+    {
+      "case": "guest_restart_state",
+      "status": "PASS",
+      "details": {
+        "guestVisible": true,
+        "authenticatedLogout": "NOT_RUN_NO_GOOGLE_ACCOUNT",
+        "rolesNotInjected": true
+      }
+    },
+    {
+      "case": "capsule_ui_export",
+      "status": "PASS",
+      "details": {
+        "exportControlReached": true,
+        "completedLocalExportImport": true,
+        "zipBytes": 11387,
+        "sha256": "2e0daeb3b421da5b243ccfbf1b668823e0cbe9dd324e2b0973289ad45cdab409",
+        "clientImportedExactAudio": true,
+        "noDriveOrGoogleAccounts": true
+      }
+    }
+  ],
+  "actualNativePlayers": [
+    {
+      "uid": "10209",
+      "players": [],
+      "active": false,
+      "diagnosticLines": [
+        "(not logged)  AudioPlaybackConfiguration piid:87 deviceId:0 type:android.media.SoundPool u/pid:1000/559 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isS",
+        "AudioPlaybackConfiguration piid:95 deviceId:0 type:android.media.SoundPool u/pid:10181/916 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isSpatialized=fa",
+        "ducked players piids:",
+        "faded out players piids:",
+        "muted player piids due to call/ring:",
+        "muted players (piids) awaiting device connection:",
+        "current portId to piid map:",
+        "11-11 22:04:59:576 new player piid:87 uid/pid:1000/559 type:android.media.SoundPool attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null session:0",
+        "11-11 22:05:02:741 new player piid:95 uid/pid:10181/916 type:android.media.SoundPool attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null session:0"
+      ]
+    },
+    {
+      "uid": "10209",
+      "players": [
+        "source:android.os.BinderProxy@3d45b9e -- pack: ru.sulfi.sulfi_hypnotherapy -- client: android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce -- gain: GAIN -- flags: PAUSES_ON_DUCKABLE_LOSS -- loss: none -- notified: true -- limbofalse -- uid: 10209 -- attr: AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null -- sdk:36",
+        "AudioPlaybackConfiguration piid:103 deviceId:2 type:android.media.AudioTrack u/pid:10209/4191 state:started attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null sessionId:121 mutedState:none  FormatInfo{isSpatialized=false, channelMask=0x1, sampleRate=44100}",
+        "11-11 22:07:00:161 new player piid:103 uid/pid:10209/4191 type:android.media.AudioTrack attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null session:121"
+      ],
+      "active": true,
+      "diagnosticLines": [
+        "source:android.os.BinderProxy@3d45b9e -- pack: ru.sulfi.sulfi_hypnotherapy -- client: android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce -- gain: GAIN -- flags: PAUSES_ON_DUCKABLE_LOSS -- loss: none -- notified: t",
+        "11-11 22:06:58:454 requestAudioFocus() from uid/pid 10209/4191 AA=USAGE_MEDIA/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce callingPack=ru.sulfi.sulfi_hypnotherapy req=1 flags=0x2",
+        "(not logged)  AudioPlaybackConfiguration piid:87 deviceId:0 type:android.media.SoundPool u/pid:1000/559 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isS",
+        "AudioPlaybackConfiguration piid:95 deviceId:0 type:android.media.SoundPool u/pid:10181/916 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isSpatialized=fa",
+        "AudioPlaybackConfiguration piid:103 deviceId:2 type:android.media.AudioTrack u/pid:10209/4191 state:started attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null sessionId:121 mutedState:none  FormatInfo{isSpatialized=false, channelMask",
+        "ducked players piids:",
+        "faded out players piids:",
+        "muted player piids due to call/ring:",
+        "muted players (piids) awaiting device connection:",
+        "current portId to piid map:",
+        "portId: 16 piid: 103",
+        "11-11 22:04:59:576 new player piid:87 uid/pid:1000/559 type:android.media.SoundPool attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null session:0"
+      ]
+    },
+    {
+      "uid": "10209",
+      "players": [
+        "source:android.os.BinderProxy@3d45b9e -- pack: ru.sulfi.sulfi_hypnotherapy -- client: android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce -- gain: GAIN -- flags: PAUSES_ON_DUCKABLE_LOSS -- loss: none -- notified: true -- limbofalse -- uid: 10209 -- attr: AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null -- sdk:36",
+        "AudioPlaybackConfiguration piid:103 deviceId:2 type:android.media.AudioTrack u/pid:10209/4191 state:started attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null sessionId:121 mutedState:none  FormatInfo{isSpatialized=false, channelMask=0x1, sampleRate=44100}",
+        "11-11 22:07:00:161 new player piid:103 uid/pid:10209/4191 type:android.media.AudioTrack attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null session:121"
+      ],
+      "active": true,
+      "diagnosticLines": [
+        "source:android.os.BinderProxy@3d45b9e -- pack: ru.sulfi.sulfi_hypnotherapy -- client: android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce -- gain: GAIN -- flags: PAUSES_ON_DUCKABLE_LOSS -- loss: none -- notified: t",
+        "11-11 22:06:58:454 requestAudioFocus() from uid/pid 10209/4191 AA=USAGE_MEDIA/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@1588bc9com.ryanheise.audio_session.AudioManagerSingleton$$ExternalSyntheticLambda0@3c0f2ce callingPack=ru.sulfi.sulfi_hypnotherapy req=1 flags=0x2",
+        "(not logged)  AudioPlaybackConfiguration piid:87 deviceId:0 type:android.media.SoundPool u/pid:1000/559 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isS",
+        "AudioPlaybackConfiguration piid:95 deviceId:0 type:android.media.SoundPool u/pid:10181/916 state:idle attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null sessionId:0 mutedState:none  FormatInfo{isSpatialized=fa",
+        "AudioPlaybackConfiguration piid:103 deviceId:2 type:android.media.AudioTrack u/pid:10209/4191 state:started attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_SPEECH flags=0x800 tags= bundle=null sessionId:121 mutedState:none  FormatInfo{isSpatialized=false, channelMask",
+        "ducked players piids:",
+        "faded out players piids:",
+        "muted player piids due to call/ring:",
+        "muted players (piids) awaiting device connection:",
+        "current portId to piid map:",
+        "portId: 16 piid: 103",
+        "11-11 22:04:59:576 new player piid:87 uid/pid:1000/559 type:android.media.SoundPool attr:AudioAttributes: usage=USAGE_ASSISTANCE_SONIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null session:0"
+      ]
+    }
+  ],
+  "localCapsule": {
+    "zipBytes": 11387,
+    "sha256": "2e0daeb3b421da5b243ccfbf1b668823e0cbe9dd324e2b0973289ad45cdab409",
+    "crc": "PASS",
+    "localDocumentsUi": true
+  },
+  "realGoogleUsers": "NOT_RUN",
+  "authenticatedLogout": "NOT_RUN",
+  "physicalDevices": "NOT_RUN",
+  "heardSound": "NOT_RUN",
+  "audioPickerImport": "NOT_RUN_CONTROLLED_SQL_PRECONDITION",
+  "serverDeploy": "NOT_RUN",
+  "previewProbe": {
+    "runId": 43109747797,
+    "source": "75a6b70267e964e03490c49d7e26d7329ba375ca",
+    "workflowConclusion": "failure",
+    "cases": [
+      {
+        "case": "install23_launch",
+        "status": "PASS",
+        "details": {
+          "versionCode": 23,
+          "launched": true
+        }
+      },
+      {
+        "case": "synthetic_local_fixture",
+        "status": "PASS",
+        "details": {
+          "rowsSeeded": 1,
+          "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+          "schema": 9,
+          "seedMethod": "controlled SQLite precondition, not UI import"
+        }
+      },
+      {
+        "case": "update23_to24_preserves_data",
+        "status": "PASS",
+        "details": {
+          "versionCode": 24,
+          "dataPreserved": true,
+          "sqliteIntegrity": "ok"
+        }
+      },
+      {
+        "case": "library_native_preview",
+        "status": "BLOCKED",
+        "error": "AssertionError:NATIVE_PLAYBACK_NOT_OBSERVED"
+      }
+    ],
+    "diagnosis": "UI exact-button probe did not observe an application AudioTrack; source cause not established; not a real-Google-user blocker and not physical-phone evidence"
+  }
+}

@@ -15,7 +15,7 @@
 
 | Область | Ветка и точный исходник | Черновик |
 |---|---|---|
-| APK QA и документация | research/task16-autonomous; исполняемый harness e777d851ef0b2e40953f8884446b36c01485950c | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
+| APK QA и документация | research/task16-autonomous; исполняемый smoke harness e777d851ef0b2e40953f8884446b36c01485950c; preview probe75a6b70267e964e03490c49d7e26d7329ba375ca | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
 | G3 inventory/dry-run/rollback | research/task16-g3-revisions; **b76083df2ae7adc2d5a3e0c0fe05a3500d052626** | [PR43](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/43) |
 | Drive RPC кандидат | perf/task16-drive-reads; **cd92f95cc44c11bddbc6985288f83b68fcb240ec** | [PR42](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/42) |
 
@@ -25,9 +25,26 @@
 
 Локально /dev/kvm, adb/emulator отсутствуют; свободного диска недостаточно для SDK/AVD, поэтому локально они не устанавливались. На GitHub Ubuntu24 KVM доступен — hardware gate выполняется до скачивания system image. Используется Android35 google_apis x86_64, существующие APK23/24, SHA allowlist и disposable emulator с airplane mode. Реальные Google-аккаунты не добавлялись, роль в базе не подделывалась.
 
-Фактический окончательный результат эмулятора: **PENDING_FINAL_EMULATOR_RESULT**. Подробные case-результаты будут зафиксированы в EMULATOR_QA_AUTONOMOUS.json. Гостевой restart не является проверкой authenticated logout. Наблюдение нативного audio player не означает слышимый звук на физическом телефоне.
+Фактический окончательный результат эмулятора: **основной run43108347041 SUCCESS, 7 PASS /1 BLOCKED; отдельный preview probe43109747797 FAILED — активный поток не подтверждён**. Подробные case-результаты зафиксированы в EMULATOR_QA_AUTONOMOUS.json. Гостевой restart не является проверкой authenticated logout. Наблюдение нативного audio player не означает слышимый звук на физическом телефоне.
 
 Первые запускающие проверки выявили ограничения harness: private draft assets недоступны read-only integration token (403), холодный старт debug APK требовал ожидания SQLite, а adb shell терял quoting составного run-as. Они исправлены в тестовом сценарии, не в приложении. Ранний run 43100461153 завершился SUCCESS при BLOCKED cases: он **не считается QA PASS**. После удаления системного препятствия выявлен неполный тестовый JSON шаблона (description/isDefault); он заменён сериализацией реальных моделей и проверен roundtrip через их fromMap/toMap. Это ошибка фикстуры, не данных владельца. Прежние зелёные jobs с недоступным UI не считаются функциональной приёмкой. Теперь install/seed/update/client требуют ещё и готовый интерфейс приложения, при ошибке job завершается с отказом.
+
+
+
+| Native-сценарий | Итог основного прогона |
+|---|---|
+| Установка/рабочий UI APK23 |PASS|
+| Синтетические preconditions, созданные через модели приложения |PASS — это подготовка, не штатный импорт через audio picker|
+| Обновление23→24: аудиобайты/SHA, шаблон, текущий план и SQLite integrity |PASS на эмуляторе, schema9→9|
+| Библиотечный preview |BLOCKED: UID-аудиопоток после нажатия не подтверждён; отдельная диагностика ниже|
+| Сессия при выключенном экране |PASS: AudioTrack UID10209/PID4191 state:started до/после screen-off,44100Hz; слышимый звук NOT_RUN|
+| Отдельная клиентская установка/пустая собственная база |PASS|
+| Гость после перезапуска и переход в права |PASS; authenticated logout NOT_RUN|
+| ZIP через DocumentsUI → CLIENT restore с сохранением местных → точные аудиобайты/шаблон |PASS;11387байт,CRC/SHA, реальный локальный importer, не cloud E2E|
+
+Основной прогон: [43108347041](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43108347041), source e777d851ef0b2e40953f8884446b36c01485950c. ZIP SHA256:2e0daeb3b421da5b243ccfbf1b668823e0cbe9dd324e2b0973289ad45cdab409. [Скриншот EMULATOR_SCREENSHOT.png](https://drive.google.com/file/d/1r1QK4t-heExFdRYhTSgBPWXNNjvKRjWT/view?usp=drivesdk) получен настоящим screencap эмулятора; его bytes сохранены через private CI logs, потому что artifact quota исчерпана. Это не изображение, нарисованное вместо интерфейса.
+
+**Оставшаяся native-проблема:** отдельный [preview probe43109747797](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43109747797), source75a6b70267e964e03490c49d7e26d7329ba375ca, повторно подтвердил install/seed/update, но точное нажатие кнопки preview не дало наблюдаемого AudioTrack. UI через12секунд всё ещё показывает «Прослушать», сама кнопка найдена и clickable. Причина пока не установлена: это техническая диагностика preview, а не отсутствие Google-аккаунтов. Нельзя считать библиотечное воспроизведение прошедшим проверку. В сессии тот же AAC даёт UID-привязанный AudioTrack и проходит screen-off. Следующее безопасное исследование — отдельный native trace LocalPreviewPlayer/audio-session/lifecycle с полным runtime error и ожиданием состояния; менять рабочую APK24 или гадать патч не следует. Слышимый звук/наушники/настоящий lockscreen также остаются NOT_RUN.
 
 Workflow допускает emulator job только для manual workflow_dispatch в точной research-ветке этого приватного repository. Для GET draft assets нужен transient GITHUB_TOKEN contents:write; actual release/ACL mutations не выполняются. OAuth/clasp/signing secrets этому job не передаются, credentials checkout не сохраняет. Используемый emulator action закреплён по полному SHA.
 
@@ -70,8 +87,10 @@ Workflow допускает emulator job только для manual workflow_dis
 |---|---|
 | [G3 CI 43105927067](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43105927067), b76083d |SUCCESS: 432 Flutter, 43 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
 | [Perf CI 43102167730](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43102167730), cd92f95 |SUCCESS: 424 Flutter, 45 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
+| [Native smoke43108347041](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43108347041), e777d85 |7 PASS/1 BLOCKED; общий SUCCESS не равен всем native PASS |
+| [Preview probe43109747797](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43109747797),75a6b70 |FAILED assertion / preview BLOCKED, остальные3setup PASS |
 | G3 targeted |11 PASS; flutter analyze --fatal-infos: No issues found |
-| Python harness syntax |py_compile PASS |
+| Python harness / fixture |py_compile и actual-model roundtrip PASS; dart analyze fixture tool clean |
 | Новая сборка APK |NOT_RUN — APK24 сохранены по заданию |
 | Deploy нового GAS / повтор большого live E2E |NOT_RUN — не разрешён/не нужен |
 | Реальный Google MASTER/CLIENT |NOT_RUN; BLOCKED до участия двух настоящих пользователей |
@@ -83,8 +102,19 @@ Workflow допускает emulator job только для manual workflow_dis
 
 **До физических тестов:** после code review принять документацию, протокол безопасной выдачи неизменённых APK, дополнительные регрессионные тесты и изолированный G3 sandbox. Продолжать точные readers отдельной веткой, не снимая save guard. Performance candidate готов к review, но не к самовольному production deploy.
 
+**Не закрыто автономно:** библиотечный preview на эмуляторе; точная причина требует отдельного native trace, это не заменяется Google-входом.
+
 **Отложить:** настоящую миграцию G3/GC, замену APK24, live-внедрение оптимизации без разрешения, публичные ссылки без разрешения, закрытие Google/двухтелефонной приёмки. Задание №16 не объявляется завершённым.
 
 **Первый шаг владельца, когда появится возможность:** прежняя мастерская APK24 → «Дневник» → «Подключение и права» → «Войти через Google» под аккаунтом владельца → «Проверить права на сервере»; сообщить текст результата. При конфликте установки не удалять приложение/аудио. Второй телефон подключается затем. Компьютер, пароль/токен в чате и повторный clasp-login не нужны. Полный сценарий: PHONE_QA_AUTONOMOUS.md.
 
-Отчёты добавляются в существующую [папку №16](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z), старые файлы сохраняются. DRIVE_UPLOAD_INDEX_AUTONOMOUS.json содержит проверенные IDs/размеры/parents новых файлов. После завершения uploads выполняется metadata readback и byte-проверка итогового отчёта.
+Отчёты добавляются в существующую [папку №16](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z), старые файлы сохраняются. DRIVE_UPLOAD_INDEX_AUTONOMOUS.json содержит проверенные IDs/размеры/parents новых файлов. Metadata readback проверяет папку/имя/размер каждого нового файла; raw byte-readback итогового отчёта фиксируется отдельно в DRIVE_READBACK_SHA256.json.
+
+## Повтор для Codex/CI, не инструкция владельцу с телефона
+
+- Проверка синтетического native precondition: `dart --packages=.dart_tool/package_config.json tool/task16/emulator_fixture.dart --check`; используется сериализация настоящих моделей, без DB/OAuth.
+- Только исходные APK: workflow checks.yml / research/task16-autonomous / emulator_qa=true / build_mode=checks. Не включать auth-candidate/dual-apk и не восстанавливать signing/clasp secrets ради QA.
+- G3: `flutter test test/task16_g3_sandbox_test.dart test/task15_revision_boundary_test.dart --reporter expanded` в research/task16-g3-revisions.
+- RPC regression: `node --test server/alchemist/test/*.test.mjs` в perf/task16-drive-reads; сборка source `node scripts/alchemist/build.mjs /tmp/alchemist-candidate` не означает deploy.
+
+Чтобы продолжить, читать последние записи PROGRESS.md и этот отчёт, сохранять APK24 и version6. Не повторять C0 или прежний большой live E2E ради нового отчёта.
