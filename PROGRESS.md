@@ -346,3 +346,35 @@ Node 17 PASS. Local Dart→production JS-domain integration passes track/module/
 Trusted-main workflow-only PR19 merged at 75339b06f423255a90c2e535ebeca22c3cd2d551. Run42799396321 SUCCESS: SCRIPT_PROJECTS=YES, SCRIPT_DEPLOYMENTS=YES, WEBAPP_DEPLOY=YES, DRIVE_FILE=YES, DRIVE_FULL=NO, CI_GOOGLE_ID_TOKEN_VERIFIED=YES. No cloud writes/deploy, no secret values in logs. CI ID token can support protected bootstrap; it is NOT an Android web OAuth client. Actual runtime Drive consent and parent-folder write ability are not proven by these scope flags.
 
 Source checkpoint7d36b72: backend CI runs42798789171/42798781189 SUCCESS, two-APK workflow42798778168 running. Regression rerun33PASS after dropdown fix, analyzer clean. Active newer server hardening (post7d36b72): metadata gallery, centralized JSON routing/rate budget/denial logging, idempotent grant registry with atomic runtime authority property, byte-alias metadata isolation. Not yet final/production verified. No Task17.
+
+
+## №16/16-А — автономная контрольная точка 2026-11-11
+
+- Accepted APK24/source cbe05240d463b9dafbe9a12ee831c967bdbf6113 и GAS version6 сохранены. Работа из c895291 разнесена по трём веткам; приложение не пересобирается и настоящая база не мигрируется.
+- G3 research: research/task16-g3-revisions, 4620db283db07f990a6e116009a6d5a2bed62f92, draft PR43. 10 targeted PASS (7 new+3 existing), analyzer clean; exact resolver/dry-run/sandbox rollback, ещё НЕ product integration.
+- Perf candidate: perf/task16-drive-reads, cd92f95cc44c11bddbc6985288f83b68fcb240ec, draft PR42. Node45PASS и source build PASS, local Drive RPC35→25 при одинаковом SHA; не live latency и не deployment.
+- Root research/task16-autonomous: неизменённые APK23/24 запускаются на KVM API35 в GitHub Actions; Google identity не подменяется. Ранние harness errors фиксируются как BLOCKED, не выдаются за product PASS. CI/final evidence ожидаются в текущей итерации.
+- Следующая точка: получить результаты run43102848830 (emulator), 43102167730 (perf CI), 43102467566 (G3 CI); завершить AUTONOMOUS_CONTINUATION.md, загрузить новые reports в существующую папку №16 и проверить readback. Не запускать production deploy/большой live E2E.
+- Настоящий MASTER/CLIENT, два телефона, физический звук/logout остаются NOT_RUN. Дальнейший ручной шаг владельца — Google-вход MASTER в прежней APK24, когда появится возможность.
+
+### Native QA checkpoint
+
+Run43104124981 SUCCESS: install23, controlled SQLite fixture, update23→24 with exact audio/template/draft preservation and integrity, client24 separate empty schema9 PASS. Preview/session/guest/capsule UI blocked by system Pixel Launcher ANR, not marked as product PASS. Final harness commit288b45deafb6b9e9cbe9892bc830da6c86c1345a handles ONLY that named system ANR and uses direct am start; no Sulfi ANR suppression. Current run43105166412 is pending. Both research CIs finished SUCCESS: G3 431Flutter/43Node/24legacy/3CLIENT; perf424Flutter/45Node/24legacy/3CLIENT. Main report is a working draft until final emulator case evidence/readback.
+
+G3 hardened checkpoint: b76083df2ae7adc2d5a3e0c0fe05a3500d052626,11 targeted PASS / analyzerclean. Legacy history missing frozen hash now blocks even when one current revision exists; same-blob metadata ambiguity covered with/without frozen hash. Negative control on prior sandbox4620db2 fails as expected. Final fullCI43105927067 pending; earlier431FlutterCI applies only to4620db2. No app/runtime integration or real DB migration.
+
+Final emulator fixture checkpoint083fa8d14f58785095de09856ee79ec136ea9bea / run43106506440. Native seed JSON now generated+roundtrip validated by actual AudioAsset/CurrentSessionDraft/SessionTemplate models (earlier fixture omitted required description/isDefault). UI-ready guards prevent DB-only preservation from being called usable-app QA. Earlier green runs with bootstrap error are NOT functional upgrade PASS. No user data involved. Wait for final native cases before report; G3 final CI43105927067 also pending.
+
+Checkpoint native valid-data run43106506440 SUCCESS/source083fa8d: real UI installation/update23→24+audio SHA/template/draft/SQLite integrity and separate client schema9 PASS. Native preview/session audio not observed (not accepted); guest return route and capsule merge UI still blocked. Actual local ZIP saved + client verified preview with1audio/1template/1history; screenshot retained from private logs without artifact allocation. Final sourcee777d851ef0b2e40953f8884446b36c01485950c / run43108347041 handles actual preserve-local conflict choice and bounded navigation; wait, no more new APK/deploy. G3 finalCI43105927067 SUCCESS432Flutter/43Node/24legacy/3CLIENT.
+
+## Terminal autonomous checkpoint №16/16-А, 2026-11-11
+
+Native smoke43108347041/sourcee777d851ef0b2e40953f8884446b36c01485950c:7PASS/1BLOCKED, actual install/update+UI+SQLite/audio/template/draft preservation, separateclientDB, guestrestart, session UID AudioTrack through screen-off, actual local ZIP export/import with byteSHA. Google users/heard sound/physical devices NOT_RUN. Exact previewprobe43109747797/source75a6b70267e964e03490c49d7e26d7329ba375ca FAILED assertion: no observed preview AudioTrack, UI stays Play; cause not established, separate technical issue, not a Google-account blocker. Do not call all native cases PASS.
+
+G3 b76083df2ae7adc2d5a3e0c0fe05a3500d052626 / PR43 / CI43105927067 SUCCESS432Flutter;11targeted (8new+3existing), no real DB migration. Perf cd92f95cc44c11bddbc6985288f83b68fcb240ec / PR42 / CI43102167730 SUCCESS424Flutter/45Node;35→25RPC verify only, no live-latency claim/deploy. PR44 contains QA/docs only.
+
+Finish report upload/readback in existing folder1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z; preserve prior24 reports. SourceAPK24cbe0524/assets/certificate/server6/main/task16base remain unchanged. Next human step when available: actual MASTER Google login in existingAPK24; then second real account/two phones/Elman3tracks. Task16 not complete; noTask17/newserver/publicrelease/GC/productiondeploy.
+
+### Report delivery verified
+
+AUTONOMOUS_CONTINUATION.md Drive ID14vEEKwgNwBxIjVYojSSPQIV673A8l7vg in existing reports16 folder.16new reports/assets verified by metadata name/size/parent; main raw download21415bytes exactly matches SHA25615a0e0362e890bfbac9daf6b1c6e46e4d560da7ac7d4da8fa135b5da8c8d6796. Index/proof also uploaded; original24 files and sharing untouched. PR42/43/44 remain draft, source/CI separated. No remaining CI running. Task16 not closed; native preview unresolved separately from real Google/two-phone blocker. No automated production or data migration step is authorized by this checkpoint.

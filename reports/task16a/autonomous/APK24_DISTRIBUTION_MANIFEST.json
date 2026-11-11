@@ -1,0 +1,24 @@
+{
+  "version": "0.4.16+24",
+  "appSource": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "apkUnchanged": true,
+  "physicalQa": "NOT_RUN",
+  "googleUserQa": "NOT_RUN",
+  "signingCertificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "files": [
+    {
+      "name": "sulfi-master-test-24.apk",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "bytes": 193718245,
+      "sha256": "a242d8222af27c936f44c86b47e2cf674c3789072c3a7cac9aa4bba3afe3cda1",
+      "assetId": 736432720
+    },
+    {
+      "name": "sulfi-client-test-24.apk",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "bytes": 193718285,
+      "sha256": "352e8d087fd6c80f632e6d150b517ff07f41f492d01322e8443ff5fa784da8f1",
+      "assetId": 736433144
+    }
+  ]
+}

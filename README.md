@@ -1,5 +1,8 @@
 # №16/16-А · две сборки для приёмки · 0.4.16+24
 
+> Актуальный статус №16/16-А (2026-11-11): существующий «Сервер Проекта Алхимик» version6 и обе APK 0.4.16+24 сохранены. Реальные Google MASTER/CLIENT и два физических телефона ещё не проверены. Автономные исследования изолированы от приложений; см. [AUTONOMOUS_CONTINUATION](reports/task16a/autonomous/AUTONOMOUS_CONTINUATION.md). Ниже также сохранены исторические сведения прежних этапов.
+
+
 [Новый результат](reports/task16a/continuation24/RESULT_CONTINUATION_24.md) · [147критериев](reports/task16a/continuation24/ACCEPTANCE_CURRENT_24.md) · [точные шаги Android](reports/task16a/continuation24/PHONE_QA_24.md).
 
 Обе подписанные QA APK24 из одного source cbe0524 собраны в CI43072088028 и независимо скачаны/проверены. Server6/endpoint прежний. CI424Flutter/43Node/24legacy PASS. Исправлены состояние Google-входа каталога и перенос официальных меток через капсулу, с сохранением локального режима. **Реальный вход двух Google-пользователей и два телефона ещё не проверены; задача не закрыта.** Отчёты в прежней папке №16; APK только private GitHub draft/файлы, не Drive. История ниже сохранена.

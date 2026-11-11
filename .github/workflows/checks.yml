@@ -8,6 +8,15 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      emulator_qa:
+        description: 'Isolated APK23/24 emulator QA, no rebuild, no Google accounts'
+        type: boolean
+        default: false
+      qa_scope:
+        description: 'Existing APK native cases: full smoke or isolated preview diagnosis'
+        type: choice
+        options: [smoke, preview]
+        default: smoke
       build_mode:
         description: '16-A: checks only; one auth candidate; or final dual APK after real server acceptance'
         type: choice
@@ -23,6 +32,7 @@ concurrency:
 
 jobs:
   verify:
+    if: inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -156,3 +166,76 @@ jobs:
             ${{ runner.temp }}/CLIENT_SHA256SUMS
           if-no-files-found: error
           retention-days: 14
+
+  emulator_qa:
+    # GitHub draft assets require a write-capable integration token to be visible.
+    # This exact-branch manual job performs GETs only; repository/Drive ACLs are unchanged.
+    permissions:
+      contents: write
+    if: github.event_name == 'workflow_dispatch' && inputs.emulator_qa == true && github.ref == 'refs/heads/research/task16-autonomous' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Hardware gate before installing any emulator image
+        id: kvm
+        run: |
+          if [ -c /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            test -r /dev/kvm && test -w /dev/kvm
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+            echo 'KVM_GATE=PASS'
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo 'KVM_GATE=BLOCKED_NO_DEVICE; NO_SYSTEM_IMAGE_INSTALLED'
+          fi
+      - name: Download existing immutable APKs (read-only, no signing/OAuth secrets)
+        if: steps.kvm.outputs.available == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/apk24"
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/735816181 -H 'Accept: application/octet-stream' > "$RUNNER_TEMP/apk24/master23.apk"
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/736432720 -H 'Accept: application/octet-stream' > "$RUNNER_TEMP/apk24/master24.apk"
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/736433144 -H 'Accept: application/octet-stream' > "$RUNNER_TEMP/apk24/client24.apk"
+          python3 - <<'PYCODE'
+          import hashlib,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'apk24'
+          expected={'master23.apk':'893a83cb06e9f5baf80643fac7946d9fdcf3ebdefbb3c948ff94415087d7fcd3','master24.apk':'a242d8222af27c936f44c86b47e2cf674c3789072c3a7cac9aa4bba3afe3cda1','client24.apk':'352e8d087fd6c80f632e6d150b517ff07f41f492d01322e8443ff5fa784da8f1'}
+          for name,digest in expected.items(): assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
+          print('ORIGINAL_APK23_24_HASHES_VERIFIED_NO_REBUILD')
+          PYCODE
+      - name: Run existing APKs on actual Android emulator (synthetic local data)
+        if: steps.kvm.outputs.available == 'true'
+        uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
+        env:
+          SULFI_QA_SCOPE: ${{ inputs.qa_scope }}
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -memory 2048
+          script: python3 scripts/task16_autonomous/emulator_qa.py
+      - name: Record fixed-schema evidence even when artifact quota is exceeded
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'emulator-evidence/EMULATOR_QA.json'
+          if p.exists():
+              v=json.loads(p.read_text())
+              for row in v['cases']: print('EMULATOR_RESULT='+json.dumps(row,separators=(',',':')))
+          else: print('EMULATOR_QA=BLOCKED_OR_NOT_RUN; NO_GOOGLE_USERS')
+          PYCODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: task16-autonomous-emulator-${{ github.run_id }}
+          path: ${{ runner.temp }}/emulator-evidence/
+          retention-days: 14
+          if-no-files-found: ignore

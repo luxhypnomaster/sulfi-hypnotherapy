@@ -313,3 +313,15 @@
 - [ ] Утверждение Home media K008 и Home draft preview.
 - [x] Separate same-code client test build configuration; actual CI artifact verification tracked in Task15 report.
 - [ ] Live provider deployment/auth decisions and physical two-device acceptance (следующее серверное ТЗ).
+
+
+## №16/16-А — автономное продолжение 2026-11-11
+
+- [x] Изолированный G3 inventory/dry-run/rollback: 8 новых + 3 boundary-теста; пользовательские базы не мигрируются.
+- [x] Кандидат Drive RPC 35 → 25 на fixture-передаче, 45 Node-проверок; deployment не выполнялся.
+- [x] Протокол выдачи прежних APK24 без раскрытия source repository и без Google Drive.
+- [ ] Полное подключение exact G3 readers и проверенная пользовательская миграция (отдельная приёмка).
+- [ ] Реальные Google MASTER/CLIENT, обновление и звук на двух физических телефонах.
+- [ ] Production внедрение оптимизации после review/разрешения и ограниченного live-измерения.
+
+Сводные факты, CI и остаток: reports/task16a/autonomous/AUTONOMOUS_CONTINUATION.md. Текущие APK24 и server6 не заменять.
