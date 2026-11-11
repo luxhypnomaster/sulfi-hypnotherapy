@@ -18,7 +18,7 @@ Revision ID — hash канонических metadata/dependencies, а blob SHA
 
 ## Проверено
 
-7 новых тестов и 3 существующих boundary-теста: 10 PASS. flutter analyze --fatal-infos: No issues found. Проверены сохранность источника, A/B, exact playback bytes (не слышимый звук), неизменяемость строк, stale plan, active session, неоднозначная история/metadata, tampered blob, инъекция сбоя, rollback и SQLite integrity. Это Flutter/FFI fixture-тесты, не проверка Android migration на настоящей базе.
+8 новых тестов и 3 существующих boundary-теста: 11 PASS. flutter analyze --fatal-infos: No issues found. Проверены сохранность источника, A/B, exact playback bytes (не слышимый звук), неизменяемость строк, stale plan, active session, неоднозначная история/metadata, tampered blob, инъекция сбоя, rollback и SQLite integrity. Это Flutter/FFI fixture-тесты, не проверка Android migration на настоящей базе.
 
 ## Обязательные читатели перед интеграцией
 
@@ -35,6 +35,8 @@ Revision ID — hash канонических metadata/dependencies, а blob SHA
 
 ## Безопасная последовательность внедрения
 
-До physical QA можно принять только исследования/тесты и продолжать точный resolver отдельным PR. Продуктовую схему не мигрировать, save guard не снимать. Перед дальнейшим применением: полный reader checklist, проверенные backup+restore на disposable копии, отсутствие active runs и конкурентной записи, crash/no-space matrix, затем отдельное разрешение владельца и физическая приёмка. Этот прототип не является готовым мигратором пользовательских данных. При ambiguities нужен ручной выбор, никакого автоматического перепривязывания истории.
+До physical QA можно принять только исследования/тесты и продолжать точный resolver отдельным PR. Продуктовую схему не мигрировать, save guard не снимать. Перед дальнейшим применением: полный reader checklist, проверенные backup+restore на disposable копии, отсутствие active runs и конкурентной записи, crash/no-space matrix, затем отдельное разрешение владельца и физическая приёмка. Этот прототип не является готовым мигратором пользовательских данных. При отсутствии frozen hash даже единственная текущая ревизия не доказывает старые байты: inventory блокируется, а не выбирает head. При ambiguities нужен ручной выбор, никакого автоматического перепривязывания истории.
 
 Повторить безопасно: flutter test test/task16_g3_sandbox_test.dart test/task15_revision_boundary_test.dart --reporter expanded. Скрипт не принимает путь к пользовательской базе и не включён в приложение. Production rollout/GC/восстановление поверх настоящей базы: NOT_RUN и не разрешены этой работой.
+
+Дополнительный review закрыл legacy fallback при одинаковых bytes/разных metadata и при единственной текущей ревизии без historical proof. Negative control на прежнем sandbox4620db2 воспроизводит падение нового сценария; текущие11тестов проходят. Это дефект исследовательского прототипа, который никогда не подключался к приложению.

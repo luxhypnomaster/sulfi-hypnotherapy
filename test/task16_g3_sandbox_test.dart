@@ -214,19 +214,86 @@ void main() {
       await f.close();
     }
   });
-  test('G3 same bytes with ambiguous metadata refuses to invent historical revision', () async {
+  test('G3 same bytes with ambiguous metadata refuses to invent historical revision with or without frozen hash', () async {
+    for (final frozenHash in [true, false]) {
+      final f = await Fixture15.open();
+      try {
+        final s = await seed(f);
+        // Isolate two metadata revisions of the SAME blob; a second blob must
+        // not accidentally make this legacy-ambiguity test pass.
+        final second = ContentRevisionStore.revisionForRow(
+          'audio_assets',
+          s.b.toMap(),
+        )!;
+        await f.db.delete(
+          'content_revisions',
+          where: 'id=?',
+          whereArgs: [second.key.token],
+        );
+        final edited = AudioAsset.fromMap({
+          ...s.a.toMap(),
+          'title': 'Later metadata only',
+        });
+        await ContentRevisionStore(f.db).put(
+          ContentRevisionStore.revisionForRow('audio_assets', edited.toMap())!,
+        );
+        if (!frozenHash) {
+          for (final row in await f.db.query('session_runs')) {
+            final payload =
+                jsonDecode(row['payload'] as String) as Map<String, dynamic>;
+            (payload['snapshot'] as Map).remove('audioMetadata');
+            await f.db.update(
+              'session_runs',
+              {'payload': jsonEncode(payload)},
+              where: 'id=?',
+              whereArgs: [row['id']],
+            );
+          }
+        }
+        final plan = await G3Research.inventory(f.db, f.c.library.directory);
+        expect(
+          plan.blockers,
+          contains(
+            frozenHash
+                ? 'AMBIGUOUS_HISTORY_REVISION'
+                : 'AMBIGUOUS_OR_MISSING_LEGACY_REFERENCE',
+          ),
+        );
+        await expectLater(
+          G3Research.applyToNewSandbox(f.db, f.c.library.directory, plan),
+          throwsStateError,
+        );
+      } finally {
+        await f.close();
+      }
+    }
+  });
+  test('G3 legacy history without frozen bytes blocks even with only one current revision', () async {
     final f = await Fixture15.open();
     try {
       final s = await seed(f);
-      final edited = AudioAsset.fromMap({
-        ...s.a.toMap(),
-        'title': 'Later metadata only',
-      });
-      await ContentRevisionStore(f.db).put(
-        ContentRevisionStore.revisionForRow('audio_assets', edited.toMap())!,
+      final second = ContentRevisionStore.revisionForRow(
+        'audio_assets',
+        s.b.toMap(),
+      )!;
+      await f.db.delete(
+        'content_revisions',
+        where: 'id=?',
+        whereArgs: [second.key.token],
       );
+      for (final row in await f.db.query('session_runs')) {
+        final payload =
+            jsonDecode(row['payload'] as String) as Map<String, dynamic>;
+        (payload['snapshot'] as Map).remove('audioMetadata');
+        await f.db.update(
+          'session_runs',
+          {'payload': jsonEncode(payload)},
+          where: 'id=?',
+          whereArgs: [row['id']],
+        );
+      }
       final plan = await G3Research.inventory(f.db, f.c.library.directory);
-      expect(plan.blockers, contains('AMBIGUOUS_HISTORY_REVISION'));
+      expect(plan.blockers, contains('HISTORY_EXACT_PROOF_MISSING'));
       await expectLater(
         G3Research.applyToNewSandbox(f.db, f.c.library.directory, plan),
         throwsStateError,

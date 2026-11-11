@@ -124,8 +124,14 @@ class G3Research {
                 v['filePath'] is String &&
                 v['durationMs'] is int &&
                 v['fileSizeBytes'] is int) {
-              final r = add(Map<String, dynamic>.from(v));
-              if (r != null) frozen[r.key.content.id] = r;
+              // A legacy path alone cannot prove which bytes history used.
+              if (v['contentHash'] is! String ||
+                  !RegExp(r'^[a-f0-9]{64}$').hasMatch(v['contentHash'])) {
+                blockers.add('HISTORY_EXACT_PROOF_MISSING');
+              } else {
+                final r = add(Map<String, dynamic>.from(v));
+                if (r != null) frozen[r.key.content.id] = r;
+              }
             }
             for (final e in v.values) {
               snapshots(e);
@@ -178,19 +184,10 @@ class G3Research {
           if (v is Map) {
             if (v['audioAssetId'] is String) {
               final id = v['audioAssetId'];
-              var r = table == 'session_runs' ? frozen[id] : heads[id];
+              final r = table == 'session_runs' ? frozen[id] : heads[id];
               if (r == null && table == 'session_runs') {
-                final candidates = revisions.values
-                    .where((r) => r.key.content.id == id)
-                    .toList();
-                if (candidates
-                            .map((r) => r.payload['contentHash'])
-                            .toSet()
-                            .length ==
-                        1 &&
-                    candidates.isNotEmpty) {
-                  r = candidates.first;
-                }
+                // Even one current candidate is not proof of historical bytes.
+                blockers.add('HISTORY_EXACT_PROOF_MISSING');
               }
               if (r == null) {
                 blockers.add('AMBIGUOUS_OR_MISSING_LEGACY_REFERENCE');
