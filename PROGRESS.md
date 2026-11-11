@@ -356,3 +356,7 @@ Source checkpoint7d36b72: backend CI runs42798789171/42798781189 SUCCESS, two-AP
 - Root research/task16-autonomous: неизменённые APK23/24 запускаются на KVM API35 в GitHub Actions; Google identity не подменяется. Ранние harness errors фиксируются как BLOCKED, не выдаются за product PASS. CI/final evidence ожидаются в текущей итерации.
 - Следующая точка: получить результаты run43102848830 (emulator), 43102167730 (perf CI), 43102467566 (G3 CI); завершить AUTONOMOUS_CONTINUATION.md, загрузить новые reports в существующую папку №16 и проверить readback. Не запускать production deploy/большой live E2E.
 - Настоящий MASTER/CLIENT, два телефона, физический звук/logout остаются NOT_RUN. Дальнейший ручной шаг владельца — Google-вход MASTER в прежней APK24, когда появится возможность.
+
+### Native QA checkpoint
+
+Run43104124981 SUCCESS: install23, controlled SQLite fixture, update23→24 with exact audio/template/draft preservation and integrity, client24 separate empty schema9 PASS. Preview/session/guest/capsule UI blocked by system Pixel Launcher ANR, not marked as product PASS. Final harness commit288b45deafb6b9e9cbe9892bc830da6c86c1345a handles ONLY that named system ANR and uses direct am start; no Sulfi ANR suppression. Current run43105166412 is pending. Both research CIs finished SUCCESS: G3 431Flutter/43Node/24legacy/3CLIENT; perf424Flutter/45Node/24legacy/3CLIENT. Main report is a working draft until final emulator case evidence/readback.
