@@ -1,0 +1,15 @@
+{
+  "fingerprint": "af095475bb3d02a4289e22e53060a1dedd4ee38459e3c63ae5785b92d36bb6e0",
+  "revisions": 2,
+  "verifiedBlobs": 2,
+  "pinnedReferences": 2,
+  "blockers": [],
+  "writesToSource": 0,
+  "scope": "synthetic Fixture15 only; no real user DB",
+  "result": "PASS",
+  "targetedTestsPassed": 10,
+  "newTests": 7,
+  "existingBoundaryTests": 3,
+  "rollback": "separate verified clone; no source replacement or GC",
+  "applicationIntegration": "NOT_IMPLEMENTED_INTENTIONALLY"
+}
