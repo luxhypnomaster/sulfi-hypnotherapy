@@ -1,0 +1,91 @@
+{
+  "run": 42878030592,
+  "conclusion": "success",
+  "approvedAppServiceSource": "6f1c8b92c1a548dac73ae839f133f498a9a754fc",
+  "serverVersion": 4,
+  "serverSource": "766f178d8c0c95a270467b0d117f77105d6eef56",
+  "recoveryRun": 42887239597,
+  "artifact": 13797585085,
+  "physicalAndroid": "NOT_RUN",
+  "nativeAndroidOAuth": "NOT_CONFIGURED_OWNER_CONFIRMED",
+  "evidence": {
+    "kind": "REAL_GOOGLE_DRIVE_FLUTTER_SERVICES",
+    "physicalAndroid": "NOT_RUN",
+    "androidSdkLogin": "NOT_RUN_CI_IDENTITY",
+    "prefix": "task16e2e_42878030592_1",
+    "phases": [
+      "STARTED",
+      "REAL_AUDIO_UPLOAD_PAUSED",
+      "REAL_ANNOTATED_TRACK_INSTALLED",
+      "REAL_MODULE_MISSING_ONLY_INSTALL_AND_RECEIPT_REPLAY",
+      "REAL_METADATA_ONLY_EDIT",
+      "REAL_TEMPLATE_AND_LARGE_ZIP_INSTALLED",
+      "REAL_DIARY_IMAGE_AUDIO_VIDEO_CONTENTLINK_AND_DOWNLOAD_RESUME",
+      "REAL_PRIVATE_AND_ANONYMOUS_MUTATION_DENIED",
+      "REAL_WITHDRAW_DENIES_NEW_BYTES_OFFLINE_COPY_RETAINED",
+      "SERVICE_E2E_PASS_NOT_ANDROID_APK_QA"
+    ],
+    "uploadedBytes": 6540746,
+    "downloadedBytes": 6540746,
+    "requests": {
+      "media.beginUpload": 30,
+      "media.uploadChunk": 62,
+      "media.commitUpload": 76,
+      "content.registerManifest": 26,
+      "catalog.createDraft": 10,
+      "catalog.publish": 10,
+      "catalog.get": 28,
+      "catalog.getInstallPlan": 10,
+      "media.getDescriptor": 30,
+      "media.downloadChunk": 62,
+      "media.finalizeDownload": 14,
+      "catalog.updateMetadata": 2,
+      "auth.whoami": 2,
+      "entry.createDraft": 4,
+      "entry.publish": 2,
+      "entry.get": 4,
+      "feed.list": 2,
+      "catalog.changes": 2,
+      "entry.unpublish": 2,
+      "catalog.archive": 8
+    },
+    "maxResponseMs": {
+      "media.beginUpload": 33813,
+      "media.uploadChunk": 31792,
+      "media.commitUpload": 26041,
+      "content.registerManifest": 23266,
+      "catalog.createDraft": 41949,
+      "catalog.publish": 67910,
+      "catalog.get": 6176,
+      "catalog.getInstallPlan": 14658,
+      "media.getDescriptor": 12701,
+      "media.downloadChunk": 9653,
+      "media.finalizeDownload": 9581,
+      "catalog.updateMetadata": 48291,
+      "auth.whoami": 2728,
+      "entry.createDraft": 26556,
+      "entry.publish": 51193,
+      "entry.get": 11809,
+      "feed.list": 12394,
+      "catalog.changes": 7902,
+      "entry.unpublish": 56498,
+      "catalog.archive": 45994
+    },
+    "lastOperation": "media.getDescriptor",
+    "artifacts": {
+      "wav": {
+        "bytes": 2205044,
+        "sha256": "97cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9",
+        "durationMs": 50000
+      },
+      "zip": {
+        "bytes": 2220602,
+        "sha256": "5f1de5aa7861be368db52e6c550b5c9cf2d0aeadf1da7afc5cb4dc729f0bdec7"
+      },
+      "video": {
+        "bytes": 2100011,
+        "sha256": "ff6ba84c2b76cb94d31d9addc480d019af8b6a97b6aaa273ea686d6393a8e0f1"
+      }
+    }
+  }
+}

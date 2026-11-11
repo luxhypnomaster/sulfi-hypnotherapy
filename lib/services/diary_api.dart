@@ -1,3 +1,5 @@
+import 'diary_read_state.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -38,6 +40,8 @@ class DiaryAuthorSession {
   DiaryAuthorSession._(this._token, this.expiresAt);
   final String _token;
   final DateTime expiresAt;
+  factory DiaryAuthorSession.verified(String token, DateTime expiresAt) =>
+      DiaryAuthorSession._(token, expiresAt);
   bool get valid => expiresAt.isAfter(DateTime.now().toUtc());
 }
 
@@ -66,6 +70,23 @@ class DiaryApi {
       throw const DiaryApiException('Для дневника нужен HTTPS адрес сервера');
     }
   }
+  Future<void> synchronizeReads(
+    DiaryReadStore reads,
+    List<DiaryEntry> entries,
+  ) async {}
+  String? get queueError => null;
+  bool get supportsAdvancedPublication => false;
+  bool get supportsServerIdentity => false;
+  String? get verifiedRole => null;
+  bool get readerAuthenticated => false;
+  DateTime? get identityExpiresAt => null;
+  Future<String?> verifiedIdentityToken() async => null;
+  String get readerScope => 'public';
+  Future<void> authenticateReader(String token) async =>
+      throw const DiaryApiException('Личный сервер не подключён');
+  void clearSession() {}
+  Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {}
+  Future<int> flushPending(DiaryAuthorSession session) async => 0;
   final Uri base;
   final DiaryRequest _request;
   Uri _uri(String path, [Map<String, String>? query]) => base.replace(
@@ -301,7 +322,7 @@ class DiaryApi {
       request.followRedirects =
           false; // Never forward an author token to a redirect.
       headers.forEach(request.headers.set);
-      if (body != null) request.write(body);
+      if (body != null) request.add(utf8.encode(body));
       final response = await request.close().timeout(
         const Duration(seconds: 20),
       );
@@ -318,6 +339,8 @@ class DiaryApi {
         headers: {
           if (response.headers.value('location') case final String location)
             'location': location,
+          if (response.headers.contentType?.mimeType case final String mime)
+            'content-type': mime,
         },
       );
     } finally {

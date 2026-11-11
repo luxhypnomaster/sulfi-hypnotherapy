@@ -1,0 +1,9 @@
+{
+  "repository": "luxhypnomaster/sulfi-hypnotherapy",
+  "sourceSha": "6f1c8b92c1a548dac73ae839f133f498a9a754fc",
+  "purpose": "Reviewed actual Flutter services, synthetic opt-in live test; no arbitrary PR/branch source with production identity",
+  "files": {
+    "test/task16_live_cloud_test.dart": "1137d84db5f833f3ecea98a7264f5514676ba692c62e7fdbf7457897f5dd91da",
+    "pubspec.lock": "3148183ac74aa03a0ba5490084275427baea08f6116c44861b7360d1b3c9b135"
+  }
+}

@@ -1,0 +1,100 @@
+name: Alchemist 16 acceptance pair24 (private test draft)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: alchemist-qa-pair-24
+  cancel-in-progress: false
+jobs:
+  candidate:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Require successful pinned app checks and complete runtime config
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -n "$ALCHEMIST_API"
+          node scripts/alchemist/check-build-config.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+          const c=JSON.parse(fs.readFileSync('server/alchemist/qa-pair-source.json'));
+          const r=JSON.parse(execFileSync('gh',['api','repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/'+c.verifiedChecksRun],{encoding:'utf8'}));
+          if(r.conclusion!=='success'||r.head_sha!==c.sourceSha||r.head_branch!==c.branch||r.event!=='workflow_dispatch'||r.path!=='.github/workflows/checks.yml')throw Error('PINNED_CHECKS_NOT_SUCCESSFUL');
+          const repo=JSON.parse(execFileSync('gh',['api','repos/luxhypnomaster/sulfi-hypnotherapy'],{encoding:'utf8'}));if(repo.private!==true)throw Error('PRIVATE_REPOSITORY_REQUIRED');
+          JS
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: cbe05240d463b9dafbe9a12ee831c967bdbf6113
+          path: app-source
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./app-source/.github/actions/setup-flutter
+      - name: Resolve the tested app dependencies
+        working-directory: app-source
+        run: flutter pub get --enforce-lockfile
+      - name: Restore the existing signing key (no clasp credentials)
+        env:
+          KEY_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KEY_BASE64"
+          umask 077
+          printf '%s' "$KEY_BASE64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
+      - name: Build both acceptance candidates from the same tested source
+        working-directory: app-source
+        env:
+          SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
+          SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+          SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/qa-pair"
+          for EDITION in master client; do
+            EXTRA=()
+            if [ "$EDITION" = client ]; then EXTRA+=(--dart-define=SULFI_EDITION=client); fi
+            flutter build apk --debug "${EXTRA[@]}" --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+            cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/qa-pair/sulfi-$EDITION-test-24.apk"
+          done
+      - name: Verify both packages, signatures, version and compiled config
+        run: |
+          BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          for EDITION in master client; do
+            APK="$RUNNER_TEMP/qa-pair/sulfi-$EDITION-test-24.apk"
+            "$BUILD_TOOLS/apksigner" verify --print-certs "$APK" > "$RUNNER_TEMP/$EDITION-CERT.txt"
+            grep -q '0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6' "$RUNNER_TEMP/$EDITION-CERT.txt"
+            "$BUILD_TOOLS/aapt" dump badging "$APK" > "$RUNNER_TEMP/$EDITION-BADGING.txt"
+            PACKAGE=ru.sulfi.sulfi_hypnotherapy
+            if [ "$EDITION" = client ]; then PACKAGE="$PACKAGE.clienttest"; fi
+            grep -q "name='$PACKAGE'" "$RUNNER_TEMP/$EDITION-BADGING.txt"
+            grep -q "versionCode='24'" "$RUNNER_TEMP/$EDITION-BADGING.txt"
+            sha256sum "$APK"
+          done
+          python3 - <<'PYCODE'
+          import os,zipfile
+          for edition in ['master','client']:
+              with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/qa-pair/sulfi-'+edition+'-test-24.apk') as z:
+                  kernel=z.read('assets/flutter_assets/kernel_blob.bin')
+              for key in ['ALCHEMIST_API','GOOGLE_WEB_CLIENT_ID']:
+                  assert os.environ[key].encode() in kernel, 'COMPILED_CONFIG_MISSING'
+          print('BOTH_PACKAGES_SIGNATURES_AND_COMPILED_CONFIG_PASS')
+          PYCODE
+      - name: Deliver two test candidates to private draft without publishing a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SULFI_QA_PAIR_EXECUTE: '1'
+        run: node scripts/alchemist/qa-pair-delivery.mjs
+      - name: Remove signing file
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sulfi-test.keystore"

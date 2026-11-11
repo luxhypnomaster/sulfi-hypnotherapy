@@ -1,3 +1,6 @@
+import 'alchemist_catalog_screen.dart';
+import '../models/content_revision.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -113,9 +116,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     await c.reload();
   });
   Future<void> _action(String action, SessionTemplate t) => _run(() async {
-    if (t.origin == 'supplied' &&
-        ['rename', 'delete'].contains(action) &&
-        !c.policy.isAuthor) {
+    if (['rename', 'delete'].contains(action) &&
+        !c.policy.canEditMaterial('template', t.id, t.origin)) {
       throw StateError(
         'Общий шаблон изменяет только автор. Сохраните личный вариант.',
       );
@@ -145,6 +147,10 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
           ),
         );
       }
+    }
+    if (action == 'publish' && mounted) {
+      await preparePublication(context, c, ContentType.template, t.id);
+      return;
     }
     if (action == 'export' && mounted && c.capsules != null) {
       await exportMaterial(context, c.capsules!, templateId: t.id);
@@ -257,7 +263,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                           style: const TextStyle(fontSize: 14),
                         ),
                         subtitle: Text(
-                          '${t.plan.steps.length} элементов · ${formatDuration(t.plan.totalMs)}${t.plan.exitStepId == null ? ' · без выхода' : ''}',
+                          '${c.policy.isCatalogOriginal('template', t.id) ? 'Официальный · ' : ''}${t.plan.steps.length} элементов · ${formatDuration(t.plan.totalMs)}${t.plan.exitStepId == null ? ' · без выхода' : ''}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -277,6 +283,11 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                             }
                           },
                           itemBuilder: (_) => [
+                            if (c.capsules != null && c.library.policy.isAuthor)
+                              const PopupMenuItem(
+                                value: 'publish',
+                                child: Text('Подготовить к публикации'),
+                              ),
                             if (c.capsules != null)
                               const PopupMenuItem(
                                 value: 'export',

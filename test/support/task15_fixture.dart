@@ -18,7 +18,10 @@ class Fixture15 {
   final Database db;
   final SessionController c;
   final MemoryPlayer player;
-  static Future<Fixture15> open({bool client = false}) async {
+  static Future<Fixture15> open({
+    bool client = false,
+    Future<Duration?> Function(String)? probe,
+  }) async {
     sqfliteFfiInit();
     final root = await Directory.systemTemp.createTemp('task15-ui');
     final db = await openAppDatabase(
@@ -32,7 +35,7 @@ class Fixture15 {
       directory: Directory('${root.path}/audio'),
       pick: () async =>
           (name: 'sample.m4a', path: 'test/fixtures/android_aac_isom.m4a'),
-      probe: (_) async => const Duration(seconds: 65),
+      probe: probe ?? (_) async => const Duration(seconds: 65),
       policy: policy,
     );
     await library.initialize();

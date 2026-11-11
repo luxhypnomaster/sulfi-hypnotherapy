@@ -204,9 +204,9 @@ class LibraryService {
         .extension(selected.name)
         .toLowerCase()
         .replaceFirst('.', '');
-    if (!{'mp3', 'm4a', 'wav'}.contains(format)) {
+    if (!{'mp3', 'm4a', 'wav', 'aac', 'ogg'}.contains(format)) {
       throw const LibraryException(
-        'Выберите аудио в формате MP3, M4A или WAV.',
+        'Выберите аудио в формате MP3, M4A, WAV, AAC или OGG.',
       );
     }
     final source = File(selected.path);

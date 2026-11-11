@@ -1,0 +1,54 @@
+{
+  "observedUtc": "2026-11-10T19:28:04.874578+00:00",
+  "liveRun": 42878030592,
+  "source": "Independent actual Drive raw downloads of synthetic diary attachments",
+  "files": [
+    {
+      "mime": "image/png",
+      "byteLength": 68,
+      "sha256": "980055f32603462384baae4a3dbfa580f0579627bb98c190f84443a047126613",
+      "equalsSource": true,
+      "decodedImage": {
+        "format": "PNG",
+        "size": [
+          2,
+          2
+        ],
+        "mode": "RGBA"
+      },
+      "ownerOnlyAclReadback": true
+    },
+    {
+      "mime": "audio/mp4",
+      "byteLength": 5001,
+      "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+      "equalsSource": true,
+      "ownerOnlyAclReadback": true
+    },
+    {
+      "mime": "video/mp4",
+      "byteLength": 2100011,
+      "sha256": "ff6ba84c2b76cb94d31d9addc480d019af8b6a97b6aaa273ea686d6393a8e0f1",
+      "equalsSource": true,
+      "ownerOnlyAclReadback": true,
+      "codecProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 64,
+            "height": 48
+          }
+        ],
+        "format": {
+          "duration": "1.000000"
+        }
+      },
+      "linuxDecodeVerified": true,
+      "fixtureDescription": "Genuine one-second H264 64x48 with valid2MiB ISO free atom; not a long-film playback test"
+    }
+  ],
+  "video": "VERIFIED_PRIVATE_DRIVE_RAW_READBACK",
+  "physicalAndroid": "NOT_RUN"
+}

@@ -1,3 +1,7 @@
+import 'alchemist_identity_session.dart';
+import 'alchemist_catalog.dart';
+import 'alchemist_api.dart';
+
 import 'dart:convert';
 import 'dart:async';
 
@@ -31,6 +35,12 @@ class SessionController extends ChangeNotifier {
     this.preview,
   }) : modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
+    if (diary != null && diary!.onAccountLogout == null) {
+      diary!.onAccountLogout = () {
+        _catalogIdentity?.invalidate();
+        if (preview != null) unawaited(preview!.stop());
+      };
+    }
   }
   AccessPolicy get policy => library.policy;
   SessionController? _editorSource;
@@ -86,6 +96,66 @@ class SessionController extends ChangeNotifier {
   final PreviewPlayer? preview;
   final DiaryController? diary;
   final SessionRepository repository;
+  AlchemistCatalog? _catalog;
+  AlchemistIdentitySession? _catalogIdentity;
+  Future<void> signInAlchemistReader() async {
+    if (diary?.api?.supportsServerIdentity ?? false) {
+      await diary!.signInAuthor();
+      notifyListeners();
+      return;
+    }
+    final identity = diary?.identity;
+    if (identity == null) {
+      throw const FormatException('Вход Google не настроен');
+    }
+    final token = await (_catalogIdentity ??= AlchemistIdentitySession(
+      identity,
+    )).token();
+    await diary!.api?.authenticateReader(token);
+    await diary!.load();
+    await diary!.sync();
+  }
+
+  Future<void> signOutAlchemist() async {
+    await diary?.logout();
+    _catalogIdentity?.invalidate();
+  }
+
+  AlchemistApi alchemistApi({bool authenticated = true}) {
+    const endpoint = String.fromEnvironment('SULFI_ALCHEMIST_API');
+    if (endpoint.isEmpty) {
+      throw const FormatException(
+        'Облачный сервер ещё не подключён в этой сборке. Локальные данные доступны.',
+      );
+    }
+    return AlchemistApi(
+      Uri.parse(endpoint),
+      identityScope: () => diary?.api?.readerScope ?? 'public',
+      credential: !authenticated
+          ? (diary?.api?.readerAuthenticated == true
+                ? () => diary!.api!.verifiedIdentityToken()
+                : null)
+          : () async {
+              if (diary?.api?.supportsServerIdentity ?? false) {
+                return diary!.api!.verifiedIdentityToken();
+              }
+              final identity = diary?.identity;
+              if (identity == null) {
+                throw const FormatException('Вход Google ещё не настроен');
+              }
+              return (_catalogIdentity ??= AlchemistIdentitySession(
+                identity,
+              )).token();
+            },
+    );
+  }
+
+  AlchemistCatalog get catalog => _catalog ??= AlchemistCatalog(
+    this,
+    api: const String.fromEnvironment('SULFI_ALCHEMIST_API').isEmpty
+        ? null
+        : alchemistApi(),
+  );
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(
     plan: SessionPlan(steps: const []),
@@ -552,7 +622,7 @@ class SessionController extends ChangeNotifier {
     if (old == null) {
       throw const LibraryException('Исходный шаблон недоступен.');
     }
-    if (!policy.canEditOrigin(old.origin)) {
+    if (!policy.canEditMaterial('template', old.id, old.origin)) {
       throw const LibraryException(
         'Общий шаблон изменяет только автор. Сохраните как новый.',
       );

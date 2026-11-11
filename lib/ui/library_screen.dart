@@ -1,3 +1,6 @@
+import 'alchemist_store_screen.dart';
+import 'alchemist_catalog_screen.dart';
+import '../models/content_revision.dart';
 import '../services/session_controller.dart';
 import 'recorder_screen.dart';
 import 'modules_screen.dart';
@@ -577,6 +580,20 @@ class _LibraryScreenState extends State<LibraryScreen>
                               ],
                             ),
                           ),
+                          if (!widget.allowSelection &&
+                              widget.controller?.capsules != null)
+                            IconButton(
+                              tooltip: 'Облачный каталог',
+                              icon: const Icon(Icons.cloud_outlined),
+                              onPressed: () => Navigator.push<void>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AlchemistStoreScreen(
+                                    controller: widget.controller!,
+                                  ),
+                                ),
+                              ),
+                            ),
                           if (widget.controller != null) ...[
                             IconButton(
                               tooltip: 'Каталог модулей',
@@ -724,6 +741,8 @@ class _LibraryScreenState extends State<LibraryScreen>
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    if (widget.library.policy.isCatalogOriginal('track', a.id))
+                      const Text('Официальный', style: TextStyle(fontSize: 11)),
                     CategoryLabel(a.category),
                   ],
                 ),
@@ -744,6 +763,16 @@ class _LibraryScreenState extends State<LibraryScreen>
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onSelected: (s) {
+                  if (s == 'publish') {
+                    unawaited(
+                      preparePublication(
+                        context,
+                        widget.controller!,
+                        ContentType.track,
+                        a.id,
+                      ),
+                    );
+                  }
                   if (s == 'info') _details(a);
                   if (s == 'export') {
                     unawaited(
@@ -761,6 +790,12 @@ class _LibraryScreenState extends State<LibraryScreen>
                   if (s == 'delete') _delete(a);
                 },
                 itemBuilder: (_) => [
+                  if (widget.controller?.capsules != null &&
+                      widget.library.policy.isAuthor)
+                    const PopupMenuItem(
+                      value: 'publish',
+                      child: Text('Подготовить к публикации'),
+                    ),
                   if (widget.controller?.capsules != null)
                     const PopupMenuItem(
                       value: 'export',

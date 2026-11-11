@@ -1,3 +1,5 @@
+import 'server_authorization_screen.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -227,6 +229,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                   DiaryBlockType.text => 'Текст',
                                   DiaryBlockType.image => 'Изображение',
                                   DiaryBlockType.audio => 'Аудио',
+                                  DiaryBlockType.video => 'Видео',
                                 },
                                 style: const TextStyle(
                                   color: neonLime,
@@ -297,7 +300,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: d,
     builder: (context, _) {
-      final cloudSignedIn = d.policy != null
+      final cloudSignedIn =
+          (d.api?.supportsServerIdentity ?? false) || d.policy != null
           ? d.authenticated
           : d.authorWorkspace;
       final author = d.authorWorkspace && !readerMode,
@@ -306,11 +310,24 @@ class _DiaryScreenState extends State<DiaryScreen> {
       return LeatherScaffold(
         title: 'Журнал записей',
         actions: [
+          if (d.api?.supportsServerIdentity ?? false)
+            IconButton(
+              tooltip: 'Подключение и права',
+              icon: const Icon(Icons.verified_user_outlined),
+              onPressed: () => Navigator.push<void>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ServerAuthorizationScreen(diary: d),
+                ),
+              ),
+            ),
           if (d.canSignIn)
             IconButton(
-              tooltip: cloudSignedIn
-                  ? 'Выйти из аккаунта автора'
-                  : 'Войти как автор через Google',
+              tooltip: (d.api?.supportsServerIdentity ?? false)
+                  ? (cloudSignedIn ? 'Выйти из Google' : 'Войти через Google')
+                  : (cloudSignedIn
+                        ? 'Выйти из аккаунта автора'
+                        : 'Войти как автор через Google'),
               onPressed: d.authorBusy || busy
                   ? null
                   : () => action(cloudSignedIn ? d.logout : d.signInAuthor),
@@ -436,6 +453,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         'Текст',
                         'Изображение',
                         'Аудио',
+                        'Видео',
                       ])
                         Align(
                           alignment: Alignment.centerLeft,
@@ -459,6 +477,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                             DiaryBlockType.text => 'Текст',
                             DiaryBlockType.image => 'Изображение',
                             DiaryBlockType.audio => 'Аудио',
+                            DiaryBlockType.video => 'Видео',
                           }),
                         ),
                     ],

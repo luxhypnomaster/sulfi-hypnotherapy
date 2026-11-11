@@ -1,3 +1,5 @@
+import 'package:crypto/crypto.dart';
+
 import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
@@ -18,6 +20,13 @@ class DiaryReadStore {
   bool get loaded => _readerId != null;
   final _states = <String, Map<String, dynamic>>{};
   Future<void>? _tail;
+  Future<void> switchReader(String? id) async {
+    if (_tail != null) await _tail;
+    _readerId = id;
+    _states.clear();
+    await load();
+  }
+
   Future<void> load() async {
     if (_readerId == null) {
       await db.transaction((tx) async {
@@ -118,6 +127,43 @@ class DiaryReadStore {
     );
     _tail = op.then<void>((_) {}, onError: (Object _, StackTrace _) {});
     return op.then((_) {});
+  }
+
+  String syncFingerprint(DiaryEntry e) =>
+      sha256.convert(utf8.encode(fingerprint(e))).toString();
+  List<Map<String, dynamic>> syncSnapshot(List<DiaryEntry> entries) => [
+    for (final e in entries)
+      if (state(e).isNotEmpty)
+        {
+          'entryId': e.id,
+          'cycle': DiaryPublication.of(e).cycle,
+          'fingerprint': syncFingerprint(e),
+          'read': isRead(e),
+          'page': state(e)['page'] ?? 0,
+        },
+  ];
+  Future<void> mergeSynced(DiaryEntry e, Map<String, dynamic> remote) async {
+    if (remote['cycle'] != DiaryPublication.of(e).cycle ||
+        remote['fingerprint'] != syncFingerprint(e) && remote['read'] != true) {
+      return;
+    }
+    final old = state(e),
+        value = <String, dynamic>{
+          ...old,
+          'readerId': readerId,
+          'entryId': e.id,
+          'activationCycleId': DiaryPublication.of(e).cycle,
+          'fingerprint': fingerprint(e),
+          'read': old['read'] == true || remote['read'] == true,
+          'page': (old['page'] as int? ?? 0) > (remote['page'] as int)
+              ? old['page']
+              : remote['page'],
+        };
+    _states[key(e)] = value;
+    await db.insert('app_settings', {
+      'name': key(e),
+      'value': jsonEncode(value),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<void> flush() async {

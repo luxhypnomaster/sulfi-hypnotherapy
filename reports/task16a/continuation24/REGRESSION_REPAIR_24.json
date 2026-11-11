@@ -1,0 +1,17 @@
+{
+  "firstSource": "1a5e484",
+  "failedTests": [
+    "legacy capsule schema6 mode preservation",
+    "legacy capsule schema7 mode preservation",
+    "legacy capsule schema8 mode preservation"
+  ],
+  "cause": "policy.load refreshed provenance and reset local mode when no DB mode existed",
+  "fixSource": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "fix": "reloadCatalogOrigins does not reload role/local mode",
+  "targetedTests": 34,
+  "targetedResult": "PASS",
+  "fullCiRun": 43070740850,
+  "fullCiResult": "PASS",
+  "nativeIdentityEvidence": "NOT_RUN",
+  "fullFlutterPassed": 424
+}

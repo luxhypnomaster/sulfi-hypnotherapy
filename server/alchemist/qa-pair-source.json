@@ -1,0 +1,14 @@
+{
+  "task": "16+16-A",
+  "purpose": "TWO_TEST_CANDIDATES_FOR_HUMAN_ACCEPTANCE_NOT_ACCEPTED_RELEASE",
+  "branch": "feat/task16-alchemist-full-server",
+  "sourceSha": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "verifiedChecksRun": 43070740850,
+  "versionCode": 24,
+  "draftTag": "task16-qa-pair-24",
+  "packages": {
+    "master": "ru.sulfi.sulfi_hypnotherapy",
+    "client": "ru.sulfi.sulfi_hypnotherapy.clienttest"
+  },
+  "authority": "Owner explicitly requested two working APKs for real testers in the continuation after build23. This authorizes test candidates, not physical acceptance, a public release, or setting SULFI_16A_ACCEPTED_SERVER_SOURCE."
+}

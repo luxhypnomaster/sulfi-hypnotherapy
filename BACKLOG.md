@@ -1,3 +1,38 @@
+# №16/16-А · продолжение24
+
+- [x] Проверить текущие отчёты без повторения C0/deploy/сервисного E2E.
+- [x] Исправить Google login/logout состояние каталога и metadata происхождения в капсуле.
+- [x] Сохранить localmode при восстановлении старых схем6/7/8; регрессия исправлена, target34 и full424 PASS.
+- [x] Две QA APK24 sourcecbe, прежние подписи/packages, compiled config + независимые SHA/apksigner PASS.
+- [x] Новая полная147матрица и10отчётов в существующей папке; originals сохранены.
+- [ ] Реальные MASTER/CLIENT Google-входы, без whitelist/пароля/токена в чате.
+- [ ] Реальные3трека Элмана→каталог→дневник→клиент→офлайн на2телефонах, сохранность update и времена.
+- [ ] Остальные native/live PARTIAL после разблокировки OAuth; не объявлять полный PASS до приёмки.
+
+# №16-А · текущий приоритет
+
+- [x] Сохранить дополнение, public Web ID, packages/SHA1; не повторять C0.
+- [x] Exact Web audience, единственный MASTER по verified sub; остальные CLIENT; CI identity только bootstrap/status.
+- [x] Две роли в UI, смена аккаунта/выход, локальный экспорт, происхождение официальных установок, published-only ContentLink.
+- [x] Локальные проверки: 422 Flutter, 42 Node; отдельные checkpoint-коммиты.
+- [x] Обновить прежнее развёртывание version6/source1a0cf8e; полный ACL readback, health/private41/replay/live negatives PASS.
+- [ ] Два настоящих Google-аккаунта: публикация/отказ и клиентская установка; фиктивные identity не считаются.
+- [ ] Две подключённые APK после серверной приёмки и критический путь на двух телефонах.
+- [x] Один signed auth-candidate23 доставлен через private GitHub draft; исходная подпись/package/compiled endpoint+WebID и независимое скачивание/SHA/apksigner PASS. Квота Actions artifacts не обходится удалением истории; APK на Drive не отправлялась.
+
+# Задание 16 — активный этап
+
+- [x] C0 независимый аудит и сверка20файлов/147критериев (не повторять).
+- [x] Реальная проверка repository clasp OAuth из доверенного main без публикации/секретов в PR.
+- [x] Разработаны GAS хранение, каталоги, дневник, медиа, точные ревизии, grants/sync/audit; Node33PASS.
+- [x] Flutter автор/клиент: публикации, выборочная установка, видео, очереди, private-cache/read-state; целевые7PASS.
+- [x] Flutter419/analyzer,33Node/24old backend; обе signedAPK0.4.14+22/sourcee4ed74b/CI42878716769 SUCCESS (поздние server/tool changes отдельно).
+- [x] Новый private Script, полный source SHA readback, immutableversion4 и real deployment/readback metadata.
+- [x] Текущая матрица147критериев и отчёты;97PASS/46PARTIAL/3BLOCKED/1NOT_RUN.
+- [x] Настоящий anonymous runtime JSON health, private bootstrap41/replay и live negative checks; deploy42872816006 SUCCESS.
+- [x] Real Flutter-service E2E42878030592 SUCCESS,6540746B в каждую сторону,10checkpoints; source/client SHA/resume/missing-only/receipt/metadata-only/private/withdraw/offline-copy PASS.
+- [ ] Настроенный Android Google web OAuth client ID; физическая Android-приёмка остаётся NOT_RUN.
+
 # Задание 14 · 09.11.2026 · 0.4.12+17
 
 - [x] A/B: возврат домой из истории, семантическая подсветка и Undo; RunScreen №13 без изменений.

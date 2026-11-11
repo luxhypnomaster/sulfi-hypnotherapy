@@ -17,6 +17,9 @@ class DiaryMediaLimits {
       type == DiaryBlockType.image ? imageBytes : audioBytes;
 }
 
+typedef DiaryVideoProbe =
+    Future<({int width, int height, int durationMs})> Function(File file);
+
 typedef DiaryMediaPicker = Future<AudioSelection?> Function(
   DiaryBlockType type,
 );
@@ -28,8 +31,28 @@ class DiaryMediaStore {
     required this.pick,
     required this.probe,
     this.stripImageMetadata = false,
+    this.videoProbe,
   });
   final Directory directory;
+  final DiaryVideoProbe? videoProbe;
+  Future<File?> Function(DiaryMedia)? remoteResolver;
+  Future<File?> resolve(DiaryMedia? media) async {
+    final local = file(media);
+    if (local != null && await local.exists()) {
+      if (media?.hash == null ||
+          await local.length() == media!.bytes &&
+              (await sha256.bind(local.openRead()).first).toString() ==
+                  media.hash) {
+        return local;
+      }
+      if (remoteResolver == null) {
+        throw const FormatException('Файл вложения повреждён');
+      }
+    }
+    if (media == null) return null;
+    return remoteResolver?.call(media);
+  }
+
   final bool stripImageMetadata;
   final DiaryMediaPicker pick;
   final DurationProbe probe;
@@ -46,6 +69,9 @@ class DiaryMediaStore {
   }) async {
     if (type == DiaryBlockType.text) {
       throw const FormatException('Выберите изображение или аудио');
+    }
+    if (type == DiaryBlockType.video) {
+      return _importVideo(selected, blockId: blockId);
     }
     final source = File(selected.path);
     var size = await source.length();
@@ -140,13 +166,26 @@ class DiaryMediaStore {
         } else if (isAudioOnlyMp4(data)) {
           mime = 'audio/mp4';
           ext = 'm4a';
+        } else if (data.length > 2 &&
+            data[0] == 255 &&
+            (data[1] & 246) == 240) {
+          mime = 'audio/aac';
+          ext = 'aac';
         } else if (starts([73, 68, 51]) ||
             (data.length > 2 && data[0] == 255 && (data[1] & 224) == 224)) {
           mime = 'audio/mpeg';
           ext = 'mp3';
+        } else if (starts([79, 103, 103, 83])) {
+          mime = 'audio/ogg';
+          ext = 'ogg';
+        } else if (data.length > 2 &&
+            data[0] == 255 &&
+            (data[1] & 246) == 240) {
+          mime = 'audio/aac';
+          ext = 'aac';
         } else {
           throw const FormatException(
-            'Поддерживаются MP3, M4A и WAV. Видеоконтейнеры запрещены.',
+            'Поддерживаются MP3, M4A, WAV, AAC и OGG. Видеоконтейнеры запрещены.',
           );
         }
         // Some native decoders require the correct extension.
@@ -191,9 +230,101 @@ class DiaryMediaStore {
     }
   }
 
+  Future<DiaryBlock> _importVideo(
+    AudioSelection selected, {
+    String? blockId,
+  }) async {
+    final source = File(selected.path),
+        size = await File(selected.path).length();
+    if (size < 16) throw const FormatException('Видеофайл пуст или повреждён');
+    final input = await source.open();
+    late final List<int> header;
+    try {
+      header = await input.read(64);
+    } finally {
+      await input.close();
+    }
+    final ext = p.extension(selected.name).toLowerCase();
+    String mime;
+    if (header.length >= 12 &&
+        String.fromCharCodes(header.sublist(4, 8)) == 'ftyp' &&
+        ['.mp4', '.mov', '.m4v'].contains(ext)) {
+      mime = ext == '.mov' ? 'video/quicktime' : 'video/mp4';
+    } else if (header.length >= 4 &&
+        header[0] == 0x1a &&
+        header[1] == 0x45 &&
+        header[2] == 0xdf &&
+        header[3] == 0xa3 &&
+        ext == '.webm') {
+      mime = 'video/webm';
+    } else {
+      throw const FormatException('Поддерживаются видео MP4/MOV/WebM');
+    }
+    if (videoProbe == null) {
+      throw const FormatException('Проверка видеокодека недоступна');
+    }
+    await directory.create(recursive: true);
+    final id = newId(), temp = File(p.join(directory.path, '$id.part'));
+    File? target;
+    try {
+      await source.copy(temp.path);
+      if (await temp.length() != size) {
+        throw const FormatException('Видео изменилось при копировании');
+      }
+      target = await temp.rename(p.join(directory.path, '$id$ext'));
+      final info = await videoProbe!(target);
+      if (info.durationMs <= 0 || info.width <= 0 || info.height <= 0) {
+        throw const FormatException(
+          'Видеокодек не поддерживается на этом устройстве',
+        );
+      }
+      final hash = (await sha256.bind(target.openRead()).first).toString();
+      return DiaryBlock(
+        id: blockId ?? newId(),
+        type: DiaryBlockType.video,
+        media: DiaryMedia(
+          assetId: id,
+          mime: mime,
+          bytes: size,
+          localPath: target.path,
+          hash: hash,
+        ),
+        width: info.width,
+        height: info.height,
+        durationMs: info.durationMs,
+        label: p.basenameWithoutExtension(selected.name),
+      );
+    } catch (_) {
+      if (target != null && await target.exists()) await target.delete();
+      rethrow;
+    } finally {
+      if (await temp.exists()) await temp.delete();
+    }
+  }
+
   File? file(DiaryMedia? media) {
-    if (media?.localPath == null) return null;
-    final path = p.normalize(media!.localPath!);
+    if (media == null) return null;
+    String? location = media.localPath;
+    if (location == null &&
+        media.hash != null &&
+        RegExp(r'^[a-f0-9]{64}$').hasMatch(media.hash!)) {
+      final ext = {
+        'image/png': 'png',
+        'image/jpeg': 'jpg',
+        'image/webp': 'webp',
+        'audio/mpeg': 'mp3',
+        'audio/mp4': 'm4a',
+        'audio/wav': 'wav',
+        'audio/aac': 'aac',
+        'audio/ogg': 'ogg',
+        'video/mp4': 'mp4',
+        'video/quicktime': 'mov',
+        'video/webm': 'webm',
+      }[media.mime];
+      if (ext != null) location = p.join(directory.path, '${media.hash}.$ext');
+    }
+    if (location == null) return null;
+    final path = p.normalize(location);
     if (!p.isWithin(directory.absolute.path, p.absolute(path))) return null;
     return File(path);
   }

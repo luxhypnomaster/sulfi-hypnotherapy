@@ -7,6 +7,12 @@ on:
     branches: [develop]
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
+    inputs:
+      build_mode:
+        description: '16-A: checks only; one auth candidate; or final dual APK after real server acceptance'
+        type: choice
+        options: [checks, auth-candidate, dual-apk]
+        default: checks
 
 permissions:
   contents: read
@@ -18,7 +24,10 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
+    env:
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,6 +42,8 @@ jobs:
           python3 -m pip install -r scripts/task15-contract-requirements.txt
           python3 scripts/task15_contract_check.py
       - run: node --test server/google_apps_script/test/backend.test.mjs
+      - run: node --test server/alchemist/test/*.test.mjs
+      - run: node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-source"
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze --fatal-infos
@@ -45,6 +56,7 @@ jobs:
           python3 scripts/flutter_test_summary.py "$RUNNER_TEMP/flutter-tests.jsonl" "$RUNNER_TEMP/flutter-test-summary.json"
           exit "$TEST_STATUS"
       - name: Preserve test report
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -55,20 +67,34 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
       - run: flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client
+      - name: Verify configured cloud endpoint before embedding it
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
+        run: |
+          node scripts/alchemist/check-build-config.mjs
+
+      - name: Require accepted real two-account server before final pair
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode == 'dual-apk'
+        env:
+          ACCEPTED_SERVER_SOURCE: ${{ vars.SULFI_16A_ACCEPTED_SERVER_SOURCE }}
+        run: node scripts/alchemist/check-accepted-server.mjs
       - name: Restore persistent user-test signing key
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
         env:
           SULFI_TEST_KEYSTORE_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
         run: |
           test -n "$SULFI_TEST_KEYSTORE_BASE64" || { echo 'Missing persistent test signing key. Refusing a newly signed APK.'; exit 1; }
           printf '%s' "$SULFI_TEST_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
           chmod 600 "$RUNNER_TEMP/sulfi-test.keystore"
-      - run: flutter build apk --debug
+      - name: Build author APK (explicit configuration, no invented endpoint)
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
+        run: flutter build apk --debug --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
         env:
           SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
           SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
           SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
           SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
       - name: Record public APK diagnostics
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
         run: |
           BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
           "$BUILD_TOOLS/apksigner" verify --print-certs build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/APK_CERT.txt
@@ -78,12 +104,14 @@ jobs:
           sha256sum build/app/outputs/flutter-apk/app-debug.apk > build/app/outputs/flutter-apk/SHA256SUMS
           cat build/app/outputs/flutter-apk/SHA256SUMS
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
         with:
           name: sulfi-android-debug-${{ github.sha }}
           path: build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 14
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
         with:
           name: sulfi-android-diagnostics-${{ github.sha }}
           path: |
@@ -94,13 +122,15 @@ jobs:
           retention-days: 14
 
       - name: Build separate client test APK (same code and persistent key)
-        run: flutter build apk --debug --dart-define=SULFI_EDITION=client
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode == 'dual-apk'
+        run: flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
         env:
           SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
           SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
           SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
           SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
       - name: Record client APK diagnostics
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode == 'dual-apk'
         run: |
           BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
           "$BUILD_TOOLS/apksigner" verify --print-certs build/app/outputs/flutter-apk/app-debug.apk > "$RUNNER_TEMP/CLIENT_CERT.txt"
@@ -110,12 +140,14 @@ jobs:
           sha256sum build/app/outputs/flutter-apk/app-debug.apk > "$RUNNER_TEMP/CLIENT_SHA256SUMS"
           cat "$RUNNER_TEMP/CLIENT_SHA256SUMS"
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode == 'dual-apk'
         with:
           name: sulfi-client-test-${{ github.sha }}
           path: build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 14
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build_mode == 'dual-apk'
         with:
           name: sulfi-client-diagnostics-${{ github.sha }}
           path: |

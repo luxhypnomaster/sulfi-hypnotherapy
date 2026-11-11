@@ -1,0 +1,50 @@
+{
+  "observedUtc": "2026-11-10T19:10:10.106443+00:00",
+  "liveRun": 42878030592,
+  "source": "Independent Drive connector raw read; actual blobs, not doubles",
+  "physicalAndroid": "NOT_RUN",
+  "files": [
+    {
+      "syntheticVariant": 2,
+      "byteLength": 5010,
+      "sha256": "50dead722ab591729beb0ebd7ed3978be8db52c06bdde44f0374035843f62ba3",
+      "equalsExpectedSource": true,
+      "ownerOnlyAclReadback": true,
+      "codecProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "12.000000"
+        }
+      }
+    },
+    {
+      "syntheticVariant": 1,
+      "byteLength": 5010,
+      "sha256": "ebbdf9addd5a2b40a65e8d7fd5e8393f96633e1887ded8db1d83a01ac57b3bc6",
+      "equalsExpectedSource": true,
+      "ownerOnlyAclReadback": true,
+      "codecProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "12.000000"
+        }
+      }
+    }
+  ]
+}

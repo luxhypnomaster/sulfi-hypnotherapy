@@ -1,3 +1,5 @@
+import 'diary_video.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -114,7 +116,11 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     if (busy) return;
     if (!await save() || !mounted) return;
     if (publish == true) {
-      final problem = value.publicationError ?? previewIssue;
+      final problem =
+          value.publicationErrorFor(
+            advanced: widget.diary.api?.supportsAdvancedPublication ?? false,
+          ) ??
+          previewIssue;
       if (problem != null) {
         setState(() => error = problem);
         return;
@@ -550,11 +556,13 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
             DiaryBlockType.text => Icons.notes,
             DiaryBlockType.image => Icons.image_outlined,
             DiaryBlockType.audio => Icons.mic_none,
+            DiaryBlockType.video => Icons.video_library_outlined,
           }, color: neonLime),
           label: Text(switch (type) {
             DiaryBlockType.text => 'Текст',
             DiaryBlockType.image => 'Изображение',
             DiaryBlockType.audio => 'Аудио',
+            DiaryBlockType.video => 'Видео',
           }),
         ),
     ],
@@ -566,6 +574,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
       DiaryBlockType.text => 'Текст',
       DiaryBlockType.image => 'Изображение',
       DiaryBlockType.audio => 'Аудио',
+      DiaryBlockType.video => 'Видео',
     };
     return Padding(
       key: ValueKey(b.id),
@@ -651,6 +660,11 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
               SizedBox(
                 height: 140,
                 child: DiaryImage(block: b, diary: widget.diary),
+              ),
+            if (b.type == DiaryBlockType.video)
+              SizedBox(
+                height: 220,
+                child: DiaryVideo(block: b, diary: widget.diary),
               ),
             if (b.type == DiaryBlockType.audio)
               Text(
@@ -801,7 +815,11 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                           key: const Key('diary-add-content'),
                           onPressed: busy ? null : addContent,
                           icon: const Icon(Icons.link),
-                          label: const Text('Добавить материал'),
+                          label: Text(
+                            (widget.diary.api?.supportsServerIdentity ?? false)
+                                ? 'Добавить из каталога'
+                                : 'Добавить материал',
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 14),

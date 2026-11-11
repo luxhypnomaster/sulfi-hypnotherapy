@@ -1,0 +1,33 @@
+{
+  "observedUtc": "2026-11-10T19:56:35.307842+00:00",
+  "stage": "FINAL_LIVE_SUCCESS_REPORTS",
+  "files": [
+    {
+      "name": "RESULT.md",
+      "bytes": 5030,
+      "sha256": "b6e0d242598d4e8d7727918105ecc176008ed368686f1a6c005957842ec81fa3",
+      "uploadedBytesReadbackEqual": true
+    },
+    {
+      "name": "TESTS.md",
+      "bytes": 39706,
+      "sha256": "519196802f142a48337b4b0e1bb20e7ff8cd2cb3c9c432ad6107c646aa5cd15e",
+      "uploadedBytesReadbackEqual": true
+    },
+    {
+      "name": "APK_INFO.md",
+      "bytes": 3082,
+      "sha256": "59e653371f9ad08cfb289e529eb995fa9364d2013731e142e1a5535054f0c046",
+      "uploadedBytesReadbackEqual": true
+    }
+  ],
+  "serverHandoffReadback": {
+    "observedUtc": "2026-11-10T21:33:38.479784+00:00",
+    "bytes": 426632,
+    "sha256": "f476478a0b4bce8745765708d06a2c2644ba8a76fc9afb329181f873659af635",
+    "driveRawBytesEqual": true,
+    "crcVerified": true,
+    "memberHashCount": 126,
+    "memberShaVerified": true
+  }
+}

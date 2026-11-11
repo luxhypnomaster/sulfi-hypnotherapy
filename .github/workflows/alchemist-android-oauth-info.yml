@@ -1,0 +1,50 @@
+name: Alchemist public Android OAuth setup evidence
+on:
+  workflow_dispatch:
+permissions:
+  actions: read
+concurrency:
+  group: alchemist-oauth-info
+  cancel-in-progress: false
+jobs:
+  certificate:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read public signing certificates from verified existing APK diagnostics
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$RUNNER_TEMP/android-oauth-evidence"
+          for artifact in 13766272837 13767162082; do
+            gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/$artifact" > "$RUNNER_TEMP/meta-$artifact.json" 2> "$RUNNER_TEMP/diag-error.txt" || { echo DIAGNOSTIC_METADATA_UNAVAILABLE; exit 1; }
+            gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/$artifact/zip" > "$RUNNER_TEMP/diag-$artifact.zip" 2> "$RUNNER_TEMP/diag-error.txt" || { echo DIAGNOSTIC_ARTIFACT_UNAVAILABLE; exit 1; }
+          done
+          python3 - <<'PY'
+          import os,json,zipfile,re,pathlib
+          out={}
+          for edition,artifact,cert,badging,pkg in [('author',13766272837,'APK_CERT.txt','APK_BADGING.txt','ru.sulfi.sulfi_hypnotherapy'),('client',13767162082,'CLIENT_CERT.txt','CLIENT_BADGING.txt','ru.sulfi.sulfi_hypnotherapy.clienttest')]:
+            meta=json.load(open(os.environ['RUNNER_TEMP']+'/meta-'+str(artifact)+'.json'))
+            assert meta['workflow_run']['id']==42819404870 and not meta['expired']
+            assert meta['workflow_run']['head_sha']=='953d5bc4a47c0c26d054e1c8c3a2ac9f8b486822'
+            with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/diag-'+str(artifact)+'.zip') as z:
+              assert sum(f.file_size for f in z.infolist())<65536
+              c=z.read(cert).decode();b=z.read(badging).decode()
+            sha1=re.search(r'SHA-1 digest:\s*([a-f0-9:]+)',c,re.I).group(1).replace(':','').lower()
+            sha256=re.search(r'SHA-256 digest:\s*([a-f0-9:]+)',c,re.I).group(1).replace(':','').lower()
+            assert len(sha1)==40 and sha256=='0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6'
+            assert "package: name='"+pkg+"'" in b and "versionCode='21'" in b
+            out[edition]={'package':pkg,'sha1':':'.join(sha1[i:i+2].upper() for i in range(0,40,2)),'sha256':sha256,'apkVersionCode':21}
+          assert out['author']['sha1']==out['client']['sha1']
+          pathlib.Path(os.environ['RUNNER_TEMP']+'/android-oauth-evidence/ANDROID_OAUTH_PUBLIC_CONFIG.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('ANDROID_OAUTH_PUBLIC_CONFIG='+json.dumps(out))
+          print('NO_PRIVATE_KEY_OR_GOOGLE_CREDENTIAL_ACCESSED')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alchemist-android-oauth-public-config
+          path: ${{ runner.temp }}/android-oauth-evidence/*.json
+          retention-days: 14

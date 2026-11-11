@@ -1,3 +1,29 @@
+# №16/16-А · две сборки для приёмки · 0.4.16+24
+
+[Новый результат](reports/task16a/continuation24/RESULT_CONTINUATION_24.md) · [147критериев](reports/task16a/continuation24/ACCEPTANCE_CURRENT_24.md) · [точные шаги Android](reports/task16a/continuation24/PHONE_QA_24.md).
+
+Обе подписанные QA APK24 из одного source cbe0524 собраны в CI43072088028 и независимо скачаны/проверены. Server6/endpoint прежний. CI424Flutter/43Node/24legacy PASS. Исправлены состояние Google-входа каталога и перенос официальных меток через капсулу, с сохранением локального режима. **Реальный вход двух Google-пользователей и два телефона ещё не проверены; задача не закрыта.** Отчёты в прежней папке №16; APK только private GitHub draft/файлы, не Drive. История ниже сохранена.
+
+# Дополнение №16-А · текущая работа
+
+[Утверждённое дополнение](docs/task16a/TASK_RU.md) · [результаты и препятствия](reports/task16a/RESULT_16A_AUTH.md) · [проверки](reports/task16a/TESTS_16A_AUTH.md).
+
+Публичный Web Client ID и две Android-регистрации предоставлены владельцем. Код использует серверные роли MASTER/CLIENT; Google ID token остаётся в памяти, Android не запрашивает Drive scopes. Локальный экспорт отделён от облачной публикации. Ссылки дневника выбираются из опубликованного каталога, установка использует прежний единый проверяемый импортёр.
+
+422 Flutter и 42 серверных Node тестов прошли локально. Подготовленная версия 0.4.15+23 предназначена для одного кандидата проверки Google-входа после обновления существующего сервера. Это ещё не две принятые подключённые APK: реальные два аккаунта, установка с телефона и физическая приёмка остаются отдельными этапами. Main получает только проверенные серверные/операционные PR; код приложения остаётся в feat/task16-alchemist-full-server.
+
+Ниже сохранена историческая точка №16; её прежняя пометка об отсутствии OAuth-регистраций относится к APK22.
+
+# Задание 16 — текущая разработка
+
+Ветка `feat/task16-alchemist-full-server`. [Контрольная точка и ограничения](PROGRESS.md), [первоначальный аудит](PREFLIGHT.md), [актуальное ТЗ](docs/task16/START_HERE.md).
+
+Реализованы серверные GAS/Drive адаптеры и Flutter-интеграция каталога/дневника/медиа. Существующий единственный Script «Сервер Проекта Алхимик» реально выполняется: anonymous JSON health, version4, приватное дерево41папки/replay и live negative checks подтверждены deploy42872816006/readback42876284145. Старый дневник не изменён. C0 не повторялся.
+
+Живой тест Flutter-сервисов выявил20sec timeout: добавлен отдельный bounded5min Alchemist transport, regression3PASS/analyzer clean; реальный E2E42878030592 SUCCESS (6540746B uploaded/downloaded, SHA/resume/withdraw). Android Web OAuth client ID и две Android registrations пока не настроены; [законная настройка с телефона](reports/task16/ANDROID_OAUTH_SETUP_RU.md). Физический Android NOT_RUN.
+
+[Отчёты/147критериев](reports/task16/RESULT.md) · [Последние APK0.4.14+22](reports/task16/APK_INFO.md): CI42878716769 SUCCESS, обе подписаны стабильным ключом, пока без облачного endpoint. Пользовательские файлы не удалялись; APK не загружаются на Google Drive.
+
 # Задание 14 · локальный перенос и каталог · 0.4.12+17
 
 [Изменения, ограничения и проверка](reports/task14_portable_content.md) · [ТЗ](docs/task14/TASK_RU.md) · [Отчёты и настоящие Flutter-рендеры](https://drive.google.com/drive/folders/1SAIk6swRXXHa07MDH10irzoiDKPYgkAT).

@@ -1,0 +1,99 @@
+name: Alchemist recover deployment checkpoint (read only)
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Trusted main Alchemist deploy or real-service validation run
+        required: true
+        default: '42820498828'
+permissions:
+  actions: read
+concurrency:
+  group: alchemist-checkpoint-read
+  cancel-in-progress: false
+jobs:
+  read:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read trusted-main deployment metadata without Google OAuth
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RECOVERY_RUN: ${{ inputs.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          [[ "$RECOVERY_RUN" =~ ^[0-9]{1,20}$ ]]
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/$RECOVERY_RUN" > "$RUNNER_TEMP/prior-run.json"
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/runs/$RECOVERY_RUN/artifacts" > "$RUNNER_TEMP/artifacts.json"
+          artifact_id=$(python3 - <<'PY'
+          import os,json,re
+          r=json.load(open(os.environ['RUNNER_TEMP']+'/prior-run.json'))
+          assert r['head_branch']=='main' and r['event']=='workflow_dispatch'
+          assert r['repository']['full_name']=='luxhypnomaster/sulfi-hypnotherapy'
+          assert r['path'] in ['.github/workflows/alchemist-server-deploy.yml','.github/workflows/alchemist-live-e2e.yml']
+          assert re.fullmatch('[a-f0-9]{40}',r['head_sha'])
+          a=json.load(open(os.environ['RUNNER_TEMP']+'/artifacts.json'))['artifacts']
+          name='alchemist-deployment-evidence-'+r['head_sha'] if r['path'].endswith('alchemist-server-deploy.yml') else 'alchemist-live-service-evidence-'+str(r['id'])
+          matches=[x for x in a if x['name']==name and not x['expired']]
+          assert len(matches)==1 and isinstance(matches[0]['id'],int)
+          print(matches[0]['id'])
+          PY
+          )
+          gh api "repos/luxhypnomaster/sulfi-hypnotherapy/actions/artifacts/$artifact_id/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          python3 - <<'PY'
+          import os,json,zipfile,re
+          from urllib.parse import urlparse
+          with zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/checkpoint.zip') as z:
+            if 'FLUTTER_LIVE_E2E.json' in z.namelist():
+              f=z.getinfo('FLUTTER_LIVE_E2E.json');assert f.file_size<65536
+              v=json.loads(z.read(f));out={}
+              assert v['kind']=='REAL_GOOGLE_DRIVE_FLUTTER_SERVICES'
+              out['kind']=v['kind'];out['physicalAndroid']='NOT_RUN';out['androidSdkLogin']='NOT_RUN_CI_IDENTITY'
+              assert re.fullmatch(r'task16e2e_[0-9_]{1,60}',v['prefix']);out['prefix']=v['prefix']
+              assert isinstance(v['phases'],list) and len(v['phases'])<100
+              assert all(isinstance(x,str) and re.fullmatch(r'[A-Z0-9_]{1,120}',x) for x in v['phases']);out['phases']=v['phases']
+              for key in ['uploadedBytes','downloadedBytes']:
+                assert isinstance(v[key],int) and 0<=v[key]<10**12;out[key]=v[key]
+              for key in ['requests','maxResponseMs']:
+                assert isinstance(v[key],dict) and len(v[key])<100
+                assert all(re.fullmatch(r'[a-zA-Z.]{1,80}',k) and isinstance(n,int) and 0<=n<10**9 for k,n in v[key].items());out[key]=v[key]
+              if v['lastOperation'] is not None:assert re.fullmatch(r'[a-zA-Z.]{1,80}',v['lastOperation'])
+              out['lastOperation']=v['lastOperation'];out['artifacts']={}
+              for key,item in v['artifacts'].items():
+                assert key in ['wav','zip','video'] and isinstance(item,dict)
+                clean={}
+                for k,value in item.items():
+                  assert k in ['sha256','bytes','durationMs']
+                  assert (isinstance(value,str) and re.fullmatch(r'[a-f0-9]{64}',value)) if k=='sha256' else (isinstance(value,(int,float)) and 0<=value<10**12)
+                  clean[k]=value
+                out['artifacts'][key]=clean
+              print('RECOVERED_LIVE_SERVICE_EVIDENCE='+json.dumps(out,separators=(',',':')))
+              print('NO_CREDENTIAL_OR_CLOUD_WRITE')
+              raise SystemExit(0)
+            f=z.getinfo('DEPLOYMENT.json')
+            assert f.file_size<16384
+            r=json.loads(z.read(f))
+          assert re.fullmatch(r'[A-Za-z0-9_-]{20,200}',r['scriptId'])
+          print('RECOVERED_CREATE_ONCE_SCRIPT_ID='+r['scriptId'])
+          for key in ['stage','reason','sourceSha']:
+            if key in r:
+              assert isinstance(r[key],str) and re.fullmatch(r'[A-Za-z0-9_: -]{1,160}',r[key])
+              print('RECOVERED_'+key.upper()+'='+r[key])
+          if 'version' in r:
+            assert isinstance(r['version'],int) and r['version']>0
+            print('RECOVERED_VERSION='+str(r['version']))
+          if 'deploymentId' in r:
+            assert re.fullmatch(r'[A-Za-z0-9_-]{20,200}',r['deploymentId'])
+            print('RECOVERED_DEPLOYMENT_ID='+r['deploymentId'])
+          if 'endpoint' in r:
+            u=urlparse(r['endpoint'])
+            assert u.scheme=='https' and u.netloc=='script.google.com' and re.fullmatch(r'/macros/s/[A-Za-z0-9_-]+/exec',u.path) and not u.query and not u.fragment
+            print('RECOVERED_EXEC_URL='+r['endpoint'])
+          print('NO_CREDENTIAL_OR_CLOUD_WRITE')
+          PY
+      - name: Remove transient metadata
+        if: always()
+        run: rm -f "$RUNNER_TEMP/prior-run.json" "$RUNNER_TEMP/artifacts.json" "$RUNNER_TEMP/checkpoint.zip"

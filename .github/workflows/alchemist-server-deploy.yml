@@ -1,0 +1,44 @@
+name: Alchemist production deploy (manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: alchemist-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    # Repository secret only. No environments/PR/fork/feature code receives it.
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: node --test server/alchemist/test/*.test.mjs
+      - run: node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-static-source"
+      - name: Require complete verified source before loading deployment credentials
+        run: node -e 'if(require("./server/alchemist/deployment-readiness.json").fullSourceVerified!==true){console.error("FULL_SOURCE_NOT_VERIFIED");process.exit(78)}'
+      - name: Install pinned clasp without production credentials
+        run: npm install --prefix "$RUNNER_TEMP/clasp-tool" --ignore-scripts --no-audit --no-fund @google/clasp@3.4.1
+      - name: Owner-verified create-once push readback deployment and private bootstrap
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+          GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
+        run: node scripts/alchemist/deploy.mjs
+      - name: Preserve restricted deployment evidence only
+        continue-on-error: true
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alchemist-deployment-evidence-${{ github.sha }}
+          path: ${{ runner.temp }}/alchemist-evidence/*.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove transient OAuth credential
+        if: always()
+        run: rm -f "$RUNNER_TEMP/alchemist.clasprc.json"

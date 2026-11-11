@@ -1,0 +1,72 @@
+name: Alchemist real Flutter service E2E (manual trusted source)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: alchemist-production
+  cancel-in-progress: false
+jobs:
+  live:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: node --test server/alchemist/test/*.test.mjs
+      - id: approved
+        run: |
+          node -e 'const fs=require("fs"),p=require("./server/alchemist/live-approved-source.json");if(!/^[a-f0-9]{40}$/.test(p.sourceSha))process.exit(1);fs.appendFileSync(process.env.GITHUB_OUTPUT,"sha="+p.sourceSha+"\n")'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.approved.outputs.sha }}
+          path: app-fixture
+          persist-credentials: false
+      - name: Verify exact main-approved app/test/dependency source before any credentials
+        run: node --input-type=module -e 'import {verifyLiveSource} from "./scripts/alchemist/live-source.mjs";import fs from "node:fs";verifyLiveSource("app-fixture",JSON.parse(fs.readFileSync("server/alchemist/live-approved-source.json")))'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: flutter/flutter
+          ref: '3.47.9'
+          path: .tooling/flutter
+          persist-credentials: false
+      - name: Prepare SDK and native codec probes before OAuth
+        run: |
+          test "$(git -C .tooling/flutter rev-parse HEAD)" = c197ca5199e9ee5661e865596c9c07294dfab51c
+          git -C .tooling/flutter switch --create stable
+          echo "$GITHUB_WORKSPACE/.tooling/flutter/bin" >> "$GITHUB_PATH"
+          .tooling/flutter/bin/flutter config --no-analytics
+          if ! command -v ffprobe; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+      - run: flutter pub get --enforce-lockfile
+        working-directory: app-fixture
+      - run: flutter analyze --fatal-infos
+        working-directory: app-fixture
+      - name: Compile opt-in test without identity (must skip)
+        run: flutter test --no-pub test/task16_live_cloud_test.dart
+        working-directory: app-fixture
+      - name: Install pinned OAuth SDK before repository secret
+        run: npm install --prefix "$RUNNER_TEMP/clasp-tool" --ignore-scripts --no-audit --no-fund @google/clasp@3.4.1
+      - name: Verified owner identity and actual author-server-Drive-client service loop
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+        run: node scripts/alchemist/live-run.mjs
+      - name: Keep only sanitized live evidence, never credentials or private fixture databases
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alchemist-live-service-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/alchemist-live-evidence/*.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove transient identity files
+        if: always()
+        run: rm -f "$RUNNER_TEMP/alchemist-live.clasprc.json" "$RUNNER_TEMP/alchemist-live-id-token"

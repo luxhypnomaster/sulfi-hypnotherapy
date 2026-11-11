@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'data/alchemist_diary_repository.dart';
+import 'services/alchemist_diary_api.dart';
+import 'ui/diary_video.dart';
+
 import 'dart:async';
 import 'dart:io';
 
@@ -86,7 +92,7 @@ class _BootstrapState extends State<_Bootstrap> {
         pick: () async {
           final selected = await FilePicker.pickFile(
             type: FileType.custom,
-            allowedExtensions: ['mp3', 'm4a', 'wav'],
+            allowedExtensions: ['mp3', 'm4a', 'wav', 'aac', 'ogg'],
           );
           if (selected == null) return null;
           final path = selected.path;
@@ -138,7 +144,9 @@ class _BootstrapState extends State<_Bootstrap> {
             type: FileType.custom,
             allowedExtensions: type == DiaryBlockType.image
                 ? ['jpg', 'jpeg', 'png', 'webp']
-                : ['mp3', 'm4a', 'wav'],
+                : type == DiaryBlockType.video
+                ? ['mp4', 'mov', 'm4v', 'webm']
+                : ['mp3', 'm4a', 'wav', 'aac', 'ogg'],
           );
           if (selected == null) return null;
           if (selected.path == null) {
@@ -149,18 +157,45 @@ class _BootstrapState extends State<_Bootstrap> {
           return (name: selected.name, path: selected.path!);
         },
         probe: library.probe,
+        videoProbe: probeDiaryVideo,
       );
+      final capsules = CapsuleService(
+        database: repository.database,
+        library: library,
+        diaryDirectory: diaryMedia.directory,
+        workspace: capsuleWorkspace,
+        availableBytes: DeviceFiles.freeBytes,
+        videoProbe: probeDiaryVideo,
+      );
+      const alchemistUrl = String.fromEnvironment('SULFI_ALCHEMIST_API');
+      final newDiaryApi = alchemistUrl.isEmpty
+          ? null
+          : AlchemistDiaryApi(
+              Uri.parse(alchemistUrl),
+              capsules: capsules,
+              media: diaryMedia,
+            );
+      if (newDiaryApi != null) {
+        diaryMedia.remoteResolver = newDiaryApi.resolveMedia;
+      }
       final diary = DiaryController(
-        DiaryRepository(repository.database),
-        policy: policy,
-        api: diaryBase == null
-            ? null
-            : DiaryApi(
-                diaryBase,
-                request: AppsScriptDiaryTransport.supports(diaryBase)
-                    ? AppsScriptDiaryTransport(diaryBase).request
-                    : null,
+        newDiaryApi == null
+            ? DiaryRepository(repository.database)
+            : AlchemistDiaryRepository(
+                repository.database,
+                scope: () => newDiaryApi.readerScope,
               ),
+        policy: policy,
+        api:
+            newDiaryApi ??
+            (diaryBase == null
+                ? null
+                : DiaryApi(
+                    diaryBase,
+                    request: AppsScriptDiaryTransport.supports(diaryBase)
+                        ? AppsScriptDiaryTransport(diaryBase).request
+                        : null,
+                  )),
         authorRepository: DiaryAuthorRepository(repository.database),
         identity: GoogleDiaryIdentity(serverClientId: googleClientId),
         mediaStore: diaryMedia,
@@ -182,18 +217,35 @@ class _BootstrapState extends State<_Bootstrap> {
         ...await diary.authorRepository!.entries(),
         ...await diary.repository.published(),
       ];
-      if (diary.authorRepository!.invalidIds.isEmpty &&
+      var privateCacheValid = true;
+      for (final row in await repository.database.query(
+        'app_settings',
+        where: 'name LIKE ?',
+        whereArgs: ['alchemist_private_entry:%'],
+      )) {
+        try {
+          final value = jsonDecode(row['value'] as String);
+          allDiaryEntries.add(
+            DiaryEntry.fromMap(Map<String, dynamic>.from(value['entry'])),
+          );
+        } catch (_) {
+          privateCacheValid = false;
+        }
+      }
+      if (privateCacheValid &&
+          diary.authorRepository!.invalidIds.isEmpty &&
           diary.repository.invalidIds.isEmpty) {
         await diaryMedia.collect({
           for (final e in allDiaryEntries)
             for (final b in e.blocks)
-              if (b.media?.localPath case final String path) path,
+              if (diaryMedia.file(b.media)?.path case final String path) path,
         });
       }
       if (diary.api != null) unawaited(diary.sync());
       final historyMedia = DiaryMediaStore(
         Directory(p.join(root.path, 'history_media')),
         stripImageMetadata: true,
+        videoProbe: probeDiaryVideo,
         pick: diaryMedia.pick,
         probe: library.probe,
       );
@@ -213,13 +265,7 @@ class _BootstrapState extends State<_Bootstrap> {
         library: library,
         modules: modules,
         diary: diary,
-        capsules: CapsuleService(
-          database: repository.database,
-          library: library,
-          diaryDirectory: diaryMedia.directory,
-          workspace: capsuleWorkspace,
-          availableBytes: DeviceFiles.freeBytes,
-        ),
+        capsules: capsules,
       );
       _controller = controller;
       await controller.initialize();

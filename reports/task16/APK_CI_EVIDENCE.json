@@ -1,0 +1,21 @@
+{
+  "run": 42878716769,
+  "conclusion": "success",
+  "sourceSha": "e4ed74b5fc4f262343df9af688f6fdef4e601762",
+  "version": "0.4.14+22",
+  "flutterPass": 419,
+  "optInLiveSkipped": 1,
+  "sourceNodePass": 33,
+  "oldBackendPass": 24,
+  "schemasPass": 13,
+  "cloudEndpointConfigured": false,
+  "googleAndroidOAuthConfigured": false,
+  "authorArtifact": 13794725587,
+  "clientArtifact": 13792599633,
+  "authorDiagnosticsArtifact": 13794865344,
+  "clientDiagnosticsArtifact": 13794006462,
+  "authorSha256": "ed5a0b4fdaffa0aca367b966bbbac620cfcbee81c5962c917f0ecaa5cb3cc891",
+  "clientSha256": "18f29ed9191f7ff6310a69a07dcd535cae57885f8b9c23c8a54867416ed0b4a4",
+  "certificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "physicalAndroid": "NOT_RUN"
+}

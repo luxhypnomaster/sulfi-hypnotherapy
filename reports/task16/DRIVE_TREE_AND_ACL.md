@@ -1,0 +1,16 @@
+# Физическое хранилище и ACL
+
+Дата:10.11.2026 UTC. Ветка feat/task16-alchemist-full-server. APK/sourcee4ed74b, service-test source6f1c8b9 (тот же lib/test код; версия21→22), GAS/version4/source766f178. Старый «Сульфи — дневник» не менялся. C0/PREFLIGHT сохранён, не повторялся.
+
+[Real service E2E42878030592 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878030592): авторские Flutter-сервисы → существующий GAS → private Drive → отдельный клиентский SQLite/installer.6540746B загружено и6540746B скачано, WAV/AAC/PNG/MP4/ZIP и SHA проверены. Recovery42887239597, artifact13797585085; протокол LIVE_SERVICE_E2E.json и LIVE_TIMELINE.json. Это НЕ испытание двух установленных Android APK.
+
+[Deploy42872816006](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42872816006)/readback42876284145: anonymous JSON health, exact41 private folders/replay/live negatives PASS. [Обе APK22/CI42878716769 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/42878716769):419Flutter/33newNode/24oldNode/13schemas/formatter/analyzer/fixedCLIENT/package/signing PASS. Пока LOCAL_BUILD_ENDPOINT_NOT_CONFIGURED: владелец подтвердил, что Web OAuth client ещё не создан. Нужны официальные Web+две Android регистрации, см. ANDROID_OAUTH_SETUP_RU.md; clasp повторно авторизовывать не нужно. Физический Android NOT_RUN.
+
+
+Закрытый parent «Проект Алхимик» повторно прочитан connector metadata: shared=false/owner-only. Runtime bootstrap также проверяет parent/каждую папку: MIME, exact name, единственный parent, owner, effective permissions; неоднозначные дубли/небезопасный ACL fail-closed. Registry pathKey→ID в private Script Properties; повторное развёртывание использует прежние IDs. Registry и actual blob files дополнительно проверяются на explicit permissions, даже если parent остался private.
+
+Схема: root «Хранилище Сервера Проекта Алхимик» +40папок:00_Система(config/registry/indexes/grants/audit/backups),10_Дневник(entries/images/audio/video/revisions),20_Библиотека(audio_tracks/modules/templates/sessions/collections),30_Медиа(covers/images/audio_other/video_other/immutable_blobs),40_Пакеты(drafts/published/imports/archived),50_Каталог(publications/index_shards/snapshots/tombstones),90_Техническое(pending_uploads/quarantine/temp/gc_candidates).
+
+Общие byte blobs — один physical parent immutable_blobs, разные logical refs без дублирования. Каталог не является Drive-search и не наследует публичность родителя. Private snapshots/receipts физически в registry, поля типов/публикации в отдельном логическом индексе. Не заявляется, что каждый раздел содержит собственную копию аудио. Нет anyone-writer в новом хранилище, нет создания public blob ACL. Shared assets не удаляются послеwithdraw.
+
+Реальный bootstrap41/replay/Drive readback: PASS, run42872816006. Advanced Drive adapter исправлен под настоящий SDK: create(resource, null, options), отсутствие undefined pageToken, empty permission list fail-closed. Независимое чтение connector подтвердило owner-only root и все7+33 подпапки; parent «Проект Алхимик» также private. Private IDs в общий отчёт не включены. Registry schema1/pathKey сохранён, replay использовал то же дерево. Это не означает, что все медиа-потоки уже прошли E2E; их результаты фиксируются отдельно.

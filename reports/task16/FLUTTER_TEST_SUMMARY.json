@@ -1,0 +1,10 @@
+{
+  "passed": 419,
+  "failed": 0,
+  "skipped": 1,
+  "success": true,
+  "sourceSnapshot": "6f1c8b92c1a548dac73ae839f133f498a9a754fc",
+  "command": "flutter test --no-pub --reporter json",
+  "elapsedMs": 261798,
+  "physicalAndroid": "NOT_RUN"
+}

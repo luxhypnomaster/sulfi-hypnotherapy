@@ -2,7 +2,7 @@ import 'content_link.dart';
 
 enum DiaryStatus { draft, published, unpublished }
 
-enum DiaryBlockType { text, image, audio }
+enum DiaryBlockType { text, image, audio, video }
 
 /// Private local location is never included in a public projection.
 class DiaryMedia {
@@ -175,8 +175,11 @@ class DiaryEntry {
         [DiaryBlock(id: '$id-text', type: DiaryBlockType.text, text: _body)],
   );
   bool get multimedia => blocks.any((b) => b.type != DiaryBlockType.text);
-  String? get publicationError {
-    if (extra.containsKey('contentLinks') || extra.containsKey('publication')) {
+  String? get publicationError => publicationErrorFor();
+  String? publicationErrorFor({bool advanced = false}) {
+    if (!advanced &&
+        (extra.containsKey('contentLinks') ||
+            extra.containsKey('publication'))) {
       return 'Новые настройки и ссылки пока доступны локально. Публикация требует подтверждённого серверного контракта.';
     }
     if (title.trim().isEmpty) return 'Заполните название записи';

@@ -1,0 +1,15 @@
+{
+  "fullSourceVerified": true,
+  "projectName": "\u0421\u0435\u0440\u0432\u0435\u0440 \u041f\u0440\u043e\u0435\u043a\u0442\u0430 \u0410\u043b\u0445\u0438\u043c\u0438\u043a",
+  "claspVersionVerified": "3.4.1",
+  "live": false,
+  "reason": "Historical version4/private41-folder bootstrap and full service E2E remain verified. Addendum16-A public Web/Android registrations owner-confirmed; new exact-Web audience/sole-master code locally verified, production update and real two-account phone tests pending. Full live=false; no Android login claimed.",
+  "runtimeHealthVerified": true,
+  "privateStorageVerified": true,
+  "fullServiceE2EVerified": true,
+  "androidOAuthConfigured": false,
+  "androidOAuthPublicConfigProvided": true,
+  "authorizationPolicyVersion": 2,
+  "twoAccountWebAuthVerified": false,
+  "physicalTwoPhoneQa": "NOT_RUN"
+}

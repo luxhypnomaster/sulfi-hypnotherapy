@@ -79,8 +79,8 @@ class SqliteSessionRepository implements SessionRepository {
     final old = (await templates())
         .where((t) => t.id == template.id)
         .firstOrNull;
-    if (old != null) policy.requireOrigin(old.origin);
-    policy.requireOrigin(template.origin);
+    if (old != null) policy.requireMaterial('template', old.id, old.origin);
+    policy.requireMaterial('template', template.id, template.origin);
     await database.transaction((tx) async {
       if (old != null) {
         await ContentRevisionStore.retainRow(tx, 'session_templates', {
@@ -102,7 +102,7 @@ class SqliteSessionRepository implements SessionRepository {
   @override
   Future<void> deleteTemplate(String id) async {
     final old = (await templates()).where((t) => t.id == id).firstOrNull;
-    if (old != null) policy.requireOrigin(old.origin);
+    if (old != null) policy.requireMaterial('template', old.id, old.origin);
     await database.delete('session_templates', where: 'id=?', whereArgs: [id]);
     await database.delete(
       'legacy_v2_documents',

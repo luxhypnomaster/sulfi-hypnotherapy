@@ -15,6 +15,7 @@ import '../models/diary_entry.dart';
 import 'history_attachments.dart';
 import 'diary_media_store.dart';
 import 'library_service.dart';
+import 'access_policy.dart';
 import 'export_file_name.dart';
 
 enum CapsuleConflictChoice { cancel, keepExisting, replace }
@@ -53,12 +54,14 @@ class CapsuleService {
     required this.diaryDirectory,
     required this.workspace,
     this.availableBytes,
+    this.videoProbe,
     DateTime Function()? clock,
   }) : clock = clock ?? DateTime.now;
   final Database database;
   final LibraryService library;
   final Directory diaryDirectory, workspace;
   final Future<int> Function()? availableBytes;
+  final DiaryVideoProbe? videoProbe;
   final DateTime Function() clock;
   static const schema = 1;
   static const tables = [
@@ -154,6 +157,19 @@ class CapsuleService {
     String? originalTitle;
     try {
       final records = await _records();
+      // Local backup is not publication. Never include the master's private
+      // drafts when another Google identity (or guest) uses this installation.
+      if (library.policy.serverIdentityRequired &&
+          library.policy.serverRole != 'MASTER') {
+        records['diary_author'] = <dynamic>[];
+        records['diary_public'] = (records['diary_public'] as List).where((
+          row,
+        ) {
+          final entry = jsonDecode(row['payload'] as String) as Map;
+          return entry['_alchemistScope'] == null ||
+              entry['_alchemistScope'] == 'public';
+        }).toList();
+      }
       if (moduleId != null || trackId != null || templateId != null) {
         final selectedModules = <Map<String, dynamic>>[];
         final selectedTemplates = <Map<String, dynamic>>[];
@@ -314,6 +330,19 @@ class CapsuleService {
           );
         }
       }
+      final exportedMaterials = <String>{
+        for (final table in const {
+          'audio_assets': 'track',
+          'module_definitions': 'module',
+          'session_templates': 'template',
+        }.entries)
+          for (final row in records[table.key] as List)
+            '${table.value}:${row['id']}',
+      };
+      final origins = library.policy.catalogOrigins.where((v) {
+        final k = v['key'] as Map;
+        return exportedMaterials.contains('${k['type']}:${k['logicalId']}');
+      }).toList();
       final dependencies = _dependencies(records);
       final manifest = <String, dynamic>{
         'format': 'sulfi-capsule',
@@ -328,6 +357,7 @@ class CapsuleService {
             : moduleId != null
             ? 'module'
             : 'full',
+        if (origins.isNotEmpty) 'catalogOrigins': origins,
         'records': records,
         'files': files.values.toList(),
         'dependencies': dependencies,
@@ -454,6 +484,17 @@ class CapsuleService {
       }
       // Integrity of the original manifest was verified before normalization.
       manifest['records'] = records;
+      final origins = manifest['catalogOrigins'] ?? <dynamic>[];
+      if (origins is! List || origins.length > 2000) {
+        throw const FormatException('Некорректное происхождение материалов');
+      }
+      manifest['catalogOrigins'] = origins
+          .map(
+            (v) => AccessPolicy.validateCatalogOrigin(
+              Map<String, dynamic>.from(v as Map),
+            ),
+          )
+          .toList();
       // This is not publisher authentication or a digital signature.
       // Add the v7 capability flag only in memory; IDs and media are unchanged.
       if (manifest['databaseSchema'] == 6) {
@@ -550,7 +591,13 @@ class CapsuleService {
                   }
                   if (asset.durationMs <= 0 ||
                       asset.fileSizeBytes <= 0 ||
-                      !{'wav', 'm4a', 'mp3'}.contains(asset.format)) {
+                      !{
+                        'wav',
+                        'm4a',
+                        'mp3',
+                        'aac',
+                        'ogg',
+                      }.contains(asset.format)) {
                     throw const FormatException('Аудиоревизия');
                   }
                 case ContentType.module:
@@ -606,7 +653,7 @@ class CapsuleService {
                 asset.fileSizeBytes !=
                     (await File(p.join(stage.path, asset.contentHash!))
                         .length()) ||
-                !{'mp3', 'm4a', 'wav'}.contains(asset.format)) {
+                !{'mp3', 'm4a', 'wav', 'aac', 'ogg'}.contains(asset.format)) {
               throw const FormatException('Неполное описание аудио');
             }
           }
@@ -659,9 +706,16 @@ class CapsuleService {
               Directory(p.join(stage.path, 'media-check')),
               pick: (_) async => null,
               probe: library.probe,
+              videoProbe: videoProbe,
             );
             final checked = await checker.importFile(a.block.type, (
-              name: 'attachment',
+              name: media.mime.startsWith('video/')
+                  ? (media.mime == 'video/webm'
+                        ? 'attachment.webm'
+                        : media.mime == 'video/quicktime'
+                        ? 'attachment.mov'
+                        : 'attachment.mp4')
+                  : 'attachment',
               path: file.path,
             ));
             if (checked.media!.mime != media.mime) {
@@ -931,7 +985,7 @@ class CapsuleService {
           );
         }
         if (skipped['audio_assets']!.contains(row['id'])) continue;
-        if (!{'mp3', 'm4a', 'wav'}.contains(row['format'])) {
+        if (!{'mp3', 'm4a', 'wav', 'aac', 'ogg'}.contains(row['format'])) {
           throw const FormatException('Неизвестный формат аудио');
         }
         row['filePath'] = p.basename(
@@ -958,6 +1012,11 @@ class CapsuleService {
                 'audio/mpeg' => 'mp3',
                 'audio/wav' => 'wav',
                 'audio/mp4' => 'm4a',
+                'audio/aac' => 'aac',
+                'audio/ogg' => 'ogg',
+                'video/mp4' => 'mp4',
+                'video/quicktime' => 'mov',
+                'video/webm' => 'webm',
                 _ => throw const FormatException('Неизвестное вложение'),
               };
               m[k] = await materialize(m[k], mediaDestination, ext);
@@ -987,6 +1046,7 @@ class CapsuleService {
         }
       }
       await database.transaction((tx) async {
+        final importedMaterials = <String>{};
         checkCancelled();
         // Detect concurrent writes again under the write transaction.
         final locked = <String, dynamic>{};
@@ -1127,7 +1187,25 @@ class CapsuleService {
               Map<String, Object?>.from(row),
               conflictAlgorithm: ConflictAlgorithm.replace,
             );
+            final type = const {
+              'audio_assets': 'track',
+              'module_definitions': 'module',
+              'session_templates': 'template',
+            }[table];
+            if (type != null) importedMaterials.add('$type:${row['id']}');
           }
+        }
+        for (final raw in preview.manifest['catalogOrigins'] as List? ?? []) {
+          final value = AccessPolicy.validateCatalogOrigin(
+            Map<String, dynamic>.from(raw),
+          );
+          final k = value['key'] as Map,
+              id = '${value['key']['type']}:${value['key']['logicalId']}';
+          if (!importedMaterials.contains(id)) continue;
+          await tx.insert('app_settings', {
+            'name': 'alchemist_origin:${k['type']}:${k['logicalId']}',
+            'value': jsonEncode(value),
+          }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
         final maxNumber =
             Sqflite.firstIntValue(
@@ -1160,5 +1238,7 @@ class CapsuleService {
       }
       rethrow;
     }
+    // A cache-refresh failure must never remove already committed media files.
+    await library.policy.reloadCatalogOrigins();
   }
 }

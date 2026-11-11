@@ -1,0 +1,41 @@
+✔ crash before atomic head publication leaves both item AND receipt invisible; commit/reopen consistent (2.663744ms)
+✔ media/checkpoint writes do not invalidate catalog pagination revision (0.511295ms)
+✔ actual production RSA verifier rejects forged signature and live registry revocation (72.615347ms)
+✔ verified subject grants never trust requested role; wrong audience/issuer/expiry/signature denied (3.752132ms)
+✔ bootstrap binds only signed configured CI owner, immutable owner and no property reset on replay (4.189678ms)
+✔ bootstrap reports bounded stage code without leaking raw Google error, token or private locator (2.479682ms)
+✔ five publication kinds, annotation metadata-only, grants and selective exact dependency plan (6.342757ms)
+✔ idempotence, stale etag, missing/corrupt/private dependency, cursor consistency (1.350925ms)
+✔ storage bootstrap exact tree replay and unsafe/ambiguous ACL fail closed (0.940779ms)
+✔ existing lawful OAuth refresh supplies missing or expired CI ID token without another owner login (0.929543ms)
+✔ missing refreshed identity, wrong account, unverified email and rejected signature fail closed (0.579916ms)
+✔ pin recovered project ID and freshly observed private ACL; never discover/create through incomplete Drive.file listing (1.043871ms)
+✔ missing OAuth and untrusted branch never create cloud project or write credentials (79.251257ms)
+✔ create-once/readback/versioned deploy/bootstrap replay checkpoint, retry updates existing deployment (1.845606ms)
+✔ wrong/duplicate/old/unclaimed project and source mismatch never deploy (1.514306ms)
+✔ crash after creation leaves one unclaimed project; retry fails closed instead of creating duplicate (0.271821ms)
+✔ storage count/replay/security failures never claim live E2E (0.443935ms)
+✔ diary private draft, immutable public snapshot, idempotent retry, quiet edit/reannounce/close and private working revision (11.933806ms)
+✔ effective blob/index file ACL is checked even when its parent stays private (2.28141ms)
+✔ actual GAS folder adapter uses metadata/null/options signature and verifies/reuses all41 folders (7.853239ms)
+✔ actual GAS adapter uses private resumable PUT and bounded authenticated ranges, serializable verification (31.651847ms)
+✔ preallocated Drive file ID recovers final PUT lost response without second byte write (1.621815ms)
+✔ production identity never reaches arbitrary PR/fork/ref or changed Flutter source/dependency lock (24.288041ms)
+✔ actual container magic allowlist rejects MIME spoof, executable, truncated image and wrong container (1.005935ms)
+✔ owner grant registry, immediate revoke, immutable owner and redacted bounded audit (536.251088ms)
+✔ per-subject sync conflict/replay isolation and outbox receipts (2.861937ms)
+✔ public tombstones expose no private payload and snapshot pagination detects changes (3.272433ms)
+✔ real transaction store links media to publications, persists replay, revokes each chunk on withdrawal (8.218938ms)
+✔ reader grants never authorize republication of foreign private bytes; source withdrawal revokes foreign links (10.491726ms)
+✔ indexed ACL and catalog ignore thousands of transfer receipts; cover grants and complete manifests survive reopen (86.536073ms)
+✔ stream SHA equals native SHA across padding boundaries, megabytes and process checkpoint resumes (115.68972ms)
+✔ multi-chunk video resume/retry, exact hash, per-range revocation, never leak private location (10.92197ms)
+✔ wrong actor, misalignment, corrupt final hash, incomplete transfer reject (1.969258ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2057.810955

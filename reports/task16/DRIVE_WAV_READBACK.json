@@ -1,0 +1,26 @@
+{
+  "observedUtc": "2026-11-10T18:59:52.631862+00:00",
+  "source": "Independent authenticated Drive connector raw read, not local mock",
+  "liveRun": 42878030592,
+  "byteLength": 2205044,
+  "sha256": "97cb9320823ba56e51b829c7f750748ec81f4d1e0b5c979c2af61e69cac2d0e9",
+  "equalsDeterministicSource": true,
+  "ownerOnlyAclReadback": true,
+  "publicDriveAcl": false,
+  "codecProbe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "pcm_s16le",
+        "sample_rate": "22050",
+        "channels": 1
+      }
+    ],
+    "format": {
+      "duration": "50.000000"
+    }
+  },
+  "physicalAndroid": "NOT_RUN",
+  "readerServiceVerification": "Separate real Flutter-service workflow still running"
+}

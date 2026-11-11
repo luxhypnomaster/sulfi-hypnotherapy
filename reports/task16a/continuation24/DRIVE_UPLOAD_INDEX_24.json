@@ -1,0 +1,89 @@
+{
+  "task": "16+16-A",
+  "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
+  "verifiedFiles": 10,
+  "files": [
+    {
+      "name": "RESULT_CONTINUATION_24.md",
+      "id": "1v7XgkHyiWk5XBm2jDQ3XaZvrzhk7w8k0",
+      "url": "https://drive.google.com/file/d/1v7XgkHyiWk5XBm2jDQ3XaZvrzhk7w8k0/view?usp=drivesdk",
+      "bytes": 6516,
+      "sha256": "87d05102fae7f87b40bb30ccf55cfce3379c1c4365031aeb8650b3f6ca9cfee0",
+      "parentAndSizeVerified": true,
+      "rawByteReadbackVerified": true
+    },
+    {
+      "name": "TESTS_CONTINUATION_24.md",
+      "id": "1vyr65Ea6Hvd8P-9f7Ria1tLX8WAN-IRi",
+      "url": "https://drive.google.com/file/d/1vyr65Ea6Hvd8P-9f7Ria1tLX8WAN-IRi/view?usp=drivesdk",
+      "bytes": 2598,
+      "sha256": "0c2a5a7359239a9e686a1dbb008ce826e6ecdb5ffe5683bb158ce250f5aa9353",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "PHONE_QA_24.md",
+      "id": "1aW98OjD8Q-wODBqW_wMtcsgHYTHwPc0c",
+      "url": "https://drive.google.com/file/d/1aW98OjD8Q-wODBqW_wMtcsgHYTHwPc0c/view?usp=drivesdk",
+      "bytes": 8053,
+      "sha256": "22f35260e04eeb5a7b3f217a9da3ca66ec6f69d1557fcfc52678cffdb639da6f",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "ISSUES_AND_NEXT_24.md",
+      "id": "1xV3aHXIbI62IDpk3YPMvRtflIKnCLcwp",
+      "url": "https://drive.google.com/file/d/1xV3aHXIbI62IDpk3YPMvRtflIKnCLcwp/view?usp=drivesdk",
+      "bytes": 3953,
+      "sha256": "50a997441cf9ac8ddbfbdb92c26ab74d897dda7fb947c1fb2d0ba676a39e9106",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "ACCEPTANCE_CURRENT_24.md",
+      "id": "1NUuUyELhvPEfjPvnRWZH2bDSolIKCkuy",
+      "url": "https://drive.google.com/file/d/1NUuUyELhvPEfjPvnRWZH2bDSolIKCkuy/view?usp=drivesdk",
+      "bytes": 39443,
+      "sha256": "0a4a27389ab9979f893b0f97d6e44e7dff437c821715ea9314234c0a05fcf491",
+      "parentAndSizeVerified": true,
+      "rawByteReadbackVerified": true
+    },
+    {
+      "name": "ACCEPTANCE_CURRENT_24.json",
+      "id": "1moREE5sxeffNhOC7ATIda75P-Irpwain",
+      "url": "https://drive.google.com/file/d/1moREE5sxeffNhOC7ATIda75P-Irpwain/view?usp=drivesdk",
+      "bytes": 66874,
+      "sha256": "0bd3e3c750822d8c0c0ea454ffc6c52863c4d7ccfcb1c7f33b4b61c7506b5fe9",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "APK_PAIR_24.json",
+      "id": "16TH82dfR8PvzJwywpRvVzfZZhxn5MtGT",
+      "url": "https://drive.google.com/file/d/16TH82dfR8PvzJwywpRvVzfZZhxn5MtGT/view?usp=drivesdk",
+      "bytes": 2295,
+      "sha256": "d77c0132594a9b54138d40c8457e04178880790082a66c645935b7abb20cb04c",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "SERVER_READBACK_24.json",
+      "id": "1yrKZJ6UZQN4_pEhVzpOBj6CV2mhXGcTZ",
+      "url": "https://drive.google.com/file/d/1yrKZJ6UZQN4_pEhVzpOBj6CV2mhXGcTZ/view?usp=drivesdk",
+      "bytes": 492,
+      "sha256": "84720b2bf604b9d73d11af5cc0ddf99ca242d9ff587803786587770d42157ea2",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "REGRESSION_REPAIR_24.json",
+      "id": "19p3WsVfDXgMpcg_-0bxmKvt3Q1T-hjz-",
+      "url": "https://drive.google.com/file/d/19p3WsVfDXgMpcg_-0bxmKvt3Q1T-hjz-/view?usp=drivesdk",
+      "bytes": 586,
+      "sha256": "fbfd36218ed030d2c0ad184313f0fa3c9f38a99755170f69ab1e39251095601d",
+      "parentAndSizeVerified": true
+    },
+    {
+      "name": "DELIVERY_SCOPE_24.md",
+      "id": "15g2sqAzUiOyh4CvW3LZKcttpDI7rqXru",
+      "url": "https://drive.google.com/file/d/15g2sqAzUiOyh4CvW3LZKcttpDI7rqXru/view?usp=drivesdk",
+      "bytes": 2747,
+      "sha256": "dbf4fa1cfc02cd3284fec6982c14cc42f80ae0c86dedaba183954273bf397f1f",
+      "parentAndSizeVerified": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "number": 16,
+  "title": "Сервер Проекта Алхимик — полноценный GAS+Drive сервер, media/packages/journals и две APK",
+  "revision": "production-github-actions-catalog-storage-preflight-2026-11-10",
+  "replaces": "staging-only draft #16",
+  "published": true,
+  "execution": "NOT_CONFIRMED",
+  "singleProjectName": "Сервер Проекта Алхимик",
+  "criteria": 147,
+  "sourceHead": "b599df6d1f5b2296b7237aa31b21c22c373fc436",
+  "expectedGitBranch": "feat/task16-alchemist-full-server",
+  "olderProjectPolicy": "DO_NOT_TOUCH_OR_DELETE",
+  "deploymentPath": "Codex -> GitHub Actions -> clasp -> Google Apps Script",
+  "oauthStatus": "CONSENT_SHOWN_BUT_CLASP_LOGIN_AND_GITHUB_SECRET_NOT_CONFIRMED",
+  "catalogAndStorage": "MANDATORY: owner annotation cards, library modular publish, client selective install, idempotent private Drive tree",
+  "files": 20,
+  "preflight": "PREFLIGHT_AUDIT.md mandatory C0; not executed"
+}

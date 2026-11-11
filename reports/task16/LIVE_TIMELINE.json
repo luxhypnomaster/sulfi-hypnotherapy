@@ -1,0 +1,46 @@
+{
+  "run": 42878030592,
+  "elapsedReporter": "51:42",
+  "phases": [
+    {
+      "utc": "2026-11-10T18:45:29.2066269Z",
+      "phase": "STARTED"
+    },
+    {
+      "utc": "2026-11-10T18:46:25.8355048Z",
+      "phase": "REAL_AUDIO_UPLOAD_PAUSED"
+    },
+    {
+      "utc": "2026-11-10T18:55:11.5658239Z",
+      "phase": "REAL_ANNOTATED_TRACK_INSTALLED"
+    },
+    {
+      "utc": "2026-11-10T19:03:01.6534465Z",
+      "phase": "REAL_MODULE_MISSING_ONLY_INSTALL_AND_RECEIPT_REPLAY"
+    },
+    {
+      "utc": "2026-11-10T19:03:59.4108411Z",
+      "phase": "REAL_METADATA_ONLY_EDIT"
+    },
+    {
+      "utc": "2026-11-10T19:18:29.1878295Z",
+      "phase": "REAL_TEMPLATE_AND_LARGE_ZIP_INSTALLED"
+    },
+    {
+      "utc": "2026-11-10T19:32:50.2748643Z",
+      "phase": "REAL_DIARY_IMAGE_AUDIO_VIDEO_CONTENTLINK_AND_DOWNLOAD_RESUME"
+    },
+    {
+      "utc": "2026-11-10T19:33:39.1430946Z",
+      "phase": "REAL_PRIVATE_AND_ANONYMOUS_MUTATION_DENIED"
+    },
+    {
+      "utc": "2026-11-10T19:37:10.9864177Z",
+      "phase": "REAL_WITHDRAW_DENIES_NEW_BYTES_OFFLINE_COPY_RETAINED"
+    },
+    {
+      "utc": "2026-11-10T19:37:10.9881542Z",
+      "phase": "SERVICE_E2E_PASS_NOT_ANDROID_APK_QA"
+    }
+  ]
+}

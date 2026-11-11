@@ -27,10 +27,16 @@ class DiaryController extends ChangeNotifier {
     this.allowDebugAuthor = false,
     this.authorEmail = 'luxhypnomaster@gmail.com',
   }) : reads = reads ?? DiaryReadStore(repository.database),
-       clock = clock ?? DateTime.now;
+       clock = clock ?? DateTime.now {
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(api?.verifiedRole);
+    }
+  }
   final DiaryReadStore reads;
   final DateTime Function() clock;
   Timer? _expiry;
+  String _readScope = 'public';
+  VoidCallback? onAccountLogout;
   int _rotation = 0;
   final _readerAudio = <String, DiaryAudio>{};
   final _heard = <String, HeardAudio>{};
@@ -150,7 +156,10 @@ class DiaryController extends ChangeNotifier {
   bool debugAuthor = false;
   bool hasCache = false;
   void enterDebugAuthor() {
-    if (!kDebugMode || !allowDebugAuthor || (policy?.clientEdition ?? false)) {
+    if (!kDebugMode ||
+        !allowDebugAuthor ||
+        (policy?.clientEdition ?? false) ||
+        (api?.supportsServerIdentity ?? false)) {
       return;
     }
     debugAuthor = true;
@@ -210,34 +219,49 @@ class DiaryController extends ChangeNotifier {
   bool authorBusy = false;
   bool get canSignIn =>
       identity != null &&
-      authorRepository != null &&
-      (policy?.isAuthor ?? true);
+      ((api?.supportsServerIdentity ?? false) ||
+          (authorRepository != null && (policy?.isAuthor ?? true)));
   bool get authorWorkspace =>
       authorRepository != null &&
+      (!(api?.supportsServerIdentity ?? false) ||
+          api?.verifiedRole == 'MASTER') &&
       !(policy?.clientEdition ?? false) &&
       (policy != null || identity == null || _localAuthor);
-  bool get authenticated => _session?.valid ?? false;
+  bool get authenticated => (api?.supportsServerIdentity ?? false)
+      ? api!.readerAuthenticated
+      : (_session?.valid ?? false);
   List<DiaryEntry> published = [], drafts = [];
   bool syncing = false;
   String? error;
+  int _loadGeneration = 0;
   Future<void> load() async {
+    final generation = ++_loadGeneration, scope = api?.readerScope ?? 'public';
+    if (scope != _readScope) {
+      await reads.switchReader(scope == 'public' ? null : scope);
+      _readScope = scope;
+    }
     await reads.load();
+    final nextPublished = await repository.published(),
+        cached = await repository.revision();
+    final workspace = authorWorkspace;
+    final work = workspace ? await authorRepository!.entries() : <DiaryEntry>[];
+    if (generation != _loadGeneration ||
+        scope != (api?.readerScope ?? 'public')) {
+      return;
+    }
     final oldCycles = published
         .map((e) => '${e.id}:${DiaryPublication.of(e).cycle}')
         .toSet();
-    published = await repository.published();
-    if (published.any(
+    if (nextPublished.any(
       (e) => !oldCycles.contains('${e.id}:${DiaryPublication.of(e).cycle}'),
     )) {
       _rotation = 0;
     }
-    hasCache = await repository.revision() != null;
-    final work = authorWorkspace
-        ? await authorRepository!.entries()
-        : <DiaryEntry>[];
-    drafts = authorWorkspace ? work : [];
+    published = nextPublished;
+    hasCache = cached != null;
+    drafts = work;
     if (repository.invalidIds.isNotEmpty ||
-        (authorWorkspace && authorRepository!.invalidIds.isNotEmpty)) {
+        (workspace && authorRepository!.invalidIds.isNotEmpty)) {
       error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
     }
     _scheduleExpiry();
@@ -251,6 +275,7 @@ class DiaryController extends ChangeNotifier {
       notifyListeners();
       return;
     }
+    final syncScope = api!.readerScope;
     syncing = true;
     error = null;
     notifyListeners();
@@ -281,8 +306,10 @@ class DiaryController extends ChangeNotifier {
           throw const DiaryApiException('Ошибка страниц дневника');
         }
       } while (page != null);
+      if (syncScope != api!.readerScope) return;
       await repository.cache(entries, removed, revision);
       await load();
+      await api!.synchronizeReads(reads, published);
     } catch (e) {
       error = e is DiaryApiException ? e.message : 'Не удалось обновить дневник. Последний сохранённый каталог не изменён.';
     } finally {
@@ -317,12 +344,46 @@ class DiaryController extends ChangeNotifier {
       throw const DiaryApiException('Вход автора недоступен');
     }
     final generation = ++_authGeneration;
+    api?.clearSession();
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(null);
+      drafts = [];
+    }
+    onAccountLogout?.call();
+    published = published
+        .where(
+          (e) =>
+              e.extra['_alchemistScope'] == null ||
+              e.extra['_alchemistScope'] == 'public',
+        )
+        .toList();
     authorBusy = true;
     _session = null;
     notifyListeners();
     try {
       final result = await identity!.signIn();
       if (generation != _authGeneration) return;
+      if (api?.supportsServerIdentity ?? false) {
+        await api!.authenticateReader(result.idToken);
+        if (generation != _authGeneration) return;
+        policy?.applyVerifiedServerRole(api!.verifiedRole);
+        _localAuthor = api!.verifiedRole == 'MASTER';
+        if (_localAuthor) {
+          _session = DiaryAuthorSession.verified(
+            result.idToken,
+            api!.identityExpiresAt!,
+          );
+        }
+        await load();
+        if (generation != _authGeneration) return;
+        if (_localAuthor && authorWorkspace) {
+          await api!.flushPending(_session!);
+          if (generation != _authGeneration) return;
+          await load();
+        }
+        await sync();
+        return;
+      }
       if (result.email.toLowerCase() != authorEmail.toLowerCase()) {
         await identity!.signOut();
         throw const DiaryApiException(
@@ -337,8 +398,17 @@ class DiaryController extends ChangeNotifier {
       } else {
         try {
           final session = await api!.authenticate(result.idToken);
-          if (generation == _authGeneration) _session = session;
-          error = null;
+          if (generation == _authGeneration) {
+            _session = session;
+            await load();
+            try {
+              await api!.flushPending(session);
+              await load();
+              error = api!.queueError;
+            } catch (e) {
+              error = 'Вход подтверждён. Очередь пока не отправлена: $e';
+            }
+          }
         } catch (_) {
           error = 'Вход Google выполнен. Облачный сервер не подтвердил доступ; локальные черновики доступны.';
         }
@@ -349,15 +419,36 @@ class DiaryController extends ChangeNotifier {
     }
   }
 
+  Future<void> pauseReaders() async {
+    for (final audio in _readerAudio.values) {
+      await audio.pause();
+    }
+  }
+
   Future<void> logout() async {
     ++_authGeneration;
+    ++_loadGeneration;
+    api?.clearSession();
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(null);
+    }
+    published = published
+        .where(
+          (e) =>
+              e.extra['_alchemistScope'] == null ||
+              e.extra['_alchemistScope'] == 'public',
+        )
+        .toList();
+    onAccountLogout?.call();
     _session = null;
     _localAuthor = false;
     debugAuthor = false;
     if (identity != null) drafts = [];
     error = null;
     notifyListeners();
+    await pauseReaders();
     await identity?.signOut();
+    await load();
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {
@@ -380,13 +471,23 @@ class DiaryController extends ChangeNotifier {
     return _session!;
   }
 
+  Future<int> flushCloudQueue() async {
+    final session = await _cloudSession();
+    final completed = await api!.flushPending(session);
+    await load();
+    await sync();
+    return completed;
+  }
+
   Future<void> saveToCloud(DiaryEntry entry) async {
-    if (entry.extra.containsKey('contentLinks') ||
-        entry.extra.containsKey('publication')) {
+    if (!(api?.supportsAdvancedPublication ?? false) &&
+        (entry.extra.containsKey('contentLinks') ||
+            entry.extra.containsKey('publication'))) {
       throw const DiaryApiException(
         'Ссылки на материалы пока сохраняются только локально. Серверный контракт не подтверждён.',
       );
     }
+    await api?.enqueuePublication(entry);
     final session = await _cloudSession();
     final result = await api!.saveAuthorDraft(entry, session);
     await authorRepository!.save(result);
@@ -405,12 +506,14 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
-    if (entry.extra.containsKey('contentLinks') ||
-        entry.extra.containsKey('publication')) {
+    if (!(api?.supportsAdvancedPublication ?? false) &&
+        (entry.extra.containsKey('contentLinks') ||
+            entry.extra.containsKey('publication'))) {
       throw const DiaryApiException(
         'Публикация ссылок на материалы пока недоступна. Локальная запись сохранена.',
       );
     }
+    await api?.enqueuePublication(entry, published: published);
     final session = await _cloudSession();
     final result = await api!.publish(entry, session, published: published);
     await authorRepository!.save(result);
