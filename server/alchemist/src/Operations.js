@@ -9,13 +9,15 @@ var AlchemistOperations=(function(){
   function request(v){if(typeof v!=='string'||! /^[\w-]{1,128}$/.test(v))AlchemistCatalog.fail(422,'INVALID_REQUEST_ID');return v;}
   function audit(actor,operation,status){return tx(function(){var events=store.get('audit:recent')||{sequence:0,events:[]};events.sequence++;events.events.push({sequence:events.sequence,at:services.now(),subjectDigest:services.digest((actor||{}).sub||'anonymous'),operation:operation,status:status});if(events.events.length>500)events.events.shift();store.put('audit:recent',events);return true;});}
   return {audit:audit,execute:function(op,a,q){q=q||{};
-   if(op==='auth.whoami'||op==='auth.roles'){authenticated(a);return {subject:a.sub,roles:a.roles.slice(),expiresAt:a.exp||null};}
+   if(op==='auth.verifyPilot')return AlchemistPilotAuthorization.verify(a,q,core,services,properties);
+   if(op==='auth.pilotStatus'){owner(a);return AlchemistPilotAuthorization.status(properties);}
+   if(op==='auth.whoami'||op==='auth.roles'){authenticated(a);var master=a.sub===properties.getProperty('ALCHEMIST_OWNER_SUB');return {subject:a.sub,role:master?'MASTER':'CLIENT',roles:master?['owner']:['client'],expiresAt:a.exp||null,authPolicyVersion:2,permissions:{publishCatalog:master,publishDiary:master,readPublished:true,installCatalog:true,exportOwnLocal:true,editOwnLocal:true}};}
    if(op==='grant.list'){owner(a);var active=JSON.parse(properties.getProperty('ALCHEMIST_AUTH_CONFIG')||'null')||{grants:JSON.parse(properties.getProperty('ALCHEMIST_GRANTS')||'{}'),revoked:{},version:0};return {grants:active.grants,version:active.version};}
    if(op==='grant.set'||op==='grant.revoke'||op==='auth.revoke'){
     owner(a);subject(q.subject);request(q.requestId);if(q.subject===properties.getProperty('ALCHEMIST_OWNER_SUB'))AlchemistCatalog.fail(409,'OWNER_GRANT_IMMUTABLE');
     var applied=tx(function(){var key=a.sub+':'+q.requestId,digest=services.digest(JSON.stringify({operation:op,parameters:q})),receipt=store.receipt(key),config=store.get('auth:registry')||JSON.parse(properties.getProperty('ALCHEMIST_AUTH_CONFIG')||'null')||{version:0,grants:JSON.parse(properties.getProperty('ALCHEMIST_GRANTS')||'{}'),revoked:{}};
      if(receipt){if(receipt.digest!==digest)AlchemistCatalog.fail(409,'IDEMPOTENCY_CONFLICT');return {result:receipt.result,config:config};}
-     if(op==='grant.set'){if(!Array.isArray(q.roles)||!q.roles.length||q.roles.length>3||q.roles.some(function(r){return ['author','client','subscriber'].indexOf(r)<0;}))AlchemistCatalog.fail(422,'INVALID_GRANT');config.grants[q.subject]=q.roles;delete config.revoked[q.subject];}else{delete config.grants[q.subject];config.revoked[q.subject]=true;}
+     if(op==='grant.set'){if(!Array.isArray(q.roles)||!q.roles.length||q.roles.length>3||q.roles.some(function(r){return r!=='client';}))AlchemistCatalog.fail(422,'INVALID_GRANT');config.grants[q.subject]=q.roles;delete config.revoked[q.subject];}else{delete config.grants[q.subject];config.revoked[q.subject]=true;}
      config.version++;if(JSON.stringify(config).length>8000)AlchemistCatalog.fail(507,'GRANT_REGISTRY_FULL');var result={subject:q.subject,revoked:op!=='grant.set',version:config.version};store.put('auth:registry',config);store.saveReceipt(key,{digest:digest,result:result});return {result:result,config:config};
     });
     // One atomic property is the runtime authority. Replayed requests always

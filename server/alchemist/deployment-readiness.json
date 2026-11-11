@@ -1,11 +1,15 @@
 {
   "fullSourceVerified": true,
-  "projectName": "Сервер Проекта Алхимик",
+  "projectName": "\u0421\u0435\u0440\u0432\u0435\u0440 \u041f\u0440\u043e\u0435\u043a\u0442\u0430 \u0410\u043b\u0445\u0438\u043c\u0438\u043a",
   "claspVersionVerified": "3.4.1",
   "live": false,
-  "reason": "Verified full source gate, runtime/version4/private41-folder bootstrap/replay. Actual Flutter-service E2E42878030592 SUCCESS:6540746bytes each way,10phases, hashes/resume/private/withdraw. CI42878716769 both signed22APK+419Flutter/33newNode/24oldNode PASS. Android OAuth Web+Android clients not created (owner confirmed); APK22 unconfigured and physical SDK/device NOT_RUN. live=false retains integrated two-APK readiness gate; runtime/service gates are true.",
+  "reason": "Historical version4/private41-folder bootstrap and full service E2E remain verified. Addendum16-A public Web/Android registrations owner-confirmed; new exact-Web audience/sole-master code locally verified, production update and real two-account phone tests pending. Full live=false; no Android login claimed.",
   "runtimeHealthVerified": true,
   "privateStorageVerified": true,
   "fullServiceE2EVerified": true,
-  "androidOAuthConfigured": false
+  "androidOAuthConfigured": false,
+  "androidOAuthPublicConfigProvided": true,
+  "authorizationPolicyVersion": 2,
+  "twoAccountWebAuthVerified": false,
+  "physicalTwoPhoneQa": "NOT_RUN"
 }

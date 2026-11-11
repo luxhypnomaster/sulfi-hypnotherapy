@@ -32,7 +32,7 @@ try{
  const config={fullSourceVerified:true,ownerSubject:identity.sub,ownerEmail:identity.email,
    ciAudience:saved.client_id,androidWebAudience:process.env.GOOGLE_WEB_CLIENT_ID||null,
    projectFolderId:'1b-FP_emjwE5LpTyx4TFzkbzlffEE7pLl',sourceSha};
- if(config.androidWebAudience&&!/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.androidWebAudience))throw Error('INVALID_ANDROID_OAUTH_AUDIENCE');
+ if(!config.androidWebAudience||!/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.androidWebAudience))throw Error('INVALID_ANDROID_OAUTH_AUDIENCE');
  writeFileSync(join(work,'source','InitialConfig.js'),'var AlchemistInitialConfig='+JSON.stringify(config)+';\n');
  writeFileSync(join(work,'.claspignore'),'SOURCE_HASHES.json\n**/.*\n**/node_modules/**\n');
  const files=readdirSync(join(work,'source')).filter(n=>n.endsWith('.js')||n==='appsscript.json').map(name=>({name:name.replace(/\.js$|\.json$/,''),type:name.endsWith('.js')?'SERVER_JS':'JSON',source:readFileSync(join(work,'source',name),'utf8')}));
@@ -74,7 +74,8 @@ try{
     {operation:'catalog.createDraft',parameters:{requestId:'negative-client'},expected:[401,403]},
     {operation:'media.getDescriptor',parameters:{assetRevisionId:'unavailable'},expected:[404]},
     {operation:'auth.whoami',parameters:{},credential:'forged.token.signature',expected:[401]},
-  ]){const result=await broker(endpoint,{version:1,operation:q.operation,parameters:q.parameters,...(q.credential?{credential:q.credential}:{})});if(result.ok||!q.expected.includes(result.status))throw Error('LIVE_NEGATIVE_SECURITY_FAILED');}writeFileSync(join(evidence,'LIVE_SECURITY.json'),JSON.stringify({anonymousMutationDenied:true,missingPrivateAssetDenied:true,forgedTokenDenied:true,fullE2E:false}));},
+    {operation:'auth.whoami',parameters:{},credential:token,expected:[401]}, // CI audience is bootstrap-only under16-A.
+  ]){const result=await broker(endpoint,{version:1,operation:q.operation,parameters:q.parameters,...(q.credential?{credential:q.credential}:{})});if(result.ok||!q.expected.includes(result.status))throw Error('LIVE_NEGATIVE_SECURITY_FAILED');}writeFileSync(join(evidence,'LIVE_SECURITY.json'),JSON.stringify({anonymousMutationDenied:true,missingPrivateAssetDenied:true,forgedTokenDenied:true,ciAudienceRejected:true,fullE2E:false}));},
  };
  await deployCore(adapter,{fullSourceVerified:true,files,sha:sourceSha,description});
 }catch(e){const raw=String(e.message||''),code=/^[A-Z0-9_: -]{1,128}$/.test(raw)?raw:'DEPLOYMENT_FAILED_REDACTED';checkpoint({stage:'BLOCKED',reason:code});console.error(code);process.exitCode=1;}
