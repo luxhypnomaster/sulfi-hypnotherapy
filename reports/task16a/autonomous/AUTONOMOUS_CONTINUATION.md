@@ -15,7 +15,7 @@
 
 | Область | Ветка и точный исходник | Черновик |
 |---|---|---|
-| APK QA и документация | research/task16-autonomous; исполняемый harness 288b45deafb6b9e9cbe9892bc830da6c86c1345a | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
+| APK QA и документация | research/task16-autonomous; исполняемый harness 083fa8d14f58785095de09856ee79ec136ea9bea | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
 | G3 inventory/dry-run/rollback | research/task16-g3-revisions; **b76083df2ae7adc2d5a3e0c0fe05a3500d052626** | [PR43](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/43) |
 | Drive RPC кандидат | perf/task16-drive-reads; **cd92f95cc44c11bddbc6985288f83b68fcb240ec** | [PR42](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/42) |
 
@@ -27,7 +27,7 @@
 
 Фактический окончательный результат эмулятора: **PENDING_FINAL_EMULATOR_RESULT**. Подробные case-результаты будут зафиксированы в EMULATOR_QA_AUTONOMOUS.json. Гостевой restart не является проверкой authenticated logout. Наблюдение нативного audio player не означает слышимый звук на физическом телефоне.
 
-Первые запускающие проверки выявили ограничения harness: private draft assets недоступны read-only integration token (403), холодный старт debug APK требовал ожидания SQLite, а adb shell терял quoting составного run-as. Они исправлены в тестовом сценарии, не в приложении. Ранний run 43100461153 завершился SUCCESS при BLOCKED cases: он **не считается QA PASS**. Последующие исправления заставляют job завершаться ошибкой при провале обязательных install/seed/update/client проверок.
+Первые запускающие проверки выявили ограничения harness: private draft assets недоступны read-only integration token (403), холодный старт debug APK требовал ожидания SQLite, а adb shell терял quoting составного run-as. Они исправлены в тестовом сценарии, не в приложении. Ранний run 43100461153 завершился SUCCESS при BLOCKED cases: он **не считается QA PASS**. После удаления системного препятствия выявлен неполный тестовый JSON шаблона (description/isDefault); он заменён сериализацией реальных моделей и проверен roundtrip через их fromMap/toMap. Это ошибка фикстуры, не данных владельца. Прежние зелёные jobs с недоступным UI не считаются функциональной приёмкой. Теперь install/seed/update/client требуют ещё и готовый интерфейс приложения, при ошибке job завершается с отказом.
 
 Workflow допускает emulator job только для manual workflow_dispatch в точной research-ветке этого приватного repository. Для GET draft assets нужен transient GITHUB_TOKEN contents:write; actual release/ACL mutations не выполняются. OAuth/clasp/signing secrets этому job не передаются, credentials checkout не сохраняет. Используемый emulator action закреплён по полному SHA.
 
