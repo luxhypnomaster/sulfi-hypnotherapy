@@ -15,7 +15,7 @@
 
 | Область | Ветка и точный исходник | Черновик |
 |---|---|---|
-| APK QA и документация | research/task16-autonomous; исполняемый harness 083fa8d14f58785095de09856ee79ec136ea9bea | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
+| APK QA и документация | research/task16-autonomous; исполняемый harness e777d851ef0b2e40953f8884446b36c01485950c | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
 | G3 inventory/dry-run/rollback | research/task16-g3-revisions; **b76083df2ae7adc2d5a3e0c0fe05a3500d052626** | [PR43](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/43) |
 | Drive RPC кандидат | perf/task16-drive-reads; **cd92f95cc44c11bddbc6985288f83b68fcb240ec** | [PR42](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/42) |
 
@@ -33,7 +33,7 @@ Workflow допускает emulator job только для manual workflow_dis
 
 ## 2. G3 — результат и пределы
 
-**8 новых + 3 существующих boundary-теста: 11 PASS локально. Финальный CI432 ожидается; прежний CI431 PASS сохранён отдельно.** Реализованы readonly inventory с проверкой bytes/SHA/size, plan fingerprint и blockers; dry-run; отдельный VACUUM INTO backup и sandbox DB; immutable revision/ref/head таблицы; exact(logicalId,revisionId,blobSha) без fallback; переключение head на B при сохранении history A; rollback в отдельную проверенную копию.
+**8 новых + 3 существующих boundary-теста: 11 PASS локально. Финальный CI 432 Flutter PASS; прежний CI431 сохранён отдельно.** Реализованы readonly inventory с проверкой bytes/SHA/size, plan fingerprint и blockers; dry-run; отдельный VACUUM INTO backup и sandbox DB; immutable revision/ref/head таблицы; exact(logicalId,revisionId,blobSha) без fallback; переключение head на B при сохранении history A; rollback в отдельную проверенную копию.
 
 Фикстура: 2 ревизии одного ID, 2 blob, 2 pinned refs, 0 записей в source. Проверены active session, stale plan, ambiguity history/metadata, повреждённые blob, injected pre-commit crash и SQLite integrity. G3_DRY_RUN.json относится только к синтетической Fixture15, не к базе владельца.
 
@@ -68,7 +68,7 @@ Workflow допускает emulator job только для manual workflow_dis
 
 | Проверка | Фактический итог |
 |---|---|
-| [G3 CI 43102467566](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43102467566), 4620db2 |SUCCESS: 431 Flutter, 43 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
+| [G3 CI 43105927067](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43105927067), b76083d |SUCCESS: 432 Flutter, 43 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
 | [Perf CI 43102167730](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43102167730), cd92f95 |SUCCESS: 424 Flutter, 45 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
 | G3 targeted |11 PASS; flutter analyze --fatal-infos: No issues found |
 | Python harness syntax |py_compile PASS |

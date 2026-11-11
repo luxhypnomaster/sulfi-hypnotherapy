@@ -226,6 +226,130 @@
         }
       ],
       "note": "earlier harness attempt, not a substitute for final run"
+    },
+    {
+      "runId": 43105166412,
+      "caseResults": [
+        {
+          "case": "install23_launch",
+          "status": "PASS",
+          "details": {
+            "versionCode": 23,
+            "launched": true
+          }
+        },
+        {
+          "case": "synthetic_local_fixture",
+          "status": "PASS",
+          "details": {
+            "rowsSeeded": 1,
+            "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+            "schema": 9,
+            "seedMethod": "controlled SQLite precondition, not UI import"
+          }
+        },
+        {
+          "case": "update23_to24_preserves_data",
+          "status": "PASS",
+          "details": {
+            "versionCode": 24,
+            "dataPreserved": true,
+            "sqliteIntegrity": "ok"
+          }
+        },
+        {
+          "case": "library_native_preview",
+          "status": "BLOCKED",
+          "error": "AssertionError:UI_NOT_FOUND:Библиотека"
+        },
+        {
+          "case": "session_screen_off_playback",
+          "status": "BLOCKED",
+          "error": "AssertionError:UI_NOT_FOUND:НАЧАТЬ ТРАНСФОРМАЦИЮ"
+        },
+        {
+          "case": "client24_package_isolation",
+          "status": "PASS",
+          "details": {
+            "distinctPackageSqlite": true,
+            "emptyOwnLibrary": true,
+            "schema": 9
+          }
+        },
+        {
+          "case": "guest_restart_state",
+          "status": "BLOCKED",
+          "error": "AssertionError:UI_NOT_FOUND:Дневник"
+        },
+        {
+          "case": "capsule_ui_export",
+          "status": "BLOCKED",
+          "error": "AssertionError:UI_NOT_FOUND:Библиотека"
+        }
+      ],
+      "note": "historical attempt; final source uses model-valid fixture and UI-ready guards; not overall product acceptance"
+    },
+    {
+      "runId": 43106506440,
+      "caseResults": [
+        {
+          "case": "install23_launch",
+          "status": "PASS",
+          "details": {
+            "versionCode": 23,
+            "launched": true
+          }
+        },
+        {
+          "case": "synthetic_local_fixture",
+          "status": "PASS",
+          "details": {
+            "rowsSeeded": 1,
+            "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+            "schema": 9,
+            "seedMethod": "controlled SQLite precondition, not UI import"
+          }
+        },
+        {
+          "case": "update23_to24_preserves_data",
+          "status": "PASS",
+          "details": {
+            "versionCode": 24,
+            "dataPreserved": true,
+            "sqliteIntegrity": "ok"
+          }
+        },
+        {
+          "case": "library_native_preview",
+          "status": "BLOCKED",
+          "error": "AssertionError:NATIVE_PLAYBACK_NOT_OBSERVED"
+        },
+        {
+          "case": "session_screen_off_playback",
+          "status": "BLOCKED",
+          "error": "AssertionError:SESSION_PLAYBACK_NOT_OBSERVED"
+        },
+        {
+          "case": "client24_package_isolation",
+          "status": "PASS",
+          "details": {
+            "distinctPackageSqlite": true,
+            "emptyOwnLibrary": true,
+            "schema": 9
+          }
+        },
+        {
+          "case": "guest_restart_state",
+          "status": "BLOCKED",
+          "error": "AssertionError:APPLICATION_UI_NOT_READY_AFTER_BOOTSTRAP"
+        },
+        {
+          "case": "capsule_ui_export",
+          "status": "BLOCKED",
+          "error": "AssertionError:UI_NOT_FOUND:Восстановить"
+        }
+      ],
+      "note": "historical attempt; final source uses model-valid fixture and UI-ready guards; not overall product acceptance"
     }
   ]
 }
