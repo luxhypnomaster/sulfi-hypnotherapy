@@ -1,0 +1,85 @@
+{
+  "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
+  "verified": [
+    {
+      "name": "G3_RESEARCH.md",
+      "id": "1-n3ABeGbeEFFWgHGwHwW5ugt4C7aL9m0",
+      "size": "7028",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1-n3ABeGbeEFFWgHGwHwW5ugt4C7aL9m0/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "G3_DRY_RUN.json",
+      "id": "1KPNbh3Gn7NCk3E4DuxF-a2XIgv2pIXMg",
+      "size": "477",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1KPNbh3Gn7NCk3E4DuxF-a2XIgv2pIXMg/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "PERFORMANCE_RESEARCH.md",
+      "id": "1J_XJZpF4cspAxe5DpW9fVFExxdNQRSuT",
+      "size": "3446",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1J_XJZpF4cspAxe5DpW9fVFExxdNQRSuT/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "PERFORMANCE_COUNTERS.json",
+      "id": "10_bpge_DgvXEGbA81YnmbH3wGyCMTS6v",
+      "size": "473",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/10_bpge_DgvXEGbA81YnmbH3wGyCMTS6v/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "APK24_DISTRIBUTION_MANIFEST.json",
+      "id": "1e_Gm7w4Q5Xpz0f6e47PjyE7RvhbhPPqK",
+      "size": "774",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1e_Gm7w4Q5Xpz0f6e47PjyE7RvhbhPPqK/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "APK_DISTRIBUTION_PLAN.md",
+      "id": "1kwBE5tzVjCF71z6xY1oJSB3OjXpHPYMy",
+      "size": "5210",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1kwBE5tzVjCF71z6xY1oJSB3OjXpHPYMy/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "PHONE_QA_AUTONOMOUS.md",
+      "id": "1ey9sSu2yYQC7JEKLk2e6aYwEuFGCkNI1",
+      "size": "4718",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1ey9sSu2yYQC7JEKLk2e6aYwEuFGCkNI1/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "PERFORMANCE_CI_EVIDENCE.txt",
+      "id": "1W1_mbl-L6xpcD_9tZCNRYhPcoH10L3gF",
+      "size": "1014",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1W1_mbl-L6xpcD_9tZCNRYhPcoH10L3gF/view?usp=drivesdk",
+      "verified": true
+    }
+  ]
+}
