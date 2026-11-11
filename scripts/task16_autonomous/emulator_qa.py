@@ -129,10 +129,11 @@ def library_play():
    except AssertionError:pass
  assert any('EMU AAC fixture' in label(n) for n in tree()),'FIXTURE_NOT_VISIBLE'
  screenshot('library-fixture');click('Прослушать EMU AAC fixture',exact=True);time.sleep(1)
+ audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
+ observed=native_playing(audio)
  print('EMULATOR_PREVIEW_UI='+json.dumps([{'label':label(n)[:140],'bounds':n.get('bounds'),'clickable':n.get('clickable')} for n in tree() if label(n).strip()][:28]),flush=True)
  screenshot('preview-after-tap')
- audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
- assert native_playing(audio),'NATIVE_PLAYBACK_NOT_OBSERVED'
+ assert observed,'NATIVE_PLAYBACK_NOT_OBSERVED'
  screenshot('preview-playing');return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
 def session_play():
  adb('shell','am','force-stop',PKG);launch();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(2)
