@@ -1,5 +1,5 @@
 """Black-box APK23→24 QA. Synthetic emulator data only; no Google identity injection."""
-import hashlib, io, json, os, pathlib, re, sqlite3, subprocess, tarfile, tempfile, time, xml.etree.ElementTree as ET
+import hashlib, io, json, os, pathlib, re, sqlite3, subprocess, tarfile, tempfile, time, zipfile, xml.etree.ElementTree as ET
 OUT=pathlib.Path(os.environ['RUNNER_TEMP'])/'emulator-evidence';OUT.mkdir(exist_ok=True)
 PKG='ru.sulfi.sulfi_hypnotherapy';CLIENT=PKG+'.clienttest';APK=pathlib.Path(os.environ['RUNNER_TEMP'])/'apk24'
 results=[]
@@ -15,7 +15,14 @@ def case(name, work):
   (OUT/'EMULATOR_QA.json').write_text(json.dumps({'kind':'REAL_ANDROID_EMULATOR_EXISTING_APKS','googleUsers':'NOT_RUN','physicalDevices':'NOT_RUN','fixture':'synthetic AAC and emulator-only SQLite, no user DB','cases':results},ensure_ascii=False,indent=2))
   print('EMULATOR_CASE='+name+':'+results[-1]['status'],flush=True)
 def launch(pkg=PKG):
- adb('shell','monkey','-p',pkg,'-c','android.intent.category.LAUNCHER','1');time.sleep(3)
+ adb('shell','monkey','-p',pkg,'-c','android.intent.category.LAUNCHER','1')
+ # Debug APK cold start/JIT on software graphics may take tens of seconds.
+ for _ in range(60):
+  if 'READY' in adb('shell',f'run-as {pkg} sh -c "test -s files/library.sqlite && echo READY"',check=False):break
+  time.sleep(2)
+ else:
+  diagnostics(pkg);raise AssertionError('DATABASE_NOT_READY_AFTER_120S')
+ time.sleep(3)
  for _ in range(3):
   nodes=tree()
   allow=next((n for n in nodes if 'permission_allow' in n.get('resource-id','')),None)
@@ -48,7 +55,8 @@ def dbcopy(pkg=PKG):
   for m in archive:
    if m.name in ['files/library.sqlite','files/library.sqlite-wal','files/library.sqlite-shm']:
     (d/pathlib.Path(m.name).name).write_bytes(archive.extractfile(m).read())
- conn=sqlite3.connect(d/'library.sqlite');return t,conn
+ assert (d/'library.sqlite').exists(),'EXPECTED_DB_NOT_IN_ARCHIVE'
+ conn=sqlite3.connect(d/'library.sqlite');assert conn.execute("select count(*) from sqlite_master where name='audio_assets'").fetchone()[0]==1,'DATABASE_SCHEMA_NOT_READY';return t,conn
 def inspect(pkg=PKG):
  t,c=dbcopy(pkg)
  try:
@@ -57,7 +65,7 @@ def inspect(pkg=PKG):
  finally:c.close();t.cleanup()
 def diagnostics(pkg):
  pid=adb('shell','pidof',pkg,check=False).strip()
- details={'pidPresent':bool(pid),'runAsPwd':adb('shell','run-as',pkg,'pwd',check=False).strip(),'files':adb('shell','run-as',pkg,'ls','files',check=False).strip()}
+ details={'pidPresent':bool(pid),'runAsPwd':adb('shell','run-as',pkg,'pwd',check=False).strip(),'files':adb('shell','run-as',pkg,'find','.', '-name','library.sqlite',check=False).strip()}
  raw=adb('logcat','-d','-t','160',check=False)
  (OUT/'launch-logcat.txt').write_text(raw)
  details['fatalLines']=[l[-300:] for l in raw.splitlines() if 'FATAL' in l or 'UnsatisfiedLinkError' in l or 'flutter' in l.lower() and ('error' in l.lower() or 'exception' in l.lower())][-8:]
@@ -93,7 +101,7 @@ def library_play():
    try:click(text);break
    except AssertionError:pass
  assert any('EMU AAC fixture' in label(n) for n in tree()),'FIXTURE_NOT_VISIBLE'
- screenshot('library-fixture');click('Прослушать EMU AAC fixture');time.sleep(2)
+ screenshot('library-fixture');click('Прослушать EMU AAC fixture');time.sleep(1)
  audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
  assert re.search(r'state[:=]\s*(started|3)|state=STARTED',audio,re.I),'NATIVE_PLAYBACK_NOT_OBSERVED'
  screenshot('preview-playing');adb('shell','input','keyevent','3');time.sleep(1);launch();return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
@@ -116,7 +124,29 @@ def capsule_export():
   try:click(text);break
   except AssertionError:pass
  else:raise AssertionError('CAPSULE_EXPORT_CONTROL_NOT_FOUND')
- time.sleep(2);screenshot('capsule-export-dialog');return {'exportControlReached':True,'completedExportImport':'NOT_RUN_DOCUMENT_PICKER_REQUIRES_NEXT_STEP'}
+ time.sleep(2);screenshot('capsule-export-dialog')
+ # Save only through local Android DocumentsUI on the offline disposable emulator.
+ nodes=tree();edit=next((n for n in nodes if 'filename' in n.get('resource-id','') or n.get('class')=='android.widget.EditText'),None)
+ assert edit is not None,'LOCAL_DOCUMENT_FILENAME_NOT_FOUND'
+ tap(edit);adb('shell','input','keyevent','KEYCODE_MOVE_HOME');adb('shell','input','keyevent','--longpress','KEYCODE_SHIFT_LEFT','KEYCODE_MOVE_END');adb('shell','input','text','sulfi-emulator-qa.zip')
+ save=next((n for n in tree() if 'action_menu_save' in n.get('resource-id','') or n.get('text','').lower() in ['save','сохранить']),None)
+ assert save is not None,'LOCAL_DOCUMENT_SAVE_NOT_FOUND';tap(save);time.sleep(3)
+ paths=adb('shell','find','/sdcard/Download','-name','sulfi-emulator-qa.zip',check=False).splitlines()
+ assert paths,'LOCAL_ZIP_NOT_FOUND_IN_DOWNLOADS'
+ raw=adb('exec-out','cat',paths[0],binary=True)
+ with zipfile.ZipFile(io.BytesIO(raw)) as z:
+  assert z.testzip() is None,'ZIP_CRC_FAILED'
+  names=z.namelist();assert any(n.endswith('.json') for n in names),'ZIP_MANIFEST_MISSING'
+ screenshot('capsule-exported')
+ # Local import into the separate empty CLIENT package; no Google identity.
+ adb('shell','am','force-stop',CLIENT);launch(CLIENT);click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');click('Восстановить из копии');time.sleep(2)
+ click('sulfi-emulator-qa.zip');time.sleep(3);click('Восстановить',exact=True);time.sleep(4)
+ adb('shell','am','force-stop',CLIENT);state=inspect(CLIENT)
+ assert any(a[0]=='emulator-fixture' for a in state['audio']),'IMPORTED_AUDIO_MISSING'
+ assert any(t[0]=='emu-template' for t in state['templates']),'IMPORTED_TEMPLATE_MISSING'
+ audio=adb('exec-out','run-as',CLIENT,'cat','files/audio/'+state['audio'][0][2],binary=True)
+ assert hashlib.sha256(audio).hexdigest()==original['audio'][0][1],'IMPORTED_BYTES_CHANGED'
+ return {'exportControlReached':True,'completedLocalExportImport':True,'zipBytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'clientImportedExactAudio':True,'noDriveOrGoogleAccounts':True}
 assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','ONLY_EMULATOR_ALLOWED'
 adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
 for name,work in [('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]:case(name,work)
