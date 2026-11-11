@@ -12,6 +12,11 @@ on:
         description: 'Isolated APK23/24 emulator QA, no rebuild, no Google accounts'
         type: boolean
         default: false
+      qa_scope:
+        description: 'Existing APK native cases: full smoke or isolated preview diagnosis'
+        type: choice
+        options: [smoke, preview]
+        default: smoke
       build_mode:
         description: '16-A: checks only; one auth candidate; or final dual APK after real server acceptance'
         type: choice
@@ -205,6 +210,8 @@ jobs:
       - name: Run existing APKs on actual Android emulator (synthetic local data)
         if: steps.kvm.outputs.available == 'true'
         uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
+        env:
+          SULFI_QA_SCOPE: ${{ inputs.qa_scope }}
         with:
           api-level: 35
           arch: x86_64

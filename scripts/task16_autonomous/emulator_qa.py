@@ -128,7 +128,9 @@ def library_play():
    try:click(text);break
    except AssertionError:pass
  assert any('EMU AAC fixture' in label(n) for n in tree()),'FIXTURE_NOT_VISIBLE'
- screenshot('library-fixture');click('Прослушать EMU AAC fixture');time.sleep(1)
+ screenshot('library-fixture');click('Прослушать EMU AAC fixture',exact=True);time.sleep(1)
+ print('EMULATOR_PREVIEW_UI='+json.dumps([{'label':label(n)[:140],'bounds':n.get('bounds'),'clickable':n.get('clickable')} for n in tree() if label(n).strip()][:28]),flush=True)
+ screenshot('preview-after-tap')
  audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
  assert native_playing(audio),'NATIVE_PLAYBACK_NOT_OBSERVED'
  screenshot('preview-playing');return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
@@ -188,7 +190,9 @@ def capsule_export():
 assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','ONLY_EMULATOR_ALLOWED'
 adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
 adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
-for name,work in [('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]:case(name,work)
+selected=[('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]
+if os.environ.get('SULFI_QA_SCOPE')=='preview':selected=selected[:4]
+for name,work in selected:case(name,work)
 print('EMULATOR_QA_COMPLETE; NO_REAL_GOOGLE_IDENTITIES',flush=True)
 # Native low-resolution capture needs no image package or artifact allocation.
 try:
@@ -199,3 +203,4 @@ try:
  else:print('EMULATOR_SCREENSHOT_INLINE=OVER_SIZE_LIMIT',flush=True)
 except Exception:print('EMULATOR_SCREENSHOT_INLINE=NOT_AVAILABLE',flush=True)
 if any(r['status']!='PASS' for r in results if r['case'] in ['install23_launch','synthetic_local_fixture','update23_to24_preserves_data','client24_package_isolation']): raise SystemExit(1)
+if os.environ.get('SULFI_QA_SCOPE')=='preview' and any(r['status']!='PASS' for r in results):raise SystemExit(1)
