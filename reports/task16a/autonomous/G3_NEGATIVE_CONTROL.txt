@@ -1,0 +1,17 @@
+EXPECTED NEGATIVE CONTROL: prior experimental sandbox4620db2, NOT production app. Exit1 intentionally demonstrates that the new same-blob legacy ambiguity test detects the old fallback. Current sandbox targeted11 PASS.
+
+00:00 +0: loading /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart
+00:00 +0: G3 same bytes with ambiguous metadata refuses to invent historical revision with or without frozen hash
+00:00 +0 -1: G3 same bytes with ambiguous metadata refuses to invent historical revision with or without frozen hash [E]
+  Expected: contains 'AMBIGUOUS_OR_MISSING_LEGACY_REFERENCE'
+    Actual: []
+     Which: does not contain 'AMBIGUOUS_OR_MISSING_LEGACY_REFERENCE'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task16_g3_sandbox_test.dart 254:9              main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 same bytes with ambiguous metadata refuses to invent historical revision with or without frozen hash

@@ -16,7 +16,7 @@
 | Область | Ветка и точный исходник | Черновик |
 |---|---|---|
 | APK QA и документация | research/task16-autonomous; исполняемый harness 288b45deafb6b9e9cbe9892bc830da6c86c1345a | [PR44](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/44) |
-| G3 inventory/dry-run/rollback | research/task16-g3-revisions; **4620db283db07f990a6e116009a6d5a2bed62f92** | [PR43](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/43) |
+| G3 inventory/dry-run/rollback | research/task16-g3-revisions; **b76083df2ae7adc2d5a3e0c0fe05a3500d052626** | [PR43](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/43) |
 | Drive RPC кандидат | perf/task16-drive-reads; **cd92f95cc44c11bddbc6985288f83b68fcb240ec** | [PR42](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/42) |
 
 Все PR направлены в существующую feat/task16-alchemist-full-server, остаются draft и не объединены. Код G3 и оптимизация сервера не попали в текущие APK. Документационные checkpoints: 89454f5, 361525f; итоговые файлы сохраняются следующими коммитами этой же research-ветки. Точный SHA каждого CI указан в GitHub run, а не приписан более позднему docs-коммиту.
@@ -33,7 +33,7 @@ Workflow допускает emulator job только для manual workflow_dis
 
 ## 2. G3 — результат и пределы
 
-**7 новых + 3 существующих boundary-теста: 10 PASS локально; полный CI 431 Flutter PASS.** Реализованы readonly inventory с проверкой bytes/SHA/size, plan fingerprint и blockers; dry-run; отдельный VACUUM INTO backup и sandbox DB; immutable revision/ref/head таблицы; exact(logicalId,revisionId,blobSha) без fallback; переключение head на B при сохранении history A; rollback в отдельную проверенную копию.
+**8 новых + 3 существующих boundary-теста: 11 PASS локально. Финальный CI432 ожидается; прежний CI431 PASS сохранён отдельно.** Реализованы readonly inventory с проверкой bytes/SHA/size, plan fingerprint и blockers; dry-run; отдельный VACUUM INTO backup и sandbox DB; immutable revision/ref/head таблицы; exact(logicalId,revisionId,blobSha) без fallback; переключение head на B при сохранении history A; rollback в отдельную проверенную копию.
 
 Фикстура: 2 ревизии одного ID, 2 blob, 2 pinned refs, 0 записей в source. Проверены active session, stale plan, ambiguity history/metadata, повреждённые blob, injected pre-commit crash и SQLite integrity. G3_DRY_RUN.json относится только к синтетической Fixture15, не к базе владельца.
 
@@ -70,14 +70,14 @@ Workflow допускает emulator job только для manual workflow_dis
 |---|---|
 | [G3 CI 43102467566](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43102467566), 4620db2 |SUCCESS: 431 Flutter, 43 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
 | [Perf CI 43102167730](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43102167730), cd92f95 |SUCCESS: 424 Flutter, 45 Alchemist Node, 24 legacy Node, 3 CLIENT; analyzer/format/contracts/source build PASS |
-| G3 targeted |10 PASS; flutter analyze --fatal-infos: No issues found |
+| G3 targeted |11 PASS; flutter analyze --fatal-infos: No issues found |
 | Python harness syntax |py_compile PASS |
 | Новая сборка APK |NOT_RUN — APK24 сохранены по заданию |
 | Deploy нового GAS / повтор большого live E2E |NOT_RUN — не разрешён/не нужен |
 | Реальный Google MASTER/CLIENT |NOT_RUN; BLOCKED до участия двух настоящих пользователей |
 | Physical update, звук/BT/lockscreen, authenticated logout |NOT_RUN; BLOCKED до двух устройств |
 
-Тесты двух веток не суммируются как уникальные: 431 включают 424 старых + 7 новых; 45 Node включают 43 старых + 2 новых. Старый backend тестируется локальными doubles, его живой проект не вызывается. Краткие извлечения actual CI и targeted log приложены. Исходная 147-критериальная матрица ACCEPTANCE_CURRENT_24 сохранена; автоматический research не превращает её физические/Google пункты в PASS.
+Тесты двух веток не суммируются как уникальные: финальная G3 содержит 424 старых + 8 новых; 45 Node включают 43 старых + 2 новых. Старый backend тестируется локальными doubles, его живой проект не вызывается. Краткие извлечения actual CI и targeted log приложены. Исходная 147-критериальная матрица ACCEPTANCE_CURRENT_24 сохранена; автоматический research не превращает её физические/Google пункты в PASS.
 
 ## Что можно принять сейчас и что отложить
 

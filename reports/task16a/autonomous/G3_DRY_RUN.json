@@ -1,5 +1,5 @@
 {
-  "fingerprint": "af095475bb3d02a4289e22e53060a1dedd4ee38459e3c63ae5785b92d36bb6e0",
+  "fingerprint": "88cbe4548a47bee8801f40ffe9f6e22070eedda3a03de4a7e6c3d70cbc2389dc",
   "revisions": 2,
   "verifiedBlobs": 2,
   "pinnedReferences": 2,
@@ -7,9 +7,11 @@
   "writesToSource": 0,
   "scope": "synthetic Fixture15 only; no real user DB",
   "result": "PASS",
-  "targetedTestsPassed": 10,
-  "newTests": 7,
+  "targetedTestsPassed": 11,
+  "newTests": 8,
   "existingBoundaryTests": 3,
   "rollback": "separate verified clone; no source replacement or GC",
-  "applicationIntegration": "NOT_IMPLEMENTED_INTENTIONALLY"
+  "applicationIntegration": "NOT_IMPLEMENTED_INTENTIONALLY",
+  "legacyWithoutFrozenHash": "BLOCKED_EVEN_IF_ONE_CURRENT_REVISION",
+  "negativeControlPriorSandbox": "FAIL_EXPECTED_ON_4620db2"
 }

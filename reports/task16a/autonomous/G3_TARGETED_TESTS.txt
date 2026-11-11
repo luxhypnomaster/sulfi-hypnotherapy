@@ -1,14 +1,15 @@
 00:00 +0: loading /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart
 00:00 +0: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 read-only inventory binds old history exactly and does not write source
-G3_DRY_RUN={"fingerprint":"af095475bb3d02a4289e22e53060a1dedd4ee38459e3c63ae5785b92d36bb6e0","revisions":2,"verifiedBlobs":2,"pinnedReferences":2,"blockers":[],"writesToSource":0}
+G3_DRY_RUN={"fingerprint":"88cbe4548a47bee8801f40ffe9f6e22070eedda3a03de4a7e6c3d70cbc2389dc","revisions":2,"verifiedBlobs":2,"pinnedReferences":2,"blockers":[],"writesToSource":0}
 00:00 +1: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 sandbox coexists A/B exact bytes; head B never changes history A; immutable rows reject changes; rollback clone
 00:00 +2: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 stale inventory, changed bytes and active session fail closed
 00:00 +3: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 ambiguous history without frozen bytes is never silently mapped to current head
-00:00 +4: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 same bytes with ambiguous metadata refuses to invent historical revision
-00:00 +5: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 copied blob tampering fails without falling back to the head or source
-00:00 +6: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 injected pre-commit failure preserves source history and both original files
-00:00 +7: loading /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart
-00:01 +7: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 retained revision bytes survive startup; same-ID byte replacement still blocked pending complete readers
-00:01 +8: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 never remove retained duplicate based on a corrupt committed file hash claim
-00:01 +9: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 missing content bytes excludes metadata-only edits; physical copies and staging are separate
-00:02 +10: All tests passed!
+00:00 +4: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 same bytes with ambiguous metadata refuses to invent historical revision with or without frozen hash
+00:00 +5: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 legacy history without frozen bytes blocks even with only one current revision
+00:00 +6: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 copied blob tampering fails without falling back to the head or source
+00:00 +7: /dev/shm/sulfi-g3/test/task16_g3_sandbox_test.dart: G3 injected pre-commit failure preserves source history and both original files
+00:00 +8: loading /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart
+00:01 +8: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 retained revision bytes survive startup; same-ID byte replacement still blocked pending complete readers
+00:01 +9: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 never remove retained duplicate based on a corrupt committed file hash claim
+00:01 +10: /dev/shm/sulfi-g3/test/task15_revision_boundary_test.dart: G3 missing content bytes excludes metadata-only edits; physical copies and staging are separate
+00:02 +11: All tests passed!
