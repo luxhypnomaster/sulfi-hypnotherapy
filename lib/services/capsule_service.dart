@@ -1239,6 +1239,6 @@ class CapsuleService {
       rethrow;
     }
     // A cache-refresh failure must never remove already committed media files.
-    await library.policy.load();
+    await library.policy.reloadCatalogOrigins();
   }
 }

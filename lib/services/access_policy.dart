@@ -107,6 +107,14 @@ class AccessPolicy extends ChangeNotifier {
       where: 'name=?',
       whereArgs: ['content_mode'],
     );
+    await _loadCatalogOrigins();
+    _mode = rows?.firstOrNull?['value'] == 'client'
+        ? LocalMode.client
+        : LocalMode.author;
+    notifyListeners();
+  }
+
+  Future<void> _loadCatalogOrigins() async {
     _catalogOrigins.clear();
     for (final row
         in await database?.query(
@@ -125,9 +133,10 @@ class AccessPolicy extends ChangeNotifier {
         /* Preserve malformed metadata; never grant author authority from it. */
       }
     }
-    _mode = rows?.firstOrNull?['value'] == 'client'
-        ? LocalMode.client
-        : LocalMode.author;
+  }
+
+  Future<void> reloadCatalogOrigins() async {
+    await _loadCatalogOrigins();
     notifyListeners();
   }
 
