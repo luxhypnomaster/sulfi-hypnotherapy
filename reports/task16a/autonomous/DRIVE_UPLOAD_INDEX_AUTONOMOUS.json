@@ -4,7 +4,7 @@
     {
       "name": "G3_RESEARCH.md",
       "id": "1-n3ABeGbeEFFWgHGwHwW5ugt4C7aL9m0",
-      "size": "7028",
+      "size": "7792",
       "parents": [
         "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
       ],
@@ -14,7 +14,7 @@
     {
       "name": "G3_DRY_RUN.json",
       "id": "1KPNbh3Gn7NCk3E4DuxF-a2XIgv2pIXMg",
-      "size": "477",
+      "size": "607",
       "parents": [
         "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
       ],
@@ -64,7 +64,7 @@
     {
       "name": "PHONE_QA_AUTONOMOUS.md",
       "id": "1ey9sSu2yYQC7JEKLk2e6aYwEuFGCkNI1",
-      "size": "4718",
+      "size": "5517",
       "parents": [
         "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
       ],
@@ -79,6 +79,86 @@
         "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
       ],
       "url": "https://drive.google.com/file/d/1W1_mbl-L6xpcD_9tZCNRYhPcoH10L3gF/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "G3_CI_EVIDENCE.txt",
+      "id": "1WhqkVPXsYPOkk0hMzpBz2hS1xOFliPiK",
+      "size": "2109",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1WhqkVPXsYPOkk0hMzpBz2hS1xOFliPiK/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "G3_TARGETED_TESTS.txt",
+      "id": "1eblGEyYTDHv1LoGNa9TvwVF4vvgvBNOI",
+      "size": "2020",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1eblGEyYTDHv1LoGNa9TvwVF4vvgvBNOI/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "G3_NEGATIVE_CONTROL.txt",
+      "id": "1FprxdvzvMxEDjgY0mJPlyYm9dGtRZ975",
+      "size": "1067",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1FprxdvzvMxEDjgY0mJPlyYm9dGtRZ975/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "EMULATOR_SCREENSHOT.png",
+      "id": "1r1QK4t-heExFdRYhTSgBPWXNNjvKRjWT",
+      "size": "36255",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1r1QK4t-heExFdRYhTSgBPWXNNjvKRjWT/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "EMULATOR_ATTEMPTS.json",
+      "id": "1KYxIi334xzpuOcLH6trhSpCg5MWLUe7D",
+      "size": "11285",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1KYxIi334xzpuOcLH6trhSpCg5MWLUe7D/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "EMULATOR_QA_AUTONOMOUS.json",
+      "id": "1A39sllElH_Rp3MFtyTmj0iEJ269HaCsc",
+      "size": "11163",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1A39sllElH_Rp3MFtyTmj0iEJ269HaCsc/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "EMULATOR_CI_EVIDENCE.txt",
+      "id": "1jzKaBmqjTiv-PTNc-WZ4radbhBXmfz81",
+      "size": "15050",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/1jzKaBmqjTiv-PTNc-WZ4radbhBXmfz81/view?usp=drivesdk",
+      "verified": true
+    },
+    {
+      "name": "AUTONOMOUS_CONTINUATION.md",
+      "id": "14vEEKwgNwBxIjVYojSSPQIV673A8l7vg",
+      "size": "21415",
+      "parents": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "url": "https://drive.google.com/file/d/14vEEKwgNwBxIjVYojSSPQIV673A8l7vg/view?usp=drivesdk",
       "verified": true
     }
   ]
