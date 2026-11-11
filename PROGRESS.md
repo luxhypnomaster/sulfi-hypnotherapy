@@ -1,3 +1,18 @@
+# Current Task16-A checkpoint — implementation in progress (2026-11-11)
+
+Continue existing feat/task16-alchemist-full-server from f144872. C0/PREFLIGHT and all Task16 historical proofs retained; do NOT rerun baseline/service51min. Full addendum read (one tab, source docs/task16a/TASK_RU.md/SOURCE.json), URL16hMVySJwkS1kABBDyWXTJ3kfogzNJWayCu4LcFh_224. Owner confirms all3OAuth clients created, exact publicWebID325102995568-07pk1fcqvfnkp27kkmv7ple39enin31d.apps.googleusercontent.com, Android packages+SHA1 match existing cert. No need to re-register. Actual SDK/two real accounts still PENDING; no browser/device here. Async question sent re2phones/account availability. No test-email whitelist, billing, scopesDrive or newserver.
+
+Changes in progress: normal JWT exactWebaud, CI bootstrap-only; soleownerSub MASTER/all other valid identities CLIENT, ignore legacy author grants (data retained), disable newauthor grant. Protected real phone permission smoke(auth.verifyPilot) + private redactedproofs, CI owner-only system.authorizationStatus. Pilot control entry must be restricted valid text (empty collection failed EMPTY_CONTENT in first unit test, corrected). Client boundary test uses actual core rejection. New source not deployed yet.
+
+Flutter WIP: shared server-verified reader/master identity, no local email authority, Role-bound AccessPolicy; CLIENT sign-in in master/client APK; general login UI and explicit phone permission-check screen. Legacy server path conditional/untouched. Important discovered gap: local diary ContentLink auto-upload could expose unpublished source; fixpublished-only picker/serverresolve, exclude linkedcontent from diaryassetgrants, revalidatepublish and denywithdrawn roots. Official provenance registry and account-switch guards pending. Local export already separatefrom cloud (audit), protectprivate author backup underotheraccount.
+
+Need tests: expandedNode (currentpilot originallyfailed emptycontrol; reread latestlog), Flutter targeted/full/analyzer (first lint8 fixeddartfix). RAM filesystem reset; build symlink target recreated/dev/shm/sulfi-task15-build, FlutterSDK/pubcache persist. Free root275MB, /dev/shm4.9GB. Do not spawnagents.
+
+Execution order: finish role/ContentLink/privacy/provenance+unit/bridge tests; publicvars+reviewednarrow mainPR (owner priorauthorization for trustedmain deployment persists); update existingScript only/verify normalCIauddenied/bootstrapowner works. Prepare SINGLE connected master authcandidate APK23 with samekey/package to obtain REAL Web tokens on phones forC (also tests CLIENT in masterAPK); do notbuildtwo finalAPKs beforetwoaccountserverproofPASS. Safe ownerCI proofstatusworkflow readsnormalWebroleproofs, no fake identities/liveclaims. AfterrealCpass, dualconnectedAPKs andtwo-phone criticalElman3tracks→catalog→diary→clientinstall→offlineplay. ScopeStageD/physicalgate notpassed byCI. No Task17, no olddiary writes, no personaldata deletion, noAPKDrive. SeparateRESULT_16A_AUTH/TESTS_16A_AUTH in existingTask16reportfolder.
+
+---
+# Historical Task16 checkpoints — newer addendum takes priority
+
 # Delivery checkpoint — Task16 runtime/service complete, native OAuth pending (2026-11-10)
 
 Existing branch feat/task16-alchemist-full-server; C0/PREFLIGHT458e8a8 unchanged. Same sole server/version4/source766f178/deployment/private41folders, old diary untouched. Real service E2E42878030592 SUCCESS (51:42), recovery42887239597,6540746B bothways,10phases. Actual source/client/directDrive SHA/CRC/codecs/resume/missing-only/metadata-only/receipt/private/withdraw/offline-copy PASS. Post-E2E anonymous health200JSON and catalog0 control publications, source blobs retainedprivate. NoTask17, no APK Drive.
