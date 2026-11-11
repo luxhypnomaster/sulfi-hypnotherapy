@@ -86,8 +86,10 @@ def require_home():
   time.sleep(1)
  raise AssertionError('APPLICATION_UI_NOT_READY_AFTER_BOOTSTRAP')
 def return_home():
- if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in tree()):return
- adb('shell','input','keyevent','4');time.sleep(1);require_home()
+ for _ in range(4):
+  if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in tree()):return
+  adb('shell','input','keyevent','4');time.sleep(1)
+ require_home()
 def install23():
  assert 'Success' in adb('install','-r',str(APK/'master23.apk'));launch();require_home();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
  screenshot('master23-start');return {'versionCode':23,'launched':bool(adb('shell','pidof',PKG).strip())}
@@ -114,9 +116,9 @@ def upgrade():
 def native_playing(audio):
  uid=adb('shell','cmd','package','list','packages','-U',PKG)
  match=re.search(r'uid:(\d+)',uid);assert match,'APP_UID_NOT_FOUND'
- rows=[l.strip() for l in audio.splitlines() if re.search(r'(?:u/pid|uid/pid):\s*'+match[1]+r'/',l)]
+ rows=[l.strip() for l in audio.splitlines() if re.search(r'(?:u/pid|uid/pid|uid)[:=]\s*'+match[1]+r'(?:/|\b)',l)]
  active=[l for l in rows if re.search(r'state[:=]\s*(?:started|3)\b',l,re.I)]
- print('EMULATOR_APP_PLAYERS='+json.dumps({'uid':match[1],'players':rows[:4],'active':bool(active)}),flush=True)
+ print('EMULATOR_APP_PLAYERS='+json.dumps({'uid':match[1],'players':rows[:4],'active':bool(active),'diagnosticLines':[l.strip()[:280] for l in audio.splitlines() if 'piid' in l or 'AudioTrack' in l or match[1] in l][:12]}),flush=True)
  return bool(active)
 def library_play():
  click('Библиотека');time.sleep(1)
@@ -168,9 +170,15 @@ def capsule_export():
   assert z.testzip() is None,'ZIP_CRC_FAILED'
   names=z.namelist();assert any(n.endswith('.json') for n in names),'ZIP_MANIFEST_MISSING'
  screenshot('capsule-exported')
+ print('EMULATOR_CAPSULE_EXPORTED='+json.dumps({'zipBytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'crc':'PASS','localDocumentsUi':True}),flush=True)
  # Local import into the separate empty CLIENT package; no Google identity.
  adb('shell','am','force-stop',CLIENT);launch(CLIENT);click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');click('Восстановить из копии');time.sleep(2)
- click('sulfi-emulator-qa.zip');time.sleep(3);click('Восстановить',exact=True);time.sleep(4)
+ click('sulfi-emulator-qa.zip');time.sleep(3)
+ nodes=tree()
+ # Preserve the empty CLIENT's existing default draft/counter when merging.
+ if any('Сохранить местные' in label(n) for n in nodes):click('Сохранить местные',exact=True)
+ else:click('Восстановить',exact=True)
+ time.sleep(4)
  adb('shell','am','force-stop',CLIENT);state=inspect(CLIENT)
  assert any(a[0]=='emulator-fixture' for a in state['audio']),'IMPORTED_AUDIO_MISSING'
  assert any(t[0]=='emu-template' for t in state['templates']),'IMPORTED_TEMPLATE_MISSING'
