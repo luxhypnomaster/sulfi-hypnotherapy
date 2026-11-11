@@ -18,7 +18,10 @@ var AlchemistJwt = (function () {
   }
   function verify(token, bootstrap) {
     var properties = PropertiesService.getScriptProperties();
-    var audience = bootstrap ? [bootstrap.audience] : JSON.parse(properties.getProperty('ALCHEMIST_GOOGLE_AUDIENCES')||'null')||[properties.getProperty('ALCHEMIST_GOOGLE_WEB_CLIENT_ID')];
+    var webAudience=properties.getProperty('ALCHEMIST_GOOGLE_WEB_CLIENT_ID');
+    // Native users must present the exact Web audience. CI identity is valid
+    // only for the separately owner-bound bootstrap, not ordinary API calls.
+    var audience = bootstrap ? [bootstrap.audience] : webAudience ? [webAudience] : JSON.parse(properties.getProperty('ALCHEMIST_GOOGLE_AUDIENCES')||'null');
     var owner = bootstrap ? bootstrap.ownerSubject : properties.getProperty('ALCHEMIST_OWNER_SUB');
     if (!Array.isArray(audience)||!audience.length||audience.some(function(a){return typeof a!=='string'||!/^[\w-]+\.apps\.googleusercontent\.com$/.test(a);}) || !owner) AlchemistCatalog.fail(503,'AUTH_CONFIGURATION_REQUIRED');
     if (typeof token !== 'string' || token.length > 16384 ||
@@ -40,7 +43,7 @@ var AlchemistJwt = (function () {
     } catch (_) { AlchemistCatalog.fail(401); }
     var now = Math.floor(Date.now() / 1000);
     if (['accounts.google.com', 'https://accounts.google.com'].indexOf(claims.iss) < 0 ||
-        audience.indexOf(claims.aud)<0 || typeof claims.sub !== 'string' || !claims.sub ||
+        audience.indexOf(claims.aud)<0 || typeof claims.sub !== 'string' || !/^[a-zA-Z0-9_-]{1,256}$/.test(claims.sub) || ['constructor','prototype','__proto__'].indexOf(claims.sub)>=0 ||
         !Number.isInteger(claims.exp) || !Number.isInteger(claims.iat) ||
         claims.exp <= now || claims.iat > now + 60 || claims.exp <= claims.iat ||
         claims.exp - claims.iat > 3700 ||
@@ -51,9 +54,10 @@ var AlchemistJwt = (function () {
     var authConfig=JSON.parse(properties.getProperty('ALCHEMIST_AUTH_CONFIG')||'null');
     var revoked=authConfig?authConfig.revoked:JSON.parse(properties.getProperty('ALCHEMIST_REVOKED_SUBJECTS')||'{}');
     if(Object.prototype.hasOwnProperty.call(revoked,claims.sub)&&revoked[claims.sub]===true)AlchemistCatalog.fail(401,'IDENTITY_REVOKED');
-    var grants=authConfig?authConfig.grants:JSON.parse(properties.getProperty('ALCHEMIST_GRANTS')||'{}');
-    claims.roles=claims.sub===owner?['owner']:(Object.prototype.hasOwnProperty.call(grants,claims.sub)?grants[claims.sub]:['client']);
-    if(!Array.isArray(claims.roles))AlchemistCatalog.fail(503,'INVALID_GRANTS');
+    // 16-A: one immutable master. Legacy grant data remains stored, but cannot
+    // promote another subject. Every other valid identity is automatically CLIENT.
+    claims.role=claims.sub===owner?'MASTER':'CLIENT';
+    claims.roles=claims.sub===owner?['owner']:['client'];
     return claims;
   }
   return {verify: verify};
