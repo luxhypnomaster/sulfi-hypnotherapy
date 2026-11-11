@@ -44,3 +44,19 @@ test('16-A: diary links require published exact typed roots; they never grant wi
  assert.equal(access.canRead(store.asset('voice','v1'),null),true);
  assert.throws(()=>core.execute('catalog.resolveReference',null,{logicalId:'voice',revisionId:'v1',digest:hash}),/EXACT_PUBLICATION_UNAVAILABLE|REFERENCE_DIGEST_MISMATCH/);
 });
+
+test('16-A legacy v4 diary grants are filtered on read without deleting content; real voice attachments stay readable',()=>{
+ vm.runInContext(readFileSync(new URL('../src/Access.js',import.meta.url),'utf8'),c);
+ let head=null,n=0;const files=new Map(),io={head:()=>head,read:k=>structuredClone(files.get(k)),writeVerified:v=>{const k=String(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:s=>createHash('sha256').update(s).digest('hex')};
+ const store=c.AlchemistAtomicStore.create(io),hash='c'.repeat(64),owner={sub:'owner',roles:['owner']},ref=id=>({logicalId:id,revisionId:'v1',sha256:hash});
+ store.begin();for(const id of ['linked-module','voice'])store.retainAsset(id,'v1',{id:id+'-asset',logicalId:id,revisionId:'v1',owner:'owner',verified:true,sha256:hash,byteLength:10,mime:'audio/mp4',dependencyRefs:[]});
+ const old={id:'entry_legacy',owner:'owner',type:'diaryEntry',logicalContentId:'legacy',contentRevision:'v1',metadataRevision:1,etag:'2',state:'published',card:{title:'История',shortAnnotation:'Аннотация',visibility:'public',coverAssetId:null},manifest:{dependencyRefs:[ref('linked-module'),ref('voice')],entry:{blocks:[{id:'text',type:'text',text:'Saved old entry'},{id:'voice',type:'audio',mediaRef:ref('voice')}],contentLinks:[{type:'module',logicalId:'linked-module',revision:'v1',digest:hash,action:'install'}]}},readers:[],updatedAt:new Date(0).toISOString()};
+ store.commit({...old,publishedRecord:old});
+ // Inject exactly the old grant shape, independent of the corrected writer.
+ for(const id of ['linked-module','voice'])store.put('asset-grants:'+id+':v1',[{publicationId:old.id,owner:'owner',visibility:'public',readers:[],publication:null}]);store.commitTransaction();
+ const access=c.AlchemistAccess.create(store,()=>0);assert.equal(access.canRead(store.asset('linked-module','v1'),null),false);assert.equal(access.canRead(store.asset('voice','v1'),null),true);assert.equal(access.canRead(store.asset('linked-module','v1'),owner),true);
+ assert.equal(store.item(old.id).manifest.entry.blocks[0].text,'Saved old entry');assert.equal(store.asset('linked-module','v1').verified,true);
+ // New writes do not add material ContentLinks as diary grants at all.
+ store.begin();store.commit({...old,id:'entry_new',publishedRecord:{...old,id:'entry_new'}});store.commitTransaction();
+ assert.equal(store.assetGrants('linked-module','v1').some(g=>g.publicationId==='entry_new'),false);assert.equal(store.assetGrants('voice','v1').some(g=>g.publicationId==='entry_new'&&g.grantPolicyVersion===2),true);
+});
