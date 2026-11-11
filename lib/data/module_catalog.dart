@@ -65,8 +65,14 @@ class ModuleCatalog {
   Future<void> save(ModuleDefinition module, {int? expectedVersion}) async {
     await load();
     final previousModule = entries.where((m) => m.id == module.id).firstOrNull;
-    if (previousModule != null) policy.requireOrigin(previousModule.origin);
-    policy.requireOrigin(module.origin);
+    if (previousModule != null) {
+      policy.requireMaterial(
+        'module',
+        previousModule.id,
+        previousModule.origin,
+      );
+    }
+    policy.requireMaterial('module', module.id, module.origin);
     if (module.title.trim().isEmpty) {
       throw ArgumentError('Введите название модуля');
     }
@@ -116,7 +122,11 @@ class ModuleCatalog {
                 jsonDecode(row['payload'] as String),
               );
               if (table == 'session_templates' &&
-                  !policy.canEditOrigin(m['origin'] as String? ?? 'personal')) {
+                  !policy.canEditMaterial(
+                    'template',
+                    row['id'] as String,
+                    m['origin'] as String? ?? 'personal',
+                  )) {
                 continue;
               }
               final plan = SessionPlan.fromMap(
@@ -183,7 +193,7 @@ class ModuleCatalog {
   Future<void> attach(String moduleId, SessionStep item) async {
     await load();
     final m = entries.firstWhere((m) => m.id == moduleId);
-    policy.requireOrigin(m.origin);
+    policy.requireMaterial('module', m.id, m.origin);
     await save(
       ModuleDefinition(
         id: m.id,
@@ -218,7 +228,7 @@ class ModuleCatalog {
   Future<void> clear() async {
     await load();
     for (final m in entries) {
-      policy.requireOrigin(m.origin);
+      policy.requireMaterial('module', m.id, m.origin);
     }
     _memory.clear();
     await database?.delete('module_definitions');

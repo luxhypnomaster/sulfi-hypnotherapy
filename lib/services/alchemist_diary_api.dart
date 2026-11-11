@@ -1,5 +1,4 @@
 import 'diary_read_state.dart';
-import 'alchemist_content_upload.dart';
 
 import 'dart:convert';
 import 'dart:io';
@@ -34,6 +33,29 @@ class AlchemistDiaryApi extends DiaryApi {
   @override
   String? get queueError => _queueError;
   String? _subject;
+  String? _verifiedRole;
+  DateTime? _identityExpiresAt;
+  @override
+  bool get supportsServerIdentity => true;
+  @override
+  String? get verifiedRole => _verifiedRole;
+  @override
+  DateTime? get identityExpiresAt => _identityExpiresAt;
+  @override
+  bool get readerAuthenticated =>
+      _token != null &&
+      (_identityExpiresAt?.isAfter(DateTime.now().toUtc()) ?? false);
+  @override
+  Future<String?> verifiedIdentityToken() async {
+    if (!readerAuthenticated) {
+      throw const DiaryApiException(
+        'Войдите через Google заново',
+        DiaryFailure.authorization,
+      );
+    }
+    return _token;
+  }
+
   int _accountGeneration = 0;
   @override
   String get readerScope => _subject == null ? 'public' : 'google:$_subject';
@@ -52,7 +74,30 @@ class AlchemistDiaryApi extends DiaryApi {
         DiaryFailure.authorization,
       );
     }
+    final roles = identity['roles'];
+    final role =
+        identity['role'] ??
+        (roles is List && roles.contains('owner') ? 'MASTER' : 'CLIENT');
+    final expires = identity['expiresAt'];
+    if (!['MASTER', 'CLIENT'].contains(role) ||
+        expires is! int ||
+        identity['subject'] is! String ||
+        (identity['subject'] as String).isEmpty) {
+      throw const DiaryApiException(
+        'Сервер не подтвердил роль',
+        DiaryFailure.authorization,
+      );
+    }
+    final until = DateTime.fromMillisecondsSinceEpoch(
+      expires * 1000,
+      isUtc: true,
+    );
+    if (!until.isAfter(DateTime.now().toUtc())) {
+      throw const DiaryApiException('Вход истёк', DiaryFailure.authorization);
+    }
     _subject = identity['subject'] as String;
+    _verifiedRole = role;
+    _identityExpiresAt = until;
     _token = token;
   }
 
@@ -61,6 +106,7 @@ class AlchemistDiaryApi extends DiaryApi {
   AlchemistApi get author => AlchemistApi(
     base,
     connection: connection,
+    identityScope: () => readerScope,
     credential: () async =>
         _token ?? (throw const DiaryApiException('Войдите через Google')),
   );
@@ -71,42 +117,20 @@ class AlchemistDiaryApi extends DiaryApi {
     _accountGeneration++;
     _token = null;
     _subject = null;
+    _verifiedRole = null;
+    _identityExpiresAt = null;
   }
 
   @override
   Future<DiaryAuthorSession> authenticate(String token) async {
-    clearSession();
-    final generation = _accountGeneration;
-    final api = AlchemistApi(
-      base,
-      connection: connection,
-      credential: () async => token,
-    );
-    final identity = await api.call('auth.whoami', {});
-    if (!(identity['roles'] as List).any(
-      (r) => r == 'owner' || r == 'author',
-    )) {
+    await authenticateReader(token);
+    if (_verifiedRole != 'MASTER') {
       throw const DiaryApiException(
-        'Нет авторских прав',
+        'Нет прав мастера',
         DiaryFailure.authorization,
       );
     }
-    final until = DateTime.fromMillisecondsSinceEpoch(
-      (identity['expiresAt'] as int) * 1000,
-      isUtc: true,
-    );
-    if (!until.isAfter(DateTime.now().toUtc())) {
-      throw const DiaryApiException('Вход истёк');
-    }
-    if (generation != _accountGeneration) {
-      throw const DiaryApiException(
-        'Вход отменён выходом из аккаунта',
-        DiaryFailure.authorization,
-      );
-    }
-    _token = token;
-    _subject = identity['subject'] as String;
-    return DiaryAuthorSession.verified(token, until);
+    return DiaryAuthorSession.verified(token, _identityExpiresAt!);
   }
 
   DiaryEntry _entry(Map<String, dynamic> result) {
@@ -241,11 +265,13 @@ class AlchemistDiaryApi extends DiaryApi {
 
   Future<Map<String, dynamic>> _document(DiaryEntry e) async {
     if (e.contentLinks.isNotEmpty) {
-      await registerAlchemistContent(
-        capsules,
-        author,
-        e.contentLinks.map((l) => l.key).toList(),
-      );
+      for (final link in e.contentLinks) {
+        await author.call('catalog.resolveReference', {
+          'logicalId': link.key.content.id,
+          'revisionId': link.key.revision,
+          'digest': link.key.digest,
+        });
+      }
     }
     final blocks = <Map<String, dynamic>>[];
     for (final b in e.blocks) {

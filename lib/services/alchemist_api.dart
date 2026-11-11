@@ -24,12 +24,15 @@ class AlchemistApi {
     this.endpoint, {
     DiaryRequest? connection,
     this.credential,
+    this.identityScope,
     this.maxAttempts = 3,
   }) : connection = connection ?? const AlchemistHttp().request {
     if (!AppsScriptDiaryTransport.supports(endpoint)) {
       throw const FormatException('Требуется проверенный адрес сервера /exec');
     }
   }
+  final String Function()? identityScope;
+  String? get currentIdentityScope => identityScope?.call();
   final int maxAttempts;
   final Uri endpoint;
   final DiaryRequest connection;
@@ -58,7 +61,18 @@ class AlchemistApi {
     String operation,
     Map<String, dynamic> parameters,
   ) async {
+    final scope = identityScope?.call();
+    void checkScope() {
+      if (scope != identityScope?.call()) {
+        throw const DiaryApiException(
+          'Аккаунт изменился. Операция отменена.',
+          DiaryFailure.authorization,
+        );
+      }
+    }
+
     final token = await credential?.call();
+    checkScope();
     var response = await connection(
       'POST',
       endpoint,
@@ -70,6 +84,7 @@ class AlchemistApi {
         'credential': ?token,
       }),
     );
+    checkScope();
     for (
       var count = 0;
       response.status == 302 || response.status == 303;
@@ -89,6 +104,7 @@ class AlchemistApi {
       response = await connection('GET', target, {
         'Accept': 'application/json',
       }, null);
+      checkScope();
     }
     if (response.status != 200) {
       throw AlchemistApiException(

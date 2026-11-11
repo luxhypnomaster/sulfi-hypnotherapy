@@ -24,15 +24,18 @@ class AlchemistCatalog {
   final AlchemistApi? api;
   Database get db => controller.capsules!.database;
   Future<List<Map<String, dynamic>>> drafts() async =>
-      (await db.query(
-            'app_settings',
-            where: 'name LIKE ?',
-            whereArgs: ['alchemist_card:%'],
-          ))
-          .map(
-            (r) => Map<String, dynamic>.from(jsonDecode(r['value'] as String)),
-          )
-          .toList();
+      controller.policy.serverIdentityRequired && !controller.policy.isAuthor
+      ? <Map<String, dynamic>>[]
+      : (await db.query(
+              'app_settings',
+              where: 'name LIKE ?',
+              whereArgs: ['alchemist_card:%'],
+            ))
+            .map(
+              (r) =>
+                  Map<String, dynamic>.from(jsonDecode(r['value'] as String)),
+            )
+            .toList();
   Future<void> save(Map<String, dynamic> card) async {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');

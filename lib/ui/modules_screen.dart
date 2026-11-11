@@ -85,7 +85,14 @@ class _ModulesScreenState extends State<ModulesScreen> {
               for (final m in widget.controller.modules.entries.where(
                 (m) =>
                     !m.archived &&
-                    (origin == 'all' || m.origin == origin) &&
+                    (origin == 'all' ||
+                        (widget.controller.policy.isCatalogOriginal(
+                                  'module',
+                                  m.id,
+                                )
+                                ? 'supplied'
+                                : m.origin) ==
+                            origin) &&
                     '${m.title} ${m.description} ${m.tags.join(' ')}'
                         .toLowerCase()
                         .contains(query),
@@ -96,7 +103,11 @@ class _ModulesScreenState extends State<ModulesScreen> {
                   subtitle: Text(
                     m.items.isEmpty
                         ? 'Пустой модуль'
-                        : '${m.origin == 'supplied' ? 'Общие' : 'Мои'} · Постоянный · ${m.items.length} элементов · ${m.description}',
+                        : '${widget.controller.policy.isCatalogOriginal('module', m.id)
+                              ? 'Официальный'
+                              : m.origin == 'supplied'
+                              ? 'Общие'
+                              : 'Мои'} · Постоянный · ${m.items.length} элементов · ${m.description}',
                   ),
                   onTap: busy
                       ? null

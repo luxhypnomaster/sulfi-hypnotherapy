@@ -268,6 +268,17 @@ void main() {
       } finally {
         await secondAuthor.close();
       }
+      // A diary ContentLink requires an explicitly published exact module.
+      // A collection or ZIP must not reopen a withdrawn standalone card.
+      await expectLater(
+        reader.call('catalog.resolveReference', {
+          'logicalId': moduleRoot.key.content.id,
+          'revisionId': moduleRoot.key.revision,
+          'digest': moduleRoot.key.digest,
+        }),
+        throwsA(isA<DiaryApiException>()),
+      );
+      await service.publish(draft);
       // Same new backend and existing diary models: durable offline intent,
       // actual multipart video bytes, no private path projection, offline cache.
       final authorMedia = DiaryMediaStore(

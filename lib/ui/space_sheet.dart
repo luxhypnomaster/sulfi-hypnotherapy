@@ -47,7 +47,8 @@ Future<void> showSpaceSheet(
                 Text(
                   library.policy.isAuthor ? 'Режим: Автор' : 'Режим: Клиент',
                 ),
-                if (!library.policy.clientEdition)
+                if (!library.policy.clientEdition &&
+                    !library.policy.serverIdentityRequired)
                   SegmentedButton<LocalMode>(
                     segments: const [
                       ButtonSegment(

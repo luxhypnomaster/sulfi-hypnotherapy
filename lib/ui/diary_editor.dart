@@ -815,7 +815,11 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                           key: const Key('diary-add-content'),
                           onPressed: busy ? null : addContent,
                           icon: const Icon(Icons.link),
-                          label: const Text('Добавить материал'),
+                          label: Text(
+                            (widget.diary.api?.supportsServerIdentity ?? false)
+                                ? 'Добавить из каталога'
+                                : 'Добавить материал',
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 14),

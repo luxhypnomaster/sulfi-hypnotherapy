@@ -57,9 +57,15 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   String? error;
   String progress = '';
   bool paused = false;
+  void _identityChanged() {
+    if (!widget.service.controller.policy.isAuthor) paused = true;
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    widget.service.controller.policy.addListener(_identityChanged);
     for (final k in [
       'title',
       'shortAnnotation',
@@ -165,6 +171,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   @override
   void dispose() {
     paused = true;
+    widget.service.controller.policy.removeListener(_identityChanged);
     for (final f in fields.values) {
       f.dispose();
     }
@@ -366,9 +373,21 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
   List<Map<String, dynamic>> cards = [];
   String filter = 'draft', query = '';
   String? error;
+  void _identityChanged() {
+    if (!widget.service.controller.policy.isAuthor) cards = [];
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    widget.service.controller.policy.removeListener(_identityChanged);
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    widget.service.controller.policy.addListener(_identityChanged);
     load();
   }
 

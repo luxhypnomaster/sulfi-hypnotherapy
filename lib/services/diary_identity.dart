@@ -51,8 +51,8 @@ class GoogleDiaryIdentity implements DiaryIdentity {
         throw const DiaryApiException('Вход отменён.');
       }
       // SDK exception details can contain sensitive provider diagnostics.
-      throw const DiaryApiException(
-        'Не удалось войти через Google. Проверьте сеть и настройку этой сборки.',
+      throw DiaryApiException(
+        'Не удалось войти через Google. Код SDK: ${e.code.name}. Проверьте сеть и настройку этой сборки.',
       );
     }
   }

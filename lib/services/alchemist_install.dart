@@ -123,8 +123,12 @@ class AlchemistInstall {
     bool Function()? interrupted,
     void Function(int, int)? progress,
   }) async {
+    final identityScope = api.currentIdentityScope;
+    bool cancelled() =>
+        interrupted?.call() == true ||
+        identityScope != api.currentIdentityScope;
     void check() {
-      if (interrupted?.call() == true) {
+      if (cancelled()) {
         throw const FormatException('Установка приостановлена');
       }
     }
@@ -154,7 +158,7 @@ class AlchemistInstall {
       }
       final zip = await downloadAsset(
         descriptor,
-        interrupted: interrupted,
+        interrupted: cancelled,
         progress: progress,
       );
       final local = await LocalCatalogSource.open(service, zip);
@@ -163,7 +167,12 @@ class AlchemistInstall {
             .map((v) => RevisionKey.fromMap(Map<String, dynamic>.from(v)))
             .toList();
         final selection = await local.planRoots(roots);
-        await local.install(selection, cancelled: interrupted);
+        await local.install(selection, cancelled: cancelled);
+        await service.library.policy.registerCatalogOriginals(
+          selection.closure.revisions.map((r) => r.key.toMap()),
+          api.endpoint.toString(),
+          card['catalogItemId'] as String,
+        );
         await _receipt(card);
       } finally {
         await local.close();
@@ -248,7 +257,7 @@ class AlchemistInstall {
       check();
       files[r.payload['contentHash']] = await downloadAsset(
         descriptors[r.key.token]!,
-        interrupted: interrupted,
+        interrupted: cancelled,
         progress: progress,
       );
     }
@@ -308,8 +317,13 @@ class AlchemistInstall {
       local = await LocalCatalogSource.open(service, zipFile);
       final selection = await local.planRoots(roots);
       check();
-      await local.install(selection, cancelled: interrupted);
+      await local.install(selection, cancelled: cancelled);
       // Install receipt is written only after the existing importer verifies all records.
+      await service.library.policy.registerCatalogOriginals(
+        closure.revisions.map((r) => r.key.toMap()),
+        api.endpoint.toString(),
+        card['catalogItemId'] as String,
+      );
       await _receipt(card);
     } finally {
       await local?.close();

@@ -76,6 +76,11 @@ class DiaryApi {
   ) async {}
   String? get queueError => null;
   bool get supportsAdvancedPublication => false;
+  bool get supportsServerIdentity => false;
+  String? get verifiedRole => null;
+  bool get readerAuthenticated => false;
+  DateTime? get identityExpiresAt => null;
+  Future<String?> verifiedIdentityToken() async => null;
   String get readerScope => 'public';
   Future<void> authenticateReader(String token) async =>
       throw const DiaryApiException('Личный сервер не подключён');

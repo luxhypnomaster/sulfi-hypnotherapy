@@ -741,6 +741,8 @@ class _LibraryScreenState extends State<LibraryScreen>
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    if (widget.library.policy.isCatalogOriginal('track', a.id))
+                      const Text('Официальный', style: TextStyle(fontSize: 11)),
                     CategoryLabel(a.category),
                   ],
                 ),

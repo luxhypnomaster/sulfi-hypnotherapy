@@ -27,7 +27,11 @@ class DiaryController extends ChangeNotifier {
     this.allowDebugAuthor = false,
     this.authorEmail = 'luxhypnomaster@gmail.com',
   }) : reads = reads ?? DiaryReadStore(repository.database),
-       clock = clock ?? DateTime.now;
+       clock = clock ?? DateTime.now {
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(api?.verifiedRole);
+    }
+  }
   final DiaryReadStore reads;
   final DateTime Function() clock;
   Timer? _expiry;
@@ -152,7 +156,10 @@ class DiaryController extends ChangeNotifier {
   bool debugAuthor = false;
   bool hasCache = false;
   void enterDebugAuthor() {
-    if (!kDebugMode || !allowDebugAuthor || (policy?.clientEdition ?? false)) {
+    if (!kDebugMode ||
+        !allowDebugAuthor ||
+        (policy?.clientEdition ?? false) ||
+        (api?.supportsServerIdentity ?? false)) {
       return;
     }
     debugAuthor = true;
@@ -212,13 +219,17 @@ class DiaryController extends ChangeNotifier {
   bool authorBusy = false;
   bool get canSignIn =>
       identity != null &&
-      authorRepository != null &&
-      (policy?.isAuthor ?? true);
+      ((api?.supportsServerIdentity ?? false) ||
+          (authorRepository != null && (policy?.isAuthor ?? true)));
   bool get authorWorkspace =>
       authorRepository != null &&
+      (!(api?.supportsServerIdentity ?? false) ||
+          api?.verifiedRole == 'MASTER') &&
       !(policy?.clientEdition ?? false) &&
       (policy != null || identity == null || _localAuthor);
-  bool get authenticated => _session?.valid ?? false;
+  bool get authenticated => (api?.supportsServerIdentity ?? false)
+      ? api!.readerAuthenticated
+      : (_session?.valid ?? false);
   List<DiaryEntry> published = [], drafts = [];
   bool syncing = false;
   String? error;
@@ -334,6 +345,10 @@ class DiaryController extends ChangeNotifier {
     }
     final generation = ++_authGeneration;
     api?.clearSession();
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(null);
+      drafts = [];
+    }
     onAccountLogout?.call();
     published = published
         .where(
@@ -348,6 +363,27 @@ class DiaryController extends ChangeNotifier {
     try {
       final result = await identity!.signIn();
       if (generation != _authGeneration) return;
+      if (api?.supportsServerIdentity ?? false) {
+        await api!.authenticateReader(result.idToken);
+        if (generation != _authGeneration) return;
+        policy?.applyVerifiedServerRole(api!.verifiedRole);
+        _localAuthor = api!.verifiedRole == 'MASTER';
+        if (_localAuthor) {
+          _session = DiaryAuthorSession.verified(
+            result.idToken,
+            api!.identityExpiresAt!,
+          );
+        }
+        await load();
+        if (generation != _authGeneration) return;
+        if (_localAuthor && authorWorkspace) {
+          await api!.flushPending(_session!);
+          if (generation != _authGeneration) return;
+          await load();
+        }
+        await sync();
+        return;
+      }
       if (result.email.toLowerCase() != authorEmail.toLowerCase()) {
         await identity!.signOut();
         throw const DiaryApiException(
@@ -393,6 +429,9 @@ class DiaryController extends ChangeNotifier {
     ++_authGeneration;
     ++_loadGeneration;
     api?.clearSession();
+    if (api?.supportsServerIdentity ?? false) {
+      policy?.applyVerifiedServerRole(null);
+    }
     published = published
         .where(
           (e) =>

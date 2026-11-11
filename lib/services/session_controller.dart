@@ -99,6 +99,11 @@ class SessionController extends ChangeNotifier {
   AlchemistCatalog? _catalog;
   AlchemistIdentitySession? _catalogIdentity;
   Future<void> signInAlchemistReader() async {
+    if (diary?.api?.supportsServerIdentity ?? false) {
+      await diary!.signInAuthor();
+      notifyListeners();
+      return;
+    }
     final identity = diary?.identity;
     if (identity == null) {
       throw const FormatException('Вход Google не настроен');
@@ -125,9 +130,15 @@ class SessionController extends ChangeNotifier {
     }
     return AlchemistApi(
       Uri.parse(endpoint),
+      identityScope: () => diary?.api?.readerScope ?? 'public',
       credential: !authenticated
-          ? null
+          ? (diary?.api?.readerAuthenticated == true
+                ? () => diary!.api!.verifiedIdentityToken()
+                : null)
           : () async {
+              if (diary?.api?.supportsServerIdentity ?? false) {
+                return diary!.api!.verifiedIdentityToken();
+              }
               final identity = diary?.identity;
               if (identity == null) {
                 throw const FormatException('Вход Google ещё не настроен');
@@ -611,7 +622,7 @@ class SessionController extends ChangeNotifier {
     if (old == null) {
       throw const LibraryException('Исходный шаблон недоступен.');
     }
-    if (!policy.canEditOrigin(old.origin)) {
+    if (!policy.canEditMaterial('template', old.id, old.origin)) {
       throw const LibraryException(
         'Общий шаблон изменяет только автор. Сохраните как новый.',
       );

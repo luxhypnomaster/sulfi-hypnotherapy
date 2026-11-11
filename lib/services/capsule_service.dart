@@ -156,6 +156,19 @@ class CapsuleService {
     String? originalTitle;
     try {
       final records = await _records();
+      // Local backup is not publication. Never include the master's private
+      // drafts when another Google identity (or guest) uses this installation.
+      if (library.policy.serverIdentityRequired &&
+          library.policy.serverRole != 'MASTER') {
+        records['diary_author'] = <dynamic>[];
+        records['diary_public'] = (records['diary_public'] as List).where((
+          row,
+        ) {
+          final entry = jsonDecode(row['payload'] as String) as Map;
+          return entry['_alchemistScope'] == null ||
+              entry['_alchemistScope'] == 'public';
+        }).toList();
+      }
       if (moduleId != null || trackId != null || templateId != null) {
         final selectedModules = <Map<String, dynamic>>[];
         final selectedTemplates = <Map<String, dynamic>>[];
