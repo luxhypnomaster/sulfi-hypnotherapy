@@ -29,7 +29,7 @@ var AlchemistPilotAuthorization=(function(){
   var source=properties.getProperty('ALCHEMIST_SOURCE_SHA'),web=properties.getProperty('ALCHEMIST_GOOGLE_WEB_CLIENT_ID');
   function read(role){try{var p=JSON.parse(properties.getProperty('ALCHEMIST_16A_PROOF_'+role)||'null');return p&&p.policyVersion===2&&p.sourceSha===source&&p.webClientId===web&&p.role===role&&typeof p.subjectDigest==='string'?p:null;}catch(_){return null;}}
   var master=read('MASTER'),client=read('CLIENT'),distinct=!!master&&!!client&&master.subjectDigest!==client.subjectDigest;
-  return {policyVersion:2,sourceSha:source,webClientId:web,master:master?{role:'MASTER',verified:master.masterPublicationVerified===true,at:master.at}:null,client:client?{role:'CLIENT',verified:client.clientPublicationDenied===true,at:client.at}:null,distinctAccounts:distinct,serverTwoAccountCheck:distinct&&master.masterPublicationVerified&&client.clientPublicationDenied?'PASS':'PENDING_REAL_ACCOUNTS',physicalTwoPhoneQa:'NOT_RUN'};
+  return {policyVersion:2,sourceSha:source,webClientId:web,master:master?{role:'MASTER',verified:master.masterPublicationVerified===true,at:master.at}:null,client:client?{role:'CLIENT',verified:client.clientPublicationDenied===true,at:client.at}:null,distinctAccounts:distinct,serverTwoAccountRoleCheck:distinct&&master.masterPublicationVerified&&client.clientPublicationDenied?'PASS':'PENDING_REAL_ACCOUNTS',serverTwoAccountCheck:distinct&&master.masterPublicationVerified&&client.clientPublicationDenied?'PARTIAL_CLIENT_READ_INSTALL_NOT_VERIFIED':'PENDING_REAL_ACCOUNTS',physicalTwoPhoneQa:'NOT_RUN'};
  }
  return {verify:verify,status:status};
 })();
