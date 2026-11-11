@@ -1,0 +1,10 @@
+{
+  "task": "16-A",
+  "branch": "feat/task16-alchemist-full-server",
+  "sourceSha": "74dd63c31d532fd976e86d8783408ae109afe2fd",
+  "verifiedChecksRun": 43036325914,
+  "versionCode": 23,
+  "package": "ru.sulfi.sulfi_hypnotherapy",
+  "purpose": "ONE_MASTER_APK_FOR_REAL_TWO_ACCOUNT_AUTH_CHECK",
+  "draftTag": "task16a-auth-candidate-23"
+}
