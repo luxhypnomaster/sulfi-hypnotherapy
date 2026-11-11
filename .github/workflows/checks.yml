@@ -163,6 +163,10 @@ jobs:
           retention-days: 14
 
   emulator_qa:
+    # GitHub draft assets require a write-capable integration token to be visible.
+    # This exact-branch manual job performs GETs only; repository/Drive ACLs are unchanged.
+    permissions:
+      contents: write
     if: github.event_name == 'workflow_dispatch' && inputs.emulator_qa == true && github.ref == 'refs/heads/research/task16-autonomous' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
