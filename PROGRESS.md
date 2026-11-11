@@ -346,3 +346,13 @@ Node 17 PASS. Local Dart→production JS-domain integration passes track/module/
 Trusted-main workflow-only PR19 merged at 75339b06f423255a90c2e535ebeca22c3cd2d551. Run42799396321 SUCCESS: SCRIPT_PROJECTS=YES, SCRIPT_DEPLOYMENTS=YES, WEBAPP_DEPLOY=YES, DRIVE_FILE=YES, DRIVE_FULL=NO, CI_GOOGLE_ID_TOKEN_VERIFIED=YES. No cloud writes/deploy, no secret values in logs. CI ID token can support protected bootstrap; it is NOT an Android web OAuth client. Actual runtime Drive consent and parent-folder write ability are not proven by these scope flags.
 
 Source checkpoint7d36b72: backend CI runs42798789171/42798781189 SUCCESS, two-APK workflow42798778168 running. Regression rerun33PASS after dropdown fix, analyzer clean. Active newer server hardening (post7d36b72): metadata gallery, centralized JSON routing/rate budget/denial logging, idempotent grant registry with atomic runtime authority property, byte-alias metadata isolation. Not yet final/production verified. No Task17.
+
+
+## №16/16-А — автономная контрольная точка 2026-11-11
+
+- Accepted APK24/source cbe05240d463b9dafbe9a12ee831c967bdbf6113 и GAS version6 сохранены. Работа из c895291 разнесена по трём веткам; приложение не пересобирается и настоящая база не мигрируется.
+- G3 research: research/task16-g3-revisions, 4620db283db07f990a6e116009a6d5a2bed62f92, draft PR43. 10 targeted PASS (7 new+3 existing), analyzer clean; exact resolver/dry-run/sandbox rollback, ещё НЕ product integration.
+- Perf candidate: perf/task16-drive-reads, cd92f95cc44c11bddbc6985288f83b68fcb240ec, draft PR42. Node45PASS и source build PASS, local Drive RPC35→25 при одинаковом SHA; не live latency и не deployment.
+- Root research/task16-autonomous: неизменённые APK23/24 запускаются на KVM API35 в GitHub Actions; Google identity не подменяется. Ранние harness errors фиксируются как BLOCKED, не выдаются за product PASS. CI/final evidence ожидаются в текущей итерации.
+- Следующая точка: получить результаты run43102848830 (emulator), 43102167730 (perf CI), 43102467566 (G3 CI); завершить AUTONOMOUS_CONTINUATION.md, загрузить новые reports в существующую папку №16 и проверить readback. Не запускать production deploy/большой live E2E.
+- Настоящий MASTER/CLIENT, два телефона, физический звук/logout остаются NOT_RUN. Дальнейший ручной шаг владельца — Google-вход MASTER в прежней APK24, когда появится возможность.

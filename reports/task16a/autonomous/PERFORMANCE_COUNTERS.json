@@ -1,0 +1,25 @@
+{
+  "level": "LOCAL_VM_DRIVE_API_COUNTERS_NOT_LIVE_LATENCY",
+  "rows": [
+    {
+      "name": "baseline_version6",
+      "bytes": 1048617,
+      "chunks": 5,
+      "metadata": 15,
+      "permissions": 15,
+      "ranges": 5,
+      "total": 35,
+      "shaVerified": true
+    },
+    {
+      "name": "candidate",
+      "bytes": 1048617,
+      "chunks": 5,
+      "metadata": 10,
+      "permissions": 10,
+      "ranges": 5,
+      "total": 25,
+      "shaVerified": true
+    }
+  ]
+}
