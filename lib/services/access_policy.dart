@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/audio_asset.dart';
+import '../models/content_revision.dart';
 import 'library_service.dart';
 
 enum LocalMode { author, client }
@@ -20,6 +21,34 @@ class AccessPolicy extends ChangeNotifier {
   final Map<String, Map<String, dynamic>> _catalogOrigins = {};
   bool isCatalogOriginal(String type, String id) =>
       _catalogOrigins.containsKey('$type:$id');
+  List<Map<String, dynamic>> get catalogOrigins => _catalogOrigins.values
+      .map((v) => Map<String, dynamic>.from(jsonDecode(jsonEncode(v))))
+      .toList();
+  static Map<String, dynamic> validateCatalogOrigin(
+    Map<String, dynamic> value,
+  ) {
+    final key = RevisionKey.fromMap(
+      Map<String, dynamic>.from(value['key'] as Map),
+    );
+    final endpoint = value['sourceEndpoint'], item = value['catalogItemId'];
+    if (value['origin'] != 'official' ||
+        !['track', 'module', 'template'].contains(key.content.type.name) ||
+        endpoint is! String ||
+        !RegExp(r'^https://script\.google\.com/macros/s/[\w-]+/exec$')
+            .hasMatch(endpoint) ||
+        item is! String ||
+        !RegExp(r'^[\w-]{1,120}$').hasMatch(item)) {
+      throw const FormatException('Некорректное происхождение материала');
+    }
+    // Local readonly provenance only. Roles, tokens and capabilities are never restored.
+    return {
+      'key': key.toMap(),
+      'sourceEndpoint': endpoint,
+      'catalogItemId': item,
+      'origin': 'official',
+    };
+  }
+
   Future<void> registerCatalogOriginals(
     Iterable<Map<String, dynamic>> keys,
     String endpoint,
@@ -30,12 +59,12 @@ class AccessPolicy extends ChangeNotifier {
       if (!['track', 'module', 'template'].contains(type) || id is! String) {
         continue;
       }
-      final value = {
+      final value = validateCatalogOrigin({
         'key': key,
         'sourceEndpoint': endpoint,
         'catalogItemId': itemId,
         'origin': 'official',
-      };
+      });
       await database?.insert('app_settings', {
         'name': 'alchemist_origin:$type:$id',
         'value': jsonEncode(value),

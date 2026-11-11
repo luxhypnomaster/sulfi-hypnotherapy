@@ -31,14 +31,15 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   String _scope = 'public';
   void accountChanged() {
     final current = widget.controller.diary?.api?.readerScope ?? 'public';
-    if (current == _scope) return;
+    final signedIn = widget.controller.diary?.authenticated ?? false;
+    if (current == _scope && authenticated == signedIn) return;
     _scope = current;
     _loadGeneration++;
     if (mounted) {
       setState(() {
         cards = [];
         cursor = null;
-        authenticated = false;
+        authenticated = signedIn;
         loading = false;
       });
     }
@@ -50,6 +51,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   void initState() {
     super.initState();
     _scope = widget.controller.diary?.api?.readerScope ?? 'public';
+    authenticated = widget.controller.diary?.authenticated ?? false;
     widget.controller.diary?.addListener(accountChanged);
     load();
   }
@@ -213,7 +215,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                 icon: const Icon(Icons.account_circle_outlined),
                 label: Text(
                   authenticated
-                      ? 'Читать без входа'
+                      ? 'Выйти из Google'
                       : 'Войти для личных материалов',
                 ),
                 onPressed: busyId != null
@@ -227,7 +229,22 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                             await widget.controller.signInAlchemistReader();
                           }
                           if (mounted) {
-                            setState(() => authenticated = target);
+                            final d = widget.controller.diary;
+                            setState(
+                              () => authenticated =
+                                  d?.api?.supportsServerIdentity == true
+                                  ? d!.authenticated
+                                  : target,
+                            );
+                            if (target &&
+                                d?.api?.supportsServerIdentity == true &&
+                                !authenticated) {
+                              setState(
+                                () => error =
+                                    d?.error ?? 'Вход не подтверждён сервером',
+                              );
+                              return;
+                            }
                             await load();
                           }
                         } catch (e) {
