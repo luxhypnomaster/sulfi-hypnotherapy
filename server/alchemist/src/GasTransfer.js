@@ -8,8 +8,9 @@ var AlchemistGasTransfer=(function(){
   function location(s){var url=s.privateLocation&&s.privateLocation.url;if(typeof url!=='string'||url.indexOf('https://www.googleapis.com/upload/drive/v3/files?')!==0)fail('INVALID_PRIVATE_SESSION');return url;}
   function fileId(s){var id=s.privateLocation&&s.privateLocation.fileId;if(typeof id!=='string'||!/^[\w-]+$/.test(id))fail('FILE_NOT_COMMITTED');return id;}
   function metadata(id){var m=AlchemistGasFiles.privateFile(id,ownerEmail);if(m.trashed||!m.parents||m.parents.length!==1||m.parents[0]!==folderId)fail('INVALID_MEDIA_PARENT');return m;}
-  function read(s,offset,length){AlchemistGasFiles.privateFolder(folderId,ownerEmail);var id=fileId(s);metadata(id);var r=request('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(id)+'?alt=media',{method:'get',headers:headers({Range:'bytes='+offset+'-'+(offset+length-1)})});
-   if(r.getResponseCode()!==206&&!(offset===0&&r.getResponseCode()===200))fail('DRIVE_RANGE_FAILED');var bytes=r.getBlob().getBytes();if(bytes.length!==length)fail('DRIVE_RANGE_SIZE');return bytes;}
+  function readChecked(s,offset,length,expected){AlchemistGasFiles.privateFolder(folderId,ownerEmail);var id=fileId(s);var meta=metadata(id);if(expected&&(Number(meta.size)!==s.byteLength||meta.mimeType!==s.mime))fail('DRIVE_METADATA_MISMATCH');var r=request('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(id)+'?alt=media',{method:'get',headers:headers({Range:'bytes='+offset+'-'+(offset+length-1)})});
+   if(r.getResponseCode()!==206&&!(offset===0&&r.getResponseCode()===200))fail('DRIVE_RANGE_FAILED');var bytes=r.getBlob().getBytes();if(bytes.length!==length)fail('DRIVE_RANGE_SIZE');return {bytes:bytes,metadata:meta};}
+  function read(s,offset,length){return readChecked(s,offset,length,false).bytes;}
   return {
    begin:function(q){AlchemistGasFiles.privateFolder(folderId,ownerEmail);var generated=Drive.Files.generateIds({count:1,space:'drive',fields:'ids'});if(!generated.ids||generated.ids.length!==1)fail('DRIVE_ID_ALLOCATION_FAILED');var allocatedId=generated.ids[0];var r=request('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',{method:'post',contentType:'application/json',headers:headers({'X-Upload-Content-Type':q.mime,'X-Upload-Content-Length':String(q.byteLength)}),payload:JSON.stringify({id:allocatedId,name:'asset-'+Utilities.getUuid(),mimeType:q.mime,parents:[folderId]})});
     if(r.getResponseCode()!==200)fail('DRIVE_BEGIN_FAILED');var h=r.getAllHeaders(),url=h.Location||h.location;var privateLocation={url:url,fileId:allocatedId};location({privateLocation:privateLocation});return privateLocation;},
@@ -18,9 +19,9 @@ var AlchemistGasTransfer=(function(){
     if(r.getResponseCode()===404||r.getResponseCode()===410)AlchemistCatalog.fail(410,'DRIVE_UPLOAD_EXPIRED');if(r.getResponseCode()!==200&&r.getResponseCode()!==201)fail('DRIVE_WRITE_FAILED');var result=JSON.parse(r.getContentText());s.privateLocation.fileId=result.id;var meta=metadata(result.id);if(Number(meta.size)!==s.byteLength)fail('DRIVE_FINAL_SIZE');return s.byteLength;},
    read:read,
    chunkHash:function(s,offset,length){return AlchemistSha256.create().update(read(s,offset,length)).hex();},
-   verify:function(s){var m=metadata(fileId(s));if(Number(m.size)!==s.byteLength||m.mimeType!==s.mime)fail('DRIVE_METADATA_MISMATCH');var checkpoint=s.verification||{offset:0,hash:null},h=AlchemistSha256.create(checkpoint.hash);
-    var length=Math.min(262144,s.byteLength-checkpoint.offset);if(length>0){var bytes=read(s,checkpoint.offset,length);if(checkpoint.offset===0&&!AlchemistMime.matches(s.mime,bytes))AlchemistCatalog.fail(422,'MIME_SIGNATURE_MISMATCH');h.update(bytes);checkpoint.offset+=length;checkpoint.hash=h.snapshot();s.verification=checkpoint;}
-    if(checkpoint.offset<s.byteLength)return {pending:true,verifiedBytes:checkpoint.offset};return {sha256:h.hex(),byteLength:checkpoint.offset,privateFileId:fileId(s)};
+   verify:function(s){var checkpoint=s.verification||{offset:0,hash:null},h=AlchemistSha256.create(checkpoint.hash);
+    var length=Math.min(262144,s.byteLength-checkpoint.offset);if(length>0){var bytes=readChecked(s,checkpoint.offset,length,true).bytes;if(checkpoint.offset===0&&!AlchemistMime.matches(s.mime,bytes))AlchemistCatalog.fail(422,'MIME_SIGNATURE_MISMATCH');h.update(bytes);checkpoint.offset+=length;checkpoint.hash=h.snapshot();s.verification=checkpoint;}
+    if(length===0){AlchemistGasFiles.privateFolder(folderId,ownerEmail);var m=metadata(fileId(s));if(Number(m.size)!==s.byteLength||m.mimeType!==s.mime)fail('DRIVE_METADATA_MISMATCH');}if(checkpoint.offset<s.byteLength)return {pending:true,verifiedBytes:checkpoint.offset};return {sha256:h.hex(),byteLength:checkpoint.offset,privateFileId:fileId(s)};
    }
   };
  }
