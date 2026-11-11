@@ -96,7 +96,7 @@ var AlchemistCatalog = (function () {
         });
         if(op==='catalog.validateDependencies'){var draft=env.store.item(id(q.catalogItemId));own(draft,actor);return dependencyPlan(draft.manifest,actor,q.installed||[]);}
         if(op==='catalog.resolveReference'){
-          id(q.logicalId);id(q.revisionId);if(q.digest&&q.digest!==q.revisionId)fail(422,'REFERENCE_DIGEST_MISMATCH');var found=env.store.items().map(function(r){return exposed(r,actor);}).filter(function(r){return readable(r,actor)&&r.logicalContentId===q.logicalId&&r.contentRevision===q.revisionId;});if(!found.length){var asset=env.store.asset(q.logicalId,q.revisionId);if(!asset||q.digest&&q.digest!==asset.manifestDigest)fail(404,'EXACT_PUBLICATION_UNAVAILABLE');return projection(virtual('_asset_'+asset.id,actor));}return projection(exposed(env.store.item(found[0].id),actor));
+          id(q.logicalId);id(q.revisionId);if(q.digest&&q.digest!==q.revisionId)fail(422,'REFERENCE_DIGEST_MISMATCH');var found=env.store.items().map(function(r){return r&&r.publishedRecord||null;}).filter(function(r){return r&&r.state==='published'&&readable(r,actor)&&r.logicalContentId===q.logicalId&&r.contentRevision===q.revisionId;});if(!found.length)fail(404,'EXACT_PUBLICATION_UNAVAILABLE');if(q.digest){var asset=env.store.asset(q.logicalId,q.revisionId);if(!asset||!asset.verified||q.digest!==asset.manifestDigest)fail(404,'EXACT_PUBLICATION_UNAVAILABLE');}return projection(env.store.item(found[0].id).publishedRecord);
         }
         if(op==='catalog.changes'){
           var since=q.sinceRevision||0;if(!Number.isSafeInteger(since)||since<0)fail(422,'INVALID_SINCE');

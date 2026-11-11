@@ -22,7 +22,8 @@ jobs:
           CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
           ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
         run: node scripts/alchemist/authorization-status.mjs
-      - name: Save sanitized status only
+      - name: Save sanitized status only (also retained in fixed-schema log)
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

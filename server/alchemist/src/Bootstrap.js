@@ -13,13 +13,19 @@ var AlchemistBootstrap=(function(){
   try{
    var owner=p.getProperty('ALCHEMIST_OWNER_SUB'),email=p.getProperty('ALCHEMIST_OWNER_EMAIL');
    if(owner&&owner!==c.ownerSubject||email&&email!==c.ownerEmail)AlchemistCatalog.fail(409,'OWNER_CONFIG_IMMUTABLE');
-   var audiences=[c.ciAudience];if(c.androidWebAudience)audiences.push(c.androidWebAudience);
+   var audiences=c.androidWebAudience?[c.androidWebAudience]:[c.ciAudience];
    p.setProperties({ALCHEMIST_OWNER_SUB:c.ownerSubject,ALCHEMIST_OWNER_EMAIL:c.ownerEmail,
-     ALCHEMIST_PROJECT_FOLDER_ID:c.projectFolderId,ALCHEMIST_GOOGLE_AUDIENCES:JSON.stringify(audiences),ALCHEMIST_SOURCE_SHA:c.sourceSha});
+     ALCHEMIST_PROJECT_FOLDER_ID:c.projectFolderId,ALCHEMIST_GOOGLE_AUDIENCES:JSON.stringify(audiences),ALCHEMIST_GOOGLE_WEB_CLIENT_ID:c.androidWebAudience||'',ALCHEMIST_SOURCE_SHA:c.sourceSha});
    if(p.getProperty('ALCHEMIST_OWNER_SUB')!==c.ownerSubject||p.getProperty('ALCHEMIST_GOOGLE_AUDIENCES')!==JSON.stringify(audiences))AlchemistCatalog.fail(503,'CONFIG_READBACK_FAILED');
   }finally{lock.releaseLock();}
   guarded('BOOTSTRAP_SCRIPT_ACL',function(){return AlchemistGasFiles.privateFile(ScriptApp.getScriptId(),c.ownerEmail);});
   return guarded('BOOTSTRAP_FOLDERS',function(){return AlchemistGasFolders.bootstrap(actor);});
  }
- return {initialize:initialize};
+ function authorizationStatus(credential){
+  if(typeof AlchemistInitialConfig==='undefined')AlchemistCatalog.fail(503,'BOOTSTRAP_CONFIG_MISSING');var c=AlchemistInitialConfig;
+  var actor=AlchemistJwt.verify(credential,{audience:c.ciAudience,ownerSubject:c.ownerSubject});
+  if(actor.sub!==c.ownerSubject||actor.email!==c.ownerEmail)AlchemistCatalog.fail(403,'OWNER_REQUIRED');
+  return AlchemistPilotAuthorization.status(PropertiesService.getScriptProperties());
+ }
+ return {initialize:initialize,authorizationStatus:authorizationStatus};
 })();

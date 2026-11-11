@@ -12,3 +12,9 @@ test('verified subject grants never trust requested role; wrong audience/issuer/
  for(const c of [{aud:'wrong'},{iss:'evil'},{exp:now-1},{sub:''},{email_verified:false}])assert.throws(()=>ctx.AlchemistJwt.verify(token({...claims,...c})));
  signed=false;assert.throws(()=>ctx.AlchemistJwt.verify(token(claims)));
 });
+test('16A exact Web audience overrides legacy CI list and all non-owner grant roles',()=>{
+ const web='web.apps.googleusercontent.com',ci='ci.apps.googleusercontent.com',now=Math.floor(Date.now()/1000),props={ALCHEMIST_GOOGLE_WEB_CLIENT_ID:web,ALCHEMIST_GOOGLE_AUDIENCES:JSON.stringify([ci,web]),ALCHEMIST_OWNER_SUB:'owner',ALCHEMIST_GRANTS:JSON.stringify({reader:['owner','author']})};
+ const c=vm.createContext({PropertiesService:{getScriptProperties:()=>({getProperty:k=>props[k]})},CacheService:{getScriptCache:()=>({get:()=>JSON.stringify({key:'CERT'})})},AlchemistRsa:{decode:s=>Buffer.from(s,'base64url').toString(),verify:()=>true}});for(const f of ['Catalog','GoogleJwt'])vm.runInContext(readFileSync(new URL('../src/'+f+'.js',import.meta.url),'utf8'),c);
+ const token=(over={})=>b64({alg:'RS256',kid:'key'})+'.'+b64({aud:web,iss:'https://accounts.google.com',sub:'reader',email:'luxhypnomaster@gmail.com',email_verified:true,iat:now,exp:now+3600,role:'MASTER',roles:['owner'],...over})+'.signature';
+ assert.equal(c.AlchemistJwt.verify(token()).role,'CLIENT');assert.equal(c.AlchemistJwt.verify(token({sub:'owner'})).role,'MASTER');assert.throws(()=>c.AlchemistJwt.verify(token({aud:ci,sub:'owner'})));assert.equal(c.AlchemistJwt.verify(token({aud:ci,sub:'owner'}),{audience:ci,ownerSubject:'owner'}).roles[0],'owner');for(const changes of [{nbf:now+1},{iat:now+61},{sub:'__proto__'},{exp:now-1},{aud:['web.apps.googleusercontent.com']}])assert.throws(()=>c.AlchemistJwt.verify(token(changes)));
+});
