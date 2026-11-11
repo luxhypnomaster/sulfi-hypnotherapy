@@ -1,0 +1,17 @@
+{
+  "spec": "https://docs.google.com/document/d/16hMVySJwkS1kABBDyWXTJ3kfogzNJWayCu4LcFh_224",
+  "projectNameOwnerConfirmed": "Sulfi Hypnotherapy",
+  "webClientId": "325102995568-07pk1fcqvfnkp27kkmv7ple39enin31d.apps.googleusercontent.com",
+  "authorPackage": "ru.sulfi.sulfi_hypnotherapy",
+  "clientPackage": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+  "sha1": "8E:B9:95:F1:4B:65:67:6F:DF:F3:05:48:CE:36:1A:EC:1F:47:92:56",
+  "signingSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "androidRegistrations": "OWNER_CONFIRMED_SDK_LIVE_PENDING",
+  "googlePublishingStatusOwnerConfirmed": "Testing",
+  "scopes": [
+    "openid",
+    "email",
+    "profile"
+  ],
+  "clientSecretRequired": false
+}
