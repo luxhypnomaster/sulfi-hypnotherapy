@@ -2,8 +2,8 @@
   "task": "16+16-A",
   "purpose": "TWO_TEST_CANDIDATES_FOR_HUMAN_ACCEPTANCE_NOT_ACCEPTED_RELEASE",
   "branch": "feat/task16-alchemist-full-server",
-  "sourceSha": "1a5e484db759ab2fe4316f11d298c59bf1a6ea33",
-  "verifiedChecksRun": 43069967285,
+  "sourceSha": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "verifiedChecksRun": 43070740850,
   "versionCode": 24,
   "draftTag": "task16-qa-pair-24",
   "packages": {

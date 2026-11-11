@@ -34,7 +34,7 @@ jobs:
           JS
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: 1a5e484db759ab2fe4316f11d298c59bf1a6ea33
+          ref: cbe05240d463b9dafbe9a12ee831c967bdbf6113
           path: app-source
           persist-credentials: false
       - uses: actions/setup-java@v4
