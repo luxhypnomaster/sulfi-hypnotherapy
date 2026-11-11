@@ -5,6 +5,7 @@ import {execFile} from 'node:child_process';import {promisify} from 'node:util';
 import {deployCore,SERVER_NAME,OLD_SCRIPT} from './deploy-core.mjs';
 import {verifiedDeployIdentity} from './deploy-identity.mjs';
 import {verifyPinnedTarget,freshPrivateAcl} from './deploy-target.mjs';
+import {readScriptAcl} from './script-acl.mjs';
 const run=promisify(execFile),sha=x=>createHash('sha256').update(x).digest('hex');
 const readiness=JSON.parse(readFileSync(new URL('../../server/alchemist/deployment-readiness.json',import.meta.url)));
 function abort(code){console.error(code);process.exit(78);}
@@ -16,7 +17,7 @@ const tool=resolve(temp,'clasp-tool/node_modules/@google/clasp'),cli=resolve(tem
 mkdirSync(work,{recursive:true,mode:0o700});
 const evidence=resolve(temp,'alchemist-evidence');mkdirSync(evidence,{recursive:true,mode:0o700});
 let last={stage:'AUTH_PENDING',fullE2E:false};
-function checkpoint(v){last={...last,...v};writeFileSync(join(evidence,'DEPLOYMENT.json'),JSON.stringify(last,null,2),{mode:0o600});console.log('DEPLOY_STAGE='+v.stage);}
+function checkpoint(v){last={...last,...v};writeFileSync(join(evidence,'DEPLOYMENT.json'),JSON.stringify(last,null,2),{mode:0o600});console.log('DEPLOY_STAGE='+v.stage);console.log('DEPLOY_CHECKPOINT='+JSON.stringify({stage:last.stage,sourceSha:last.sourceSha,version:last.version,endpoint:last.endpoint,reason:last.reason,fullE2E:false,androidVerified:false}));}
 try{
  JSON.parse(process.env.CLASPRC_JSON);writeFileSync(credential,process.env.CLASPRC_JSON,{mode:0o600});delete process.env.CLASPRC_JSON;
  if(!existsSync(cli))throw Error('PINNED_CLASP_NOT_INSTALLED');
@@ -58,9 +59,12 @@ try{
   async createProject(title){await clasp(['create-script','--type','standalone','--title',title,'--rootDir',join(work,'source')]);return JSON.parse(readFileSync(join(work,'.clasp.json'))).scriptId;},
   async markProject(id){await google('PATCH',driveApi(id),{appProperties:{alchemistTask16:'task16-production'}});},
   async inspectProject(id){const project=await google('GET',scriptApi(id));verifyPinnedTarget(target,project,identity.email);
-    let f;try{f=await google('GET',driveApi(id)+'?fields=id,owners(emailAddress),permissions(type,role,emailAddress),trashed');}
-    catch(e){if(e.message!=='DRIVE_GET_403_APPNOTAUTHORIZEDTOFILE')throw e;freshPrivateAcl(target,identity.email);checkpoint({stage:'SCRIPT_ACL_VERIFIED_EXTERNAL_READBACK',scriptId:id});return {title:project.title,owned:true,private:true};}
-    return {title:project.title,owned:!f.trashed&&f.owners?.length===1&&f.owners[0].emailAddress===identity.email,private:f.permissions?.length===1&&f.permissions[0].type==='user'&&f.permissions[0].role==='owner'&&f.permissions[0].emailAddress===identity.email};},
+    let acl;try{acl=await readScriptAcl(client,id,identity.email);}
+    catch(e){if(e.response?.status!==403||e.response?.data?.error?.errors?.[0]?.reason!=='appNotAuthorizedToFile')throw Error('SCRIPT_ACL_READ_FAILED');freshPrivateAcl(target,identity.email);checkpoint({stage:'SCRIPT_ACL_VERIFIED_EXTERNAL_READBACK',scriptId:id});return {title:project.title,owned:true,private:true};}
+    if(!acl.privateVerified)throw Error('UNSAFE_SCRIPT_ACL');
+    writeFileSync(join(evidence,'SCRIPT_ACL.json'),JSON.stringify(acl));
+    checkpoint({stage:'SCRIPT_ACL_COMPLETE_OWNER_ONLY',scriptId:id});
+    return {title:project.title,owned:acl.ownerOnly,private:acl.privateVerified};},
   async pushSource(id,expected){for(const f of readdirSync(join(work,'source')))rmSync(join(work,'source',f),{force:true});for(const f of expected)writeFileSync(join(work,'source',f.name+(f.type==='JSON'?'.json':'.js')),f.source);bind(id);await clasp(['push','--force']);},compareSource:(id,v)=>compare(id,v),compareVersion:(id,n,v)=>compare(id,v,n),
   versions:id=>pages(scriptApi(id)+'/versions','versions'),
   async createVersion(id,text){bind(id);return (await clasp(['create-version',text])).versionNumber;},
