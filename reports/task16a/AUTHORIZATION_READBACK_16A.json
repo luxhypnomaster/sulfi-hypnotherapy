@@ -1,0 +1,24 @@
+{
+  "kind": "SANITIZED_FIELDS_OBSERVED_IN_TRUSTED_MAIN_LOG",
+  "runId": 43037262461,
+  "conclusion": "success",
+  "sourceSha": "93d0f48af832f746dbfac98a9f3cab405ea8ff88",
+  "observed": {
+    "claspOwnerVerified": true,
+    "existingProjectVerified": true,
+    "completePermissions": true,
+    "ownerOnly": true,
+    "privateVerified": true,
+    "runtimeHealthVerified": true,
+    "webAudienceConfigured": true,
+    "distinctAccounts": false,
+    "permissionPages": 1,
+    "permissionCount": 1,
+    "authorizationPolicyVersion": 2
+  },
+  "serverTwoAccountRoleCheck": "PENDING_REAL_ACCOUNTS",
+  "serverTwoAccountCheck": "PENDING_REAL_ACCOUNTS",
+  "physicalTwoPhoneQa": "NOT_RUN",
+  "artifactUpload": "BLOCKED_GITHUB_ARTIFACT_QUOTA",
+  "note": "Scalar fields extracted from actual fixed-schema log. GitHub masks JSON braces; this is a sanitized readback, not the original artifact."
+}
