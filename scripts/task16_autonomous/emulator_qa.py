@@ -1,5 +1,5 @@
 """Black-box APK23→24 QA. Synthetic emulator data only; no Google identity injection."""
-import hashlib, io, json, os, pathlib, re, shlex, sqlite3, subprocess, tarfile, tempfile, time, zipfile, xml.etree.ElementTree as ET
+import base64, hashlib, io, json, os, pathlib, re, shlex, sqlite3, subprocess, tarfile, tempfile, time, zipfile, xml.etree.ElementTree as ET
 OUT=pathlib.Path(os.environ['RUNNER_TEMP'])/'emulator-evidence';OUT.mkdir(exist_ok=True)
 PKG='ru.sulfi.sulfi_hypnotherapy';CLIENT=PKG+'.clienttest';APK=pathlib.Path(os.environ['RUNNER_TEMP'])/'apk24'
 results=[]
@@ -15,7 +15,7 @@ def case(name, work):
   (OUT/'EMULATOR_QA.json').write_text(json.dumps({'kind':'REAL_ANDROID_EMULATOR_EXISTING_APKS','googleUsers':'NOT_RUN','physicalDevices':'NOT_RUN','fixture':'synthetic AAC and emulator-only SQLite, no user DB','cases':results},ensure_ascii=False,indent=2))
   print('EMULATOR_CASE='+name+':'+results[-1]['status'],flush=True)
 def launch(pkg=PKG):
- adb('shell','monkey','-p',pkg,'-c','android.intent.category.LAUNCHER','1')
+ adb('shell','am','start','-W','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
  # Debug APK cold start/JIT on software graphics may take tens of seconds.
  for _ in range(60):
   if 'READY' in adb('shell',f'run-as {pkg} sh -c "test -s files/library.sqlite && echo READY"',check=False):break
@@ -31,7 +31,15 @@ def launch(pkg=PKG):
 def tree():
  adb('shell','uiautomator','dump','/sdcard/sulfi-window.xml',check=False)
  xml=adb('shell','cat','/sdcard/sulfi-window.xml',check=False)
- try:return list(ET.fromstring(xml).iter('node'))
+ try:
+  nodes=list(ET.fromstring(xml).iter('node'))
+  # Dismiss only the known system launcher ANR; never dismiss a Sulfi ANR.
+  if any("Pixel Launcher isn't responding" in n.get('text','') for n in nodes):
+   close=next((n for n in nodes if n.get('text')=='Close app'),None)
+   if close is not None:
+    tap(close);print('EMULATOR_SYSTEM_LAUNCHER_ANR_DISMISSED',flush=True)
+    return tree()
+  return nodes
  except ET.ParseError:return []
 def label(n):return n.get('text','')+' '+n.get('content-desc','')
 def tap(n):
@@ -113,7 +121,7 @@ def library_play():
  screenshot('library-fixture');click('Прослушать EMU AAC fixture');time.sleep(1)
  audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
  assert native_playing(audio),'NATIVE_PLAYBACK_NOT_OBSERVED'
- screenshot('preview-playing');adb('shell','input','keyevent','3');time.sleep(1);launch();return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
+ screenshot('preview-playing');return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
 def session_play():
  adb('shell','am','force-stop',PKG);launch();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(2)
  audio=adb('shell','dumpsys','audio');assert native_playing(audio),'SESSION_PLAYBACK_NOT_OBSERVED'
@@ -163,6 +171,14 @@ def capsule_export():
  return {'exportControlReached':True,'completedLocalExportImport':True,'zipBytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'clientImportedExactAudio':True,'noDriveOrGoogleAccounts':True}
 assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','ONLY_EMULATOR_ALLOWED'
 adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
+adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
 for name,work in [('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]:case(name,work)
 print('EMULATOR_QA_COMPLETE; NO_REAL_GOOGLE_IDENTITIES',flush=True)
+try:
+ from PIL import Image
+ sample=next((OUT/n for n in ['capsule-exported.png','library-fixture.png','master24-updated.png'] if (OUT/n).exists()),None)
+ if sample:
+  thumb=Image.open(sample);thumb.thumbnail((360,640));b=io.BytesIO();thumb.save(b,format='PNG',optimize=True)
+  if len(b.getvalue())<180000:print('EMULATOR_SYNTHETIC_SCREENSHOT_PNG='+base64.b64encode(b.getvalue()).decode(),flush=True)
+except ImportError:print('EMULATOR_SCREENSHOT_INLINE=NOT_AVAILABLE',flush=True)
 if any(r['status']!='PASS' for r in results if r['case'] in ['install23_launch','synthetic_local_fixture','update23_to24_preserves_data','client24_package_isolation']): raise SystemExit(1)
