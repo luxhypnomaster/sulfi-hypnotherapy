@@ -1,3 +1,17 @@
+# Current checkpoint — Task16 continuation: QA pair24 pending exact-source CI (2026-11-11)
+
+Continue existing Task16/16-A branch; no C0 replay, server6/source1a0cf8e unchanged. Latest owner explicitly requests TWO working APKs for testers before pausing at real login. Prepare two NOT-YET-ACCEPTED QA candidates; do not set the accepted-server variable or mark C/E PASS. Existing singlemaster23 remains intact/private.
+
+App source cbe05240d463b9dafbe9a12ee831c967bdbf6113,0.4.16+24. Fixes: catalog reflects existing Google login/logout and failed sign-in; optional capsule catalogOrigins preserves official marks without importing roles/tokens. Full first run source1a5 caught legacy mode-reset3fail; corrected separate reloadCatalogOrigins. Targeted34capsule/UI tests and cross-language subset6 PASS; exact full app CI43070740850 IN_PROGRESS (sourcecbe). Earlier43069967285 is obsolete/failed/cancelled, never build it. Runtime/owner-role code unchanged; no redeploy.
+
+PR40+41 operational workflows merged/main, only delivery cfg/scripts/workflow; appfeature not merged. Manualmain workflow alchemist-qa-pair.yml pins exactsourcecbe and successfulCI43070740850; builds BOTH master/client24 sameSHA/key/WebID+endpoint. Only private GitHub DRAFT, no release/tag publication. Signing secrets only, no CLASPRC. Do not run until exact CI succeeds. Configserver/alchemist/qa-pair-source.json, scripts/alchemist/qa-pair-delivery.mjs;43NodePASS. Source59? use pinned cbe fullSHA above, not branch tip docs.
+
+Fresh readonly43069660391 SUCCESS: server6 existing/exactWeb/policy2/private1owner true; MASTER=null/CLIENT=null, PENDING_REAL_ACCOUNTS. No Google account/phone evidence; don't synthesize identities. Original147/history/PREFLIGHT and reports/task16 unchanged. Need final CURRENT acceptance147 matrix, no false physical PASS; Data sameIDaudio remains permitted FAIL-CLOSED, no destructive migration. Prepare pair metadata/hash/download guide, update existing DriveTask16folder with reports only (neverAPK). Newcontinuation reports under reports/task16a/continuation24; original16A reports9files preserved, add named24 reports. OldDriveindexreports/task16a/DRIVE_UPLOAD_INDEX_16A.json has authoritative IDs.
+
+Remaining work: waitCI then manualmain qa pair run; verify both actual assets independently (samepubliccertificate/package/version/compiledconfig/hash), resolve download via private GitHub draft + owner Android QuickShare to tester (no need grant repo/source access). If possible also provide direct local files through chat. Native download success requires user confirmation. Root251MBfree, /dev/shm4GBfree; store APKs there, notroot. sudo unavailable, /mnt root-owned. Never ask Google reauth/PC/secret/client-email whitelist. Then PHONE_QA24 exact owner MASTER/CLIENT→Elman3realtracks→publishedcatalog→DiaryContentLink→clientinstall→offline; stop ONLY at actual Google-user input. Do not call two test APKs accepted. All GH env -u GH_TOKEN, same trustedmain secret guard. Check GitHub run real outcomes before final.
+
+---
+
 # Current checkpoint — Task16-A version6 verified, signed master23 delivered; real users pending (2026-11-11)
 
 Task16-A ONLY; existing feat/task16-alchemist-full-server. Original20files/147criteria/PREFLIGHT/historicalTask16 reports unchanged. Existing sole Script/deployment/private41 folders; old diary untouched. NoTask17/newserver/GoogleDriveAPK upload.
