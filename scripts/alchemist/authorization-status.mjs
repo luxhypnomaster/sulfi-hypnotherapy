@@ -4,6 +4,7 @@ import {resolve,join} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {verifiedDeployIdentity} from './deploy-identity.mjs';
 import {verifyPinnedTarget} from './deploy-target.mjs';
+import {readScriptAcl} from './script-acl.mjs';
 if(process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy')throw Error('TRUSTED_MAIN_REQUIRED');
 const temp=process.env.RUNNER_TEMP;if(!temp)throw Error('RUNNER_TEMP_REQUIRED');
 const file=resolve(temp,'alchemist-status.clasprc.json'),out=resolve(temp,'alchemist-authorization-status');
@@ -20,7 +21,7 @@ try{
  const target=JSON.parse(readFileSync('server/alchemist/production-target.json'));
  const project=(await client.request({url:'https://script.googleapis.com/v1/projects/'+target.scriptId})).data;
  verifyPinnedTarget(target,project,identity.email);result.existingProjectVerified=true;
- try{const f=(await client.request({url:'https://www.googleapis.com/drive/v3/files/'+target.scriptId,params:{fields:'shared,trashed,owners(emailAddress),permissions(type,role,emailAddress)'}})).data;result.scriptAcl={readable:true,shared:f.shared===true,ownerOnly:f.trashed!==true&&f.owners?.length===1&&f.owners[0].emailAddress===identity.email&&f.permissions?.length===1&&f.permissions[0].type==='user'&&f.permissions[0].role==='owner'&&f.permissions[0].emailAddress===identity.email,privateVerified:f.shared===false&&f.permissions?.length===1&&f.permissions[0].role==='owner'&&f.permissions[0].emailAddress===identity.email};}catch{result.scriptAcl={readable:false,privateVerified:false,reason:'DRIVE_FILE_SCOPE_OR_READ_UNAVAILABLE'};}
+ try{result.scriptAcl=await readScriptAcl(client,target.scriptId,identity.email);}catch{result.scriptAcl={readable:false,privateVerified:false,reason:'DRIVE_FILE_SCOPE_OR_READ_UNAVAILABLE'};}
 
  const publicConfig=JSON.parse(readFileSync('server/alchemist/android-oauth-public.json'));
  const endpoint=process.env.ALCHEMIST_API;
