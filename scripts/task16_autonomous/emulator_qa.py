@@ -23,7 +23,7 @@ def launch(pkg=PKG):
   tap(allow);time.sleep(.5)
 def tree():
  adb('shell','uiautomator','dump','/sdcard/sulfi-window.xml',check=False)
- xml=adb('shell','cat','/sdcard/sulfi-window.xml')
+ xml=adb('shell','cat','/sdcard/sulfi-window.xml',check=False)
  try:return list(ET.fromstring(xml).iter('node'))
  except ET.ParseError:return []
 def label(n):return n.get('text','')+' '+n.get('content-desc','')
@@ -38,10 +38,11 @@ def click(text, exact=False):
  raise AssertionError('UI_NOT_FOUND:'+text)
 def screenshot(name):
  (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
- (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/sulfi-window.xml'))
+ (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/sulfi-window.xml',check=False))
 def dbcopy(pkg=PKG):
- data=adb('exec-out','run-as',pkg,'tar','cf','-','files',binary=True)
+ data=adb('exec-out','run-as',pkg,'tar','-cf','-','files',binary=True)
  t=tempfile.TemporaryDirectory();d=pathlib.Path(t.name)
+ if not data.startswith(b'files') and len(data)<512: raise AssertionError('APP_FILES_NOT_READY:'+repr(data[:140]))
  # Only own synthetic emulator data. Read selected DB files without generic tar extraction.
  with tarfile.open(fileobj=io.BytesIO(data)) as archive:
   for m in archive:
@@ -54,8 +55,16 @@ def inspect(pkg=PKG):
   assert c.execute('pragma integrity_check').fetchone()[0]=='ok'
   return {'audio':c.execute('select id,contentHash,filePath from audio_assets order by id').fetchall(),'templates':c.execute('select id from session_templates order by id').fetchall(),'draft':c.execute('select payload from current_draft').fetchall(),'schema':c.execute('pragma user_version').fetchone()[0]}
  finally:c.close();t.cleanup()
+def diagnostics(pkg):
+ pid=adb('shell','pidof',pkg,check=False).strip()
+ details={'pidPresent':bool(pid),'runAsPwd':adb('shell','run-as',pkg,'pwd',check=False).strip(),'files':adb('shell','run-as',pkg,'ls','files',check=False).strip()}
+ raw=adb('logcat','-d','-t','160',check=False)
+ (OUT/'launch-logcat.txt').write_text(raw)
+ details['fatalLines']=[l[-300:] for l in raw.splitlines() if 'FATAL' in l or 'UnsatisfiedLinkError' in l or 'flutter' in l.lower() and ('error' in l.lower() or 'exception' in l.lower())][-8:]
+ print('EMULATOR_DIAGNOSTIC='+json.dumps(details),flush=True)
+ return details
 def install23():
- assert 'Success' in adb('install','-r',str(APK/'master23.apk'));launch();assert 'Error' not in adb('shell','pidof',PKG)
+ assert 'Success' in adb('install','-r',str(APK/'master23.apk'));launch();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
  screenshot('master23-start');return {'versionCode':23,'launched':bool(adb('shell','pidof',PKG).strip())}
 def seed():
  adb('shell','am','force-stop',PKG);t,c=dbcopy();now='2026-11-11T00:00:00.000Z'
@@ -67,6 +76,7 @@ def seed():
  c.execute('insert or replace into current_draft values (1,?)',(json.dumps({'plan':plan,'updatedAt':now,'notes':'EMULATOR ONLY'}),))
  c.execute('insert or replace into session_templates values (?,?)',('emu-template',json.dumps({'id':'emu-template','name':'EMU template','plan':plan,'createdAt':now,'updatedAt':now,'version':1,'origin':'personal'})))
  c.commit();c.execute('pragma wal_checkpoint(truncate)');c.close()
+ adb('shell','run-as',PKG,'sh','-c','for suffix in -wal -shm; do if [ -f files/library.sqlite$suffix ]; then mv files/library.sqlite$suffix files/qa-preseed$suffix; fi; done');
  adb('push',str(pathlib.Path(t.name)/'library.sqlite'),'/data/local/tmp/emu-library.sqlite');adb('shell',f'cat /data/local/tmp/emu-library.sqlite | run-as {PKG} sh -c "cat > files/library.sqlite"')
  adb('push','test/fixtures/android_aac_isom.m4a','/data/local/tmp/emu-fixture.m4a');adb('shell','run-as',PKG,'mkdir','-p','files/audio');adb('shell',f'cat /data/local/tmp/emu-fixture.m4a | run-as {PKG} sh -c "cat > files/audio/{row["filePath"]}"');t.cleanup()
  assert hashlib.sha256(adb('exec-out','run-as',PKG,'cat','files/audio/'+row['filePath'],binary=True)).hexdigest()==digest
@@ -107,6 +117,8 @@ def capsule_export():
   except AssertionError:pass
  else:raise AssertionError('CAPSULE_EXPORT_CONTROL_NOT_FOUND')
  time.sleep(2);screenshot('capsule-export-dialog');return {'exportControlReached':True,'completedExportImport':'NOT_RUN_DOCUMENT_PICKER_REQUIRES_NEXT_STEP'}
+assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','ONLY_EMULATOR_ALLOWED'
 adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
 for name,work in [('install23_launch',install23),('synthetic_local_fixture',seed),('update23_to24_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client24_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]:case(name,work)
 print('EMULATOR_QA_COMPLETE; NO_REAL_GOOGLE_IDENTITIES',flush=True)
+if any(r['status']!='PASS' for r in results if r['case'] in ['install23_launch','synthetic_local_fixture','update23_to24_preserves_data','client24_package_isolation']): raise SystemExit(1)
