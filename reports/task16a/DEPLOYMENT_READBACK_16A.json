@@ -1,9 +1,9 @@
 {
   "task": "16-A",
-  "runId": 43036540579,
+  "runId": 43040280601,
   "conclusion": "success",
-  "sourceSha": "93d0f48af832f746dbfac98a9f3cab405ea8ff88",
-  "existingServerVersion": 5,
+  "sourceSha": "1a0cf8e5a60144075eec793767953586bfa319a2",
+  "existingServerVersion": 6,
   "stage": "DEPLOYED_STORAGE_VERIFIED",
   "sameScriptAndDeployment": true,
   "folderCountReadback": 41,
@@ -13,5 +13,23 @@
   "realGoogleCiAudienceDeniedInNormalApi": true,
   "physicalAndroid": "NOT_RUN",
   "twoRealWebAccounts": "PENDING_REAL_ACCOUNTS",
-  "evidence": "Actual trusted-main checkpoint after deployCore health + two exact bootstrap readbacks + all live negative checks. Artifact upload quota warning retained separately."
+  "evidence": "Actual trusted-main checkpoint after deployCore health + two exact bootstrap readbacks + all live negative checks. Artifact upload quota warning retained separately.",
+  "history": [
+    {
+      "version": 5,
+      "runId": 43036540579,
+      "sourceSha": "93d0f48af832f746dbfac98a9f3cab405ea8ff88",
+      "conclusion": "success"
+    },
+    {
+      "version": 6,
+      "runId": 43039898736,
+      "sourceSha": "1a0cf8e5a60144075eec793767953586bfa319a2",
+      "conclusion": "failure",
+      "checkpoint": "VERSION_VERIFIED_AND_DEPLOYMENT_CREATED",
+      "reason": "WEBAPP_CONFIGURATION_MISMATCH"
+    }
+  ],
+  "retrySameVersionVerified": true,
+  "legacyDiaryGrantProtection": "42_NODE_TESTS_AND_LOCAL_CROSS_LANGUAGE_PASS"
 }

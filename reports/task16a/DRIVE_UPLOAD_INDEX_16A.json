@@ -1,13 +1,14 @@
 {
   "folderId": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
   "task": "16-A",
+  "verifiedReports": 9,
   "files": [
     {
       "name": "RESULT_16A_AUTH.md",
       "id": "1oNgycJ45UnkYg7d6JD8qNp9cSd0C0Sme",
       "url": "https://drive.google.com/file/d/1oNgycJ45UnkYg7d6JD8qNp9cSd0C0Sme/view?usp=drivesdk",
-      "sha256": "3e3bb7c7d6061bd010ffc1904bcba417045d356617e08217b093d6e8c4a021b3",
-      "bytes": 9681,
+      "bytes": 11642,
+      "sha256": "1c299b1c0030684f45fcbce98d3dcb481ced41782c39cf45341b29684550973f",
       "metadataParentAndSizeVerified": true,
       "downloadSha256Verified": true
     },
@@ -15,8 +16,8 @@
       "name": "TESTS_16A_AUTH.md",
       "id": "1_DkJIiZpOolfHEtjae9VI9KTaBSoHlDH",
       "url": "https://drive.google.com/file/d/1_DkJIiZpOolfHEtjae9VI9KTaBSoHlDH/view?usp=drivesdk",
-      "sha256": "367dae575b8fa984d9a95f7ce60de0f07c5339ef831e52718063c5644c199849",
-      "bytes": 5829,
+      "bytes": 6493,
+      "sha256": "386db6cd6f407e59bf4a5773935233e52ad6021e901e3f549c5baaccff059b9e",
       "metadataParentAndSizeVerified": true,
       "downloadSha256Verified": true
     },
@@ -24,48 +25,56 @@
       "name": "PHONE_QA_16A.md",
       "id": "1bwgQPPAxRvM8lOtK1bYqXZLem_4SrcXY",
       "url": "https://drive.google.com/file/d/1bwgQPPAxRvM8lOtK1bYqXZLem_4SrcXY/view?usp=drivesdk",
-      "sha256": "37d9efd54cc5540ef69717583de7d4db8b626bb71fe40efb714d80cf0327dc67",
-      "bytes": 5839,
+      "bytes": 6500,
+      "sha256": "8e8ea9e053d81e404153b94127a628aa75bdca3efdeea2fc346c70f033d8dc2f",
       "metadataParentAndSizeVerified": true
     },
     {
       "name": "AUTHORIZATION_READBACK_16A.json",
       "id": "16Hkqm_kR5HJJrBpff9pFfkauXq1l3uhV",
       "url": "https://drive.google.com/file/d/16Hkqm_kR5HJJrBpff9pFfkauXq1l3uhV/view?usp=drivesdk",
-      "sha256": "e67243c1aa76855ca9a063b172cdee3e47b182b2176ebecc4206eb7a73366aa6",
       "bytes": 882,
+      "sha256": "1f0278cd7bf7b7d50c7ad7f2c2f7090ada03b3e97081139de47bfb20b1aaddb1",
       "metadataParentAndSizeVerified": true
     },
     {
       "name": "DEPLOYMENT_READBACK_16A.json",
       "id": "1aC6umMBxyRW4mv0zIPKh4lPQ7tJ0i9RI",
       "url": "https://drive.google.com/file/d/1aC6umMBxyRW4mv0zIPKh4lPQ7tJ0i9RI/view?usp=drivesdk",
-      "sha256": "8cf7a8c5691d97d9494d00a2c20ff0c22860f432852809c60cac00743ebe7f34",
-      "bytes": 677,
+      "bytes": 1231,
+      "sha256": "bfa27576d1345ced57dc0b93a7bc6370cab4ae3bd16474ef5a0d76df3f577ac1",
       "metadataParentAndSizeVerified": true
     },
     {
       "name": "FLUTTER_TEST_SUMMARY_16A.json",
       "id": "1Nqsashf7iFnehyP3A1wIFyxwa3YUVSix",
       "url": "https://drive.google.com/file/d/1Nqsashf7iFnehyP3A1wIFyxwa3YUVSix/view?usp=drivesdk",
-      "sha256": "018b77b1c936330e3efacdc1bc2d552006edc6f120636d96652ae1e0b674e2be",
       "bytes": 56,
+      "sha256": "018b77b1c936330e3efacdc1bc2d552006edc6f120636d96652ae1e0b674e2be",
       "metadataParentAndSizeVerified": true
     },
     {
       "name": "RUNTIME_HEALTH_16A.json",
       "id": "1Tx-PwZ6P3U1vKYr2D4gH15rUqVVAzYAe",
       "url": "https://drive.google.com/file/d/1Tx-PwZ6P3U1vKYr2D4gH15rUqVVAzYAe/view?usp=drivesdk",
-      "sha256": "7a44b91f072359cca691bc90b16cd892b66bd414f8f7052fe898a959c36df1d7",
-      "bytes": 739,
+      "bytes": 740,
+      "sha256": "0baafded54c688ec6c91dce8952b7ce64ec35ccb766b2edfc0b93a89070a0a5a",
       "metadataParentAndSizeVerified": true
     },
     {
       "name": "ARTIFACT_QUOTA_16A.json",
       "id": "1bVHdZpWwCLfJyc_a907tl3c0ZfGFQMPz",
       "url": "https://drive.google.com/file/d/1bVHdZpWwCLfJyc_a907tl3c0ZfGFQMPz/view?usp=drivesdk",
-      "sha256": "354515ed36554d88fd0617061bfc1f4e4a0a3272e6c1714d596948f75511f6e9",
       "bytes": 218,
+      "sha256": "354515ed36554d88fd0617061bfc1f4e4a0a3272e6c1714d596948f75511f6e9",
+      "metadataParentAndSizeVerified": true
+    },
+    {
+      "name": "APK_CANDIDATE_16A.json",
+      "id": "1BKIB6mBFCgWpZCmILI3j2WxZHTdtmJs9",
+      "url": "https://drive.google.com/file/d/1BKIB6mBFCgWpZCmILI3j2WxZHTdtmJs9/view?usp=drivesdk",
+      "bytes": 1505,
+      "sha256": "92c95113f8874afeb55399fd31559e353f64c66de420f715830e396133e069df",
       "metadataParentAndSizeVerified": true
     }
   ]

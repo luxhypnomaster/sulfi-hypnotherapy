@@ -3,11 +3,11 @@
 - [x] Сохранить дополнение, public Web ID, packages/SHA1; не повторять C0.
 - [x] Exact Web audience, единственный MASTER по verified sub; остальные CLIENT; CI identity только bootstrap/status.
 - [x] Две роли в UI, смена аккаунта/выход, локальный экспорт, происхождение официальных установок, published-only ContentLink.
-- [x] Локальные проверки: 422 Flutter, 39 Node; отдельные checkpoint-коммиты.
-- [ ] Обновить прежнее развёртывание после полного ACL readback; проверить runtime.
+- [x] Локальные проверки: 422 Flutter, 42 Node; отдельные checkpoint-коммиты.
+- [x] Обновить прежнее развёртывание version6/source1a0cf8e; полный ACL readback, health/private41/replay/live negatives PASS.
 - [ ] Два настоящих Google-аккаунта: публикация/отказ и клиентская установка; фиктивные identity не считаются.
 - [ ] Две подключённые APK после серверной приёмки и критический путь на двух телефонах.
-- [ ] Доставка APK: квота Actions artifacts превышена; без удаления исторических артефактов и загрузки APK на Drive.
+- [x] Один signed auth-candidate23 доставлен через private GitHub draft; исходная подпись/package/compiled endpoint+WebID и независимое скачивание/SHA/apksigner PASS. Квота Actions artifacts не обходится удалением истории; APK на Drive не отправлялась.
 
 # Задание 16 — активный этап
 
