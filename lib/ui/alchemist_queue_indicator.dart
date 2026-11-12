@@ -25,6 +25,7 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _lastOwner = widget.controller.catalog.api?.ownerBinding;
     widget.controller.policy.addListener(identityChanged);
     unawaited(widget.controller.cloudQueue.recover());
   }

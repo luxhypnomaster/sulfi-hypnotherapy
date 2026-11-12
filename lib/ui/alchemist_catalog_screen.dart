@@ -144,6 +144,14 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
       draft['card'] = card;
       await widget.service.save(draft);
       if (publish) {
+        if ((card['title'] as String).trim().isEmpty ||
+            (card['shortAnnotation'] as String).trim().isEmpty) {
+          throw const AlchemistFailure(
+            'Заполните название и аннотацию.',
+            422,
+            'METADATA_REQUIRED',
+          );
+        }
         await widget.service.controller.cloudQueue.enqueue(
           'alchemist_card:${draft['catalogItemId']}',
         );
@@ -339,16 +347,27 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                     ),
                   ),
               if (draft['localCover'] is Map)
-                Image.file(
-                  widget.service.controller.diary!.mediaStore!.file(
-                    DiaryMedia.fromMap(
-                      Map<String, dynamic>.from(draft['localCover']),
-                    ),
-                  )!,
-                  height: 160,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, _, _) =>
-                      const Text('Обложка недоступна — выберите другую'),
+                Builder(
+                  builder: (context) {
+                    File? file;
+                    try {
+                      file = widget.service.controller.diary?.mediaStore?.file(
+                        DiaryMedia.fromMap(
+                          Map<String, dynamic>.from(draft['localCover']),
+                        ),
+                      );
+                    } catch (_) {}
+                    return file == null
+                        ? const Text('Обложка недоступна — выберите другую')
+                        : Image.file(
+                            file,
+                            height: 160,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, _, _) => const Text(
+                              'Обложка недоступна — выберите другую',
+                            ),
+                          );
+                  },
                 ),
               if (draft['coverStatus'] != null)
                 Text('Обложка: ${draft['coverStatus']}'),

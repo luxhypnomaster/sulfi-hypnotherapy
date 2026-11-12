@@ -197,7 +197,11 @@ class AlchemistWorkQueue extends ChangeNotifier {
         final retries = <String, int>{};
         void diagnostic() {
           final event = AlchemistDiagnostics.instance.events.lastOrNull;
-          if (event == null || stop()) return;
+          if (event == null ||
+              stop() ||
+              event['taskId'] != name.split(':').last) {
+            return;
+          }
           final trace = event['traceId'] as String,
               attempt = event['attempt'] as int;
           retries[trace] = attempt > (retries[trace] ?? 0)
@@ -212,19 +216,22 @@ class AlchemistWorkQueue extends ChangeNotifier {
         AlchemistDiagnostics.instance.addListener(diagnostic);
         try {
           final value = (await _read(name))!;
-          await send(
-            name,
-            value,
-            stop,
-            (stage) {
-              // Progress is serialized below; callbacks must not overwrite a card receipt.
-              if (!stop()) _recordProgress(name, {'stage': stage});
-            },
-            (n, total) {
-              if (!stop()) {
-                _recordProgress(name, {'bytes': n, 'totalBytes': total});
-              }
-            },
+          await runZoned(
+            () => send(
+              name,
+              value,
+              stop,
+              (stage) {
+                // Progress is serialized below; callbacks must not overwrite a card receipt.
+                if (!stop()) _recordProgress(name, {'stage': stage});
+              },
+              (n, total) {
+                if (!stop()) {
+                  _recordProgress(name, {'bytes': n, 'totalBytes': total});
+                }
+              },
+            ),
+            zoneValues: {#alchemistTask: name.split(':').last},
           );
           await _progress;
           await _patch(name, {

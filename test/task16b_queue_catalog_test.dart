@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -222,11 +223,23 @@ void main() {
           d['card']['categoryIds'] = ['Старая категория'];
           await diary.mediaStore!.directory.create(recursive: true);
           final image = File('${diary.mediaStore!.directory.path}/fixture.png');
-          await image.writeAsBytes(
-            base64Decode(
-              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
-            ),
+          final recorder = ui.PictureRecorder();
+          final canvas = ui.Canvas(recorder);
+          canvas.drawRect(
+            const ui.Rect.fromLTWH(0, 0, 160, 100),
+            ui.Paint()..color = const Color(0xffa41264),
           );
+          canvas.drawCircle(
+            const ui.Offset(80, 50),
+            28,
+            ui.Paint()..color = const Color(0xffd5ff00),
+          );
+          final picture = recorder.endRecording(),
+              pngImage = await picture.toImage(160, 100);
+          final png = await pngImage.toByteData(format: ui.ImageByteFormat.png);
+          await image.writeAsBytes(png!.buffer.asUint8List());
+          pngImage.dispose();
+          picture.dispose();
           d['localCover'] = DiaryMedia(
             assetId: 'cover-fixture',
             mime: 'image/png',
@@ -255,12 +268,15 @@ void main() {
         expect(find.byType(Image), findsWidgets);
         expect(find.text('Сохранённая аннотация'), findsOneWidget);
         expect(find.text('Обложка: local'), findsOneWidget);
+        expect(find.text('Обложка недоступна — выберите другую'), findsNothing);
         await capture15(t, 'task16b-cover-local');
         await t.scrollUntilVisible(
           find.textContaining('Категории:'),
           300,
           scrollable: find.byType(Scrollable).first,
         );
+        await t.drag(find.byType(ListView).first, const Offset(0, -180));
+        await io15(t);
         await t.tap(find.textContaining('Категории:'));
         await io15(t);
         expect(find.text('Старая категория'), findsOneWidget);

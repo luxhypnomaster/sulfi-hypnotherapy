@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/session_plan.dart';
@@ -24,6 +26,9 @@ class AlchemistDiagnostics extends ChangeNotifier {
     }
     _events.add({
       'traceId': traceId,
+      if (Zone.current[#alchemistTask] case final String taskId
+          when RegExp(r'^[a-f0-9]{32}$').hasMatch(taskId))
+        'taskId': taskId,
       'operation': operation,
       'phase': phase,
       'elapsedMs': elapsedMs,
