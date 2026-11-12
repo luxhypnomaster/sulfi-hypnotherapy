@@ -9,6 +9,14 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlSerializer;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.DatabaseErrorHandler;
+import org.json.JSONObject;
 
 /** Disposable test runner only. Reads/acts on Android UI; no DB, network or role APIs. */
 public class Probe extends Instrumentation {
@@ -32,9 +40,37 @@ public class Probe extends Instrumentation {
     if(n.isEditable())all.add(n);
     for(int i=0;i<n.getChildCount();i++)fields(n.getChild(i),all);
   }
+  private String hash(File f) throws Exception {
+    if(!f.exists())return "MISSING";
+    MessageDigest d=MessageDigest.getInstance("SHA-256");
+    try(FileInputStream in=new FileInputStream(f)){byte[] b=new byte[8192];for(int n;(n=in.read(b))>0;)d.update(b,0,n);}
+    StringBuilder s=new StringBuilder();for(byte b:d.digest())s.append(String.format("%02x",b));return s.toString();
+  }
+  private JSONObject corruptionProbe() throws Exception {
+    File dir=getTargetContext().getFilesDir();
+    File source=new File(dir,"controlled-source.sqlite");
+    SQLiteDatabase db=SQLiteDatabase.openOrCreateDatabase(source,null);
+    db.execSQL("CREATE TABLE sentinel (id TEXT)");db.execSQL("INSERT INTO sentinel VALUES ('CONTROLLED_HELPER_ONLY')");db.close();
+    JSONObject result=new JSONObject();
+    for(String name:new String[]{"default_rw","guard_readonly"}){
+      File file=new File(dir,name+".sqlite");Files.copy(source.toPath(),file.toPath());
+      try(RandomAccessFile f=new RandomAccessFile(file,"rw")){f.seek(0);f.write("NOT_SQLITE_TEST!!".getBytes("UTF-8"));f.getFD().sync();}
+      String before=hash(file);String error="none";
+      try {
+        SQLiteDatabase opened=name.equals("default_rw")
+          ? SQLiteDatabase.openDatabase(file.getPath(),null,SQLiteDatabase.CREATE_IF_NECESSARY)
+          : SQLiteDatabase.openDatabase(file.getPath(),null,SQLiteDatabase.OPEN_READONLY,new DatabaseErrorHandler(){public void onCorruption(SQLiteDatabase ignored){}});
+        opened.rawQuery("PRAGMA integrity_check",null).close();opened.close();
+      }catch(Exception e){error=e.getClass().getSimpleName();}
+      JSONObject row=new JSONObject();row.put("before_sha256",before);row.put("after_sha256",hash(file));row.put("exists",file.exists());row.put("exception",error);row.put("bytesUnchanged",before.equals(hash(file)));result.put(name,row);
+    }
+    result.put("kind","DISPOSABLE_HELPER_DB_ONLY_NOT_SULFI_OR_OWNER");return result;
+  }
   @Override public void onStart() {
     Bundle result=new Bundle();
     try {
+      if("corruption".equals(args.getString("op"))){result.putString("dependency_probe",corruptionProbe().toString());finish(-1,result);return;}
+      getUiAutomation();Thread.sleep(300);
       AccessibilityNodeInfo root=null;
       for(int i=0;i<15&&root==null;i++){root=getUiAutomation().getRootInActiveWindow();if(root==null)Thread.sleep(200);}
       if(root==null)throw new IllegalStateException("NO_ACTIVE_UI_ROOT");

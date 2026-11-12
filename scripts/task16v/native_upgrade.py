@@ -32,7 +32,7 @@ def tap(n):
 def click(text,exact=False,attempts=3):
  for _ in range(attempts):
   ns=tree()
-  for n in ns:
+  for n in sorted(ns,key=lambda n: 0 if n.get('text')==text else 1):
    if (text in [n.get('text'),n.get('content-desc')]) if exact else text in label(n):
     ACTIONS.append({'action':'tap','label':text});tap(n);return
   time.sleep(.5)
@@ -106,7 +106,7 @@ def import_audio(filename,title):
   time.sleep(1)
  if not any(filename in label(n) for n in ns):
   click('Show roots',exact=True);click('Downloads',exact=True);time.sleep(1)
- click(filename);time.sleep(3);text(title);click('Сохранить',exact=True);time.sleep(1)
+ click(filename,exact=True);time.sleep(3);text(title);click('Сохранить',exact=True);time.sleep(1)
  assert any(title in label(n) for n in tree()),'IMPORTED_NOT_VISIBLE';shot('24-import-'+filename)
  return {'createdBy':'UI_system_picker','title':title}
 def record_audio():
@@ -169,6 +169,7 @@ def ui_after():
  return {'allUIAudioAndModulesVisible':True,'defaultLibraryLabels':default[:35]}
 try:
  case('install_24',install)
+ case('native_dependency_corruption',lambda:json.loads(re.search(r'INSTRUMENTATION_RESULT: dependency_probe=([^\r\n]+)',probe('corruption')).group(1)))
  adb('shell','mkdir','-p','/sdcard/Download')
  # Generate a harmless PCM WAV fixture (not the Sulfi voice), then register
  # each actual file with Android MediaScanner so DocumentsUI knows its MIME.

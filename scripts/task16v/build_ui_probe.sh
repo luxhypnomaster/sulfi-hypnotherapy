@@ -7,7 +7,7 @@ mkdir -p "$probe_root/classes" "$probe_root/dex"
 probe_tools="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
 probe_android="$(ls -d "$ANDROID_HOME"/platforms/android-* | sort -V | tail -1)/android.jar"
 javac -source 17 -target 17 -cp "$probe_android" -d "$probe_root/classes" scripts/task16v/ui_probe/Probe.java
-"$probe_tools/d8" --min-api 24 --lib "$probe_android" --output "$probe_root/dex" "$probe_root/classes/org/alchemist/p0probe/Probe.class"
+"$probe_tools/d8" --min-api 24 --lib "$probe_android" --output "$probe_root/dex" "$probe_root/classes/org/alchemist/p0probe/"*.class
 "$probe_tools/aapt" package -f -M scripts/task16v/ui_probe/AndroidManifest.xml -I "$probe_android" -F "$probe_root/unsigned.apk"
 zip -j "$probe_root/unsigned.apk" "$probe_root/dex/classes.dex"
 "$probe_tools/zipalign" -f 4 "$probe_root/unsigned.apk" "$probe_root/aligned.apk"

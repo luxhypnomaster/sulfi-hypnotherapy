@@ -1,0 +1,182 @@
+[
+  {
+    "apk": "24",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "9fc25f8c8e30a2cb18a5c50f944c59fad15d3d43f4b5ce5748295464dcbdcd1a",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes10.dex",
+        "sha256": "5c7e409e4fdf54112a29aad80bde42ef7f6d2194d380abfc3d310e5634f16d29",
+        "containsSqfliteDatabase": true
+      },
+      {
+        "name": "classes11.dex",
+        "sha256": "bf426d4c2289e5028b32ebdad9ee9757327bbae1171e48b656bfae62bc811082",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes12.dex",
+        "sha256": "5a34d03e79d113983fe793de0f65ef715de3815c1476354c3971296ff897f72f",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes13.dex",
+        "sha256": "e6b5994296c44d04b86341e09f9228f8f6230b544156c42ff72f4abe0f5634f0",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes14.dex",
+        "sha256": "c36facfe90380c4322e7de896c02eb6940876d0b481e705eea0f7dadd412a4a9",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes15.dex",
+        "sha256": "1b5bf199b4639ada7d349a80f622260de0a5f5a1326286c63117c83935e99458",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes16.dex",
+        "sha256": "308d45916aaf632aa80ff445222f4649707de220cdaaea06f298653544aa779d",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes17.dex",
+        "sha256": "2c8acad04e1abfe58d282c89937afe293aea1d3426eedf58e3c36ab82ac1c08b",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "36151f863051f24691399ad7f0ce0abf0c9efd22987599de86d353164614d276",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "1c1438774ba9199c5355a72b0953078acfa0df3d366c4e141599c6671bc74dcb",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "faae4b3e4c473afe196ee5b0c0eae54fb42d904b09b0277609a088ad9811c1ae",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "199c7f7e7520481d778d6a19237090ea1b5e7ffa93cf9fae0aa108942c8a204e",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes6.dex",
+        "sha256": "62b2bdb032ec94d4cd6b0f08922ade34698797ec4ee95faa6172cd1136dd4b19",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes7.dex",
+        "sha256": "f93fe121d3ea766e2ccce136c92edfe60de340f7d77bb9410ff0688f8827b400",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes8.dex",
+        "sha256": "e22670a2992b9efd4bd360e196f30cd5a301700744c3320c79033f8d2b069bdc",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes9.dex",
+        "sha256": "899d77972518039834d9fbc57f2e1470e3c01a7dd09a2043fd67c39bf4b6abc4",
+        "containsSqfliteDatabase": false
+      }
+    ]
+  },
+  {
+    "apk": "25",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "9fc25f8c8e30a2cb18a5c50f944c59fad15d3d43f4b5ce5748295464dcbdcd1a",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes10.dex",
+        "sha256": "5c7e409e4fdf54112a29aad80bde42ef7f6d2194d380abfc3d310e5634f16d29",
+        "containsSqfliteDatabase": true
+      },
+      {
+        "name": "classes11.dex",
+        "sha256": "bf426d4c2289e5028b32ebdad9ee9757327bbae1171e48b656bfae62bc811082",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes12.dex",
+        "sha256": "5a34d03e79d113983fe793de0f65ef715de3815c1476354c3971296ff897f72f",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes13.dex",
+        "sha256": "e6b5994296c44d04b86341e09f9228f8f6230b544156c42ff72f4abe0f5634f0",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes14.dex",
+        "sha256": "c36facfe90380c4322e7de896c02eb6940876d0b481e705eea0f7dadd412a4a9",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes15.dex",
+        "sha256": "1b5bf199b4639ada7d349a80f622260de0a5f5a1326286c63117c83935e99458",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes16.dex",
+        "sha256": "308d45916aaf632aa80ff445222f4649707de220cdaaea06f298653544aa779d",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes17.dex",
+        "sha256": "2c8acad04e1abfe58d282c89937afe293aea1d3426eedf58e3c36ab82ac1c08b",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "36151f863051f24691399ad7f0ce0abf0c9efd22987599de86d353164614d276",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "1c1438774ba9199c5355a72b0953078acfa0df3d366c4e141599c6671bc74dcb",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "faae4b3e4c473afe196ee5b0c0eae54fb42d904b09b0277609a088ad9811c1ae",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "199c7f7e7520481d778d6a19237090ea1b5e7ffa93cf9fae0aa108942c8a204e",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes6.dex",
+        "sha256": "62b2bdb032ec94d4cd6b0f08922ade34698797ec4ee95faa6172cd1136dd4b19",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes7.dex",
+        "sha256": "f93fe121d3ea766e2ccce136c92edfe60de340f7d77bb9410ff0688f8827b400",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes8.dex",
+        "sha256": "e22670a2992b9efd4bd360e196f30cd5a301700744c3320c79033f8d2b069bdc",
+        "containsSqfliteDatabase": false
+      },
+      {
+        "name": "classes9.dex",
+        "sha256": "899d77972518039834d9fbc57f2e1470e3c01a7dd09a2043fd67c39bf4b6abc4",
+        "containsSqfliteDatabase": false
+      }
+    ]
+  }
+]
