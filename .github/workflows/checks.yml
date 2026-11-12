@@ -1,11 +1,16 @@
 name: Task16V P0 read-only baseline and native UI upgrade
 on:
   workflow_dispatch:
+    inputs:
+      native_qa:
+        description: 'Create real APK24 UI materials and upgrade immutable APK25 in disposable emulator'
+        type: boolean
+        default: true
 permissions:
   contents: read
 jobs:
   native_upgrade:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    if: inputs.native_qa == true && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
     permissions:
       contents: write # GET existing private draft APK assets only; no publication
     runs-on: ubuntu-24.04
@@ -63,3 +68,30 @@ jobs:
           name: task16v-native-ui-${{ github.sha }}
           path: ${{ runner.temp }}/task16v-evidence
           retention-days: 14
+
+  regressions:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-flutter
+      - name: Python read-only diagnostics and WAL preservation
+        run: python3 -m unittest discover -s scripts/task16v -p 'test_*.py' -v
+      - run: node --test server/alchemist/test/*.test.mjs
+      - run: node --test server/google_apps_script/test/backend.test.mjs
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+      - name: Full Flutter regressions; no live server tests without explicit opt-in
+        run: |
+          set +e
+          flutter test --reporter json > "$RUNNER_TEMP/task16v-tests.jsonl" 2>&1
+          STATUS=$?
+          set -e
+          python3 scripts/flutter_test_summary.py "$RUNNER_TEMP/task16v-tests.jsonl" "$RUNNER_TEMP/task16v-test-summary.json"
+          cat "$RUNNER_TEMP/task16v-test-summary.json"
+          exit "$STATUS"
+      - run: flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client
