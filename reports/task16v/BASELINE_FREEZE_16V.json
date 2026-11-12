@@ -1,0 +1,22 @@
+{
+  "task": "16-V P0",
+  "apk24_source": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "apk25_source": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "main": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+  "apk26": "STOP_SHIP_NOT_BUILT",
+  "owner_state": "MISSING_FROM_UI_AFTER_STANDARD_UPDATE; PHYSICAL_BYTES_UNKNOWN",
+  "zip_sha256": "41a99244f4993aa63d61f24673b4984858ddc70dd5f5dff0fb1f3d2f9dae2684",
+  "schema": 9,
+  "apk25_local": [
+    {
+      "name": "sulfi-client-test-25.apk",
+      "bytes": 193781493,
+      "sha256": "c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73"
+    },
+    {
+      "name": "sulfi-master-test-25.apk",
+      "bytes": 193781457,
+      "sha256": "d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9"
+    }
+  ]
+}

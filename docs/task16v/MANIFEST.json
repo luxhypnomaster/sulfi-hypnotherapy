@@ -1,0 +1,47 @@
+{
+  "task": "16-V",
+  "date": "2026-11-12",
+  "count": 8,
+  "files": [
+    {
+      "name": "00_READ_FIRST.md",
+      "bytes": 4346,
+      "sha256": "b8f96be48d7d991145c7777b6b1d9da9697e5b8b31f8cdc558604e317798b21d"
+    },
+    {
+      "name": "01_CONTEXT_AND_BASELINES.md",
+      "bytes": 2943,
+      "sha256": "49a0deaee2be6855094fbc7c29346836afd8b6261fbe74bbc775ceb2ab32e5d3"
+    },
+    {
+      "name": "02_FORENSIC_DIAGNOSIS.md",
+      "bytes": 3904,
+      "sha256": "dc4cc2fdd710966266990947d2d1f083bc2d94897669af6a6ecb8afefdbce3c4"
+    },
+    {
+      "name": "03_REPRODUCE_AND_TEST.md",
+      "bytes": 4167,
+      "sha256": "91395db9de6a0619e9fefaee00770dbdc33931167fe12037ee9a3c7aefa22365"
+    },
+    {
+      "name": "04_FIX_AND_RECOVERY.md",
+      "bytes": 4536,
+      "sha256": "2ecb12af6040aa9a189b706130d285803d8552622ad1f5901b3c7b34d01449f2"
+    },
+    {
+      "name": "05_DELIVERY_GATES.md",
+      "bytes": 3153,
+      "sha256": "b1c55f4b4111ea60cb2a267b88e568dc0a392f58b9553eb00bdcd6091870e3f6"
+    },
+    {
+      "name": "06_OWNER_NO_TOUCH_NOTICE.md",
+      "bytes": 2092,
+      "sha256": "e3a75915cfcbce3ea6493ede1838b96684c4bd17b6a822a04d464c1fad351a55"
+    },
+    {
+      "name": "ACCEPTANCE_16V.csv",
+      "bytes": 4943,
+      "sha256": "b0c41e72b4d15c45c5a2ee83586ce24a1e0c3452643983f617f1679892f3a44c"
+    }
+  ]
+}
