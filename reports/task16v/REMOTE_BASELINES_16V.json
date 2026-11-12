@@ -1,0 +1,59 @@
+{
+  "pr45": {
+    "id": 5271929789,
+    "number": 45,
+    "state": "open",
+    "draft": true,
+    "tag_name": null,
+    "target_commitish": null,
+    "head": "24a51c5e47140131c9e8d214a60b841fa32179b5"
+  },
+  "apk24": {
+    "id": 442038688,
+    "number": null,
+    "state": null,
+    "draft": true,
+    "tag_name": "task16-qa-pair-24",
+    "target_commitish": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+    "assets": [
+      {
+        "id": 736433144,
+        "name": "sulfi-client-test-24.apk",
+        "size": 193718285,
+        "digest": "sha256:352e8d087fd6c80f632e6d150b517ff07f41f492d01322e8443ff5fa784da8f1",
+        "updated_at": "2026-11-11T18:02:36Z"
+      },
+      {
+        "id": 736432720,
+        "name": "sulfi-master-test-24.apk",
+        "size": 193718245,
+        "digest": "sha256:a242d8222af27c936f44c86b47e2cf674c3789072c3a7cac9aa4bba3afe3cda1",
+        "updated_at": "2026-11-11T18:02:26Z"
+      }
+    ]
+  },
+  "apk25": {
+    "id": 442553188,
+    "number": null,
+    "state": null,
+    "draft": true,
+    "tag_name": "task16b-qa-pair-25",
+    "target_commitish": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+    "assets": [
+      {
+        "id": 738283907,
+        "name": "sulfi-client-test-25.apk",
+        "size": 193781493,
+        "digest": "sha256:c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73",
+        "updated_at": "2026-11-12T06:02:44Z"
+      },
+      {
+        "id": 738283668,
+        "name": "sulfi-master-test-25.apk",
+        "size": 193781457,
+        "digest": "sha256:d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9",
+        "updated_at": "2026-11-12T06:02:38Z"
+      }
+    ]
+  }
+}

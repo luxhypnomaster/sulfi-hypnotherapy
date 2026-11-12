@@ -1,3 +1,9 @@
+# №16-В P0 — STOP-SHIP
+
+После штатного MASTER24→25 владелец сообщает об отсутствии треков, модулей и черновиков. Физическое состояние данных **UNKNOWN**, восстановление **BLOCKED**. Новую APK не выдавать. Никаких uninstall/clear/downgrade/import или действий с единственным телефоном.
+
+[Расследование](reports/task16v/ROOT_CAUSE_16V.md) · [Безопасный план](reports/task16v/OWNER_RECOVERY_PLAN_16V.md) · [Контрольная точка](reports/task16v/PROGRESS.md). Hotfix source-only: draft PR46, APK25 baseline012f7f69. Сервер6/main/signing/старые APK сохранены. История поставок ниже не является разрешением устанавливать их при текущем P0.
+
 # №16/16-А · две сборки для приёмки · 0.4.16+24
 
 [Новый результат](reports/task16a/continuation24/RESULT_CONTINUATION_24.md) · [147критериев](reports/task16a/continuation24/ACCEPTANCE_CURRENT_24.md) · [точные шаги Android](reports/task16a/continuation24/PHONE_QA_24.md).

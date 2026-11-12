@@ -1,0 +1,3664 @@
+diff --git a/lib/app.dart b/lib/app.dart
+index 86a9ba6..5613284 100644
+--- a/lib/app.dart
++++ b/lib/app.dart
+@@ -1,3 +1,5 @@
++import 'ui/alchemist_queue_indicator.dart';
++
+ import 'package:flutter/material.dart';
+ import 'package:flutter_localizations/flutter_localizations.dart';
+ 
+@@ -97,6 +99,11 @@ class _SulfiAppState extends State<SulfiApp> {
+                 padding: EdgeInsets.only(bottom: inset),
+                 child: Column(
+                   children: [
++                    if (controller.capsules != null)
++                      AlchemistQueueIndicator(
++                        controller: controller,
++                        navigatorKey: navigatorKey,
++                      ),
+                     Expanded(
+                       child: active
+                           ? MediaQuery.removeViewInsets(
+diff --git a/lib/main.dart b/lib/main.dart
+index 107e268..cecc000 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -235,11 +235,34 @@ class _BootstrapState extends State<_Bootstrap> {
+       if (privateCacheValid &&
+           diary.authorRepository!.invalidIds.isEmpty &&
+           diary.repository.invalidIds.isEmpty) {
+-        await diaryMedia.collect({
+-          for (final e in allDiaryEntries)
+-            for (final b in e.blocks)
+-              if (diaryMedia.file(b.media)?.path case final String path) path,
+-        });
++        final coverRows = await repository.database.query(
++          'app_settings',
++          where: 'name LIKE ?',
++          whereArgs: ['alchemist_card:%'],
++        );
++        final coverPaths = <String>{};
++        var coversValid = true;
++        for (final row in coverRows) {
++          try {
++            final cover = jsonDecode(row['value'] as String)['localCover'];
++            if (cover is Map) {
++              final file = diaryMedia.file(
++                DiaryMedia.fromMap(Map<String, dynamic>.from(cover)),
++              );
++              if (file != null) coverPaths.add(file.path);
++            }
++          } catch (_) {
++            coversValid = false;
++          }
++        }
++        if (coversValid) {
++          await diaryMedia.collect({
++            ...coverPaths,
++            for (final e in allDiaryEntries)
++              for (final b in e.blocks)
++                if (diaryMedia.file(b.media)?.path case final String path) path,
++          });
++        }
+       }
+       if (diary.api != null) unawaited(diary.sync());
+       final historyMedia = DiaryMediaStore(
+@@ -279,6 +302,7 @@ class _BootstrapState extends State<_Bootstrap> {
+         ),
+       );
+       if (mounted) setState(() => _library = library);
++      unawaited(diary.restoreSignIn());
+     } catch (_) {
+       await _player?.close();
+       _controller?.dispose();
+diff --git a/lib/services/alchemist_announcement.dart b/lib/services/alchemist_announcement.dart
+new file mode 100644
+index 0000000..d9bb104
+--- /dev/null
++++ b/lib/services/alchemist_announcement.dart
+@@ -0,0 +1,96 @@
++import '../models/content_link.dart';
++import '../models/content_revision.dart';
++import '../models/diary_entry.dart';
++import '../models/session_plan.dart';
++import 'alchemist_catalog.dart';
++
++/// Exact references remain frozen; a repeated announcement is a new diary post.
++Future<DiaryEntry> prepareCatalogAnnouncement(
++  AlchemistCatalog catalog,
++  Map<String, dynamic> draft,
++) async {
++  final diary = catalog.controller.diary!;
++  final root = ContentRevision.fromMap(
++    Map<String, dynamic>.from(draft['root']),
++  );
++  for (final e in await diary.authorRepository!.entries()) {
++    if (e.status == DiaryStatus.draft &&
++        e.extra['catalogItemId'] == draft['catalogItemId'] &&
++        e.contentLinks.any((l) => l.key.token == root.key.token)) {
++      return e;
++    }
++  }
++  final card = draft['card'] as Map;
++  final now = DateTime.now().toUtc();
++  final entry = DiaryEntry(
++    id: newId(),
++    title: card['title'] as String,
++    message: (card['shortAnnotation'] as String).isEmpty
++        ? card['title'] as String
++        : card['shortAnnotation'] as String,
++    body: (card['description'] as String).isEmpty
++        ? card['title'] as String
++        : card['description'] as String,
++    createdAt: now,
++    updatedAt: now,
++    extra: {
++      'catalogItemId': draft['catalogItemId'],
++      'catalogRevision': root.key.revision,
++      'contentLinks': [
++        ContentLink(root.key, ContentLinkAction.install).toMap(),
++      ],
++    },
++  );
++  await diary.saveDraft(entry);
++  return entry;
++}
++
++Future<void> commitAnnouncementDependency(
++  AlchemistCatalog catalog,
++  DiaryEntry entry, {
++  bool Function()? interrupted,
++  void Function(String)? onStage,
++  void Function(int, int)? progress,
++}) async {
++  final id = entry.extra['catalogItemId'];
++  if (id == null) return;
++  final draft = (await catalog.drafts())
++      .where((d) => d['catalogItemId'] == id)
++      .firstOrNull;
++  if (draft == null) {
++    throw const FormatException(
++      'Карточка материала недоступна этому аккаунту.',
++    );
++  }
++  final expected = entry.extra['catalogRevision'];
++  final root = ContentRevision.fromMap(
++    Map<String, dynamic>.from(draft['root']),
++  );
++  if (root.key.revision != expected ||
++      !entry.contentLinks.any((l) => l.key.token == root.key.token)) {
++    throw const FormatException(
++      'Состав карточки изменился. Подготовьте анонс выбранной версии заново.',
++    );
++  }
++  if (draft['card']['visibility'] != 'public') {
++    throw const FormatException(
++      'Для анонса читателям явно выберите «Для всех читателей» в карточке материала.',
++    );
++  }
++  if ((draft['card']['shortAnnotation'] as String).trim().isEmpty) {
++    draft['card']['shortAnnotation'] = entry.message;
++    await catalog.save(draft);
++  }
++  await catalog.publish(
++    draft,
++    interrupted: interrupted,
++    onStage: onStage,
++    progress: progress,
++  );
++  if (draft['publishedRevision'] != expected ||
++      draft['status'] != 'published') {
++    throw const FormatException(
++      'Точная версия материала не подтверждена. Анонс сохранён на телефоне.',
++    );
++  }
++}
+diff --git a/lib/services/alchemist_api.dart b/lib/services/alchemist_api.dart
+index bc2d097..64fd414 100644
+--- a/lib/services/alchemist_api.dart
++++ b/lib/services/alchemist_api.dart
+@@ -1,57 +1,207 @@
+-import 'dart:convert';
+ import 'dart:async';
+-import 'dart:io';
++import 'dart:convert';
+ import 'dart:math';
+ 
+-import 'apps_script_diary_transport.dart';
++import 'package:crypto/crypto.dart';
++
++import 'alchemist_diagnostics.dart';
++import 'alchemist_errors.dart';
+ import 'alchemist_http.dart';
++import 'apps_script_diary_transport.dart';
+ import 'diary_api.dart';
+ 
+-class AlchemistApiException extends DiaryApiException {
++class AlchemistApiException extends AlchemistFailure {
+   const AlchemistApiException(
+     super.message,
+-    this.status,
+-    this.code, [
+-    super.kind,
++    super.status,
++    super.code, [
++    super.kind = DiaryFailure.network,
++    super.retryable = false,
+   ]);
+-  final int status;
+-  final String code;
+ }
+ 
+-/// New-project protocol. Legacy diary transport and credentials are untouched.
++/// Same GAS6 envelope and redirect policy; retries keep the original account.
+ class AlchemistApi {
+   AlchemistApi(
+     this.endpoint, {
+     DiaryRequest? connection,
+     this.credential,
+     this.identityScope,
++    this.identityEpoch,
++    this.onUnauthorized,
++    this.onAuthenticationFailure,
+     this.maxAttempts = 3,
+-  }) : connection = connection ?? const AlchemistHttp().request {
++    Future<void> Function(Duration)? delay,
++    AlchemistDiagnostics? diagnostics,
++    this.callTimeout = const Duration(minutes: 3),
++  }) : connection = connection ?? const AlchemistHttp().request,
++       delay = delay ?? Future<void>.delayed,
++       diagnostics = diagnostics ?? AlchemistDiagnostics.instance {
+     if (!AppsScriptDiaryTransport.supports(endpoint)) {
+       throw const FormatException('Требуется проверенный адрес сервера /exec');
+     }
+   }
+   final String Function()? identityScope;
++  final int Function()? identityEpoch;
+   String? get currentIdentityScope => identityScope?.call();
++  String? get ownerBinding =>
++      currentIdentityScope == null || currentIdentityScope == 'public'
++      ? null
++      : sha256
++            .convert(utf8.encode('$endpoint|$currentIdentityScope'))
++            .toString();
+   final int maxAttempts;
+   final Uri endpoint;
+   final DiaryRequest connection;
+   final Future<String?> Function()? credential;
++  final Future<bool> Function()? onUnauthorized;
++  final void Function()? onAuthenticationFailure;
++  final Future<void> Function(Duration) delay;
++  final AlchemistDiagnostics diagnostics;
++  final Duration callTimeout;
++
++  static bool repeatable(String op, Map<String, dynamic> p) =>
++      const {
++            'media.beginUpload',
++            'catalog.createDraft',
++            'catalog.patchDraft',
++            'catalog.updateMetadata',
++            'catalog.publish',
++            'catalog.withdraw',
++            'catalog.archive',
++            'catalog.restore',
++            'entry.createDraft',
++            'entry.patchDraft',
++            'entry.updateMetadata',
++            'entry.publish',
++            'entry.unpublish',
++            'entry.archive',
++            'entry.restore',
++            'reads.merge',
++          }.contains(op) &&
++          p['requestId'] is String &&
++          (p['requestId'] as String).isNotEmpty ||
++      const {
++        'auth.whoami',
++        'feed.list',
++        'entry.get',
++        'catalog.list',
++        'catalog.get',
++        'catalog.getRevision',
++        'catalog.resolveReference',
++        'catalog.changes',
++        'catalog.checkUpdates',
++        'content.getRevision',
++        'media.getDescriptor',
++        'media.beginDownload',
++        'media.downloadChunk',
++        'media.metadata',
++        'system.authorizationStatus',
++      }.contains(op) ||
++      op == 'content.registerManifest' && p['revision'] is Map ||
++      const {
++            'media.uploadChunk',
++            'media.commitUpload',
++            'media.abortUpload',
++          }.contains(op) &&
++          p['sessionId'] is String;
++
+   Future<Map<String, dynamic>> call(
+     String operation,
+     Map<String, dynamic> parameters,
+   ) async {
++    final originalScope = identityScope?.call(),
++        originalEpoch = identityEpoch?.call(),
++        trace = diagnostics.begin();
++    final watch = Stopwatch()..start();
++    var refreshed = false;
++    void checkScope() {
++      if (originalScope != identityScope?.call() ||
++          originalEpoch != identityEpoch?.call()) {
++        throw const AlchemistApiException(
++          'Аккаунт изменился. Задача приостановлена.',
++          401,
++          'ACCOUNT_CHANGED',
++          DiaryFailure.authorization,
++        );
++      }
++    }
++
+     for (var attempt = 0; ; attempt++) {
++      checkScope();
++      final left = callTimeout - watch.elapsed;
++      if (left <= Duration.zero) {
++        throw AlchemistFailure.from(TimeoutException('deadline'));
++      }
+       try {
+-        return await _once(operation, parameters);
+-      } catch (e) {
+-        final retryable =
+-            e is SocketException ||
+-            e is TimeoutException ||
+-            e is AlchemistApiException && [429, 503].contains(e.status);
+-        if (!retryable || attempt + 1 >= maxAttempts) rethrow;
+-        await Future<void>.delayed(
+-          Duration(milliseconds: (250 << attempt) + Random().nextInt(200)),
++        final result = await _once(
++          operation,
++          parameters,
++          trace,
++          attempt,
++          checkScope,
++        ).timeout(left);
++        diagnostics.record(
++          trace,
++          operation,
++          'complete',
++          watch.elapsedMilliseconds,
++          attempt: attempt,
++          status: 200,
++        );
++        return result;
++      } catch (error) {
++        checkScope();
++        final e = AlchemistFailure.from(error);
++        diagnostics.record(
++          trace,
++          operation,
++          'error',
++          watch.elapsedMilliseconds,
++          attempt: attempt,
++          status: e.status,
++          code: e.code,
++        );
++        if (e.status == 401) onAuthenticationFailure?.call();
++        if (!refreshed &&
++            e.status == 401 &&
++            onUnauthorized != null &&
++            !const {
++              'IDENTITY_REVOKED',
++              'TOKEN_AUDIENCE_INVALID',
++              'ACCOUNT_CHANGED',
++            }.contains(e.code)) {
++          refreshed = true;
++          if (await onUnauthorized!()) {
++            checkScope();
++            continue;
++          }
++        }
++        if (!e.retryable ||
++            !repeatable(operation, parameters) ||
++            attempt + 1 >= maxAttempts ||
++            watch.elapsed >= callTimeout) {
++          if (error is DiaryApiException && error is! AlchemistFailure) rethrow;
++          throw AlchemistApiException(
++            e.message,
++            e.status,
++            e.code,
++            e.kind,
++            e.retryable,
++          );
++        }
++        diagnostics.record(
++          trace,
++          operation,
++          'retry',
++          watch.elapsedMilliseconds,
++          attempt: attempt + 1,
++          code: e.code,
++        );
++        await delay(
++          Duration(
++            milliseconds: (250 << min(attempt, 4)) + Random().nextInt(200),
++          ),
+         );
+       }
+     }
+@@ -60,19 +210,20 @@ class AlchemistApi {
+   Future<Map<String, dynamic>> _once(
+     String operation,
+     Map<String, dynamic> parameters,
++    String trace,
++    int attempt,
++    void Function() checkScope,
+   ) async {
+-    final scope = identityScope?.call();
+-    void checkScope() {
+-      if (scope != identityScope?.call()) {
+-        throw const DiaryApiException(
+-          'Аккаунт изменился. Операция отменена.',
+-          DiaryFailure.authorization,
+-        );
+-      }
+-    }
+-
++    final clock = Stopwatch()..start();
+     final token = await credential?.call();
+     checkScope();
++    diagnostics.record(
++      trace,
++      operation,
++      'credential',
++      clock.elapsedMilliseconds,
++      attempt: attempt,
++    );
+     var response = await connection(
+       'POST',
+       endpoint,
+@@ -81,10 +232,19 @@ class AlchemistApi {
+         'version': 1,
+         'operation': operation,
+         'parameters': parameters,
++        'traceId': trace,
+         'credential': ?token,
+       }),
+     );
+     checkScope();
++    diagnostics.record(
++      trace,
++      operation,
++      'response',
++      clock.elapsedMilliseconds,
++      attempt: attempt,
++      status: response.status,
++    );
+     for (
+       var count = 0;
+       response.status == 302 || response.status == 303;
+@@ -100,17 +260,22 @@ class AlchemistApi {
+           target.hasFragment) {
+         throw const DiaryApiException('Небезопасное перенаправление сервера');
+       }
+-      // Never forward the POST payload or credential to the redirect host.
+       response = await connection('GET', target, {
+         'Accept': 'application/json',
+       }, null);
+       checkScope();
+     }
+     if (response.status != 200) {
+-      throw AlchemistApiException(
+-        'Сервер недоступен. Локальные данные сохранены.',
++      final e = AlchemistFailure.server(
+         response.status,
+-        'HTTP_SERVER_UNAVAILABLE',
++        'HTTP_${response.status}',
++      );
++      throw AlchemistApiException(
++        e.message,
++        e.status,
++        e.code,
++        e.kind,
++        e.retryable,
+       );
+     }
+     final mime = response.headers['content-type'];
+@@ -134,20 +299,17 @@ class AlchemistApi {
+       throw const DiaryApiException('Некорректный протокол сервера');
+     }
+     if (value['ok'] != true || status >= 300) {
+-      final rawCode = value['error'] is Map ? value['error']['code'] : null;
+-      final code =
+-          rawCode is String && RegExp(r'^[A-Z0-9_]{1,64}$').hasMatch(rawCode)
+-          ? rawCode
++      final raw = value['error'] is Map ? value['error']['code'] : null;
++      final code = raw is String && RegExp(r'^[A-Z0-9_]{1,64}$').hasMatch(raw)
++          ? raw
+           : 'REQUEST_REJECTED';
++      final e = AlchemistFailure.server(status, code);
+       throw AlchemistApiException(
+-        'Сервер отклонил запрос: $code',
+-        status,
+-        code,
+-        status == 401 || status == 403
+-            ? DiaryFailure.authorization
+-            : status == 409 || status == 412
+-            ? DiaryFailure.conflict
+-            : DiaryFailure.network,
++        e.message,
++        e.status,
++        e.code,
++        e.kind,
++        e.retryable,
+       );
+     }
+     if (value['result'] is! Map) {
+diff --git a/lib/services/alchemist_catalog.dart b/lib/services/alchemist_catalog.dart
+index 5ebe0ac..dc7a51a 100644
+--- a/lib/services/alchemist_catalog.dart
++++ b/lib/services/alchemist_catalog.dart
+@@ -1,3 +1,7 @@
++import 'dart:async';
++
++import 'alchemist_errors.dart';
++import '../models/diary_entry.dart';
+ import 'alchemist_content_upload.dart';
+ 
+ import 'dart:io';
+@@ -23,30 +27,88 @@ class AlchemistCatalog {
+   final SessionController controller;
+   final AlchemistApi? api;
+   Database get db => controller.capsules!.database;
+-  Future<List<Map<String, dynamic>>> drafts() async =>
+-      controller.policy.serverIdentityRequired && !controller.policy.isAuthor
+-      ? <Map<String, dynamic>>[]
+-      : (await db.query(
+-              'app_settings',
+-              where: 'name LIKE ?',
+-              whereArgs: ['alchemist_card:%'],
+-            ))
+-            .map(
+-              (r) =>
+-                  Map<String, dynamic>.from(jsonDecode(r['value'] as String)),
+-            )
+-            .toList();
++  Future<List<Map<String, dynamic>>> drafts() async {
++    if (controller.policy.serverIdentityRequired &&
++        !controller.policy.isAuthor) {
++      return [];
++    }
++    final owner = api?.ownerBinding;
++    return (await db.query(
++          'app_settings',
++          where: 'name LIKE ?',
++          whereArgs: ['alchemist_card:%'],
++        ))
++        .map((r) => Map<String, dynamic>.from(jsonDecode(r['value'] as String)))
++        .where((d) => d['ownerBinding'] == null || d['ownerBinding'] == owner)
++        .toList();
++  }
++
++  final _preparing = <String, Future<Map<String, dynamic>>>{};
++  Future<void> _store(Map<String, dynamic> card) async {
++    await db.transaction((tx) async {
++      final name = 'alchemist_card:${card['catalogItemId']}';
++      final rows = await tx.query(
++        'app_settings',
++        where: 'name=?',
++        whereArgs: [name],
++      );
++      if (rows.isNotEmpty) {
++        final previous = jsonDecode(rows.single['value'] as String);
++        if (previous['_work'] != null) card['_work'] = previous['_work'];
++      }
++      await tx.insert('app_settings', {
++        'name': name,
++        'value': jsonEncode(card),
++      }, conflictAlgorithm: ConflictAlgorithm.replace);
++    });
++  }
++
+   Future<void> save(Map<String, dynamic> card) async {
+     if (!controller.library.policy.isAuthor) {
+       throw const FormatException('Авторский режим недоступен');
+     }
+-    await db.insert('app_settings', {
+-      'name': 'alchemist_card:${card['catalogItemId']}',
+-      'value': jsonEncode(card),
+-    }, conflictAlgorithm: ConflictAlgorithm.replace);
++    final owner = api?.ownerBinding;
++    if (card['ownerBinding'] != null && card['ownerBinding'] != owner) {
++      throw const AlchemistFailure(
++        'Задача принадлежит другому аккаунту.',
++        401,
++        'ACCOUNT_CHANGED',
++      );
++    }
++    if (owner != null) card['ownerBinding'] = owner;
++    await _store(card);
+   }
+ 
+-  Future<Map<String, dynamic>> prepare(ContentRevision root) async {
++  Future<Map<String, dynamic>> prepare(
++    ContentRevision root, {
++    bool reuse = true,
++  }) {
++    final key = '${api?.ownerBinding}:${root.key.token}';
++    if (!reuse) return _prepare(root, reuse: false);
++    return _preparing.putIfAbsent(
++      key,
++      () => _prepare(root, reuse: true).whenComplete(() {
++        _preparing.remove(key);
++      }),
++    );
++  }
++
++  Future<Map<String, dynamic>> _prepare(
++    ContentRevision root, {
++    required bool reuse,
++  }) async {
++    if (reuse) {
++      for (final d in await drafts()) {
++        if (d['type'] == root.key.content.type.name &&
++            d['root'] != null &&
++            ContentRevision.fromMap(Map<String, dynamic>.from(d['root']))
++                    .key
++                    .token ==
++                root.key.token) {
++          return d;
++        }
++      }
++    }
+     final title = root.payload['title'] ?? root.payload['name'] ?? 'Материал';
+     final draft = <String, dynamic>{
+       'catalogItemId': newId(),
+@@ -57,8 +119,8 @@ class AlchemistCatalog {
+       'publishRequestId': newId(),
+       'card': {
+         'title': title,
+-        'shortAnnotation': '',
+-        'description': '',
++        'shortAnnotation': root.payload['description'] ?? '',
++        'description': root.payload['description'] ?? '',
+         'categoryIds': <String>[],
+         'tags': <String>[],
+         'language': 'ru',
+@@ -83,12 +145,12 @@ class AlchemistCatalog {
+       roots.map((r) => r.key).toList(),
+       await LocalCatalogSource.currentIndex(controller.capsules!),
+     );
+-    final draft = await prepare(roots.first);
++    final draft = await prepare(roots.first, reuse: false);
+     draft['type'] = 'collection';
+     draft['logicalId'] = newId();
+     draft['roots'] = roots.map((r) => r.toMap()).toList();
+     draft['card']['title'] = title;
+-    await save(draft);
++    await _store(draft);
+     return draft;
+   }
+ 
+@@ -130,7 +192,7 @@ class AlchemistCatalog {
+       if ((await sha256.bind(target.openRead()).first).toString() != hash) {
+         throw const FormatException('ZIP изменился');
+       }
+-      final draft = await prepare(roots.first);
++      final draft = await prepare(roots.first, reuse: false);
+       draft['type'] = 'package';
+       draft['logicalId'] = newId();
+       draft['zipPath'] = target.path;
+@@ -138,7 +200,7 @@ class AlchemistCatalog {
+       draft['packageBytes'] = await target.length();
+       draft['packageRoots'] = roots.map((r) => r.key.toMap()).toList();
+       draft['card']['title'] = p.basenameWithoutExtension(source.path);
+-      await save(draft);
++      await _store(draft);
+       return draft;
+     } finally {
+       await local.close();
+@@ -180,7 +242,7 @@ class AlchemistCatalog {
+     final draft = await prepare(root);
+     draft['type'] = 'session';
+     draft['embeddedRoot'] = true;
+-    await save(draft);
++    await _store(draft);
+     return draft;
+   }
+ 
+@@ -250,7 +312,7 @@ class AlchemistCatalog {
+           'remoteStatus': item['publicationState'],
+           if (existing == null || changed) 'remoteOnly': true,
+         };
+-        await save(draft);
++        await _store(draft);
+         count++;
+       }
+       cursor = page['nextPage'];
+@@ -284,7 +346,7 @@ class AlchemistCatalog {
+     }
+     draft['status'] = 'published';
+     draft.remove('error');
+-    await save(draft);
++    await _store(draft);
+   }
+ 
+   AlchemistApi get remote =>
+@@ -297,16 +359,32 @@ class AlchemistCatalog {
+     String operation,
+     Map<String, dynamic> parameters,
+   ) async {
++    if (draft['ownerBinding'] != null &&
++        draft['ownerBinding'] != remote.ownerBinding) {
++      throw const AlchemistFailure(
++        'Аккаунт изменился.',
++        401,
++        'ACCOUNT_CHANGED',
++      );
++    }
+     final pending = <String, dynamic>{
+       'operation': operation,
+       'parameters': {'requestId': newId(), ...parameters},
+     };
+     draft['pending'] = pending;
+-    await save(draft);
++    await _store(draft);
+     return _recover(draft);
+   }
+ 
+   Future<Map<String, dynamic>> _recover(Map<String, dynamic> draft) async {
++    if (draft['ownerBinding'] != null &&
++        draft['ownerBinding'] != remote.ownerBinding) {
++      throw const AlchemistFailure(
++        'Аккаунт изменился.',
++        401,
++        'ACCOUNT_CHANGED',
++      );
++    }
+     final pending = Map<String, dynamic>.from(draft['pending']);
+     final result = await remote.call(
+       pending['operation'],
+@@ -323,7 +401,7 @@ class AlchemistCatalog {
+       draft['remoteRevision'] = result['immutableRevisionId'];
+     }
+     draft.remove('pending');
+-    await save(draft);
++    await _store(draft);
+     return result;
+   }
+ 
+@@ -337,7 +415,7 @@ class AlchemistCatalog {
+       'ifMatch': draft['etag'],
+     });
+     draft['status'] = result['publicationState'];
+-    await save(draft);
++    await _store(draft);
+   }
+ 
+   Future<void> publish(
+@@ -349,6 +427,20 @@ class AlchemistCatalog {
+     if (!controller.library.policy.isAuthor) {
+       throw const FormatException('Авторский режим недоступен');
+     }
++    await save(draft);
++    final owner = remote.ownerBinding, epoch = remote.identityEpoch?.call();
++    void checkOwner() {
++      if (owner != remote.ownerBinding ||
++          epoch != remote.identityEpoch?.call() ||
++          interrupted?.call() == true) {
++        throw const AlchemistFailure(
++          'Задача приостановлена.',
++          401,
++          'ACCOUNT_CHANGED',
++        );
++      }
++    }
++
+     final card = Map<String, dynamic>.from(draft['card'])
+       ..putIfAbsent('coverAssetId', () => null);
+     draft['card'] = card;
+@@ -357,15 +449,47 @@ class AlchemistCatalog {
+       throw const FormatException('Заполните название и аннотацию');
+     }
+     draft['status'] = 'uploading';
+-    await save(draft);
++    await _store(draft);
+     try {
+       if (interrupted?.call() == true) {
+         throw const FormatException('Публикация приостановлена');
+       }
++      checkOwner();
++      final cover = draft['localCover'];
++      if (cover is Map) {
++        final m = DiaryMedia.fromMap(Map<String, dynamic>.from(cover));
++        final file = controller.diary?.mediaStore?.file(m);
++        if (file == null || !await file.exists()) {
++          throw const FormatException(
++            'Выбранная обложка недоступна. Выберите другую или явно уберите её.',
++          );
++        }
++        draft['coverStatus'] = 'transferring';
++        await _store(draft);
++        final receipt = await AlchemistMediaTransfer(db, remote).upload(
++          file,
++          logicalId: m.assetId,
++          revisionId: m.hash!,
++          mime: m.mime,
++          expectedHash: m.hash,
++          interrupted: () =>
++              interrupted?.call() == true ||
++              owner != remote.ownerBinding ||
++              epoch != remote.identityEpoch?.call(),
++          onStage: onStage,
++          taskId: draft['catalogItemId'],
++        );
++        checkOwner();
++        card['coverAssetId'] = receipt['assetRevisionId'];
++        draft['card'] = card;
++        draft['coverStatus'] = 'verified';
++        await _store(draft);
++      }
+       if (draft['pending'] != null) await _recover(draft);
++      checkOwner();
+       if (draft['remoteOnly'] == true) {
+         draft['status'] = 'publishing';
+-        await save(draft);
++        await _store(draft);
+         onStage?.call('publishing');
+         await _publishRemoteMetadata(draft, card);
+         return;
+@@ -388,7 +512,14 @@ class AlchemistCatalog {
+             mime: 'application/zip',
+             expectedHash: contentRevision,
+             progress: progress,
++            interrupted: () =>
++                interrupted?.call() == true ||
++                owner != remote.ownerBinding ||
++                epoch != remote.identityEpoch?.call(),
++            onStage: onStage,
++            taskId: draft['catalogItemId'],
+           );
++          checkOwner();
+           final parameters = <String, dynamic>{
+             'catalogItemId': draft['catalogItemId'],
+             'card': card,
+@@ -425,9 +556,15 @@ class AlchemistCatalog {
+             remote,
+             roots.map((r) => r.key).toList(),
+             embedded: draft['embeddedRoot'] == true ? [root] : [],
+-            interrupted: interrupted,
++            interrupted: () =>
++                interrupted?.call() == true ||
++                owner != remote.ownerBinding ||
++                epoch != remote.identityEpoch?.call(),
++            onStage: onStage,
++            taskId: draft['catalogItemId'],
+             progress: progress,
+           );
++          checkOwner();
+           final parameters = <String, dynamic>{
+             'catalogItemId': draft['catalogItemId'],
+             'card': card,
+@@ -465,7 +602,7 @@ class AlchemistCatalog {
+         throw const FormatException('Публикация приостановлена');
+       }
+       draft['status'] = 'publishing';
+-      await save(draft);
++      await _store(draft);
+       onStage?.call('publishing');
+       if (draft['remoteStatus'] != 'published' ||
+           draft['publishedRevision'] != contentRevision) {
+@@ -484,13 +621,21 @@ class AlchemistCatalog {
+         );
+       }
+       draft['publishedRevision'] = contentRevision;
++      checkOwner();
+       draft['status'] = 'published';
++      if (draft['localCover'] != null) draft['coverStatus'] = 'published';
+       draft.remove('error');
+-      await save(draft);
++      await _store(draft);
+     } catch (e) {
+       draft['status'] = interrupted?.call() == true ? 'paused' : 'failed';
+-      draft['error'] = e.toString();
+-      await save(draft);
++      if (draft['localCover'] != null &&
++          !const ['verified', 'published'].contains(draft['coverStatus'])) {
++        draft['coverStatus'] = 'failed';
++      }
++      final failure = AlchemistFailure.from(e);
++      draft['error'] = failure.message;
++      draft['errorCode'] = failure.code;
++      await _store(draft);
+       rethrow;
+     }
+   }
+diff --git a/lib/services/alchemist_content_upload.dart b/lib/services/alchemist_content_upload.dart
+index 0ff6050..88aab80 100644
+--- a/lib/services/alchemist_content_upload.dart
++++ b/lib/services/alchemist_content_upload.dart
+@@ -12,7 +12,15 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
+   List<ContentRevision> embedded = const [],
+   bool Function()? interrupted,
+   void Function(int, int)? progress,
++  void Function(String)? onStage,
++  String? taskId,
+ }) async {
++  final originalOwner = api.ownerBinding,
++      originalEpoch = api.identityEpoch?.call();
++  bool stopped() =>
++      interrupted?.call() == true ||
++      originalOwner != api.ownerBinding ||
++      originalEpoch != api.identityEpoch?.call();
+   final index = [
+     ...await LocalCatalogSource.currentIndex(service),
+     ...embedded,
+@@ -20,8 +28,12 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
+   final closure = resolveContentRoots(roots, index),
+       refs = <String, Map<String, dynamic>>{};
+   final assets = await service.library.repository.list();
++  final totalBytes = closure.revisions
++      .where((r) => r.key.content.type == ContentType.track)
++      .fold<int>(0, (n, r) => n + (r.payload['fileSizeBytes'] as int));
++  var acknowledged = 0;
+   for (final r in closure.revisions) {
+-    if (interrupted?.call() == true) {
++    if (stopped()) {
+       throw const FormatException('Передача приостановлена');
+     }
+     if (r.key.content.type == ContentType.track) {
+@@ -40,10 +52,17 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
+         revisionId: r.key.revision,
+         mime: mime,
+         expectedHash: r.payload['contentHash'],
+-        interrupted: interrupted,
+-        progress: progress,
++        interrupted: stopped,
++        progress: (n, _) => progress?.call(acknowledged + n, totalBytes),
++        onStage: onStage,
++        taskId: taskId,
+       );
++      acknowledged += asset.fileSizeBytes;
+     }
++    if (stopped()) {
++      throw const FormatException('Передача приостановлена');
++    }
++    onStage?.call('manifest_registering');
+     final body = {
+       'type': r.key.content.type.name,
+       'logicalId': r.key.content.id,
+diff --git a/lib/services/alchemist_diagnostics.dart b/lib/services/alchemist_diagnostics.dart
+new file mode 100644
+index 0000000..5f04627
+--- /dev/null
++++ b/lib/services/alchemist_diagnostics.dart
+@@ -0,0 +1,43 @@
++import 'dart:async';
++
++import 'package:flutter/foundation.dart';
++
++import '../models/session_plan.dart';
++
++/// Bounded RAM-only measurements; no URL, parameters, claims, title or token.
++class AlchemistDiagnostics extends ChangeNotifier {
++  static final instance = AlchemistDiagnostics();
++  final List<Map<String, Object?>> _events = [];
++  List<Map<String, Object?>> get events => List.unmodifiable(_events);
++  String begin() => newId();
++  void record(
++    String traceId,
++    String operation,
++    String phase,
++    int elapsedMs, {
++    int attempt = 0,
++    int? status,
++    String? code,
++  }) {
++    if (!RegExp(r'^[a-f0-9]{32}$').hasMatch(traceId) ||
++        !RegExp(r'^[a-zA-Z]+\.[a-zA-Z]+$').hasMatch(operation) ||
++        !RegExp(r'^[a-z_]{1,32}$').hasMatch(phase)) {
++      return;
++    }
++    _events.add({
++      'traceId': traceId,
++      if (Zone.current[#alchemistTask] case final String taskId
++          when RegExp(r'^[a-f0-9]{32}$').hasMatch(taskId))
++        'taskId': taskId,
++      'operation': operation,
++      'phase': phase,
++      'elapsedMs': elapsedMs,
++      'attempt': attempt,
++      'status': ?status,
++      if (code != null && RegExp(r'^[A-Z0-9_]{1,80}$').hasMatch(code))
++        'code': code,
++    });
++    if (_events.length > 200) _events.removeAt(0);
++    notifyListeners();
++  }
++}
+diff --git a/lib/services/alchemist_diary_api.dart b/lib/services/alchemist_diary_api.dart
+index dc3209a..7cc4c21 100644
+--- a/lib/services/alchemist_diary_api.dart
++++ b/lib/services/alchemist_diary_api.dart
+@@ -3,6 +3,11 @@ import 'diary_read_state.dart';
+ import 'dart:convert';
+ import 'dart:io';
+ 
++import 'package:crypto/crypto.dart';
++
++import 'diary_identity.dart';
++import 'alchemist_errors.dart';
++
+ import 'package:sqflite/sqflite.dart';
+ 
+ import '../models/diary_entry.dart';
+@@ -24,17 +29,74 @@ class AlchemistDiaryApi extends DiaryApi {
+     required this.capsules,
+     required this.media,
+     this.connection,
+-  });
++    DateTime Function()? clock,
++  }) : clock = clock ?? DateTime.now;
+   final CapsuleService capsules;
+   final DiaryMediaStore media;
+   final DiaryRequest? connection;
+   String? _token;
++  bool _identityRejected = false;
++  @override
++  void rejectIdentity() {
++    _identityRejected = true;
++  }
++
++  Future<void> Function(DiaryEntry)? beforePublication;
++  bool Function()? workInterrupted;
++  void Function(String)? workStage;
++  void Function(int, int)? workProgress;
+   String? _queueError;
+   @override
+   String? get queueError => _queueError;
+   String? _subject;
+   String? _verifiedRole;
+   DateTime? _identityExpiresAt;
++  DiaryIdentity? _identity;
++  Future<bool>? _refreshing;
++  final DateTime Function() clock;
++  @override
++  void bindIdentity(DiaryIdentity identity) => _identity = identity;
++  @override
++  Future<bool> restoreIdentity() =>
++      _refreshing ??= _restore().whenComplete(() => _refreshing = null);
++  Future<bool> _restore({bool force = false}) async {
++    if (!force &&
++        readerAuthenticated &&
++        _identityExpiresAt!.isAfter(
++          clock().toUtc().add(const Duration(minutes: 1)),
++        )) {
++      return true;
++    }
++    final identity = _identity;
++    if (identity is! RestorableDiaryIdentity) return false;
++    final generation = _accountGeneration,
++        subject = _subject,
++        previous = _token;
++    final result = await (identity as RestorableDiaryIdentity).restore();
++    if (generation != _accountGeneration) {
++      throw const AlchemistFailure(
++        'Аккаунт изменился. Передача приостановлена.',
++        401,
++        'ACCOUNT_CHANGED',
++        DiaryFailure.authorization,
++      );
++    }
++    if (result == null || force && result.idToken == previous) return false;
++    await _verifyIdentity(result.idToken, expectedSubject: subject);
++    return true;
++  }
++
++  Future<bool> _forceRefresh() =>
++      _refreshing ??= _restore(force: true)
++          .whenComplete(() => _refreshing = null);
++  @override
++  Future<void> refreshIdentity() async {
++    await verifiedIdentityToken();
++  }
++
++  @override
++  Future<bool> refreshRejectedIdentity() => _forceRefresh();
++
+   @override
+   bool get supportsServerIdentity => true;
+   @override
+@@ -43,10 +105,17 @@ class AlchemistDiaryApi extends DiaryApi {
+   DateTime? get identityExpiresAt => _identityExpiresAt;
+   @override
+   bool get readerAuthenticated =>
++      !_identityRejected &&
+       _token != null &&
+-      (_identityExpiresAt?.isAfter(DateTime.now().toUtc()) ?? false);
++      (_identityExpiresAt?.isAfter(clock().toUtc()) ?? false);
+   @override
+   Future<String?> verifiedIdentityToken() async {
++    if (_identityExpiresAt == null ||
++        !_identityExpiresAt!.isAfter(
++          clock().toUtc().add(const Duration(minutes: 1)),
++        )) {
++      if (await restoreIdentity()) return _token;
++    }
+     if (!readerAuthenticated) {
+       throw const DiaryApiException(
+         'Войдите через Google заново',
+@@ -58,10 +127,17 @@ class AlchemistDiaryApi extends DiaryApi {
+ 
+   int _accountGeneration = 0;
+   @override
+-  String get readerScope => _subject == null ? 'public' : 'google:$_subject';
++  int get identityGeneration => _accountGeneration;
++  @override
++  String get readerScope => _subject == null
++      ? 'public'
++      : 'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:$_subject'))}';
+   @override
+   Future<void> authenticateReader(String token) async {
+-    clearSession();
++    await _verifyIdentity(token);
++  }
++
++  Future<void> _verifyIdentity(String token, {String? expectedSubject}) async {
+     final generation = _accountGeneration;
+     final identity = await AlchemistApi(
+       base,
+@@ -92,13 +168,25 @@ class AlchemistDiaryApi extends DiaryApi {
+       expires * 1000,
+       isUtc: true,
+     );
+-    if (!until.isAfter(DateTime.now().toUtc())) {
++    if (!until.isAfter(clock().toUtc())) {
+       throw const DiaryApiException('Вход истёк', DiaryFailure.authorization);
+     }
++    if (expectedSubject != null && identity['subject'] != expectedSubject) {
++      throw const AlchemistFailure(
++        'Google выбрал другой аккаунт. Войдите явно перед продолжением.',
++        401,
++        'ACCOUNT_CHANGED',
++        DiaryFailure.authorization,
++      );
++    }
++    if (_subject != null && _subject != identity['subject']) {
++      _accountGeneration++;
++    }
+     _subject = identity['subject'] as String;
+     _verifiedRole = role;
+     _identityExpiresAt = until;
+     _token = token;
++    _identityRejected = false;
+   }
+ 
+   Database get db => capsules.database;
+@@ -107,8 +195,10 @@ class AlchemistDiaryApi extends DiaryApi {
+     base,
+     connection: connection,
+     identityScope: () => readerScope,
+-    credential: () async =>
+-        _token ?? (throw const DiaryApiException('Войдите через Google')),
++    identityEpoch: () => identityGeneration,
++    credential: verifiedIdentityToken,
++    onUnauthorized: _forceRefresh,
++    onAuthenticationFailure: rejectIdentity,
+   );
+   @override
+   bool get supportsAdvancedPublication => true;
+@@ -116,6 +206,7 @@ class AlchemistDiaryApi extends DiaryApi {
+   void clearSession() {
+     _accountGeneration++;
+     _token = null;
++    _identityRejected = false;
+     _subject = null;
+     _verifiedRole = null;
+     _identityExpiresAt = null;
+@@ -215,6 +306,17 @@ class AlchemistDiaryApi extends DiaryApi {
+         : Map<String, dynamic>.from(jsonDecode(row.single['value'] as String));
+   }
+ 
++  void _checkEntryOwner(Map<String, dynamic> state) {
++    if (workInterrupted?.call() == true ||
++        state['ownerBinding'] != null &&
++            state['ownerBinding'] != author.ownerBinding) {
++      throw const DiaryApiException(
++        'Аккаунт изменился. Задача приостановлена.',
++        DiaryFailure.authorization,
++      );
++    }
++  }
++
+   Future<void> _save(String id, Map<String, dynamic> state) => db
+       .insert('app_settings', {
+         'name': 'alchemist_entry:$id',
+@@ -225,6 +327,7 @@ class AlchemistDiaryApi extends DiaryApi {
+     String id,
+     Map<String, dynamic> state,
+   ) async {
++    _checkEntryOwner(state);
+     final p = state['pending'];
+     final result = await author.call(
+       p['operation'],
+@@ -250,6 +353,8 @@ class AlchemistDiaryApi extends DiaryApi {
+     String op,
+     Map<String, dynamic> parameters,
+   ) async {
++    _checkEntryOwner(state);
++    state['ownerBinding'] = author.ownerBinding;
+     state['pending'] = {
+       'operation': op,
+       'parameters': {
+@@ -263,9 +368,14 @@ class AlchemistDiaryApi extends DiaryApi {
+     return _recover(id, state);
+   }
+ 
+-  Future<Map<String, dynamic>> _document(DiaryEntry e) async {
++  Future<Map<String, dynamic>> _document(
++    DiaryEntry e, {
++    void Function()? check,
++  }) async {
++    check?.call();
+     if (e.contentLinks.isNotEmpty) {
+       for (final link in e.contentLinks) {
++        check?.call();
+         await author.call('catalog.resolveReference', {
+           'logicalId': link.key.content.id,
+           'revisionId': link.key.revision,
+@@ -275,6 +385,13 @@ class AlchemistDiaryApi extends DiaryApi {
+     }
+     final blocks = <Map<String, dynamic>>[];
+     for (final b in e.blocks) {
++      check?.call();
++      if (workInterrupted?.call() == true) {
++        throw const DiaryApiException(
++          'Передача приостановлена.',
++          DiaryFailure.network,
++        );
++      }
+       if (b.type == DiaryBlockType.text) {
+         blocks.add({'id': b.id, 'type': 'text', 'text': b.text});
+         continue;
+@@ -289,6 +406,9 @@ class AlchemistDiaryApi extends DiaryApi {
+         revisionId: m.hash!,
+         mime: m.mime,
+         expectedHash: m.hash,
++        interrupted: workInterrupted,
++        onStage: workStage,
++        progress: workProgress,
+       );
+       blocks.add({
+         'id': b.id,
+@@ -319,10 +439,27 @@ class AlchemistDiaryApi extends DiaryApi {
+   }
+ 
+   Future<DiaryEntry> _saveRemote(DiaryEntry e, {required bool publish}) async {
++    final initialOwner = readerScope, initialGeneration = identityGeneration;
++    if (publish) await beforePublication?.call(e);
++    void check() {
++      if (initialOwner != readerScope ||
++          initialGeneration != identityGeneration ||
++          workInterrupted?.call() == true) {
++        throw const DiaryApiException(
++          'Задача приостановлена.',
++          DiaryFailure.authorization,
++        );
++      }
++    }
++
++    check();
+     final queued = await _queued(e.id);
+     final state = await _state(e.id);
++    _checkEntryOwner(state);
++    state['ownerBinding'] = author.ownerBinding;
+     if (state['pending'] != null) await _recover(e.id, state);
+-    final document = await _document(e);
++    final document = await _document(e, check: check);
++    check();
+     final previous = state['manifest'];
+     final beforeBlocks = previous is Map
+         ? (previous['blocks'] as List).map((v) {
+@@ -453,6 +590,7 @@ class AlchemistDiaryApi extends DiaryApi {
+     await db.insert('app_settings', {
+       'name': 'alchemist_diary_queue:${entry.id}',
+       'value': jsonEncode({
++        'ownerBinding': author.ownerBinding,
+         'entry': entry.toMap(),
+         'published': published,
+         'status': 'pending',
+@@ -460,6 +598,71 @@ class AlchemistDiaryApi extends DiaryApi {
+     }, conflictAlgorithm: ConflictAlgorithm.replace);
+   }
+ 
++  Future<void> sendQueued(
++    String name, {
++    required bool Function() interrupted,
++    void Function(String)? onStage,
++    void Function(int, int)? progress,
++  }) async {
++    final rows = await db.query(
++      'app_settings',
++      where: 'name=?',
++      whereArgs: [name],
++    );
++    if (rows.isEmpty) return;
++    final q = Map<String, dynamic>.from(
++      jsonDecode(rows.single['value'] as String),
++    );
++    if (q['ownerBinding'] == null ||
++        q['ownerBinding'] != author.ownerBinding ||
++        interrupted()) {
++      throw const DiaryApiException(
++        'Аккаунт задачи не подтверждён.',
++        DiaryFailure.authorization,
++      );
++    }
++    final e = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
++    final current = await db.query(
++      'diary_author',
++      where: 'id=?',
++      whereArgs: [e.id],
++    );
++    if (current.isNotEmpty &&
++        _editable(
++              DiaryEntry.fromMap(
++                Map<String, dynamic>.from(
++                  jsonDecode(current.single['payload'] as String),
++                ),
++              ),
++            ) !=
++            _editable(e)) {
++      throw const DiaryApiException(
++        'После постановки в очередь появились новые правки. Подтвердите отправку из редактора.',
++        DiaryFailure.conflict,
++      );
++    }
++    workInterrupted = interrupted;
++    workStage = onStage;
++    workProgress = progress;
++    try {
++      onStage?.call('diary_verifying');
++      final identity = await verifiedIdentityToken();
++      final session = DiaryAuthorSession.verified(
++        identity!,
++        identityExpiresAt!,
++      );
++      if (q['published'] == null) {
++        await saveAuthorDraft(e, session);
++      } else {
++        await publish(e, session, published: q['published']);
++      }
++    } finally {
++      workInterrupted = null;
++      workStage = null;
++      workProgress = null;
++    }
++  }
++
+   Future<String?> _queued(String id) async {
+     final rows = await db.query(
+       'app_settings',
+@@ -541,6 +744,11 @@ class AlchemistDiaryApi extends DiaryApi {
+     )) {
+       final q = jsonDecode(row['value'] as String),
+           entry = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
++      if (q['ownerBinding'] != null &&
++          q['ownerBinding'] != author.ownerBinding) {
++        continue;
++      }
++      if (q['ownerBinding'] == null && readerScope != 'public') continue;
+       final current = await db.query(
+         'diary_author',
+         where: 'id=?',
+diff --git a/lib/services/alchemist_errors.dart b/lib/services/alchemist_errors.dart
+new file mode 100644
+index 0000000..4ddd1ea
+--- /dev/null
++++ b/lib/services/alchemist_errors.dart
+@@ -0,0 +1,99 @@
++import 'dart:async';
++import 'dart:io';
++
++import 'diary_api.dart';
++
++/// Public, bounded error information. Never serialize an SDK/socket exception.
++class AlchemistFailure extends DiaryApiException {
++  const AlchemistFailure(
++    super.message,
++    this.status,
++    this.code, [
++    super.kind = DiaryFailure.network,
++    this.retryable = false,
++  ]);
++  final int status;
++  final String code;
++  final bool retryable;
++
++  static AlchemistFailure from(Object error) {
++    if (error is AlchemistFailure) return error;
++    if (error is SocketException) {
++      return const AlchemistFailure(
++        'Сеть или DNS недоступны. Данные сохранены; повторите после подключения.',
++        0,
++        'NETWORK_DNS_OR_SOCKET',
++        DiaryFailure.network,
++        true,
++      );
++    }
++    if (error is HttpException) {
++      return const AlchemistFailure(
++        'Соединение оборвалось. Подтверждённый прогресс сохранён.',
++        0,
++        'NETWORK_CONNECTION_ABORT',
++        DiaryFailure.network,
++        true,
++      );
++    }
++    if (error is TimeoutException) {
++      return const AlchemistFailure(
++        'Сервер не ответил вовремя. Результат будет сверен при повторе.',
++        0,
++        'NETWORK_TIMEOUT',
++        DiaryFailure.network,
++        true,
++      );
++    }
++    if (error is DiaryApiException &&
++        error.kind == DiaryFailure.authorization) {
++      return AlchemistFailure(error.message, 401, 'AUTH_REQUIRED', error.kind);
++    }
++    return const AlchemistFailure(
++      'Не удалось завершить операцию. Черновик и исходные файлы сохранены.',
++      0,
++      'LOCAL_OPERATION_FAILED',
++      DiaryFailure.invalidData,
++    );
++  }
++
++  static AlchemistFailure server(int status, String code) {
++    if (status == 401) {
++      return AlchemistFailure(
++        code == 'TOKEN_AUDIENCE_INVALID'
++            ? 'Google-вход не соответствует настройке сервера. Код: TOKEN_AUDIENCE_INVALID.'
++            : code == 'IDENTITY_REVOKED'
++            ? 'Доступ аккаунта отозван сервером. Нужна проверка владельцем.'
++            : 'Нужно подтвердить Google-вход. Черновики и переданные части сохранены.',
++        status,
++        code,
++        DiaryFailure.authorization,
++      );
++    }
++    if (status == 403) {
++      return AlchemistFailure(
++        'Сервер не разрешил это действие для вашей роли.',
++        status,
++        code,
++        DiaryFailure.blocked,
++      );
++    }
++    if (status == 409 || status == 412) {
++      return AlchemistFailure(
++        'Версия на сервере изменилась. Сверьте изменения перед повтором.',
++        status,
++        code,
++        DiaryFailure.conflict,
++      );
++    }
++    return AlchemistFailure(
++      status == 429
++          ? 'Достигнут лимит запросов. Передача приостановлена; повторите позже.'
++          : 'Сервер временно недоступен. Данные и прогресс сохранены.',
++      status,
++      code,
++      DiaryFailure.network,
++      status == 429 || status >= 500,
++    );
++  }
++}
+diff --git a/lib/services/alchemist_http.dart b/lib/services/alchemist_http.dart
+index 62d12c9..3f58869 100644
+--- a/lib/services/alchemist_http.dart
++++ b/lib/services/alchemist_http.dart
+@@ -1,32 +1,64 @@
++import 'dart:async';
+ import 'dart:convert';
+ import 'dart:io';
+ 
++import 'alchemist_diagnostics.dart';
+ import 'diary_api.dart';
+ 
+-/// Apps Script may spend over 20 seconds committing private Drive metadata.
+-/// Keep connection/body deadlines short, but allow a bounded server execution.
+-/// Legacy diary HTTP behavior is deliberately unchanged.
++/// Bounded response and keep-alive pool per HTTP override (native app / tests).
++/// Cookies/authorization are not installed on the pool; each request is fresh.
+ class AlchemistHttp {
+-  const AlchemistHttp({this.responseTimeout = const Duration(minutes: 5)});
+-
++  const AlchemistHttp({
++    this.responseTimeout = const Duration(seconds: 90),
++    this.reuseConnections = true,
++  });
+   final Duration responseTimeout;
+-
++  final bool reuseConnections;
++  static final Map<HttpOverrides?, HttpClient> _clients = {};
+   Future<DiaryResponse> request(
+     String method,
+     Uri uri,
+     Map<String, String> headers,
+     String? body,
+   ) async {
+-    final client = HttpClient()
+-      ..connectionTimeout = const Duration(seconds: 15);
++    HttpClient create() => HttpClient()
++      ..connectionTimeout = const Duration(seconds: 15)
++      ..idleTimeout = const Duration(seconds: 30)
++      ..maxConnectionsPerHost = 2;
++    final client = reuseConnections
++        ? _clients.putIfAbsent(HttpOverrides.current, create)
++        : create();
++    HttpClientRequest? request;
++    final clock = Stopwatch()..start();
++    String? trace, op;
++    try {
++      final m = body == null ? null : jsonDecode(body);
++      if (m is Map) {
++        trace = m['traceId'] as String?;
++        op = m['operation'] as String?;
++      }
++    } catch (_) {}
++    void measure(String phase) {
++      if (trace != null && op != null) {
++        AlchemistDiagnostics.instance.record(
++          trace,
++          op,
++          phase,
++          clock.elapsedMilliseconds,
++        );
++      }
++    }
++
+     try {
+-      final request = await client
++      request = await client
+           .openUrl(method, uri)
+           .timeout(const Duration(seconds: 20));
++      measure('connect_including_dns_tls');
+       request.followRedirects = false;
+       headers.forEach(request.headers.set);
+       if (body != null) request.add(utf8.encode(body));
+       final response = await request.close().timeout(responseTimeout);
++      measure('headers');
+       final bytes = <int>[];
+       await for (final chunk in response.timeout(const Duration(seconds: 30))) {
+         bytes.addAll(chunk);
+@@ -34,18 +66,22 @@ class AlchemistHttp {
+           throw const DiaryApiException('Слишком большой ответ сервера');
+         }
+       }
++      measure('body');
+       return DiaryResponse(
+         response.statusCode,
+         utf8.decode(bytes),
+         headers: {
+-          if (response.headers.value('location') case final String location)
+-            'location': location,
++          if (response.headers.value('location') case final String value)
++            'location': value,
+           if (response.headers.contentType?.mimeType case final String mime)
+             'content-type': mime,
+         },
+       );
++    } catch (e) {
++      request?.abort();
++      rethrow;
+     } finally {
+-      client.close(force: true);
++      if (!reuseConnections) client.close(force: true);
+     }
+   }
+ }
+diff --git a/lib/services/alchemist_media_transfer.dart b/lib/services/alchemist_media_transfer.dart
+index 86f2010..d481eb7 100644
+--- a/lib/services/alchemist_media_transfer.dart
++++ b/lib/services/alchemist_media_transfer.dart
+@@ -6,13 +6,16 @@ import 'package:sqflite/sqflite.dart';
+ 
+ import '../models/session_plan.dart';
+ import 'alchemist_api.dart';
++import 'alchemist_errors.dart';
++import 'diary_api.dart';
+ 
+-/// Persistent request identity and bounded, seekable file transfer. Blob commit
+-/// never implies publication; callers publish a separate validated manifest.
++/// Existing upload checkpoints, now account-bound. Never trusts a byte counter
++/// as a commit receipt and never deletes a local source on pause/cancel/failure.
+ class AlchemistMediaTransfer {
+   AlchemistMediaTransfer(this.db, this.api);
+   final Database db;
+   final AlchemistApi api;
++  static final Map<String, Future<Map<String, dynamic>>> _active = {};
+   Future<Map<String, dynamic>> upload(
+     File file, {
+     required String logicalId,
+@@ -20,64 +23,160 @@ class AlchemistMediaTransfer {
+     required String mime,
+     String? expectedHash,
+     bool restartExpired = true,
++    String? taskId,
+     bool Function()? interrupted,
+     void Function(int, int)? progress,
++    void Function(String)? onStage,
+   }) async {
++    final size = await file.length(),
++        hash = (await sha256.bind(file.openRead()).first).toString();
++    if (size == 0 || expectedHash != null && expectedHash != hash) {
++      throw const FormatException('Файл изменён или пуст');
++    }
++    if (api.identityScope != null && api.ownerBinding == null) {
++      throw const AlchemistFailure(
++        'Подтвердите вход Google перед отправкой.',
++        401,
++        'AUTH_REQUIRED',
++        DiaryFailure.authorization,
++      );
++    }
++    final owner = api.ownerBinding ?? 'controlled-${identityHashCode(api)}';
++    final activeKey =
++        '${identityHashCode(db)}:$owner:$logicalId:$revisionId:$hash';
++    final existing = _active[activeKey];
++    if (existing != null) return existing;
++    late Future<Map<String, dynamic>> future;
++    future =
++        _upload(
++          file,
++          size,
++          hash,
++          owner,
++          logicalId,
++          revisionId,
++          mime,
++          restartExpired,
++          taskId,
++          interrupted,
++          progress,
++          onStage,
++        ).whenComplete(() {
++          if (identical(_active[activeKey], future)) _active.remove(activeKey);
++        });
++    _active[activeKey] = future;
++    return future;
++  }
++
++  Future<Map<String, dynamic>> _upload(
++    File file,
++    int size,
++    String hash,
++    String owner,
++    String logicalId,
++    String revisionId,
++    String mime,
++    bool restartExpired,
++    String? taskId,
++    bool Function()? interrupted,
++    void Function(int, int)? progress,
++    void Function(String)? onStage,
++  ) async {
++    final scope = api.currentIdentityScope, epoch = api.identityEpoch?.call();
+     void check() {
++      if (scope != api.currentIdentityScope ||
++          epoch != api.identityEpoch?.call()) {
++        throw const AlchemistFailure(
++          'Аккаунт изменился. Передача приостановлена.',
++          401,
++          'ACCOUNT_CHANGED',
++          DiaryFailure.authorization,
++        );
++      }
+       if (interrupted?.call() == true) {
+-        throw const FormatException(
++        throw const AlchemistFailure(
+           'Передача приостановлена. Черновик сохранён.',
++          0,
++          'TRANSFER_PAUSED',
++          DiaryFailure.blocked,
+         );
+       }
+     }
+ 
+-    final size = await file.length();
+-    final hash = (await sha256.bind(file.openRead()).first).toString();
+-    if (size == 0 || expectedHash != null && expectedHash != hash) {
+-      throw const FormatException('Файл изменён или пуст');
+-    }
+-    final key = 'alchemist_upload:$logicalId:$revisionId:$hash';
++    final key = 'alchemist_upload:$owner:$logicalId:$revisionId:$hash';
+     final rows = await db.query(
+       'app_settings',
+       where: 'name=?',
+       whereArgs: [key],
+     );
+-    final requestId = rows.isEmpty
+-        ? newId()
+-        : jsonDecode(rows.single['value'] as String)['requestId'];
+-    final state = <String, dynamic>{
+-      'requestId': requestId,
++    final state = rows.isEmpty
++        ? <String, dynamic>{}
++        : Map<String, dynamic>.from(jsonDecode(rows.single['value'] as String));
++    state.addAll({
++      'requestId': state['requestId'] ?? newId(),
++      'ownerBinding': owner,
+       'sha256': hash,
+       'byteLength': size,
+       'logicalId': logicalId,
+       'revisionId': revisionId,
+       'mime': mime,
+-      'state': 'uploading',
+-    };
++      'localPath': file.path,
++      'state': 'queued',
++      'taskId': ?taskId,
++    });
+     Future<void> checkpoint() => db
+         .insert('app_settings', {
+           'name': key,
+           'value': jsonEncode(state),
+         }, conflictAlgorithm: ConflictAlgorithm.replace)
+         .then((_) {});
+-    await checkpoint();
++    Future<void> stage(String phase) async {
++      state['state'] = phase;
++      await checkpoint();
++      onStage?.call(phase);
++    }
++
+     check();
++    await checkpoint();
+     try {
++      if (state['receipt'] is Map) {
++        check();
++        final descriptor = await api.call('media.getDescriptor', {
++          'assetRevisionId': state['receipt']['assetRevisionId'],
++        });
++        check();
++        if (descriptor['sha256'] != hash ||
++            descriptor['byteLength'] != size ||
++            descriptor['logicalId'] != logicalId ||
++            descriptor['revisionId'] != revisionId ||
++            descriptor['mime'] != mime) {
++          throw const FormatException(
++            'Сервер не подтвердил прежнюю версию файла',
++          );
++        }
++        progress?.call(size, size);
++        await stage('verified');
++        return Map<String, dynamic>.from(state['receipt']);
++      }
++      check();
++      await stage('transferring');
+       final start = await api.call('media.beginUpload', {
+-        'requestId': requestId,
++        'requestId': state['requestId'],
+         'logicalId': logicalId,
+         'revisionId': revisionId,
+         'sha256': hash,
+         'byteLength': size,
+         'mime': mime,
+       });
++      check();
+       state['sessionId'] = start['sessionId'];
+-      state['localPath'] = file.path;
+-      await checkpoint();
+       var offset = start['offset'] as int;
+       if (offset < 0 || offset > size) {
+         throw const FormatException('Некорректная позиция передачи');
+       }
++      state['offset'] = offset;
++      await checkpoint();
++      progress?.call(offset, size);
+       final input = await file.open();
+       try {
+         while (offset < size) {
+@@ -90,6 +189,7 @@ class AlchemistMediaTransfer {
+             'offset': offset,
+             'base64': base64Encode(bytes),
+           });
++          check();
+           final next = result['offset'];
+           if (next is! int || next != offset + bytes.length) {
+             throw const FormatException('Сервер не подтвердил блок');
+@@ -102,44 +202,81 @@ class AlchemistMediaTransfer {
+       } finally {
+         await input.close();
+       }
++      await stage('bytes_acked');
++      check();
++      await stage('server_verifying');
+       Map<String, dynamic> result;
++      var previousVerified = -1, stalled = 0;
+       do {
+         check();
+         result = await api.call('media.commitUpload', {
+           'sessionId': start['sessionId'],
+         });
++        check();
+         if (result['state'] == 'verifying') {
+-          progress?.call(result['verifiedBytes'] as int, size);
++          final verified = result['verifiedBytes'];
++          if (verified is! int ||
++              verified < 0 ||
++              verified > size ||
++              verified < previousVerified) {
++            throw const FormatException('Некорректная проверка файла');
++          }
++          stalled = verified == previousVerified ? stalled + 1 : 0;
++          previousVerified = verified;
++          if (stalled >= 3) {
++            throw const AlchemistFailure(
++              'Проверка на сервере остановилась. Можно продолжить позже.',
++              503,
++              'VERIFICATION_STALLED',
++              DiaryFailure.network,
++              true,
++            );
++          }
++          state['verifiedBytes'] = verified;
++          await checkpoint();
+         }
+       } while (result['state'] == 'verifying');
+       if (result['sha256'] != hash ||
+           result['byteLength'] != size ||
+           result['logicalId'] != logicalId ||
+-          result['revisionId'] != revisionId) {
++          result['revisionId'] != revisionId ||
++          result['assetRevisionId'] is! String) {
+         throw const FormatException('Сервер не подтвердил файл');
+       }
+-      state['state'] = 'verified';
+       state['assetRevisionId'] = result['assetRevisionId'];
+-      await checkpoint();
++      state['receipt'] = result;
++      await stage('verified');
+       return result;
+     } catch (e) {
+       if (e is AlchemistApiException && e.status == 410 && restartExpired) {
+         state['requestId'] = newId();
+-        state['state'] = 'expired';
+-        await checkpoint();
+-        return upload(
++        state.remove('receipt');
++        state.remove('sessionId');
++        await stage('expired');
++        return _upload(
+           file,
+-          logicalId: logicalId,
+-          revisionId: revisionId,
+-          mime: mime,
+-          expectedHash: expectedHash,
+-          restartExpired: false,
+-          interrupted: interrupted,
+-          progress: progress,
++          size,
++          hash,
++          owner,
++          logicalId,
++          revisionId,
++          mime,
++          false,
++          taskId,
++          interrupted,
++          progress,
++          onStage,
+         );
+       }
+-      state['state'] = interrupted?.call() == true ? 'paused' : 'failed';
+-      state['error'] = e.toString();
++      final failure = AlchemistFailure.from(e);
++      state['state'] = interrupted?.call() == true
++          ? 'paused'
++          : failure.retryable
++          ? 'failed_retryable'
++          : 'failed_final';
++      state['error'] = failure.message;
++      state['errorCode'] = failure.code;
++      state['httpStatus'] = failure.status;
+       await checkpoint();
+       rethrow;
+     }
+diff --git a/lib/services/alchemist_work_queue.dart b/lib/services/alchemist_work_queue.dart
+new file mode 100644
+index 0000000..55892a0
+--- /dev/null
++++ b/lib/services/alchemist_work_queue.dart
+@@ -0,0 +1,294 @@
++import 'alchemist_diagnostics.dart';
++
++import 'dart:async';
++import 'dart:convert';
++
++import 'package:flutter/foundation.dart';
++import 'package:sqflite/sqflite.dart';
++
++import 'alchemist_errors.dart';
++
++String alchemistStageLabel(Object? phase) =>
++    const {
++      'queued': 'Ожидает отправки',
++      'running': 'Выполняется',
++      'transferring': 'Передача файла',
++      'bytes_acked': 'Байты приняты; ждём проверку',
++      'server_verifying': 'Сервер проверяет файл',
++      'verified': 'Файл проверен',
++      'manifest_registering': 'Проверка состава',
++      'publishing': 'Подтверждение каталога',
++      'catalog_committed': 'Подтверждено сервером',
++      'diary_verifying': 'Проверка дневниковой записи',
++      'paused': 'Пауза',
++      'failed': 'Сбой',
++      'cancelled': 'Отправка отменена',
++      'complete': 'Подтверждено сервером',
++      'pausing': 'Завершается текущий запрос',
++    }[phase] ??
++    'Ожидание';
++
++/// One runner over the existing card and diary outbox records. No second queue.
++/// Survives editor navigation. Android suspension cooperatively pauses work;
++/// restart never silently starts an upload under a newly selected account.
++class AlchemistWorkQueue extends ChangeNotifier {
++  AlchemistWorkQueue({
++    required this.db,
++    required this.owner,
++    required this.send,
++  });
++  final Database db;
++  final String? Function() owner;
++  final Future<void> Function(
++    String,
++    Map<String, dynamic>,
++    bool Function(),
++    void Function(String),
++    void Function(int, int),
++  )
++  send;
++  final Map<String, bool> _stops = {};
++  bool _running = false, _closed = false;
++  String? _activeName;
++  final _cancelled = <String>{};
++  Future<void> _progress = Future.value();
++  void _recordProgress(String name, Map<String, dynamic> values) {
++    _progress = _progress
++        .then((_) => _patch(name, values))
++        .catchError((Object _) {});
++  }
++
++  List<Map<String, dynamic>> rows = [];
++  int get pendingCount => rows
++      .where(
++        (r) => !const ['complete', 'cancelled'].contains(r['_work']?['phase']),
++      )
++      .length;
++  void changed() {
++    if (!_closed) notifyListeners();
++  }
++
++  Future<Map<String, dynamic>?> _read(String name) async {
++    final r = await db.query(
++      'app_settings',
++      where: 'name=?',
++      whereArgs: [name],
++    );
++    return r.isEmpty
++        ? null
++        : Map<String, dynamic>.from(jsonDecode(r.single['value'] as String));
++  }
++
++  Future<void> _patch(String name, Map<String, dynamic> values) async {
++    await db.transaction((tx) async {
++      final r = await tx.query(
++        'app_settings',
++        where: 'name=?',
++        whereArgs: [name],
++      );
++      if (r.isEmpty) return;
++      final v = Map<String, dynamic>.from(
++        jsonDecode(r.single['value'] as String),
++      );
++      final work = Map<String, dynamic>.from(v['_work'] ?? {})..addAll(values);
++      v['_work'] = work;
++      await tx.update(
++        'app_settings',
++        {'value': jsonEncode(v)},
++        where: 'name=?',
++        whereArgs: [name],
++      );
++    });
++    await refresh();
++  }
++
++  Future<void> refresh() async {
++    final current = owner();
++    final records = await db.query(
++      'app_settings',
++      where: 'name LIKE ? OR name LIKE ?',
++      whereArgs: ['alchemist_card:%', 'alchemist_diary_queue:%'],
++    );
++    rows = records
++        .map(
++          (r) => <String, dynamic>{
++            ...Map<String, dynamic>.from(jsonDecode(r['value'] as String)),
++            '_name': r['name'],
++          },
++        )
++        .where(
++          (v) =>
++              current != null &&
++              v['ownerBinding'] == current &&
++              v['_work'] != null,
++        )
++        .toList();
++    changed();
++  }
++
++  Future<void> enqueue(String name) async {
++    final v = await _read(name), current = owner();
++    if (v == null || current == null || v['ownerBinding'] != current) {
++      throw const AlchemistFailure(
++        'Подтвердите аккаунт владельца задачи.',
++        401,
++        'ACCOUNT_CHANGED',
++      );
++    }
++    if (const ['queued', 'running'].contains(v['_work']?['phase']) &&
++        _running) {
++      return;
++    }
++    if (_activeName == name) return;
++    _cancelled.remove(name);
++    _stops[name] = false;
++    await _patch(name, {
++      'phase': 'queued',
++      'code': null,
++      'message': null,
++      'taskId': name.split(':').last,
++      'ownerBinding': current,
++    });
++    unawaited(_pump());
++  }
++
++  Future<void> pause(String name, {bool cancel = false}) async {
++    _stops[name] = true;
++    if (cancel) _cancelled.add(name);
++    await _patch(name, {
++      'phase': cancel
++          ? 'cancelled'
++          : _activeName == name
++          ? 'pausing'
++          : 'paused',
++      'code': cancel ? 'CANCELLED' : 'USER_PAUSED',
++    });
++  }
++
++  Future<void> pauseAll() async {
++    for (final row in List<Map<String, dynamic>>.of(rows)) {
++      if (!const [
++        'complete',
++        'cancelled',
++        'paused',
++        'failed',
++      ].contains(row['_work']?['phase'])) {
++        await pause(row['_name']);
++      }
++    }
++  }
++
++  Future<void> recover() async {
++    await refresh();
++    for (final row in List<Map<String, dynamic>>.of(rows)) {
++      if (!const [
++        'complete',
++        'cancelled',
++        'paused',
++        'failed',
++      ].contains(row['_work']?['phase'])) {
++        await _patch(row['_name'], {'phase': 'paused', 'code': 'APP_RESTART'});
++      }
++    }
++  }
++
++  Future<void> _pump() async {
++    if (_running || _closed) return;
++    _running = true;
++    try {
++      while (!_closed) {
++        await refresh();
++        final row = rows
++            .where((v) => v['_work']?['phase'] == 'queued')
++            .firstOrNull;
++        if (row == null) break;
++        final name = row['_name'] as String, originalOwner = owner();
++        bool stop() =>
++            _closed || _stops[name] == true || owner() != originalOwner;
++        if (stop()) {
++          await pause(name);
++          continue;
++        }
++        _activeName = name;
++        await _patch(name, {
++          'phase': 'running',
++          'attempts': (row['_work']?['attempts'] as int? ?? 0) + 1,
++        });
++        final retries = <String, int>{};
++        void diagnostic() {
++          final event = AlchemistDiagnostics.instance.events.lastOrNull;
++          if (event == null ||
++              stop() ||
++              event['taskId'] != name.split(':').last) {
++            return;
++          }
++          final trace = event['traceId'] as String,
++              attempt = event['attempt'] as int;
++          retries[trace] = attempt > (retries[trace] ?? 0)
++              ? attempt
++              : (retries[trace] ?? 0);
++          _recordProgress(name, {
++            'traceId': trace,
++            'networkRetries': retries.values.fold<int>(0, (n, v) => n + v),
++          });
++        }
++
++        AlchemistDiagnostics.instance.addListener(diagnostic);
++        try {
++          final value = (await _read(name))!;
++          await runZoned(
++            () => send(
++              name,
++              value,
++              stop,
++              (stage) {
++                // Progress is serialized below; callbacks must not overwrite a card receipt.
++                if (!stop()) _recordProgress(name, {'stage': stage});
++              },
++              (n, total) {
++                if (!stop()) {
++                  _recordProgress(name, {'bytes': n, 'totalBytes': total});
++                }
++              },
++            ),
++            zoneValues: {#alchemistTask: name.split(':').last},
++          );
++          await _progress;
++          await _patch(name, {
++            'phase': _cancelled.contains(name)
++                ? 'cancelled'
++                : stop()
++                ? 'paused'
++                : 'complete',
++            'code': null,
++            'stage': 'catalog_committed',
++          });
++        } catch (e) {
++          await _progress;
++          final failure = AlchemistFailure.from(e);
++          await _patch(name, {
++            'phase': _cancelled.contains(name)
++                ? 'cancelled'
++                : stop()
++                ? 'paused'
++                : 'failed',
++            'code': failure.code,
++            'message': failure.message,
++          });
++        } finally {
++          AlchemistDiagnostics.instance.removeListener(diagnostic);
++          _activeName = null;
++        }
++      }
++    } finally {
++      _running = false;
++      changed();
++    }
++  }
++
++  @override
++  void dispose() {
++    _closed = true;
++    super.dispose();
++  }
++}
+diff --git a/lib/services/diary_api.dart b/lib/services/diary_api.dart
+index e4e3d3e..abac7a9 100644
+--- a/lib/services/diary_api.dart
++++ b/lib/services/diary_api.dart
+@@ -3,6 +3,8 @@ import 'diary_read_state.dart';
+ import 'dart:convert';
+ import 'dart:io';
+ 
++import 'diary_identity.dart';
++
+ import '../models/diary_entry.dart';
+ 
+ enum DiaryFailure {
+@@ -81,7 +83,13 @@ class DiaryApi {
+   bool get readerAuthenticated => false;
+   DateTime? get identityExpiresAt => null;
+   Future<String?> verifiedIdentityToken() async => null;
++  void bindIdentity(DiaryIdentity identity) {}
++  Future<bool> restoreIdentity() async => false;
++  Future<void> refreshIdentity() async {}
++  Future<bool> refreshRejectedIdentity() async => false;
++  void rejectIdentity() {}
+   String get readerScope => 'public';
++  int get identityGeneration => 0;
+   Future<void> authenticateReader(String token) async =>
+       throw const DiaryApiException('Личный сервер не подключён');
+   void clearSession() {}
+diff --git a/lib/services/diary_controller.dart b/lib/services/diary_controller.dart
+index 7023cea..6f1cf83 100644
+--- a/lib/services/diary_controller.dart
++++ b/lib/services/diary_controller.dart
+@@ -1,6 +1,9 @@
+ import 'dart:async';
+ 
+ import 'package:flutter/foundation.dart';
++import 'package:sqflite/sqflite.dart';
++
++import 'alchemist_errors.dart';
+ 
+ import '../models/diary_publication.dart';
+ import 'diary_read_state.dart';
+@@ -14,6 +17,12 @@ import 'diary_audio.dart';
+ import 'access_policy.dart';
+ 
+ class DiaryController extends ChangeNotifier {
++  bool _closed = false;
++  @override
++  void notifyListeners() {
++    if (!_closed) super.notifyListeners();
++  }
++
+   DiaryController(
+     this.repository, {
+     this.api,
+@@ -29,6 +38,7 @@ class DiaryController extends ChangeNotifier {
+   }) : reads = reads ?? DiaryReadStore(repository.database),
+        clock = clock ?? DateTime.now {
+     if (api?.supportsServerIdentity ?? false) {
++      if (identity != null) api!.bindIdentity(identity!);
+       policy?.applyVerifiedServerRole(api?.verifiedRole);
+     }
+   }
+@@ -137,6 +147,8 @@ class DiaryController extends ChangeNotifier {
+ 
+   @override
+   void dispose() {
++    _closed = true;
++    _authGeneration++;
+     _expiry?.cancel();
+     for (final audio in _readerAudio.values) {
+       unawaited(audio.close());
+@@ -259,7 +271,15 @@ class DiaryController extends ChangeNotifier {
+     }
+     published = nextPublished;
+     hasCache = cached != null;
+-    drafts = work;
++    drafts = (api?.supportsServerIdentity ?? false)
++        ? work
++              .where(
++                (e) =>
++                    e.extra['_alchemistScope'] == null ||
++                    e.extra['_alchemistScope'] == scope,
++              )
++              .toList()
++        : work;
+     if (repository.invalidIds.isNotEmpty ||
+         (workspace && authorRepository!.invalidIds.isNotEmpty)) {
+       error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
+@@ -325,6 +345,11 @@ class DiaryController extends ChangeNotifier {
+     DiaryEntry.fromMap(
+       entry.toMap(),
+     ); // Validate before writing; failed drafts never poison stored JSON.
++    if (api?.supportsServerIdentity ?? false) {
++      entry = entry.copyWith(
++        extra: {...entry.extra, '_alchemistScope': api!.readerScope},
++      );
++    }
+     await authorRepository!.save(entry);
+     await load();
+   }
+@@ -337,6 +362,38 @@ class DiaryController extends ChangeNotifier {
+     notifyListeners();
+   }
+ 
++  Future<void>? _restoring;
++  Future<void> restoreSignIn() =>
++      _restoring ??= _restoreSignIn().whenComplete(() => _restoring = null);
++  Future<void> _restoreSignIn() async {
++    if (_closed) return;
++    if (!(api?.supportsServerIdentity ?? false)) return;
++    final optOut = await repository.database.query(
++      'app_settings',
++      where: 'name=?',
++      whereArgs: ['alchemist_restore_disabled'],
++    );
++    if (optOut.firstOrNull?['value'] == '1' || api!.readerAuthenticated) return;
++    final generation = _authGeneration;
++    try {
++      if (!await api!.restoreIdentity() || generation != _authGeneration) {
++        return;
++      }
++      policy?.applyVerifiedServerRole(api!.verifiedRole);
++      _localAuthor = api!.verifiedRole == 'MASTER';
++      final token = await api!.verifiedIdentityToken();
++      if (generation != _authGeneration) return;
++      _session = _localAuthor && token != null
++          ? DiaryAuthorSession.verified(token, api!.identityExpiresAt!)
++          : null;
++      await load();
++    } catch (e) {
++      // Network loss is not logout and does not delete authority/drafts.
++      error = AlchemistFailure.from(e).message;
++      notifyListeners();
++    }
++  }
++
+   /// Uses the platform account chooser. Local editing and server permissions
+   /// remain separate: a network failure never deletes the author's drafts.
+   Future<void> signInAuthor() async {
+@@ -344,8 +401,10 @@ class DiaryController extends ChangeNotifier {
+       throw const DiaryApiException('Вход автора недоступен');
+     }
+     final generation = ++_authGeneration;
+-    api?.clearSession();
++    if (!(api?.supportsServerIdentity ?? false)) api?.clearSession();
+     if (api?.supportsServerIdentity ?? false) {
++      // Hide the previous private workspace while an explicit account choice
++      // is unverified. Ordinary transport failures never enter this path.
+       policy?.applyVerifiedServerRole(null);
+       drafts = [];
+     }
+@@ -358,7 +417,7 @@ class DiaryController extends ChangeNotifier {
+         )
+         .toList();
+     authorBusy = true;
+-    _session = null;
++    if (!(api?.supportsServerIdentity ?? false)) _session = null;
+     notifyListeners();
+     try {
+       final result = await identity!.signIn();
+@@ -367,6 +426,10 @@ class DiaryController extends ChangeNotifier {
+         await api!.authenticateReader(result.idToken);
+         if (generation != _authGeneration) return;
+         policy?.applyVerifiedServerRole(api!.verifiedRole);
++        await repository.database.insert('app_settings', {
++          'name': 'alchemist_restore_disabled',
++          'value': '0',
++        }, conflictAlgorithm: ConflictAlgorithm.replace);
+         _localAuthor = api!.verifiedRole == 'MASTER';
+         if (_localAuthor) {
+           _session = DiaryAuthorSession.verified(
+@@ -376,11 +439,8 @@ class DiaryController extends ChangeNotifier {
+         }
+         await load();
+         if (generation != _authGeneration) return;
+-        if (_localAuthor && authorWorkspace) {
+-          await api!.flushPending(_session!);
+-          if (generation != _authGeneration) return;
+-          await load();
+-        }
++        // Pending work requires an explicit account-bound resume, never an
++        // automatic upload of legacy/unowned drafts at sign-in.
+         await sync();
+         return;
+       }
+@@ -428,6 +488,12 @@ class DiaryController extends ChangeNotifier {
+   Future<void> logout() async {
+     ++_authGeneration;
+     ++_loadGeneration;
++    if (api?.supportsServerIdentity ?? false) {
++      await repository.database.insert('app_settings', {
++        'name': 'alchemist_restore_disabled',
++        'value': '1',
++      }, conflictAlgorithm: ConflictAlgorithm.replace);
++    }
+     api?.clearSession();
+     if (api?.supportsServerIdentity ?? false) {
+       policy?.applyVerifiedServerRole(null);
+@@ -452,6 +518,27 @@ class DiaryController extends ChangeNotifier {
+   }
+ 
+   Future<DiaryAuthorSession> _cloudSession() async {
++    if (api?.supportsServerIdentity ?? false) {
++      if (authorBusy) {
++        throw const DiaryApiException(
++          'Выбор аккаунта ещё не завершён.',
++          DiaryFailure.authorization,
++        );
++      }
++      final token = await api!.verifiedIdentityToken();
++      policy?.applyVerifiedServerRole(api!.verifiedRole);
++      if (api!.verifiedRole != 'MASTER' ||
++          policy?.isAuthor == false ||
++          policy?.clientEdition == true ||
++          token == null) {
++        throw const DiaryApiException(
++          'Сервер не разрешил публикацию для этой роли.',
++          DiaryFailure.blocked,
++        );
++      }
++      _session = DiaryAuthorSession.verified(token, api!.identityExpiresAt!);
++      return _session!;
++    }
+     if (policy != null && !policy!.isAuthor) {
+       throw const DiaryApiException(
+         'В клиентском режиме доступны личные записи. Публикация авторских материалов запрещена.',
+diff --git a/lib/services/diary_identity.dart b/lib/services/diary_identity.dart
+index 028801d..c47afe6 100644
+--- a/lib/services/diary_identity.dart
++++ b/lib/services/diary_identity.dart
+@@ -14,7 +14,12 @@ abstract interface class DiaryIdentity {
+   Future<void> signOut();
+ }
+ 
+-class GoogleDiaryIdentity implements DiaryIdentity {
++/// Optional official SDK restoration, not an invented refresh-token endpoint.
++abstract interface class RestorableDiaryIdentity {
++  Future<DiaryIdentityResult?> restore();
++}
++
++class GoogleDiaryIdentity implements DiaryIdentity, RestorableDiaryIdentity {
+   GoogleDiaryIdentity({required this.serverClientId});
+   final String serverClientId;
+   Future<void>? _initialization;
+@@ -35,9 +40,7 @@ class GoogleDiaryIdentity implements DiaryIdentity {
+   Future<DiaryIdentityResult> signIn() async {
+     try {
+       await _initialize();
+-      // Authentication tokens are snapshots, not refreshable access tokens.
+-      // Reauthenticate only on explicit author actions, never when reading.
+-      await GoogleSignIn.instance.signOut();
++      // Explicit account choice. Do not sign out another in-flight SDK session.
+       final account = await GoogleSignIn.instance.authenticate();
+       final token = account.authentication.idToken;
+       if (token == null || token.isEmpty) {
+@@ -57,6 +60,29 @@ class GoogleDiaryIdentity implements DiaryIdentity {
+     }
+   }
+ 
++  @override
++  Future<DiaryIdentityResult?> restore() async {
++    try {
++      await _initialize();
++      final pending = GoogleSignIn.instance.attemptLightweightAuthentication(
++        reportAllExceptions: true,
++      );
++      final account = pending == null ? null : await pending;
++      final token = account?.authentication.idToken;
++      if (account == null || token == null || token.isEmpty) return null;
++      return DiaryIdentityResult(email: account.email, idToken: token);
++    } on GoogleSignInException catch (e) {
++      if (e.code == GoogleSignInExceptionCode.canceled ||
++          e.code == GoogleSignInExceptionCode.interrupted ||
++          e.code == GoogleSignInExceptionCode.uiUnavailable) {
++        return null;
++      }
++      throw DiaryApiException(
++        'Не удалось восстановить вход Google. Код SDK: ${e.code.name}.',
++      );
++    }
++  }
++
+   @override
+   Future<void> signOut() async {
+     if (_initialization != null) {
+diff --git a/lib/services/session_controller.dart b/lib/services/session_controller.dart
+index 0e40c11..f2a4258 100644
+--- a/lib/services/session_controller.dart
++++ b/lib/services/session_controller.dart
+@@ -1,3 +1,6 @@
++import 'alchemist_announcement.dart';
++import 'alchemist_work_queue.dart';
++import 'alchemist_diary_api.dart';
+ import 'alchemist_identity_session.dart';
+ import 'alchemist_catalog.dart';
+ import 'alchemist_api.dart';
+@@ -38,6 +41,7 @@ class SessionController extends ChangeNotifier {
+     if (diary != null && diary!.onAccountLogout == null) {
+       diary!.onAccountLogout = () {
+         _catalogIdentity?.invalidate();
++        if (_cloudQueue != null) unawaited(_cloudQueue!.pauseAll());
+         if (preview != null) unawaited(preview!.stop());
+       };
+     }
+@@ -131,6 +135,9 @@ class SessionController extends ChangeNotifier {
+     return AlchemistApi(
+       Uri.parse(endpoint),
+       identityScope: () => diary?.api?.readerScope ?? 'public',
++      identityEpoch: () => diary?.api?.identityGeneration ?? 0,
++      onUnauthorized: diary?.api?.refreshRejectedIdentity,
++      onAuthenticationFailure: diary?.api?.rejectIdentity,
+       credential: !authenticated
+           ? (diary?.api?.readerAuthenticated == true
+                 ? () => diary!.api!.verifiedIdentityToken()
+@@ -156,6 +163,45 @@ class SessionController extends ChangeNotifier {
+         ? null
+         : alchemistApi(),
+   );
++  AlchemistWorkQueue? _cloudQueue;
++  AlchemistWorkQueue get cloudQueue => _cloudQueue ??= AlchemistWorkQueue(
++    db: capsules!.database,
++    owner: () => catalog.api?.ownerBinding,
++    send: (name, value, stop, stage, progress) async {
++      if (name.startsWith('alchemist_card:')) {
++        await catalog.publish(
++          value,
++          interrupted: stop,
++          onStage: stage,
++          progress: progress,
++        );
++      } else {
++        final api = diary?.api;
++        if (api is! AlchemistDiaryApi) {
++          throw const FormatException('Сервер не подключён');
++        }
++        final previous = api.beforePublication;
++        api.beforePublication = (entry) => commitAnnouncementDependency(
++          catalog,
++          entry,
++          interrupted: stop,
++          onStage: stage,
++          progress: progress,
++        );
++        try {
++          await api.sendQueued(
++            name,
++            interrupted: stop,
++            onStage: stage,
++            progress: progress,
++          );
++        } finally {
++          api.beforePublication = previous;
++        }
++        await diary!.load();
++      }
++    },
++  );
+   final LibraryService library;
+   CurrentSessionDraft draft = CurrentSessionDraft(
+     plan: SessionPlan(steps: const []),
+@@ -863,6 +909,7 @@ class SessionController extends ChangeNotifier {
+   @override
+   void dispose() {
+     library.policy.removeListener(_notify);
++    _cloudQueue?.dispose();
+     _disposed = true;
+     super.dispose();
+   }
+diff --git a/lib/ui/alchemist_catalog_screen.dart b/lib/ui/alchemist_catalog_screen.dart
+index df5380c..c669bd5 100644
+--- a/lib/ui/alchemist_catalog_screen.dart
++++ b/lib/ui/alchemist_catalog_screen.dart
+@@ -2,7 +2,11 @@ import 'dart:io';
+ 
+ import 'package:file_picker/file_picker.dart';
+ 
+-import '../services/alchemist_media_transfer.dart';
++import 'dart:async';
++
++import '../services/alchemist_announcement.dart';
++import '../services/alchemist_errors.dart';
++import 'diary_editor.dart';
+ import '../models/diary_entry.dart';
+ 
+ import 'package:flutter/material.dart';
+@@ -18,19 +22,25 @@ Future<void> preparePublication(
+   BuildContext context,
+   SessionController c,
+   ContentType type,
+-  String id,
+-) async {
++  String id, {
++  bool catalogOnly = false,
++}) async {
+   await showActionError(context, () async {
+     final index = await LocalCatalogSource.currentIndex(c.capsules!);
+     final root = index.singleWhere(
+       (r) => r.key.content.type == type && r.key.content.id == id,
+     );
+     final draft = await c.catalog.prepare(root);
++    final announcement = catalogOnly
++        ? null
++        : await prepareCatalogAnnouncement(c.catalog, draft);
+     if (context.mounted) {
+       await Navigator.push<void>(
+         context,
+         MaterialPageRoute(
+-          builder: (_) => CatalogCardEditor(service: c.catalog, draft: draft),
++          builder: (_) => catalogOnly
++              ? CatalogCardEditor(service: c.catalog, draft: draft)
++              : DiaryEditor(diary: c.diary!, entry: announcement!),
+         ),
+       );
+     }
+@@ -57,6 +67,58 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+   String? error;
+   String progress = '';
+   bool paused = false;
++  Timer? autosave;
++  bool get transferring => widget.service.controller.cloudQueue.rows.any(
++    (r) =>
++        r['catalogItemId'] == draft['catalogItemId'] &&
++        !const [
++          'complete',
++          'failed',
++          'paused',
++          'cancelled',
++        ].contains(r['_work']?['phase']),
++  );
++  void queueChanged() {
++    final row = widget.service.controller.cloudQueue.rows
++        .where((r) => r['catalogItemId'] == draft['catalogItemId'])
++        .firstOrNull;
++    if (row != null) {
++      for (final key in [
++        'status',
++        'coverStatus',
++        'etag',
++        'remoteStatus',
++        'publishedRevision',
++        'remoteRevision',
++        'pending',
++        'error',
++        'errorCode',
++      ]) {
++        if (row.containsKey(key)) {
++          draft[key] = row[key];
++        } else {
++          draft.remove(key);
++        }
++      }
++      if (row['card'] is Map) {
++        card['coverAssetId'] = row['card']['coverAssetId'];
++      }
++    }
++    if (mounted) setState(() {});
++  }
++
++  void scheduleSave() {
++    autosave?.cancel();
++    autosave = Timer(const Duration(milliseconds: 500), () {
++      if (mounted &&
++          !busy &&
++          !transferring &&
++          widget.service.controller.policy.isAuthor) {
++        unawaited(save());
++      }
++    });
++  }
++
+   void _identityChanged() {
+     if (!widget.service.controller.policy.isAuthor) paused = true;
+     if (mounted) setState(() {});
+@@ -66,6 +128,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+   void initState() {
+     super.initState();
+     widget.service.controller.policy.addListener(_identityChanged);
++    widget.service.controller.cloudQueue.addListener(queueChanged);
+     for (final k in [
+       'title',
+       'shortAnnotation',
+@@ -82,6 +145,9 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+     fields['categoryIds'] = TextEditingController(
+       text: (card['categoryIds'] as List? ?? []).join(', '),
+     );
++    for (final field in fields.values) {
++      field.addListener(scheduleSave);
++    }
+   }
+ 
+   Future<void> save({bool publish = false}) async {
+@@ -103,22 +169,22 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+       draft['card'] = card;
+       await widget.service.save(draft);
+       if (publish) {
+-        await widget.service.publish(
+-          draft,
+-          interrupted: () => paused || !mounted,
+-          onStage: (_) {
+-            if (mounted) {
+-              setState(() => progress = 'Ожидаем подтверждение сервера');
+-            }
+-          },
+-          progress: (n, total) {
+-            if (mounted) setState(() => progress = '$n / $total байт');
+-          },
++        if ((card['title'] as String).trim().isEmpty ||
++            (card['shortAnnotation'] as String).trim().isEmpty) {
++          throw const AlchemistFailure(
++            'Заполните название и аннотацию.',
++            422,
++            'METADATA_REQUIRED',
++          );
++        }
++        await widget.service.controller.cloudQueue.enqueue(
++          'alchemist_card:${draft['catalogItemId']}',
+         );
++        progress = 'В очереди приложения. Можно перейти на другой экран.';
+       }
+       if (mounted) setState(() => error = null);
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     } finally {
+       if (mounted) setState(() => busy = false);
+     }
+@@ -130,7 +196,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+       await widget.service.transition(draft, action);
+       if (mounted) setState(() => error = null);
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     } finally {
+       if (mounted) setState(() => busy = false);
+     }
+@@ -146,31 +212,121 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+       final block = await store.import(DiaryBlockType.image);
+       if (block == null) return;
+       final m = block.media!;
+-      final receipt =
+-          await AlchemistMediaTransfer(
+-            widget.service.db,
+-            widget.service.remote,
+-          ).upload(
+-            store.file(m)!,
+-            logicalId: m.assetId,
+-            revisionId: m.hash!,
+-            mime: m.mime,
+-            expectedHash: m.hash,
+-          );
+-      card['coverAssetId'] = receipt['assetRevisionId'];
++      draft['localCover'] = m.toMap();
++      draft['coverStatus'] = 'local';
++      card['coverAssetId'] = null;
+       draft['card'] = card;
+       await widget.service.save(draft);
+       if (mounted) setState(() => error = null);
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     } finally {
+       if (mounted) setState(() => busy = false);
+     }
+   }
+ 
++  Future<void> categories() async {
++    final selected = fields['categoryIds']!.text
++        .split(',')
++        .map((v) => v.trim())
++        .where((v) => v.isNotEmpty)
++        .toSet();
++    final known = <String>{
++      ...selected,
++      'Расслабление',
++      'Самогипноз',
++      'Ресурс',
++      'Сон',
++    };
++    for (final d in await widget.service.drafts()) {
++      known.addAll(List<String>.from(d['card']['categoryIds'] ?? []));
++    }
++    if (!mounted) return;
++    final input = TextEditingController();
++    await showDialog<void>(
++      context: context,
++      builder: (ctx) => StatefulBuilder(
++        builder: (ctx, refresh) => AlertDialog(
++          title: const Text('Категории материала'),
++          content: SizedBox(
++            width: 320,
++            child: SingleChildScrollView(
++              child: Column(
++                mainAxisSize: MainAxisSize.min,
++                children: [
++                  for (final value in known)
++                    CheckboxListTile(
++                      title: Text(value),
++                      value: selected.contains(value),
++                      onChanged: (v) => refresh(() {
++                        if (v == true) {
++                          selected.add(value);
++                        } else {
++                          selected.remove(value);
++                        }
++                      }),
++                    ),
++                  TextField(
++                    controller: input,
++                    maxLength: 60,
++                    decoration: const InputDecoration(
++                      labelText: 'Новая категория для этой карточки',
++                    ),
++                  ),
++                  TextButton(
++                    onPressed: () {
++                      final value = input.text.trim();
++                      if (value.isEmpty ||
++                          value.length > 60 ||
++                          value.contains(',') ||
++                          RegExp(r'[\x00-\x1f]').hasMatch(value)) {
++                        return;
++                      }
++                      refresh(() {
++                        known.add(value);
++                        selected.add(value);
++                        input.clear();
++                      });
++                    },
++                    child: const Text('Добавить значение'),
++                  ),
++                ],
++              ),
++            ),
++          ),
++          actions: [
++            TextButton(
++              onPressed: () => Navigator.pop(ctx),
++              child: const Text('Готово'),
++            ),
++          ],
++        ),
++      ),
++    );
++    fields['categoryIds']!.text = selected.join(', ');
++    // Controller lives until the dialog route finishes disposing its text field.
++    WidgetsBinding.instance.addPostFrameCallback((_) => input.dispose());
++  }
++
+   @override
+   void dispose() {
+-    paused = true;
++    if (autosave?.isActive == true &&
++        !transferring &&
++        widget.service.controller.policy.isAuthor) {
++      for (final f in fields.entries) {
++        card[f.key] = ['tags', 'categoryIds'].contains(f.key)
++            ? f.value.text
++                  .split(',')
++                  .map((s) => s.trim())
++                  .where((s) => s.isNotEmpty)
++                  .toList()
++            : f.value.text;
++      }
++      draft['card'] = card;
++      unawaited(widget.service.save(draft).catchError((Object _) {}));
++    }
++    autosave?.cancel();
++    widget.service.controller.cloudQueue.removeListener(queueChanged);
+     widget.service.controller.policy.removeListener(_identityChanged);
+     for (final f in fields.values) {
+       f.dispose();
+@@ -215,8 +371,35 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                       'Точных зависимостей: ${(root['dependencies'] as List).length}',
+                     ),
+                   ),
++              if (draft['localCover'] is Map)
++                Builder(
++                  builder: (context) {
++                    File? file;
++                    try {
++                      file = widget.service.controller.diary?.mediaStore?.file(
++                        DiaryMedia.fromMap(
++                          Map<String, dynamic>.from(draft['localCover']),
++                        ),
++                      );
++                    } catch (_) {}
++                    return file == null
++                        ? const Text('Обложка недоступна — выберите другую')
++                        : Image.file(
++                            file,
++                            height: 160,
++                            fit: BoxFit.contain,
++                            errorBuilder: (_, _, _) => const Text(
++                              'Обложка недоступна — выберите другую',
++                            ),
++                          );
++                  },
++                ),
++              if (draft['coverStatus'] != null)
++                Text(
++                  'Обложка: ${const {'local': 'на телефоне', 'transferring': 'передаётся', 'verified': 'проверена сервером', 'published': 'опубликована', 'failed': 'сбой; файл сохранён'}[draft['coverStatus']] ?? 'на телефоне'}',
++                ),
+               TextButton.icon(
+-                onPressed: busy ? null : cover,
++                onPressed: busy || transferring ? null : cover,
+                 icon: const Icon(Icons.image_outlined),
+                 label: Text(
+                   card['coverAssetId'] == null
+@@ -224,11 +407,18 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                       : 'Заменить обложку',
+                 ),
+               ),
+-              if (card['coverAssetId'] != null)
++              if (card['coverAssetId'] != null || draft['localCover'] != null)
+                 TextButton(
+                   onPressed: busy
+                       ? null
+-                      : () => setState(() => card['coverAssetId'] = null),
++                      : () {
++                          setState(() {
++                            card['coverAssetId'] = null;
++                            draft.remove('localCover');
++                            draft.remove('coverStatus');
++                          });
++                          scheduleSave();
++                        },
+                   child: const Text('Убрать обложку'),
+                 ),
+               if (draft['type'] != 'package' &&
+@@ -265,7 +455,11 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                             await widget.service.save(draft);
+                             if (mounted) setState(() => error = null);
+                           } catch (e) {
+-                            if (mounted) setState(() => error = e.toString());
++                            if (mounted) {
++                              setState(
++                                () => error = AlchemistFailure.from(e).message,
++                              );
++                            }
+                           }
+                         },
+                   child: const Text('Обновить состав из библиотеки'),
+@@ -274,7 +468,6 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                 'title': 'Название',
+                 'shortAnnotation': 'Аннотация',
+                 'description': 'Описание',
+-                'categoryIds': 'Категории через запятую',
+                 'tags': 'Теги через запятую',
+                 'language': 'Язык',
+                 'authorDisplayName': 'Автор / правообладатель',
+@@ -285,14 +478,29 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                   child: TextField(
+                     key: ValueKey('catalog-${item.key}'),
+                     controller: fields[item.key],
+-                    enabled: !busy,
++                    enabled: !busy && !transferring,
+                     maxLines:
+                         ['description', 'shortAnnotation'].contains(item.key)
+                         ? 3
+                         : 1,
+-                    decoration: InputDecoration(labelText: item.value),
++                    decoration: InputDecoration(
++                      labelText: item.value,
++                      helperText: item.key == 'shortAnnotation'
++                          ? 'Кратко: кому и чем поможет материал'
++                          : item.key == 'description'
++                          ? 'Подробности, состав и рекомендации'
++                          : null,
++                      helperMaxLines: 2,
++                    ),
+                   ),
+                 ),
++              TextButton.icon(
++                onPressed: busy || transferring ? null : categories,
++                icon: const Icon(Icons.category_outlined),
++                label: Text(
++                  'Категории: ${fields['categoryIds']!.text.isEmpty ? 'выбрать ▾' : fields['categoryIds']!.text} ▾',
++                ),
++              ),
+               DropdownButtonFormField<String>(
+                 isExpanded: true,
+                 initialValue: card['visibility'] as String? ?? 'private',
+@@ -315,7 +523,12 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                     ),
+                   ),
+                 ],
+-                onChanged: busy ? null : (v) => card['visibility'] = v,
++                onChanged: busy || transferring
++                    ? null
++                    : (v) {
++                        card['visibility'] = v;
++                        scheduleSave();
++                      },
+               ),
+               const Padding(
+                 padding: EdgeInsets.symmetric(vertical: 12),
+@@ -352,8 +565,10 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
+                     ),
+                   ],
+                   FilledButton(
+-                    onPressed: busy ? null : () => save(publish: true),
+-                    child: const Text('Опубликовать'),
++                    onPressed: busy || transferring
++                        ? null
++                        : () => save(publish: true),
++                    child: const Text('Добавить в каталог'),
+                   ),
+                 ],
+               ),
+@@ -396,7 +611,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
+       final values = await widget.service.drafts();
+       if (mounted) setState(() => cards = values);
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     }
+   }
+ 
+@@ -473,7 +688,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
+         );
+       }
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     }
+   }
+ 
+@@ -487,7 +702,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
+         await openDraft(await widget.service.preparePackage(File(f!.path!)));
+       }
+     } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
++      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
+     }
+   }
+ 
+@@ -513,7 +728,11 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
+                             await widget.service.prepareCurrentSession(),
+                           );
+                         } catch (e) {
+-                          if (mounted) setState(() => error = e.toString());
++                          if (mounted) {
++                            setState(
++                              () => error = AlchemistFailure.from(e).message,
++                            );
++                          }
+                         }
+                       },
+                       icon: const Icon(Icons.playlist_add),
+@@ -535,7 +754,11 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
+                           await widget.service.synchronize();
+                           await load();
+                         } catch (e) {
+-                          if (mounted) setState(() => error = e.toString());
++                          if (mounted) {
++                            setState(
++                              () => error = AlchemistFailure.from(e).message,
++                            );
++                          }
+                         }
+                       },
+                       icon: const Icon(Icons.sync),
+diff --git a/lib/ui/alchemist_queue_indicator.dart b/lib/ui/alchemist_queue_indicator.dart
+new file mode 100644
+index 0000000..43b2034
+--- /dev/null
++++ b/lib/ui/alchemist_queue_indicator.dart
+@@ -0,0 +1,105 @@
++import '../services/alchemist_work_queue.dart';
++
++import 'dart:async';
++
++import 'package:flutter/material.dart';
++
++import '../services/session_controller.dart';
++import 'alchemist_sync_screen.dart';
++import 'design.dart';
++
++class AlchemistQueueIndicator extends StatefulWidget {
++  const AlchemistQueueIndicator({
++    super.key,
++    required this.controller,
++    required this.navigatorKey,
++  });
++  final SessionController controller;
++  final GlobalKey<NavigatorState> navigatorKey;
++  @override
++  State<AlchemistQueueIndicator> createState() =>
++      _AlchemistQueueIndicatorState();
++}
++
++class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
++    with WidgetsBindingObserver {
++  @override
++  void initState() {
++    super.initState();
++    WidgetsBinding.instance.addObserver(this);
++    _lastOwner = widget.controller.catalog.api?.ownerBinding;
++    widget.controller.policy.addListener(identityChanged);
++    unawaited(widget.controller.cloudQueue.recover());
++  }
++
++  String? _lastOwner;
++  void identityChanged() {
++    final owner = widget.controller.catalog.api?.ownerBinding;
++    if (owner == _lastOwner) return;
++    _lastOwner = owner;
++    unawaited(widget.controller.cloudQueue.recover());
++  }
++
++  @override
++  void didChangeAppLifecycleState(AppLifecycleState state) {
++    if (state == AppLifecycleState.paused ||
++        state == AppLifecycleState.detached) {
++      unawaited(widget.controller.cloudQueue.pauseAll());
++    }
++    if (state == AppLifecycleState.resumed) {
++      unawaited(
++        widget.controller.diary?.restoreSignIn() ?? Future<void>.value(),
++      );
++    }
++  }
++
++  @override
++  void dispose() {
++    WidgetsBinding.instance.removeObserver(this);
++    widget.controller.policy.removeListener(identityChanged);
++    super.dispose();
++  }
++
++  @override
++  Widget build(BuildContext context) => ListenableBuilder(
++    listenable: widget.controller.cloudQueue,
++    builder: (context, _) {
++      final queue = widget.controller.cloudQueue;
++      if (!widget.controller.policy.isAuthor || queue.pendingCount == 0) {
++        return const SizedBox.shrink();
++      }
++      return Material(
++        color: ink,
++        child: SafeArea(
++          bottom: false,
++          child: InkWell(
++            onTap: () => widget.navigatorKey.currentState?.push<void>(
++              MaterialPageRoute(
++                builder: (_) =>
++                    AlchemistSyncScreen(controller: widget.controller),
++              ),
++            ),
++            child: Padding(
++              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
++              child: Row(
++                children: [
++                  const Icon(Icons.sync, size: 18, color: neonPink),
++                  const SizedBox(width: 8),
++                  Expanded(
++                    child: Text(
++                      'Передачи: ${queue.pendingCount} · ${alchemistStageLabel(queue.rows.where((r) => !const ['complete', 'cancelled'].contains(r['_work']?['phase'])).firstOrNull?['_work']?['stage'])}',
++                      style: const TextStyle(fontSize: 12),
++                      maxLines: 1,
++                      overflow: TextOverflow.ellipsis,
++                    ),
++                  ),
++                  const Icon(Icons.chevron_right, size: 18),
++                ],
++              ),
++            ),
++          ),
++        ),
++      );
++    },
++  );
++}
+diff --git a/lib/ui/alchemist_sync_screen.dart b/lib/ui/alchemist_sync_screen.dart
+index 5c9d691..d63e8e5 100644
+--- a/lib/ui/alchemist_sync_screen.dart
++++ b/lib/ui/alchemist_sync_screen.dart
+@@ -1,11 +1,10 @@
+-import 'dart:convert';
++import '../services/alchemist_work_queue.dart';
++
++import 'dart:async';
+ 
+ import 'package:flutter/material.dart';
+-import 'package:sqflite/sqflite.dart';
+ 
+-import '../models/session_plan.dart';
+ import '../services/session_controller.dart';
+-import 'alchemist_catalog_screen.dart';
+ import 'design.dart';
+ 
+ class AlchemistSyncScreen extends StatefulWidget {
+@@ -16,115 +15,10 @@ class AlchemistSyncScreen extends StatefulWidget {
+ }
+ 
+ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
+-  final rows = <Map<String, dynamic>>[];
+-  String? error;
+-  bool busy = false;
+-  Database get db => widget.controller.capsules!.database;
+   @override
+   void initState() {
+     super.initState();
+-    load();
+-  }
+-
+-  Future<void> load() async {
+-    try {
+-      final values = await db.query(
+-        'app_settings',
+-        where: 'name LIKE ?',
+-        whereArgs: ['alchemist_%'],
+-      );
+-      final parsed = <Map<String, dynamic>>[];
+-      for (final row in values) {
+-        final name = row['name'] as String;
+-        if (![
+-          'alchemist_upload:',
+-          'alchemist_card:',
+-          'alchemist_diary_queue:',
+-          'alchemist_read_sync_queue:',
+-        ].any(name.startsWith)) {
+-          continue;
+-        }
+-        try {
+-          parsed.add({
+-            'name': name,
+-            'value': Map<String, dynamic>.from(
+-              jsonDecode(row['value'] as String),
+-            ),
+-          });
+-        } catch (_) {}
+-      }
+-      if (mounted) {
+-        setState(() {
+-          rows.clear();
+-          rows.addAll(parsed);
+-        });
+-      }
+-    } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
+-    }
+-  }
+-
+-  Future<void> flush() async {
+-    setState(() => busy = true);
+-    try {
+-      await widget.controller.diary?.flushCloudQueue();
+-      await load();
+-    } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
+-    } finally {
+-      if (mounted) setState(() => busy = false);
+-    }
+-  }
+-
+-  Future<void> cancel(Map<String, dynamic> row) async {
+-    final name = row['name'] as String,
+-        value = row['value'] as Map<String, dynamic>;
+-    final ok = await showDialog<bool>(
+-      context: context,
+-      builder: (ctx) => AlertDialog(
+-        title: const Text('Отменить ожидание отправки?'),
+-        content: const Text(
+-          'Черновик и исходные файлы сохранятся. Уже подтверждённые публикации проверяются и снимаются в редакторе.',
+-        ),
+-        actions: [
+-          TextButton(
+-            onPressed: () => Navigator.pop(ctx, false),
+-            child: const Text('Назад'),
+-          ),
+-          FilledButton(
+-            onPressed: () => Navigator.pop(ctx, true),
+-            child: const Text('Отменить ожидание'),
+-          ),
+-        ],
+-      ),
+-    );
+-    if (ok != true || !mounted) return;
+-    setState(() => busy = true);
+-    try {
+-      if (name.startsWith('alchemist_upload:')) {
+-        if (value['sessionId'] != null) {
+-          await widget.controller.alchemistApi().call('media.abortUpload', {
+-            'sessionId': value['sessionId'],
+-          });
+-        }
+-        value['state'] = 'cancelled';
+-        value['requestId'] = newId();
+-        value.remove('sessionId');
+-        await db.update(
+-          'app_settings',
+-          {'value': jsonEncode(value)},
+-          where: 'name=?',
+-          whereArgs: [name],
+-        );
+-      } else {
+-        await db.delete('app_settings', where: 'name=?', whereArgs: [name]);
+-      }
+-      await load();
+-    } catch (e) {
+-      if (mounted) setState(() => error = e.toString());
+-    } finally {
+-      if (mounted) setState(() => busy = false);
+-    }
++    unawaited(widget.controller.cloudQueue.refresh());
+   }
+ 
+   @override
+@@ -133,67 +27,89 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
+           body: Center(child: Text('Авторские возможности недоступны')),
+         )
+       : LeatherScaffold(
+-          title: 'Очередь синхронизации',
+-          child: RefreshIndicator(
+-            onRefresh: load,
+-            child: ListView(
+-              children: [
+-                TextButton.icon(
+-                  onPressed: busy ? null : flush,
+-                  icon: const Icon(Icons.sync),
+-                  label: const Text('Повторить отправку дневника'),
+-                ),
+-                if (busy) const LinearProgressIndicator(),
+-                if (error != null)
+-                  Text(error!, style: const TextStyle(color: neonPink)),
+-                for (final row in rows)
+-                  Builder(
+-                    builder: (context) {
+-                      final v = row['value'], name = row['name'] as String;
+-                      final card = name.startsWith('alchemist_card:'),
+-                          upload = name.startsWith('alchemist_upload:');
+-                      final status = v['status'] ?? v['state'] ?? 'pending';
+-                      return ListTile(
+-                        title: Text(
+-                          v['card']?['title'] ??
+-                              v['entry']?['title'] ??
+-                              (upload ? 'Передача файла' : 'Состояние чтения'),
+-                        ),
+-                        subtitle: Text(
+-                          '${const {'draft': 'Черновик', 'published': 'Опубликовано', 'failed': 'Ошибка — можно повторить', 'paused': 'Пауза', 'pending': 'Ожидает отправки', 'verified': 'Файл проверен сервером', 'localConflict': 'Новые правки — подтвердите публикацию в редакторе', 'cancelled': 'Ожидание отменено'}[status] ?? status}'
+-                          '${upload ? '\n${v['offset'] ?? 0} / ${v['byteLength'] ?? 0} байт' : ''}${v['error'] == null ? '' : '\n${v['error']}'}',
+-                        ),
+-                        onTap: card
+-                            ? () async {
+-                                await Navigator.push<void>(
+-                                  context,
+-                                  MaterialPageRoute(
+-                                    builder: (_) => CatalogCardEditor(
+-                                      service: widget.controller.catalog,
+-                                      draft: Map<String, dynamic>.from(v),
+-                                    ),
++          title: 'Очередь передач',
++          child: ListenableBuilder(
++            listenable: widget.controller.cloudQueue,
++            builder: (context, _) {
++              final queue = widget.controller.cloudQueue;
++              return RefreshIndicator(
++                onRefresh: queue.refresh,
++                child: ListView(
++                  children: [
++                    const Text(
++                      'При сворачивании передача ставится на паузу после текущего запроса. Для продолжения откройте приложение и нажмите «Продолжить». Исходники сохраняются. Отмена очереди не снимает уже подтверждённую публикацию: используйте «Снять публикацию» в карточке.',
++                    ),
++                    for (final row in queue.rows)
++                      Builder(
++                        builder: (context) {
++                          final work = row['_work'] as Map,
++                              name = row['_name'] as String,
++                              phase = work['phase'];
++                          return Card(
++                            child: Padding(
++                              padding: const EdgeInsets.all(8),
++                              child: Column(
++                                crossAxisAlignment: CrossAxisAlignment.start,
++                                children: [
++                                  Text(
++                                    row['card']?['title'] ??
++                                        row['entry']?['title'] ??
++                                        'Передача',
+                                   ),
+-                                );
+-                                await load();
+-                              }
+-                            : null,
+-                        trailing:
+-                            busy ||
+-                                card ||
+-                                ['verified', 'cancelled'].contains(status)
+-                            ? null
+-                            : IconButton(
+-                                tooltip: 'Отменить ожидание',
+-                                onPressed: () => cancel(row),
+-                                icon: const Icon(Icons.close),
++                                  Text(
++                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'pausing': 'Завершается текущий запрос', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${alchemistStageLabel(work['stage'])}',
++                                  ),
++                                  Text(
++                                    '${work['bytes'] ?? 0} / ${work['totalBytes'] ?? 0} байт · попыток задачи ${work['attempts'] ?? 0} · сетевых повторов ${work['networkRetries'] ?? 0}',
++                                  ),
++                                  if (work['code'] != null)
++                                    Text('Код: ${work['code']}'),
++                                  if (work['message'] != null)
++                                    Text(work['message']),
++                                  if (!const [
++                                    'complete',
++                                    'cancelled',
++                                  ].contains(phase))
++                                    Wrap(
++                                      spacing: 8,
++                                      children: [
++                                        if (const [
++                                          'paused',
++                                          'failed',
++                                        ].contains(phase))
++                                          TextButton(
++                                            onPressed: () =>
++                                                queue.enqueue(name),
++                                            child: const Text('Продолжить'),
++                                          )
++                                        else
++                                          TextButton(
++                                            onPressed: () => queue.pause(name),
++                                            child: const Text('Пауза'),
++                                          ),
++                                        TextButton(
++                                          onPressed: () =>
++                                              queue.pause(name, cancel: true),
++                                          child: const Text(
++                                            'Отменить отправку',
++                                          ),
++                                        ),
++                                      ],
++                                    ),
++                                ],
+                               ),
+-                      );
+-                    },
+-                  ),
+-                if (rows.isEmpty)
+-                  const ListTile(title: Text('Нет сохранённых операций')),
+-              ],
+-            ),
++                            ),
++                          );
++                        },
++                      ),
++                    if (queue.rows.isEmpty)
++                      const Text(
++                        'Нет задач этого аккаунта. Старые черновики доступны в разделе «Мои публикации».',
++                      ),
++                  ],
++                ),
++              );
++            },
+           ),
+         );
+ }
+diff --git a/lib/ui/diary_editor.dart b/lib/ui/diary_editor.dart
+index 39362a7..088ec0f 100644
+--- a/lib/ui/diary_editor.dart
++++ b/lib/ui/diary_editor.dart
+@@ -148,6 +148,21 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
+     if (!mounted) return;
+     setState(() => busy = true);
+     try {
++      final controller = SessionScope.maybeOf(context)?.controller;
++      if (widget.diary.api?.supportsServerIdentity == true &&
++          controller?.capsules != null) {
++        await widget.diary.api!.enqueuePublication(value, published: publish);
++        await controller!.cloudQueue.enqueue(
++          'alchemist_diary_queue:${value.id}',
++        );
++        if (mounted) {
++          setState(
++            () =>
++                saved = 'В очереди приложения. Результат — на экране передач.',
++          );
++        }
++        return;
++      }
+       if (publish == null) {
+         await widget.diary.saveToCloud(value);
+       } else {
+diff --git a/lib/ui/library_screen.dart b/lib/ui/library_screen.dart
+index 5919212..0acf5af 100644
+--- a/lib/ui/library_screen.dart
++++ b/lib/ui/library_screen.dart
+@@ -582,16 +582,34 @@ class _LibraryScreenState extends State<LibraryScreen>
+                           ),
+                           if (!widget.allowSelection &&
+                               widget.controller?.capsules != null)
+-                            IconButton(
+-                              tooltip: 'Облачный каталог',
+-                              icon: const Icon(Icons.cloud_outlined),
+-                              onPressed: () => Navigator.push<void>(
+-                                context,
+-                                MaterialPageRoute(
+-                                  builder: (_) => AlchemistStoreScreen(
+-                                    controller: widget.controller!,
++                            SizedBox(
++                              width: 52,
++                              child: TextButton(
++                                style: TextButton.styleFrom(
++                                  padding: EdgeInsets.zero,
++                                  minimumSize: const Size(48, 48),
++                                ),
++                                onPressed: () => Navigator.push<void>(
++                                  context,
++                                  MaterialPageRoute(
++                                    builder: (_) => AlchemistStoreScreen(
++                                      controller: widget.controller!,
++                                    ),
+                                   ),
+                                 ),
++                                child: const Column(
++                                  mainAxisSize: MainAxisSize.min,
++                                  children: [
++                                    Icon(Icons.cloud_outlined, size: 20),
++                                    FittedBox(
++                                      fit: BoxFit.scaleDown,
++                                      child: Text(
++                                        'Каталог',
++                                        style: TextStyle(fontSize: 11),
++                                      ),
++                                    ),
++                                  ],
++                                ),
+                               ),
+                             ),
+                           if (widget.controller != null) ...[
+@@ -763,13 +781,14 @@ class _LibraryScreenState extends State<LibraryScreen>
+                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                 ),
+                 onSelected: (s) {
+-                  if (s == 'publish') {
++                  if ((s == 'publish' || s == 'catalog')) {
+                     unawaited(
+                       preparePublication(
+                         context,
+                         widget.controller!,
+                         ContentType.track,
+                         a.id,
++                        catalogOnly: s == 'catalog',
+                       ),
+                     );
+                   }
+@@ -791,15 +810,20 @@ class _LibraryScreenState extends State<LibraryScreen>
+                 },
+                 itemBuilder: (_) => [
+                   if (widget.controller?.capsules != null &&
+-                      widget.library.policy.isAuthor)
++                      widget.library.policy.isAuthor) ...[
++                    const PopupMenuItem(
++                      value: 'catalog',
++                      child: Text('Добавить в каталог'),
++                    ),
+                     const PopupMenuItem(
+                       value: 'publish',
+                       child: Text('Подготовить к публикации'),
+                     ),
++                  ],
+                   if (widget.controller?.capsules != null)
+                     const PopupMenuItem(
+                       value: 'export',
+-                      child: Text('Экспортировать трек'),
++                      child: Text('Экспортировать на устройство'),
+                     ),
+                   const PopupMenuItem(
+                     value: 'info',
+diff --git a/lib/ui/modules_screen.dart b/lib/ui/modules_screen.dart
+index 4e81700..67cc5b0 100644
+--- a/lib/ui/modules_screen.dart
++++ b/lib/ui/modules_screen.dart
+@@ -118,12 +118,13 @@ class _ModulesScreenState extends State<ModulesScreen> {
+                     tooltip: 'Действия модуля',
+                     enabled: !busy,
+                     onSelected: (value) async {
+-                      if (value == 'publish') {
++                      if ((value == 'publish' || value == 'catalog')) {
+                         await preparePublication(
+                           context,
+                           widget.controller,
+                           ContentType.module,
+                           m.id,
++                          catalogOnly: value == 'catalog',
+                         );
+                         return;
+                       }
+@@ -144,11 +145,16 @@ class _ModulesScreenState extends State<ModulesScreen> {
+                     },
+                     itemBuilder: (_) => [
+                       if (widget.controller.capsules != null &&
+-                          widget.controller.library.policy.isAuthor)
++                          widget.controller.library.policy.isAuthor) ...[
++                        const PopupMenuItem(
++                          value: 'catalog',
++                          child: Text('Добавить в каталог'),
++                        ),
+                         const PopupMenuItem(
+                           value: 'publish',
+                           child: Text('Подготовить к публикации'),
+                         ),
++                      ],
+                       const PopupMenuItem(
+                         value: 'edit',
+                         child: Text('Редактировать'),
+@@ -156,7 +162,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
+                       if (widget.controller.capsules != null)
+                         const PopupMenuItem(
+                           value: 'export',
+-                          child: Text('Экспортировать модуль'),
++                          child: Text('Экспортировать на устройство'),
+                         ),
+                     ],
+                   ),
+diff --git a/lib/ui/templates_screen.dart b/lib/ui/templates_screen.dart
+index 4e8095b..245dba3 100644
+--- a/lib/ui/templates_screen.dart
++++ b/lib/ui/templates_screen.dart
+@@ -148,8 +148,14 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
+         );
+       }
+     }
+-    if (action == 'publish' && mounted) {
+-      await preparePublication(context, c, ContentType.template, t.id);
++    if ((action == 'publish' || action == 'catalog') && mounted) {
++      await preparePublication(
++        context,
++        c,
++        ContentType.template,
++        t.id,
++        catalogOnly: action == 'catalog',
++      );
+       return;
+     }
+     if (action == 'export' && mounted && c.capsules != null) {
+@@ -283,15 +289,21 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
+                             }
+                           },
+                           itemBuilder: (_) => [
+-                            if (c.capsules != null && c.library.policy.isAuthor)
++                            if (c.capsules != null &&
++                                c.library.policy.isAuthor) ...[
++                              const PopupMenuItem(
++                                value: 'catalog',
++                                child: Text('Добавить в каталог'),
++                              ),
+                               const PopupMenuItem(
+                                 value: 'publish',
+                                 child: Text('Подготовить к публикации'),
+                               ),
++                            ],
+                             if (c.capsules != null)
+                               const PopupMenuItem(
+                                 value: 'export',
+-                                child: Text('Экспортировать шаблон'),
++                                child: Text('Экспортировать на устройство'),
+                               ),
+                             const PopupMenuItem(
+                               value: 'edit',
+diff --git a/pubspec.yaml b/pubspec.yaml
+index ff8ded2..24f82bf 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -1,7 +1,7 @@
+ name: sulfi_hypnotherapy
+ description: Локальная аудиобиблиотека «Сульфи — гипнотерапевт».
+ publish_to: 'none'
+-version: 0.4.16+24
++version: 0.4.17+25
+ 
+ environment:
+   sdk: ^3.13.7

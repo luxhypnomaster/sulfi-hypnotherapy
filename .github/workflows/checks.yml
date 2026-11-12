@@ -8,6 +8,19 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      p0_scope:
+        description: 'UI upgrade core, or optional native recorder24 gate'
+        type: choice
+        options: [core, recording]
+        default: core
+      p0_native:
+        description: '16V immutable APK24 UI-created update investigation; no build/signing'
+        type: boolean
+        default: false
+      p0_checks:
+        description: '16V hotfix regressions only; no build/signing'
+        type: boolean
+        default: false
       emulator_qa:
         description: '16B isolated APK24 to25 native QA, no Google identities'
         type: boolean
@@ -27,18 +40,23 @@ permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}
+  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}
   cancel-in-progress: true
 
 jobs:
   verify:
-    if: inputs.emulator_qa != true
+    if: inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
       ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
       GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
     steps:
+      - name: P0 STOP-SHIP forbids building or signing any Sulfi candidate
+        if: github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
+        run: |
+          echo 'BLOCKED: Task16V preservation/recovery gates are not accepted. No Sulfi APK build/sign/upload is allowed.'
+          exit 1
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -245,3 +263,96 @@ jobs:
           path: ${{ runner.temp }}/emulator-evidence/
           retention-days: 14
           if-no-files-found: ignore
+
+  native_upgrade:
+    if: inputs.p0_native == true && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    permissions:
+      contents: write # GET existing private draft APK assets only; no publication
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Hardware gate
+        id: kvm
+        run: |
+          if [ -c /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo 'BLOCKED_NO_KVM_NO_IMAGE_INSTALL'
+          fi
+      - name: Read immutable APK24 and APK25
+        if: steps.kvm.outputs.available == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/task16v-apks"
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/736432720 -H 'Accept: application/octet-stream' > "$RUNNER_TEMP/task16v-apks/master24.apk"
+          gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/738283668 -H 'Accept: application/octet-stream' > "$RUNNER_TEMP/task16v-apks/master25.apk"
+          python3 - <<'PYCODE'
+          import hashlib,os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-apks'
+          expected={'master24.apk':'a242d8222af27c936f44c86b47e2cf674c3789072c3a7cac9aa4bba3afe3cda1','master25.apk':'d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9'}
+          for n,h in expected.items(): assert hashlib.sha256((p/n).read_bytes()).hexdigest()==h
+          print('IMMUTABLE_APK_SHA_PASS')
+          PYCODE
+          TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          for N in 24 25; do
+            "$TOOLS/apksigner" verify --print-certs "$RUNNER_TEMP/task16v-apks/master$N.apk" | grep -E 'certificate SHA-256 digest|certificate SHA-1 digest'
+            "$TOOLS/aapt" dump badging "$RUNNER_TEMP/task16v-apks/master$N.apk" | head -1
+          done
+      - name: Compile disposable Android UI accessibility probe (not Sulfi APK)
+        if: steps.kvm.outputs.available == 'true'
+        run: bash scripts/task16v/build_ui_probe.sh
+      - name: Native UI creation then normal update; no DB writes by harness
+        env:
+          P0_QA_SCOPE: ${{ inputs.p0_scope }}
+        if: steps.kvm.outputs.available == 'true'
+        uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -feature -Vulkan -no-snapshot -cores 2 -noaudio -no-boot-anim -camera-back none -memory 1536
+          script: bash scripts/task16v/run_native.sh
+      - name: Preserve synthetic-only native evidence
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: task16v-native-ui-${{ github.sha }}
+          path: ${{ runner.temp }}/task16v-evidence
+          retention-days: 14
+
+
+  regressions:
+    if: inputs.p0_checks == true && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-flutter
+      - name: Python read-only diagnostics and WAL preservation
+        run: python3 -m unittest discover -s scripts/task16v -p 'test_*.py' -v
+      - run: node --test server/alchemist/test/*.test.mjs
+      - run: node --test server/google_apps_script/test/backend.test.mjs
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+      - name: Full Flutter regressions; no live server tests without explicit opt-in
+        run: |
+          set +e
+          flutter test --reporter json > "$RUNNER_TEMP/task16v-tests.jsonl" 2>&1
+          STATUS=$?
+          set -e
+          python3 scripts/flutter_test_summary.py "$RUNNER_TEMP/task16v-tests.jsonl" "$RUNNER_TEMP/task16v-test-summary.json"
+          cat "$RUNNER_TEMP/task16v-test-summary.json"
+          exit "$STATUS"
+      - run: flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client

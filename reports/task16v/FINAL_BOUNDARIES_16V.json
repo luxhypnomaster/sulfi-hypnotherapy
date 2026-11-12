@@ -1,0 +1,40 @@
+{
+  "main": {
+    "expected": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+    "actual": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+    "unchanged": true
+  },
+  "pr45": {
+    "head": "24a51c5e47140131c9e8d214a60b841fa32179b5",
+    "unchanged": true,
+    "draft": true
+  },
+  "releases": [
+    {
+      "id": 442038688,
+      "draft": true,
+      "target": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+      "assetsExactUnchanged": true
+    },
+    {
+      "id": 442553188,
+      "draft": true,
+      "target": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+      "assetsExactUnchanged": true
+    }
+  ],
+  "androidSigningAndPackage": {
+    "sourceDiffEmpty": true
+  },
+  "storageModelMigrations": {
+    "sourceDiffEmpty": true
+  },
+  "oldDiaryAndServer": {
+    "sourceDiffEmpty": true
+  },
+  "gasDeploymentMutations": "NONE; no deploy invoked in P0; live runtime not re-probed",
+  "driveAclMutations": "NONE; only new16V reports written in existing Task16 folder",
+  "ownerPhoneActions": "NONE",
+  "sulfiCandidateAPK26": "NOT_BUILT_STOP_SHIP",
+  "testHelperSigning": "Separate disposable emulator helper key only; not Sulfi signing"
+}

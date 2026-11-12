@@ -133,6 +133,14 @@ class AlchemistDiaryApi extends DiaryApi {
       ? 'public'
       : 'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:$_subject'))}';
   @override
+  // APK24's server-restored drafts used google:<verified subject>. Accept that
+  // exact legacy owner only after server verification; never rewrite the row or
+  // broaden this alias to another Google account, guest, or client role.
+  bool canReadAuthorDraftScope(Object? scope) =>
+      _verifiedRole == 'MASTER' &&
+      _subject != null &&
+      (super.canReadAuthorDraftScope(scope) || scope == 'google:$_subject');
+  @override
   Future<void> authenticateReader(String token) async {
     await _verifyIdentity(token);
   }

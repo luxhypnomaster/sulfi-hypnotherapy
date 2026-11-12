@@ -1,0 +1,300 @@
+{
+  "fixture": "created through unmodified APK24 Android UI; no SQL/DB injection",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_24",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "uninstall": false,
+        "databaseInjected": false
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_import_2",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_import_3",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_native_recording",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_module_elman",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_module_pause",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "ui_diary_auth_boundary",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "before24_inventory",
+      "status": "BLOCKED",
+      "reason": "NOT_ENOUGH_UI_AUDIO"
+    },
+    {
+      "case": "native_update24_to25",
+      "status": "PASS",
+      "details": {
+        "exactRowsAndMediaPreserved": true,
+        "audio": 0,
+        "modules": 0,
+        "diary": 0
+      }
+    },
+    {
+      "case": "ui_after25",
+      "status": "BLOCKED",
+      "reason": "element indices must be integers"
+    },
+    {
+      "case": "cold_restart25",
+      "status": "PASS",
+      "details": {
+        "exactRowsAndMediaPreserved": true,
+        "audio": 0,
+        "modules": 0,
+        "diary": 0
+      }
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Шаблоны"
+    },
+    {
+      "action": "tap",
+      "label": "Шаблоны"
+    },
+    {
+      "action": "tap",
+      "label": "Дневник"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    }
+  ],
+  "inventories": {
+    "before24": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "0a6508861972a063ecedbccb8096305f"
+          }
+        ],
+        "audio_assets": [],
+        "capsule_imports": [],
+        "content_revisions": [],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T16:04:13.379559Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "cc6ad78420ddc383a2cdbb69479460078b60426cf1231b9712bc001cb6fa8066"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "3469bce021679e2c06a13c9f9712425908fe0f09ee907159e5c5d4c35199eba2"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        }
+      },
+      "snapshot_sha256": "79107a064d1a85505442c8b6acecd7381739d5bf82519addc51b8bf643d7c30a"
+    },
+    "after25": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "0a6508861972a063ecedbccb8096305f"
+          }
+        ],
+        "audio_assets": [],
+        "capsule_imports": [],
+        "content_revisions": [],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T16:04:13.379559Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "cc6ad78420ddc383a2cdbb69479460078b60426cf1231b9712bc001cb6fa8066"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "3af7556d3056f42474ba66df5aa05a47b650d3bfee08c5f75db0dee81674864c"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        }
+      },
+      "snapshot_sha256": "a43fdaa5c0d253d4615c52999ddadabd5338e25f0a0e2cd5ef2a1b472bfb1a74"
+    },
+    "cold25": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "0a6508861972a063ecedbccb8096305f"
+          }
+        ],
+        "audio_assets": [],
+        "capsule_imports": [],
+        "content_revisions": [],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T16:04:13.379559Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "cc6ad78420ddc383a2cdbb69479460078b60426cf1231b9712bc001cb6fa8066"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "3af7556d3056f42474ba66df5aa05a47b650d3bfee08c5f75db0dee81674864c"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        }
+      },
+      "snapshot_sha256": "a43fdaa5c0d253d4615c52999ddadabd5338e25f0a0e2cd5ef2a1b472bfb1a74"
+    }
+  }
+}

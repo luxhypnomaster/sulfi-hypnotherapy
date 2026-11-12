@@ -1,0 +1,149 @@
+{
+  "baseline_native_invalid": {
+    "conclusion": "success",
+    "databaseId": 43254064338,
+    "headSha": "b47bf5470c2d7ce5318b650889add52168f382c1",
+    "jobs": [
+      {
+        "name": "native_upgrade",
+        "status": "completed",
+        "conclusion": "success",
+        "databaseId": 131307410403
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43254064338"
+  },
+  "source_regressions": {
+    "conclusion": "success",
+    "databaseId": 43255233809,
+    "headSha": "47fe11cf00cbd9f0af5bc9faf07a59e0fcb5493b",
+    "jobs": [
+      {
+        "name": "regressions",
+        "status": "completed",
+        "conclusion": "success",
+        "databaseId": 131311544570
+      },
+      {
+        "name": "native_upgrade",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131311547818
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43255233809"
+  },
+  "native_run2_blocked": {
+    "conclusion": "success",
+    "databaseId": 43255433079,
+    "headSha": "0aecc56c4b8cc0fc1cfb81cc9b9136bb6a582776",
+    "jobs": [
+      {
+        "name": "native_upgrade",
+        "status": "completed",
+        "conclusion": "success",
+        "databaseId": 131312256349
+      },
+      {
+        "name": "regressions",
+        "status": "completed",
+        "conclusion": "success",
+        "databaseId": 131312256762
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43255433079"
+  },
+  "dispatch_yaml_failure": {
+    "conclusion": "failure",
+    "databaseId": 43256990236,
+    "headSha": "e0bf737f7cafbf46e778a340d6564984a6bf8992",
+    "jobs": [],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43256990236"
+  },
+  "cancelled_old_probe": {
+    "conclusion": "cancelled",
+    "databaseId": 43257069432,
+    "headSha": "ff582eac5094ba0b4c9f2de1d55453b8669d6549",
+    "jobs": [
+      {
+        "name": "native_upgrade",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "databaseId": 131318050699
+      },
+      {
+        "name": "regressions",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "databaseId": 131318051461
+      },
+      {
+        "name": "emulator_qa",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131318053373
+      },
+      {
+        "name": "verify",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131318126377
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43257069432"
+  },
+  "appTreeEqualToTestedCommit": true,
+  "final_diagnostics9_regressions": {
+    "conclusion": "success",
+    "databaseId": 43269227639,
+    "headSha": "c73daa697433c23086ffeeced75bd14b8632da77",
+    "jobs": [
+      {
+        "name": "regressions",
+        "status": "completed",
+        "conclusion": "success",
+        "databaseId": 131360962157
+      },
+      {
+        "name": "verify",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131360964782
+      },
+      {
+        "name": "native_upgrade",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131360964877
+      },
+      {
+        "name": "emulator_qa",
+        "status": "completed",
+        "conclusion": "skipped",
+        "databaseId": 131361048876
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43269227639"
+  },
+  "appTreeEqualToFinalTestedCommit": true,
+  "accepted_populated_native_core": {
+    "databaseId": 43265893487,
+    "acceptedEvidence": "Controlled UI-created core dataset24\u219225+cold only; full gate blocked",
+    "googleIdentities": "NONE",
+    "ownerPhone": "NONE"
+  },
+  "final_native_followup": {
+    "databaseId": 43273089509,
+    "headSha": "7de676e",
+    "conclusion": "failure",
+    "acceptedAsUpgrade": false,
+    "reason": "CANNOT_RETURN_HOME then invalid baseline guard",
+    "receipt": "NATIVE_UI_UPGRADE_RUN12.json"
+  }
+}

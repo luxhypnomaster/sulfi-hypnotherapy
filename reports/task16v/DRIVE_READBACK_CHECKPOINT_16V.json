@@ -1,0 +1,34 @@
+[
+  {
+    "file": "ROOT_CAUSE_16V.md",
+    "id": "1o6qEeoVt5v-zsWrUj5gL4Qn3hwu9PTae",
+    "size": 6350,
+    "sha256": "cf701d65607cef3bd441ec279f784dfad4bdf630bee48e962db9225700656fe4",
+    "stage": "checkpoint_readback_before_final_owner_update",
+    "verified": true
+  },
+  {
+    "file": "DIFF_AUDIT_16V.md",
+    "id": "1gsXc3AQt5_Np3V6swfXpi8nY8LHOTy2i",
+    "size": 9101,
+    "sha256": "49858a00dfa5f497233e78a0cb32034d7e0cf4f9ff49f2dc09ce196a75144af2",
+    "stage": "checkpoint_readback_before_final_owner_update",
+    "verified": true
+  },
+  {
+    "file": "OWNER_RECOVERY_PLAN_16V.md",
+    "id": "1a1456B2r5oeaZeP2rZzZ-JzeI_sRskib",
+    "size": 8873,
+    "sha256": "4d984558f463e42e477142de43c0d4aaab562285266f180fd76a406d4ffc9f73",
+    "stage": "checkpoint_readback_before_final_owner_update",
+    "verified": true
+  },
+  {
+    "file": "RECOVERY_LIMITATIONS_16V.md",
+    "id": "1NAq1OZVkVslgRxccperJCGDdg_HEBola",
+    "size": 2584,
+    "sha256": "a1025b86a99353d410bc9084ff2260773129c2ce6180771bb00becd14fe98744",
+    "stage": "checkpoint_readback_before_final_owner_update",
+    "verified": true
+  }
+]

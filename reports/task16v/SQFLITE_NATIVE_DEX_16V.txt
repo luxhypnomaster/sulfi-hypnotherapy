@@ -1,0 +1,2680 @@
+Class descriptor  : 'Lcom/tekartik/sqflite/Database;'
+  Access flags      : 0x0000 ()
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'WAL_ENABLED_BY_DEFAULT'
+      type          : 'Z'
+      access        : 0x0018 (STATIC FINAL)
+      value         : false
+    #1              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'WAL_ENABLED_META_NAME'
+      type          : 'Ljava/lang/String;'
+      access        : 0x001a (PRIVATE STATIC FINAL)
+      value         : "com.tekartik.sqflite.wal_enabled"
+    #2              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'walGloballyEnabled'
+      type          : 'Ljava/lang/Boolean;'
+      access        : 0x000a (PRIVATE STATIC)
+  Instance fields   -
+    #0              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'context'
+      type          : 'Landroid/content/Context;'
+      access        : 0x0010 (FINAL)
+    #1              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'currentTransactionId'
+      type          : 'Ljava/lang/Integer;'
+      access        : 0x0002 (PRIVATE)
+    #2              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'cursors'
+      type          : 'Ljava/util/Map;'
+      access        : 0x0010 (FINAL)
+    #3              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'databaseWorkerPool'
+      type          : 'Lcom/tekartik/sqflite/DatabaseWorkerPool;'
+      access        : 0x0001 (PUBLIC)
+    #4              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'id'
+      type          : 'I'
+      access        : 0x0010 (FINAL)
+    #5              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lastCursorId'
+      type          : 'I'
+      access        : 0x0002 (PRIVATE)
+    #6              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lastTransactionId'
+      type          : 'I'
+      access        : 0x0002 (PRIVATE)
+    #7              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'logLevel'
+      type          : 'I'
+      access        : 0x0010 (FINAL)
+    #8              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'noTransactionOperationQueue'
+      type          : 'Ljava/util/List;'
+      access        : 0x0010 (FINAL)
+    #9              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'path'
+      type          : 'Ljava/lang/String;'
+      access        : 0x0010 (FINAL)
+    #10              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'singleInstance'
+      type          : 'Z'
+      access        : 0x0010 (FINAL)
+    #11              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'sqliteDatabase'
+      type          : 'Landroid/database/sqlite/SQLiteDatabase;'
+      access        : 0x0000 ()
+    #12              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'transactionDepth'
+      type          : 'I'
+      access        : 0x0002 (PRIVATE)
+  Direct methods    -
+    #0              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$GlK_UlnvC23u32dLYejKG3EbHLo'
+      type          : '(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+0042b0:                                        |[0042b0] com.tekartik.sqflite.Database.$r8$lambda$GlK_UlnvC23u32dLYejKG3EbHLo:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V
+0042c0: 7020 8100 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.lambda$queryCursorNext$2:(Lcom/tekartik/sqflite/operation/Operation;)V // method@0081
+0042c6: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #1              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$OLxF53giEYIlaGyGm6-5ZaOuP-Y'
+      type          : '(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+0042c8:                                        |[0042c8] com.tekartik.sqflite.Database.$r8$lambda$OLxF53giEYIlaGyGm6-5ZaOuP-Y:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V
+0042d8: 7020 8200 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.lambda$update$6:(Lcom/tekartik/sqflite/operation/Operation;)V // method@0082
+0042de: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #2              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$QYOdnxLeXSEwH_kEol4_Du-vnAg'
+      type          : '(Lcom/tekartik/sqflite/Database;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+0042e0:                                        |[0042e0] com.tekartik.sqflite.Database.$r8$lambda$QYOdnxLeXSEwH_kEol4_Du-vnAg:(Lcom/tekartik/sqflite/Database;)V
+0042f0: 7010 8a00 0000                         |0000: invoke-direct {v0}, Lcom/tekartik/sqflite/Database;.runQueuedOperations:()V // method@008a
+0042f6: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #3              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$RUfQKbTFhgcoTvjKMr7dGnUan_M'
+      type          : '(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+0042f8:                                        |[0042f8] com.tekartik.sqflite.Database.$r8$lambda$RUfQKbTFhgcoTvjKMr7dGnUan_M:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V
+004308: 7020 8000 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.lambda$query$0:(Lcom/tekartik/sqflite/operation/Operation;)V // method@0080
+00430e: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #4              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$Xk1EGDodLPILpU4Ic8wa861sszU'
+      type          : '(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004310:                                        |[004310] com.tekartik.sqflite.Database.$r8$lambda$Xk1EGDodLPILpU4Ic8wa861sszU:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V
+004320: 7020 7e00 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.lambda$execute$4:(Lcom/tekartik/sqflite/operation/Operation;)V // method@007e
+004326: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #5              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '$r8$lambda$xSfTz1oXnkJmvnGmYm9cpwo4KzY'
+      type          : '(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1009 (PUBLIC STATIC SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004328:                                        |[004328] com.tekartik.sqflite.Database.$r8$lambda$xSfTz1oXnkJmvnGmYm9cpwo4KzY:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V
+004338: 7020 7f00 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.lambda$insert$5:(Lcom/tekartik/sqflite/operation/Operation;)V // method@007f
+00433e: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #6              : (in Lcom/tekartik/sqflite/Database;)
+      name          : '<init>'
+      type          : '(Landroid/content/Context;Ljava/lang/String;IZI)V'
+      access        : 0x10000 (CONSTRUCTOR)
+      code          -
+      registers     : 7
+      ins           : 6
+      outs          : 1
+      insns size    : 35 16-bit code units
+004340:                                        |[004340] com.tekartik.sqflite.Database.<init>:(Landroid/content/Context;Ljava/lang/String;IZI)V
+004350: 7010 4701 0100                         |0000: invoke-direct {v1}, Ljava/lang/Object;.<init>:()V // method@0147
+004356: 2200 7100                              |0003: new-instance v0, Ljava/util/ArrayList; // type@0071
+00435a: 7010 5b01 0000                         |0005: invoke-direct {v0}, Ljava/util/ArrayList;.<init>:()V // method@015b
+004360: 5b10 5700                              |0008: iput-object v0, v1, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004364: 2200 7400                              |000a: new-instance v0, Ljava/util/HashMap; // type@0074
+004368: 7010 5f01 0000                         |000c: invoke-direct {v0}, Ljava/util/HashMap;.<init>:()V // method@015f
+00436e: 5b10 5100                              |000f: iput-object v0, v1, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+004372: 1200                                   |0011: const/4 v0, #int 0 // #0
+004374: 5910 5b00                              |0012: iput v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+004378: 5910 5500                              |0014: iput v0, v1, Lcom/tekartik/sqflite/Database;.lastTransactionId:I // field@0055
+00437c: 5910 5400                              |0016: iput v0, v1, Lcom/tekartik/sqflite/Database;.lastCursorId:I // field@0054
+004380: 5b12 4f00                              |0018: iput-object v2, v1, Lcom/tekartik/sqflite/Database;.context:Landroid/content/Context; // field@004f
+004384: 5b13 5800                              |001a: iput-object v3, v1, Lcom/tekartik/sqflite/Database;.path:Ljava/lang/String; // field@0058
+004388: 5c15 5900                              |001c: iput-boolean v5, v1, Lcom/tekartik/sqflite/Database;.singleInstance:Z // field@0059
+00438c: 5914 5300                              |001e: iput v4, v1, Lcom/tekartik/sqflite/Database;.id:I // field@0053
+004390: 5916 5600                              |0020: iput v6, v1, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+004394: 0e00                                   |0022: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=86
+        0x0003 line=72
+        0x000a line=73
+        0x0011 line=78
+        0x0014 line=80
+        0x0016 line=84
+        0x0018 line=87
+        0x001a line=88
+        0x001c line=89
+        0x001e line=90
+        0x0020 line=91
+        0x0022 line=92
+      locals        :
+        0x0000 - 0x0023 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0023 reg=2 context Landroid/content/Context;
+        0x0000 - 0x0023 reg=3 path Ljava/lang/String;
+        0x0000 - 0x0023 reg=4 id I
+        0x0000 - 0x0023 reg=5 singleInstance Z
+        0x0000 - 0x0023 reg=6 logLevel I
+
+    #7              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'bindArgs'
+      type          : '(Landroid/database/sqlite/SQLiteStatement;[Ljava/lang/Object;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 8
+      ins           : 3
+      outs          : 4
+      insns size    : 93 16-bit code units
+0045f0:                                        |[0045f0] com.tekartik.sqflite.Database.bindArgs:(Landroid/database/sqlite/SQLiteStatement;[Ljava/lang/Object;)V
+004600: 1200                                   |0000: const/4 v0, #int 0 // #0
+004602: 2171                                   |0001: array-length v1, v7
+004604: 3510 5a00                              |0002: if-ge v0, v1, 005c // +005a
+004608: 4601 0700                              |0004: aget-object v1, v7, v0
+00460c: d802 0001                              |0006: add-int/lit8 v2, v0, #int 1 // #01
+004610: 3901 0600                              |0008: if-nez v1, 000e // +0006
+004614: 6e20 2b00 2600                         |000a: invoke-virtual {v6, v2}, Landroid/database/sqlite/SQLiteStatement;.bindNull:(I)V // method@002b
+00461a: 284c                                   |000d: goto 0059 // +004c
+00461c: 2013 8400                              |000e: instance-of v3, v1, [B // type@0084
+004620: 3803 0900                              |0010: if-eqz v3, 0019 // +0009
+004624: 0713                                   |0012: move-object v3, v1
+004626: 1f03 8400                              |0013: check-cast v3, [B // type@0084
+00462a: 6e30 2800 2603                         |0015: invoke-virtual {v6, v2, v3}, Landroid/database/sqlite/SQLiteStatement;.bindBlob:(I[B)V // method@0028
+004630: 2841                                   |0018: goto 0059 // +0041
+004632: 2013 6300                              |0019: instance-of v3, v1, Ljava/lang/Double; // type@0063
+004636: 3903 3400                              |001b: if-nez v3, 004f // +0034
+00463a: 2013 6500                              |001d: instance-of v3, v1, Ljava/lang/Float; // type@0065
+00463e: 3803 0300                              |001f: if-eqz v3, 0022 // +0003
+004642: 282e                                   |0021: goto 004f // +002e
+004644: 2013 6a00                              |0022: instance-of v3, v1, Ljava/lang/Number; // type@006a
+004648: 3803 0d00                              |0024: if-eqz v3, 0031 // +000d
+00464c: 0713                                   |0026: move-object v3, v1
+00464e: 1f03 6a00                              |0027: check-cast v3, Ljava/lang/Number; // type@006a
+004652: 6e10 4601 0300                         |0029: invoke-virtual {v3}, Ljava/lang/Number;.longValue:()J // method@0146
+004658: 0b03                                   |002c: move-result-wide v3
+00465a: 6e40 2a00 2643                         |002d: invoke-virtual {v6, v2, v3, v4}, Landroid/database/sqlite/SQLiteStatement;.bindLong:(IJ)V // method@002a
+004660: 2829                                   |0030: goto 0059 // +0029
+004662: 2013 6000                              |0031: instance-of v3, v1, Ljava/lang/Boolean; // type@0060
+004666: 3803 1400                              |0033: if-eqz v3, 0047 // +0014
+00466a: 0713                                   |0035: move-object v3, v1
+00466c: 1f03 6000                              |0036: check-cast v3, Ljava/lang/Boolean; // type@0060
+004670: 6e10 3301 0300                         |0038: invoke-virtual {v3}, Ljava/lang/Boolean;.booleanValue:()Z // method@0133
+004676: 0a03                                   |003b: move-result v3
+004678: 3803 0500                              |003c: if-eqz v3, 0041 // +0005
+00467c: 1603 0100                              |003e: const-wide/16 v3, #int 1 // #1
+004680: 2803                                   |0040: goto 0043 // +0003
+004682: 1603 0000                              |0041: const-wide/16 v3, #int 0 // #0
+004686: 6e40 2a00 2643                         |0043: invoke-virtual {v6, v2, v3, v4}, Landroid/database/sqlite/SQLiteStatement;.bindLong:(IJ)V // method@002a
+00468c: 2813                                   |0046: goto 0059 // +0013
+00468e: 6e10 4a01 0100                         |0047: invoke-virtual {v1}, Ljava/lang/Object;.toString:()Ljava/lang/String; // method@014a
+004694: 0c03                                   |004a: move-result-object v3
+004696: 6e30 2c00 2603                         |004b: invoke-virtual {v6, v2, v3}, Landroid/database/sqlite/SQLiteStatement;.bindString:(ILjava/lang/String;)V // method@002c
+00469c: 280b                                   |004e: goto 0059 // +000b
+00469e: 0713                                   |004f: move-object v3, v1
+0046a0: 1f03 6a00                              |0050: check-cast v3, Ljava/lang/Number; // type@006a
+0046a4: 6e10 4501 0300                         |0052: invoke-virtual {v3}, Ljava/lang/Number;.doubleValue:()D // method@0145
+0046aa: 0b03                                   |0055: move-result-wide v3
+0046ac: 6e40 2900 2643                         |0056: invoke-virtual {v6, v2, v3, v4}, Landroid/database/sqlite/SQLiteStatement;.bindDouble:(ID)V // method@0029
+0046b2: d800 0001                              |0059: add-int/lit8 v0, v0, #int 1 // #01
+0046b6: 28a6                                   |005b: goto 0001 // -005a
+0046b8: 0e00                                   |005c: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=583
+        0x0004 line=584
+        0x0006 line=585
+        0x0008 line=587
+        0x000a line=588
+        0x000e line=589
+        0x0012 line=590
+        0x0019 line=591
+        0x0022 line=593
+        0x0026 line=594
+        0x0031 line=595
+        0x0035 line=596
+        0x0047 line=598
+        0x004f line=592
+        0x0059 line=583
+        0x005c line=601
+      locals        :
+        0x0006 - 0x0059 reg=1 arg Ljava/lang/Object;
+        0x0008 - 0x0059 reg=2 index I
+        0x0001 - 0x005c reg=0 i I
+        0x0000 - 0x005d reg=5 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x005d reg=6 stmt Landroid/database/sqlite/SQLiteStatement;
+        0x0000 - 0x005d reg=7 args [Ljava/lang/Object;
+
+    #8              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'checkMetaBoolean'
+      type          : '(Landroid/content/Context;Ljava/lang/String;Z)Z'
+      access        : 0x000c (PROTECTED STATIC)
+      code          -
+      registers     : 7
+      ins           : 3
+      outs          : 3
+      insns size    : 48 16-bit code units
+0038f8:                                        |[0038f8] com.tekartik.sqflite.Database.checkMetaBoolean:(Landroid/content/Context;Ljava/lang/String;Z)Z
+003908: 6e10 0300 0400                         |0000: invoke-virtual {v4}, Landroid/content/Context;.getPackageName:()Ljava/lang/String; // method@0003
+00390e: 0c00                                   |0003: move-result-object v0
+003910: 6001 0200                              |0004: sget v1, Landroid/os/Build$VERSION;.SDK_INT:I // field@0002
+003914: 1302 2100                              |0006: const/16 v2, #int 33 // #21
+003918: 3421 1100                              |0008: if-lt v1, v2, 0019 // +0011
+00391c: 6e10 0200 0400                         |000a: invoke-virtual {v4}, Landroid/content/Context;.getPackageManager:()Landroid/content/pm/PackageManager; // method@0002
+003922: 0c01                                   |000d: move-result-object v1
+003924: 1602 8000                              |000e: const-wide/16 v2, #int 128 // #80
+003928: 7120 0400 3200                         |0010: invoke-static {v2, v3}, Landroid/content/pm/PackageManager$ApplicationInfoFlags;.of:(J)Landroid/content/pm/PackageManager$ApplicationInfoFlags; // method@0004
+00392e: 0c02                                   |0013: move-result-object v2
+003930: 6e30 0600 0102                         |0014: invoke-virtual {v1, v0, v2}, Landroid/content/pm/PackageManager;.getApplicationInfo:(Ljava/lang/String;Landroid/content/pm/PackageManager$ApplicationInfoFlags;)Landroid/content/pm/ApplicationInfo; // method@0006
+003936: 0c01                                   |0017: move-result-object v1
+003938: 2807                                   |0018: goto 001f // +0007
+00393a: 1301 8000                              |0019: const/16 v1, #int 128 // #80
+00393e: 7130 7300 0401                         |001b: invoke-static {v4, v0, v1}, Lcom/tekartik/sqflite/Database;.getApplicationInfoWithMeta32:(Landroid/content/Context;Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo; // method@0073
+003944: 0c01                                   |001e: move-result-object v1
+003946: 5412 0000                              |001f: iget-object v2, v1, Landroid/content/pm/ApplicationInfo;.metaData:Landroid/os/Bundle; // field@0000
+00394a: 6e30 2f00 5206                         |0021: invoke-virtual {v2, v5, v6}, Landroid/os/Bundle;.getBoolean:(Ljava/lang/String;Z)Z // method@002f
+003950: 0a02                                   |0024: move-result v2
+003952: 3802 0400                              |0025: if-eqz v2, 0029 // +0004
+003956: 1213                                   |0027: const/4 v3, #int 1 // #1
+003958: 0f03                                   |0028: return v3
+00395a: 2805                                   |0029: goto 002e // +0005
+00395c: 0d00                                   |002a: move-exception v0
+00395e: 6e10 3c01 0000                         |002b: invoke-virtual {v0}, Ljava/lang/Exception;.printStackTrace:()V // method@013c
+003964: 1200                                   |002e: const/4 v0, #int 0 // #0
+003966: 0f00                                   |002f: return v0
+      catches       : 1
+        0x0000 - 0x0025
+          Ljava/lang/Exception; -> 0x002a
+      positions     :
+        0x0000 line=109
+        0x0004 line=111
+        0x000a line=112
+        0x0019 line=114
+        0x001f line=116
+        0x0025 line=117
+        0x0027 line=118
+        0x0029 line=123
+        0x002a line=121
+        0x002b line=122
+        0x002e line=124
+      locals        :
+        0x0018 - 0x0019 reg=1 applicationInfo Landroid/content/pm/ApplicationInfo;
+        0x0004 - 0x0029 reg=0 packageName Ljava/lang/String;
+        0x001f - 0x0029 reg=1 applicationInfo Landroid/content/pm/ApplicationInfo;
+        0x0025 - 0x0029 reg=2 walEnabled Z
+        0x002b - 0x002e reg=0 e Ljava/lang/Exception;
+        0x0000 - 0x0030 reg=4 context Landroid/content/Context;
+        0x0000 - 0x0030 reg=5 metaKey Ljava/lang/String;
+        0x0000 - 0x0030 reg=6 defaultValue Z
+
+    #9              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'checkWalEnabled'
+      type          : '(Landroid/content/Context;)Z'
+      access        : 0x000c (PROTECTED STATIC)
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 3
+      insns size    : 8 16-bit code units
+003974:                                        |[003974] com.tekartik.sqflite.Database.checkWalEnabled:(Landroid/content/Context;)Z
+003984: 1a00 9001                              |0000: const-string v0, "com.tekartik.sqflite.wal_enabled" // string@0190
+003988: 1201                                   |0002: const/4 v1, #int 0 // #0
+00398a: 7130 6100 0201                         |0003: invoke-static {v2, v0, v1}, Lcom/tekartik/sqflite/Database;.checkMetaBoolean:(Landroid/content/Context;Ljava/lang/String;Z)Z // method@0061
+003990: 0a00                                   |0006: move-result v0
+003992: 0f00                                   |0007: return v0
+      catches       : (none)
+      positions     :
+        0x0000 line=97
+      locals        :
+        0x0000 - 0x0008 reg=2 context Landroid/content/Context;
+
+    #10              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'closeCursor'
+      type          : '(I)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 2
+      insns size    : 18 16-bit code units
+0047d8:                                        |[0047d8] com.tekartik.sqflite.Database.closeCursor:(I)V
+0047e8: 5420 5100                              |0000: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+0047ec: 7110 4201 0300                         |0002: invoke-static {v3}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+0047f2: 0c01                                   |0005: move-result-object v1
+0047f4: 7220 7701 1000                         |0006: invoke-interface {v0, v1}, Ljava/util/Map;.get:(Ljava/lang/Object;)Ljava/lang/Object; // method@0177
+0047fa: 0c00                                   |0009: move-result-object v0
+0047fc: 1f00 3800                              |000a: check-cast v0, Lcom/tekartik/sqflite/SqfliteCursor; // type@0038
+004800: 3800 0500                              |000c: if-eqz v0, 0011 // +0005
+004804: 7020 6500 0200                         |000e: invoke-direct {v2, v0}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+00480a: 0e00                                   |0011: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=408
+        0x000c line=409
+        0x000e line=410
+        0x0011 line=412
+      locals        :
+        0x000c - 0x0012 reg=0 sqfliteCursor Lcom/tekartik/sqflite/SqfliteCursor;
+        0x0000 - 0x0012 reg=2 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0012 reg=3 cursorId I
+
+    #11              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'closeCursor'
+      type          : '(Lcom/tekartik/sqflite/SqfliteCursor;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 6
+      ins           : 2
+      outs          : 2
+      insns size    : 59 16-bit code units
+004744:                                        |[004744] com.tekartik.sqflite.Database.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V
+004754: 5250 7b00                              |0000: iget v0, v5, Lcom/tekartik/sqflite/SqfliteCursor;.cursorId:I // field@007b
+004758: 5241 5600                              |0002: iget v1, v4, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+00475c: 7110 b400 0100                         |0004: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasVerboseLevel:(I)Z // method@00b4
+004762: 0a01                                   |0007: move-result v1
+004764: 3801 2200                              |0008: if-eqz v1, 002a // +0022
+004768: 1a01 2c01                              |000a: const-string v1, "Sqflite" // string@012c
+00476c: 2202 6e00                              |000c: new-instance v2, Ljava/lang/StringBuilder; // type@006e
+004770: 7010 5001 0200                         |000e: invoke-direct {v2}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+004776: 6e10 7500 0400                         |0011: invoke-virtual {v4}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+00477c: 0c03                                   |0014: move-result-object v3
+00477e: 6e20 5401 3200                         |0015: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004784: 0c02                                   |0018: move-result-object v2
+004786: 1a03 8701                              |0019: const-string v3, "closing cursor " // string@0187
+00478a: 6e20 5401 3200                         |001b: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004790: 0c02                                   |001e: move-result-object v2
+004792: 6e20 5101 0200                         |001f: invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;.append:(I)Ljava/lang/StringBuilder; // method@0151
+004798: 0c02                                   |0022: move-result-object v2
+00479a: 6e10 5501 0200                         |0023: invoke-virtual {v2}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+0047a0: 0c02                                   |0026: move-result-object v2
+0047a2: 7120 3600 2100                         |0027: invoke-static {v1, v2}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+0047a8: 5441 5100                              |002a: iget-object v1, v4, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+0047ac: 7110 4201 0000                         |002c: invoke-static {v0}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+0047b2: 0c02                                   |002f: move-result-object v2
+0047b4: 7220 7b01 2100                         |0030: invoke-interface {v1, v2}, Ljava/util/Map;.remove:(Ljava/lang/Object;)Ljava/lang/Object; // method@017b
+0047ba: 5451 7a00                              |0033: iget-object v1, v5, Lcom/tekartik/sqflite/SqfliteCursor;.cursor:Landroid/database/Cursor; // field@007a
+0047be: 7210 0700 0100                         |0035: invoke-interface {v1}, Landroid/database/Cursor;.close:()V // method@0007
+0047c4: 2802                                   |0038: goto 003a // +0002
+0047c6: 0d00                                   |0039: move-exception v0
+0047c8: 0e00                                   |003a: return-void
+      catches       : 1
+        0x0000 - 0x0038
+          Ljava/lang/Exception; -> 0x0039
+      positions     :
+        0x0000 line=396
+        0x0002 line=397
+        0x000a line=398
+        0x002a line=400
+        0x0033 line=401
+        0x0038 line=403
+        0x0039 line=402
+        0x003a line=404
+      locals        :
+        0x0002 - 0x0038 reg=0 cursorId I
+        0x0000 - 0x003b reg=4 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x003b reg=5 sqfliteCursor Lcom/tekartik/sqflite/SqfliteCursor;
+
+    #12              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'cursorToResults'
+      type          : '(Landroid/database/Cursor;Ljava/lang/Integer;)Ljava/util/Map;'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 8
+      ins           : 3
+      outs          : 3
+      insns size    : 75 16-bit code units
+004208:                                        |[004208] com.tekartik.sqflite.Database.cursorToResults:(Landroid/database/Cursor;Ljava/lang/Integer;)Ljava/util/Map;
+004218: 1200                                   |0000: const/4 v0, #int 0 // #0
+00421a: 1201                                   |0001: const/4 v1, #int 0 // #0
+00421c: 1202                                   |0002: const/4 v2, #int 0 // #0
+00421e: 7210 1200 0600                         |0003: invoke-interface {v6}, Landroid/database/Cursor;.moveToNext:()Z // method@0012
+004224: 0a03                                   |0006: move-result v3
+004226: 3803 3b00                              |0007: if-eqz v3, 0042 // +003b
+00422a: 3900 2500                              |0009: if-nez v0, 002e // +0025
+00422e: 2203 7100                              |000b: new-instance v3, Ljava/util/ArrayList; // type@0071
+004232: 7010 5b01 0300                         |000d: invoke-direct {v3}, Ljava/util/ArrayList;.<init>:()V // method@015b
+004238: 2201 7400                              |0010: new-instance v1, Ljava/util/HashMap; // type@0074
+00423c: 7010 5f01 0100                         |0012: invoke-direct {v1}, Ljava/util/HashMap;.<init>:()V // method@015f
+004242: 7210 0900 0600                         |0015: invoke-interface {v6}, Landroid/database/Cursor;.getColumnCount:()I // method@0009
+004248: 0a00                                   |0018: move-result v0
+00424a: 7210 0a00 0600                         |0019: invoke-interface {v6}, Landroid/database/Cursor;.getColumnNames:()[Ljava/lang/String; // method@000a
+004250: 0c02                                   |001c: move-result-object v2
+004252: 7110 5d01 0200                         |001d: invoke-static {v2}, Ljava/util/Arrays;.asList:([Ljava/lang/Object;)Ljava/util/List; // method@015d
+004258: 0c02                                   |0020: move-result-object v2
+00425a: 1a04 8d01                              |0021: const-string v4, "columns" // string@018d
+00425e: 7230 7a01 4102                         |0023: invoke-interface {v1, v4, v2}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+004264: 1a02 d402                              |0026: const-string v2, "rows" // string@02d4
+004268: 7230 7a01 2103                         |0028: invoke-interface {v1, v2, v3}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+00426e: 0102                                   |002b: move v2, v0
+004270: 0710                                   |002c: move-object v0, v1
+004272: 0731                                   |002d: move-object v1, v3
+004274: 7120 0801 2600                         |002e: invoke-static {v6, v2}, Lcom/tekartik/sqflite/Utils;.cursorRowToList:(Landroid/database/Cursor;I)Ljava/util/List; // method@0108
+00427a: 0c03                                   |0031: move-result-object v3
+00427c: 7220 6701 3100                         |0032: invoke-interface {v1, v3}, Ljava/util/List;.add:(Ljava/lang/Object;)Z // method@0167
+004282: 3807 ceff                              |0035: if-eqz v7, 0003 // -0032
+004286: 7210 6c01 0100                         |0037: invoke-interface {v1}, Ljava/util/List;.size:()I // method@016c
+00428c: 0a03                                   |003a: move-result v3
+00428e: 6e10 4001 0700                         |003b: invoke-virtual {v7}, Ljava/lang/Integer;.intValue:()I // method@0140
+004294: 0a04                                   |003e: move-result v4
+004296: 3443 c4ff                              |003f: if-lt v3, v4, 0003 // -003c
+00429a: 0000                                   |0041: nop // spacer
+00429c: 3900 0800                              |0042: if-nez v0, 004a // +0008
+0042a0: 2203 7400                              |0044: new-instance v3, Ljava/util/HashMap; // type@0074
+0042a4: 7010 5f01 0300                         |0046: invoke-direct {v3}, Ljava/util/HashMap;.<init>:()V // method@015f
+0042aa: 0730                                   |0049: move-object v0, v3
+0042ac: 1100                                   |004a: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=216
+        0x0001 line=217
+        0x0002 line=218
+        0x0003 line=219
+        0x0009 line=221
+        0x000b line=222
+        0x0010 line=223
+        0x0015 line=224
+        0x0019 line=225
+        0x0026 line=226
+        0x002e line=228
+        0x0035 line=231
+        0x0037 line=232
+        0x0041 line=233
+        0x0042 line=238
+        0x0044 line=239
+        0x004a line=242
+      locals        :
+        0x0002 - 0x0010 reg=1 rows Ljava/util/List; Ljava/util/List<Ljava/util/List<Ljava/lang/Object;>;>;
+        0x0001 - 0x0015 reg=0 results Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x0003 - 0x0019 reg=2 columnCount I
+        0x0010 - 0x002e reg=3 rows Ljava/util/List; Ljava/util/List<Ljava/util/List<Ljava/lang/Object;>;>;
+        0x0019 - 0x002e reg=0 columnCount I
+        0x0015 - 0x002e reg=1 results Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x002e - 0x004b reg=0 results Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x002e - 0x004b reg=1 rows Ljava/util/List; Ljava/util/List<Ljava/util/List<Ljava/lang/Object;>;>;
+        0x002e - 0x004b reg=2 columnCount I
+        0x0000 - 0x004b reg=5 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x004b reg=6 cursor Landroid/database/Cursor;
+        0x0000 - 0x004b reg=7 cursorPageSize Ljava/lang/Integer;
+
+    #13              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'deleteDatabase'
+      type          : '(Ljava/lang/String;)V'
+      access        : 0x0008 (STATIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 2
+      insns size    : 9 16-bit code units
+00480c:                                        |[00480c] com.tekartik.sqflite.Database.deleteDatabase:(Ljava/lang/String;)V
+00481c: 2200 5f00                              |0000: new-instance v0, Ljava/io/File; // type@005f
+004820: 7020 2f01 1000                         |0002: invoke-direct {v0, v1}, Ljava/io/File;.<init>:(Ljava/lang/String;)V // method@012f
+004826: 7110 1700 0000                         |0005: invoke-static {v0}, Landroid/database/sqlite/SQLiteDatabase;.deleteDatabase:(Ljava/io/File;)Z // method@0017
+00482c: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=129
+        0x0008 line=130
+      locals        :
+        0x0000 - 0x0009 reg=1 path Ljava/lang/String;
+
+    #14              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'doExecute'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 2
+      insns size    : 14 16-bit code units
+003994:                                        |[003994] com.tekartik.sqflite.Database.doExecute:(Lcom/tekartik/sqflite/operation/Operation;)Z
+0039a4: 7020 7100 2100                         |0000: invoke-direct {v1, v2}, Lcom/tekartik/sqflite/Database;.executeOrError:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@0071
+0039aa: 0a00                                   |0003: move-result v0
+0039ac: 3900 0400                              |0004: if-nez v0, 0008 // +0004
+0039b0: 1200                                   |0006: const/4 v0, #int 0 // #0
+0039b2: 0f00                                   |0007: return v0
+0039b4: 1200                                   |0008: const/4 v0, #int 0 // #0
+0039b6: 7220 2101 0200                         |0009: invoke-interface {v2, v0}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+0039bc: 1210                                   |000c: const/4 v0, #int 1 // #1
+0039be: 0f00                                   |000d: return v0
+      catches       : (none)
+      positions     :
+        0x0000 line=645
+        0x0006 line=646
+        0x0008 line=648
+        0x000c line=649
+      locals        :
+        0x0000 - 0x000e reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x000e reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #15              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'doInsert'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 8
+      ins           : 2
+      outs          : 3
+      insns size    : 87 16-bit code units
+0039c0:                                        |[0039c0] com.tekartik.sqflite.Database.doInsert:(Lcom/tekartik/sqflite/operation/Operation;)Z
+0039d0: 7210 1e01 0700                         |0000: invoke-interface {v7}, Lcom/tekartik/sqflite/operation/Operation;.getSqlCommand:()Lcom/tekartik/sqflite/SqlCommand; // method@011e
+0039d6: 0c00                                   |0003: move-result-object v0
+0039d8: 5261 5600                              |0004: iget v1, v6, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+0039dc: 7110 b300 0100                         |0006: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+0039e2: 0a01                                   |0009: move-result v1
+0039e4: 3801 1c00                              |000a: if-eqz v1, 0026 // +001c
+0039e8: 2201 6e00                              |000c: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+0039ec: 7010 5001 0100                         |000e: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+0039f2: 6e10 7500 0600                         |0011: invoke-virtual {v6}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+0039f8: 0c02                                   |0014: move-result-object v2
+0039fa: 6e20 5401 2100                         |0015: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003a00: 0c01                                   |0018: move-result-object v1
+003a02: 6e20 5301 0100                         |0019: invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder; // method@0153
+003a08: 0c01                                   |001c: move-result-object v1
+003a0a: 6e10 5501 0100                         |001d: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003a10: 0c01                                   |0020: move-result-object v1
+003a12: 1a02 2c01                              |0021: const-string v2, "Sqflite" // string@012c
+003a16: 7120 3600 1200                         |0023: invoke-static {v2, v1}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+003a1c: 6e10 7700 0600                         |0026: invoke-virtual {v6}, Lcom/tekartik/sqflite/Database;.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0077
+003a22: 0c01                                   |0029: move-result-object v1
+003a24: 6e10 0101 0000                         |002a: invoke-virtual {v0}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+003a2a: 0c02                                   |002d: move-result-object v2
+003a2c: 6e20 1600 2100                         |002e: invoke-virtual {v1, v2}, Landroid/database/sqlite/SQLiteDatabase;.compileStatement:(Ljava/lang/String;)Landroid/database/sqlite/SQLiteStatement; // method@0016
+003a32: 0c02                                   |0031: move-result-object v2
+003a34: 6e10 0201 0000                         |0032: invoke-virtual {v0}, Lcom/tekartik/sqflite/SqlCommand;.getSqlArguments:()[Ljava/lang/Object; // method@0102
+003a3a: 0c03                                   |0035: move-result-object v3
+003a3c: 7030 6000 2603                         |0036: invoke-direct {v6, v2, v3}, Lcom/tekartik/sqflite/Database;.bindArgs:(Landroid/database/sqlite/SQLiteStatement;[Ljava/lang/Object;)V // method@0060
+003a42: 6e10 2d00 0200                         |0039: invoke-virtual {v2}, Landroid/database/sqlite/SQLiteStatement;.executeInsert:()J // method@002d
+003a48: 0b03                                   |003c: move-result-wide v3
+003a4a: 7210 1d01 0700                         |003d: invoke-interface {v7}, Lcom/tekartik/sqflite/operation/Operation;.getNoResult:()Z // method@011d
+003a50: 0a05                                   |0040: move-result v5
+003a52: 3805 0700                              |0041: if-eqz v5, 0048 // +0007
+003a56: 1205                                   |0043: const/4 v5, #int 0 // #0
+003a58: 7220 2101 5700                         |0044: invoke-interface {v7, v5}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003a5e: 2808                                   |0047: goto 004f // +0008
+003a60: 7120 4401 4300                         |0048: invoke-static {v3, v4}, Ljava/lang/Long;.valueOf:(J)Ljava/lang/Long; // method@0144
+003a66: 0c05                                   |004b: move-result-object v5
+003a68: 7220 2101 5700                         |004c: invoke-interface {v7, v5}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003a6e: 1215                                   |004f: const/4 v5, #int 1 // #1
+003a70: 0f05                                   |0050: return v5
+003a72: 0d01                                   |0051: move-exception v1
+003a74: 7030 7900 1607                         |0052: invoke-direct {v6, v1, v7}, Lcom/tekartik/sqflite/Database;.handleStatementException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0079
+003a7a: 1202                                   |0055: const/4 v2, #int 0 // #0
+003a7c: 0f02                                   |0056: return v2
+      catches       : 1
+        0x0026 - 0x004f
+          Ljava/lang/Exception; -> 0x0051
+      positions     :
+        0x0000 line=658
+        0x0004 line=659
+        0x000c line=660
+        0x0026 line=664
+        0x002a line=666
+        0x0032 line=667
+        0x0039 line=668
+        0x003d line=669
+        0x0043 line=670
+        0x0048 line=672
+        0x004f line=674
+        0x0051 line=675
+        0x0052 line=676
+        0x0055 line=677
+      locals        :
+        0x002a - 0x0051 reg=1 db Landroid/database/sqlite/SQLiteDatabase;
+        0x0032 - 0x0051 reg=2 statement Landroid/database/sqlite/SQLiteStatement;
+        0x003d - 0x0051 reg=3 id J
+        0x0004 - 0x0057 reg=0 command Lcom/tekartik/sqflite/SqlCommand;
+        0x0052 - 0x0057 reg=1 exception Ljava/lang/Exception;
+        0x0000 - 0x0057 reg=6 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0057 reg=7 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #16              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'doQuery'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 13
+      ins           : 2
+      outs          : 5
+      insns size    : 169 16-bit code units
+003a8c:                                        |[003a8c] com.tekartik.sqflite.Database.doQuery:(Lcom/tekartik/sqflite/operation/Operation;)Z
+003a9c: 1a00 a001                              |0000: const-string v0, "cursorPageSize" // string@01a0
+003aa0: 7220 1b01 0c00                         |0002: invoke-interface {v12, v0}, Lcom/tekartik/sqflite/operation/Operation;.getArgument:(Ljava/lang/String;)Ljava/lang/Object; // method@011b
+003aa6: 0c00                                   |0005: move-result-object v0
+003aa8: 1f00 6800                              |0006: check-cast v0, Ljava/lang/Integer; // type@0068
+003aac: 1201                                   |0008: const/4 v1, #int 0 // #0
+003aae: 7210 1e01 0c00                         |0009: invoke-interface {v12}, Lcom/tekartik/sqflite/operation/Operation;.getSqlCommand:()Lcom/tekartik/sqflite/SqlCommand; // method@011e
+003ab4: 0c02                                   |000c: move-result-object v2
+003ab6: 1203                                   |000d: const/4 v3, #int 0 // #0
+003ab8: 52b4 5600                              |000e: iget v4, v11, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+003abc: 7110 b300 0400                         |0010: invoke-static {v4}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+003ac2: 0a04                                   |0013: move-result v4
+003ac4: 3804 1c00                              |0014: if-eqz v4, 0030 // +001c
+003ac8: 2204 6e00                              |0016: new-instance v4, Ljava/lang/StringBuilder; // type@006e
+003acc: 7010 5001 0400                         |0018: invoke-direct {v4}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003ad2: 6e10 7500 0b00                         |001b: invoke-virtual {v11}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+003ad8: 0c05                                   |001e: move-result-object v5
+003ada: 6e20 5401 5400                         |001f: invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003ae0: 0c04                                   |0022: move-result-object v4
+003ae2: 6e20 5301 2400                         |0023: invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder; // method@0153
+003ae8: 0c04                                   |0026: move-result-object v4
+003aea: 6e10 5501 0400                         |0027: invoke-virtual {v4}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003af0: 0c04                                   |002a: move-result-object v4
+003af2: 1a05 2c01                              |002b: const-string v5, "Sqflite" // string@012c
+003af6: 7120 3600 4500                         |002d: invoke-static {v5, v4}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+003afc: 1204                                   |0030: const/4 v4, #int 0 // #0
+003afe: 1205                                   |0031: const/4 v5, #int 0 // #0
+003b00: 6e10 7400 0b00                         |0032: invoke-virtual {v11}, Lcom/tekartik/sqflite/Database;.getReadableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0074
+003b06: 0c06                                   |0035: move-result-object v6
+003b08: 2207 2b00                              |0036: new-instance v7, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda7; // type@002b
+003b0c: 7020 5400 2700                         |0038: invoke-direct {v7, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda7;.<init>:(Lcom/tekartik/sqflite/SqlCommand;)V // method@0054
+003b12: 6e10 0101 0200                         |003b: invoke-virtual {v2}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+003b18: 0c08                                   |003e: move-result-object v8
+003b1a: 6209 0800                              |003f: sget-object v9, Lcom/tekartik/sqflite/Constant;.EMPTY_STRING_ARRAY:[Ljava/lang/String; // field@0008
+003b1e: 120a                                   |0041: const/4 v10, #int 0 // #0
+003b20: 6e5a 2000 7698                         |0042: invoke-virtual {v6, v7, v8, v9, v10}, Landroid/database/sqlite/SQLiteDatabase;.rawQueryWithFactory:(Landroid/database/sqlite/SQLiteDatabase$CursorFactory;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor; // method@0020
+003b26: 0c06                                   |0045: move-result-object v6
+003b28: 0764                                   |0046: move-object v4, v6
+003b2a: 7030 6600 4b00                         |0047: invoke-direct {v11, v4, v0}, Lcom/tekartik/sqflite/Database;.cursorToResults:(Landroid/database/Cursor;Ljava/lang/Integer;)Ljava/util/Map; // method@0066
+003b30: 0c06                                   |004a: move-result-object v6
+003b32: 1217                                   |004b: const/4 v7, #int 1 // #1
+003b34: 3800 1200                              |004c: if-eqz v0, 005e // +0012
+003b38: 7210 1100 0400                         |004e: invoke-interface {v4}, Landroid/database/Cursor;.isLast:()Z // method@0011
+003b3e: 0a08                                   |0051: move-result v8
+003b40: 3908 0a00                              |0052: if-nez v8, 005c // +000a
+003b44: 7210 1000 0400                         |0054: invoke-interface {v4}, Landroid/database/Cursor;.isAfterLast:()Z // method@0010
+003b4a: 0a08                                   |0057: move-result v8
+003b4c: 3908 0400                              |0058: if-nez v8, 005c // +0004
+003b50: 0178                                   |005a: move v8, v7
+003b52: 2802                                   |005b: goto 005d // +0002
+003b54: 0158                                   |005c: move v8, v5
+003b56: 0181                                   |005d: move v1, v8
+003b58: 3801 2300                              |005e: if-eqz v1, 0081 // +0023
+003b5c: 52b8 5400                              |0060: iget v8, v11, Lcom/tekartik/sqflite/Database;.lastCursorId:I // field@0054
+003b60: b078                                   |0062: add-int/2addr v8, v7
+003b62: 59b8 5400                              |0063: iput v8, v11, Lcom/tekartik/sqflite/Database;.lastCursorId:I // field@0054
+003b66: 1a09 9f01                              |0065: const-string v9, "cursorId" // string@019f
+003b6a: 7110 4201 0800                         |0067: invoke-static {v8}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003b70: 0c0a                                   |006a: move-result-object v10
+003b72: 7230 7a01 960a                         |006b: invoke-interface {v6, v9, v10}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+003b78: 2209 3800                              |006e: new-instance v9, Lcom/tekartik/sqflite/SqfliteCursor; // type@0038
+003b7c: 6e10 4001 0000                         |0070: invoke-virtual {v0}, Ljava/lang/Integer;.intValue:()I // method@0140
+003b82: 0a0a                                   |0073: move-result v10
+003b84: 7040 b900 894a                         |0074: invoke-direct {v9, v8, v10, v4}, Lcom/tekartik/sqflite/SqfliteCursor;.<init>:(IILandroid/database/Cursor;)V // method@00b9
+003b8a: 0793                                   |0077: move-object v3, v9
+003b8c: 54b9 5100                              |0078: iget-object v9, v11, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+003b90: 7110 4201 0800                         |007a: invoke-static {v8}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003b96: 0c0a                                   |007d: move-result-object v10
+003b98: 7230 7a01 a903                         |007e: invoke-interface {v9, v10, v3}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+003b9e: 7220 2101 6c00                         |0081: invoke-interface {v12, v6}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003ba4: 0000                                   |0084: nop // spacer
+003ba6: 3903 0700                              |0085: if-nez v3, 008c // +0007
+003baa: 3804 0500                              |0087: if-eqz v4, 008c // +0005
+003bae: 7210 0700 0400                         |0089: invoke-interface {v4}, Landroid/database/Cursor;.close:()V // method@0007
+003bb4: 0f07                                   |008c: return v7
+003bb6: 0d05                                   |008d: move-exception v5
+003bb8: 2813                                   |008e: goto 00a1 // +0013
+003bba: 0d06                                   |008f: move-exception v6
+003bbc: 7030 7900 6b0c                         |0090: invoke-direct {v11, v6, v12}, Lcom/tekartik/sqflite/Database;.handleStatementException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0079
+003bc2: 3803 0500                              |0093: if-eqz v3, 0098 // +0005
+003bc6: 7020 6500 3b00                         |0095: invoke-direct {v11, v3}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+003bcc: 0000                                   |0098: nop // spacer
+003bce: 3903 0700                              |0099: if-nez v3, 00a0 // +0007
+003bd2: 3804 0500                              |009b: if-eqz v4, 00a0 // +0005
+003bd6: 7210 0700 0400                         |009d: invoke-interface {v4}, Landroid/database/Cursor;.close:()V // method@0007
+003bdc: 0f05                                   |00a0: return v5
+003bde: 3903 0700                              |00a1: if-nez v3, 00a8 // +0007
+003be2: 3804 0500                              |00a3: if-eqz v4, 00a8 // +0005
+003be6: 7210 0700 0400                         |00a5: invoke-interface {v4}, Landroid/database/Cursor;.close:()V // method@0007
+003bec: 2705                                   |00a8: throw v5
+      catches       : 2
+        0x0032 - 0x0084
+          Ljava/lang/Exception; -> 0x008f
+          <any> -> 0x008d
+        0x0090 - 0x0098
+          <any> -> 0x008d
+      positions     :
+        0x0000 line=285
+        0x0008 line=286
+        0x0009 line=288
+        0x000d line=292
+        0x000e line=293
+        0x0016 line=294
+        0x0030 line=296
+        0x0031 line=299
+        0x003b line=303
+        0x0041 line=299
+        0x0047 line=305
+        0x004b line=306
+        0x004e line=308
+        0x005e line=312
+        0x0060 line=313
+        0x0065 line=314
+        0x006e line=315
+        0x0078 line=316
+        0x0081 line=318
+        0x0084 line=320
+        0x0085 line=331
+        0x0087 line=332
+        0x0089 line=333
+        0x008c line=320
+        0x008d line=331
+        0x008f line=322
+        0x0090 line=323
+        0x0093 line=325
+        0x0095 line=326
+        0x0098 line=328
+        0x0099 line=331
+        0x009b line=332
+        0x009d line=333
+        0x00a0 line=328
+        0x00a1 line=331
+        0x00a3 line=332
+        0x00a5 line=333
+        0x00a8 line=336
+      locals        :
+        0x0065 - 0x0081 reg=8 cursorId I
+        0x004b - 0x008d reg=6 results Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x0090 - 0x00a1 reg=6 exception Ljava/lang/Exception;
+        0x0008 - 0x00a9 reg=0 cursorPageSize Ljava/lang/Integer;
+        0x0009 - 0x00a9 reg=1 cursorHasMoreData Z
+        0x000d - 0x00a9 reg=2 command Lcom/tekartik/sqflite/SqlCommand;
+        0x000e - 0x00a9 reg=3 sqfliteCursor Lcom/tekartik/sqflite/SqfliteCursor;
+        0x0031 - 0x00a9 reg=4 cursor Landroid/database/Cursor;
+        0x0000 - 0x00a9 reg=11 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x00a9 reg=12 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #17              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'doQueryCursorNext'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 12
+      ins           : 2
+      outs          : 3
+      insns size    : 212 16-bit code units
+003c0c:                                        |[003c0c] com.tekartik.sqflite.Database.doQueryCursorNext:(Lcom/tekartik/sqflite/operation/Operation;)Z
+003c1c: 1a00 9f01                              |0000: const-string v0, "cursorId" // string@019f
+003c20: 7220 1b01 0b00                         |0002: invoke-interface {v11, v0}, Lcom/tekartik/sqflite/operation/Operation;.getArgument:(Ljava/lang/String;)Ljava/lang/Object; // method@011b
+003c26: 0c01                                   |0005: move-result-object v1
+003c28: 1f01 6800                              |0006: check-cast v1, Ljava/lang/Integer; // type@0068
+003c2c: 6e10 4001 0100                         |0008: invoke-virtual {v1}, Ljava/lang/Integer;.intValue:()I // method@0140
+003c32: 0a01                                   |000b: move-result v1
+003c34: 6202 b800                              |000c: sget-object v2, Ljava/lang/Boolean;.TRUE:Ljava/lang/Boolean; // field@00b8
+003c38: 1a03 7d01                              |000e: const-string v3, "cancel" // string@017d
+003c3c: 7220 1b01 3b00                         |0010: invoke-interface {v11, v3}, Lcom/tekartik/sqflite/operation/Operation;.getArgument:(Ljava/lang/String;)Ljava/lang/Object; // method@011b
+003c42: 0c03                                   |0013: move-result-object v3
+003c44: 6e20 3401 3200                         |0014: invoke-virtual {v2, v3}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+003c4a: 0a02                                   |0017: move-result v2
+003c4c: 52a3 5600                              |0018: iget v3, v10, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+003c50: 7110 b400 0300                         |001a: invoke-static {v3}, Lcom/tekartik/sqflite/LogLevel;.hasVerboseLevel:(I)Z // method@00b4
+003c56: 0a03                                   |001d: move-result v3
+003c58: 3803 2d00                              |001e: if-eqz v3, 004b // +002d
+003c5c: 2203 6e00                              |0020: new-instance v3, Ljava/lang/StringBuilder; // type@006e
+003c60: 7010 5001 0300                         |0022: invoke-direct {v3}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003c66: 6e10 7500 0a00                         |0025: invoke-virtual {v10}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+003c6c: 0c04                                   |0028: move-result-object v4
+003c6e: 6e20 5401 4300                         |0029: invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003c74: 0c03                                   |002c: move-result-object v3
+003c76: 1a04 9d01                              |002d: const-string v4, "cursor " // string@019d
+003c7a: 6e20 5401 4300                         |002f: invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003c80: 0c03                                   |0032: move-result-object v3
+003c82: 6e20 5101 1300                         |0033: invoke-virtual {v3, v1}, Ljava/lang/StringBuilder;.append:(I)Ljava/lang/StringBuilder; // method@0151
+003c88: 0c03                                   |0036: move-result-object v3
+003c8a: 3802 0500                              |0037: if-eqz v2, 003c // +0005
+003c8e: 1a04 0600                              |0039: const-string v4, " cancel" // string@0006
+003c92: 2803                                   |003b: goto 003e // +0003
+003c94: 1a04 0a00                              |003c: const-string v4, " next" // string@000a
+003c98: 6e20 5401 4300                         |003e: invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003c9e: 0c03                                   |0041: move-result-object v3
+003ca0: 6e10 5501 0300                         |0042: invoke-virtual {v3}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003ca6: 0c03                                   |0045: move-result-object v3
+003ca8: 1a04 2c01                              |0046: const-string v4, "Sqflite" // string@012c
+003cac: 7120 3600 3400                         |0048: invoke-static {v4, v3}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+003cb2: 1213                                   |004b: const/4 v3, #int 1 // #1
+003cb4: 3802 0a00                              |004c: if-eqz v2, 0056 // +000a
+003cb8: 7020 6400 1a00                         |004e: invoke-direct {v10, v1}, Lcom/tekartik/sqflite/Database;.closeCursor:(I)V // method@0064
+003cbe: 1200                                   |0051: const/4 v0, #int 0 // #0
+003cc0: 7220 2101 0b00                         |0052: invoke-interface {v11, v0}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003cc6: 0f03                                   |0055: return v3
+003cc8: 54a4 5100                              |0056: iget-object v4, v10, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+003ccc: 7110 4201 0100                         |0058: invoke-static {v1}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003cd2: 0c05                                   |005b: move-result-object v5
+003cd4: 7220 7701 5400                         |005c: invoke-interface {v4, v5}, Ljava/util/Map;.get:(Ljava/lang/Object;)Ljava/lang/Object; // method@0177
+003cda: 0c04                                   |005f: move-result-object v4
+003cdc: 1f04 3800                              |0060: check-cast v4, Lcom/tekartik/sqflite/SqfliteCursor; // type@0038
+003ce0: 1205                                   |0062: const/4 v5, #int 0 // #0
+003ce2: 1206                                   |0063: const/4 v6, #int 0 // #0
+003ce4: 3804 3700                              |0064: if-eqz v4, 009b // +0037
+003ce8: 5447 7a00                              |0066: iget-object v7, v4, Lcom/tekartik/sqflite/SqfliteCursor;.cursor:Landroid/database/Cursor; // field@007a
+003cec: 5248 7c00                              |0068: iget v8, v4, Lcom/tekartik/sqflite/SqfliteCursor;.pageSize:I // field@007c
+003cf0: 7110 4201 0800                         |006a: invoke-static {v8}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003cf6: 0c08                                   |006d: move-result-object v8
+003cf8: 7030 6600 7a08                         |006e: invoke-direct {v10, v7, v8}, Lcom/tekartik/sqflite/Database;.cursorToResults:(Landroid/database/Cursor;Ljava/lang/Integer;)Ljava/util/Map; // method@0066
+003cfe: 0c08                                   |0071: move-result-object v8
+003d00: 7210 1100 0700                         |0072: invoke-interface {v7}, Landroid/database/Cursor;.isLast:()Z // method@0011
+003d06: 0a09                                   |0075: move-result v9
+003d08: 3909 0a00                              |0076: if-nez v9, 0080 // +000a
+003d0c: 7210 1000 0700                         |0078: invoke-interface {v7}, Landroid/database/Cursor;.isAfterLast:()Z // method@0010
+003d12: 0a09                                   |007b: move-result v9
+003d14: 3909 0400                              |007c: if-nez v9, 0080 // +0004
+003d18: 0139                                   |007e: move v9, v3
+003d1a: 2802                                   |007f: goto 0081 // +0002
+003d1c: 0169                                   |0080: move v9, v6
+003d1e: 0195                                   |0081: move v5, v9
+003d20: 3805 0900                              |0082: if-eqz v5, 008b // +0009
+003d24: 7110 4201 0100                         |0084: invoke-static {v1}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003d2a: 0c09                                   |0087: move-result-object v9
+003d2c: 7230 7a01 0809                         |0088: invoke-interface {v8, v0, v9}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+003d32: 7220 2101 8b00                         |008b: invoke-interface {v11, v8}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003d38: 0000                                   |008e: nop // spacer
+003d3a: 3905 0700                              |008f: if-nez v5, 0096 // +0007
+003d3e: 3804 0500                              |0091: if-eqz v4, 0096 // +0005
+003d42: 7020 6500 4a00                         |0093: invoke-direct {v10, v4}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+003d48: 0f03                                   |0096: return v3
+003d4a: 0d00                                   |0097: move-exception v0
+003d4c: 2834                                   |0098: goto 00cc // +0034
+003d4e: 0d00                                   |0099: move-exception v0
+003d50: 2820                                   |009a: goto 00ba // +0020
+003d52: 2200 6700                              |009b: new-instance v0, Ljava/lang/IllegalStateException; // type@0067
+003d56: 2203 6e00                              |009d: new-instance v3, Ljava/lang/StringBuilder; // type@006e
+003d5a: 7010 5001 0300                         |009f: invoke-direct {v3}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003d60: 1a07 3f00                              |00a2: const-string v7, "Cursor " // string@003f
+003d64: 6e20 5401 7300                         |00a4: invoke-virtual {v3, v7}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003d6a: 0c03                                   |00a7: move-result-object v3
+003d6c: 6e20 5101 1300                         |00a8: invoke-virtual {v3, v1}, Ljava/lang/StringBuilder;.append:(I)Ljava/lang/StringBuilder; // method@0151
+003d72: 0c03                                   |00ab: move-result-object v3
+003d74: 1a07 0b00                              |00ac: const-string v7, " not found" // string@000b
+003d78: 6e20 5401 7300                         |00ae: invoke-virtual {v3, v7}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003d7e: 0c03                                   |00b1: move-result-object v3
+003d80: 6e10 5501 0300                         |00b2: invoke-virtual {v3}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003d86: 0c03                                   |00b5: move-result-object v3
+003d88: 7020 3e01 3000                         |00b6: invoke-direct {v0, v3}, Ljava/lang/IllegalStateException;.<init>:(Ljava/lang/String;)V // method@013e
+003d8e: 2700                                   |00b9: throw v0
+003d90: 6e30 7800 0a0b                         |00ba: invoke-virtual {v10, v0, v11}, Lcom/tekartik/sqflite/Database;.handleException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0078
+003d96: 3804 0600                              |00bd: if-eqz v4, 00c3 // +0006
+003d9a: 7020 6500 4a00                         |00bf: invoke-direct {v10, v4}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+003da0: 1204                                   |00c2: const/4 v4, #int 0 // #0
+003da2: 0000                                   |00c3: nop // spacer
+003da4: 3905 0700                              |00c4: if-nez v5, 00cb // +0007
+003da8: 3804 0500                              |00c6: if-eqz v4, 00cb // +0005
+003dac: 7020 6500 4a00                         |00c8: invoke-direct {v10, v4}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+003db2: 0f06                                   |00cb: return v6
+003db4: 3905 0700                              |00cc: if-nez v5, 00d3 // +0007
+003db8: 3804 0500                              |00ce: if-eqz v4, 00d3 // +0005
+003dbc: 7020 6500 4a00                         |00d0: invoke-direct {v10, v4}, Lcom/tekartik/sqflite/Database;.closeCursor:(Lcom/tekartik/sqflite/SqfliteCursor;)V // method@0065
+003dc2: 2700                                   |00d3: throw v0
+      catches       : 3
+        0x0066 - 0x008e
+          Ljava/lang/Exception; -> 0x0099
+          <any> -> 0x0097
+        0x009b - 0x00ba
+          Ljava/lang/Exception; -> 0x0099
+          <any> -> 0x0097
+        0x00ba - 0x00c2
+          <any> -> 0x0097
+      positions     :
+        0x0000 line=345
+        0x000c line=346
+        0x0018 line=347
+        0x0020 line=348
+        0x004b line=350
+        0x004e line=351
+        0x0051 line=352
+        0x0055 line=353
+        0x0056 line=355
+        0x0062 line=356
+        0x0063 line=358
+        0x0066 line=361
+        0x0068 line=363
+        0x0072 line=366
+        0x0082 line=368
+        0x0084 line=370
+        0x008b line=372
+        0x008e line=374
+        0x008f line=386
+        0x0091 line=387
+        0x0093 line=388
+        0x0096 line=374
+        0x0097 line=386
+        0x0099 line=376
+        0x009b line=359
+        0x00ba line=377
+        0x00bd line=379
+        0x00bf line=380
+        0x00c2 line=381
+        0x00c3 line=383
+        0x00c4 line=386
+        0x00c6 line=387
+        0x00c8 line=388
+        0x00cb line=383
+        0x00cc line=386
+        0x00ce line=387
+        0x00d0 line=388
+        0x00d3 line=391
+      locals        :
+        0x0068 - 0x0097 reg=7 cursor Landroid/database/Cursor;
+        0x0072 - 0x0097 reg=8 results Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x000c - 0x00b9 reg=1 cursorId I
+        0x0018 - 0x00b9 reg=2 cancel Z
+        0x0062 - 0x00b9 reg=4 sqfliteCursor Lcom/tekartik/sqflite/SqfliteCursor;
+        0x0063 - 0x00b9 reg=5 cursorHasMoreData Z
+        0x0000 - 0x00b9 reg=11 operation Lcom/tekartik/sqflite/operation/Operation;
+        0x00ba - 0x00cc reg=0 exception Ljava/lang/Exception;
+        0x00ba - 0x00d4 reg=1 cursorId I
+        0x00ba - 0x00d4 reg=2 cancel Z
+        0x00ba - 0x00d4 reg=4 sqfliteCursor Lcom/tekartik/sqflite/SqfliteCursor;
+        0x00ba - 0x00d4 reg=5 cursorHasMoreData Z
+        0x0000 - 0x00d4 reg=10 this Lcom/tekartik/sqflite/Database;
+        0x00ba - 0x00d4 reg=11 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #18              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'doUpdate'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 7
+      ins           : 2
+      outs          : 3
+      insns size    : 87 16-bit code units
+003de8:                                        |[003de8] com.tekartik.sqflite.Database.doUpdate:(Lcom/tekartik/sqflite/operation/Operation;)Z
+003df8: 7210 1e01 0600                         |0000: invoke-interface {v6}, Lcom/tekartik/sqflite/operation/Operation;.getSqlCommand:()Lcom/tekartik/sqflite/SqlCommand; // method@011e
+003dfe: 0c00                                   |0003: move-result-object v0
+003e00: 5251 5600                              |0004: iget v1, v5, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+003e04: 7110 b300 0100                         |0006: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+003e0a: 0a01                                   |0009: move-result v1
+003e0c: 3801 1c00                              |000a: if-eqz v1, 0026 // +001c
+003e10: 2201 6e00                              |000c: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+003e14: 7010 5001 0100                         |000e: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003e1a: 6e10 7500 0500                         |0011: invoke-virtual {v5}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+003e20: 0c02                                   |0014: move-result-object v2
+003e22: 6e20 5401 2100                         |0015: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003e28: 0c01                                   |0018: move-result-object v1
+003e2a: 6e20 5301 0100                         |0019: invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder; // method@0153
+003e30: 0c01                                   |001c: move-result-object v1
+003e32: 6e10 5501 0100                         |001d: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003e38: 0c01                                   |0020: move-result-object v1
+003e3a: 1a02 2c01                              |0021: const-string v2, "Sqflite" // string@012c
+003e3e: 7120 3600 1200                         |0023: invoke-static {v2, v1}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+003e44: 6e10 7700 0500                         |0026: invoke-virtual {v5}, Lcom/tekartik/sqflite/Database;.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0077
+003e4a: 0c01                                   |0029: move-result-object v1
+003e4c: 6e10 0101 0000                         |002a: invoke-virtual {v0}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+003e52: 0c02                                   |002d: move-result-object v2
+003e54: 6e20 1600 2100                         |002e: invoke-virtual {v1, v2}, Landroid/database/sqlite/SQLiteDatabase;.compileStatement:(Ljava/lang/String;)Landroid/database/sqlite/SQLiteStatement; // method@0016
+003e5a: 0c02                                   |0031: move-result-object v2
+003e5c: 6e10 0201 0000                         |0032: invoke-virtual {v0}, Lcom/tekartik/sqflite/SqlCommand;.getSqlArguments:()[Ljava/lang/Object; // method@0102
+003e62: 0c03                                   |0035: move-result-object v3
+003e64: 7030 6000 2503                         |0036: invoke-direct {v5, v2, v3}, Lcom/tekartik/sqflite/Database;.bindArgs:(Landroid/database/sqlite/SQLiteStatement;[Ljava/lang/Object;)V // method@0060
+003e6a: 6e10 2e00 0200                         |0039: invoke-virtual {v2}, Landroid/database/sqlite/SQLiteStatement;.executeUpdateDelete:()I // method@002e
+003e70: 0a03                                   |003c: move-result v3
+003e72: 7210 1d01 0600                         |003d: invoke-interface {v6}, Lcom/tekartik/sqflite/operation/Operation;.getNoResult:()Z // method@011d
+003e78: 0a04                                   |0040: move-result v4
+003e7a: 3804 0700                              |0041: if-eqz v4, 0048 // +0007
+003e7e: 1204                                   |0043: const/4 v4, #int 0 // #0
+003e80: 7220 2101 4600                         |0044: invoke-interface {v6, v4}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003e86: 2808                                   |0047: goto 004f // +0008
+003e88: 7110 4201 0300                         |0048: invoke-static {v3}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+003e8e: 0c04                                   |004b: move-result-object v4
+003e90: 7220 2101 4600                         |004c: invoke-interface {v6, v4}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+003e96: 1214                                   |004f: const/4 v4, #int 1 // #1
+003e98: 0f04                                   |0050: return v4
+003e9a: 0d01                                   |0051: move-exception v1
+003e9c: 7030 7900 1506                         |0052: invoke-direct {v5, v1, v6}, Lcom/tekartik/sqflite/Database;.handleStatementException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0079
+003ea2: 1202                                   |0055: const/4 v2, #int 0 // #0
+003ea4: 0f02                                   |0056: return v2
+      catches       : 1
+        0x0026 - 0x004f
+          Ljava/lang/Exception; -> 0x0051
+      positions     :
+        0x0000 line=687
+        0x0004 line=688
+        0x000c line=689
+        0x0026 line=693
+        0x002a line=695
+        0x0032 line=696
+        0x0039 line=697
+        0x003d line=698
+        0x0043 line=699
+        0x0048 line=701
+        0x004f line=703
+        0x0051 line=704
+        0x0052 line=705
+        0x0055 line=706
+      locals        :
+        0x002a - 0x0051 reg=1 db Landroid/database/sqlite/SQLiteDatabase;
+        0x0032 - 0x0051 reg=2 statement Landroid/database/sqlite/SQLiteStatement;
+        0x003d - 0x0051 reg=3 count I
+        0x0004 - 0x0057 reg=0 command Lcom/tekartik/sqflite/SqlCommand;
+        0x0052 - 0x0057 reg=1 exception Ljava/lang/Exception;
+        0x0000 - 0x0057 reg=5 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0057 reg=6 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #19              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'execSQL'
+      type          : '(Lcom/tekartik/sqflite/SqlCommand;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 9
+      ins           : 2
+      outs          : 5
+      insns size    : 80 16-bit code units
+00489c:                                        |[00489c] com.tekartik.sqflite.Database.execSQL:(Lcom/tekartik/sqflite/SqlCommand;)V
+0048ac: 6e10 7700 0700                         |0000: invoke-virtual {v7}, Lcom/tekartik/sqflite/Database;.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0077
+0048b2: 0c00                                   |0003: move-result-object v0
+0048b4: 6e10 0101 0800                         |0004: invoke-virtual {v8}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+0048ba: 0c01                                   |0007: move-result-object v1
+0048bc: 6e10 0201 0800                         |0008: invoke-virtual {v8}, Lcom/tekartik/sqflite/SqlCommand;.getSqlArguments:()[Ljava/lang/Object; // method@0102
+0048c2: 0c02                                   |000b: move-result-object v2
+0048c4: 6e30 1b00 1002                         |000c: invoke-virtual {v0, v1, v2}, Landroid/database/sqlite/SQLiteDatabase;.execSQL:(Ljava/lang/String;[Ljava/lang/Object;)V // method@001b
+0048ca: 2833                                   |000f: goto 0042 // +0033
+0048cc: 0d01                                   |0010: move-exception v1
+0048ce: 6e10 2200 0100                         |0011: invoke-virtual {v1}, Landroid/database/sqlite/SQLiteException;.getMessage:()Ljava/lang/String; // method@0022
+0048d4: 0c02                                   |0014: move-result-object v2
+0048d6: 6e10 0101 0800                         |0015: invoke-virtual {v8}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+0048dc: 0c03                                   |0018: move-result-object v3
+0048de: 7110 1300 0300                         |0019: invoke-static {v3}, Landroid/database/DatabaseUtils;.getSqlStatementType:(Ljava/lang/String;)I // method@0013
+0048e4: 0a03                                   |001c: move-result v3
+0048e6: 1274                                   |001d: const/4 v4, #int 7 // #7
+0048e8: 3343 3100                              |001e: if-ne v3, v4, 004f // +0031
+0048ec: 3802 2f00                              |0020: if-eqz v2, 004f // +002f
+0048f0: 1a03 2701                              |0022: const-string v3, "Queries can be performed" // string@0127
+0048f4: 6e20 4c01 3200                         |0024: invoke-virtual {v2, v3}, Ljava/lang/String;.contains:(Ljava/lang/CharSequence;)Z // method@014c
+0048fa: 0a03                                   |0027: move-result v3
+0048fc: 3803 2700                              |0028: if-eqz v3, 004f // +0027
+004900: 2203 2a00                              |002a: new-instance v3, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda6; // type@002a
+004904: 7020 5200 8300                         |002c: invoke-direct {v3, v8}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda6;.<init>:(Lcom/tekartik/sqflite/SqlCommand;)V // method@0052
+00490a: 6e10 0101 0800                         |002f: invoke-virtual {v8}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+004910: 0c04                                   |0032: move-result-object v4
+004912: 6205 0800                              |0033: sget-object v5, Lcom/tekartik/sqflite/Constant;.EMPTY_STRING_ARRAY:[Ljava/lang/String; // field@0008
+004916: 1206                                   |0035: const/4 v6, #int 0 // #0
+004918: 6e56 2000 3054                         |0036: invoke-virtual {v0, v3, v4, v5, v6}, Landroid/database/sqlite/SQLiteDatabase;.rawQueryWithFactory:(Landroid/database/sqlite/SQLiteDatabase$CursorFactory;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor; // method@0020
+00491e: 0c03                                   |0039: move-result-object v3
+004920: 7210 0b00 0300                         |003a: invoke-interface {v3}, Landroid/database/Cursor;.getCount:()I // method@000b
+004926: 3803 0500                              |003d: if-eqz v3, 0042 // +0005
+00492a: 7210 0700 0300                         |003f: invoke-interface {v3}, Landroid/database/Cursor;.close:()V // method@0007
+004930: 0e00                                   |0042: return-void
+004932: 0d04                                   |0043: move-exception v4
+004934: 3803 0a00                              |0044: if-eqz v3, 004e // +000a
+004938: 7210 0700 0300                         |0046: invoke-interface {v3}, Landroid/database/Cursor;.close:()V // method@0007
+00493e: 2805                                   |0049: goto 004e // +0005
+004940: 0d05                                   |004a: move-exception v5
+004942: 6e20 5a01 5400                         |004b: invoke-virtual {v4, v5}, Ljava/lang/Throwable;.addSuppressed:(Ljava/lang/Throwable;)V // method@015a
+004948: 2704                                   |004e: throw v4
+00494a: 2701                                   |004f: throw v1
+      catches       : 3
+        0x0004 - 0x000f
+          Landroid/database/sqlite/SQLiteException; -> 0x0010
+        0x003a - 0x003d
+          <any> -> 0x0043
+        0x0046 - 0x0049
+          <any> -> 0x004a
+      positions     :
+        0x0000 line=515
+        0x0004 line=517
+        0x000f line=535
+        0x0010 line=518
+        0x0011 line=522
+        0x0015 line=523
+        0x0022 line=524
+        0x002a line=527
+        0x002f line=531
+        0x0035 line=527
+        0x003a line=533
+        0x003d line=534
+        0x0042 line=536
+        0x0043 line=527
+        0x004f line=525
+      locals        :
+        0x0011 - 0x0042 reg=1 e Landroid/database/sqlite/SQLiteException;
+        0x0015 - 0x0042 reg=2 message Ljava/lang/String;
+        0x003a - 0x0042 reg=3 cursor Landroid/database/Cursor;
+        0x0043 - 0x004f reg=3 cursor Landroid/database/Cursor;
+        0x0004 - 0x0050 reg=0 db Landroid/database/sqlite/SQLiteDatabase;
+        0x0043 - 0x0050 reg=1 e Landroid/database/sqlite/SQLiteException;
+        0x0043 - 0x0050 reg=2 message Ljava/lang/String;
+        0x0000 - 0x0050 reg=7 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0050 reg=8 command Lcom/tekartik/sqflite/SqlCommand;
+
+    #20              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'executeOrError'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 6
+      ins           : 2
+      outs          : 3
+      insns size    : 77 16-bit code units
+003f24:                                        |[003f24] com.tekartik.sqflite.Database.executeOrError:(Lcom/tekartik/sqflite/operation/Operation;)Z
+003f34: 7210 1e01 0500                         |0000: invoke-interface {v5}, Lcom/tekartik/sqflite/operation/Operation;.getSqlCommand:()Lcom/tekartik/sqflite/SqlCommand; // method@011e
+003f3a: 0c00                                   |0003: move-result-object v0
+003f3c: 5241 5600                              |0004: iget v1, v4, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+003f40: 7110 b300 0100                         |0006: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+003f46: 0a01                                   |0009: move-result v1
+003f48: 3801 1c00                              |000a: if-eqz v1, 0026 // +001c
+003f4c: 2201 6e00                              |000c: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+003f50: 7010 5001 0100                         |000e: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003f56: 6e10 7500 0400                         |0011: invoke-virtual {v4}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+003f5c: 0c02                                   |0014: move-result-object v2
+003f5e: 6e20 5401 2100                         |0015: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003f64: 0c01                                   |0018: move-result-object v1
+003f66: 6e20 5301 0100                         |0019: invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder; // method@0153
+003f6c: 0c01                                   |001c: move-result-object v1
+003f6e: 6e10 5501 0100                         |001d: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003f74: 0c01                                   |0020: move-result-object v1
+003f76: 1a02 2c01                              |0021: const-string v2, "Sqflite" // string@012c
+003f7a: 7120 3600 1200                         |0023: invoke-static {v2, v1}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+003f80: 7210 1c01 0500                         |0026: invoke-interface {v5}, Lcom/tekartik/sqflite/operation/Operation;.getInTransactionChange:()Ljava/lang/Boolean; // method@011c
+003f86: 0c01                                   |0029: move-result-object v1
+003f88: 7020 6f00 0400                         |002a: invoke-direct {v4, v0}, Lcom/tekartik/sqflite/Database;.execSQL:(Lcom/tekartik/sqflite/SqlCommand;)V // method@006f
+003f8e: 6e20 6e00 1400                         |002d: invoke-virtual {v4, v1}, Lcom/tekartik/sqflite/Database;.enterOrLeaveInTransaction:(Ljava/lang/Boolean;)V // method@006e
+003f94: 1212                                   |0030: const/4 v2, #int 1 // #1
+003f96: 0f02                                   |0031: return v2
+003f98: 0d02                                   |0032: move-exception v2
+003f9a: 6203 b700                              |0033: sget-object v3, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@00b7
+003f9e: 6e20 3401 1300                         |0035: invoke-virtual {v3, v1}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+003fa4: 0a03                                   |0038: move-result v3
+003fa6: 3803 0900                              |0039: if-eqz v3, 0042 // +0009
+003faa: 6e10 0101 0000                         |003b: invoke-virtual {v0}, Lcom/tekartik/sqflite/SqlCommand;.getSql:()Ljava/lang/String; // method@0101
+003fb0: 0c03                                   |003e: move-result-object v3
+003fb2: 7030 8400 3402                         |003f: invoke-direct {v4, v3, v2}, Lcom/tekartik/sqflite/Database;.leaveTransactionOnError:(Ljava/lang/String;Ljava/lang/Exception;)V // method@0084
+003fb8: 3901 0600                              |0042: if-nez v1, 0048 // +0006
+003fbc: 7030 7900 2405                         |0044: invoke-direct {v4, v2, v5}, Lcom/tekartik/sqflite/Database;.handleStatementException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0079
+003fc2: 2804                                   |0047: goto 004b // +0004
+003fc4: 6e30 7800 2405                         |0048: invoke-virtual {v4, v2, v5}, Lcom/tekartik/sqflite/Database;.handleException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0078
+003fca: 1203                                   |004b: const/4 v3, #int 0 // #0
+003fcc: 0f03                                   |004c: return v3
+      catches       : 1
+        0x002a - 0x0030
+          Ljava/lang/Exception; -> 0x0032
+      positions     :
+        0x0000 line=492
+        0x0004 line=493
+        0x000c line=494
+        0x0026 line=496
+        0x002a line=498
+        0x002d line=499
+        0x0030 line=500
+        0x0032 line=501
+        0x0033 line=502
+        0x003b line=503
+        0x0042 line=505
+        0x0044 line=506
+        0x0048 line=508
+        0x004b line=510
+      locals        :
+        0x0004 - 0x004d reg=0 command Lcom/tekartik/sqflite/SqlCommand;
+        0x002a - 0x004d reg=1 operationInTransaction Ljava/lang/Boolean;
+        0x0033 - 0x004d reg=2 exception Ljava/lang/Exception;
+        0x0000 - 0x004d reg=4 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x004d reg=5 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #21              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'existsDatabase'
+      type          : '(Ljava/lang/String;)Z'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 2
+      insns size    : 14 16-bit code units
+003fdc:                                        |[003fdc] com.tekartik.sqflite.Database.existsDatabase:(Ljava/lang/String;)Z
+003fec: 1200                                   |0000: const/4 v0, #int 0 // #0
+003fee: 2201 5f00                              |0001: new-instance v1, Ljava/io/File; // type@005f
+003ff2: 7020 2f01 2100                         |0003: invoke-direct {v1, v2}, Ljava/io/File;.<init>:(Ljava/lang/String;)V // method@012f
+003ff8: 6e10 3001 0100                         |0006: invoke-virtual {v1}, Ljava/io/File;.exists:()Z // method@0130
+003ffe: 0a01                                   |0009: move-result v1
+004000: 0110                                   |000a: move v0, v1
+004002: 2802                                   |000b: goto 000d // +0002
+004004: 0d01                                   |000c: move-exception v1
+004006: 0f00                                   |000d: return v0
+      catches       : 1
+        0x0001 - 0x000a
+          Ljava/lang/Exception; -> 0x000c
+      positions     :
+        0x0000 line=136
+        0x0001 line=138
+        0x000b line=140
+        0x000c line=139
+        0x000d line=141
+      locals        :
+        0x0001 - 0x000e reg=0 exists Z
+        0x0000 - 0x000e reg=2 path Ljava/lang/String;
+
+    #22              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'getApplicationInfoWithMeta32'
+      type          : '(Landroid/content/Context;Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;'
+      access        : 0x0008 (STATIC)
+      code          -
+      registers     : 4
+      ins           : 3
+      outs          : 3
+      insns size    : 9 16-bit code units
+00385c:                                        |[00385c] com.tekartik.sqflite.Database.getApplicationInfoWithMeta32:(Landroid/content/Context;Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;
+00386c: 6e10 0200 0100                         |0000: invoke-virtual {v1}, Landroid/content/Context;.getPackageManager:()Landroid/content/pm/PackageManager; // method@0002
+003872: 0c00                                   |0003: move-result-object v0
+003874: 6e30 0500 2003                         |0004: invoke-virtual {v0, v2, v3}, Landroid/content/pm/PackageManager;.getApplicationInfo:(Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo; // method@0005
+00387a: 0c00                                   |0007: move-result-object v0
+00387c: 1100                                   |0008: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=102
+      locals        :
+        0x0000 - 0x0009 reg=1 context Landroid/content/Context;
+        0x0000 - 0x0009 reg=2 packageName Ljava/lang/String;
+        0x0000 - 0x0009 reg=3 flags I
+
+    #23              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'handleStatementException'
+      type          : '(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 6
+      ins           : 3
+      outs          : 4
+      insns size    : 50 16-bit code units
+004a18:                                        |[004a18] com.tekartik.sqflite.Database.handleStatementException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V
+004a28: 2040 0d00                              |0000: instance-of v0, v4, Landroid/database/SQLException; // type@000d
+004a2c: 3800 2c00                              |0002: if-eqz v0, 002e // +002c
+004a30: 2040 0e00                              |0004: instance-of v0, v4, Landroid/database/sqlite/SQLiteCantOpenDatabaseException; // type@000e
+004a34: 3900 2800                              |0006: if-nez v0, 002e // +0028
+004a38: 7010 8300 0300                         |0008: invoke-direct {v3}, Lcom/tekartik/sqflite/Database;.leaveTransactionIfRolledBack:()Z // method@0083
+004a3e: 0a00                                   |000b: move-result v0
+004a40: 3800 2200                              |000c: if-eqz v0, 002e // +0022
+004a44: 7110 2401 0500                         |000e: invoke-static {v5}, Lcom/tekartik/sqflite/operation/SqlErrorInfo;.getMap:(Lcom/tekartik/sqflite/operation/Operation;)Ljava/util/Map; // method@0124
+004a4a: 0c00                                   |0011: move-result-object v0
+004a4c: 3900 0800                              |0012: if-nez v0, 001a // +0008
+004a50: 2201 7400                              |0014: new-instance v1, Ljava/util/HashMap; // type@0074
+004a54: 7010 5f01 0100                         |0016: invoke-direct {v1}, Ljava/util/HashMap;.<init>:()V // method@015f
+004a5a: 0710                                   |0019: move-object v0, v1
+004a5c: 1211                                   |001a: const/4 v1, #int 1 // #1
+004a5e: 7110 3501 0100                         |001b: invoke-static {v1}, Ljava/lang/Boolean;.valueOf:(Z)Ljava/lang/Boolean; // method@0135
+004a64: 0c01                                   |001e: move-result-object v1
+004a66: 1a02 fc02                              |001f: const-string v2, "transactionClosed" // string@02fc
+004a6a: 7230 7a01 2001                         |0021: invoke-interface {v0, v2, v1}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+004a70: 1a01 e602                              |0024: const-string v1, "sqlite_error" // string@02e6
+004a74: 6e10 3b01 0400                         |0026: invoke-virtual {v4}, Ljava/lang/Exception;.getMessage:()Ljava/lang/String; // method@013b
+004a7a: 0c02                                   |0029: move-result-object v2
+004a7c: 7240 1a01 1502                         |002a: invoke-interface {v5, v1, v2, v0}, Lcom/tekartik/sqflite/operation/Operation;.error:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V // method@011a
+004a82: 0e00                                   |002d: return-void
+004a84: 6e30 7800 4305                         |002e: invoke-virtual {v3, v4, v5}, Lcom/tekartik/sqflite/Database;.handleException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V // method@0078
+004a8a: 0e00                                   |0031: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=432
+        0x0008 line=433
+        0x000e line=434
+        0x0012 line=435
+        0x0014 line=436
+        0x001a line=438
+        0x0024 line=439
+        0x002d line=440
+        0x002e line=442
+        0x0031 line=443
+      locals        :
+        0x0012 - 0x002e reg=0 data Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x0000 - 0x0032 reg=3 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0032 reg=4 exception Ljava/lang/Exception;
+        0x0000 - 0x0032 reg=5 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #24              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$doQuery$1'
+      type          : '(Lcom/tekartik/sqflite/SqlCommand;Landroid/database/sqlite/SQLiteDatabase;Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)Landroid/database/Cursor;'
+      access        : 0x1008 (STATIC SYNTHETIC)
+      code          -
+      registers     : 6
+      ins           : 5
+      outs          : 4
+      insns size    : 9 16-bit code units
+003880:                                        |[003880] com.tekartik.sqflite.Database.lambda$doQuery$1:(Lcom/tekartik/sqflite/SqlCommand;Landroid/database/sqlite/SQLiteDatabase;Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)Landroid/database/Cursor;
+003890: 6e20 fe00 5100                         |0000: invoke-virtual {v1, v5}, Lcom/tekartik/sqflite/SqlCommand;.bindTo:(Landroid/database/sqlite/SQLiteProgram;)V // method@00fe
+003896: 2200 0f00                              |0003: new-instance v0, Landroid/database/sqlite/SQLiteCursor; // type@000f
+00389a: 7040 1400 3054                         |0005: invoke-direct {v0, v3, v4, v5}, Landroid/database/sqlite/SQLiteCursor;.<init>:(Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)V // method@0014
+0038a0: 1100                                   |0008: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=301
+        0x0003 line=302
+      locals        :
+        0x0000 - 0x0009 reg=1 command Lcom/tekartik/sqflite/SqlCommand;
+        0x0000 - 0x0009 reg=2 sqLiteDatabase Landroid/database/sqlite/SQLiteDatabase;
+        0x0000 - 0x0009 reg=3 sqLiteCursorDriver Landroid/database/sqlite/SQLiteCursorDriver;
+        0x0000 - 0x0009 reg=4 editTable Ljava/lang/String;
+        0x0000 - 0x0009 reg=5 sqLiteQuery Landroid/database/sqlite/SQLiteQuery;
+
+    #25              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$execSQL$3'
+      type          : '(Lcom/tekartik/sqflite/SqlCommand;Landroid/database/sqlite/SQLiteDatabase;Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)Landroid/database/Cursor;'
+      access        : 0x1008 (STATIC SYNTHETIC)
+      code          -
+      registers     : 6
+      ins           : 5
+      outs          : 4
+      insns size    : 9 16-bit code units
+0038a4:                                        |[0038a4] com.tekartik.sqflite.Database.lambda$execSQL$3:(Lcom/tekartik/sqflite/SqlCommand;Landroid/database/sqlite/SQLiteDatabase;Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)Landroid/database/Cursor;
+0038b4: 6e20 fe00 5100                         |0000: invoke-virtual {v1, v5}, Lcom/tekartik/sqflite/SqlCommand;.bindTo:(Landroid/database/sqlite/SQLiteProgram;)V // method@00fe
+0038ba: 2200 0f00                              |0003: new-instance v0, Landroid/database/sqlite/SQLiteCursor; // type@000f
+0038be: 7040 1400 3054                         |0005: invoke-direct {v0, v3, v4, v5}, Landroid/database/sqlite/SQLiteCursor;.<init>:(Landroid/database/sqlite/SQLiteCursorDriver;Ljava/lang/String;Landroid/database/sqlite/SQLiteQuery;)V // method@0014
+0038c4: 1100                                   |0008: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=529
+        0x0003 line=530
+      locals        :
+        0x0000 - 0x0009 reg=1 command Lcom/tekartik/sqflite/SqlCommand;
+        0x0000 - 0x0009 reg=2 sqLiteDatabase Landroid/database/sqlite/SQLiteDatabase;
+        0x0000 - 0x0009 reg=3 sqLiteCursorDriver Landroid/database/sqlite/SQLiteCursorDriver;
+        0x0000 - 0x0009 reg=4 editTable Ljava/lang/String;
+        0x0000 - 0x0009 reg=5 sqLiteQuery Landroid/database/sqlite/SQLiteQuery;
+
+    #26              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$execute$4'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1002 (PRIVATE SYNTHETIC)
+      code          -
+      registers     : 7
+      ins           : 2
+      outs          : 3
+      insns size    : 90 16-bit code units
+004ab0:                                        |[004ab0] com.tekartik.sqflite.Database.lambda$execute$4:(Lcom/tekartik/sqflite/operation/Operation;)V
+004ac0: 7210 1c01 0600                         |0000: invoke-interface {v6}, Lcom/tekartik/sqflite/operation/Operation;.getInTransactionChange:()Ljava/lang/Boolean; // method@011c
+004ac6: 0c00                                   |0003: move-result-object v0
+004ac8: 6201 b800                              |0004: sget-object v1, Ljava/lang/Boolean;.TRUE:Ljava/lang/Boolean; // field@00b8
+004acc: 6e20 3401 0100                         |0006: invoke-virtual {v1, v0}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+004ad2: 0a01                                   |0009: move-result v1
+004ad4: 1212                                   |000a: const/4 v2, #int 1 // #1
+004ad6: 3801 0a00                              |000b: if-eqz v1, 0015 // +000a
+004ada: 7210 2001 0600                         |000d: invoke-interface {v6}, Lcom/tekartik/sqflite/operation/Operation;.hasNullTransactionId:()Z // method@0120
+004ae0: 0a01                                   |0010: move-result v1
+004ae2: 3801 0400                              |0011: if-eqz v1, 0015 // +0004
+004ae6: 0121                                   |0013: move v1, v2
+004ae8: 2802                                   |0014: goto 0016 // +0002
+004aea: 1201                                   |0015: const/4 v1, #int 0 // #0
+004aec: 3801 0d00                              |0016: if-eqz v1, 0023 // +000d
+004af0: 5253 5500                              |0018: iget v3, v5, Lcom/tekartik/sqflite/Database;.lastTransactionId:I // field@0055
+004af4: b023                                   |001a: add-int/2addr v3, v2
+004af6: 5953 5500                              |001b: iput v3, v5, Lcom/tekartik/sqflite/Database;.lastTransactionId:I // field@0055
+004afa: 7110 4201 0300                         |001d: invoke-static {v3}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@0142
+004b00: 0c02                                   |0020: move-result-object v2
+004b02: 5b52 5000                              |0021: iput-object v2, v5, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004b06: 7020 7100 6500                         |0023: invoke-direct {v5, v6}, Lcom/tekartik/sqflite/Database;.executeOrError:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@0071
+004b0c: 0a02                                   |0026: move-result v2
+004b0e: 1203                                   |0027: const/4 v3, #int 0 // #0
+004b10: 3902 1200                              |0028: if-nez v2, 003a // +0012
+004b14: 3801 0500                              |002a: if-eqz v1, 002f // +0005
+004b18: 5b53 5000                              |002c: iput-object v3, v5, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004b1c: 282b                                   |002e: goto 0059 // +002b
+004b1e: 6202 b700                              |002f: sget-object v2, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@00b7
+004b22: 6e20 3401 0200                         |0031: invoke-virtual {v2, v0}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+004b28: 0a02                                   |0034: move-result v2
+004b2a: 3802 2400                              |0035: if-eqz v2, 0059 // +0024
+004b2e: 5b53 5000                              |0037: iput-object v3, v5, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004b32: 2820                                   |0039: goto 0059 // +0020
+004b34: 3801 1200                              |003a: if-eqz v1, 004c // +0012
+004b38: 2202 7400                              |003c: new-instance v2, Ljava/util/HashMap; // type@0074
+004b3c: 7010 5f01 0200                         |003e: invoke-direct {v2}, Ljava/util/HashMap;.<init>:()V // method@015f
+004b42: 1a03 ff02                              |0041: const-string v3, "transactionId" // string@02ff
+004b46: 5454 5000                              |0043: iget-object v4, v5, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004b4a: 7230 7a01 3204                         |0045: invoke-interface {v2, v3, v4}, Ljava/util/Map;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@017a
+004b50: 7220 2101 2600                         |0048: invoke-interface {v6, v2}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+004b56: 280e                                   |004b: goto 0059 // +000e
+004b58: 6202 b700                              |004c: sget-object v2, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@00b7
+004b5c: 6e20 3401 0200                         |004e: invoke-virtual {v2, v0}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+004b62: 0a02                                   |0051: move-result v2
+004b64: 3802 0400                              |0052: if-eqz v2, 0056 // +0004
+004b68: 5b53 5000                              |0054: iput-object v3, v5, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004b6c: 7220 2101 3600                         |0056: invoke-interface {v6, v3}, Lcom/tekartik/sqflite/operation/Operation;.success:(Ljava/lang/Object;)V // method@0121
+004b72: 0e00                                   |0059: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=612
+        0x0004 line=614
+        0x0016 line=615
+        0x0018 line=616
+        0x0023 line=618
+        0x002a line=620
+        0x002c line=621
+        0x002f line=622
+        0x0037 line=625
+        0x003a line=628
+        0x003c line=630
+        0x0041 line=631
+        0x0048 line=632
+        0x004b line=633
+        0x004c line=634
+        0x0054 line=636
+        0x0056 line=638
+        0x0059 line=640
+      locals        :
+        0x0041 - 0x004b reg=2 result Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x0004 - 0x005a reg=0 inTransactionChange Ljava/lang/Boolean;
+        0x0016 - 0x005a reg=1 enteringTransaction Z
+        0x0000 - 0x005a reg=5 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x005a reg=6 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #27              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$insert$5'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1002 (PRIVATE SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004b74:                                        |[004b74] com.tekartik.sqflite.Database.lambda$insert$5:(Lcom/tekartik/sqflite/operation/Operation;)V
+004b84: 7020 6900 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.doInsert:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@0069
+004b8a: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=653
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0004 reg=1 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #28              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$query$0'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1002 (PRIVATE SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004b8c:                                        |[004b8c] com.tekartik.sqflite.Database.lambda$query$0:(Lcom/tekartik/sqflite/operation/Operation;)V
+004b9c: 7020 6a00 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.doQuery:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@006a
+004ba2: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=280
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0004 reg=1 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #29              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$queryCursorNext$2'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1002 (PRIVATE SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004ba4:                                        |[004ba4] com.tekartik.sqflite.Database.lambda$queryCursorNext$2:(Lcom/tekartik/sqflite/operation/Operation;)V
+004bb4: 7020 6b00 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.doQueryCursorNext:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@006b
+004bba: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=340
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0004 reg=1 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #30              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'lambda$update$6'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x1002 (PRIVATE SYNTHETIC)
+      code          -
+      registers     : 2
+      ins           : 2
+      outs          : 2
+      insns size    : 4 16-bit code units
+004bbc:                                        |[004bbc] com.tekartik.sqflite.Database.lambda$update$6:(Lcom/tekartik/sqflite/operation/Operation;)V
+004bcc: 7020 6c00 1000                         |0000: invoke-direct {v0, v1}, Lcom/tekartik/sqflite/Database;.doUpdate:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@006c
+004bd2: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=682
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0004 reg=1 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #31              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'leaveTransactionIfRolledBack'
+      type          : '()Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 5
+      ins           : 1
+      outs          : 2
+      insns size    : 82 16-bit code units
+004054:                                        |[004054] com.tekartik.sqflite.Database.leaveTransactionIfRolledBack:()Z
+004064: 6e10 7700 0400                         |0000: invoke-virtual {v4}, Lcom/tekartik/sqflite/Database;.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0077
+00406a: 0c00                                   |0003: move-result-object v0
+00406c: 1201                                   |0004: const/4 v1, #int 0 // #0
+00406e: 6e10 1c00 0000                         |0005: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.inTransaction:()Z // method@001c
+004074: 0a02                                   |0008: move-result v2
+004076: 3902 0300                              |0009: if-nez v2, 000c // +0003
+00407a: 0f01                                   |000b: return v1
+00407c: 1a02 3000                              |000c: const-string v2, ";BEGIN" // string@0030
+004080: 6e20 1a00 2000                         |000e: invoke-virtual {v0, v2}, Landroid/database/sqlite/SQLiteDatabase;.execSQL:(Ljava/lang/String;)V // method@001a
+004086: 0000                                   |0011: nop // spacer
+004088: 6e10 1c00 0000                         |0012: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.inTransaction:()Z // method@001c
+00408e: 0a02                                   |0015: move-result v2
+004090: 3802 0800                              |0016: if-eqz v2, 001e // +0008
+004094: 6e10 1900 0000                         |0018: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.endTransaction:()V // method@0019
+00409a: 28f7                                   |001b: goto 0012 // -0009
+00409c: 0d02                                   |001c: move-exception v2
+00409e: 28fe                                   |001d: goto 001b // -0002
+0040a0: 2802                                   |001e: goto 0020 // +0002
+0040a2: 0d02                                   |001f: move-exception v2
+0040a4: 1d04                                   |0020: monitor-enter v4
+0040a6: 5941 5b00                              |0021: iput v1, v4, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+0040aa: 1e04                                   |0023: monitor-exit v4
+0040ac: 1201                                   |0024: const/4 v1, #int 0 // #0
+0040ae: 5b41 5000                              |0025: iput-object v1, v4, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+0040b2: 5241 5600                              |0027: iget v1, v4, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+0040b6: 7110 b300 0100                         |0029: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+0040bc: 0a01                                   |002c: move-result v1
+0040be: 3801 1e00                              |002d: if-eqz v1, 004b // +001e
+0040c2: 1a01 2c01                              |002f: const-string v1, "Sqflite" // string@012c
+0040c6: 2202 6e00                              |0031: new-instance v2, Ljava/lang/StringBuilder; // type@006e
+0040ca: 7010 5001 0200                         |0033: invoke-direct {v2}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+0040d0: 6e10 7500 0400                         |0036: invoke-virtual {v4}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+0040d6: 0c03                                   |0039: move-result-object v3
+0040d8: 6e20 5401 3200                         |003a: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0040de: 0c02                                   |003d: move-result-object v2
+0040e0: 1a03 fb02                              |003e: const-string v3, "transaction rolled back by SQLite" // string@02fb
+0040e4: 6e20 5401 3200                         |0040: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0040ea: 0c02                                   |0043: move-result-object v2
+0040ec: 6e10 5501 0200                         |0044: invoke-virtual {v2}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+0040f2: 0c02                                   |0047: move-result-object v2
+0040f4: 7120 3600 2100                         |0048: invoke-static {v1, v2}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+0040fa: 1211                                   |004b: const/4 v1, #int 1 // #1
+0040fc: 0f01                                   |004c: return v1
+0040fe: 0d01                                   |004d: move-exception v1
+004100: 1e04                                   |004e: monitor-exit v4
+004102: 2701                                   |004f: throw v1
+004104: 0d02                                   |0050: move-exception v2
+004106: 0f01                                   |0051: return v1
+      catches       : 5
+        0x0005 - 0x0011
+          Ljava/lang/Exception; -> 0x0050
+        0x0012 - 0x0016
+          Ljava/lang/Exception; -> 0x001f
+        0x0018 - 0x001b
+          Landroid/database/SQLException; -> 0x001c
+          Ljava/lang/Exception; -> 0x001f
+        0x0021 - 0x0024
+          <any> -> 0x004d
+        0x004e - 0x004f
+          <any> -> 0x004d
+      positions     :
+        0x0000 line=455
+        0x0004 line=459
+        0x000b line=460
+        0x000c line=464
+        0x0011 line=467
+        0x0012 line=470
+        0x0018 line=472
+        0x001b line=475
+        0x001c line=473
+        0x001e line=479
+        0x001f line=477
+        0x0020 line=480
+        0x0021 line=481
+        0x0023 line=482
+        0x0024 line=483
+        0x0027 line=484
+        0x002f line=485
+        0x004b line=487
+        0x004d line=482
+        0x0050 line=465
+        0x0051 line=466
+      locals        :
+        0x0004 - 0x0052 reg=0 db Landroid/database/sqlite/SQLiteDatabase;
+        0x0051 - 0x0052 reg=2 e Ljava/lang/Exception;
+        0x0000 - 0x0052 reg=4 this Lcom/tekartik/sqflite/Database;
+
+    #32              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'leaveTransactionOnError'
+      type          : '(Ljava/lang/String;Ljava/lang/Exception;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 10
+      ins           : 3
+      outs          : 2
+      insns size    : 132 16-bit code units
+004bd4:                                        |[004bd4] com.tekartik.sqflite.Database.leaveTransactionOnError:(Ljava/lang/String;Ljava/lang/Exception;)V
+004be4: 6e10 7700 0700                         |0000: invoke-virtual {v7}, Lcom/tekartik/sqflite/Database;.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase; // method@0077
+004bea: 0c00                                   |0003: move-result-object v0
+004bec: 6e10 1c00 0000                         |0004: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.inTransaction:()Z // method@001c
+004bf2: 0a01                                   |0007: move-result v1
+004bf4: 3801 0300                              |0008: if-eqz v1, 000b // +0003
+004bf8: 0e00                                   |000a: return-void
+004bfa: 2802                                   |000b: goto 000d // +0002
+004bfc: 0d01                                   |000c: move-exception v1
+004bfe: 1d07                                   |000d: monitor-enter v7
+004c00: 1201                                   |000e: const/4 v1, #int 0 // #0
+004c02: 5971 5b00                              |000f: iput v1, v7, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+004c06: 1e07                                   |0011: monitor-exit v7
+004c08: 7110 1300 0800                         |0012: invoke-static {v8}, Landroid/database/DatabaseUtils;.getSqlStatementType:(Ljava/lang/String;)I // method@0013
+004c0e: 0a02                                   |0015: move-result v2
+004c10: 1253                                   |0016: const/4 v3, #int 5 // #5
+004c12: 3232 0500                              |0017: if-eq v2, v3, 001c // +0005
+004c16: 1263                                   |0019: const/4 v3, #int 6 // #6
+004c18: 3332 0300                              |001a: if-ne v2, v3, 001d // +0003
+004c1c: 1211                                   |001c: const/4 v1, #int 1 // #1
+004c1e: 3801 6300                              |001d: if-eqz v1, 0080 // +0063
+004c22: 2093 0d00                              |001f: instance-of v3, v9, Landroid/database/SQLException; // type@000d
+004c26: 3903 0300                              |0021: if-nez v3, 0024 // +0003
+004c2a: 285d                                   |0023: goto 0080 // +005d
+004c2c: 1a03 3100                              |0024: const-string v3, ";ROLLBACK" // string@0031
+004c30: 6e20 1a00 3000                         |0026: invoke-virtual {v0, v3}, Landroid/database/sqlite/SQLiteDatabase;.execSQL:(Ljava/lang/String;)V // method@001a
+004c36: 5273 5600                              |0029: iget v3, v7, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+004c3a: 7110 b300 0300                         |002b: invoke-static {v3}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+004c40: 0a03                                   |002e: move-result v3
+004c42: 3803 2200                              |002f: if-eqz v3, 0051 // +0022
+004c46: 1a03 2c01                              |0031: const-string v3, "Sqflite" // string@012c
+004c4a: 2204 6e00                              |0033: new-instance v4, Ljava/lang/StringBuilder; // type@006e
+004c4e: 7010 5001 0400                         |0035: invoke-direct {v4}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+004c54: 6e10 7500 0700                         |0038: invoke-virtual {v7}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+004c5a: 0c05                                   |003b: move-result-object v5
+004c5c: 6e20 5401 5400                         |003c: invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004c62: 0c04                                   |003f: move-result-object v4
+004c64: 1a05 d302                              |0040: const-string v5, "rolled back the transaction left by the failed " // string@02d3
+004c68: 6e20 5401 5400                         |0042: invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004c6e: 0c04                                   |0045: move-result-object v4
+004c70: 6e20 5401 8400                         |0046: invoke-virtual {v4, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004c76: 0c04                                   |0049: move-result-object v4
+004c78: 6e10 5501 0400                         |004a: invoke-virtual {v4}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+004c7e: 0c04                                   |004d: move-result-object v4
+004c80: 7120 3600 4300                         |004e: invoke-static {v3, v4}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+004c86: 282e                                   |0051: goto 007f // +002e
+004c88: 0d03                                   |0052: move-exception v3
+004c8a: 5274 5600                              |0053: iget v4, v7, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+004c8e: 7110 b400 0400                         |0055: invoke-static {v4}, Lcom/tekartik/sqflite/LogLevel;.hasVerboseLevel:(I)Z // method@00b4
+004c94: 0a04                                   |0058: move-result v4
+004c96: 3804 2600                              |0059: if-eqz v4, 007f // +0026
+004c9a: 1a04 2c01                              |005b: const-string v4, "Sqflite" // string@012c
+004c9e: 2205 6e00                              |005d: new-instance v5, Ljava/lang/StringBuilder; // type@006e
+004ca2: 7010 5001 0500                         |005f: invoke-direct {v5}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+004ca8: 6e10 7500 0700                         |0062: invoke-virtual {v7}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+004cae: 0c06                                   |0065: move-result-object v6
+004cb0: 6e20 5401 6500                         |0066: invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004cb6: 0c05                                   |0069: move-result-object v5
+004cb8: 1a06 8002                              |006a: const-string v6, "no transaction to roll back: " // string@0280
+004cbc: 6e20 5401 6500                         |006c: invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004cc2: 0c05                                   |006f: move-result-object v5
+004cc4: 6e10 3b01 0300                         |0070: invoke-virtual {v3}, Ljava/lang/Exception;.getMessage:()Ljava/lang/String; // method@013b
+004cca: 0c06                                   |0073: move-result-object v6
+004ccc: 6e20 5401 6500                         |0074: invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004cd2: 0c05                                   |0077: move-result-object v5
+004cd4: 6e10 5501 0500                         |0078: invoke-virtual {v5}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+004cda: 0c05                                   |007b: move-result-object v5
+004cdc: 7120 3600 5400                         |007c: invoke-static {v4, v5}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+004ce2: 0e00                                   |007f: return-void
+004ce4: 0e00                                   |0080: return-void
+004ce6: 0d01                                   |0081: move-exception v1
+004ce8: 1e07                                   |0082: monitor-exit v7
+004cea: 2701                                   |0083: throw v1
+      catches       : 4
+        0x0004 - 0x0008
+          Ljava/lang/Exception; -> 0x000c
+        0x000f - 0x0012
+          <any> -> 0x0081
+        0x0024 - 0x0051
+          Ljava/lang/Exception; -> 0x0052
+        0x0082 - 0x0083
+          <any> -> 0x0081
+      positions     :
+        0x0000 line=546
+        0x0004 line=548
+        0x000a line=550
+        0x000b line=554
+        0x000c line=552
+        0x000d line=555
+        0x000e line=556
+        0x0011 line=557
+        0x0012 line=561
+        0x0016 line=562
+        0x001d line=564
+        0x0024 line=570
+        0x0029 line=571
+        0x0031 line=572
+        0x0051 line=579
+        0x0052 line=574
+        0x0053 line=576
+        0x005b line=577
+        0x007f line=580
+        0x0080 line=565
+        0x0081 line=557
+      locals        :
+        0x0053 - 0x007f reg=3 e Ljava/lang/Exception;
+        0x001d - 0x0081 reg=1 transactionEnd Z
+        0x0016 - 0x0081 reg=2 statementType I
+        0x0004 - 0x0084 reg=0 db Landroid/database/sqlite/SQLiteDatabase;
+        0x0000 - 0x0084 reg=7 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0084 reg=8 sql Ljava/lang/String;
+        0x0000 - 0x0084 reg=9 exception Ljava/lang/Exception;
+
+    #33              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'postQueuedOperationsIfNotInTransaction'
+      type          : '()V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 3
+      insns size    : 23 16-bit code units
+004e00:                                        |[004e00] com.tekartik.sqflite.Database.postQueuedOperationsIfNotInTransaction:()V
+004e10: 5420 5000                              |0000: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004e14: 3900 1400                              |0002: if-nez v0, 0016 // +0014
+004e18: 5420 5700                              |0004: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004e1c: 7210 6901 0000                         |0006: invoke-interface {v0}, Ljava/util/List;.isEmpty:()Z // method@0169
+004e22: 0a00                                   |0009: move-result v0
+004e24: 3900 0c00                              |000a: if-nez v0, 0016 // +000c
+004e28: 5420 5200                              |000c: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.databaseWorkerPool:Lcom/tekartik/sqflite/DatabaseWorkerPool; // field@0052
+004e2c: 2201 2600                              |000e: new-instance v1, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda2; // type@0026
+004e30: 7020 4a00 2100                         |0010: invoke-direct {v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda2;.<init>:(Lcom/tekartik/sqflite/Database;)V // method@004a
+004e36: 7230 a100 2001                         |0013: invoke-interface {v0, v2, v1}, Lcom/tekartik/sqflite/DatabaseWorkerPool;.post:(Lcom/tekartik/sqflite/Database;Ljava/lang/Runnable;)V // method@00a1
+004e3c: 0e00                                   |0016: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=258
+        0x000c line=259
+        0x0016 line=261
+      locals        :
+        0x0000 - 0x0017 reg=2 this Lcom/tekartik/sqflite/Database;
+
+    #34              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'runQueuedOperations'
+      type          : '()V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 4
+      ins           : 1
+      outs          : 2
+      insns size    : 33 16-bit code units
+004e88:                                        |[004e88] com.tekartik.sqflite.Database.runQueuedOperations:()V
+004e98: 0000                                   |0000: nop // spacer
+004e9a: 5430 5700                              |0001: iget-object v0, v3, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004e9e: 7210 6901 0000                         |0003: invoke-interface {v0}, Ljava/util/List;.isEmpty:()Z // method@0169
+004ea4: 0a00                                   |0006: move-result v0
+004ea6: 3900 1900                              |0007: if-nez v0, 0020 // +0019
+004eaa: 5430 5000                              |0009: iget-object v0, v3, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004eae: 3800 0300                              |000b: if-eqz v0, 000e // +0003
+004eb2: 2813                                   |000d: goto 0020 // +0013
+004eb4: 5430 5700                              |000e: iget-object v0, v3, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004eb8: 1201                                   |0010: const/4 v1, #int 0 // #0
+004eba: 7220 6801 1000                         |0011: invoke-interface {v0, v1}, Ljava/util/List;.get:(I)Ljava/lang/Object; // method@0168
+004ec0: 0c00                                   |0014: move-result-object v0
+004ec2: 1f00 4b00                              |0015: check-cast v0, Lcom/tekartik/sqflite/operation/QueuedOperation; // type@004b
+004ec6: 6e10 2301 0000                         |0017: invoke-virtual {v0}, Lcom/tekartik/sqflite/operation/QueuedOperation;.run:()V // method@0123
+004ecc: 5432 5700                              |001a: iget-object v2, v3, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004ed0: 7220 6b01 1200                         |001c: invoke-interface {v2, v1}, Ljava/util/List;.remove:(I)Ljava/lang/Object; // method@016b
+004ed6: 28e2                                   |001f: goto 0001 // -001e
+004ed8: 0e00                                   |0020: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=246
+        0x0009 line=247
+        0x000d line=248
+        0x000e line=250
+        0x0017 line=251
+        0x001a line=252
+        0x001f line=253
+        0x0020 line=254
+      locals        :
+        0x0017 - 0x001f reg=0 queuedOperation Lcom/tekartik/sqflite/operation/QueuedOperation;
+        0x0000 - 0x0021 reg=3 this Lcom/tekartik/sqflite/Database;
+
+    #35              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'wrapSqlOperationHandler'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 6
+      ins           : 3
+      outs          : 3
+      insns size    : 47 16-bit code units
+004f00:                                        |[004f00] com.tekartik.sqflite.Database.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V
+004f10: 7210 1f01 0400                         |0000: invoke-interface {v4}, Lcom/tekartik/sqflite/operation/Operation;.getTransactionId:()Ljava/lang/Integer; // method@011f
+004f16: 0c00                                   |0003: move-result-object v0
+004f18: 5431 5000                              |0004: iget-object v1, v3, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004f1c: 3901 0600                              |0006: if-nez v1, 000c // +0006
+004f20: 7210 4b01 0500                         |0008: invoke-interface {v5}, Ljava/lang/Runnable;.run:()V // method@014b
+004f26: 2823                                   |000b: goto 002e // +0023
+004f28: 3800 1800                              |000c: if-eqz v0, 0024 // +0018
+004f2c: 5431 5000                              |000e: iget-object v1, v3, Lcom/tekartik/sqflite/Database;.currentTransactionId:Ljava/lang/Integer; // field@0050
+004f30: 6e20 3f01 1000                         |0010: invoke-virtual {v0, v1}, Ljava/lang/Integer;.equals:(Ljava/lang/Object;)Z // method@013f
+004f36: 0a01                                   |0013: move-result v1
+004f38: 3901 0900                              |0014: if-nez v1, 001d // +0009
+004f3c: 6e10 4001 0000                         |0016: invoke-virtual {v0}, Ljava/lang/Integer;.intValue:()I // method@0140
+004f42: 0a01                                   |0019: move-result v1
+004f44: 12f2                                   |001a: const/4 v2, #int -1 // #ff
+004f46: 3321 0900                              |001b: if-ne v1, v2, 0024 // +0009
+004f4a: 7210 4b01 0500                         |001d: invoke-interface {v5}, Ljava/lang/Runnable;.run:()V // method@014b
+004f50: 7010 8700 0300                         |0020: invoke-direct {v3}, Lcom/tekartik/sqflite/Database;.postQueuedOperationsIfNotInTransaction:()V // method@0087
+004f56: 280b                                   |0023: goto 002e // +000b
+004f58: 2201 4b00                              |0024: new-instance v1, Lcom/tekartik/sqflite/operation/QueuedOperation; // type@004b
+004f5c: 7030 2201 4105                         |0026: invoke-direct {v1, v4, v5}, Lcom/tekartik/sqflite/operation/QueuedOperation;.<init>:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@0122
+004f62: 5432 5700                              |0029: iget-object v2, v3, Lcom/tekartik/sqflite/Database;.noTransactionOperationQueue:Ljava/util/List; // field@0057
+004f66: 7220 6701 1200                         |002b: invoke-interface {v2, v1}, Ljava/util/List;.add:(Ljava/lang/Object;)Z // method@0167
+004f6c: 0e00                                   |002e: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=264
+        0x0004 line=265
+        0x0008 line=267
+        0x000c line=268
+        0x001d line=269
+        0x0020 line=270
+        0x0024 line=274
+        0x0029 line=275
+        0x002e line=277
+      locals        :
+        0x0029 - 0x002e reg=1 queuedOperation Lcom/tekartik/sqflite/operation/QueuedOperation;
+        0x0004 - 0x002f reg=0 transactionId Ljava/lang/Integer;
+        0x0000 - 0x002f reg=3 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x002f reg=4 operation Lcom/tekartik/sqflite/operation/Operation;
+        0x0000 - 0x002f reg=5 r Ljava/lang/Runnable;
+
+  Virtual methods   -
+    #0              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'batch'
+      type          : '(Lio/flutter/plugin/common/MethodCall;Lio/flutter/plugin/common/MethodChannel$Result;)V'
+      access        : 0x0000 ()
+      code          -
+      registers     : 14
+      ins           : 3
+      outs          : 4
+      insns size    : 292 16-bit code units
+004398:                                        |[004398] com.tekartik.sqflite.Database.batch:(Lio/flutter/plugin/common/MethodCall;Lio/flutter/plugin/common/MethodChannel$Result;)V
+0043a8: 2200 4900                              |0000: new-instance v0, Lcom/tekartik/sqflite/operation/MethodCallOperation; // type@0049
+0043ac: 7030 1601 c00d                         |0002: invoke-direct {v0, v12, v13}, Lcom/tekartik/sqflite/operation/MethodCallOperation;.<init>:(Lio/flutter/plugin/common/MethodCall;Lio/flutter/plugin/common/MethodChannel$Result;)V // method@0116
+0043b2: 6e10 1901 0000                         |0005: invoke-virtual {v0}, Lcom/tekartik/sqflite/operation/MethodCallOperation;.getNoResult:()Z // method@0119
+0043b8: 0a01                                   |0008: move-result v1
+0043ba: 6e10 1801 0000                         |0009: invoke-virtual {v0}, Lcom/tekartik/sqflite/operation/MethodCallOperation;.getContinueOnError:()Z // method@0118
+0043c0: 0a02                                   |000c: move-result v2
+0043c2: 1a03 ad02                              |000d: const-string v3, "operations" // string@02ad
+0043c6: 6e20 1701 3000                         |000f: invoke-virtual {v0, v3}, Lcom/tekartik/sqflite/operation/MethodCallOperation;.getArgument:(Ljava/lang/String;)Ljava/lang/Object; // method@0117
+0043cc: 0c03                                   |0012: move-result-object v3
+0043ce: 1f03 7800                              |0013: check-cast v3, Ljava/util/List; // type@0078
+0043d2: 2204 7100                              |0015: new-instance v4, Ljava/util/ArrayList; // type@0071
+0043d6: 7010 5b01 0400                         |0017: invoke-direct {v4}, Ljava/util/ArrayList;.<init>:()V // method@015b
+0043dc: 7210 6a01 0300                         |001a: invoke-interface {v3}, Ljava/util/List;.iterator:()Ljava/util/Iterator; // method@016a
+0043e2: 0c05                                   |001d: move-result-object v5
+0043e4: 7210 6201 0500                         |001e: invoke-interface {v5}, Ljava/util/Iterator;.hasNext:()Z // method@0162
+0043ea: 0a06                                   |0021: move-result v6
+0043ec: 1207                                   |0022: const/4 v7, #int 0 // #0
+0043ee: 3806 d900                              |0023: if-eqz v6, 00fc // +00d9
+0043f2: 7210 6301 0500                         |0025: invoke-interface {v5}, Ljava/util/Iterator;.next:()Ljava/lang/Object; // method@0163
+0043f8: 0c06                                   |0028: move-result-object v6
+0043fa: 1f06 7c00                              |0029: check-cast v6, Ljava/util/Map; // type@007c
+0043fe: 2208 4800                              |002b: new-instance v8, Lcom/tekartik/sqflite/operation/BatchOperation; // type@0048
+004402: 7030 1001 6801                         |002d: invoke-direct {v8, v6, v1}, Lcom/tekartik/sqflite/operation/BatchOperation;.<init>:(Ljava/util/Map;Z)V // method@0110
+004408: 6e10 1101 0800                         |0030: invoke-virtual {v8}, Lcom/tekartik/sqflite/operation/BatchOperation;.getMethod:()Ljava/lang/String; // method@0111
+00440e: 0c09                                   |0033: move-result-object v9
+004410: 6e10 4e01 0900                         |0034: invoke-virtual {v9}, Ljava/lang/String;.hashCode:()I // method@014e
+004416: 0a0a                                   |0037: move-result v10
+004418: 2c0a ce00 0000                         |0038: sparse-switch v10, 00000106 // +000000ce
+00441e: 2829                                   |003b: goto 0064 // +0029
+004420: 1a0a bf02                              |003c: const-string v10, "query" // string@02bf
+004424: 6e20 4d01 a900                         |003e: invoke-virtual {v9, v10}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@014d
+00442a: 0a0a                                   |0041: move-result v10
+00442c: 380a f9ff                              |0042: if-eqz v10, 003b // -0007
+004430: 122a                                   |0044: const/4 v10, #int 2 // #2
+004432: 2820                                   |0045: goto 0065 // +0020
+004434: 1a0a 0203                              |0046: const-string v10, "update" // string@0302
+004438: 6e20 4d01 a900                         |0048: invoke-virtual {v9, v10}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@014d
+00443e: 0a0a                                   |004b: move-result v10
+004440: 380a efff                              |004c: if-eqz v10, 003b // -0011
+004444: 123a                                   |004e: const/4 v10, #int 3 // #3
+004446: 2816                                   |004f: goto 0065 // +0016
+004448: 1a0a 3402                              |0050: const-string v10, "insert" // string@0234
+00444c: 6e20 4d01 a900                         |0052: invoke-virtual {v9, v10}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@014d
+004452: 0a0a                                   |0055: move-result v10
+004454: 380a e5ff                              |0056: if-eqz v10, 003b // -001b
+004458: 121a                                   |0058: const/4 v10, #int 1 // #1
+00445a: 280c                                   |0059: goto 0065 // +000c
+00445c: 1a0a d301                              |005a: const-string v10, "execute" // string@01d3
+004460: 6e20 4d01 a900                         |005c: invoke-virtual {v9, v10}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@014d
+004466: 0a0a                                   |005f: move-result v10
+004468: 380a dbff                              |0060: if-eqz v10, 003b // -0025
+00446c: 120a                                   |0062: const/4 v10, #int 0 // #0
+00446e: 2802                                   |0063: goto 0065 // +0002
+004470: 12fa                                   |0064: const/4 v10, #int -1 // #ff
+004472: 2b0a b300 0000                         |0065: packed-switch v10, 00000118 // +000000b3
+004478: 2205 6e00                              |0068: new-instance v5, Ljava/lang/StringBuilder; // type@006e
+00447c: 7010 5001 0500                         |006a: invoke-direct {v5}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+004482: 1a0a 3a00                              |006d: const-string v10, "Batch method '" // string@003a
+004486: 6e20 5401 a500                         |006f: invoke-virtual {v5, v10}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+00448c: 0c05                                   |0072: move-result-object v5
+00448e: 6e20 5401 9500                         |0073: invoke-virtual {v5, v9}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004494: 0c05                                   |0076: move-result-object v5
+004496: 1a0a 1600                              |0077: const-string v10, "' not supported" // string@0016
+00449a: 6e20 5401 a500                         |0079: invoke-virtual {v5, v10}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0044a0: 0c05                                   |007c: move-result-object v5
+0044a2: 6e10 5501 0500                         |007d: invoke-virtual {v5}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+0044a8: 0c05                                   |0080: move-result-object v5
+0044aa: 1a0a 6f01                              |0081: const-string v10, "bad_param" // string@016f
+0044ae: 7240 2a01 ad75                         |0083: invoke-interface {v13, v10, v5, v7}, Lio/flutter/plugin/common/MethodChannel$Result;.error:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V // method@012a
+0044b4: 0e00                                   |0086: return-void
+0044b6: 7020 6c00 8b00                         |0087: invoke-direct {v11, v8}, Lcom/tekartik/sqflite/Database;.doUpdate:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@006c
+0044bc: 0a07                                   |008a: move-result v7
+0044be: 3807 0600                              |008b: if-eqz v7, 0091 // +0006
+0044c2: 6e20 1401 4800                         |008d: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleSuccess:(Ljava/util/List;)V // method@0114
+0044c8: 2863                                   |0090: goto 00f3 // +0063
+0044ca: 3802 0c00                              |0091: if-eqz v2, 009d // +000c
+0044ce: 6e10 1501 0800                         |0093: invoke-virtual {v8}, Lcom/tekartik/sqflite/operation/BatchOperation;.isTransactionClosed:()Z // method@0115
+0044d4: 0a07                                   |0096: move-result v7
+0044d6: 3907 0600                              |0097: if-nez v7, 009d // +0006
+0044da: 6e20 1301 4800                         |0099: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleErrorContinue:(Ljava/util/List;)V // method@0113
+0044e0: 2857                                   |009c: goto 00f3 // +0057
+0044e2: 6e20 1201 d800                         |009d: invoke-virtual {v8, v13}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleError:(Lio/flutter/plugin/common/MethodChannel$Result;)V // method@0112
+0044e8: 7010 8700 0b00                         |00a0: invoke-direct {v11}, Lcom/tekartik/sqflite/Database;.postQueuedOperationsIfNotInTransaction:()V // method@0087
+0044ee: 0e00                                   |00a3: return-void
+0044f0: 7020 6a00 8b00                         |00a4: invoke-direct {v11, v8}, Lcom/tekartik/sqflite/Database;.doQuery:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@006a
+0044f6: 0a07                                   |00a7: move-result v7
+0044f8: 3807 0600                              |00a8: if-eqz v7, 00ae // +0006
+0044fc: 6e20 1401 4800                         |00aa: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleSuccess:(Ljava/util/List;)V // method@0114
+004502: 2846                                   |00ad: goto 00f3 // +0046
+004504: 3802 0c00                              |00ae: if-eqz v2, 00ba // +000c
+004508: 6e10 1501 0800                         |00b0: invoke-virtual {v8}, Lcom/tekartik/sqflite/operation/BatchOperation;.isTransactionClosed:()Z // method@0115
+00450e: 0a07                                   |00b3: move-result v7
+004510: 3907 0600                              |00b4: if-nez v7, 00ba // +0006
+004514: 6e20 1301 4800                         |00b6: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleErrorContinue:(Ljava/util/List;)V // method@0113
+00451a: 283a                                   |00b9: goto 00f3 // +003a
+00451c: 6e20 1201 d800                         |00ba: invoke-virtual {v8, v13}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleError:(Lio/flutter/plugin/common/MethodChannel$Result;)V // method@0112
+004522: 7010 8700 0b00                         |00bd: invoke-direct {v11}, Lcom/tekartik/sqflite/Database;.postQueuedOperationsIfNotInTransaction:()V // method@0087
+004528: 0e00                                   |00c0: return-void
+00452a: 7020 6900 8b00                         |00c1: invoke-direct {v11, v8}, Lcom/tekartik/sqflite/Database;.doInsert:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@0069
+004530: 0a07                                   |00c4: move-result v7
+004532: 3807 0600                              |00c5: if-eqz v7, 00cb // +0006
+004536: 6e20 1401 4800                         |00c7: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleSuccess:(Ljava/util/List;)V // method@0114
+00453c: 2829                                   |00ca: goto 00f3 // +0029
+00453e: 3802 0c00                              |00cb: if-eqz v2, 00d7 // +000c
+004542: 6e10 1501 0800                         |00cd: invoke-virtual {v8}, Lcom/tekartik/sqflite/operation/BatchOperation;.isTransactionClosed:()Z // method@0115
+004548: 0a07                                   |00d0: move-result v7
+00454a: 3907 0600                              |00d1: if-nez v7, 00d7 // +0006
+00454e: 6e20 1301 4800                         |00d3: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleErrorContinue:(Ljava/util/List;)V // method@0113
+004554: 281d                                   |00d6: goto 00f3 // +001d
+004556: 6e20 1201 d800                         |00d7: invoke-virtual {v8, v13}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleError:(Lio/flutter/plugin/common/MethodChannel$Result;)V // method@0112
+00455c: 7010 8700 0b00                         |00da: invoke-direct {v11}, Lcom/tekartik/sqflite/Database;.postQueuedOperationsIfNotInTransaction:()V // method@0087
+004562: 0e00                                   |00dd: return-void
+004564: 7020 6800 8b00                         |00de: invoke-direct {v11, v8}, Lcom/tekartik/sqflite/Database;.doExecute:(Lcom/tekartik/sqflite/operation/Operation;)Z // method@0068
+00456a: 0a07                                   |00e1: move-result v7
+00456c: 3807 0600                              |00e2: if-eqz v7, 00e8 // +0006
+004570: 6e20 1401 4800                         |00e4: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleSuccess:(Ljava/util/List;)V // method@0114
+004576: 280c                                   |00e7: goto 00f3 // +000c
+004578: 3802 0d00                              |00e8: if-eqz v2, 00f5 // +000d
+00457c: 6e10 1501 0800                         |00ea: invoke-virtual {v8}, Lcom/tekartik/sqflite/operation/BatchOperation;.isTransactionClosed:()Z // method@0115
+004582: 0a07                                   |00ed: move-result v7
+004584: 3907 0700                              |00ee: if-nez v7, 00f5 // +0007
+004588: 6e20 1301 4800                         |00f0: invoke-virtual {v8, v4}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleErrorContinue:(Ljava/util/List;)V // method@0113
+00458e: 2900 2bff                              |00f3: goto/16 001e // -00d5
+004592: 6e20 1201 d800                         |00f5: invoke-virtual {v8, v13}, Lcom/tekartik/sqflite/operation/BatchOperation;.handleError:(Lio/flutter/plugin/common/MethodChannel$Result;)V // method@0112
+004598: 7010 8700 0b00                         |00f8: invoke-direct {v11}, Lcom/tekartik/sqflite/Database;.postQueuedOperationsIfNotInTransaction:()V // method@0087
+00459e: 0e00                                   |00fb: return-void
+0045a0: 3801 0600                              |00fc: if-eqz v1, 0102 // +0006
+0045a4: 7220 2c01 7d00                         |00fe: invoke-interface {v13, v7}, Lio/flutter/plugin/common/MethodChannel$Result;.success:(Ljava/lang/Object;)V // method@012c
+0045aa: 2804                                   |0101: goto 0105 // +0004
+0045ac: 7220 2c01 4d00                         |0102: invoke-interface {v13, v4}, Lio/flutter/plugin/common/MethodChannel$Result;.success:(Ljava/lang/Object;)V // method@012c
+0045b2: 0e00                                   |0105: return-void
+0045b4: 0002 0400 75f7 58b1 b9c2 70b9 c938 ... |0106: sparse-switch-data (18 units)
+0045d8: 0001 0400 0000 0000 7900 0000 5c00 ... |0118: packed-switch-data (12 units)
+      catches       : (none)
+      positions     :
+        0x0000 line=711
+        0x0005 line=713
+        0x0009 line=714
+        0x000d line=716
+        0x0015 line=717
+        0x001a line=720
+        0x002b line=722
+        0x0030 line=723
+        0x0034 line=724
+        0x0068 line=783
+        0x0086 line=784
+        0x0087 line=769
+        0x008d line=771
+        0x0091 line=772
+        0x0099 line=773
+        0x009d line=776
+        0x00a0 line=778
+        0x00a3 line=779
+        0x00a4 line=754
+        0x00aa line=756
+        0x00ae line=757
+        0x00b6 line=758
+        0x00ba line=761
+        0x00bd line=763
+        0x00c0 line=764
+        0x00c1 line=740
+        0x00c7 line=742
+        0x00cb line=743
+        0x00d3 line=744
+        0x00d7 line=747
+        0x00da line=749
+        0x00dd line=750
+        0x00de line=726
+        0x00e4 line=728
+        0x00e8 line=729
+        0x00f0 line=730
+        0x00f3 line=786
+        0x00f5 line=733
+        0x00f8 line=735
+        0x00fb line=736
+        0x00fc line=789
+        0x00fe line=790
+        0x0102 line=792
+        0x0105 line=794
+      locals        :
+        0x002b - 0x00f3 reg=6 map Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x0030 - 0x00f3 reg=8 operation Lcom/tekartik/sqflite/operation/BatchOperation;
+        0x0034 - 0x00f3 reg=9 method Ljava/lang/String;
+        0x00f5 - 0x00fc reg=6 map Ljava/util/Map; Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+        0x00f5 - 0x00fc reg=8 operation Lcom/tekartik/sqflite/operation/BatchOperation;
+        0x00f5 - 0x00fc reg=9 method Ljava/lang/String;
+        0x0005 - 0x0124 reg=0 mainOperation Lcom/tekartik/sqflite/operation/MethodCallOperation;
+        0x0009 - 0x0124 reg=1 noResult Z
+        0x000d - 0x0124 reg=2 continueOnError Z
+        0x0015 - 0x0124 reg=3 operations Ljava/util/List; Ljava/util/List<Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;>;
+        0x001a - 0x0124 reg=4 results Ljava/util/List; Ljava/util/List<Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;>;
+        0x0000 - 0x0124 reg=11 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0124 reg=12 call Lio/flutter/plugin/common/MethodCall;
+        0x0000 - 0x0124 reg=13 result Lio/flutter/plugin/common/MethodChannel$Result;
+
+    #1              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'close'
+      type          : '()V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 2
+      insns size    : 60 16-bit code units
+0046bc:                                        |[0046bc] com.tekartik.sqflite.Database.close:()V
+0046cc: 5420 5100                              |0000: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+0046d0: 7210 7801 0000                         |0002: invoke-interface {v0}, Ljava/util/Map;.isEmpty:()Z // method@0178
+0046d6: 0a00                                   |0005: move-result v0
+0046d8: 3900 3000                              |0006: if-nez v0, 0036 // +0030
+0046dc: 5220 5600                              |0008: iget v0, v2, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+0046e0: 7110 b300 0000                         |000a: invoke-static {v0}, Lcom/tekartik/sqflite/LogLevel;.hasSqlLevel:(I)Z // method@00b3
+0046e6: 0a00                                   |000d: move-result v0
+0046e8: 3800 2800                              |000e: if-eqz v0, 0036 // +0028
+0046ec: 2200 6e00                              |0010: new-instance v0, Ljava/lang/StringBuilder; // type@006e
+0046f0: 7010 5001 0000                         |0012: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+0046f6: 6e10 7500 0200                         |0015: invoke-virtual {v2}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+0046fc: 0c01                                   |0018: move-result-object v1
+0046fe: 6e20 5401 1000                         |0019: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004704: 0c00                                   |001c: move-result-object v0
+004706: 5421 5100                              |001d: iget-object v1, v2, Lcom/tekartik/sqflite/Database;.cursors:Ljava/util/Map; // field@0051
+00470a: 7210 7c01 0100                         |001f: invoke-interface {v1}, Ljava/util/Map;.size:()I // method@017c
+004710: 0a01                                   |0022: move-result v1
+004712: 6e20 5101 1000                         |0023: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(I)Ljava/lang/StringBuilder; // method@0151
+004718: 0c00                                   |0026: move-result-object v0
+00471a: 1a01 0700                              |0027: const-string v1, " cursor(s) are left opened" // string@0007
+00471e: 6e20 5401 1000                         |0029: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004724: 0c00                                   |002c: move-result-object v0
+004726: 6e10 5501 0000                         |002d: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+00472c: 0c00                                   |0030: move-result-object v0
+00472e: 1a01 2c01                              |0031: const-string v1, "Sqflite" // string@012c
+004732: 7120 3600 0100                         |0033: invoke-static {v1, v0}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+004738: 5420 5a00                              |0036: iget-object v0, v2, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+00473c: 6e10 1500 0000                         |0038: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.close:()V // method@0015
+004742: 0e00                                   |003b: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=180
+        0x0008 line=181
+        0x0010 line=182
+        0x0036 line=185
+        0x003b line=186
+      locals        :
+        0x0000 - 0x003c reg=2 this Lcom/tekartik/sqflite/Database;
+
+    #2              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'enableWriteAheadLogging'
+      type          : '()Z'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 4
+      ins           : 1
+      outs          : 2
+      insns size    : 42 16-bit code units
+003eb4:                                        |[003eb4] com.tekartik.sqflite.Database.enableWriteAheadLogging:()Z
+003ec4: 5430 5a00                              |0000: iget-object v0, v3, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+003ec8: 6e10 1800 0000                         |0002: invoke-virtual {v0}, Landroid/database/sqlite/SQLiteDatabase;.enableWriteAheadLogging:()Z // method@0018
+003ece: 0a00                                   |0005: move-result v0
+003ed0: 0f00                                   |0006: return v0
+003ed2: 0d00                                   |0007: move-exception v0
+003ed4: 2201 6e00                              |0008: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+003ed8: 7010 5001 0100                         |000a: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+003ede: 6e10 7500 0300                         |000d: invoke-virtual {v3}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+003ee4: 0c02                                   |0010: move-result-object v2
+003ee6: 6e20 5401 2100                         |0011: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003eec: 0c01                                   |0014: move-result-object v1
+003eee: 1a02 c701                              |0015: const-string v2, "enable WAL error: " // string@01c7
+003ef2: 6e20 5401 2100                         |0017: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+003ef8: 0c01                                   |001a: move-result-object v1
+003efa: 6e20 5301 0100                         |001b: invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder; // method@0153
+003f00: 0c01                                   |001e: move-result-object v1
+003f02: 6e10 5501 0100                         |001f: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+003f08: 0c01                                   |0022: move-result-object v1
+003f0a: 1a02 2c01                              |0023: const-string v2, "Sqflite" // string@012c
+003f0e: 7120 3700 1200                         |0025: invoke-static {v2, v1}, Landroid/util/Log;.e:(Ljava/lang/String;Ljava/lang/String;)I // method@0037
+003f14: 1201                                   |0028: const/4 v1, #int 0 // #0
+003f16: 0f01                                   |0029: return v1
+      catches       : 1
+        0x0000 - 0x0006
+          Ljava/lang/Exception; -> 0x0007
+      positions     :
+        0x0000 line=198
+        0x0007 line=199
+        0x0008 line=200
+        0x0028 line=201
+      locals        :
+        0x0008 - 0x002a reg=0 e Ljava/lang/Exception;
+        0x0000 - 0x002a reg=3 this Lcom/tekartik/sqflite/Database;
+
+    #3              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'enterOrLeaveInTransaction'
+      type          : '(Ljava/lang/Boolean;)V'
+      access        : 0x20000 (DECLARED_SYNCHRONIZED)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 2
+      insns size    : 35 16-bit code units
+004830:                                        |[004830] com.tekartik.sqflite.Database.enterOrLeaveInTransaction:(Ljava/lang/Boolean;)V
+004840: 1d01                                   |0000: monitor-enter v1
+004842: 6200 b800                              |0001: sget-object v0, Ljava/lang/Boolean;.TRUE:Ljava/lang/Boolean; // field@00b8
+004846: 6e20 3401 2000                         |0003: invoke-virtual {v0, v2}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+00484c: 0a00                                   |0006: move-result v0
+00484e: 3800 0900                              |0007: if-eqz v0, 0010 // +0009
+004852: 5210 5b00                              |0009: iget v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+004856: d800 0001                              |000b: add-int/lit8 v0, v0, #int 1 // #01
+00485a: 5910 5b00                              |000d: iput v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+00485e: 280f                                   |000f: goto 001e // +000f
+004860: 6200 b700                              |0010: sget-object v0, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@00b7
+004864: 6e20 3401 2000                         |0012: invoke-virtual {v0, v2}, Ljava/lang/Boolean;.equals:(Ljava/lang/Object;)Z // method@0134
+00486a: 0a00                                   |0015: move-result v0
+00486c: 3800 0800                              |0016: if-eqz v0, 001e // +0008
+004870: 5210 5b00                              |0018: iget v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+004874: d800 00ff                              |001a: add-int/lit8 v0, v0, #int -1 // #ff
+004878: 5910 5b00                              |001c: iput v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+00487c: 1e01                                   |001e: monitor-exit v1
+00487e: 0e00                                   |001f: return-void
+004880: 0d02                                   |0020: move-exception v2
+004882: 1e01                                   |0021: monitor-exit v1
+004884: 2702                                   |0022: throw v2
+      catches       : 2
+        0x0001 - 0x001e
+          <any> -> 0x0020
+        0x0021 - 0x0022
+          <any> -> 0x0020
+      positions     :
+        0x0001 line=801
+        0x0009 line=802
+        0x0010 line=803
+        0x0018 line=804
+        0x001e line=806
+        0x0020 line=800
+      locals        :
+        0x0000 - 0x0010 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0020 reg=2 value Ljava/lang/Boolean;
+
+    #4              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'execute'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 9 16-bit code units
+00496c:                                        |[00496c] com.tekartik.sqflite.Database.execute:(Lcom/tekartik/sqflite/operation/Operation;)V
+00497c: 2200 2900                              |0000: new-instance v0, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda5; // type@0029
+004980: 7030 5000 1002                         |0002: invoke-direct {v0, v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda5;.<init>:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V // method@0050
+004986: 7030 8c00 2100                         |0005: invoke-direct {v1, v2, v0}, Lcom/tekartik/sqflite/Database;.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@008c
+00498c: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=611
+        0x0008 line=641
+      locals        :
+        0x0000 - 0x0009 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0009 reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #5              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'getReadableDatabase'
+      type          : '()Landroid/database/sqlite/SQLiteDatabase;'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 3 16-bit code units
+0038c8:                                        |[0038c8] com.tekartik.sqflite.Database.getReadableDatabase:()Landroid/database/sqlite/SQLiteDatabase;
+0038d8: 5410 5a00                              |0000: iget-object v0, v1, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+0038dc: 1100                                   |0002: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=193
+      locals        :
+        0x0000 - 0x0003 reg=1 this Lcom/tekartik/sqflite/Database;
+
+    #6              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'getThreadLogPrefix'
+      type          : '()Ljava/lang/String;'
+      access        : 0x0000 ()
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 2
+      insns size    : 30 16-bit code units
+004140:                                        |[004140] com.tekartik.sqflite.Database.getThreadLogPrefix:()Ljava/lang/String;
+004150: 2200 6e00                              |0000: new-instance v0, Ljava/lang/StringBuilder; // type@006e
+004154: 7010 5001 0000                         |0002: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+00415a: 1a01 5201                              |0005: const-string v1, "[" // string@0152
+00415e: 6e20 5401 1000                         |0007: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004164: 0c00                                   |000a: move-result-object v0
+004166: 6e10 7600 0200                         |000b: invoke-virtual {v2}, Lcom/tekartik/sqflite/Database;.getThreadLogTag:()Ljava/lang/String; // method@0076
+00416c: 0c01                                   |000e: move-result-object v1
+00416e: 6e20 5401 1000                         |000f: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004174: 0c00                                   |0012: move-result-object v0
+004176: 1a01 5801                              |0013: const-string v1, "] " // string@0158
+00417a: 6e20 5401 1000                         |0015: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004180: 0c00                                   |0018: move-result-object v0
+004182: 6e10 5501 0000                         |0019: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+004188: 0c00                                   |001c: move-result-object v0
+00418a: 1100                                   |001d: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=212
+      locals        :
+        0x0000 - 0x001e reg=2 this Lcom/tekartik/sqflite/Database;
+
+    #7              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'getThreadLogTag'
+      type          : '()Ljava/lang/String;'
+      access        : 0x0000 ()
+      code          -
+      registers     : 5
+      ins           : 1
+      outs          : 3
+      insns size    : 54 16-bit code units
+00418c:                                        |[00418c] com.tekartik.sqflite.Database.getThreadLogTag:()Ljava/lang/String;
+00419c: 7100 5601 0000                         |0000: invoke-static {}, Ljava/lang/Thread;.currentThread:()Ljava/lang/Thread; // method@0156
+0041a2: 0c00                                   |0003: move-result-object v0
+0041a4: 2201 6e00                              |0004: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+0041a8: 7010 5001 0100                         |0006: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+0041ae: 5242 5300                              |0009: iget v2, v4, Lcom/tekartik/sqflite/Database;.id:I // field@0053
+0041b2: 6e20 5101 2100                         |000b: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(I)Ljava/lang/StringBuilder; // method@0151
+0041b8: 0c01                                   |000e: move-result-object v1
+0041ba: 1a02 2700                              |000f: const-string v2, "," // string@0027
+0041be: 6e20 5401 2100                         |0011: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0041c4: 0c01                                   |0014: move-result-object v1
+0041c6: 6e10 5801 0000                         |0015: invoke-virtual {v0}, Ljava/lang/Thread;.getName:()Ljava/lang/String; // method@0158
+0041cc: 0c02                                   |0018: move-result-object v2
+0041ce: 6e20 5401 2100                         |0019: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0041d4: 0c01                                   |001c: move-result-object v1
+0041d6: 1a02 1700                              |001d: const-string v2, "(" // string@0017
+0041da: 6e20 5401 2100                         |001f: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0041e0: 0c01                                   |0022: move-result-object v1
+0041e2: 7110 0b01 0000                         |0023: invoke-static {v0}, Lcom/tekartik/sqflite/Utils;.getThreadId:(Ljava/lang/Thread;)J // method@010b
+0041e8: 0b02                                   |0026: move-result-wide v2
+0041ea: 6e30 5201 2103                         |0027: invoke-virtual {v1, v2, v3}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0152
+0041f0: 0c01                                   |002a: move-result-object v1
+0041f2: 1a02 2600                              |002b: const-string v2, ")" // string@0026
+0041f6: 6e20 5401 2100                         |002d: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0041fc: 0c01                                   |0030: move-result-object v1
+0041fe: 6e10 5501 0100                         |0031: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+004204: 0c01                                   |0034: move-result-object v1
+004206: 1101                                   |0035: return-object v1
+      catches       : (none)
+      positions     :
+        0x0000 line=206
+        0x0004 line=208
+      locals        :
+        0x0004 - 0x0036 reg=0 thread Ljava/lang/Thread;
+        0x0000 - 0x0036 reg=4 this Lcom/tekartik/sqflite/Database;
+
+    #8              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'getWritableDatabase'
+      type          : '()Landroid/database/sqlite/SQLiteDatabase;'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 3 16-bit code units
+0038e0:                                        |[0038e0] com.tekartik.sqflite.Database.getWritableDatabase:()Landroid/database/sqlite/SQLiteDatabase;
+0038f0: 5410 5a00                              |0000: iget-object v0, v1, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+0038f4: 1100                                   |0002: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=189
+      locals        :
+        0x0000 - 0x0003 reg=1 this Lcom/tekartik/sqflite/Database;
+
+    #9              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'handleException'
+      type          : '(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0000 ()
+      code          -
+      registers     : 6
+      ins           : 3
+      outs          : 4
+      insns size    : 60 16-bit code units
+004990:                                        |[004990] com.tekartik.sqflite.Database.handleException:(Ljava/lang/Exception;Lcom/tekartik/sqflite/operation/Operation;)V
+0049a0: 2040 0e00                              |0000: instance-of v0, v4, Landroid/database/sqlite/SQLiteCantOpenDatabaseException; // type@000e
+0049a4: 1a01 e602                              |0002: const-string v1, "sqlite_error" // string@02e6
+0049a8: 3800 1c00                              |0004: if-eqz v0, 0020 // +001c
+0049ac: 2200 6e00                              |0006: new-instance v0, Ljava/lang/StringBuilder; // type@006e
+0049b0: 7010 5001 0000                         |0008: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+0049b6: 1a02 a802                              |000b: const-string v2, "open_failed " // string@02a8
+0049ba: 6e20 5401 2000                         |000d: invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0049c0: 0c00                                   |0010: move-result-object v0
+0049c2: 5432 5800                              |0011: iget-object v2, v3, Lcom/tekartik/sqflite/Database;.path:Ljava/lang/String; // field@0058
+0049c6: 6e20 5401 2000                         |0013: invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+0049cc: 0c00                                   |0016: move-result-object v0
+0049ce: 6e10 5501 0000                         |0017: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+0049d4: 0c00                                   |001a: move-result-object v0
+0049d6: 1202                                   |001b: const/4 v2, #int 0 // #0
+0049d8: 7240 1a01 1520                         |001c: invoke-interface {v5, v1, v0, v2}, Lcom/tekartik/sqflite/operation/Operation;.error:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V // method@011a
+0049de: 0e00                                   |001f: return-void
+0049e0: 2040 0d00                              |0020: instance-of v0, v4, Landroid/database/SQLException; // type@000d
+0049e4: 3800 0e00                              |0022: if-eqz v0, 0030 // +000e
+0049e8: 6e10 3b01 0400                         |0024: invoke-virtual {v4}, Ljava/lang/Exception;.getMessage:()Ljava/lang/String; // method@013b
+0049ee: 0c00                                   |0027: move-result-object v0
+0049f0: 7110 2401 0500                         |0028: invoke-static {v5}, Lcom/tekartik/sqflite/operation/SqlErrorInfo;.getMap:(Lcom/tekartik/sqflite/operation/Operation;)Ljava/util/Map; // method@0124
+0049f6: 0c02                                   |002b: move-result-object v2
+0049f8: 7240 1a01 1520                         |002c: invoke-interface {v5, v1, v0, v2}, Lcom/tekartik/sqflite/operation/Operation;.error:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V // method@011a
+0049fe: 0e00                                   |002f: return-void
+004a00: 6e10 3b01 0400                         |0030: invoke-virtual {v4}, Ljava/lang/Exception;.getMessage:()Ljava/lang/String; // method@013b
+004a06: 0c00                                   |0033: move-result-object v0
+004a08: 7110 2401 0500                         |0034: invoke-static {v5}, Lcom/tekartik/sqflite/operation/SqlErrorInfo;.getMap:(Lcom/tekartik/sqflite/operation/Operation;)Ljava/util/Map; // method@0124
+004a0e: 0c02                                   |0037: move-result-object v2
+004a10: 7240 1a01 1520                         |0038: invoke-interface {v5, v1, v0, v2}, Lcom/tekartik/sqflite/operation/Operation;.error:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V // method@011a
+004a16: 0e00                                   |003b: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=415
+        0x0006 line=416
+        0x001f line=417
+        0x0020 line=418
+        0x0024 line=419
+        0x002f line=420
+        0x0030 line=422
+        0x003b line=423
+      locals        :
+        0x0000 - 0x003c reg=3 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x003c reg=4 exception Ljava/lang/Exception;
+        0x0000 - 0x003c reg=5 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #10              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'insert'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 9 16-bit code units
+004a8c:                                        |[004a8c] com.tekartik.sqflite.Database.insert:(Lcom/tekartik/sqflite/operation/Operation;)V
+004a9c: 2200 2800                              |0000: new-instance v0, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda4; // type@0028
+004aa0: 7030 4e00 1002                         |0002: invoke-direct {v0, v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda4;.<init>:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V // method@004e
+004aa6: 7030 8c00 2100                         |0005: invoke-direct {v1, v2, v0}, Lcom/tekartik/sqflite/Database;.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@008c
+004aac: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=653
+        0x0008 line=654
+      locals        :
+        0x0000 - 0x0009 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0009 reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #11              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'isInTransaction'
+      type          : '()Z'
+      access        : 0x20000 (DECLARED_SYNCHRONIZED)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 13 16-bit code units
+004014:                                        |[004014] com.tekartik.sqflite.Database.isInTransaction:()Z
+004024: 1d01                                   |0000: monitor-enter v1
+004026: 5210 5b00                              |0001: iget v0, v1, Lcom/tekartik/sqflite/Database;.transactionDepth:I // field@005b
+00402a: 3d00 0400                              |0003: if-lez v0, 0007 // +0004
+00402e: 1210                                   |0005: const/4 v0, #int 1 // #1
+004030: 2802                                   |0006: goto 0008 // +0002
+004032: 1200                                   |0007: const/4 v0, #int 0 // #0
+004034: 1e01                                   |0008: monitor-exit v1
+004036: 0f00                                   |0009: return v0
+004038: 0d00                                   |000a: move-exception v0
+00403a: 1e01                                   |000b: monitor-exit v1
+00403c: 2700                                   |000c: throw v0
+      catches       : 2
+        0x0001 - 0x0003
+          <any> -> 0x000a
+        0x000b - 0x000c
+          <any> -> 0x000a
+      positions     :
+        0x0001 line=797
+        0x000a line=797
+      locals        :
+        0x0000 - 0x000a reg=1 this Lcom/tekartik/sqflite/Database;
+
+    #12              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'open'
+      type          : '()V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 4
+      ins           : 1
+      outs          : 3
+      insns size    : 83 16-bit code units
+004d18:                                        |[004d18] com.tekartik.sqflite.Database.open:()V
+004d28: 1500 0010                              |0000: const/high16 v0, #int 268435456 // #1000
+004d2c: 6201 5c00                              |0002: sget-object v1, Lcom/tekartik/sqflite/Database;.walGloballyEnabled:Ljava/lang/Boolean; // field@005c
+004d30: 3901 3a00                              |0004: if-nez v1, 003e // +003a
+004d34: 5431 4f00                              |0006: iget-object v1, v3, Lcom/tekartik/sqflite/Database;.context:Landroid/content/Context; // field@004f
+004d38: 7110 6200 0100                         |0008: invoke-static {v1}, Lcom/tekartik/sqflite/Database;.checkWalEnabled:(Landroid/content/Context;)Z // method@0062
+004d3e: 0a01                                   |000b: move-result v1
+004d40: 7110 3501 0100                         |000c: invoke-static {v1}, Ljava/lang/Boolean;.valueOf:(Z)Ljava/lang/Boolean; // method@0135
+004d46: 0c01                                   |000f: move-result-object v1
+004d48: 6901 5c00                              |0010: sput-object v1, Lcom/tekartik/sqflite/Database;.walGloballyEnabled:Ljava/lang/Boolean; // field@005c
+004d4c: 6201 5c00                              |0012: sget-object v1, Lcom/tekartik/sqflite/Database;.walGloballyEnabled:Ljava/lang/Boolean; // field@005c
+004d50: 6e10 3301 0100                         |0014: invoke-virtual {v1}, Ljava/lang/Boolean;.booleanValue:()Z // method@0133
+004d56: 0a01                                   |0017: move-result v1
+004d58: 3801 2600                              |0018: if-eqz v1, 003e // +0026
+004d5c: 5231 5600                              |001a: iget v1, v3, Lcom/tekartik/sqflite/Database;.logLevel:I // field@0056
+004d60: 7110 b400 0100                         |001c: invoke-static {v1}, Lcom/tekartik/sqflite/LogLevel;.hasVerboseLevel:(I)Z // method@00b4
+004d66: 0a01                                   |001f: move-result v1
+004d68: 3801 1e00                              |0020: if-eqz v1, 003e // +001e
+004d6c: 2201 6e00                              |0022: new-instance v1, Ljava/lang/StringBuilder; // type@006e
+004d70: 7010 5001 0100                         |0024: invoke-direct {v1}, Ljava/lang/StringBuilder;.<init>:()V // method@0150
+004d76: 6e10 7500 0300                         |0027: invoke-virtual {v3}, Lcom/tekartik/sqflite/Database;.getThreadLogPrefix:()Ljava/lang/String; // method@0075
+004d7c: 0c02                                   |002a: move-result-object v2
+004d7e: 6e20 5401 2100                         |002b: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004d84: 0c01                                   |002e: move-result-object v1
+004d86: 1a02 5701                              |002f: const-string v2, "[sqflite] WAL enabled" // string@0157
+004d8a: 6e20 5401 2100                         |0031: invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0154
+004d90: 0c01                                   |0034: move-result-object v1
+004d92: 6e10 5501 0100                         |0035: invoke-virtual {v1}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0155
+004d98: 0c01                                   |0038: move-result-object v1
+004d9a: 1a02 2c01                              |0039: const-string v2, "Sqflite" // string@012c
+004d9e: 7120 3600 1200                         |003b: invoke-static {v2, v1}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@0036
+004da4: 6201 5c00                              |003e: sget-object v1, Lcom/tekartik/sqflite/Database;.walGloballyEnabled:Ljava/lang/Boolean; // field@005c
+004da8: 6e10 3301 0100                         |0040: invoke-virtual {v1}, Ljava/lang/Boolean;.booleanValue:()Z // method@0133
+004dae: 0a01                                   |0043: move-result v1
+004db0: 3801 0500                              |0044: if-eqz v1, 0049 // +0005
+004db4: 1501 0020                              |0046: const/high16 v1, #int 536870912 // #2000
+004db8: b610                                   |0048: or-int/2addr v0, v1
+004dba: 5431 5800                              |0049: iget-object v1, v3, Lcom/tekartik/sqflite/Database;.path:Ljava/lang/String; // field@0058
+004dbe: 1202                                   |004b: const/4 v2, #int 0 // #0
+004dc0: 7130 1e00 2100                         |004c: invoke-static {v1, v2, v0}, Landroid/database/sqlite/SQLiteDatabase;.openDatabase:(Ljava/lang/String;Landroid/database/sqlite/SQLiteDatabase$CursorFactory;I)Landroid/database/sqlite/SQLiteDatabase; // method@001e
+004dc6: 0c01                                   |004f: move-result-object v1
+004dc8: 5b31 5a00                              |0050: iput-object v1, v3, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+004dcc: 0e00                                   |0052: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=145
+        0x0002 line=148
+        0x0006 line=149
+        0x0012 line=150
+        0x001a line=151
+        0x0022 line=152
+        0x003e line=156
+        0x0046 line=158
+        0x0049 line=161
+        0x0052 line=162
+      locals        :
+        0x0002 - 0x0053 reg=0 flags I
+        0x0000 - 0x0053 reg=3 this Lcom/tekartik/sqflite/Database;
+
+    #13              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'openReadOnly'
+      type          : '()V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 5
+      ins           : 1
+      outs          : 4
+      insns size    : 16 16-bit code units
+004dd0:                                        |[004dd0] com.tekartik.sqflite.Database.openReadOnly:()V
+004de0: 5440 5800                              |0000: iget-object v0, v4, Lcom/tekartik/sqflite/Database;.path:Ljava/lang/String; // field@0058
+004de4: 2201 2c00                              |0002: new-instance v1, Lcom/tekartik/sqflite/Database$1; // type@002c
+004de8: 7020 5600 4100                         |0004: invoke-direct {v1, v4}, Lcom/tekartik/sqflite/Database$1;.<init>:(Lcom/tekartik/sqflite/Database;)V // method@0056
+004dee: 1202                                   |0007: const/4 v2, #int 0 // #0
+004df0: 1213                                   |0008: const/4 v3, #int 1 // #1
+004df2: 7140 1f00 2013                         |0009: invoke-static {v0, v2, v3, v1}, Landroid/database/sqlite/SQLiteDatabase;.openDatabase:(Ljava/lang/String;Landroid/database/sqlite/SQLiteDatabase$CursorFactory;ILandroid/database/DatabaseErrorHandler;)Landroid/database/sqlite/SQLiteDatabase; // method@001f
+004df8: 0c00                                   |000c: move-result-object v0
+004dfa: 5b40 5a00                              |000d: iput-object v0, v4, Lcom/tekartik/sqflite/Database;.sqliteDatabase:Landroid/database/sqlite/SQLiteDatabase; // field@005a
+004dfe: 0e00                                   |000f: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=166
+        0x000f line=177
+      locals        :
+        0x0000 - 0x0010 reg=4 this Lcom/tekartik/sqflite/Database;
+
+    #14              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'query'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 9 16-bit code units
+004e40:                                        |[004e40] com.tekartik.sqflite.Database.query:(Lcom/tekartik/sqflite/operation/Operation;)V
+004e50: 2200 2500                              |0000: new-instance v0, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda1; // type@0025
+004e54: 7030 4800 1002                         |0002: invoke-direct {v0, v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda1;.<init>:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V // method@0048
+004e5a: 7030 8c00 2100                         |0005: invoke-direct {v1, v2, v0}, Lcom/tekartik/sqflite/Database;.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@008c
+004e60: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=280
+        0x0008 line=281
+      locals        :
+        0x0000 - 0x0009 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0009 reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #15              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'queryCursorNext'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 9 16-bit code units
+004e64:                                        |[004e64] com.tekartik.sqflite.Database.queryCursorNext:(Lcom/tekartik/sqflite/operation/Operation;)V
+004e74: 2200 2400                              |0000: new-instance v0, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda0; // type@0024
+004e78: 7030 4600 1002                         |0002: invoke-direct {v0, v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda0;.<init>:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V // method@0046
+004e7e: 7030 8c00 2100                         |0005: invoke-direct {v1, v2, v0}, Lcom/tekartik/sqflite/Database;.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@008c
+004e84: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=340
+        0x0008 line=341
+      locals        :
+        0x0000 - 0x0009 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0009 reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+    #16              : (in Lcom/tekartik/sqflite/Database;)
+      name          : 'update'
+      type          : '(Lcom/tekartik/sqflite/operation/Operation;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 9 16-bit code units
+004edc:                                        |[004edc] com.tekartik.sqflite.Database.update:(Lcom/tekartik/sqflite/operation/Operation;)V
+004eec: 2200 2700                              |0000: new-instance v0, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda3; // type@0027
+004ef0: 7030 4c00 1002                         |0002: invoke-direct {v0, v1, v2}, Lcom/tekartik/sqflite/Database$$ExternalSyntheticLambda3;.<init>:(Lcom/tekartik/sqflite/Database;Lcom/tekartik/sqflite/operation/Operation;)V // method@004c
+004ef6: 7030 8c00 2100                         |0005: invoke-direct {v1, v2, v0}, Lcom/tekartik/sqflite/Database;.wrapSqlOperationHandler:(Lcom/tekartik/sqflite/operation/Operation;Ljava/lang/Runnable;)V // method@008c
+004efc: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=682
+        0x0008 line=683
+      locals        :
+        0x0000 - 0x0009 reg=1 this Lcom/tekartik/sqflite/Database;
+        0x0000 - 0x0009 reg=2 operation Lcom/tekartik/sqflite/operation/Operation;
+
+  source_file_idx   : 67 (Database.java)
+
+Class #14            -
+  

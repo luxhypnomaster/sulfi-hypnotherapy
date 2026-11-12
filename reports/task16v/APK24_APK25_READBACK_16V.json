@@ -1,0 +1,25 @@
+{
+  "previous": {
+    "applicationId": "ru.sulfi.sulfi_hypnotherapy",
+    "versionCode": 24,
+    "versionName": "0.4.16",
+    "certificateSha256": [
+      "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    ]
+  },
+  "candidate": {
+    "applicationId": "ru.sulfi.sulfi_hypnotherapy",
+    "versionCode": 25,
+    "versionName": "0.4.17",
+    "certificateSha256": [
+      "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    ]
+  },
+  "checks": {
+    "sameApplicationId": true,
+    "sameSigningCertificates": true,
+    "increasedVersionCode": true
+  },
+  "metadataCompatible": true,
+  "deviceInstallVerified": false
+}

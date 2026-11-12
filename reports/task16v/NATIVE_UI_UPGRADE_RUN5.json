@@ -1,0 +1,174 @@
+{
+  "fixture": "created through unmodified APK24 Android UI; no SQL/DB injection",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_24",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "uninstall": false,
+        "databaseInjected": false
+      }
+    },
+    {
+      "case": "native_dependency_corruption",
+      "status": "PASS",
+      "details": {
+        "default_rw": {
+          "before_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "after_sha256": "fcc764519d2c607f2501288ae7200254f30f2a4c0eb78ea63a5c3385357e44bd",
+          "exists": true,
+          "exception": "none",
+          "bytesUnchanged": false
+        },
+        "guard_readonly": {
+          "before_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "after_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "exists": true,
+          "exception": "SQLiteDatabaseCorruptException",
+          "bytesUnchanged": true
+        },
+        "kind": "DISPOSABLE_HELPER_DB_ONLY_NOT_SULFI_OR_OWNER"
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "BLOCKED",
+      "reason": "IMPORTED_NOT_VISIBLE"
+    },
+    {
+      "case": "ui_import_2",
+      "status": "BLOCKED",
+      "reason": "IMPORTED_NOT_VISIBLE"
+    },
+    {
+      "case": "ui_import_3",
+      "status": "BLOCKED",
+      "reason": "IMPORTED_NOT_VISIBLE"
+    },
+    {
+      "case": "ui_native_recording",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' timed out after 55 seconds"
+    },
+    {
+      "case": "ui_module_elman",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' returned non-zero exit status 1."
+    },
+    {
+      "case": "ui_module_pause",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' returned non-zero exit status 1."
+    },
+    {
+      "case": "ui_diary_auth_boundary",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' returned non-zero exit status 1."
+    },
+    {
+      "case": "before24_inventory",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' returned non-zero exit status 1."
+    },
+    {
+      "case": "native_update24_to25",
+      "status": "BLOCKED",
+      "reason": "STOP_SHIP_INVALID_UI_BASELINE_NO_UPGRADE_PROOF"
+    },
+    {
+      "case": "ui_after25",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' returned non-zero exit status 1."
+    },
+    {
+      "case": "cold_restart25",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'force-stop', 'ru.sulfi.sulfi_hypnotherapy']' returned non-zero exit status 1."
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "Show roots"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-1.wav"
+    },
+    {
+      "action": "UI_accessibility_set_text",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-2.wav"
+    },
+    {
+      "action": "UI_accessibility_set_text",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-3.wav"
+    },
+    {
+      "action": "UI_accessibility_set_text",
+      "value": "UI third track",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Записать свой трек"
+    }
+  ],
+  "inventories": {}
+}

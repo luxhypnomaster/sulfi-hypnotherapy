@@ -1,3 +1,13 @@
+# №16-В P0 data preservation
+
+- [x] Зафиксировать normal update owner fact, physical bytes UNKNOWN; STOP-SHIP.
+- [x] Exact APK/source/storage/Android read-only audit; отдельная hotfix-ветка012f7f69 и draft PR46.
+- [x] Legacy diary scope RED→GREEN source patch без перезаписи строк/медиа; guest/CLIENT/other subject denied.
+- [x] Read-only copy diagnostic, SQLite/WAL/hash/failure regressions.
+- [ ] Native populated UI-created APK24→25 full dataset, реальная Google identity — см. отчёты №16-В; synthetic fixture не заменяет.
+- [ ] Полная причина missing tracks+modules+drafts владельца, owner forensic acquisition и доказанное recovery — BLOCKED.
+- [ ] Native24→candidate26, независимый review/snapshot/owner approval — до этого APK26 запрещена.
+
 # №16/16-А · продолжение24
 
 - [x] Проверить текущие отчёты без повторения C0/deploy/сервисного E2E.
