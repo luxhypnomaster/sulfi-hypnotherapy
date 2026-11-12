@@ -1,0 +1,11 @@
+test_absent_database_is_not_created (test_readonly_inventory.ReadOnly16V.test_absent_database_is_not_created) ... ok
+test_bad_payload_is_reported_without_rewrite (test_readonly_inventory.ReadOnly16V.test_bad_payload_is_reported_without_rewrite) ... ok
+test_corrupt_db_stays_identical_no_fallback (test_readonly_inventory.ReadOnly16V.test_corrupt_db_stays_identical_no_fallback) ... ok
+test_legacy_external_path_not_followed (test_readonly_inventory.ReadOnly16V.test_legacy_external_path_not_followed) ... ok
+test_missing_media_does_not_delete_reference (test_readonly_inventory.ReadOnly16V.test_missing_media_does_not_delete_reference) ... ok
+test_wal_rows_and_exact_source_bytes_preserved (test_readonly_inventory.ReadOnly16V.test_wal_rows_and_exact_source_bytes_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK

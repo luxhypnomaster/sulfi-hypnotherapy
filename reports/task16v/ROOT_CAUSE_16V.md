@@ -1,0 +1,28 @@
+# №16-В P0 — причина и границы доказательств
+
+**STOP-SHIP. Инцидент владельца ещё не закрыт.** Статус: `MISSING_FROM_UI_AFTER_STANDARD_UPDATE; PHYSICAL_BYTES_UNKNOWN`.
+Владелец подтвердил штатное обновление MASTER24→MASTER25 без удаления; повторного подтверждения не требуем. Исчезновение с UI одновременно собственных треков, модулей и черновиков — факт наблюдения владельца. Физическое стирание не установлено.
+
+Baseline: APK24 cbe05240d463b9dafbe9a12ee831c967bdbf6113; APK25 012f7f69b7ad99c0d44f2a442d9649aa1481117e. Изолированная hotfix-ветка от второго SHA; draft PR46. PR45 сохранён.
+
+| Факт / механизм | Доказательство | Вывод / уверенность |
+|---|---|---|
+| Package/certificate не поменялись | APK24_APK25_READBACK_16V.json: независимые реальные apksigner verify/aapt; SHA соответствуют remote digest | PASS metadata; не доказывает состояние телефона |
+| Android/build, storage repositories/models, access policy, pubspec.lock идентичны | STORAGE_SOURCE_COMPARISON.json с Git blob SHA | Изменение схемы/базовых путей в этом diff не найдено |
+| DB version9, `getApplicationSupportDirectory()/library.sqlite`, `audio/` | app_database.dart; main.dart | Нет нового onUpgrade для24→25. Actual path владельца неизвестен |
+| Полный инцидент tracks+modules+drafts | Только наблюдение владельца; физический sandbox недоступен | Root cause UNKNOWN; нельзя свести к одной авторизации |
+| APK24 server-restored private diary draft с `_alchemistScope=google:<subject>` скрывается в25 | old AlchemistDiaryApi.readerScope; new DiaryController.load compares only account hash. Domain RED log: same verified MASTER sees [] despite existing row | CONFIRMED code-level read/filter defect, `ROWS_PRESENT_BUT_FILTERED` в controlled SQLite. НЕ доказан как причина всех пропавших материалов владельца |
+| Утечка при снятии scope | Глобально снимать scope опасно | Minimal source alias only exact server-verified MASTER subject; other subject/CLIENT/guest denied |
+| App bootstrap не ловит ошибку базы переходом к пустой БД | main.dart catch closes resources and shows failure; no delete/recreate fallback | Code PASS; нативные/физические crash состояния требуют отдельного доказательства |
+| UI library/module queries | LibraryRepository.list без owner filter; ModuleCatalog.load без owner filter; library sections/category/search and module archived/origin/query separate | Scope change дневника не объясняет обе коллекции |
+| Native прежний REL-03 | №16-Б injected SQLite fixture | Не является достаточным UI-created upgrade доказательством |
+
+## Подтверждённый узкий fail → fix → pass
+
+Контролируемый unit regression сохраняет старый формат private draft, два блока (text→audio), реальные тестовые media bytes; серверный ответ/идентичность — явная fixture, НЕ настоящий Google. APK25 load скрывает запись (RED). Минимальный alias-патч возвращает её тому же подтверждённому MASTER без UPDATE/INSERT diary row и без изменения media. Другой subject видит только собственную legacy запись, CLIENT/guest — ни одной; блоки и исходная строка byte/structurally equal (GREEN).
+
+Патч не меняет readerScope, endpoint, роли, очередь, public feed, пути, схему, миграции или Google credential. Это не миграция и не восстановление удалённых данных.
+
+## Что не установлено
+
+`DB_FILE_MISSING`, `ROWS_ABSENT`, `PATH_CHANGED`, `SCHEMA_MIGRATION_ERROR`, `FILE_BYTES_MISSING_REFERENCES_PRESENT`, `UI_LOAD_EXCEPTION`, `ALTERNATIVE_ACCOUNT_SCOPE` на телефоне владельца — UNKNOWN. Ни одна гипотеза не объявляется диагнозом без копии/безопасной наблюдаемой информации. Итог native evidence и ограничения — UPGRADE_REPRO_16V.md.
