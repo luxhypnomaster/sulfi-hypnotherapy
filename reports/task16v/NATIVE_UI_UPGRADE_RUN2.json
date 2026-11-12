@@ -1,0 +1,92 @@
+{
+  "fixture": "created through unmodified APK24 Android UI; no SQL/DB injection",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_24",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "uninstall": false,
+        "databaseInjected": false
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "BLOCKED",
+      "reason": "UI_NOT_FOUND:task16v-1.m4a;labels=['Large files', 'This week', 'Recent files', 'Grid view', 'Show roots', 'Recent', 'Search', 'More options', 'No items']"
+    },
+    {
+      "case": "ui_import_2",
+      "status": "BLOCKED",
+      "reason": "NO_EDIT_FIELD"
+    },
+    {
+      "case": "ui_import_3",
+      "status": "BLOCKED",
+      "reason": "NO_EDIT_FIELD"
+    },
+    {
+      "case": "ui_native_recording",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'uiautomator', 'dump', '/sdcard/task16v-window.xml']' timed out after 55 seconds"
+    },
+    {
+      "case": "driver",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'exec-out', 'screencap', '-p']' returned non-zero exit status 255."
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-2.m4a"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-3.m4a"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "Записать свой трек"
+    }
+  ],
+  "inventories": {}
+}

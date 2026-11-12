@@ -14,8 +14,11 @@ def tree():
  except ET.ParseError:return []
 def label(n):return (n.get('text','')+' '+n.get('content-desc','')).strip()
 def shot(name):
- (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
- (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/task16v-window.xml',check=False))
+ try:
+  (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
+  (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/task16v-window.xml',check=False))
+ except Exception as error:
+  (OUT/(name+'-capture-error.txt')).write_text(type(error).__name__)
 def tap(n):
  p=[int(i) for i in re.findall(r'\d+',n.get('bounds',''))]
  adb('shell','input','tap',str((p[0]+p[2])//2),str((p[1]+p[3])//2));time.sleep(.5)
@@ -28,7 +31,13 @@ def click(text,exact=False,attempts=3):
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
 def text(value,index=0):
- ns=[n for n in tree() if n.get('class')=='android.widget.EditText'];assert len(ns)>index,'NO_EDIT_FIELD'
+ ns=[]
+ for _ in range(8):
+  ns=[n for n in tree() if n.get('class')=='android.widget.EditText']
+  if len(ns)>index:break
+  time.sleep(1)
+ assert len(ns)>index,'NO_EDIT_FIELD'
+
  tap(ns[index]);adb('shell','input','keycombination','KEYCODE_CTRL_LEFT','KEYCODE_A');adb('shell','input','text',value.replace(' ','%s'));adb('shell','input','keyevent','4');time.sleep(.5)
  ACTIONS.append({'action':'UI_text','value':value,'index':index})
 def launch():
@@ -84,11 +93,13 @@ def install():
  return {'versionCode':24,'uninstall':False,'databaseInjected':False}
 def import_audio(filename,title):
  home();click('Библиотека');click('+ Добавить аудио');time.sleep(1)
- # Real Android DocumentsUI, files exist in disposable Downloads only.
- ns=tree()
+ # Wait for DocumentsUI before resolving its drawer; no invisible stale taps.
+ for _ in range(10):
+  ns=tree()
+  if any('Show roots' in label(n) for n in ns):break
+  time.sleep(1)
  if not any(filename in label(n) for n in ns):
-  drawer=next((n for n in ns if 'Show roots' in label(n) or 'Показать корни' in label(n)),None)
-  if drawer is not None:tap(drawer);click('Downloads');time.sleep(.5)
+  click('Show roots',exact=True);click('Downloads',exact=True);time.sleep(1)
  click(filename);time.sleep(3);text(title);click('Сохранить',exact=True);time.sleep(1)
  assert any(title in label(n) for n in tree()),'IMPORTED_NOT_VISIBLE';shot('24-import-'+filename)
  return {'createdBy':'UI_system_picker','title':title}
@@ -152,11 +163,21 @@ def ui_after():
 try:
  case('install_24',install)
  adb('shell','mkdir','-p','/sdcard/Download')
- for i in range(1,4):adb('push','test/fixtures/android_aac_isom.m4a','/sdcard/Download/task16v-'+str(i)+'.m4a')
- adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file:///sdcard/Download/',check=False)
- for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.m4a','UI same title' if i<3 else 'UI third track'))
+ # Generate a harmless PCM WAV fixture (not the Sulfi voice), then register
+ # each actual file with Android MediaScanner so DocumentsUI knows its MIME.
+ import wave,math,struct
+ fixture=OUT/'ui-source.wav'
+ with wave.open(str(fixture),'wb') as w:
+  w.setparams((1,2,22050,0,'NONE','not compressed'))
+  w.writeframes(b''.join(struct.pack('<h',int(1800*math.sin(i*2*math.pi*220/22050))) for i in range(22050*12)))
+ for i in range(1,4):
+  path='/sdcard/Download/task16v-'+str(i)+'.wav'
+  adb('push',str(fixture),path)
+  adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file://'+path,check=False)
+ time.sleep(2)
+ for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
  case('ui_native_recording',record_audio)
- case('ui_module_elman',lambda:module('Elman variant 2',['UI same title','UI third track']))
+ case('ui_module_elman',lambda:module('Elman variant 2',['UI same title','UI third track','UI third track']))
  case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
  case('ui_diary_auth_boundary',diary_boundary)
  case('before24_inventory',before)
@@ -167,7 +188,15 @@ except Exception as e:
  CASES.append({'case':'driver','status':'BLOCKED','reason':str(e)[:1500]});report()
 finally:
  report()
- print('NATIVE16V_EVIDENCE='+base64.b64encode((OUT/'NATIVE_UI_UPGRADE_16V.json').read_bytes()).decode(),flush=True)
+ def emit(name,data):
+  enc=base64.b64encode(data).decode();chunks=[enc[i:i+12000] for i in range(0,len(enc),12000)]
+  print('NATIVE16V_DIGEST='+name+':'+hashlib.sha256(data).hexdigest(),flush=True)
+  for i,chunk in enumerate(chunks):print('NATIVE16V_CHUNK='+name+':'+str(i)+':'+str(len(chunks))+':'+chunk,flush=True)
+ emit('NATIVE_UI_UPGRADE_16V.json',(OUT/'NATIVE_UI_UPGRADE_16V.json').read_bytes())
  for p in sorted(OUT.glob('*.png')):
-  if p.name in ['25-library.png','25-modules.png'] or p.name.startswith('failure-'):
-   print('NATIVE16V_SCREEN='+p.name+':'+base64.b64encode(p.read_bytes()).decode(),flush=True)
+  if p.name in ['25-library.png','25-modules.png','24-before-upgrade.png'] or p.name.startswith('failure-'):
+   emit(p.name,p.read_bytes())
+ for p in sorted(OUT.glob('failure-*.xml')):emit(p.name,p.read_bytes())
+ if any(c['status']!='PASS' for c in CASES):
+  print('NATIVE16V_RELEASE_GATE=BLOCKED; do not equate completed driver with accepted upgrade',flush=True)
+  raise SystemExit(2)
