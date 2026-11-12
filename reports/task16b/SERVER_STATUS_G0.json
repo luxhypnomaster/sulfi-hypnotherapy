@@ -1,0 +1,15 @@
+{
+  "workflowRun": 43156961962,
+  "checkedAt": "2026-11-12T04:46:49.413Z",
+  "mode": "READ_ONLY",
+  "claspOwnerVerified": true,
+  "existingProjectVerified": true,
+  "scriptOwnerOnly": true,
+  "runtimeHealthVerified": true,
+  "webAudienceConfigured": true,
+  "sourceSha": "1a0cf8e5a60144075eec793767953586bfa319a2",
+  "distinctAccounts": true,
+  "serverTwoAccountRoleCheck": "PASS",
+  "serverTwoAccountCheck": "PARTIAL_CLIENT_READ_INSTALL_NOT_VERIFIED",
+  "physical16bAcceptance": "NOT_RUN"
+}

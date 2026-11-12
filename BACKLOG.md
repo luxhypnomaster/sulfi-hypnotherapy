@@ -313,3 +313,9 @@
 - [ ] Утверждение Home media K008 и Home draft preview.
 - [x] Separate same-code client test build configuration; actual CI artifact verification tracked in Task15 report.
 - [ ] Live provider deployment/auth decisions and physical two-device acceptance (следующее серверное ТЗ).
+
+## №16-Б — продолжение №16/16-А
+- [x] G0 фактический аудит и read-only runtime/ACL status.
+- [x] G1–G4 кандидат: единая SDK identity, owner-bound транспорт и существующая очередь, отдельный каталог/анонс, обложка/категории.
+- [ ] G5 exact-source CI, две APK25 и обновление APK24 на эмуляторе — отчёты reports/task16b.
+- [ ] G6 физический MASTER → три трека → дневник → CLIENT → offline; новые live server checks после отдельного разрешения на candidate deploy.

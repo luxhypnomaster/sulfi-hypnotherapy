@@ -1,3 +1,5 @@
+import 'alchemist_diagnostics.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -27,6 +29,15 @@ class AlchemistWorkQueue extends ChangeNotifier {
   send;
   final Map<String, bool> _stops = {};
   bool _running = false, _closed = false;
+  String? _activeName;
+  final _cancelled = <String>{};
+  Future<void> _progress = Future.value();
+  void _recordProgress(String name, Map<String, dynamic> values) {
+    _progress = _progress
+        .then((_) => _patch(name, values))
+        .catchError((Object _) {});
+  }
+
   List<Map<String, dynamic>> rows = [];
   int get pendingCount => rows
       .where(
@@ -108,6 +119,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
         _running) {
       return;
     }
+    if (_activeName == name) return;
+    _cancelled.remove(name);
     _stops[name] = false;
     await _patch(name, {
       'phase': 'queued',
@@ -121,8 +134,13 @@ class AlchemistWorkQueue extends ChangeNotifier {
 
   Future<void> pause(String name, {bool cancel = false}) async {
     _stops[name] = true;
+    if (cancel) _cancelled.add(name);
     await _patch(name, {
-      'phase': cancel ? 'cancelled' : 'paused',
+      'phase': cancel
+          ? 'cancelled'
+          : _activeName == name
+          ? 'pausing'
+          : 'paused',
       'code': cancel ? 'CANCELLED' : 'USER_PAUSED',
     });
   }
@@ -171,10 +189,27 @@ class AlchemistWorkQueue extends ChangeNotifier {
           await pause(name);
           continue;
         }
+        _activeName = name;
         await _patch(name, {
           'phase': 'running',
           'attempts': (row['_work']?['attempts'] as int? ?? 0) + 1,
         });
+        final retries = <String, int>{};
+        void diagnostic() {
+          final event = AlchemistDiagnostics.instance.events.lastOrNull;
+          if (event == null || stop()) return;
+          final trace = event['traceId'] as String,
+              attempt = event['attempt'] as int;
+          retries[trace] = attempt > (retries[trace] ?? 0)
+              ? attempt
+              : (retries[trace] ?? 0);
+          _recordProgress(name, {
+            'traceId': trace,
+            'networkRetries': retries.values.fold<int>(0, (n, v) => n + v),
+          });
+        }
+
+        AlchemistDiagnostics.instance.addListener(diagnostic);
         try {
           final value = (await _read(name))!;
           await send(
@@ -183,26 +218,39 @@ class AlchemistWorkQueue extends ChangeNotifier {
             stop,
             (stage) {
               // Progress is serialized below; callbacks must not overwrite a card receipt.
-              if (!stop()) unawaited(_patch(name, {'stage': stage}));
+              if (!stop()) _recordProgress(name, {'stage': stage});
             },
             (n, total) {
               if (!stop()) {
-                unawaited(_patch(name, {'bytes': n, 'totalBytes': total}));
+                _recordProgress(name, {'bytes': n, 'totalBytes': total});
               }
             },
           );
+          await _progress;
           await _patch(name, {
-            'phase': stop() ? 'paused' : 'complete',
+            'phase': _cancelled.contains(name)
+                ? 'cancelled'
+                : stop()
+                ? 'paused'
+                : 'complete',
             'code': null,
             'stage': 'catalog_committed',
           });
         } catch (e) {
+          await _progress;
           final failure = AlchemistFailure.from(e);
           await _patch(name, {
-            'phase': stop() ? 'paused' : 'failed',
+            'phase': _cancelled.contains(name)
+                ? 'cancelled'
+                : stop()
+                ? 'paused'
+                : 'failed',
             'code': failure.code,
             'message': failure.message,
           });
+        } finally {
+          AlchemistDiagnostics.instance.removeListener(diagnostic);
+          _activeName = null;
         }
       }
     } finally {

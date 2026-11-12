@@ -277,6 +277,21 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
 
   @override
   void dispose() {
+    if (autosave?.isActive == true &&
+        !transferring &&
+        widget.service.controller.policy.isAuthor) {
+      for (final f in fields.entries) {
+        card[f.key] = ['tags', 'categoryIds'].contains(f.key)
+            ? f.value.text
+                  .split(',')
+                  .map((s) => s.trim())
+                  .where((s) => s.isNotEmpty)
+                  .toList()
+            : f.value.text;
+      }
+      draft['card'] = card;
+      unawaited(widget.service.save(draft).catchError((Object _) {}));
+    }
     autosave?.cancel();
     widget.service.controller.cloudQueue.removeListener(queueChanged);
     widget.service.controller.policy.removeListener(_identityChanged);

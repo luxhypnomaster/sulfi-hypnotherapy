@@ -295,6 +295,17 @@ class AlchemistDiaryApi extends DiaryApi {
         : Map<String, dynamic>.from(jsonDecode(row.single['value'] as String));
   }
 
+  void _checkEntryOwner(Map<String, dynamic> state) {
+    if (workInterrupted?.call() == true ||
+        state['ownerBinding'] != null &&
+            state['ownerBinding'] != author.ownerBinding) {
+      throw const DiaryApiException(
+        'Аккаунт изменился. Задача приостановлена.',
+        DiaryFailure.authorization,
+      );
+    }
+  }
+
   Future<void> _save(String id, Map<String, dynamic> state) => db
       .insert('app_settings', {
         'name': 'alchemist_entry:$id',
@@ -305,6 +316,7 @@ class AlchemistDiaryApi extends DiaryApi {
     String id,
     Map<String, dynamic> state,
   ) async {
+    _checkEntryOwner(state);
     final p = state['pending'];
     final result = await author.call(
       p['operation'],
@@ -330,6 +342,8 @@ class AlchemistDiaryApi extends DiaryApi {
     String op,
     Map<String, dynamic> parameters,
   ) async {
+    _checkEntryOwner(state);
+    state['ownerBinding'] = author.ownerBinding;
     state['pending'] = {
       'operation': op,
       'parameters': {
@@ -343,9 +357,14 @@ class AlchemistDiaryApi extends DiaryApi {
     return _recover(id, state);
   }
 
-  Future<Map<String, dynamic>> _document(DiaryEntry e) async {
+  Future<Map<String, dynamic>> _document(
+    DiaryEntry e, {
+    void Function()? check,
+  }) async {
+    check?.call();
     if (e.contentLinks.isNotEmpty) {
       for (final link in e.contentLinks) {
+        check?.call();
         await author.call('catalog.resolveReference', {
           'logicalId': link.key.content.id,
           'revisionId': link.key.revision,
@@ -355,6 +374,13 @@ class AlchemistDiaryApi extends DiaryApi {
     }
     final blocks = <Map<String, dynamic>>[];
     for (final b in e.blocks) {
+      check?.call();
+      if (workInterrupted?.call() == true) {
+        throw const DiaryApiException(
+          'Передача приостановлена.',
+          DiaryFailure.network,
+        );
+      }
       if (b.type == DiaryBlockType.text) {
         blocks.add({'id': b.id, 'type': 'text', 'text': b.text});
         continue;
@@ -404,18 +430,25 @@ class AlchemistDiaryApi extends DiaryApi {
   Future<DiaryEntry> _saveRemote(DiaryEntry e, {required bool publish}) async {
     final initialOwner = readerScope, initialGeneration = identityGeneration;
     if (publish) await beforePublication?.call(e);
-    if (initialOwner != readerScope ||
-        initialGeneration != identityGeneration ||
-        workInterrupted?.call() == true) {
-      throw const DiaryApiException(
-        'Задача приостановлена.',
-        DiaryFailure.authorization,
-      );
+    void check() {
+      if (initialOwner != readerScope ||
+          initialGeneration != identityGeneration ||
+          workInterrupted?.call() == true) {
+        throw const DiaryApiException(
+          'Задача приостановлена.',
+          DiaryFailure.authorization,
+        );
+      }
     }
+
+    check();
     final queued = await _queued(e.id);
     final state = await _state(e.id);
+    _checkEntryOwner(state);
+    state['ownerBinding'] = author.ownerBinding;
     if (state['pending'] != null) await _recover(e.id, state);
-    final document = await _document(e);
+    final document = await _document(e, check: check);
+    check();
     final previous = state['manifest'];
     final beforeBlocks = previous is Map
         ? (previous['blocks'] as List).map((v) {

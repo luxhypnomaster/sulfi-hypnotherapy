@@ -55,10 +55,10 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                         'Передача',
                                   ),
                                   Text(
-                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${work['stage'] ?? ''}',
+                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'pausing': 'Завершается текущий запрос', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${work['stage'] ?? ''}',
                                   ),
                                   Text(
-                                    '${work['bytes'] ?? 0} / ${work['totalBytes'] ?? 0} байт · попыток ${work['attempts'] ?? 0}',
+                                    '${work['bytes'] ?? 0} / ${work['totalBytes'] ?? 0} байт · попыток задачи ${work['attempts'] ?? 0} · сетевых повторов ${work['networkRetries'] ?? 0}',
                                   ),
                                   if (work['code'] != null)
                                     Text('Код: ${work['code']}'),

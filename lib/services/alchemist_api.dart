@@ -70,6 +70,7 @@ class AlchemistApi {
             'catalog.restore',
             'entry.createDraft',
             'entry.patchDraft',
+            'entry.updateMetadata',
             'entry.publish',
             'entry.unpublish',
             'entry.archive',

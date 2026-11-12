@@ -87,10 +87,9 @@ class AlchemistCatalog {
     if (!reuse) return _prepare(root, reuse: false);
     return _preparing.putIfAbsent(
       key,
-      () => _prepare(
-        root,
-        reuse: true,
-      ).whenComplete(() => _preparing.remove(key)),
+      () => _prepare(root, reuse: true).whenComplete(() {
+        _preparing.remove(key);
+      }),
     );
   }
 

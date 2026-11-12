@@ -179,6 +179,7 @@ class SessionController extends ChangeNotifier {
         if (api is! AlchemistDiaryApi) {
           throw const FormatException('Сервер не подключён');
         }
+        final previous = api.beforePublication;
         api.beforePublication = (entry) => commitAnnouncementDependency(
           catalog,
           entry,
@@ -186,12 +187,16 @@ class SessionController extends ChangeNotifier {
           onStage: stage,
           progress: progress,
         );
-        await api.sendQueued(
-          name,
-          interrupted: stop,
-          onStage: stage,
-          progress: progress,
-        );
+        try {
+          await api.sendQueued(
+            name,
+            interrupted: stop,
+            onStage: stage,
+            progress: progress,
+          );
+        } finally {
+          api.beforePublication = previous;
+        }
         await diary!.load();
       }
     },

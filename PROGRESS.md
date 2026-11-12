@@ -354,3 +354,9 @@ Branch fix/task16b-auth-transfer-publication/worktree /dev/shm/sulfi16b fromc895
 - Official lightweight Google restore, singleflight refresh, identity-bound retry, classified 401/403/network errors and bounded HTTP connection reuse implemented.
 - Existing persisted upload receipts now owner/hash/revision bound, verified bytes distinct from catalog commit. Existing catalog and diary outbox reused by app-lifetime runner.
 - Catalog action separated from diary announcement; exact dependency gate, deduplicated drafts, local cover persistence/preview and multi-category selection implemented. Full regression and APK candidate build remain gates; no live deployment.
+
+### №16-Б — G3/G4 verified checkpoint / APK25 candidate source
+- Targeted 3-track Dart→production JS→client install/announcements regression passes: failed catalog leaves local diary draft; committed material reused by repeat announcement without audio retransmission.
+- Existing ZIP export regression preserved with clarified labels; actual Flutter cover/category screenshots captured using synthetic fixture only.
+- Pooled HTTP loopback benchmark records 20→1 TCP connections; not presented as real GAS or cellular latency. Server source candidate has distinct signed token errors and safe request correlation; no deploy.
+- Two APK25 candidates will use existing signing/package and existing GAS6; exact source checks required before private draft upload. APK24 and old artifacts untouched. Native update and physical owner checks remain separate gates.

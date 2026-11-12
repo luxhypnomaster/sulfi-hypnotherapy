@@ -339,6 +339,7 @@ void main() {
         media: authorMedia,
         connection: connection,
       );
+      final session = await diaryAuthor.authenticate('TEST_OWNER');
       await diaryAuthor.enqueuePublication(entry, published: true);
       expect(
         (await author.db.query(
@@ -348,7 +349,6 @@ void main() {
         )).length,
         1,
       );
-      final session = await diaryAuthor.authenticate('TEST_OWNER');
       expect(await diaryAuthor.flushPending(session), 1);
       final localRow = (await author.db.query(
         'diary_author',

@@ -345,6 +345,11 @@ class DiaryController extends ChangeNotifier {
     DiaryEntry.fromMap(
       entry.toMap(),
     ); // Validate before writing; failed drafts never poison stored JSON.
+    if (api?.supportsServerIdentity ?? false) {
+      entry = entry.copyWith(
+        extra: {...entry.extra, '_alchemistScope': api!.readerScope},
+      );
+    }
     await authorRepository!.save(entry);
     await load();
   }
@@ -368,7 +373,7 @@ class DiaryController extends ChangeNotifier {
       where: 'name=?',
       whereArgs: ['alchemist_restore_disabled'],
     );
-    if (optOut.firstOrNull?['value'] == '1') return;
+    if (optOut.firstOrNull?['value'] == '1' || api!.readerAuthenticated) return;
     final generation = _authGeneration;
     try {
       if (!await api!.restoreIdentity() || generation != _authGeneration) {

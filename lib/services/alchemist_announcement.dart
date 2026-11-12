@@ -77,6 +77,10 @@ Future<void> commitAnnouncementDependency(
       'Для анонса читателям явно выберите «Для всех читателей» в карточке материала.',
     );
   }
+  if ((draft['card']['shortAnnotation'] as String).trim().isEmpty) {
+    draft['card']['shortAnnotation'] = entry.message;
+    await catalog.save(draft);
+  }
   await catalog.publish(
     draft,
     interrupted: interrupted,

@@ -297,7 +297,7 @@ void main() {
       );
       await t.tap(find.byTooltip('Действия с аудио').first);
       await io(t);
-      await t.tap(find.text('Экспортировать трек'));
+      await t.tap(find.text('Экспортировать на устройство'));
       await io(t);
       for (var i = 0; i < 40 && saves < 1; i++) {
         await io(t);
@@ -306,7 +306,7 @@ void main() {
       await show(t, ModulesScreen(controller: c, player: player));
       await t.tap(find.byTooltip('Действия модуля').first);
       await io(t);
-      await t.tap(find.text('Экспортировать модуль'));
+      await t.tap(find.text('Экспортировать на устройство'));
       await io(t);
       for (var i = 0; i < 40 && saves < 2; i++) {
         await io(t);
@@ -315,7 +315,7 @@ void main() {
       await show(t, TemplatesScreen(controller: c, player: player));
       await t.tap(find.byTooltip('Действия шаблона').first);
       await io(t);
-      await t.tap(find.text('Экспортировать шаблон'));
+      await t.tap(find.text('Экспортировать на устройство'));
       await io(t);
       for (var i = 0; i < 40 && saves < 3; i++) {
         await io(t);

@@ -215,3 +215,6 @@ APK: `build/app/outputs/flutter-apk/app-debug.apk`. Универсальные d
 CI выпускает author/test `ru.sulfi.sulfi_hypnotherapy` и отдельный companion client/test `ru.sulfi.sulfi_hypnotherapy.clienttest`. Клиентская сборка: `flutter build apk --debug --dart-define=SULFI_EDITION=client`. Локальная сборка без существующего CI ключа не является совместимым обновлением авторского APK; не распространяйте случайную debug подпись.
 
 `DiaryContractProvider` требует явно переданного transport. Действующий Apps Script не менялся; новый контракт не подключён к live серверу. [SERVER_HANDOFF](docs/task15/SERVER_HANDOFF/) и [G3 blocker](docs/task15/MIGRATION_BLOCKER.md): SERVER_READY:NO, пока старые и новые байты одного logical audio ID не исполняются через все readers. Превью медиавитрины Home также ждёт утверждения K008. Контрактный e2e: `flutter test test/task15_client_test.dart`; физический двухтелефонный сценарий пока отдельный ручной runbook.
+
+### Продолжение №16-Б
+Кандидат `0.4.17+25` из `fix/task16b-auth-transfer-publication`: документация [docs/task16b/00_START_HERE.md](docs/task16b/00_START_HERE.md), фактические результаты [reports/task16b](reports/task16b). Физическая приёмка нового кандидата и разрешение на deployment отделены от CI. Текущий GAS6/APK24 не заменяются автоматически.
