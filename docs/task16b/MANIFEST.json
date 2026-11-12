@@ -1,0 +1,119 @@
+{
+  "task": "16-Б",
+  "date": "2026-11-12",
+  "type": "supplement to existing Task 16 and 16-A",
+  "status": "published specification not executed",
+  "acceptance_count": 80,
+  "files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 6679,
+      "sha256": "a22d9df2a2ae84e260aff43e5a25c5c35321405e1f2f960e5ad11f484facbc68"
+    },
+    {
+      "path": "01_BASELINE_AND_GUARDS.md",
+      "bytes": 3589,
+      "sha256": "c5a444a99f48ca762eb628fa9a8bf0e6e98a3673ede6d0aa3b7a0a921923054f"
+    },
+    {
+      "path": "02_AUTH_AND_SECURITY.md",
+      "bytes": 3510,
+      "sha256": "ca307af472a65f934db35545b1acc86fed4a48dc8f3a12b7eabbe9725fc0a71e"
+    },
+    {
+      "path": "03_TRANSFER_PIPELINE.md",
+      "bytes": 4315,
+      "sha256": "ea5ae53ccefa62cf9a1973c74e9ab1e62baa35f17abc0333cef67d3f03735458"
+    },
+    {
+      "path": "04_CATALOG_PUBLICATION_FLOW.md",
+      "bytes": 4823,
+      "sha256": "9c25cb7a5a17c8b04a6c55df952d0af2abe387bef08104c314ff4052485f7f44"
+    },
+    {
+      "path": "05_UI_QUEUE_AND_NAVIGATION.md",
+      "bytes": 4162,
+      "sha256": "23fd89cf0981ce3b4209f12c1bba39b31d6b635dab8376ef94f82feb5fd2f6d6"
+    },
+    {
+      "path": "07_DELIVERY_REPORTS.md",
+      "bytes": 3697,
+      "sha256": "c05bea052b22f80c69b50bccb387f37075b7be4879a7e611bec2a7fbe7a578a0"
+    },
+    {
+      "path": "08_ANDROID_PHONE_QA.md",
+      "bytes": 4625,
+      "sha256": "937f1a481503672f39e857038b3d815a1fa260175c6714d87a2e88fb9982eace"
+    },
+    {
+      "path": "09_EXISTING_SOURCES.md",
+      "bytes": 2615,
+      "sha256": "d235b4b3487cadf71efdb6c8a5e18d7838e0092396f3357b8c0816c75c23e4bb"
+    },
+    {
+      "path": "ACCEPTANCE_MATRIX.csv",
+      "bytes": 14635,
+      "sha256": "01e140c93fb5489a8528ef67417f1dc67d68f562cd1ae33eedbf3a19230f2a4d"
+    },
+    {
+      "path": "06_TEST_AND_ACCEPTANCE.md",
+      "bytes": 1906,
+      "sha256": "b99810d49ece144bef57b96e7000e3ab672cde8f4cdadd62350da8d3998e5252"
+    },
+    {
+      "path": "EVIDENCE_INDEX.md",
+      "bytes": 1086,
+      "sha256": "ffb6bf24422592214b0d810a38434ae908d082ae0ef981881c9d7638b4a5f8ab"
+    },
+    {
+      "path": "evidence/01_master_role.jpg",
+      "bytes": 251669,
+      "sha256": "3564d2fe6e30f0a1d2b96f0b3123d9182974ebbd809e70cef86d1d2f1a83eb4e"
+    },
+    {
+      "path": "evidence/02_client_role.jpg",
+      "bytes": 213576,
+      "sha256": "5519d04e01b9cb132f298fbba939f278cc1f660affebe564ece51b2282832e15"
+    },
+    {
+      "path": "evidence/03_module_menu.jpg",
+      "bytes": 164544,
+      "sha256": "ea3633ab24a8631c391895c70f3ccfa76b5cdb43a6aa9346fd5ec3e8ab56b27b"
+    },
+    {
+      "path": "evidence/04_publication_card.jpg",
+      "bytes": 211227,
+      "sha256": "25ff30d84ec4b338380d4fea501ae594680a6f118a719099582214b2d440d3f5"
+    },
+    {
+      "path": "evidence/05_catalog_drafts.jpg",
+      "bytes": 186650,
+      "sha256": "bdd7cf84b744504f900960ddb296d0ebc7cf562715e0b666025853a32588ea0e"
+    },
+    {
+      "path": "evidence/06_cloud_catalog.jpg",
+      "bytes": 166690,
+      "sha256": "525a0ca1c44fb5927d14345b9302395ff8c113dab862932cc65fa99238e2034d"
+    },
+    {
+      "path": "evidence/07_sync_queue.jpg",
+      "bytes": 254429,
+      "sha256": "7ff0444a44c7dfbfbd05164325a802dc45ea48d492df09694a19e22dc229e4f2"
+    },
+    {
+      "path": "evidence/08_error_dns.jpg",
+      "bytes": 203735,
+      "sha256": "07dcf6802c708dd6963aa83b597f49ff7b304c93e56687018f4094bda552dd0c"
+    },
+    {
+      "path": "evidence/09_error_abort.jpg",
+      "bytes": 224722,
+      "sha256": "578d5fa4a4568851b90e100016669c52b166c7d9c88a7f7fecbcb57ab1fcd24b"
+    },
+    {
+      "path": "evidence/10_client_auth_failure.jpg",
+      "bytes": 216350,
+      "sha256": "06d9905e0c144940f25bf83c8b7bf4ac0473732d67def14e635a63e4ed173f78"
+    }
+  ]
+}

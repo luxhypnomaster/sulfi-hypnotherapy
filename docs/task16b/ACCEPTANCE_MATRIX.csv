@@ -1,0 +1,81 @@
+ID,Priority,Stage,Criterion,RequiredEvidence,Status
+AUD-01,P0,G0,"Сохранён фактический source HEAD, package/version, deployed Script version и отчет о несовпадениях с документами","BASELINE_AUDIT_16B.md",NOT_RUN
+AUD-02,P0,G0,"Перечислены реализованные entry points auth/queue/catalog/cover/ContentLink с точными source paths и существующими тестами","BASELINE_AUDIT_16B.md",NOT_RUN
+AUD-03,P0,G0,"Создан безопасный rollback plan для клиента и backend без удаления личных данных","BASELINE_AUDIT_16B.md",NOT_RUN
+AUD-04,P0,G0,"Подтверждено отсутствие нового Script, Google Drive дерева, разрушительных миграций и несанкционированных ACL","BASELINE_AUDIT_16B.md",NOT_RUN
+AUD-05,P0,G0,"Получены сетевые трейс-метрики per phase с redacted request correlation, без токенов и email","BASELINE_AUDIT_16B.md",NOT_RUN
+AUD-06,P0,G0,"Найдено воспроизводимое минимальное условие хотя бы одного из виденных телефонных сбоев либо BLOCKED с доказательствами и трассой","BASELINE_AUDIT_16B.md",NOT_RUN
+AUTH-01,P0,G1,"Первоначальный Google Sign-In MASTER и CLIENT через оба UI entrypoints использует согласованный session provider","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-02,P0,G1,"Повторный launch/navigation не требует повторного интерактивного входа при валидной identity","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-03,P0,G1,"Токен при истечении обновляется в допустимом SDK flow или предлагается корректная интерактивная реавторизация","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-04,P0,G1,"DNS/timeout/5xx не вызывают локального logout и не выводятся как ошибка учетной записи","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-05,P0,G1,"Server 401 и ACL 403 показывают разные сообщения и диагностику","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-06,P0,G1,"Клиент не может публиковать при прямом серверном запросе под подтверждённой ролью CLIENT","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-07,P0,G1,"MASTER может безопасно выполнить контрольное publish/close только по разрешённому сценарию","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-08,P0,G1,"На смене аккаунта pending queue и cache другого verified sub не используются","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-09,P0,G1,"Ни tokens/sub/email пользователя/secret не попадают в логи/скриншоты/SQLite/URL","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-10,P0,G1,"Offline mode сохраняет локальные черновики/библиотеку и корректно reauth после восстановления","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-11,P0,G1,"Кнопка человечка и экран щита показывают один и тот же подтверждённый Google state","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+AUTH-12,P0,G1,"Тесты invalid aud/expired/unsigned/role spoofing остаются отрицательными","AUTH_TESTS_16B.md+security redacted logs",NOT_RUN
+TRF-01,P0,G2,"Части upload имеют устойчивые session/task IDs и owner identity binding","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-02,P0,G2,"Локально persisted queue восстанавливается после принудительного restart","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-03,P0,G2,"DNS failed host lookup фиксируется как retryable network без сброса identity","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-04,P0,G2,"Connection abort фиксируется с checkpoint и ограниченными повторами","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-05,P0,G2,"Переданные 100% байтов не показываются как каталогово опубликованный материал до server receipt","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-06,P0,G2,"Уже подтверждённые блоки по возможности не отправляются повторно при resume","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-07,P0,G2,"Повторный POST/commit защищен idempotency key и не рождает дубликаты","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-08,P0,G2,"Изменившаяся версия/хеш при повторе не скрыто переиспользует старый идентификатор blob","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-09,P0,G2,"Полнота 3 зависимостей + SHA/readback обязательна до каталогового COMMITTED","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-10,P0,G2,"Uncommitted bytes/metadata не видны клиенту","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-11,P0,G2,"Отмена/пауза не удаляют локальный оригинал","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-12,P0,G2,"При quota/timeout/permission/server failure показывается различимая причина","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-13,P0,G2,"Измерено время DNS/auth/chunks/server verify/commit и p50/p95 на тестовых файлах","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-14,P0,G2,"Проведено сравнение Wi-Fi/mobile и network switch в середине передачи","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-15,P0,G2,"Медленный контентный upload не блокирует UI-навигацию между экранами","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-16,P0,G2,"Backend проверен на запрещённый repeated oversized Apps Script operations, рекомендации подтверждены замерами","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-17,P0,G2,"Не создан прямой доступ Android-клиента к приватному Drive","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+TRF-18,P0,G2,"Existing G3 fail-closed multirevision guard не ослаблен","TRANSFER_TRACE_16B.json+tests",NOT_RUN
+CAT-01,P0,G3,"В меню модуля отображаются четыре независимых действия, включая «Добавить в каталог»","CATALOG_E2E_16B.md",NOT_RUN
+CAT-02,P0,G3,"Локальный экспорт на устройство сохранил прежнюю ZIP-функцию","CATALOG_E2E_16B.md",NOT_RUN
+CAT-03,P0,G3,"«Добавить в каталог» создаёт/обновляет catalog item без дневниковой записи","CATALOG_E2E_16B.md",NOT_RUN
+CAT-04,P0,G3,"После upload проверяется exact contentId/revision/dependency manifest/readback","CATALOG_E2E_16B.md",NOT_RUN
+CAT-05,P0,G3,"«Подготовить к публикации» может ссылаться на уже catalog-committed module без повторной отправки 3 файлов","CATALOG_E2E_16B.md",NOT_RUN
+CAT-06,P0,G3,"Объединённый путь сначала commits catalog, потом публикует дневниковый ContentLink","CATALOG_E2E_16B.md",NOT_RUN
+CAT-07,P0,G3,"При сбое catalog upload дневниковый черновик сохраняется, broken published link не создаётся","CATALOG_E2E_16B.md",NOT_RUN
+CAT-08,P0,G3,"При ошибке дневника готовый catalog object не удаляется и не передаётся заново","CATALOG_E2E_16B.md",NOT_RUN
+CAT-09,P0,G3,"Draft и failed каталоговых карточек восстанавливаются с заполненными полями","CATALOG_E2E_16B.md",NOT_RUN
+CAT-10,P0,G3,"Каталоговый draft и дневниковый draft остаются разными сущностями","CATALOG_E2E_16B.md",NOT_RUN
+CAT-11,P0,G3,"Повторные нажатия Publish/Prepare не создают несколько каталоговых версий без изменения","CATALOG_E2E_16B.md",NOT_RUN
+CAT-12,P0,G3,"Private/draft/withdrawn materials не доступны клиенту через ContentLink bypass","CATALOG_E2E_16B.md",NOT_RUN
+CAT-13,P0,G3,"Обновление версии не меняет молча уже опубликованные exact ContentLink","CATALOG_E2E_16B.md",NOT_RUN
+CAT-14,P0,G3,"CLIENT получает выбранный опубликованный модуль + 3 точных трека без дублей","CATALOG_E2E_16B.md",NOT_RUN
+CAT-15,P0,G3,"Повторная client install не повторяет скачивание неизменённых blobs","CATALOG_E2E_16B.md",NOT_RUN
+CAT-16,P0,G3,"Офлайн-исполнение всех 3 треков подтверждено на Android владельца","CATALOG_E2E_16B.md",NOT_RUN
+MED-01,P0,G3,"Выбранная обложка сразу показывается локально до обращения к серверу","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-02,P0,G3,"Выбранная обложка сохраняется после выхода/рестарта черновика","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-03,P0,G3,"Обложка upload SHA/type/size и publish state проверяется отдельно от metadata/audio","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-04,P0,G3,"При обрыве обложки local preview не исчезает","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-05,P0,G3,"Legacy module без обложки остаётся рабочим","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-06,P0,G3,"Категории в карточке выбираются из выпадающего мультисписка","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-07,P0,G3,"Существующие категории корректно импортируются/отображаются/не теряются","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-08,P0,G3,"Добавление новой категории реализовано без изменения чужих пользовательских значений","COVER_METADATA_16B.md+screens",NOT_RUN
+MED-09,P0,G3,"Поля аннотация/описание снабжены понятными подсказками и не перезаписывают текст","COVER_METADATA_16B.md+screens",NOT_RUN
+UX-01,P1,G4,"Облачный каталог виден как подписанный раздел, а не только как неочевидный значок облака","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-02,P1,G4,"Переключение Библиотека/Каталог не требует создания нового каталога или второй очереди","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-03,P1,G4,"Существующая очередь видна через компактный глобальный индикатор с задачами/этапом","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-04,P1,G4,"Детальная очередь показывает bytes, phase, retries и код причины ошибки","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-05,P1,G4,"UI работает во время передачи модуля, картинки и дневника","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-06,P1,G4,"Pause/resume/cancel управляют реальной задачей и сохраняют данные","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-07,P1,G4,"Фоновое поведение после сворачивания соответствует Android policy и честно сообщено","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-08,P1,G4,"Существующий preview дневниковой записи по tap сохранён, дублирующая кнопка не добавлена","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+UX-09,P1,G4,"Утверждённая палитра/планшет/плеер/cobra не изменены","UI_SCREENSHOTS_16B.md+device report",NOT_RUN
+REL-01,P0,G5-G6,"Существующие Flutter/Node/schema/security regression suites PASS или конкретный честный blocker","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-02,P0,G5-G6,"Две APK build/sign/package/version hash сравнимы с APK24 без риска потери данных","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-03,P0,G5-G6,"Android update over existing MASTER сохраняет personal audio/history/templates/diary drafts","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-04,P0,G5-G6,"CLIENT отдельная APK и sandbox не получают привилегии master UI","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-05,P0,G5-G6,"Никакого несанкционированного GAS deployment или merge в main","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-06,P0,G5-G6,"У каждого сбоя есть root cause confirmed/candidate и фактическое доказательство","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-07,P0,G5-G6,"Итоговые исходные отчёты размещены в текущей папке №16 без удалений","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-08,P0,G5-G6,"Старые 147 criteria №16 не переобъявлены PASS без доказательств","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-09,P0,G5-G6,"Двухтелефонная приёмка owner marked PASS/PARTIAL/BLOCKED отдельно от CI","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
+REL-10,P0,G5-G6,"Нет требований реализации новых «Программ», «Курсов», onboarding или монетизации в текущем ТЗ","RESULT_16B.md+APK_INFO_16B.md",NOT_RUN
