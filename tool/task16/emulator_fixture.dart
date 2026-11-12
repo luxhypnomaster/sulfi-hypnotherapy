@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:sulfi_hypnotherapy/models/audio_asset.dart';
+import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
 import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/models/session_plan.dart';
 
@@ -19,6 +20,8 @@ Future<void> main(List<String> args) async {
     final template = SessionTemplate.fromMap(
       Map<String, dynamic>.from(m['template']),
     );
+    final history = SessionRun.fromMap(Map<String, dynamic>.from(m['history']));
+    final diary = DiaryEntry.fromMap(Map<String, dynamic>.from(m['diary']));
     final bytes = await File('test/fixtures/android_aac_isom.m4a')
         .readAsBytes();
     if (audio.contentHash != sha256.convert(bytes).toString() ||
@@ -26,6 +29,8 @@ Future<void> main(List<String> args) async {
         canonicalContent(audio.toMap()) != canonicalContent(m['audio']) ||
         canonicalContent(draft.toMap()) != canonicalContent(m['draft']) ||
         canonicalContent(template.toMap()) != canonicalContent(m['template']) ||
+        canonicalContent(history.toMap()) != canonicalContent(m['history']) ||
+        canonicalContent(diary.toMap()) != canonicalContent(m['diary']) ||
         !draft.plan.hasExitAudio ||
         template.plan.steps.single.audioAssetId != audio.id) {
       throw StateError('Invalid synthetic emulator precondition');
@@ -62,6 +67,28 @@ Future<void> main(List<String> args) async {
     exitStepId: 'emu-step',
   );
   final m = {
+    'history': SessionRun(
+      id: 'emu-history',
+      displayNumber: 1,
+      name: 'EMU completed history',
+      snapshot: CurrentSessionDraft(
+        plan: plan,
+        updatedAt: now,
+        notes: 'EMULATOR HISTORY ONLY',
+      ),
+      startedAt: now,
+      status: RunStatus.completed,
+      endedAt: now.add(const Duration(seconds: 12)),
+      elapsedMs: 12000,
+    ).toMap(),
+    'diary': DiaryEntry(
+      id: 'emu-diary-draft',
+      title: 'EMU private diary',
+      message: 'Synthetic draft',
+      body: 'No Google account or private user data',
+      createdAt: now,
+      updatedAt: now,
+    ).toMap(),
     'audio': audio.toMap(),
     'draft': CurrentSessionDraft(
       plan: plan,

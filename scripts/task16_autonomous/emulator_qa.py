@@ -70,7 +70,7 @@ def inspect(pkg=PKG):
  t,c=dbcopy(pkg)
  try:
   assert c.execute('pragma integrity_check').fetchone()[0]=='ok'
-  return {'audio':c.execute('select id,contentHash,filePath from audio_assets order by id').fetchall(),'templates':c.execute('select id from session_templates order by id').fetchall(),'draft':c.execute('select payload from current_draft').fetchall(),'schema':c.execute('pragma user_version').fetchone()[0]}
+  return {'audio':c.execute('select id,contentHash,filePath from audio_assets order by id').fetchall(),'templates':c.execute('select id from session_templates order by id').fetchall(),'draft':c.execute('select payload from current_draft').fetchall(),'schema':c.execute('pragma user_version').fetchone()[0], 'history':c.execute("select id,payload from session_runs where id='emu-history'").fetchall(), 'diary':c.execute("select id,payload from diary_author where id='emu-diary-draft'").fetchall()}
  finally:c.close();t.cleanup()
 def diagnostics(pkg):
  pid=adb('shell','pidof',pkg,check=False).strip()
@@ -92,7 +92,7 @@ def return_home():
  require_home()
 def install24():
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();require_home();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
- screenshot('master23-start');return {'versionCode':23,'launched':bool(adb('shell','pidof',PKG).strip())}
+ screenshot('master24-start');return {'versionCode':24,'launched':bool(adb('shell','pidof',PKG).strip())}
 def seed():
  adb('shell','am','force-stop',PKG);t,c=dbcopy();now='2026-11-11T00:00:00.000Z'
  data=pathlib.Path('test/fixtures/android_aac_isom.m4a').read_bytes();digest=hashlib.sha256(data).hexdigest()
@@ -102,6 +102,8 @@ def seed():
  c.execute('insert or replace into audio_assets ('+','.join(row)+') values ('+','.join('?' for _ in row)+')',list(row.values()))
  c.execute('insert or replace into current_draft values (1,?)',(json.dumps(fixture['draft']),))
  c.execute('insert or replace into session_templates values (?,?)',('emu-template',json.dumps(fixture['template'])))
+ history=fixture['history'];c.execute('insert or replace into session_runs values (?,?,?,?)',(history['id'],history['displayNumber'],history['status'],json.dumps(history)))
+ diary=fixture['diary'];c.execute('insert or replace into diary_author values (?,?,?)',(diary['id'],diary['updatedAt'],json.dumps(diary)))
  c.commit();c.execute('pragma wal_checkpoint(truncate)');c.close()
  adb('shell',f'run-as {PKG} sh -c '+shlex.quote('for suffix in -wal -shm; do if [ -f files/library.sqlite$suffix ]; then mv files/library.sqlite$suffix files/qa-preseed$suffix; fi; done'));
  adb('push',str(pathlib.Path(t.name)/'library.sqlite'),'/data/local/tmp/emu-library.sqlite');adb('shell',f'cat /data/local/tmp/emu-library.sqlite | run-as {PKG} sh -c "cat > files/library.sqlite"')
@@ -110,9 +112,9 @@ def seed():
  launch();require_home();adb('shell','am','force-stop',PKG)
  global original;original=inspect();assert any(a[0]=='emulator-fixture' for a in original['audio']),'SEEDED_AUDIO_MISSING';return {'rowsSeeded':1,'sha256':digest,'schema':original['schema'],'seedMethod':'controlled SQLite precondition, not UI import'}
 def upgrade():
- assert 'Success' in adb('install','-r',str(APK/'master25.apk'));launch();require_home();adb('shell','am','force-stop',PKG);after=inspect();assert after==original,'DATA_CHANGED_ON_UPDATE'
+ assert 'Success' in adb('install','-r',str(APK/'master25.apk'));launch();require_home();adb('shell','am','force-stop',PKG);after=inspect();assert after==original,'DATA_CHANGED_ON_UPDATE';assert len(after['history'])==1 and len(after['diary'])==1,'PERSONAL_FIXTURE_NOT_PRESERVED'
  assert hashlib.sha256(adb('exec-out','run-as',PKG,'cat','files/audio/asset_emulator_fixture.m4a',binary=True)).hexdigest()==original['audio'][0][1]
- launch();screenshot('master25-updated');return {'versionCode':25,'dataPreserved':True,'sqliteIntegrity':'ok'}
+ launch();screenshot('master25-updated');return {'versionCode':25,'dataPreserved':True,'audioHistoryTemplateDiary':'ALL_PRESERVED','sqliteIntegrity':'ok'}
 def native_playing(audio):
  uid=adb('shell','cmd','package','list','packages','-U',PKG)
  match=re.search(r'uid:(\d+)',uid);assert match,'APP_UID_NOT_FOUND'
