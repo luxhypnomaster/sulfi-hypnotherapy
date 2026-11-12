@@ -1,4 +1,4 @@
-package org.alchemist.p0ime;
+package org.alchemist.p0probe;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

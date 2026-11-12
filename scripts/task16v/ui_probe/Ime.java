@@ -1,4 +1,4 @@
-package org.alchemist.p0ime;
+package org.alchemist.p0probe;
 
 import android.inputmethodservice.InputMethodService;
 import android.view.View;

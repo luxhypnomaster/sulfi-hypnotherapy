@@ -50,19 +50,19 @@ def text(value,index=0):
  if IME:
   result=''
   for _ in range(8):
-   result=adb('shell','am','broadcast','-n','org.alchemist.p0ime/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+   result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
    if 'UI_TEXT_COMMITTED' in result:break
    time.sleep(.5)
-   # The IME has a separate package, so probe termination cannot kill it.
-   # Keep the focused UI field; wait for its real Android InputConnection.
+   # Wait without another instrumentation launch while the IME binds.
   assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-200:]
   method='native_IME_commitText'
  else:
   assert value.isascii(),'UNICODE_INPUT_NOT_AVAILABLE'
-  adb('shell','input','keycombination','KEYCODE_CTRL_LEFT','KEYCODE_A')
-  adb('shell','input','text',value.replace(' ','%s'));method='native_keyboard_key_events'
+  adb('shell','input','keyevent','KEYCODE_MOVE_END',*(['KEYCODE_DEL']*160))
+  adb('shell','input','text',value.replace(' ','%s'));method='native_keyboard_clear_and_key_events'
  time.sleep(.4);adb('shell','input','keyevent','4');time.sleep(.4)
- assert any(value in label(n) for n in tree()),'UI_INPUT_READBACK_MISMATCH'
+ actual=[n.get('text') for n in tree() if n.get('class')=='android.widget.EditText']
+ assert len(actual)>index and actual[index]==value,'UI_INPUT_EXACT_READBACK_MISMATCH:'+repr(actual)
  ACTIONS.append({'action':method+'_with_UI_readback','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
@@ -119,17 +119,16 @@ def install():
  global IME,ELMAN_TITLE
  assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','DISPOSABLE_EMULATOR_REQUIRED'
  assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
- assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/ime.apk'))
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'))
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
  adb('shell','svc','wifi','disable',check=False);adb('shell','svc','data','disable',check=False)
  for _ in range(10):
   listing=adb('shell','ime','list','-s',check=False)
-  if 'org.alchemist.p0ime/' in listing:break
+  if 'org.alchemist.p0probe/' in listing:break
   time.sleep(1)
  try:
-  ime_id=next(x.strip() for x in listing.splitlines() if x.strip().startswith('org.alchemist.p0ime/'))
+  ime_id=next(x.strip() for x in listing.splitlines() if x.strip().startswith('org.alchemist.p0probe/'))
   adb('shell','ime','enable',ime_id);adb('shell','ime','set',ime_id);IME=True
  except Exception as error:
   IME=False;ELMAN_TITLE='Elman variant 2'

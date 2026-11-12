@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.alchemist.p0probe">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="35"/>
-  <application android:label="P0 disposable UI probe" android:debuggable="true" android:allowBackup="false" />
+  <application android:label="P0 disposable UI probe" android:debuggable="true" android:allowBackup="false">
+    <service android:name=".Ime" android:process=":ime" android:permission="android.permission.BIND_INPUT_METHOD" android:exported="true">
+      <intent-filter><action android:name="android.view.InputMethod" /></intent-filter>
+      <meta-data android:name="android.view.im" android:resource="@xml/input_method" />
+    </service>
+    <receiver android:name=".TypeTextReceiver" android:process=":ime" android:exported="true" />
+  </application>
   <instrumentation android:name=".Probe" android:targetPackage="org.alchemist.p0probe" android:functionalTest="true" />
 </manifest>
