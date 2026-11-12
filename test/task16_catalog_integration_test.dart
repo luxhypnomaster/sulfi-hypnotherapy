@@ -99,7 +99,13 @@ void main() {
       losePublishReply = true;
       await expectLater(
         service.publish(draft),
-        throwsA(isA<SocketException>()),
+        throwsA(
+          isA<AlchemistApiException>().having(
+            (e) => e.code,
+            'code',
+            'NETWORK_DNS_OR_SOCKET',
+          ),
+        ),
       );
       final recovered = (await service.drafts()).singleWhere(
         (r) => r['catalogItemId'] == draft['catalogItemId'],

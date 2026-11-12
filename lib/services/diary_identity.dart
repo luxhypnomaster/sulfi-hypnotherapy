@@ -14,7 +14,12 @@ abstract interface class DiaryIdentity {
   Future<void> signOut();
 }
 
-class GoogleDiaryIdentity implements DiaryIdentity {
+/// Optional official SDK restoration, not an invented refresh-token endpoint.
+abstract interface class RestorableDiaryIdentity {
+  Future<DiaryIdentityResult?> restore();
+}
+
+class GoogleDiaryIdentity implements DiaryIdentity, RestorableDiaryIdentity {
   GoogleDiaryIdentity({required this.serverClientId});
   final String serverClientId;
   Future<void>? _initialization;
@@ -35,9 +40,7 @@ class GoogleDiaryIdentity implements DiaryIdentity {
   Future<DiaryIdentityResult> signIn() async {
     try {
       await _initialize();
-      // Authentication tokens are snapshots, not refreshable access tokens.
-      // Reauthenticate only on explicit author actions, never when reading.
-      await GoogleSignIn.instance.signOut();
+      // Explicit account choice. Do not sign out another in-flight SDK session.
       final account = await GoogleSignIn.instance.authenticate();
       final token = account.authentication.idToken;
       if (token == null || token.isEmpty) {
@@ -53,6 +56,29 @@ class GoogleDiaryIdentity implements DiaryIdentity {
       // SDK exception details can contain sensitive provider diagnostics.
       throw DiaryApiException(
         'Не удалось войти через Google. Код SDK: ${e.code.name}. Проверьте сеть и настройку этой сборки.',
+      );
+    }
+  }
+
+  @override
+  Future<DiaryIdentityResult?> restore() async {
+    try {
+      await _initialize();
+      final pending = GoogleSignIn.instance.attemptLightweightAuthentication(
+        reportAllExceptions: true,
+      );
+      final account = pending == null ? null : await pending;
+      final token = account?.authentication.idToken;
+      if (account == null || token == null || token.isEmpty) return null;
+      return DiaryIdentityResult(email: account.email, idToken: token);
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled ||
+          e.code == GoogleSignInExceptionCode.interrupted ||
+          e.code == GoogleSignInExceptionCode.uiUnavailable) {
+        return null;
+      }
+      throw DiaryApiException(
+        'Не удалось восстановить вход Google. Код SDK: ${e.code.name}.',
       );
     }
   }

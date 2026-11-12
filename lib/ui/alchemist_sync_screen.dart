@@ -1,11 +1,8 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../models/session_plan.dart';
 import '../services/session_controller.dart';
-import 'alchemist_catalog_screen.dart';
 import 'design.dart';
 
 class AlchemistSyncScreen extends StatefulWidget {
@@ -16,115 +13,10 @@ class AlchemistSyncScreen extends StatefulWidget {
 }
 
 class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
-  final rows = <Map<String, dynamic>>[];
-  String? error;
-  bool busy = false;
-  Database get db => widget.controller.capsules!.database;
   @override
   void initState() {
     super.initState();
-    load();
-  }
-
-  Future<void> load() async {
-    try {
-      final values = await db.query(
-        'app_settings',
-        where: 'name LIKE ?',
-        whereArgs: ['alchemist_%'],
-      );
-      final parsed = <Map<String, dynamic>>[];
-      for (final row in values) {
-        final name = row['name'] as String;
-        if (![
-          'alchemist_upload:',
-          'alchemist_card:',
-          'alchemist_diary_queue:',
-          'alchemist_read_sync_queue:',
-        ].any(name.startsWith)) {
-          continue;
-        }
-        try {
-          parsed.add({
-            'name': name,
-            'value': Map<String, dynamic>.from(
-              jsonDecode(row['value'] as String),
-            ),
-          });
-        } catch (_) {}
-      }
-      if (mounted) {
-        setState(() {
-          rows.clear();
-          rows.addAll(parsed);
-        });
-      }
-    } catch (e) {
-      if (mounted) setState(() => error = e.toString());
-    }
-  }
-
-  Future<void> flush() async {
-    setState(() => busy = true);
-    try {
-      await widget.controller.diary?.flushCloudQueue();
-      await load();
-    } catch (e) {
-      if (mounted) setState(() => error = e.toString());
-    } finally {
-      if (mounted) setState(() => busy = false);
-    }
-  }
-
-  Future<void> cancel(Map<String, dynamic> row) async {
-    final name = row['name'] as String,
-        value = row['value'] as Map<String, dynamic>;
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Отменить ожидание отправки?'),
-        content: const Text(
-          'Черновик и исходные файлы сохранятся. Уже подтверждённые публикации проверяются и снимаются в редакторе.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Назад'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Отменить ожидание'),
-          ),
-        ],
-      ),
-    );
-    if (ok != true || !mounted) return;
-    setState(() => busy = true);
-    try {
-      if (name.startsWith('alchemist_upload:')) {
-        if (value['sessionId'] != null) {
-          await widget.controller.alchemistApi().call('media.abortUpload', {
-            'sessionId': value['sessionId'],
-          });
-        }
-        value['state'] = 'cancelled';
-        value['requestId'] = newId();
-        value.remove('sessionId');
-        await db.update(
-          'app_settings',
-          {'value': jsonEncode(value)},
-          where: 'name=?',
-          whereArgs: [name],
-        );
-      } else {
-        await db.delete('app_settings', where: 'name=?', whereArgs: [name]);
-      }
-      await load();
-    } catch (e) {
-      if (mounted) setState(() => error = e.toString());
-    } finally {
-      if (mounted) setState(() => busy = false);
-    }
+    unawaited(widget.controller.cloudQueue.refresh());
   }
 
   @override
@@ -133,67 +25,89 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
           body: Center(child: Text('Авторские возможности недоступны')),
         )
       : LeatherScaffold(
-          title: 'Очередь синхронизации',
-          child: RefreshIndicator(
-            onRefresh: load,
-            child: ListView(
-              children: [
-                TextButton.icon(
-                  onPressed: busy ? null : flush,
-                  icon: const Icon(Icons.sync),
-                  label: const Text('Повторить отправку дневника'),
-                ),
-                if (busy) const LinearProgressIndicator(),
-                if (error != null)
-                  Text(error!, style: const TextStyle(color: neonPink)),
-                for (final row in rows)
-                  Builder(
-                    builder: (context) {
-                      final v = row['value'], name = row['name'] as String;
-                      final card = name.startsWith('alchemist_card:'),
-                          upload = name.startsWith('alchemist_upload:');
-                      final status = v['status'] ?? v['state'] ?? 'pending';
-                      return ListTile(
-                        title: Text(
-                          v['card']?['title'] ??
-                              v['entry']?['title'] ??
-                              (upload ? 'Передача файла' : 'Состояние чтения'),
-                        ),
-                        subtitle: Text(
-                          '${const {'draft': 'Черновик', 'published': 'Опубликовано', 'failed': 'Ошибка — можно повторить', 'paused': 'Пауза', 'pending': 'Ожидает отправки', 'verified': 'Файл проверен сервером', 'localConflict': 'Новые правки — подтвердите публикацию в редакторе', 'cancelled': 'Ожидание отменено'}[status] ?? status}'
-                          '${upload ? '\n${v['offset'] ?? 0} / ${v['byteLength'] ?? 0} байт' : ''}${v['error'] == null ? '' : '\n${v['error']}'}',
-                        ),
-                        onTap: card
-                            ? () async {
-                                await Navigator.push<void>(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => CatalogCardEditor(
-                                      service: widget.controller.catalog,
-                                      draft: Map<String, dynamic>.from(v),
-                                    ),
+          title: 'Очередь передач',
+          child: ListenableBuilder(
+            listenable: widget.controller.cloudQueue,
+            builder: (context, _) {
+              final queue = widget.controller.cloudQueue;
+              return RefreshIndicator(
+                onRefresh: queue.refresh,
+                child: ListView(
+                  children: [
+                    const Text(
+                      'При сворачивании передача ставится на паузу после текущего запроса. Для продолжения откройте приложение и нажмите «Продолжить». Исходники сохраняются.',
+                    ),
+                    for (final row in queue.rows)
+                      Builder(
+                        builder: (context) {
+                          final work = row['_work'] as Map,
+                              name = row['_name'] as String,
+                              phase = work['phase'];
+                          return Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    row['card']?['title'] ??
+                                        row['entry']?['title'] ??
+                                        'Передача',
                                   ),
-                                );
-                                await load();
-                              }
-                            : null,
-                        trailing:
-                            busy ||
-                                card ||
-                                ['verified', 'cancelled'].contains(status)
-                            ? null
-                            : IconButton(
-                                tooltip: 'Отменить ожидание',
-                                onPressed: () => cancel(row),
-                                icon: const Icon(Icons.close),
+                                  Text(
+                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${work['stage'] ?? ''}',
+                                  ),
+                                  Text(
+                                    '${work['bytes'] ?? 0} / ${work['totalBytes'] ?? 0} байт · попыток ${work['attempts'] ?? 0}',
+                                  ),
+                                  if (work['code'] != null)
+                                    Text('Код: ${work['code']}'),
+                                  if (work['message'] != null)
+                                    Text(work['message']),
+                                  if (!const [
+                                    'complete',
+                                    'cancelled',
+                                  ].contains(phase))
+                                    Wrap(
+                                      spacing: 8,
+                                      children: [
+                                        if (const [
+                                          'paused',
+                                          'failed',
+                                        ].contains(phase))
+                                          TextButton(
+                                            onPressed: () =>
+                                                queue.enqueue(name),
+                                            child: const Text('Продолжить'),
+                                          )
+                                        else
+                                          TextButton(
+                                            onPressed: () => queue.pause(name),
+                                            child: const Text('Пауза'),
+                                          ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              queue.pause(name, cancel: true),
+                                          child: const Text(
+                                            'Отменить отправку',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
                               ),
-                      );
-                    },
-                  ),
-                if (rows.isEmpty)
-                  const ListTile(title: Text('Нет сохранённых операций')),
-              ],
-            ),
+                            ),
+                          );
+                        },
+                      ),
+                    if (queue.rows.isEmpty)
+                      const Text(
+                        'Нет задач этого аккаунта. Старые черновики доступны в разделе «Мои публикации».',
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
         );
 }

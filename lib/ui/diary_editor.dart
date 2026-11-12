@@ -148,6 +148,21 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
     if (!mounted) return;
     setState(() => busy = true);
     try {
+      final controller = SessionScope.maybeOf(context)?.controller;
+      if (widget.diary.api?.supportsServerIdentity == true &&
+          controller?.capsules != null) {
+        await widget.diary.api!.enqueuePublication(value, published: publish);
+        await controller!.cloudQueue.enqueue(
+          'alchemist_diary_queue:${value.id}',
+        );
+        if (mounted) {
+          setState(
+            () =>
+                saved = 'В очереди приложения. Результат — на экране передач.',
+          );
+        }
+        return;
+      }
       if (publish == null) {
         await widget.diary.saveToCloud(value);
       } else {

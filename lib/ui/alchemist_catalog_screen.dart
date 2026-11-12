@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 
-import '../services/alchemist_media_transfer.dart';
+import 'dart:async';
+
+import '../services/alchemist_announcement.dart';
+import '../services/alchemist_errors.dart';
+import 'diary_editor.dart';
 import '../models/diary_entry.dart';
 
 import 'package:flutter/material.dart';
@@ -18,19 +22,25 @@ Future<void> preparePublication(
   BuildContext context,
   SessionController c,
   ContentType type,
-  String id,
-) async {
+  String id, {
+  bool catalogOnly = false,
+}) async {
   await showActionError(context, () async {
     final index = await LocalCatalogSource.currentIndex(c.capsules!);
     final root = index.singleWhere(
       (r) => r.key.content.type == type && r.key.content.id == id,
     );
     final draft = await c.catalog.prepare(root);
+    final announcement = catalogOnly
+        ? null
+        : await prepareCatalogAnnouncement(c.catalog, draft);
     if (context.mounted) {
       await Navigator.push<void>(
         context,
         MaterialPageRoute(
-          builder: (_) => CatalogCardEditor(service: c.catalog, draft: draft),
+          builder: (_) => catalogOnly
+              ? CatalogCardEditor(service: c.catalog, draft: draft)
+              : DiaryEditor(diary: c.diary!, entry: announcement!),
         ),
       );
     }
@@ -57,6 +67,33 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   String? error;
   String progress = '';
   bool paused = false;
+  Timer? autosave;
+  bool get transferring => widget.service.controller.cloudQueue.rows.any(
+    (r) =>
+        r['catalogItemId'] == draft['catalogItemId'] &&
+        !const [
+          'complete',
+          'failed',
+          'paused',
+          'cancelled',
+        ].contains(r['_work']?['phase']),
+  );
+  void queueChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void scheduleSave() {
+    autosave?.cancel();
+    autosave = Timer(const Duration(milliseconds: 500), () {
+      if (mounted &&
+          !busy &&
+          !transferring &&
+          widget.service.controller.policy.isAuthor) {
+        unawaited(save());
+      }
+    });
+  }
+
   void _identityChanged() {
     if (!widget.service.controller.policy.isAuthor) paused = true;
     if (mounted) setState(() {});
@@ -66,6 +103,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
   void initState() {
     super.initState();
     widget.service.controller.policy.addListener(_identityChanged);
+    widget.service.controller.cloudQueue.addListener(queueChanged);
     for (final k in [
       'title',
       'shortAnnotation',
@@ -82,6 +120,9 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
     fields['categoryIds'] = TextEditingController(
       text: (card['categoryIds'] as List? ?? []).join(', '),
     );
+    for (final field in fields.values) {
+      field.addListener(scheduleSave);
+    }
   }
 
   Future<void> save({bool publish = false}) async {
@@ -103,22 +144,14 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
       draft['card'] = card;
       await widget.service.save(draft);
       if (publish) {
-        await widget.service.publish(
-          draft,
-          interrupted: () => paused || !mounted,
-          onStage: (_) {
-            if (mounted) {
-              setState(() => progress = 'Ожидаем подтверждение сервера');
-            }
-          },
-          progress: (n, total) {
-            if (mounted) setState(() => progress = '$n / $total байт');
-          },
+        await widget.service.controller.cloudQueue.enqueue(
+          'alchemist_card:${draft['catalogItemId']}',
         );
+        progress = 'В очереди приложения. Можно перейти на другой экран.';
       }
       if (mounted) setState(() => error = null);
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -130,7 +163,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
       await widget.service.transition(draft, action);
       if (mounted) setState(() => error = null);
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -146,31 +179,106 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
       final block = await store.import(DiaryBlockType.image);
       if (block == null) return;
       final m = block.media!;
-      final receipt =
-          await AlchemistMediaTransfer(
-            widget.service.db,
-            widget.service.remote,
-          ).upload(
-            store.file(m)!,
-            logicalId: m.assetId,
-            revisionId: m.hash!,
-            mime: m.mime,
-            expectedHash: m.hash,
-          );
-      card['coverAssetId'] = receipt['assetRevisionId'];
+      draft['localCover'] = m.toMap();
+      draft['coverStatus'] = 'local';
+      card['coverAssetId'] = null;
       draft['card'] = card;
       await widget.service.save(draft);
       if (mounted) setState(() => error = null);
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     } finally {
       if (mounted) setState(() => busy = false);
     }
   }
 
+  Future<void> categories() async {
+    final selected = fields['categoryIds']!.text
+        .split(',')
+        .map((v) => v.trim())
+        .where((v) => v.isNotEmpty)
+        .toSet();
+    final known = <String>{
+      ...selected,
+      'Расслабление',
+      'Самогипноз',
+      'Ресурс',
+      'Сон',
+    };
+    for (final d in await widget.service.drafts()) {
+      known.addAll(List<String>.from(d['card']['categoryIds'] ?? []));
+    }
+    if (!mounted) return;
+    final input = TextEditingController();
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, refresh) => AlertDialog(
+          title: const Text('Категории материала'),
+          content: SizedBox(
+            width: 320,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final value in known)
+                    CheckboxListTile(
+                      title: Text(value),
+                      value: selected.contains(value),
+                      onChanged: (v) => refresh(() {
+                        if (v == true) {
+                          selected.add(value);
+                        } else {
+                          selected.remove(value);
+                        }
+                      }),
+                    ),
+                  TextField(
+                    controller: input,
+                    maxLength: 60,
+                    decoration: const InputDecoration(
+                      labelText: 'Новая категория для этой карточки',
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      final value = input.text.trim();
+                      if (value.isEmpty ||
+                          value.length > 60 ||
+                          value.contains(',') ||
+                          RegExp(r'[\x00-\x1f]').hasMatch(value)) {
+                        return;
+                      }
+                      refresh(() {
+                        known.add(value);
+                        selected.add(value);
+                        input.clear();
+                      });
+                    },
+                    child: const Text('Добавить значение'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Готово'),
+            ),
+          ],
+        ),
+      ),
+    );
+    fields['categoryIds']!.text = selected.join(', ');
+    // Controller lives until the dialog route finishes disposing its text field.
+    WidgetsBinding.instance.addPostFrameCallback((_) => input.dispose());
+  }
+
   @override
   void dispose() {
-    paused = true;
+    autosave?.cancel();
+    widget.service.controller.cloudQueue.removeListener(queueChanged);
     widget.service.controller.policy.removeListener(_identityChanged);
     for (final f in fields.values) {
       f.dispose();
@@ -215,8 +323,22 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                       'Точных зависимостей: ${(root['dependencies'] as List).length}',
                     ),
                   ),
+              if (draft['localCover'] is Map)
+                Image.file(
+                  widget.service.controller.diary!.mediaStore!.file(
+                    DiaryMedia.fromMap(
+                      Map<String, dynamic>.from(draft['localCover']),
+                    ),
+                  )!,
+                  height: 160,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, _, _) =>
+                      const Text('Обложка недоступна — выберите другую'),
+                ),
+              if (draft['coverStatus'] != null)
+                Text('Обложка: ${draft['coverStatus']}'),
               TextButton.icon(
-                onPressed: busy ? null : cover,
+                onPressed: busy || transferring ? null : cover,
                 icon: const Icon(Icons.image_outlined),
                 label: Text(
                   card['coverAssetId'] == null
@@ -224,11 +346,18 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                       : 'Заменить обложку',
                 ),
               ),
-              if (card['coverAssetId'] != null)
+              if (card['coverAssetId'] != null || draft['localCover'] != null)
                 TextButton(
                   onPressed: busy
                       ? null
-                      : () => setState(() => card['coverAssetId'] = null),
+                      : () {
+                          setState(() {
+                            card['coverAssetId'] = null;
+                            draft.remove('localCover');
+                            draft.remove('coverStatus');
+                          });
+                          scheduleSave();
+                        },
                   child: const Text('Убрать обложку'),
                 ),
               if (draft['type'] != 'package' &&
@@ -265,7 +394,11 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                             await widget.service.save(draft);
                             if (mounted) setState(() => error = null);
                           } catch (e) {
-                            if (mounted) setState(() => error = e.toString());
+                            if (mounted) {
+                              setState(
+                                () => error = AlchemistFailure.from(e).message,
+                              );
+                            }
                           }
                         },
                   child: const Text('Обновить состав из библиотеки'),
@@ -274,7 +407,6 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                 'title': 'Название',
                 'shortAnnotation': 'Аннотация',
                 'description': 'Описание',
-                'categoryIds': 'Категории через запятую',
                 'tags': 'Теги через запятую',
                 'language': 'Язык',
                 'authorDisplayName': 'Автор / правообладатель',
@@ -285,14 +417,29 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                   child: TextField(
                     key: ValueKey('catalog-${item.key}'),
                     controller: fields[item.key],
-                    enabled: !busy,
+                    enabled: !busy && !transferring,
                     maxLines:
                         ['description', 'shortAnnotation'].contains(item.key)
                         ? 3
                         : 1,
-                    decoration: InputDecoration(labelText: item.value),
+                    decoration: InputDecoration(
+                      labelText: item.value,
+                      helperText: item.key == 'shortAnnotation'
+                          ? 'Кратко: кому и чем поможет материал'
+                          : item.key == 'description'
+                          ? 'Подробности, состав и рекомендации'
+                          : null,
+                      helperMaxLines: 2,
+                    ),
                   ),
                 ),
+              TextButton.icon(
+                onPressed: busy || transferring ? null : categories,
+                icon: const Icon(Icons.category_outlined),
+                label: Text(
+                  'Категории: ${fields['categoryIds']!.text.isEmpty ? 'выбрать ▾' : fields['categoryIds']!.text} ▾',
+                ),
+              ),
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 initialValue: card['visibility'] as String? ?? 'private',
@@ -315,7 +462,12 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                     ),
                   ),
                 ],
-                onChanged: busy ? null : (v) => card['visibility'] = v,
+                onChanged: busy || transferring
+                    ? null
+                    : (v) {
+                        card['visibility'] = v;
+                        scheduleSave();
+                      },
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -352,8 +504,10 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                     ),
                   ],
                   FilledButton(
-                    onPressed: busy ? null : () => save(publish: true),
-                    child: const Text('Опубликовать'),
+                    onPressed: busy || transferring
+                        ? null
+                        : () => save(publish: true),
+                    child: const Text('Добавить в каталог'),
                   ),
                 ],
               ),
@@ -396,7 +550,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
       final values = await widget.service.drafts();
       if (mounted) setState(() => cards = values);
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     }
   }
 
@@ -473,7 +627,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
         );
       }
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     }
   }
 
@@ -487,7 +641,7 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
         await openDraft(await widget.service.preparePackage(File(f!.path!)));
       }
     } catch (e) {
-      if (mounted) setState(() => error = e.toString());
+      if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     }
   }
 
@@ -513,7 +667,11 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
                             await widget.service.prepareCurrentSession(),
                           );
                         } catch (e) {
-                          if (mounted) setState(() => error = e.toString());
+                          if (mounted) {
+                            setState(
+                              () => error = AlchemistFailure.from(e).message,
+                            );
+                          }
                         }
                       },
                       icon: const Icon(Icons.playlist_add),
@@ -535,7 +693,11 @@ class _AlchemistCatalogScreenState extends State<AlchemistCatalogScreen> {
                           await widget.service.synchronize();
                           await load();
                         } catch (e) {
-                          if (mounted) setState(() => error = e.toString());
+                          if (mounted) {
+                            setState(
+                              () => error = AlchemistFailure.from(e).message,
+                            );
+                          }
                         }
                       },
                       icon: const Icon(Icons.sync),

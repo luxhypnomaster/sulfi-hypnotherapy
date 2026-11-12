@@ -349,3 +349,8 @@ Source checkpoint7d36b72: backend CI runs42798789171/42798781189 SUCCESS, two-AP
 
 ## №16-Б G0 checkpoint 2026-11-12
 Branch fix/task16b-auth-transfer-publication/worktree /dev/shm/sulfi16b fromc895291, appbaselinecbe0524/APK24. Fullspec23files/80criteria read+hashverified;10owner screenshots inspectedinRAM. BASELINE_AUDIT_16B+ROOT_CAUSE written before changes. Usernewproof:initialMASTER/CLIENTauth andpermissioncheck passed onphones; laterfailure notlocalized. Readonlystatus43156961962 pending. NextG1 officialSDK lightweightrestore/refresh sharedwithDiary+Catalog;G2safeRPCerror/retry+ownerboundqueue;G3existingcatalogvsannounce;G4runner/UI;G5signedpair+CI. NoGASdeploy/main/ACL/signing/migrations allowed.
+
+### №16-Б — G1/G2 + G3/G4 candidate checkpoint
+- Official lightweight Google restore, singleflight refresh, identity-bound retry, classified 401/403/network errors and bounded HTTP connection reuse implemented.
+- Existing persisted upload receipts now owner/hash/revision bound, verified bytes distinct from catalog commit. Existing catalog and diary outbox reused by app-lifetime runner.
+- Catalog action separated from diary announcement; exact dependency gate, deduplicated drafts, local cover persistence/preview and multi-category selection implemented. Full regression and APK candidate build remain gates; no live deployment.

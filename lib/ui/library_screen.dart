@@ -582,8 +582,8 @@ class _LibraryScreenState extends State<LibraryScreen>
                           ),
                           if (!widget.allowSelection &&
                               widget.controller?.capsules != null)
-                            IconButton(
-                              tooltip: 'Облачный каталог',
+                            TextButton.icon(
+                              label: const Text('Каталог'),
                               icon: const Icon(Icons.cloud_outlined),
                               onPressed: () => Navigator.push<void>(
                                 context,
@@ -763,13 +763,14 @@ class _LibraryScreenState extends State<LibraryScreen>
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onSelected: (s) {
-                  if (s == 'publish') {
+                  if ((s == 'publish' || s == 'catalog')) {
                     unawaited(
                       preparePublication(
                         context,
                         widget.controller!,
                         ContentType.track,
                         a.id,
+                        catalogOnly: s == 'catalog',
                       ),
                     );
                   }
@@ -791,15 +792,20 @@ class _LibraryScreenState extends State<LibraryScreen>
                 },
                 itemBuilder: (_) => [
                   if (widget.controller?.capsules != null &&
-                      widget.library.policy.isAuthor)
+                      widget.library.policy.isAuthor) ...[
+                    const PopupMenuItem(
+                      value: 'catalog',
+                      child: Text('Добавить в каталог'),
+                    ),
                     const PopupMenuItem(
                       value: 'publish',
                       child: Text('Подготовить к публикации'),
                     ),
+                  ],
                   if (widget.controller?.capsules != null)
                     const PopupMenuItem(
                       value: 'export',
-                      child: Text('Экспортировать трек'),
+                      child: Text('Экспортировать на устройство'),
                     ),
                   const PopupMenuItem(
                     value: 'info',

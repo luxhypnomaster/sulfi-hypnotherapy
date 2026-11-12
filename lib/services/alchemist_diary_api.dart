@@ -3,6 +3,11 @@ import 'diary_read_state.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
+
+import 'diary_identity.dart';
+import 'alchemist_errors.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 import '../models/diary_entry.dart';
@@ -24,17 +29,68 @@ class AlchemistDiaryApi extends DiaryApi {
     required this.capsules,
     required this.media,
     this.connection,
-  });
+    DateTime Function()? clock,
+  }) : clock = clock ?? DateTime.now;
   final CapsuleService capsules;
   final DiaryMediaStore media;
   final DiaryRequest? connection;
   String? _token;
+  Future<void> Function(DiaryEntry)? beforePublication;
+  bool Function()? workInterrupted;
+  void Function(String)? workStage;
+  void Function(int, int)? workProgress;
   String? _queueError;
   @override
   String? get queueError => _queueError;
   String? _subject;
   String? _verifiedRole;
   DateTime? _identityExpiresAt;
+  DiaryIdentity? _identity;
+  Future<bool>? _refreshing;
+  final DateTime Function() clock;
+  @override
+  void bindIdentity(DiaryIdentity identity) => _identity = identity;
+  @override
+  Future<bool> restoreIdentity() =>
+      _refreshing ??= _restore().whenComplete(() => _refreshing = null);
+  Future<bool> _restore({bool force = false}) async {
+    if (!force &&
+        readerAuthenticated &&
+        _identityExpiresAt!.isAfter(
+          clock().toUtc().add(const Duration(minutes: 1)),
+        )) {
+      return true;
+    }
+    final identity = _identity;
+    if (identity is! RestorableDiaryIdentity) return false;
+    final generation = _accountGeneration,
+        subject = _subject,
+        previous = _token;
+    final result = await (identity as RestorableDiaryIdentity).restore();
+    if (generation != _accountGeneration) {
+      throw const AlchemistFailure(
+        'Аккаунт изменился. Передача приостановлена.',
+        401,
+        'ACCOUNT_CHANGED',
+        DiaryFailure.authorization,
+      );
+    }
+    if (result == null || force && result.idToken == previous) return false;
+    await _verifyIdentity(result.idToken, expectedSubject: subject);
+    return true;
+  }
+
+  Future<bool> _forceRefresh() =>
+      _refreshing ??= _restore(force: true)
+          .whenComplete(() => _refreshing = null);
+  @override
+  Future<void> refreshIdentity() async {
+    await verifiedIdentityToken();
+  }
+
+  @override
+  Future<bool> refreshRejectedIdentity() => _forceRefresh();
+
   @override
   bool get supportsServerIdentity => true;
   @override
@@ -43,10 +99,15 @@ class AlchemistDiaryApi extends DiaryApi {
   DateTime? get identityExpiresAt => _identityExpiresAt;
   @override
   bool get readerAuthenticated =>
-      _token != null &&
-      (_identityExpiresAt?.isAfter(DateTime.now().toUtc()) ?? false);
+      _token != null && (_identityExpiresAt?.isAfter(clock().toUtc()) ?? false);
   @override
   Future<String?> verifiedIdentityToken() async {
+    if (_identityExpiresAt == null ||
+        !_identityExpiresAt!.isAfter(
+          clock().toUtc().add(const Duration(minutes: 1)),
+        )) {
+      if (await restoreIdentity()) return _token;
+    }
     if (!readerAuthenticated) {
       throw const DiaryApiException(
         'Войдите через Google заново',
@@ -58,10 +119,17 @@ class AlchemistDiaryApi extends DiaryApi {
 
   int _accountGeneration = 0;
   @override
-  String get readerScope => _subject == null ? 'public' : 'google:$_subject';
+  int get identityGeneration => _accountGeneration;
+  @override
+  String get readerScope => _subject == null
+      ? 'public'
+      : 'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:$_subject'))}';
   @override
   Future<void> authenticateReader(String token) async {
-    clearSession();
+    await _verifyIdentity(token);
+  }
+
+  Future<void> _verifyIdentity(String token, {String? expectedSubject}) async {
     final generation = _accountGeneration;
     final identity = await AlchemistApi(
       base,
@@ -92,8 +160,19 @@ class AlchemistDiaryApi extends DiaryApi {
       expires * 1000,
       isUtc: true,
     );
-    if (!until.isAfter(DateTime.now().toUtc())) {
+    if (!until.isAfter(clock().toUtc())) {
       throw const DiaryApiException('Вход истёк', DiaryFailure.authorization);
+    }
+    if (expectedSubject != null && identity['subject'] != expectedSubject) {
+      throw const AlchemistFailure(
+        'Google выбрал другой аккаунт. Войдите явно перед продолжением.',
+        401,
+        'ACCOUNT_CHANGED',
+        DiaryFailure.authorization,
+      );
+    }
+    if (_subject != null && _subject != identity['subject']) {
+      _accountGeneration++;
     }
     _subject = identity['subject'] as String;
     _verifiedRole = role;
@@ -107,8 +186,9 @@ class AlchemistDiaryApi extends DiaryApi {
     base,
     connection: connection,
     identityScope: () => readerScope,
-    credential: () async =>
-        _token ?? (throw const DiaryApiException('Войдите через Google')),
+    identityEpoch: () => identityGeneration,
+    credential: verifiedIdentityToken,
+    onUnauthorized: _forceRefresh,
   );
   @override
   bool get supportsAdvancedPublication => true;
@@ -289,6 +369,9 @@ class AlchemistDiaryApi extends DiaryApi {
         revisionId: m.hash!,
         mime: m.mime,
         expectedHash: m.hash,
+        interrupted: workInterrupted,
+        onStage: workStage,
+        progress: workProgress,
       );
       blocks.add({
         'id': b.id,
@@ -319,6 +402,16 @@ class AlchemistDiaryApi extends DiaryApi {
   }
 
   Future<DiaryEntry> _saveRemote(DiaryEntry e, {required bool publish}) async {
+    final initialOwner = readerScope, initialGeneration = identityGeneration;
+    if (publish) await beforePublication?.call(e);
+    if (initialOwner != readerScope ||
+        initialGeneration != identityGeneration ||
+        workInterrupted?.call() == true) {
+      throw const DiaryApiException(
+        'Задача приостановлена.',
+        DiaryFailure.authorization,
+      );
+    }
     final queued = await _queued(e.id);
     final state = await _state(e.id);
     if (state['pending'] != null) await _recover(e.id, state);
@@ -453,11 +546,77 @@ class AlchemistDiaryApi extends DiaryApi {
     await db.insert('app_settings', {
       'name': 'alchemist_diary_queue:${entry.id}',
       'value': jsonEncode({
+        'ownerBinding': author.ownerBinding,
         'entry': entry.toMap(),
         'published': published,
         'status': 'pending',
       }),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> sendQueued(
+    String name, {
+    required bool Function() interrupted,
+    void Function(String)? onStage,
+    void Function(int, int)? progress,
+  }) async {
+    final rows = await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: [name],
+    );
+    if (rows.isEmpty) return;
+    final q = Map<String, dynamic>.from(
+      jsonDecode(rows.single['value'] as String),
+    );
+    if (q['ownerBinding'] == null ||
+        q['ownerBinding'] != author.ownerBinding ||
+        interrupted()) {
+      throw const DiaryApiException(
+        'Аккаунт задачи не подтверждён.',
+        DiaryFailure.authorization,
+      );
+    }
+    final e = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
+    final current = await db.query(
+      'diary_author',
+      where: 'id=?',
+      whereArgs: [e.id],
+    );
+    if (current.isNotEmpty &&
+        _editable(
+              DiaryEntry.fromMap(
+                Map<String, dynamic>.from(
+                  jsonDecode(current.single['payload'] as String),
+                ),
+              ),
+            ) !=
+            _editable(e)) {
+      throw const DiaryApiException(
+        'После постановки в очередь появились новые правки. Подтвердите отправку из редактора.',
+        DiaryFailure.conflict,
+      );
+    }
+    workInterrupted = interrupted;
+    workStage = onStage;
+    workProgress = progress;
+    try {
+      onStage?.call('diary_verifying');
+      final identity = await verifiedIdentityToken();
+      final session = DiaryAuthorSession.verified(
+        identity!,
+        identityExpiresAt!,
+      );
+      if (q['published'] == null) {
+        await saveAuthorDraft(e, session);
+      } else {
+        await publish(e, session, published: q['published']);
+      }
+    } finally {
+      workInterrupted = null;
+      workStage = null;
+      workProgress = null;
+    }
   }
 
   Future<String?> _queued(String id) async {
@@ -541,6 +700,11 @@ class AlchemistDiaryApi extends DiaryApi {
     )) {
       final q = jsonDecode(row['value'] as String),
           entry = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
+      if (q['ownerBinding'] != null &&
+          q['ownerBinding'] != author.ownerBinding) {
+        continue;
+      }
+      if (q['ownerBinding'] == null && readerScope != 'public') continue;
       final current = await db.query(
         'diary_author',
         where: 'id=?',

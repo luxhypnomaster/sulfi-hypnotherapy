@@ -1,57 +1,203 @@
-import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
 import 'dart:math';
 
-import 'apps_script_diary_transport.dart';
+import 'package:crypto/crypto.dart';
+
+import 'alchemist_diagnostics.dart';
+import 'alchemist_errors.dart';
 import 'alchemist_http.dart';
+import 'apps_script_diary_transport.dart';
 import 'diary_api.dart';
 
-class AlchemistApiException extends DiaryApiException {
+class AlchemistApiException extends AlchemistFailure {
   const AlchemistApiException(
     super.message,
-    this.status,
-    this.code, [
-    super.kind,
+    super.status,
+    super.code, [
+    super.kind = DiaryFailure.network,
+    super.retryable = false,
   ]);
-  final int status;
-  final String code;
 }
 
-/// New-project protocol. Legacy diary transport and credentials are untouched.
+/// Same GAS6 envelope and redirect policy; retries keep the original account.
 class AlchemistApi {
   AlchemistApi(
     this.endpoint, {
     DiaryRequest? connection,
     this.credential,
     this.identityScope,
+    this.identityEpoch,
+    this.onUnauthorized,
     this.maxAttempts = 3,
-  }) : connection = connection ?? const AlchemistHttp().request {
+    Future<void> Function(Duration)? delay,
+    AlchemistDiagnostics? diagnostics,
+    this.callTimeout = const Duration(minutes: 3),
+  }) : connection = connection ?? const AlchemistHttp().request,
+       delay = delay ?? Future<void>.delayed,
+       diagnostics = diagnostics ?? AlchemistDiagnostics.instance {
     if (!AppsScriptDiaryTransport.supports(endpoint)) {
       throw const FormatException('Требуется проверенный адрес сервера /exec');
     }
   }
   final String Function()? identityScope;
+  final int Function()? identityEpoch;
   String? get currentIdentityScope => identityScope?.call();
+  String? get ownerBinding =>
+      currentIdentityScope == null || currentIdentityScope == 'public'
+      ? null
+      : sha256
+            .convert(utf8.encode('$endpoint|$currentIdentityScope'))
+            .toString();
   final int maxAttempts;
   final Uri endpoint;
   final DiaryRequest connection;
   final Future<String?> Function()? credential;
+  final Future<bool> Function()? onUnauthorized;
+  final Future<void> Function(Duration) delay;
+  final AlchemistDiagnostics diagnostics;
+  final Duration callTimeout;
+
+  static bool repeatable(String op, Map<String, dynamic> p) =>
+      const {
+            'media.beginUpload',
+            'catalog.createDraft',
+            'catalog.patchDraft',
+            'catalog.updateMetadata',
+            'catalog.publish',
+            'catalog.withdraw',
+            'catalog.archive',
+            'catalog.restore',
+            'entry.createDraft',
+            'entry.patchDraft',
+            'entry.publish',
+            'entry.unpublish',
+            'entry.archive',
+            'entry.restore',
+            'reads.merge',
+          }.contains(op) &&
+          p['requestId'] is String &&
+          (p['requestId'] as String).isNotEmpty ||
+      const {
+        'auth.whoami',
+        'feed.list',
+        'entry.get',
+        'catalog.list',
+        'catalog.get',
+        'catalog.getRevision',
+        'catalog.resolveReference',
+        'catalog.changes',
+        'catalog.checkUpdates',
+        'content.getRevision',
+        'media.getDescriptor',
+        'media.beginDownload',
+        'media.downloadChunk',
+        'media.metadata',
+        'system.authorizationStatus',
+      }.contains(op) ||
+      op == 'content.registerManifest' && p['revision'] is Map ||
+      const {
+            'media.uploadChunk',
+            'media.commitUpload',
+            'media.abortUpload',
+          }.contains(op) &&
+          p['sessionId'] is String;
+
   Future<Map<String, dynamic>> call(
     String operation,
     Map<String, dynamic> parameters,
   ) async {
+    final originalScope = identityScope?.call(),
+        originalEpoch = identityEpoch?.call(),
+        trace = diagnostics.begin();
+    final watch = Stopwatch()..start();
+    var refreshed = false;
+    void checkScope() {
+      if (originalScope != identityScope?.call() ||
+          originalEpoch != identityEpoch?.call()) {
+        throw const AlchemistApiException(
+          'Аккаунт изменился. Задача приостановлена.',
+          401,
+          'ACCOUNT_CHANGED',
+          DiaryFailure.authorization,
+        );
+      }
+    }
+
     for (var attempt = 0; ; attempt++) {
+      checkScope();
+      final left = callTimeout - watch.elapsed;
+      if (left <= Duration.zero) {
+        throw AlchemistFailure.from(TimeoutException('deadline'));
+      }
       try {
-        return await _once(operation, parameters);
-      } catch (e) {
-        final retryable =
-            e is SocketException ||
-            e is TimeoutException ||
-            e is AlchemistApiException && [429, 503].contains(e.status);
-        if (!retryable || attempt + 1 >= maxAttempts) rethrow;
-        await Future<void>.delayed(
-          Duration(milliseconds: (250 << attempt) + Random().nextInt(200)),
+        final result = await _once(
+          operation,
+          parameters,
+          trace,
+          attempt,
+          checkScope,
+        ).timeout(left);
+        diagnostics.record(
+          trace,
+          operation,
+          'complete',
+          watch.elapsedMilliseconds,
+          attempt: attempt,
+          status: 200,
+        );
+        return result;
+      } catch (error) {
+        checkScope();
+        final e = AlchemistFailure.from(error);
+        diagnostics.record(
+          trace,
+          operation,
+          'error',
+          watch.elapsedMilliseconds,
+          attempt: attempt,
+          status: e.status,
+          code: e.code,
+        );
+        if (!refreshed &&
+            e.status == 401 &&
+            onUnauthorized != null &&
+            !const {
+              'IDENTITY_REVOKED',
+              'TOKEN_AUDIENCE_INVALID',
+              'ACCOUNT_CHANGED',
+            }.contains(e.code)) {
+          refreshed = true;
+          if (await onUnauthorized!()) {
+            checkScope();
+            continue;
+          }
+        }
+        if (!e.retryable ||
+            !repeatable(operation, parameters) ||
+            attempt + 1 >= maxAttempts ||
+            watch.elapsed >= callTimeout) {
+          if (error is DiaryApiException && error is! AlchemistFailure) rethrow;
+          throw AlchemistApiException(
+            e.message,
+            e.status,
+            e.code,
+            e.kind,
+            e.retryable,
+          );
+        }
+        diagnostics.record(
+          trace,
+          operation,
+          'retry',
+          watch.elapsedMilliseconds,
+          attempt: attempt + 1,
+          code: e.code,
+        );
+        await delay(
+          Duration(
+            milliseconds: (250 << min(attempt, 4)) + Random().nextInt(200),
+          ),
         );
       }
     }
@@ -60,19 +206,20 @@ class AlchemistApi {
   Future<Map<String, dynamic>> _once(
     String operation,
     Map<String, dynamic> parameters,
+    String trace,
+    int attempt,
+    void Function() checkScope,
   ) async {
-    final scope = identityScope?.call();
-    void checkScope() {
-      if (scope != identityScope?.call()) {
-        throw const DiaryApiException(
-          'Аккаунт изменился. Операция отменена.',
-          DiaryFailure.authorization,
-        );
-      }
-    }
-
+    final clock = Stopwatch()..start();
     final token = await credential?.call();
     checkScope();
+    diagnostics.record(
+      trace,
+      operation,
+      'credential',
+      clock.elapsedMilliseconds,
+      attempt: attempt,
+    );
     var response = await connection(
       'POST',
       endpoint,
@@ -81,10 +228,19 @@ class AlchemistApi {
         'version': 1,
         'operation': operation,
         'parameters': parameters,
+        'traceId': trace,
         'credential': ?token,
       }),
     );
     checkScope();
+    diagnostics.record(
+      trace,
+      operation,
+      'response',
+      clock.elapsedMilliseconds,
+      attempt: attempt,
+      status: response.status,
+    );
     for (
       var count = 0;
       response.status == 302 || response.status == 303;
@@ -100,17 +256,22 @@ class AlchemistApi {
           target.hasFragment) {
         throw const DiaryApiException('Небезопасное перенаправление сервера');
       }
-      // Never forward the POST payload or credential to the redirect host.
       response = await connection('GET', target, {
         'Accept': 'application/json',
       }, null);
       checkScope();
     }
     if (response.status != 200) {
-      throw AlchemistApiException(
-        'Сервер недоступен. Локальные данные сохранены.',
+      final e = AlchemistFailure.server(
         response.status,
-        'HTTP_SERVER_UNAVAILABLE',
+        'HTTP_${response.status}',
+      );
+      throw AlchemistApiException(
+        e.message,
+        e.status,
+        e.code,
+        e.kind,
+        e.retryable,
       );
     }
     final mime = response.headers['content-type'];
@@ -134,20 +295,17 @@ class AlchemistApi {
       throw const DiaryApiException('Некорректный протокол сервера');
     }
     if (value['ok'] != true || status >= 300) {
-      final rawCode = value['error'] is Map ? value['error']['code'] : null;
-      final code =
-          rawCode is String && RegExp(r'^[A-Z0-9_]{1,64}$').hasMatch(rawCode)
-          ? rawCode
+      final raw = value['error'] is Map ? value['error']['code'] : null;
+      final code = raw is String && RegExp(r'^[A-Z0-9_]{1,64}$').hasMatch(raw)
+          ? raw
           : 'REQUEST_REJECTED';
+      final e = AlchemistFailure.server(status, code);
       throw AlchemistApiException(
-        'Сервер отклонил запрос: $code',
-        status,
-        code,
-        status == 401 || status == 403
-            ? DiaryFailure.authorization
-            : status == 409 || status == 412
-            ? DiaryFailure.conflict
-            : DiaryFailure.network,
+        e.message,
+        e.status,
+        e.code,
+        e.kind,
+        e.retryable,
       );
     }
     if (value['result'] is! Map) {

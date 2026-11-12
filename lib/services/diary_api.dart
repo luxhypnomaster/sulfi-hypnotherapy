@@ -3,6 +3,8 @@ import 'diary_read_state.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'diary_identity.dart';
+
 import '../models/diary_entry.dart';
 
 enum DiaryFailure {
@@ -81,7 +83,12 @@ class DiaryApi {
   bool get readerAuthenticated => false;
   DateTime? get identityExpiresAt => null;
   Future<String?> verifiedIdentityToken() async => null;
+  void bindIdentity(DiaryIdentity identity) {}
+  Future<bool> restoreIdentity() async => false;
+  Future<void> refreshIdentity() async {}
+  Future<bool> refreshRejectedIdentity() async => false;
   String get readerScope => 'public';
+  int get identityGeneration => 0;
   Future<void> authenticateReader(String token) async =>
       throw const DiaryApiException('Личный сервер не подключён');
   void clearSession() {}
