@@ -35,8 +35,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.p0_native != true && inputs.p0_checks != true
-    if: inputs.emulator_qa != true
+    if: inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
