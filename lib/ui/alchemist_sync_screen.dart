@@ -1,3 +1,5 @@
+import '../services/alchemist_work_queue.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -55,7 +57,7 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                         'Передача',
                                   ),
                                   Text(
-                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'pausing': 'Завершается текущий запрос', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${work['stage'] ?? ''}',
+                                    '${const {'queued': 'В очереди', 'running': 'Выполняется', 'complete': 'Подтверждено сервером', 'paused': 'Пауза', 'pausing': 'Завершается текущий запрос', 'failed': 'Сбой', 'cancelled': 'Отменено'}[phase] ?? phase} · ${alchemistStageLabel(work['stage'])}',
                                   ),
                                   Text(
                                     '${work['bytes'] ?? 0} / ${work['totalBytes'] ?? 0} байт · попыток задачи ${work['attempts'] ?? 0} · сетевых повторов ${work['networkRetries'] ?? 0}',

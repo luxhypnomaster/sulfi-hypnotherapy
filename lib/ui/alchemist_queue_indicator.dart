@@ -1,3 +1,5 @@
+import '../services/alchemist_work_queue.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -85,7 +87,7 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Передачи: ${queue.pendingCount} · ${queue.rows.firstOrNull?['_work']?['stage'] ?? queue.rows.firstOrNull?['_work']?['phase'] ?? ''}',
+                      'Передачи: ${queue.pendingCount} · ${alchemistStageLabel(queue.rows.where((r) => !const ['complete', 'cancelled'].contains(r['_work']?['phase'])).firstOrNull?['_work']?['stage'])}',
                       style: const TextStyle(fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

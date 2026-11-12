@@ -79,6 +79,31 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
         ].contains(r['_work']?['phase']),
   );
   void queueChanged() {
+    final row = widget.service.controller.cloudQueue.rows
+        .where((r) => r['catalogItemId'] == draft['catalogItemId'])
+        .firstOrNull;
+    if (row != null) {
+      for (final key in [
+        'status',
+        'coverStatus',
+        'etag',
+        'remoteStatus',
+        'publishedRevision',
+        'remoteRevision',
+        'pending',
+        'error',
+        'errorCode',
+      ]) {
+        if (row.containsKey(key)) {
+          draft[key] = row[key];
+        } else {
+          draft.remove(key);
+        }
+      }
+      if (row['card'] is Map) {
+        card['coverAssetId'] = row['card']['coverAssetId'];
+      }
+    }
     if (mounted) setState(() {});
   }
 
@@ -370,7 +395,9 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                   },
                 ),
               if (draft['coverStatus'] != null)
-                Text('Обложка: ${draft['coverStatus']}'),
+                Text(
+                  'Обложка: ${const {'local': 'на телефоне', 'transferring': 'передаётся', 'verified': 'проверена сервером', 'published': 'опубликована', 'failed': 'сбой; файл сохранён'}[draft['coverStatus']] ?? 'на телефоне'}',
+                ),
               TextButton.icon(
                 onPressed: busy || transferring ? null : cover,
                 icon: const Icon(Icons.image_outlined),

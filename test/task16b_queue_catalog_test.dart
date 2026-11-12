@@ -267,7 +267,7 @@ void main() {
         );
         expect(find.byType(Image), findsWidgets);
         expect(find.text('Сохранённая аннотация'), findsOneWidget);
-        expect(find.text('Обложка: local'), findsOneWidget);
+        expect(find.text('Обложка: на телефоне'), findsOneWidget);
         expect(find.text('Обложка недоступна — выберите другую'), findsNothing);
         await capture15(t, 'task16b-cover-local');
         await t.scrollUntilVisible(

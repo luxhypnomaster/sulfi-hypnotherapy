@@ -8,6 +8,26 @@ import 'package:sqflite/sqflite.dart';
 
 import 'alchemist_errors.dart';
 
+String alchemistStageLabel(Object? phase) =>
+    const {
+      'queued': 'Ожидает отправки',
+      'running': 'Выполняется',
+      'transferring': 'Передача файла',
+      'bytes_acked': 'Байты приняты; ждём проверку',
+      'server_verifying': 'Сервер проверяет файл',
+      'verified': 'Файл проверен',
+      'manifest_registering': 'Проверка состава',
+      'publishing': 'Подтверждение каталога',
+      'catalog_committed': 'Подтверждено сервером',
+      'diary_verifying': 'Проверка дневниковой записи',
+      'paused': 'Пауза',
+      'failed': 'Сбой',
+      'cancelled': 'Отправка отменена',
+      'complete': 'Подтверждено сервером',
+      'pausing': 'Завершается текущий запрос',
+    }[phase] ??
+    'Ожидание';
+
 /// One runner over the existing card and diary outbox records. No second queue.
 /// Survives editor navigation. Android suspension cooperatively pauses work;
 /// restart never silently starts an upload under a newly selected account.
