@@ -1,3 +1,6 @@
+import 'alchemist_announcement.dart';
+import 'alchemist_work_queue.dart';
+import 'alchemist_diary_api.dart';
 import 'alchemist_identity_session.dart';
 import 'alchemist_catalog.dart';
 import 'alchemist_api.dart';
@@ -38,6 +41,7 @@ class SessionController extends ChangeNotifier {
     if (diary != null && diary!.onAccountLogout == null) {
       diary!.onAccountLogout = () {
         _catalogIdentity?.invalidate();
+        if (_cloudQueue != null) unawaited(_cloudQueue!.pauseAll());
         if (preview != null) unawaited(preview!.stop());
       };
     }
@@ -131,6 +135,9 @@ class SessionController extends ChangeNotifier {
     return AlchemistApi(
       Uri.parse(endpoint),
       identityScope: () => diary?.api?.readerScope ?? 'public',
+      identityEpoch: () => diary?.api?.identityGeneration ?? 0,
+      onUnauthorized: diary?.api?.refreshRejectedIdentity,
+      onAuthenticationFailure: diary?.api?.rejectIdentity,
       credential: !authenticated
           ? (diary?.api?.readerAuthenticated == true
                 ? () => diary!.api!.verifiedIdentityToken()
@@ -155,6 +162,45 @@ class SessionController extends ChangeNotifier {
     api: const String.fromEnvironment('SULFI_ALCHEMIST_API').isEmpty
         ? null
         : alchemistApi(),
+  );
+  AlchemistWorkQueue? _cloudQueue;
+  AlchemistWorkQueue get cloudQueue => _cloudQueue ??= AlchemistWorkQueue(
+    db: capsules!.database,
+    owner: () => catalog.api?.ownerBinding,
+    send: (name, value, stop, stage, progress) async {
+      if (name.startsWith('alchemist_card:')) {
+        await catalog.publish(
+          value,
+          interrupted: stop,
+          onStage: stage,
+          progress: progress,
+        );
+      } else {
+        final api = diary?.api;
+        if (api is! AlchemistDiaryApi) {
+          throw const FormatException('Сервер не подключён');
+        }
+        final previous = api.beforePublication;
+        api.beforePublication = (entry) => commitAnnouncementDependency(
+          catalog,
+          entry,
+          interrupted: stop,
+          onStage: stage,
+          progress: progress,
+        );
+        try {
+          await api.sendQueued(
+            name,
+            interrupted: stop,
+            onStage: stage,
+            progress: progress,
+          );
+        } finally {
+          api.beforePublication = previous;
+        }
+        await diary!.load();
+      }
+    },
   );
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(
@@ -863,6 +909,7 @@ class SessionController extends ChangeNotifier {
   @override
   void dispose() {
     library.policy.removeListener(_notify);
+    _cloudQueue?.dispose();
     _disposed = true;
     super.dispose();
   }

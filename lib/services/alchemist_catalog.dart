@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'alchemist_errors.dart';
+import '../models/diary_entry.dart';
 import 'alchemist_content_upload.dart';
 
 import 'dart:io';
@@ -23,30 +27,88 @@ class AlchemistCatalog {
   final SessionController controller;
   final AlchemistApi? api;
   Database get db => controller.capsules!.database;
-  Future<List<Map<String, dynamic>>> drafts() async =>
-      controller.policy.serverIdentityRequired && !controller.policy.isAuthor
-      ? <Map<String, dynamic>>[]
-      : (await db.query(
-              'app_settings',
-              where: 'name LIKE ?',
-              whereArgs: ['alchemist_card:%'],
-            ))
-            .map(
-              (r) =>
-                  Map<String, dynamic>.from(jsonDecode(r['value'] as String)),
-            )
-            .toList();
+  Future<List<Map<String, dynamic>>> drafts() async {
+    if (controller.policy.serverIdentityRequired &&
+        !controller.policy.isAuthor) {
+      return [];
+    }
+    final owner = api?.ownerBinding;
+    return (await db.query(
+          'app_settings',
+          where: 'name LIKE ?',
+          whereArgs: ['alchemist_card:%'],
+        ))
+        .map((r) => Map<String, dynamic>.from(jsonDecode(r['value'] as String)))
+        .where((d) => d['ownerBinding'] == null || d['ownerBinding'] == owner)
+        .toList();
+  }
+
+  final _preparing = <String, Future<Map<String, dynamic>>>{};
+  Future<void> _store(Map<String, dynamic> card) async {
+    await db.transaction((tx) async {
+      final name = 'alchemist_card:${card['catalogItemId']}';
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [name],
+      );
+      if (rows.isNotEmpty) {
+        final previous = jsonDecode(rows.single['value'] as String);
+        if (previous['_work'] != null) card['_work'] = previous['_work'];
+      }
+      await tx.insert('app_settings', {
+        'name': name,
+        'value': jsonEncode(card),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
   Future<void> save(Map<String, dynamic> card) async {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');
     }
-    await db.insert('app_settings', {
-      'name': 'alchemist_card:${card['catalogItemId']}',
-      'value': jsonEncode(card),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final owner = api?.ownerBinding;
+    if (card['ownerBinding'] != null && card['ownerBinding'] != owner) {
+      throw const AlchemistFailure(
+        'Задача принадлежит другому аккаунту.',
+        401,
+        'ACCOUNT_CHANGED',
+      );
+    }
+    if (owner != null) card['ownerBinding'] = owner;
+    await _store(card);
   }
 
-  Future<Map<String, dynamic>> prepare(ContentRevision root) async {
+  Future<Map<String, dynamic>> prepare(
+    ContentRevision root, {
+    bool reuse = true,
+  }) {
+    final key = '${api?.ownerBinding}:${root.key.token}';
+    if (!reuse) return _prepare(root, reuse: false);
+    return _preparing.putIfAbsent(
+      key,
+      () => _prepare(root, reuse: true).whenComplete(() {
+        _preparing.remove(key);
+      }),
+    );
+  }
+
+  Future<Map<String, dynamic>> _prepare(
+    ContentRevision root, {
+    required bool reuse,
+  }) async {
+    if (reuse) {
+      for (final d in await drafts()) {
+        if (d['type'] == root.key.content.type.name &&
+            d['root'] != null &&
+            ContentRevision.fromMap(Map<String, dynamic>.from(d['root']))
+                    .key
+                    .token ==
+                root.key.token) {
+          return d;
+        }
+      }
+    }
     final title = root.payload['title'] ?? root.payload['name'] ?? 'Материал';
     final draft = <String, dynamic>{
       'catalogItemId': newId(),
@@ -57,8 +119,8 @@ class AlchemistCatalog {
       'publishRequestId': newId(),
       'card': {
         'title': title,
-        'shortAnnotation': '',
-        'description': '',
+        'shortAnnotation': root.payload['description'] ?? '',
+        'description': root.payload['description'] ?? '',
         'categoryIds': <String>[],
         'tags': <String>[],
         'language': 'ru',
@@ -83,12 +145,12 @@ class AlchemistCatalog {
       roots.map((r) => r.key).toList(),
       await LocalCatalogSource.currentIndex(controller.capsules!),
     );
-    final draft = await prepare(roots.first);
+    final draft = await prepare(roots.first, reuse: false);
     draft['type'] = 'collection';
     draft['logicalId'] = newId();
     draft['roots'] = roots.map((r) => r.toMap()).toList();
     draft['card']['title'] = title;
-    await save(draft);
+    await _store(draft);
     return draft;
   }
 
@@ -130,7 +192,7 @@ class AlchemistCatalog {
       if ((await sha256.bind(target.openRead()).first).toString() != hash) {
         throw const FormatException('ZIP изменился');
       }
-      final draft = await prepare(roots.first);
+      final draft = await prepare(roots.first, reuse: false);
       draft['type'] = 'package';
       draft['logicalId'] = newId();
       draft['zipPath'] = target.path;
@@ -138,7 +200,7 @@ class AlchemistCatalog {
       draft['packageBytes'] = await target.length();
       draft['packageRoots'] = roots.map((r) => r.key.toMap()).toList();
       draft['card']['title'] = p.basenameWithoutExtension(source.path);
-      await save(draft);
+      await _store(draft);
       return draft;
     } finally {
       await local.close();
@@ -180,7 +242,7 @@ class AlchemistCatalog {
     final draft = await prepare(root);
     draft['type'] = 'session';
     draft['embeddedRoot'] = true;
-    await save(draft);
+    await _store(draft);
     return draft;
   }
 
@@ -250,7 +312,7 @@ class AlchemistCatalog {
           'remoteStatus': item['publicationState'],
           if (existing == null || changed) 'remoteOnly': true,
         };
-        await save(draft);
+        await _store(draft);
         count++;
       }
       cursor = page['nextPage'];
@@ -284,7 +346,7 @@ class AlchemistCatalog {
     }
     draft['status'] = 'published';
     draft.remove('error');
-    await save(draft);
+    await _store(draft);
   }
 
   AlchemistApi get remote =>
@@ -297,16 +359,32 @@ class AlchemistCatalog {
     String operation,
     Map<String, dynamic> parameters,
   ) async {
+    if (draft['ownerBinding'] != null &&
+        draft['ownerBinding'] != remote.ownerBinding) {
+      throw const AlchemistFailure(
+        'Аккаунт изменился.',
+        401,
+        'ACCOUNT_CHANGED',
+      );
+    }
     final pending = <String, dynamic>{
       'operation': operation,
       'parameters': {'requestId': newId(), ...parameters},
     };
     draft['pending'] = pending;
-    await save(draft);
+    await _store(draft);
     return _recover(draft);
   }
 
   Future<Map<String, dynamic>> _recover(Map<String, dynamic> draft) async {
+    if (draft['ownerBinding'] != null &&
+        draft['ownerBinding'] != remote.ownerBinding) {
+      throw const AlchemistFailure(
+        'Аккаунт изменился.',
+        401,
+        'ACCOUNT_CHANGED',
+      );
+    }
     final pending = Map<String, dynamic>.from(draft['pending']);
     final result = await remote.call(
       pending['operation'],
@@ -323,7 +401,7 @@ class AlchemistCatalog {
       draft['remoteRevision'] = result['immutableRevisionId'];
     }
     draft.remove('pending');
-    await save(draft);
+    await _store(draft);
     return result;
   }
 
@@ -337,7 +415,7 @@ class AlchemistCatalog {
       'ifMatch': draft['etag'],
     });
     draft['status'] = result['publicationState'];
-    await save(draft);
+    await _store(draft);
   }
 
   Future<void> publish(
@@ -349,6 +427,20 @@ class AlchemistCatalog {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');
     }
+    await save(draft);
+    final owner = remote.ownerBinding, epoch = remote.identityEpoch?.call();
+    void checkOwner() {
+      if (owner != remote.ownerBinding ||
+          epoch != remote.identityEpoch?.call() ||
+          interrupted?.call() == true) {
+        throw const AlchemistFailure(
+          'Задача приостановлена.',
+          401,
+          'ACCOUNT_CHANGED',
+        );
+      }
+    }
+
     final card = Map<String, dynamic>.from(draft['card'])
       ..putIfAbsent('coverAssetId', () => null);
     draft['card'] = card;
@@ -357,15 +449,47 @@ class AlchemistCatalog {
       throw const FormatException('Заполните название и аннотацию');
     }
     draft['status'] = 'uploading';
-    await save(draft);
+    await _store(draft);
     try {
       if (interrupted?.call() == true) {
         throw const FormatException('Публикация приостановлена');
       }
+      checkOwner();
+      final cover = draft['localCover'];
+      if (cover is Map) {
+        final m = DiaryMedia.fromMap(Map<String, dynamic>.from(cover));
+        final file = controller.diary?.mediaStore?.file(m);
+        if (file == null || !await file.exists()) {
+          throw const FormatException(
+            'Выбранная обложка недоступна. Выберите другую или явно уберите её.',
+          );
+        }
+        draft['coverStatus'] = 'transferring';
+        await _store(draft);
+        final receipt = await AlchemistMediaTransfer(db, remote).upload(
+          file,
+          logicalId: m.assetId,
+          revisionId: m.hash!,
+          mime: m.mime,
+          expectedHash: m.hash,
+          interrupted: () =>
+              interrupted?.call() == true ||
+              owner != remote.ownerBinding ||
+              epoch != remote.identityEpoch?.call(),
+          onStage: onStage,
+          taskId: draft['catalogItemId'],
+        );
+        checkOwner();
+        card['coverAssetId'] = receipt['assetRevisionId'];
+        draft['card'] = card;
+        draft['coverStatus'] = 'verified';
+        await _store(draft);
+      }
       if (draft['pending'] != null) await _recover(draft);
+      checkOwner();
       if (draft['remoteOnly'] == true) {
         draft['status'] = 'publishing';
-        await save(draft);
+        await _store(draft);
         onStage?.call('publishing');
         await _publishRemoteMetadata(draft, card);
         return;
@@ -388,7 +512,14 @@ class AlchemistCatalog {
             mime: 'application/zip',
             expectedHash: contentRevision,
             progress: progress,
+            interrupted: () =>
+                interrupted?.call() == true ||
+                owner != remote.ownerBinding ||
+                epoch != remote.identityEpoch?.call(),
+            onStage: onStage,
+            taskId: draft['catalogItemId'],
           );
+          checkOwner();
           final parameters = <String, dynamic>{
             'catalogItemId': draft['catalogItemId'],
             'card': card,
@@ -425,9 +556,15 @@ class AlchemistCatalog {
             remote,
             roots.map((r) => r.key).toList(),
             embedded: draft['embeddedRoot'] == true ? [root] : [],
-            interrupted: interrupted,
+            interrupted: () =>
+                interrupted?.call() == true ||
+                owner != remote.ownerBinding ||
+                epoch != remote.identityEpoch?.call(),
+            onStage: onStage,
+            taskId: draft['catalogItemId'],
             progress: progress,
           );
+          checkOwner();
           final parameters = <String, dynamic>{
             'catalogItemId': draft['catalogItemId'],
             'card': card,
@@ -465,7 +602,7 @@ class AlchemistCatalog {
         throw const FormatException('Публикация приостановлена');
       }
       draft['status'] = 'publishing';
-      await save(draft);
+      await _store(draft);
       onStage?.call('publishing');
       if (draft['remoteStatus'] != 'published' ||
           draft['publishedRevision'] != contentRevision) {
@@ -484,13 +621,21 @@ class AlchemistCatalog {
         );
       }
       draft['publishedRevision'] = contentRevision;
+      checkOwner();
       draft['status'] = 'published';
+      if (draft['localCover'] != null) draft['coverStatus'] = 'published';
       draft.remove('error');
-      await save(draft);
+      await _store(draft);
     } catch (e) {
       draft['status'] = interrupted?.call() == true ? 'paused' : 'failed';
-      draft['error'] = e.toString();
-      await save(draft);
+      if (draft['localCover'] != null &&
+          !const ['verified', 'published'].contains(draft['coverStatus'])) {
+        draft['coverStatus'] = 'failed';
+      }
+      final failure = AlchemistFailure.from(e);
+      draft['error'] = failure.message;
+      draft['errorCode'] = failure.code;
+      await _store(draft);
       rethrow;
     }
   }

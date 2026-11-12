@@ -1,0 +1,19 @@
+// Exact reproduction of the emulator-only precondition bug, not a user DB fix.
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sulfi_hypnotherapy/models/session_plan.dart';
+import '../../test/support/task15_fixture.dart';
+void main(){test('history fixture needs monotonic counter; normal repository starts next session without conflict',()async{
+ final f=await Fixture15.open();
+ try{
+  final fixture=jsonDecode(await File('scripts/task16_autonomous/fixture.json').readAsString());
+  final history=SessionRun.fromMap(Map<String,dynamic>.from(fixture['history']));
+  final draft=CurrentSessionDraft.fromMap(Map<String,dynamic>.from(fixture['draft']));
+  await f.db.insert('session_runs',{'id':history.id,'displayNumber':history.displayNumber,'status':history.status.name,'payload':jsonEncode(history.toMap())});
+  expect(await f.c.repository.nextNumber(),1);
+  await expectLater(f.c.repository.startRun(draft),throwsException);
+  await f.db.insert('app_counters',{'name':'session','value':1});
+  final run=await f.c.repository.startRun(draft);expect(run.displayNumber,2);expect(run.status,RunStatus.running);
+ }finally{await f.close();}
+});}

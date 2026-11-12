@@ -1,0 +1,12 @@
+Source012f7f69b7ad99c0d44f2a442d9649aa1481117e
+https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43163688437
+Conclusion success attempt2
+candidate	Build both acceptance candidates from the same tested source	2026-11-12T06:01:43.0992690Z ✓ Built build/app/outputs/flutter-apk/app-debug.apk
+candidate	Build both acceptance candidates from the same tested source	2026-11-12T06:02:26.2816259Z ✓ Built build/app/outputs/flutter-apk/app-debug.apk
+candidate	Verify both packages, signatures, version and compiled config	2026-11-12T06:02:26.4635177Z [36;1mprint('BOTH_PACKAGES_SIGNATURES_AND_COMPILED_CONFIG_PASS')[0m
+candidate	Verify both packages, signatures, version and compiled config	2026-11-12T06:02:29.4403244Z BOTH_PACKAGES_SIGNATURES_AND_COMPILED_CONFIG_PASS
+candidate	Deliver two test candidates to private draft without publishing a release	2026-11-12T06:02:38.4755006Z QA_APK_MASTER_URL=https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-master-test-25.apk
+candidate	Deliver two test candidates to private draft without publishing a release	2026-11-12T06:02:38.4760114Z QA_APK_MASTER_SHA256=d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9
+candidate	Deliver two test candidates to private draft without publishing a release	2026-11-12T06:02:45.0105203Z QA_APK_CLIENT_URL=https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-client-test-25.apk
+candidate	Deliver two test candidates to private draft without publishing a release	2026-11-12T06:02:45.0112939Z QA_APK_CLIENT_SHA256=c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73
+candidate	Deliver two test candidates to private draft without publishing a release	2026-11-12T06:02:45.0136929Z QA_PAIR_DRAFT_URL=https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-89fd5ff3b9d445c2d347

@@ -8,11 +8,11 @@ var AlchemistJwt = (function () {
     var response = UrlFetchApp.fetch('https://www.googleapis.com/oauth2/v1/certs', {
       muteHttpExceptions: true, followRedirects: false, validateHttpsCertificates: true
     });
-    if (response.getResponseCode() !== 200) AlchemistCatalog.fail(503);
+    if (response.getResponseCode() !== 200) AlchemistCatalog.fail(503,'AUTH_CERTIFICATES_UNAVAILABLE');
     var body = response.getContentText();
-    if (body.length > 100000) AlchemistCatalog.fail(503);
+    if (body.length > 100000) AlchemistCatalog.fail(503,'AUTH_CERTIFICATES_UNAVAILABLE');
     var certs = JSON.parse(body);
-    if (!certs || typeof certs !== 'object') AlchemistCatalog.fail(503);
+    if (!certs || typeof certs !== 'object') AlchemistCatalog.fail(503,'AUTH_CERTIFICATES_UNAVAILABLE');
     cache.put(key, body, 1800);cache.put('alchemist-cert-refreshed-at',String(Date.now()),1800);
     return certs;
   }
@@ -42,6 +42,9 @@ var AlchemistJwt = (function () {
       if (!AlchemistRsa.verify(token, cert)) AlchemistCatalog.fail(401);
     } catch (_) { AlchemistCatalog.fail(401); }
     var now = Math.floor(Date.now() / 1000);
+    if (audience.indexOf(claims.aud)<0) AlchemistCatalog.fail(401,'TOKEN_AUDIENCE_INVALID');
+    if (Number.isInteger(claims.exp) && claims.exp<=now) AlchemistCatalog.fail(401,'TOKEN_EXPIRED');
+    if (['accounts.google.com','https://accounts.google.com'].indexOf(claims.iss)<0) AlchemistCatalog.fail(401,'TOKEN_ISSUER_INVALID');
     if (['accounts.google.com', 'https://accounts.google.com'].indexOf(claims.iss) < 0 ||
         audience.indexOf(claims.aud)<0 || typeof claims.sub !== 'string' || !/^[a-zA-Z0-9_-]{1,256}$/.test(claims.sub) || ['constructor','prototype','__proto__'].indexOf(claims.sub)>=0 ||
         !Number.isInteger(claims.exp) || !Number.isInteger(claims.iat) ||

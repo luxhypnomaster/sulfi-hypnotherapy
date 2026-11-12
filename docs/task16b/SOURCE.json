@@ -1,0 +1,8 @@
+{
+  "fileId": "1aO3f8kJ3dP115bIyFq7Y2e54PHajF0tf",
+  "sha256": "8058c42b0f34ecd696013e345ca15d94f20b549ab3d72349f5550b1c32245391",
+  "bytes": 2086883,
+  "criteria": 80,
+  "evidence": "10 owner screenshots inspected in RAM; not copied to repository/reports",
+  "baseline": "c895291e618cc481d82cc0dcc5a90cfd73ed53f8"
+}

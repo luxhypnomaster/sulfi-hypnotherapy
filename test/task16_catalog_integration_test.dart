@@ -99,7 +99,13 @@ void main() {
       losePublishReply = true;
       await expectLater(
         service.publish(draft),
-        throwsA(isA<SocketException>()),
+        throwsA(
+          isA<AlchemistApiException>().having(
+            (e) => e.code,
+            'code',
+            'NETWORK_DNS_OR_SOCKET',
+          ),
+        ),
       );
       final recovered = (await service.drafts()).singleWhere(
         (r) => r['catalogItemId'] == draft['catalogItemId'],
@@ -333,6 +339,7 @@ void main() {
         media: authorMedia,
         connection: connection,
       );
+      final session = await diaryAuthor.authenticate('TEST_OWNER');
       await diaryAuthor.enqueuePublication(entry, published: true);
       expect(
         (await author.db.query(
@@ -342,7 +349,6 @@ void main() {
         )).length,
         1,
       );
-      final session = await diaryAuthor.authenticate('TEST_OWNER');
       expect(await diaryAuthor.flushPending(session), 1);
       final localRow = (await author.db.query(
         'diary_author',

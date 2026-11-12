@@ -1,0 +1,18 @@
+// Reproducible controlled transport capture, not a live Google or Drive proof.
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_api.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_diagnostics.dart';
+import 'package:sulfi_hypnotherapy/services/diary_api.dart';
+void main(){test('16B sanitized retry capture',()async{
+ final diagnostics=AlchemistDiagnostics();var calls=0;
+ final api=AlchemistApi(Uri.parse('https://script.google.com/macros/s/CONTROLLED/exec'),diagnostics:diagnostics,delay:(_)async{},credential:()async=>'CONTROLLED_FIXTURE_CREDENTIAL',connection:(method,uri,headers,body)async{
+  calls++;if(calls==1)throw const HttpException('private error must not escape');
+  if(calls==2)throw const SocketException('private DNS error must not escape');
+  return DiaryResponse(200,jsonEncode({'ok':true,'status':200,'result':{'state':'verified'}}));
+ });
+ await api.call('media.commitUpload',{'sessionId':'CONTROLLED_SESSION'});
+ expect(calls,3);final encoded=jsonEncode(diagnostics.events);expect(encoded, isNot(contains('CONTROLLED_FIXTURE_CREDENTIAL')));expect(encoded,isNot(contains('private error')));
+ await File('reports/task16b/TRANSFER_TRACE_16B.json').writeAsString('${const JsonEncoder.withIndent('  ').convert({'scope':'CONTROLLED_DART_TRANSPORT_NOT_LIVE','calls':calls,'events':diagnostics.events})}\n');
+});}

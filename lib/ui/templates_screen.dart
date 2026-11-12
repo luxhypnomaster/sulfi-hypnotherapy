@@ -148,8 +148,14 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         );
       }
     }
-    if (action == 'publish' && mounted) {
-      await preparePublication(context, c, ContentType.template, t.id);
+    if ((action == 'publish' || action == 'catalog') && mounted) {
+      await preparePublication(
+        context,
+        c,
+        ContentType.template,
+        t.id,
+        catalogOnly: action == 'catalog',
+      );
       return;
     }
     if (action == 'export' && mounted && c.capsules != null) {
@@ -283,15 +289,21 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                             }
                           },
                           itemBuilder: (_) => [
-                            if (c.capsules != null && c.library.policy.isAuthor)
+                            if (c.capsules != null &&
+                                c.library.policy.isAuthor) ...[
+                              const PopupMenuItem(
+                                value: 'catalog',
+                                child: Text('Добавить в каталог'),
+                              ),
                               const PopupMenuItem(
                                 value: 'publish',
                                 child: Text('Подготовить к публикации'),
                               ),
+                            ],
                             if (c.capsules != null)
                               const PopupMenuItem(
                                 value: 'export',
-                                child: Text('Экспортировать шаблон'),
+                                child: Text('Экспортировать на устройство'),
                               ),
                             const PopupMenuItem(
                               value: 'edit',

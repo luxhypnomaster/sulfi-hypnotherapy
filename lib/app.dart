@@ -1,3 +1,5 @@
+import 'ui/alchemist_queue_indicator.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -97,6 +99,11 @@ class _SulfiAppState extends State<SulfiApp> {
                 padding: EdgeInsets.only(bottom: inset),
                 child: Column(
                   children: [
+                    if (controller.capsules != null)
+                      AlchemistQueueIndicator(
+                        controller: controller,
+                        navigatorKey: navigatorKey,
+                      ),
                     Expanded(
                       child: active
                           ? MediaQuery.removeViewInsets(

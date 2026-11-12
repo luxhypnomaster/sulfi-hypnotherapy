@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'alchemist_errors.dart';
 
 import '../models/diary_publication.dart';
 import 'diary_read_state.dart';
@@ -14,6 +17,12 @@ import 'diary_audio.dart';
 import 'access_policy.dart';
 
 class DiaryController extends ChangeNotifier {
+  bool _closed = false;
+  @override
+  void notifyListeners() {
+    if (!_closed) super.notifyListeners();
+  }
+
   DiaryController(
     this.repository, {
     this.api,
@@ -29,6 +38,7 @@ class DiaryController extends ChangeNotifier {
   }) : reads = reads ?? DiaryReadStore(repository.database),
        clock = clock ?? DateTime.now {
     if (api?.supportsServerIdentity ?? false) {
+      if (identity != null) api!.bindIdentity(identity!);
       policy?.applyVerifiedServerRole(api?.verifiedRole);
     }
   }
@@ -137,6 +147,8 @@ class DiaryController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _closed = true;
+    _authGeneration++;
     _expiry?.cancel();
     for (final audio in _readerAudio.values) {
       unawaited(audio.close());
@@ -259,7 +271,15 @@ class DiaryController extends ChangeNotifier {
     }
     published = nextPublished;
     hasCache = cached != null;
-    drafts = work;
+    drafts = (api?.supportsServerIdentity ?? false)
+        ? work
+              .where(
+                (e) =>
+                    e.extra['_alchemistScope'] == null ||
+                    e.extra['_alchemistScope'] == scope,
+              )
+              .toList()
+        : work;
     if (repository.invalidIds.isNotEmpty ||
         (workspace && authorRepository!.invalidIds.isNotEmpty)) {
       error = 'Некоторые записи не удалось прочитать. Исходные данные и вложения сохранены; остальные записи доступны.';
@@ -325,6 +345,11 @@ class DiaryController extends ChangeNotifier {
     DiaryEntry.fromMap(
       entry.toMap(),
     ); // Validate before writing; failed drafts never poison stored JSON.
+    if (api?.supportsServerIdentity ?? false) {
+      entry = entry.copyWith(
+        extra: {...entry.extra, '_alchemistScope': api!.readerScope},
+      );
+    }
     await authorRepository!.save(entry);
     await load();
   }
@@ -337,6 +362,38 @@ class DiaryController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void>? _restoring;
+  Future<void> restoreSignIn() =>
+      _restoring ??= _restoreSignIn().whenComplete(() => _restoring = null);
+  Future<void> _restoreSignIn() async {
+    if (_closed) return;
+    if (!(api?.supportsServerIdentity ?? false)) return;
+    final optOut = await repository.database.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['alchemist_restore_disabled'],
+    );
+    if (optOut.firstOrNull?['value'] == '1' || api!.readerAuthenticated) return;
+    final generation = _authGeneration;
+    try {
+      if (!await api!.restoreIdentity() || generation != _authGeneration) {
+        return;
+      }
+      policy?.applyVerifiedServerRole(api!.verifiedRole);
+      _localAuthor = api!.verifiedRole == 'MASTER';
+      final token = await api!.verifiedIdentityToken();
+      if (generation != _authGeneration) return;
+      _session = _localAuthor && token != null
+          ? DiaryAuthorSession.verified(token, api!.identityExpiresAt!)
+          : null;
+      await load();
+    } catch (e) {
+      // Network loss is not logout and does not delete authority/drafts.
+      error = AlchemistFailure.from(e).message;
+      notifyListeners();
+    }
+  }
+
   /// Uses the platform account chooser. Local editing and server permissions
   /// remain separate: a network failure never deletes the author's drafts.
   Future<void> signInAuthor() async {
@@ -344,8 +401,10 @@ class DiaryController extends ChangeNotifier {
       throw const DiaryApiException('Вход автора недоступен');
     }
     final generation = ++_authGeneration;
-    api?.clearSession();
+    if (!(api?.supportsServerIdentity ?? false)) api?.clearSession();
     if (api?.supportsServerIdentity ?? false) {
+      // Hide the previous private workspace while an explicit account choice
+      // is unverified. Ordinary transport failures never enter this path.
       policy?.applyVerifiedServerRole(null);
       drafts = [];
     }
@@ -358,7 +417,7 @@ class DiaryController extends ChangeNotifier {
         )
         .toList();
     authorBusy = true;
-    _session = null;
+    if (!(api?.supportsServerIdentity ?? false)) _session = null;
     notifyListeners();
     try {
       final result = await identity!.signIn();
@@ -367,6 +426,10 @@ class DiaryController extends ChangeNotifier {
         await api!.authenticateReader(result.idToken);
         if (generation != _authGeneration) return;
         policy?.applyVerifiedServerRole(api!.verifiedRole);
+        await repository.database.insert('app_settings', {
+          'name': 'alchemist_restore_disabled',
+          'value': '0',
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
         _localAuthor = api!.verifiedRole == 'MASTER';
         if (_localAuthor) {
           _session = DiaryAuthorSession.verified(
@@ -376,11 +439,8 @@ class DiaryController extends ChangeNotifier {
         }
         await load();
         if (generation != _authGeneration) return;
-        if (_localAuthor && authorWorkspace) {
-          await api!.flushPending(_session!);
-          if (generation != _authGeneration) return;
-          await load();
-        }
+        // Pending work requires an explicit account-bound resume, never an
+        // automatic upload of legacy/unowned drafts at sign-in.
         await sync();
         return;
       }
@@ -428,6 +488,12 @@ class DiaryController extends ChangeNotifier {
   Future<void> logout() async {
     ++_authGeneration;
     ++_loadGeneration;
+    if (api?.supportsServerIdentity ?? false) {
+      await repository.database.insert('app_settings', {
+        'name': 'alchemist_restore_disabled',
+        'value': '1',
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
     api?.clearSession();
     if (api?.supportsServerIdentity ?? false) {
       policy?.applyVerifiedServerRole(null);
@@ -452,6 +518,27 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {
+    if (api?.supportsServerIdentity ?? false) {
+      if (authorBusy) {
+        throw const DiaryApiException(
+          'Выбор аккаунта ещё не завершён.',
+          DiaryFailure.authorization,
+        );
+      }
+      final token = await api!.verifiedIdentityToken();
+      policy?.applyVerifiedServerRole(api!.verifiedRole);
+      if (api!.verifiedRole != 'MASTER' ||
+          policy?.isAuthor == false ||
+          policy?.clientEdition == true ||
+          token == null) {
+        throw const DiaryApiException(
+          'Сервер не разрешил публикацию для этой роли.',
+          DiaryFailure.blocked,
+        );
+      }
+      _session = DiaryAuthorSession.verified(token, api!.identityExpiresAt!);
+      return _session!;
+    }
     if (policy != null && !policy!.isAuthor) {
       throw const DiaryApiException(
         'В клиентском режиме доступны личные записи. Публикация авторских материалов запрещена.',

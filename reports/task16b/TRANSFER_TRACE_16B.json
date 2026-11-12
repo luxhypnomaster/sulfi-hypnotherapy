@@ -1,0 +1,101 @@
+{
+  "scope": "CONTROLLED_DART_TRANSPORT_NOT_LIVE",
+  "calls": 3,
+  "events": [
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "credential",
+      "elapsedMs": 0,
+      "attempt": 0
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "error",
+      "elapsedMs": 5,
+      "attempt": 0,
+      "status": 0,
+      "code": "NETWORK_CONNECTION_ABORT"
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "retry",
+      "elapsedMs": 6,
+      "attempt": 1,
+      "code": "NETWORK_CONNECTION_ABORT"
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "credential",
+      "elapsedMs": 0,
+      "attempt": 1
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "error",
+      "elapsedMs": 6,
+      "attempt": 1,
+      "status": 0,
+      "code": "NETWORK_DNS_OR_SOCKET"
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "retry",
+      "elapsedMs": 6,
+      "attempt": 2,
+      "code": "NETWORK_DNS_OR_SOCKET"
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "credential",
+      "elapsedMs": 0,
+      "attempt": 2
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "response",
+      "elapsedMs": 0,
+      "attempt": 2,
+      "status": 200
+    },
+    {
+      "traceId": "a96fa23efb2d81e2e95108237d0d8e91",
+      "operation": "media.commitUpload",
+      "phase": "complete",
+      "elapsedMs": 7,
+      "attempt": 2,
+      "status": 200
+    }
+  ],
+  "loopbackScope": "REAL_TCP_LOOPBACK_PLAIN_HTTP_NO_GOOGLE_OR_TLS",
+  "loopbackNetworkEvents": [
+    {
+      "traceId": "2730b67c37236eea86d42a8647cd8d1c",
+      "operation": "catalog.get",
+      "phase": "connect_including_dns_tls",
+      "elapsedMs": 5,
+      "attempt": 0
+    },
+    {
+      "traceId": "2730b67c37236eea86d42a8647cd8d1c",
+      "operation": "catalog.get",
+      "phase": "headers",
+      "elapsedMs": 17,
+      "attempt": 0
+    },
+    {
+      "traceId": "2730b67c37236eea86d42a8647cd8d1c",
+      "operation": "catalog.get",
+      "phase": "body",
+      "elapsedMs": 19,
+      "attempt": 0
+    }
+  ]
+}

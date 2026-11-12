@@ -12,7 +12,15 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
   List<ContentRevision> embedded = const [],
   bool Function()? interrupted,
   void Function(int, int)? progress,
+  void Function(String)? onStage,
+  String? taskId,
 }) async {
+  final originalOwner = api.ownerBinding,
+      originalEpoch = api.identityEpoch?.call();
+  bool stopped() =>
+      interrupted?.call() == true ||
+      originalOwner != api.ownerBinding ||
+      originalEpoch != api.identityEpoch?.call();
   final index = [
     ...await LocalCatalogSource.currentIndex(service),
     ...embedded,
@@ -20,8 +28,12 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
   final closure = resolveContentRoots(roots, index),
       refs = <String, Map<String, dynamic>>{};
   final assets = await service.library.repository.list();
+  final totalBytes = closure.revisions
+      .where((r) => r.key.content.type == ContentType.track)
+      .fold<int>(0, (n, r) => n + (r.payload['fileSizeBytes'] as int));
+  var acknowledged = 0;
   for (final r in closure.revisions) {
-    if (interrupted?.call() == true) {
+    if (stopped()) {
       throw const FormatException('Передача приостановлена');
     }
     if (r.key.content.type == ContentType.track) {
@@ -40,10 +52,17 @@ Future<Map<String, Map<String, dynamic>>> registerAlchemistContent(
         revisionId: r.key.revision,
         mime: mime,
         expectedHash: r.payload['contentHash'],
-        interrupted: interrupted,
-        progress: progress,
+        interrupted: stopped,
+        progress: (n, _) => progress?.call(acknowledged + n, totalBytes),
+        onStage: onStage,
+        taskId: taskId,
       );
+      acknowledged += asset.fileSizeBytes;
     }
+    if (stopped()) {
+      throw const FormatException('Передача приостановлена');
+    }
+    onStage?.call('manifest_registering');
     final body = {
       'type': r.key.content.type.name,
       'logicalId': r.key.content.id,

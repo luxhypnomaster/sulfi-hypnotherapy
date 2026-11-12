@@ -235,11 +235,34 @@ class _BootstrapState extends State<_Bootstrap> {
       if (privateCacheValid &&
           diary.authorRepository!.invalidIds.isEmpty &&
           diary.repository.invalidIds.isEmpty) {
-        await diaryMedia.collect({
-          for (final e in allDiaryEntries)
-            for (final b in e.blocks)
-              if (diaryMedia.file(b.media)?.path case final String path) path,
-        });
+        final coverRows = await repository.database.query(
+          'app_settings',
+          where: 'name LIKE ?',
+          whereArgs: ['alchemist_card:%'],
+        );
+        final coverPaths = <String>{};
+        var coversValid = true;
+        for (final row in coverRows) {
+          try {
+            final cover = jsonDecode(row['value'] as String)['localCover'];
+            if (cover is Map) {
+              final file = diaryMedia.file(
+                DiaryMedia.fromMap(Map<String, dynamic>.from(cover)),
+              );
+              if (file != null) coverPaths.add(file.path);
+            }
+          } catch (_) {
+            coversValid = false;
+          }
+        }
+        if (coversValid) {
+          await diaryMedia.collect({
+            ...coverPaths,
+            for (final e in allDiaryEntries)
+              for (final b in e.blocks)
+                if (diaryMedia.file(b.media)?.path case final String path) path,
+          });
+        }
       }
       if (diary.api != null) unawaited(diary.sync());
       final historyMedia = DiaryMediaStore(
@@ -279,6 +302,7 @@ class _BootstrapState extends State<_Bootstrap> {
         ),
       );
       if (mounted) setState(() => _library = library);
+      unawaited(diary.restoreSignIn());
     } catch (_) {
       await _player?.close();
       _controller?.dispose();

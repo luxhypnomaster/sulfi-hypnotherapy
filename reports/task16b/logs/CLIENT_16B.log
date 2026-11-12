@@ -1,0 +1,6 @@
+00:00 +0: loading /dev/shm/sulfi16b/test/task5_client_build_test.dart
+00:00 +0: /dev/shm/sulfi16b/test/task5_client_build_test.dart: build configuration fixes CLIENT independently of mutable settings
+00:00 +1: loading /dev/shm/sulfi16b/test/task15_client_test.dart
+00:05 +1: /dev/shm/sulfi16b/test/task15_client_test.dart: CLI independent stores author -> immutable fake provider -> client media/read/exact install/player; reannounce/expiry/private isolation
+00:08 +2: /dev/shm/sulfi16b/test/task15_client_test.dart: SRV contract enforces permission, conditional publish, idempotent receipt, blob entitlement and SHA
+00:08 +3: All tests passed!

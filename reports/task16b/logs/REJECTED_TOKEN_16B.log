@@ -1,0 +1,8 @@
+00:00 +0: loading /dev/shm/sulfi16b/test/task16b_auth_transport_test.dart
+00:00 +0: /dev/shm/sulfi16b/test/task16b_auth_transport_test.dart: G1 official restore shares refreshed RAM identity; offline is not logout; wrong restored account fails closed
+00:01 +1: /dev/shm/sulfi16b/test/task16b_auth_transport_test.dart: G1 server-rejected cached token stops showing authenticated without erasing identity or drafts
+00:01 +2: /dev/shm/sulfi16b/test/task16b_auth_transport_test.dart: G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry
+00:01 +3: /dev/shm/sulfi16b/test/task16b_auth_transport_test.dart: G1-G2 retry cannot send old task after account switch during backoff; 401 refresh is bounded
+00:01 +4: loading /dev/shm/sulfi16b/test/task16b_announcement_e2e_test.dart
+00:01 +4: /dev/shm/sulfi16b/test/task16b_announcement_e2e_test.dart: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install
+00:03 +5: All tests passed!

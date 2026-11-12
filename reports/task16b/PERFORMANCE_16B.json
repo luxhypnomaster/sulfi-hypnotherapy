@@ -1,0 +1,62 @@
+{
+  "measurement": "REAL_LOOPBACK_HTTP_ONLY",
+  "liveGas": "NOT_RUN",
+  "dnsTlsAuth": "NOT_ISOLATED",
+  "physicalWifiMobile": "NOT_RUN",
+  "baseline": {
+    "requests": 20,
+    "tcpConnections": 20,
+    "p50Micros": 3702,
+    "p95Micros": 5448,
+    "rawMicros": [
+      3068,
+      3120,
+      3288,
+      3508,
+      3512,
+      3553,
+      3569,
+      3670,
+      3680,
+      3686,
+      3702,
+      3704,
+      3747,
+      3749,
+      4131,
+      4590,
+      4745,
+      5444,
+      5448,
+      26045
+    ]
+  },
+  "pooled": {
+    "requests": 20,
+    "tcpConnections": 1,
+    "p50Micros": 2031,
+    "p95Micros": 3052,
+    "rawMicros": [
+      1708,
+      1783,
+      1784,
+      1792,
+      1828,
+      1869,
+      1875,
+      1884,
+      1896,
+      1989,
+      2031,
+      2046,
+      2080,
+      2097,
+      2250,
+      2305,
+      2327,
+      2348,
+      3052,
+      3994
+    ]
+  }
+}

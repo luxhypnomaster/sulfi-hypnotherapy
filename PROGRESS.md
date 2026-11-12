@@ -346,3 +346,33 @@ Node 17 PASS. Local Dart→production JS-domain integration passes track/module/
 Trusted-main workflow-only PR19 merged at 75339b06f423255a90c2e535ebeca22c3cd2d551. Run42799396321 SUCCESS: SCRIPT_PROJECTS=YES, SCRIPT_DEPLOYMENTS=YES, WEBAPP_DEPLOY=YES, DRIVE_FILE=YES, DRIVE_FULL=NO, CI_GOOGLE_ID_TOKEN_VERIFIED=YES. No cloud writes/deploy, no secret values in logs. CI ID token can support protected bootstrap; it is NOT an Android web OAuth client. Actual runtime Drive consent and parent-folder write ability are not proven by these scope flags.
 
 Source checkpoint7d36b72: backend CI runs42798789171/42798781189 SUCCESS, two-APK workflow42798778168 running. Regression rerun33PASS after dropdown fix, analyzer clean. Active newer server hardening (post7d36b72): metadata gallery, centralized JSON routing/rate budget/denial logging, idempotent grant registry with atomic runtime authority property, byte-alias metadata isolation. Not yet final/production verified. No Task17.
+
+## №16-Б G0 checkpoint 2026-11-12
+Branch fix/task16b-auth-transfer-publication/worktree /dev/shm/sulfi16b fromc895291, appbaselinecbe0524/APK24. Fullspec23files/80criteria read+hashverified;10owner screenshots inspectedinRAM. BASELINE_AUDIT_16B+ROOT_CAUSE written before changes. Usernewproof:initialMASTER/CLIENTauth andpermissioncheck passed onphones; laterfailure notlocalized. Readonlystatus43156961962 pending. NextG1 officialSDK lightweightrestore/refresh sharedwithDiary+Catalog;G2safeRPCerror/retry+ownerboundqueue;G3existingcatalogvsannounce;G4runner/UI;G5signedpair+CI. NoGASdeploy/main/ACL/signing/migrations allowed.
+
+### №16-Б — G1/G2 + G3/G4 candidate checkpoint
+- Official lightweight Google restore, singleflight refresh, identity-bound retry, classified 401/403/network errors and bounded HTTP connection reuse implemented.
+- Existing persisted upload receipts now owner/hash/revision bound, verified bytes distinct from catalog commit. Existing catalog and diary outbox reused by app-lifetime runner.
+- Catalog action separated from diary announcement; exact dependency gate, deduplicated drafts, local cover persistence/preview and multi-category selection implemented. Full regression and APK candidate build remain gates; no live deployment.
+
+### №16-Б — G3/G4 verified checkpoint / APK25 candidate source
+- Targeted 3-track Dart→production JS→client install/announcements regression passes: failed catalog leaves local diary draft; committed material reused by repeat announcement without audio retransmission.
+- Existing ZIP export regression preserved with clarified labels; actual Flutter cover/category screenshots captured using synthetic fixture only.
+- Pooled HTTP loopback benchmark records 20→1 TCP connections; not presented as real GAS or cellular latency. Server source candidate has distinct signed token errors and safe request correlation; no deploy.
+- Two APK25 candidates will use existing signing/package and existing GAS6; exact source checks required before private draft upload. APK24 and old artifacts untouched. Native update and physical owner checks remain separate gates.
+
+### №16-Б — signed pair25 / отчётная контрольная точка
+
+App source012f7f69b7ad99c0d44f2a442d9649aa1481117e проверен local+CI:433 Flutter PASS,client3,Node46+24,schemas/format/analyze PASS. Checks43162781960; build43163688437 attempt2 SUCCESS (attempt1 failed external Kotlin POM resolution,source unchanged). Private draft442553188; master asset738283668,client738283907. Оба APK реально скачаны, SHA и V2 certificate совпадают с GitHub/старым ключом; compiled endpoint/WebID verified. APK24 preserved.
+
+Native emulator QA43165399224 запущен от того же source012f,пока NOT_CONCLUDED; отдельные synthetic audio/history/template/diary fixtures. Google/owner physical acceptance25 NOT_RUN. Отчётный commit после012f меняет только документы/отчёты; build source остаётся012f. Никакого GAS deploy/main/signing/Drive ACL change. Матрица80 и результат уточняются после native readback.
+
+### №16-Б — завершение доступной автономной проверки
+
+Неизменные APK25 source012f:local+CI433 PASS,Node46+24,client3,schemas/format/analyze PASS;сертификат/package/version/compiled config и реальные скачанные файлы PASS. Native smoke43165399224 сохраняет audio/history/template/diary при update24→25,CLIENT isolation и capsule export/import PASS. Initial audio snapshots/counter fixture исправлены только в QA. Corrected probe43196379265 подтверждает library/session/screen-off AudioTrack на24/25,7PASS/1BLOCKED (ожидание Home после сеанса не поймано);слышимость/реальные Google/две физические телефоны NOT_RUN.
+
+Все80 критериев оценены раздельно по Code/Emulator/Live/Owner;оригинальные147/отчёты16/16-А сохранены. Серверный candidate JWT/trace не deployed,требует отдельного разрешения;GAS6/source1a0/main0800/signing/APK24 сохранены. Отчётный scope не равен закрытию всего№16.
+
+### №16-Б — отчёты и байтовый readback
+
+Итоговая матрица80:37 PASS/41 PARTIAL/2 BLOCKED. RESULT_16B.md Drive id19mUU0HERZ9o1smBGBMhO-tFxCFNsp7Lt; исходный текст скачан обратно и byte-identical. EVIDENCE_16B.zip id1c5RsrKTdA_mje7lsowqufwhSFmxnyA-S,4997572bytes,SHA7576d6b9bfdbc1c283a4275d58c2eb38601aee04f0d0192f4fcb3f839b72402b; реальный raw readback и65 manifest entries проверены. APK внутри архива/на Drive отсутствуют. Индексы/receipt отдельно. Старые16/16-А/147 сохранены,main0800f34/GAS6/signing не менялись.

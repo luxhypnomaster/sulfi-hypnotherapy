@@ -1,0 +1,78 @@
+{
+  "workflowRun": 43165399224,
+  "workflowConclusion": "success",
+  "sourceSha": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "scope": "ACTUAL_ANDROID_EMULATOR_SYNTHETIC_DATA_ONLY",
+  "realGoogleUsers": "NOT_RUN",
+  "physicalOwnerQa": "NOT_RUN",
+  "cases": [
+    {
+      "case": "install24_launch",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "launched": true
+      }
+    },
+    {
+      "case": "synthetic_local_fixture",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "update24_to25_preserves_data",
+      "status": "PASS",
+      "details": {
+        "versionCode": 25,
+        "dataPreserved": true,
+        "audioHistoryTemplateDiary": "ALL_PRESERVED",
+        "sqliteIntegrity": "ok"
+      }
+    },
+    {
+      "case": "library_native_preview",
+      "status": "BLOCKED",
+      "error": "AssertionError:NATIVE_PLAYBACK_NOT_OBSERVED"
+    },
+    {
+      "case": "session_screen_off_playback",
+      "status": "BLOCKED",
+      "error": "AssertionError:SESSION_PLAYBACK_NOT_OBSERVED"
+    },
+    {
+      "case": "client25_package_isolation",
+      "status": "PASS",
+      "details": {
+        "distinctPackageSqlite": true,
+        "emptyOwnLibrary": true,
+        "schema": 9
+      }
+    },
+    {
+      "case": "guest_restart_state",
+      "status": "PASS",
+      "details": {
+        "guestVisible": true,
+        "authenticatedLogout": "NOT_RUN_NO_GOOGLE_ACCOUNT",
+        "rolesNotInjected": true
+      }
+    },
+    {
+      "case": "capsule_ui_export",
+      "status": "PASS",
+      "details": {
+        "exportControlReached": true,
+        "completedLocalExportImport": true,
+        "zipBytes": 9689,
+        "sha256": "a01b1c3f51d4e63fa40d778fb1e5ceab9687cd288190f75c56fce67639e64442",
+        "clientImportedExactAudio": true,
+        "noDriveOrGoogleAccounts": true
+      }
+    }
+  ]
+}

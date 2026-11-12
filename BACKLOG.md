@@ -313,3 +313,11 @@
 - [ ] Утверждение Home media K008 и Home draft preview.
 - [x] Separate same-code client test build configuration; actual CI artifact verification tracked in Task15 report.
 - [ ] Live provider deployment/auth decisions and physical two-device acceptance (следующее серверное ТЗ).
+
+## №16-Б — продолжение №16/16-А
+- [x] G0 фактический аудит и read-only runtime/ACL status.
+- [x] G1–G4 кандидат: единая SDK identity, owner-bound транспорт и существующая очередь, отдельный каталог/анонс, обложка/категории.
+- [x] G5 exact-source CI433 PASS и две подписанные APK25 с download/certificate/config readback.
+- [x] Native emulator install/update24→25,сохранение audio/history/template/diary,CLIENT sandbox,UI capsule export/import: run43165399224.
+- [x] Native AudioTrack library/session/screen-off на неизменных24/25 подтверждены corrected probe43196379265;один navigation expectation остаётся BLOCKED,не физическая приёмка.
+- [ ] G6 физический MASTER → три трека → дневник → CLIENT → offline; новые live server checks после отдельного разрешения на candidate deploy.

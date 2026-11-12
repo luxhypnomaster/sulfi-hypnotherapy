@@ -32,7 +32,7 @@ void main() {
       try {
         expect(
           const AlchemistHttp().responseTimeout,
-          const Duration(minutes: 5),
+          const Duration(seconds: 90),
         );
         final result = await const AlchemistHttp().request(
           'POST',

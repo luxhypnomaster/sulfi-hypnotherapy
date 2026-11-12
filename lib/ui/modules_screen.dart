@@ -118,12 +118,13 @@ class _ModulesScreenState extends State<ModulesScreen> {
                     tooltip: 'Действия модуля',
                     enabled: !busy,
                     onSelected: (value) async {
-                      if (value == 'publish') {
+                      if ((value == 'publish' || value == 'catalog')) {
                         await preparePublication(
                           context,
                           widget.controller,
                           ContentType.module,
                           m.id,
+                          catalogOnly: value == 'catalog',
                         );
                         return;
                       }
@@ -144,11 +145,16 @@ class _ModulesScreenState extends State<ModulesScreen> {
                     },
                     itemBuilder: (_) => [
                       if (widget.controller.capsules != null &&
-                          widget.controller.library.policy.isAuthor)
+                          widget.controller.library.policy.isAuthor) ...[
+                        const PopupMenuItem(
+                          value: 'catalog',
+                          child: Text('Добавить в каталог'),
+                        ),
                         const PopupMenuItem(
                           value: 'publish',
                           child: Text('Подготовить к публикации'),
                         ),
+                      ],
                       const PopupMenuItem(
                         value: 'edit',
                         child: Text('Редактировать'),
@@ -156,7 +162,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
                       if (widget.controller.capsules != null)
                         const PopupMenuItem(
                           value: 'export',
-                          child: Text('Экспортировать модуль'),
+                          child: Text('Экспортировать на устройство'),
                         ),
                     ],
                   ),

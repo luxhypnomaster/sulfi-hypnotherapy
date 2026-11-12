@@ -1,0 +1,438 @@
+{
+  "run": 43196379265,
+  "runnerSource": "daa8716361adad3352a53d211168ea38e85fd434",
+  "apkSource": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "physicalOwner": "NOT_RUN",
+  "GoogleUsers": "NOT_RUN",
+  "cases": [
+    {
+      "case": "control24_install",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "launched": true
+      }
+    },
+    {
+      "case": "control24_seed",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "control24_library",
+      "status": "PASS",
+      "details": {
+        "mode": "library",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": false
+          },
+          {
+            "attempt": 3,
+            "active": false
+          },
+          {
+            "attempt": 4,
+            "active": true
+          }
+        ],
+        "ui": [
+          " Назад",
+          " 1 аудио · 0:12",
+          " Библиотека",
+          " Облачный каталог",
+          " Каталог модулей",
+          " Записать свой трек",
+          " О приложении и данных",
+          " Все категории",
+          " Общие",
+          " Установки",
+          " Мои",
+          " + Добавить аудио",
+          " EMU AAC fixture\nВыход\n0:12",
+          " Прослушать EMU AAC fixture",
+          " Действия с аудио"
+        ],
+        "appLogs": [
+          "11-12 10:04:25.659  3855  3855 I ExoPlayerImpl: Init 4c1ee77 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 10:04:27.069  3855  4019 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 10:04:28.367  3855  4030 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 10:04:28.420  3855  4019 D MediaCodec: keep callback message for reclaim",
+          "11-12 10:04:28.719  3855  4019 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 10:04:29.352  3855  4019 D AudioTrack: getTimestamp_l(16): device stall time corrected using current time 143909857759"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN",
+        "screenOffObserved": null
+      }
+    },
+    {
+      "case": "control24_session",
+      "status": "PASS",
+      "details": {
+        "mode": "session",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": false
+          },
+          {
+            "attempt": 3,
+            "active": true
+          }
+        ],
+        "ui": [
+          " Самогипноз. Сульфи. Ваш внутренний навигатор.",
+          " О приложении и данных",
+          " Дневник",
+          " Дневник",
+          " Сессия №2",
+          " 12.11 · 10:05",
+          " Тема / запрос и заметка",
+          " Тема / запрос",
+          " Действия сессии",
+          " Структура сессии",
+          " Открыть конструктор",
+          " 0:12\n1 фаза · 0 модулей · 1 трек\nДлительность\n0:12",
+          " 1\nФаза: Нераспределённые\n0:12\n0:12",
+          " Прослушать EMU AAC fixture",
+          " EMU AAC fixture",
+          " 0:12",
+          " Шаблон",
+          " Выбрать шаблон",
+          " НАЧАТЬ ТРАНСФОРМАЦИЮ",
+          " Записаться\nк мастеру",
+          " Библиотека",
+          " Шаблоны\nи модули",
+          " История"
+        ],
+        "appLogs": [
+          "11-12 10:05:13.049  4286  4286 I ExoPlayerImpl: Init 596749f [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 10:05:14.007  4286  4409 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 10:05:14.070  4286  4421 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 10:05:14.075  4286  4409 D MediaCodec: keep callback message for reclaim",
+          "11-12 10:05:14.139  4286  4409 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 10:05:14.247  4286  4409 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 188805459691",
+          "11-12 10:05:17.151  4286  4409 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 191709697841"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN",
+        "screenOffObserved": true
+      }
+    },
+    {
+      "case": "candidate25_install",
+      "status": "BLOCKED",
+      "error": "AssertionError:APPLICATION_UI_NOT_READY_AFTER_BOOTSTRAP"
+    },
+    {
+      "case": "candidate25_seed",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "candidate25_library",
+      "status": "PASS",
+      "details": {
+        "mode": "library",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": true
+          }
+        ],
+        "ui": [
+          " Назад",
+          " 1 аудио · 0:12",
+          " Библиотека",
+          " Каталог",
+          " Каталог модулей",
+          " Записать свой трек",
+          " О приложении и данных",
+          " Все категории",
+          " Общие",
+          " Установки",
+          " Мои",
+          " + Добавить аудио",
+          " EMU AAC fixture\nВыход\n0:12",
+          " Прослушать EMU AAC fixture",
+          " Действия с аудио"
+        ],
+        "appLogs": [
+          "11-12 10:06:32.199  4928  4928 I ExoPlayerImpl: Init f5c2602 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 10:06:32.786  4928  5090 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 10:06:33.202  4928  5096 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 10:06:33.290  4928  5090 D MediaCodec: keep callback message for reclaim",
+          "11-12 10:06:33.609  4928  5090 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 10:06:34.105  4928  5090 D AudioTrack: getTimestamp_l(18): device stall time corrected using current time 268663402786"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN",
+        "screenOffObserved": null
+      }
+    },
+    {
+      "case": "candidate25_session",
+      "status": "PASS",
+      "details": {
+        "mode": "session",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": true
+          }
+        ],
+        "ui": [],
+        "appLogs": [
+          "11-12 10:07:15.946  5322  5322 I ExoPlayerImpl: Init a9249ec [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 10:07:16.438  5322  5451 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 10:07:16.499  5322  5453 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 10:07:16.519  5322  5451 D MediaCodec: keep callback message for reclaim",
+          "11-12 10:07:16.729  5322  5451 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 10:07:16.922  5322  5451 D AudioTrack: getTimestamp_l(19): device stall time corrected using current time 311480289821"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN",
+        "screenOffObserved": true
+      }
+    }
+  ],
+  "probes": [
+    {
+      "mode": "library",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": false
+        },
+        {
+          "attempt": 4,
+          "active": true
+        }
+      ],
+      "ui": [
+        " Назад",
+        " 1 аудио · 0:12",
+        " Библиотека",
+        " Облачный каталог",
+        " Каталог модулей",
+        " Записать свой трек",
+        " О приложении и данных",
+        " Все категории",
+        " Общие",
+        " Установки",
+        " Мои",
+        " + Добавить аудио",
+        " EMU AAC fixture\nВыход\n0:12",
+        " Прослушать EMU AAC fixture",
+        " Действия с аудио"
+      ],
+      "appLogs": [
+        "11-12 10:04:25.659  3855  3855 I ExoPlayerImpl: Init 4c1ee77 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 10:04:27.069  3855  4019 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 10:04:28.367  3855  4030 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 10:04:28.420  3855  4019 D MediaCodec: keep callback message for reclaim",
+        "11-12 10:04:28.719  3855  4019 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 10:04:29.352  3855  4019 D AudioTrack: getTimestamp_l(16): device stall time corrected using current time 143909857759"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN",
+      "screenOffObserved": null
+    },
+    {
+      "mode": "session",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": true
+        }
+      ],
+      "ui": [
+        " Самогипноз. Сульфи. Ваш внутренний навигатор.",
+        " О приложении и данных",
+        " Дневник",
+        " Дневник",
+        " Сессия №2",
+        " 12.11 · 10:05",
+        " Тема / запрос и заметка",
+        " Тема / запрос",
+        " Действия сессии",
+        " Структура сессии",
+        " Открыть конструктор",
+        " 0:12\n1 фаза · 0 модулей · 1 трек\nДлительность\n0:12",
+        " 1\nФаза: Нераспределённые\n0:12\n0:12",
+        " Прослушать EMU AAC fixture",
+        " EMU AAC fixture",
+        " 0:12",
+        " Шаблон",
+        " Выбрать шаблон",
+        " НАЧАТЬ ТРАНСФОРМАЦИЮ",
+        " Записаться\nк мастеру",
+        " Библиотека",
+        " Шаблоны\nи модули",
+        " История"
+      ],
+      "appLogs": [
+        "11-12 10:05:13.049  4286  4286 I ExoPlayerImpl: Init 596749f [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 10:05:14.007  4286  4409 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 10:05:14.070  4286  4421 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 10:05:14.075  4286  4409 D MediaCodec: keep callback message for reclaim",
+        "11-12 10:05:14.139  4286  4409 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 10:05:14.247  4286  4409 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 188805459691",
+        "11-12 10:05:17.151  4286  4409 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 191709697841"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN",
+      "screenOffObserved": true
+    },
+    {
+      "mode": "library",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": true
+        }
+      ],
+      "ui": [
+        " Назад",
+        " 1 аудио · 0:12",
+        " Библиотека",
+        " Каталог",
+        " Каталог модулей",
+        " Записать свой трек",
+        " О приложении и данных",
+        " Все категории",
+        " Общие",
+        " Установки",
+        " Мои",
+        " + Добавить аудио",
+        " EMU AAC fixture\nВыход\n0:12",
+        " Прослушать EMU AAC fixture",
+        " Действия с аудио"
+      ],
+      "appLogs": [
+        "11-12 10:06:32.199  4928  4928 I ExoPlayerImpl: Init f5c2602 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 10:06:32.786  4928  5090 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 10:06:33.202  4928  5096 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 10:06:33.290  4928  5090 D MediaCodec: keep callback message for reclaim",
+        "11-12 10:06:33.609  4928  5090 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 10:06:34.105  4928  5090 D AudioTrack: getTimestamp_l(18): device stall time corrected using current time 268663402786"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN",
+      "screenOffObserved": null
+    },
+    {
+      "mode": "session",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": true
+        }
+      ],
+      "ui": [],
+      "appLogs": [
+        "11-12 10:07:15.946  5322  5322 I ExoPlayerImpl: Init a9249ec [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 10:07:16.438  5322  5451 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 10:07:16.499  5322  5453 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 10:07:16.519  5322  5451 D MediaCodec: keep callback message for reclaim",
+        "11-12 10:07:16.729  5322  5451 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 10:07:16.922  5322  5451 D AudioTrack: getTimestamp_l(19): device stall time corrected using current time 311480289821"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN",
+      "screenOffObserved": true
+    }
+  ]
+}
