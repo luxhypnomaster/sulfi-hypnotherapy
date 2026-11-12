@@ -193,6 +193,41 @@ def capsule_export():
 assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','ONLY_EMULATOR_ALLOWED'
 adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
 adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
+def playback_probe(mode):
+ adb('shell','am','force-stop',PKG);launch();time.sleep(3);adb('logcat','-c',check=False)
+ if mode=='library':
+  click('Библиотека')
+  if not any('EMU AAC fixture' in label(n) for n in tree()):click('Мои',exact=True)
+  click('Прослушать EMU AAC fixture',exact=True)
+ else:click('НАЧАТЬ ТРАНСФОРМАЦИЮ')
+ observed=False;observations=[]
+ for attempt in range(10):
+  audio=adb('shell','dumpsys','audio');active=native_playing(audio);observations.append({'attempt':attempt,'active':active})
+  if active:observed=True;break
+  time.sleep(.5)
+ pid=adb('shell','pidof',PKG,check=False).strip().split()
+ raw=adb('logcat','-d','--pid='+pid[0],check=False) if pid else ''
+ selected=[re.sub(r'[A-Za-z0-9_-]{160,}','REDACTED_LONG_VALUE',l[-320:]) for l in raw.splitlines() if any(v in l.lower() for v in ['error','exception','exoplayer','audiotrack','mediacodec','playback','audiofocus','flutter'])][-60:]
+ labels=[label(n)[:140] for n in tree() if label(n).strip()][:45]
+ details={'mode':mode,'observed':observed,'samples':observations,'ui':labels,'appLogs':selected,'actualHeardSound':'NOT_RUN','googleUsers':'NOT_RUN'}
+ print('PLAYBACK_PROBE='+json.dumps(details),flush=True)
+ screenshot('probe-'+mode)
+ if observed and mode=='session':
+  # UI dump can wait for animation idle until a short fixture ends; check screen
+  # off immediately after a fresh run instead of reusing the late dump timing.
+  adb('shell','am','force-stop',PKG);launch();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');adb('shell','input','keyevent','223');time.sleep(1)
+  details['screenOffObserved']=native_playing(adb('shell','dumpsys','audio'));adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard')
+ assert observed,'PLAYBACK_NOT_OBSERVED_WITH_10_SAMPLES'
+ return details
+if os.environ.get('SULFI_QA_SCOPE')=='playback':
+ case('control24_install',install24);case('control24_seed',seed)
+ case('control24_library',lambda:playback_probe('library'));case('control24_session',lambda:playback_probe('session'))
+ def upgrade_for_probe():
+  assert 'Success' in adb('install','-r',str(APK/'master25.apk'));launch();require_home();return {'versionCode':25}
+ case('candidate25_install',upgrade_for_probe);case('candidate25_seed',seed)
+ case('candidate25_library',lambda:playback_probe('library'));case('candidate25_session',lambda:playback_probe('session'))
+ print('PLAYBACK_PROBE_COMPLETE_NO_GOOGLE_USERS',flush=True)
+ raise SystemExit(0)
 selected=[('install24_launch',install24),('synthetic_local_fixture',seed),('update24_to25_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client25_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]
 if os.environ.get('SULFI_QA_SCOPE')=='preview':selected=selected[:4]
 for name,work in selected:case(name,work)

@@ -12,6 +12,11 @@ on:
         description: '16B isolated APK24 to25 native QA, no Google identities'
         type: boolean
         default: false
+      qa_scope:
+        description: 'Native smoke or isolated APK24/APK25 playback diagnosis'
+        type: choice
+        options: [smoke, playback]
+        default: smoke
       build_mode:
         description: '16-A: checks only; one auth candidate; or final dual APK after real server acceptance'
         type: choice
@@ -198,7 +203,8 @@ jobs:
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'apk25'
           assert hashlib.sha256((root/'master24.apk').read_bytes()).hexdigest()=='a242d8222af27c936f44c86b47e2cf674c3789072c3a7cac9aa4bba3afe3cda1'
           release=next(r for r in json.loads(subprocess.check_output(['gh','api','repos/luxhypnomaster/sulfi-hypnotherapy/releases?per_page=100'])) if r['tag_name']=='task16b-qa-pair-25')
-          assert release['draft'] is True and release['target_commitish']==os.environ['GITHUB_SHA']
+          assert release['draft'] is True and release['target_commitish']=='012f7f69b7ad99c0d44f2a442d9649aa1481117e'
+          subprocess.run(['git','diff','--exit-code','012f7f69b7ad99c0d44f2a442d9649aa1481117e','--','lib','android','pubspec.yaml','pubspec.lock','server/alchemist/src'],check=True,stdout=subprocess.DEVNULL)
           for edition in ['master','client']:
               asset=next(a for a in release['assets'] if a['name']=='sulfi-'+edition+'-test-25.apk')
               output=root/(edition+'25.apk')
@@ -210,7 +216,7 @@ jobs:
         if: steps.kvm.outputs.available == 'true'
         uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
         env:
-          SULFI_QA_SCOPE: smoke
+          SULFI_QA_SCOPE: ${{ inputs.qa_scope }}
         with:
           api-level: 35
           arch: x86_64
