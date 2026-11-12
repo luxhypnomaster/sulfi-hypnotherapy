@@ -162,7 +162,16 @@ def record_audio():
  if allow is not None:tap(allow)
  time.sleep(4);tap(finish);time.sleep(2);click('Сохранить трек');time.sleep(2)
  assert any('UI recorded original' in label(n) for n in tree()),'RECORDED_NOT_VISIBLE'
- return {'createdBy':'native_microphone_UI','hardware':'emulator_virtual_microphone'}
+ saved=[]
+ for _ in range(8):
+  v=inventory('after-ui-recording24')
+  saved=[r for r in v['rows']['audio_assets'] if r['title']=='UI recorded original' and r['source']=='recorded']
+  if saved:break
+  time.sleep(1)
+ assert len(saved)==1 and saved[0]['durationMs']>1000,'RECORDED_ROW_NOT_PERSISTED_IN_SQLITE'
+ file=v['files'].get('files/audio/'+saved[0]['filePath'])
+ assert file and file['sha256']==saved[0]['contentHash'],'RECORDED_BYTES_NOT_VERIFIED'
+ return {'createdBy':'native_microphone_UI','hardware':'emulator_virtual_microphone','sqliteID':saved[0]['id'],'durationMs':saved[0]['durationMs'],'sha256':file['sha256']}
 def module(title,tracks,pause=False):
  home();click('Шаблоны');click('Модули');click('Создать модуль');text(title)
  click('Добавить трек');time.sleep(1)
