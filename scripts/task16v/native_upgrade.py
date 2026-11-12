@@ -17,7 +17,7 @@ def shot(name):
  (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
  (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/task16v-window.xml',check=False))
 def tap(n):
- p=[int(i) for i in re.findall(r'\d+',n['bounds'])]
+ p=[int(i) for i in re.findall(r'\d+',n.get('bounds',''))]
  adb('shell','input','tap',str((p[0]+p[2])//2),str((p[1]+p[3])//2));time.sleep(.5)
 def click(text,exact=False,attempts=3):
  for _ in range(attempts):
@@ -125,6 +125,8 @@ def before():
  shot('24-before-upgrade');return {'tracks':len(v['rows']['audio_assets']),'modules':len(v['rows']['module_definitions']),'integrity':v['database']['integrity']}
 def compare(name):
  v=inventory(name);old=inventories.get('before24');assert old,'NO_BASELINE'
+ assert any(c['case']=='before24_inventory' and c['status']=='PASS' for c in CASES),'INVALID_BASELINE_UI_CREATION_FAILED'
+ assert len(old['rows']['audio_assets'])>=3 and len(old['rows']['module_definitions'])>=1,'EMPTY_BASELINE_CANNOT_PASS_UPGRADE'
  missing={}
  for table in ['audio_assets','module_definitions','session_templates','diary_author']:
   absent=[r for r in old['rows'][table] if r not in v['rows'][table]]
@@ -135,6 +137,7 @@ def compare(name):
  assert v['database']['integrity']=='ok','INTEGRITY_FAILED'
  return {'exactRowsAndMediaPreserved':True,'audio':len(v['rows']['audio_assets']),'modules':len(v['rows']['module_definitions']),'diary':len(v['rows']['diary_author'])}
 def upgrade():
+ assert any(c['case']=='before24_inventory' and c['status']=='PASS' for c in CASES),'STOP_SHIP_INVALID_UI_BASELINE_NO_UPGRADE_PROOF'
  assert 'Success' in adb('install','-r',str(APK/'master25.apk'));launch();shot('25-after-upgrade');return compare('after25')
 def ui_after():
  home();click('Библиотека');ns=tree();shot('25-library')
