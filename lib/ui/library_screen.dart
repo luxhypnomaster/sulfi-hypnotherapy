@@ -582,15 +582,33 @@ class _LibraryScreenState extends State<LibraryScreen>
                           ),
                           if (!widget.allowSelection &&
                               widget.controller?.capsules != null)
-                            TextButton.icon(
-                              label: const Text('Каталог'),
-                              icon: const Icon(Icons.cloud_outlined),
-                              onPressed: () => Navigator.push<void>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => AlchemistStoreScreen(
-                                    controller: widget.controller!,
+                            SizedBox(
+                              width: 52,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: const Size(48, 48),
+                                ),
+                                onPressed: () => Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AlchemistStoreScreen(
+                                      controller: widget.controller!,
+                                    ),
                                   ),
+                                ),
+                                child: const Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.cloud_outlined, size: 20),
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        'Каталог',
+                                        style: TextStyle(fontSize: 11),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
