@@ -94,7 +94,7 @@ def install24():
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();require_home();details=diagnostics(PKG);assert details['pidPresent'],'APP_NOT_RUNNING'
  screenshot('master24-start');return {'versionCode':24,'launched':bool(adb('shell','pidof',PKG).strip())}
 def seed():
- adb('shell','am','force-stop',PKG);t,c=dbcopy();now='2026-11-11T00:00:00.000Z'
+ adb('shell','am','force-stop',PKG);t,c=dbcopy();c.execute('pragma foreign_keys=ON');now='2026-11-11T00:00:00.000Z'
  data=pathlib.Path('test/fixtures/android_aac_isom.m4a').read_bytes();digest=hashlib.sha256(data).hexdigest()
  fixture=json.loads(pathlib.Path('scripts/task16_autonomous/fixture.json').read_text())
  row=fixture['audio'];assert row['contentHash']==digest and row['fileSizeBytes']==len(data)
@@ -102,7 +102,12 @@ def seed():
  c.execute('insert or replace into audio_assets ('+','.join(row)+') values ('+','.join('?' for _ in row)+')',list(row.values()))
  c.execute('insert or replace into current_draft values (1,?)',(json.dumps(fixture['draft']),))
  c.execute('insert or replace into session_templates values (?,?)',('emu-template',json.dumps(fixture['template'])))
+ if os.environ.get('SULFI_QA_SCOPE')=='playback':c.execute("delete from session_runs where id!='emu-history'")
  history=fixture['history'];c.execute('insert or replace into session_runs values (?,?,?,?)',(history['id'],history['displayNumber'],history['status'],json.dumps(history)))
+ # Match the real repository's monotonic counter invariant after explicit QA seeding.
+ maximum=c.execute('select coalesce(max(displayNumber),0) from session_runs').fetchone()[0]
+ prior=c.execute("select value from app_counters where name='session'").fetchone()
+ c.execute('insert or replace into app_counters values (?,?)',('session',max(maximum,prior[0] if prior else 0)))
  diary=fixture['diary'];c.execute('insert or replace into diary_author values (?,?,?)',(diary['id'],diary['updatedAt'],json.dumps(diary)))
  c.commit();c.execute('pragma wal_checkpoint(truncate)');c.close()
  adb('shell',f'run-as {PKG} sh -c '+shlex.quote('for suffix in -wal -shm; do if [ -f files/library.sqlite$suffix ]; then mv files/library.sqlite$suffix files/qa-preseed$suffix; fi; done'));
@@ -122,6 +127,11 @@ def native_playing(audio):
  active=[l for l in rows if re.search(r'state[:=]\s*(?:started|3)\b',l,re.I)]
  print('EMULATOR_APP_PLAYERS='+json.dumps({'uid':match[1],'players':rows[:4],'active':bool(active),'diagnosticLines':[l.strip()[:280] for l in audio.splitlines() if 'piid' in l or 'AudioTrack' in l or match[1] in l][:12]}),flush=True)
  return bool(active)
+def wait_playing(attempts=12):
+ for _ in range(attempts):
+  if native_playing(adb('shell','dumpsys','audio')):return True
+  time.sleep(.5)
+ return False
 def library_play():
  click('Библиотека');time.sleep(1)
  # Imported fixture is personal, select that section if necessary.
@@ -132,17 +142,17 @@ def library_play():
  assert any('EMU AAC fixture' in label(n) for n in tree()),'FIXTURE_NOT_VISIBLE'
  screenshot('library-fixture');click('Прослушать EMU AAC fixture',exact=True);time.sleep(1)
  audio=adb('shell','dumpsys','audio');(OUT/'audio-preview.txt').write_text(audio)
- observed=native_playing(audio)
+ observed=wait_playing()
  print('EMULATOR_PREVIEW_UI='+json.dumps([{'label':label(n)[:140],'bounds':n.get('bounds'),'clickable':n.get('clickable')} for n in tree() if label(n).strip()][:28]),flush=True)
  screenshot('preview-after-tap')
  assert observed,'NATIVE_PLAYBACK_NOT_OBSERVED'
  screenshot('preview-playing');return {'nativePlaybackObserved':True,'actualHeardSound':'NOT_RUN'}
 def session_play():
  adb('shell','am','force-stop',PKG);launch();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(2)
- audio=adb('shell','dumpsys','audio');assert native_playing(audio),'SESSION_PLAYBACK_NOT_OBSERVED'
+ audio=adb('shell','dumpsys','audio');assert wait_playing(),'SESSION_PLAYBACK_NOT_OBSERVED'
  screenshot('session-playing');adb('shell','input','keyevent','223');time.sleep(2)
  audio=adb('shell','dumpsys','audio');(OUT/'audio-screen-off.txt').write_text(audio)
- assert native_playing(audio),'BACKGROUND_PLAYBACK_NOT_OBSERVED'
+ assert wait_playing(),'BACKGROUND_PLAYBACK_NOT_OBSERVED'
  adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard');return {'screenOffPlaybackObserved':True,'physicalPhone':'NOT_RUN'}
 def client_isolation():
  assert 'Success' in adb('install','-r',str(APK/'client25.apk'));launch(CLIENT);require_home();screenshot('client24-guest');adb('shell','am','force-stop',CLIENT)
@@ -205,27 +215,26 @@ def playback_probe(mode):
   audio=adb('shell','dumpsys','audio');active=native_playing(audio);observations.append({'attempt':attempt,'active':active})
   if active:observed=True;break
   time.sleep(.5)
+ screen_off=None
+ if observed and mode=='session':
+  adb('shell','input','keyevent','223');time.sleep(.5);screen_off=wait_playing(4)
+  adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard')
  pid=adb('shell','pidof',PKG,check=False).strip().split()
  raw=adb('logcat','-d','--pid='+pid[0],check=False) if pid else ''
  selected=[re.sub(r'[A-Za-z0-9_-]{160,}','REDACTED_LONG_VALUE',l[-320:]) for l in raw.splitlines() if any(v in l.lower() for v in ['error','exception','exoplayer','audiotrack','mediacodec','playback','audiofocus','flutter'])][-60:]
  labels=[label(n)[:140] for n in tree() if label(n).strip()][:45]
- details={'mode':mode,'observed':observed,'samples':observations,'ui':labels,'appLogs':selected,'actualHeardSound':'NOT_RUN','googleUsers':'NOT_RUN'}
+ details={'mode':mode,'observed':observed,'samples':observations,'ui':labels,'appLogs':selected,'actualHeardSound':'NOT_RUN','googleUsers':'NOT_RUN','screenOffObserved':screen_off}
  print('PLAYBACK_PROBE='+json.dumps(details),flush=True)
  screenshot('probe-'+mode)
- if observed and mode=='session':
-  # UI dump can wait for animation idle until a short fixture ends; check screen
-  # off immediately after a fresh run instead of reusing the late dump timing.
-  adb('shell','am','force-stop',PKG);launch();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');adb('shell','input','keyevent','223');time.sleep(1)
-  details['screenOffObserved']=native_playing(adb('shell','dumpsys','audio'));adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard')
  assert observed,'PLAYBACK_NOT_OBSERVED_WITH_10_SAMPLES'
  return details
 if os.environ.get('SULFI_QA_SCOPE')=='playback':
  case('control24_install',install24);case('control24_seed',seed)
- case('control24_library',lambda:playback_probe('library'));case('control24_session',lambda:playback_probe('session'))
+ case('control24_library',lambda:playback_probe('library'));case('control24_session',lambda:(seed(),playback_probe('session'))[1])
  def upgrade_for_probe():
   assert 'Success' in adb('install','-r',str(APK/'master25.apk'));launch();require_home();return {'versionCode':25}
  case('candidate25_install',upgrade_for_probe);case('candidate25_seed',seed)
- case('candidate25_library',lambda:playback_probe('library'));case('candidate25_session',lambda:playback_probe('session'))
+ case('candidate25_library',lambda:playback_probe('library'));case('candidate25_session',lambda:(seed(),playback_probe('session'))[1])
  print('PLAYBACK_PROBE_COMPLETE_NO_GOOGLE_USERS',flush=True)
  raise SystemExit(0)
 selected=[('install24_launch',install24),('synthetic_local_fixture',seed),('update24_to25_preserves_data',upgrade),('library_native_preview',library_play),('session_screen_off_playback',session_play),('client25_package_isolation',client_isolation),('guest_restart_state',guest_state),('capsule_ui_export',capsule_export)]
