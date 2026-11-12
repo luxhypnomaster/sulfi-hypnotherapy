@@ -10,3 +10,7 @@
 8. **Owner safety**: normal update факт не переспросили, uninstall/clear/cache/downgrade/import/logout/замены личных объектов не предлагали. Main/PR45/old APK/GAS/Drive ACL/signing не изменялись.
 
 Owner evidence update: владелец сообщил по памяти «Пустые списки без ошибки». Не является forensic bytes evidence; различие rows absent vs filtered по-прежнему UNKNOWN. Ошибка пользователя/удаление приложения не предполагаются.
+
+Возможная destructive chain подробно отделена от фактов: default corruption recovery → fresh empty schema → generated audio/diary orphan cleanup → empty UI without exception. Native first link и последующие code paths подтверждены отдельно; invocation/initial corruption на телефоне UNKNOWN. Это причина STOP-SHIP, не объявленное восстановление и не доказанная вина аккаунта.
+
+Final core run12 completed, not pending:2imports then navigation failure, populated update blocked; no additional preservation PASS. All verified evidence retained; existing run8 proof still valid within its limited dataset. No emulator loop can establish physical owner bytes or authenticated diary without lawful separate access.

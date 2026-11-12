@@ -1,0 +1,792 @@
+{
+  "kind": "REPORTS_AND_CONTROLLED_TEST_EVIDENCE_ONLY",
+  "ownerMaterial": "NONE",
+  "sulfiAPK26": "NOT_BUILT_STOP_SHIP",
+  "files": [
+    {
+      "path": ".github/workflows/checks.yml",
+      "bytes": 18200,
+      "sha256": "616628f104251f54f762cacc436f42f2572bdef27d898d3ee44bf64805248049"
+    },
+    {
+      "path": "docs/task16v/00_READ_FIRST.md",
+      "bytes": 4346,
+      "sha256": "b8f96be48d7d991145c7777b6b1d9da9697e5b8b31f8cdc558604e317798b21d"
+    },
+    {
+      "path": "docs/task16v/01_CONTEXT_AND_BASELINES.md",
+      "bytes": 2943,
+      "sha256": "49a0deaee2be6855094fbc7c29346836afd8b6261fbe74bbc775ceb2ab32e5d3"
+    },
+    {
+      "path": "docs/task16v/02_FORENSIC_DIAGNOSIS.md",
+      "bytes": 3904,
+      "sha256": "dc4cc2fdd710966266990947d2d1f083bc2d94897669af6a6ecb8afefdbce3c4"
+    },
+    {
+      "path": "docs/task16v/03_REPRODUCE_AND_TEST.md",
+      "bytes": 4167,
+      "sha256": "91395db9de6a0619e9fefaee00770dbdc33931167fe12037ee9a3c7aefa22365"
+    },
+    {
+      "path": "docs/task16v/04_FIX_AND_RECOVERY.md",
+      "bytes": 4536,
+      "sha256": "2ecb12af6040aa9a189b706130d285803d8552622ad1f5901b3c7b34d01449f2"
+    },
+    {
+      "path": "docs/task16v/05_DELIVERY_GATES.md",
+      "bytes": 3153,
+      "sha256": "b1c55f4b4111ea60cb2a267b88e568dc0a392f58b9553eb00bdcd6091870e3f6"
+    },
+    {
+      "path": "docs/task16v/06_OWNER_NO_TOUCH_NOTICE.md",
+      "bytes": 2092,
+      "sha256": "e3a75915cfcbce3ea6493ede1838b96684c4bd17b6a822a04d464c1fad351a55"
+    },
+    {
+      "path": "docs/task16v/ACCEPTANCE_16V.csv",
+      "bytes": 4943,
+      "sha256": "b0c41e72b4d15c45c5a2ee83586ce24a1e0c3452643983f617f1679892f3a44c"
+    },
+    {
+      "path": "docs/task16v/MANIFEST.json",
+      "bytes": 1334,
+      "sha256": "2bd4f4eb16629f4a9f3115f30adcbc0db649e8a49512727738fd77c74c7fdc62"
+    },
+    {
+      "path": "reports/task16v/ACCEPTANCE_16V.csv",
+      "bytes": 8401,
+      "sha256": "332a67d94f5de1dda6b0752c6d10d9fcad989444b9cc994950c3cccd7ba032f5"
+    },
+    {
+      "path": "reports/task16v/ACCEPTANCE_COUNTS_16V.json",
+      "bytes": 161,
+      "sha256": "423ce393b8361e8c214a03e85631011dfecb7644a24a64aa3f729123e7635c23"
+    },
+    {
+      "path": "reports/task16v/ACQUISITION_OPTIONS_16V.md",
+      "bytes": 4983,
+      "sha256": "7a7659fe0d63cd2a18a23a4c0b859b863b201f59a89d860a711c0158a5eba40e"
+    },
+    {
+      "path": "reports/task16v/APK24_APK25_READBACK_16V.json",
+      "bytes": 650,
+      "sha256": "d6f77970349cc2d1710617dfff754d538e6e097215e3bbeeb81e23af8db2bb77"
+    },
+    {
+      "path": "reports/task16v/APK24_TO25_APP.diff",
+      "bytes": 135052,
+      "sha256": "06116378d2aa76702890394c905d6589dad4754065fe4a4860c037f0e734e9ac"
+    },
+    {
+      "path": "reports/task16v/BASELINE_FREEZE_16V.json",
+      "bytes": 767,
+      "sha256": "6a6941981d3663e1ecfb4f032b97439538f9a5803f10d84f080f6604b084ca0f"
+    },
+    {
+      "path": "reports/task16v/BINARY_METADATA_16V.json",
+      "bytes": 29972,
+      "sha256": "e83b2da7dae37fe82f346bf0c5ccdc35d5deeb9e99226a2498b285b2454c8595"
+    },
+    {
+      "path": "reports/task16v/CHANGES_16V.md",
+      "bytes": 1789,
+      "sha256": "8010fca1005b2c64628c0605171b670f4a1f90b21217ac111d1729d614de0966"
+    },
+    {
+      "path": "reports/task16v/CI_EVIDENCE_16V.json",
+      "bytes": 4246,
+      "sha256": "311c34ca477ce6a2bebcb347abb09bd54216e83fe5aa3901fa81fbcb48ed5581"
+    },
+    {
+      "path": "reports/task16v/DARTJNI_BYTE_DIFF_16V.json",
+      "bytes": 526,
+      "sha256": "23d3e2ec8fb5138c9defc4516161d7513a4f291bee73b3c7e7e08c6f1b41242d"
+    },
+    {
+      "path": "reports/task16v/DARTJNI_ELF_COMPARISON_16V.json",
+      "bytes": 6602,
+      "sha256": "c0f0968586bbdcff7758b3aee54a23b7d6ad4669b97d5da442a6699aa1eebf1a"
+    },
+    {
+      "path": "reports/task16v/DEPENDENCY_SAFETY_16V.md",
+      "bytes": 4434,
+      "sha256": "cf8723e0bfc8d39fdd277078fbb32232a3ba388d19653149c812cf8a189598f1"
+    },
+    {
+      "path": "reports/task16v/DIFF_AUDIT_16V.md",
+      "bytes": 10574,
+      "sha256": "e44729aca138e87e407d4df306d18d22f8bebfd1d8f41fbdb60d7b94e4a72fe7"
+    },
+    {
+      "path": "reports/task16v/ENGINE_LIBRARY_COMPARISON_16V.json",
+      "bytes": 2518,
+      "sha256": "44ce6dea8bf82f540f80b10b8170e7b60be3c0d1f4df5dbb2bb05ef80f5c5f30"
+    },
+    {
+      "path": "reports/task16v/EVIDENCE_INDEX_16V.md",
+      "bytes": 5385,
+      "sha256": "e945ede6b4316e4d933a5f85d5f56ef69f5a105eea1cd07bc00fc29c2a425a07"
+    },
+    {
+      "path": "reports/task16v/FINAL_BOUNDARIES_16V.json",
+      "bytes": 1127,
+      "sha256": "61e7255e7ca681cf24c81e9ccd16f0d0de32886b12ca1035cc82a6eed0e51a0a"
+    },
+    {
+      "path": "reports/task16v/FLUTTER_SUMMARY_16V.json",
+      "bytes": 56,
+      "sha256": "f30d5c7b7957ecfb889e52e1b9a5b73a8264dff0da5a5abf9dfd5305dc4721f9"
+    },
+    {
+      "path": "reports/task16v/INVENTORY_AFTER25_UI_16V.json",
+      "bytes": 35516,
+      "sha256": "bc4ff13bed164f8c5ecb04b9bb325a8bbfb3036eaa1f47f96a9c1905adf5cc7c"
+    },
+    {
+      "path": "reports/task16v/INVENTORY_BEFORE24_UI_16V.json",
+      "bytes": 35517,
+      "sha256": "a319dd250dcf1949b60c57232ab18998df457143e13d3f5f5e22f029e2342d9b"
+    },
+    {
+      "path": "reports/task16v/INVENTORY_COLD25_UI_16V.json",
+      "bytes": 35515,
+      "sha256": "81cc1a52bbdf8c05e6f6e1da168b7c97ee064ef0702a9142f899f404771a29fa"
+    },
+    {
+      "path": "reports/task16v/INVENTORY_DIFF_UI_16V.json",
+      "bytes": 2152,
+      "sha256": "2476d71b91726edf9bc2a8a019c114b0b2b7d688f0efca197858f2bbe2f58829"
+    },
+    {
+      "path": "reports/task16v/ISSUES_16V.md",
+      "bytes": 3948,
+      "sha256": "b2844520a11baeffd50e82b688d70de8dc7df030991c9bb4bedb118b60920bb5"
+    },
+    {
+      "path": "reports/task16v/NATIVE_DEX_COMPARISON_16V.json",
+      "bytes": 6086,
+      "sha256": "1121b14216402ce527b053305973a438829cf01759a3670f7f332e96a7bba130"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_CURRENT.json",
+      "bytes": 135495,
+      "sha256": "f1326b1b6143217524d55f3d6e815c395ee3331ba26ff90adfe85f326f81f9da"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN1.json",
+      "bytes": 8989,
+      "sha256": "0f49567079a371e243f104a5fe9d55b2e9005fd64bf0c96523dbfc18014b62cc"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN10.json",
+      "bytes": 3780,
+      "sha256": "95af3b4cca21ff8607d51d634a8e522700ce488750e83b07765ae9be725d5c33"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN11.json",
+      "bytes": 32685,
+      "sha256": "cb283275ef5c7cc21e0d383bb46f079fb9e39d423f8cd4bc50c533f2a10296e1"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN12.json",
+      "bytes": 21248,
+      "sha256": "ff9ff493695bd8ea051c08765468a3722fb884fa346f4d191ccf8b3135cf62fd"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN2.json",
+      "bytes": 2105,
+      "sha256": "801310c05c891b6fad54813dd22539f36355cd2d0084e783815d7491b1e3b126"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN4.json",
+      "bytes": 3640,
+      "sha256": "9485f71743a129fe7bfe51463cc71a9645f848ab748d15d9e9770ba16cedecc2"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN5.json",
+      "bytes": 4777,
+      "sha256": "eccc0d2bfcc5b0e3cc1e595b116898a40f23eaec86417f90d7f97bbc69bd2ca3"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN6.json",
+      "bytes": 2833,
+      "sha256": "ec4aaf9159c7f5c30b1bb3bf7f9a9bf57bf5fdcb7611155eba6e983c41c73cbb"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN7.json",
+      "bytes": 21704,
+      "sha256": "d6d20055eaa9b5b3b589c56a25a9d8f0cacbe515c3f090b43e2a15b7b739d98a"
+    },
+    {
+      "path": "reports/task16v/NATIVE_UI_UPGRADE_RUN8.json",
+      "bytes": 135495,
+      "sha256": "f1326b1b6143217524d55f3d6e815c395ee3331ba26ff90adfe85f326f81f9da"
+    },
+    {
+      "path": "reports/task16v/OWNER_OBSERVATION_16V.json",
+      "bytes": 518,
+      "sha256": "1d27b15d563c861ea0b7e640cf382512df7d572e6c05a436b51b3a01d5c2b4ba"
+    },
+    {
+      "path": "reports/task16v/OWNER_RECOVERY_PLAN_16V.md",
+      "bytes": 9422,
+      "sha256": "d818ed1c0b833e6cae67872c9002fe66f32508bfaab2c85511e340b2f122c3b4"
+    },
+    {
+      "path": "reports/task16v/PRODUCT_PATCH_16V.diff",
+      "bytes": 2184,
+      "sha256": "54875abcb990413ead767e6fbbc0729ba93867ddf7b1fc994a39fe62e3f3cc54"
+    },
+    {
+      "path": "reports/task16v/PROGRESS.md",
+      "bytes": 9641,
+      "sha256": "a80316a36b920fff61d59242750d9cdb620df43ecc81357825e80abce23a9ad1"
+    },
+    {
+      "path": "reports/task16v/RECOVERY_LIMITATIONS_16V.md",
+      "bytes": 2584,
+      "sha256": "a1025b86a99353d410bc9084ff2260773129c2ce6180771bb00becd14fe98744"
+    },
+    {
+      "path": "reports/task16v/REMOTE_BASELINES_16V.json",
+      "bytes": 1657,
+      "sha256": "a66a04965f5b089b66e9051dcee7d724f3b7a431567d9b56ac6ddcd0bf246bf8"
+    },
+    {
+      "path": "reports/task16v/RESULT_16V.md",
+      "bytes": 6941,
+      "sha256": "88de89d487d5b18903dcd7a43f736f6fb246311603a440ef38d65fba59efc905"
+    },
+    {
+      "path": "reports/task16v/RESUME_16V.md",
+      "bytes": 2533,
+      "sha256": "c9dfbcdde11efd36ddf8f2e9ece4437d37661ff697cccbde86c994e6bdf503fd"
+    },
+    {
+      "path": "reports/task16v/ROOT_CAUSE_16V.md",
+      "bytes": 9202,
+      "sha256": "d5ed6ed12b3fa8a9a9fc976718185dafe391a8400932d3615b392d154be50b97"
+    },
+    {
+      "path": "reports/task16v/SAFE_READONLY_DIAGNOSTIC.md",
+      "bytes": 4163,
+      "sha256": "c3d64fdc30d6f2268110482431def360c8405e3557bf28cbc1e992d6a4522532"
+    },
+    {
+      "path": "reports/task16v/SOURCE_VERIFICATION_16V.json",
+      "bytes": 872,
+      "sha256": "07c74475a96685ef4a86e893cdd908b361d79dda0548ebd67c0b022673e1979b"
+    },
+    {
+      "path": "reports/task16v/SQFLITE_NATIVE_DEX_16V.txt",
+      "bytes": 192861,
+      "sha256": "a20de58858111581ad979642374885aab69eadde77ea2d5eff3bb2dec0ebe543"
+    },
+    {
+      "path": "reports/task16v/STORAGE_SOURCE_COMPARISON.json",
+      "bytes": 2549,
+      "sha256": "2ddbcc074549ed9e2e82fc353bdb040b19f40fddfeffc7aa88a82b9ff45df80e"
+    },
+    {
+      "path": "reports/task16v/TESTS_16V.md",
+      "bytes": 5366,
+      "sha256": "822542af0be35e0ab7e5ac61fb731a53141bba48f5fa03ccdd89c2917fbe9ee6"
+    },
+    {
+      "path": "reports/task16v/UNCHANGED_STORAGE_SOURCE.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/task16v/UPGRADE_REPRO_16V.md",
+      "bytes": 8500,
+      "sha256": "c30e00fa8c9373bac6c98b6dcc871e09a94e22a9f80b6c79c8a81a3ae587fc88"
+    },
+    {
+      "path": "reports/task16v/logs/ci-final-regressions9.log",
+      "bytes": 631,
+      "sha256": "ab601fda1f1fb93fc91730b8d01f59691de8ae409c98e1ce550970b05af2da4b"
+    },
+    {
+      "path": "reports/task16v/logs/ci-regressions-run2.log",
+      "bytes": 518,
+      "sha256": "41fb18eb4b511a32cf9e74b0fbe479c5ed74d7917a9539675737968d33e70929"
+    },
+    {
+      "path": "reports/task16v/logs/flutter-analyze.log",
+      "bytes": 1539,
+      "sha256": "40d7d1c17cecb81cccd2b5b49d2394743f18b2f59d7bc4796a85dcbda8671015"
+    },
+    {
+      "path": "reports/task16v/logs/flutter-client.log",
+      "bytes": 2088,
+      "sha256": "d1471d2030d39d82305c1a26691bb9545747e1597475cc18fcf553398b1cb4d8"
+    },
+    {
+      "path": "reports/task16v/logs/flutter-tests.jsonl",
+      "bytes": 224353,
+      "sha256": "050d7cd6cd8a79a7b9806328c753f2333c8a32f86bf45156d53314149cb6d541"
+    },
+    {
+      "path": "reports/task16v/logs/legacy-scope-after-fix.log",
+      "bytes": 3063,
+      "sha256": "65df3215e7ed304100ed7d88e1d227af4f3def2c897b3ea6a3c7be0a3865d3f3"
+    },
+    {
+      "path": "reports/task16v/logs/legacy-scope-before-fix.log",
+      "bytes": 2338,
+      "sha256": "8b1641c5ddacde355abaf09162bd02e03d23fee61032c63f817a7d6a134352e3"
+    },
+    {
+      "path": "reports/task16v/logs/node-alchemist.log",
+      "bytes": 5226,
+      "sha256": "81c3a71d616284f13c512c937382c85a5ae37bfd7418d299459acab88a59f6ee"
+    },
+    {
+      "path": "reports/task16v/logs/node-legacy.log",
+      "bytes": 1998,
+      "sha256": "2d131902e7a903e63147435dc5db4037bbb0bf4ba0f3bc1b357dac3a52171fa4"
+    },
+    {
+      "path": "reports/task16v/logs/pub-get.log",
+      "bytes": 1443,
+      "sha256": "4b41d6e0432f061b0ca3ae5f091ee16a25be3fad981a7c278198c6a2b284f64f"
+    },
+    {
+      "path": "reports/task16v/logs/readonly-tool-tests-final.log",
+      "bytes": 109,
+      "sha256": "fb6f76994c6a616dd603233e98a16878de350a28414f7c7ae0cd03b7f3359a7c"
+    },
+    {
+      "path": "reports/task16v/logs/readonly-tool-tests.log",
+      "bytes": 880,
+      "sha256": "2739260516b8a6bf78f939ef05cd4977b56dbbfc996f3604ffc10b818c7cc833"
+    },
+    {
+      "path": "reports/task16v/screens/failure-ui_import_1.png",
+      "bytes": 31168,
+      "sha256": "0185c5cf8074641c917dd26033667ac79587f604b3c17ee4fa58c50f73677ba6"
+    },
+    {
+      "path": "reports/task16v/screens/failure-ui_import_2.png",
+      "bytes": 48533,
+      "sha256": "95298f02372276f961ea7428cd1eed14097d376f83703cfae3ed5f997d6bf6a6"
+    },
+    {
+      "path": "reports/task16v/screens/failure-ui_import_3.png",
+      "bytes": 48533,
+      "sha256": "95298f02372276f961ea7428cd1eed14097d376f83703cfae3ed5f997d6bf6a6"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-before24_inventory.xml",
+      "bytes": 4369,
+      "sha256": "4e3ae87ad53bb91c47491e8889a03b49fa67e64e0346dd3831b0611dac01f2b8"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-cold_restart25.xml",
+      "bytes": 6485,
+      "sha256": "e0f71c9b24e672bfbd2e6878f5b4bfb99bbf1bceb2daf0c25827e850589491cd"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-native_update24_to25.xml",
+      "bytes": 4369,
+      "sha256": "4e3ae87ad53bb91c47491e8889a03b49fa67e64e0346dd3831b0611dac01f2b8"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_after25.xml",
+      "bytes": 4375,
+      "sha256": "575ac810c2be0533f89a727784f44bca3a3f96d7abca3010834177798c475e9d"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_capsule_export.xml",
+      "bytes": 4375,
+      "sha256": "575ac810c2be0533f89a727784f44bca3a3f96d7abca3010834177798c475e9d"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_diary_auth_boundary.xml",
+      "bytes": 3246,
+      "sha256": "d57d48361c92e2b98261b96088125b91884bf084eaae757c60b03beefb543ad9"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_history.xml",
+      "bytes": 4369,
+      "sha256": "4e3ae87ad53bb91c47491e8889a03b49fa67e64e0346dd3831b0611dac01f2b8"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_module_elman.xml",
+      "bytes": 6071,
+      "sha256": "8aacbdc7241cf2530a1d7e6b859d6d71a7553d82cbc231d82149ec383a0d462b"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_module_pause.xml",
+      "bytes": 4375,
+      "sha256": "575ac810c2be0533f89a727784f44bca3a3f96d7abca3010834177798c475e9d"
+    },
+    {
+      "path": "reports/task16v/screens/run11-failure-ui_template.xml",
+      "bytes": 3246,
+      "sha256": "d57d48361c92e2b98261b96088125b91884bf084eaae757c60b03beefb543ad9"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-before24_inventory.png",
+      "bytes": 710532,
+      "sha256": "30d289e284788973eb22711c249b1fc377cd9e488a06df555545abbf22b63d5d"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-before24_inventory.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-cold_restart25.xml",
+      "bytes": 6485,
+      "sha256": "62edfd7d424feda7ba72a3fc588267793d833d05e188337fbdfe570db4535d4a"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-native_update24_to25.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_after25.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_capsule_export.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_diary_auth_boundary.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_history.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_import_3.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_module_elman.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_module_pause.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run12-failure-ui_template.xml",
+      "bytes": 5778,
+      "sha256": "9ede311b1570302436e98934d947f4dccde6a2c1e4e24fb687c29c5b66f22073"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_1.png",
+      "bytes": 63981,
+      "sha256": "a0c9c3343d199beaaf5c7d732ebf529cc97f2f9cb66c335292b64e5a369984b7"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_1.xml",
+      "bytes": 3282,
+      "sha256": "a2ed3de9554a7d1550922d9bd7aaeecee4a40c7781466e6899ee7db189ec69b0"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_2.png",
+      "bytes": 64807,
+      "sha256": "c08c5dbb9a31c4f92ea1734f1c956c8cb488ddc73a78bff5832f3e87cd9deeae"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_2.xml",
+      "bytes": 3282,
+      "sha256": "074aab4db7bb3809f80a143c5c112bca7e2babbc00cb9fedc3a807a2e86a1da1"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_3.png",
+      "bytes": 64916,
+      "sha256": "f54239c8b448cdbce4da4c421f2feb7115795c770a430de20324a466935859dd"
+    },
+    {
+      "path": "reports/task16v/screens/run4-failure-ui_import_3.xml",
+      "bytes": 3282,
+      "sha256": "7860c39db97a079f7c3f65a7f45043e0b914802313a036476a3090953e4f267d"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_1.png",
+      "bytes": 42007,
+      "sha256": "de2d101c9c995255e08915e9b9057fa4d70dec5c5967c884bdb4b56d5ba6b940"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_1.xml",
+      "bytes": 4907,
+      "sha256": "d45228140875e6373d5d689e8b2534e57fa493b926bdc2d966dcf5534ced4fee"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_2.png",
+      "bytes": 50845,
+      "sha256": "3fb17f9db25933fa40d81201d306689e014e17d043ef7f2f8ca223f81dcc3fdc"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_2.xml",
+      "bytes": 5561,
+      "sha256": "a65cbd54a56db7f00a004c932786a94a58800f45b2396c68ca0fbd0c2c0c0a97"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_3.png",
+      "bytes": 58320,
+      "sha256": "63646c1159ec77038645235889b85be9b12f4a87ba96c52397f3f5ea7af18190"
+    },
+    {
+      "path": "reports/task16v/screens/run5-failure-ui_import_3.xml",
+      "bytes": 6215,
+      "sha256": "43cdd0e9821536dcffc88e4773e109e7f2eefc0dbaec188a2e27be2309fddf90"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-before24_inventory.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-cold_restart25.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-native_update24_to25.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_after25.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_capsule_export.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_diary_auth_boundary.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_history.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_import_1.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_import_2.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_import_3.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_module_elman.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_module_pause.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run6-failure-ui_template.xml",
+      "bytes": 5739,
+      "sha256": "c09b19150ace99433bd42c5230420fb6ad7373eba8445120f138a9fa0bd3b928"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-before24_inventory.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-cold_restart25.xml",
+      "bytes": 6485,
+      "sha256": "eb0aae5960b17875058aee9d5ac7e9956e2c89639dacb4d7f95fcc56c00f48d2"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-native_update24_to25.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_after25.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_capsule_export.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_diary_auth_boundary.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_history.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_import_1.xml",
+      "bytes": 4773,
+      "sha256": "305e242370682f83f5ba0c3c710ae855ae8be23780dfdd4401b4bf454b5e4897"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_module_elman.xml",
+      "bytes": 5354,
+      "sha256": "ab0a3beebf6ab3df0e3d37aab01ab1e427a2a18c0a5208c2e7951b36be776106"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_module_pause.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run7-failure-ui_template.xml",
+      "bytes": 5192,
+      "sha256": "94d3d1cfbce92eeb03f0c40b4faf158e732fd68d7cc14ab1dae31341975053d3"
+    },
+    {
+      "path": "reports/task16v/screens/run8-24-before-upgrade.png",
+      "bytes": 845804,
+      "sha256": "c8e2909e7825c091a6ce8d862437a0a63555b86b5124575ac11b99fd00108847"
+    },
+    {
+      "path": "reports/task16v/screens/run8-25-library.png",
+      "bytes": 58277,
+      "sha256": "8ff54969ad6bbbf0905aa51f4421ceb0bc10b01475984d6e5c4833c36a6d8701"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_after25.png",
+      "bytes": 1159788,
+      "sha256": "41f1c7dc76e1f3d21088e9a1c649524fefd141f03c8ea38af491250b2e5370c9"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_after25.xml",
+      "bytes": 4174,
+      "sha256": "fdd85c79deed6773c2b06404812886ea12cee6c4894829118c2cad38f56adb32"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_capsule_export.png",
+      "bytes": 48892,
+      "sha256": "48b26274defc952765ef62c1f4b16bfbcc5a480e696381e6b40283876ffa0577"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_capsule_export.xml",
+      "bytes": 15224,
+      "sha256": "73911119633717f3fe11a62e8bef6ca9ab5f2aac17f1fee033a7ed9e67f5373e"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_diary_auth_boundary.png",
+      "bytes": 1168167,
+      "sha256": "012839711e223f8aab4c11aafb66be438d6d9d613e0e835e15e27b04c5d84c46"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_diary_auth_boundary.xml",
+      "bytes": 4746,
+      "sha256": "2ad882ed401d1454870093a0acb1d032cdb9f4878c5fe134ab6d3755c3704a92"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_history.png",
+      "bytes": 883007,
+      "sha256": "57b729a06dada9d4b4eb5a67b88c7cfe34df70284b1ae388eda72a39436e0054"
+    },
+    {
+      "path": "reports/task16v/screens/run8-failure-ui_history.xml",
+      "bytes": 5729,
+      "sha256": "5a2280935e398a1277b0cccf2cc462eaa909478eb50100ec432d3aedf2396fbb"
+    },
+    {
+      "path": "scripts/task16v/acceptance_report.py",
+      "bytes": 7349,
+      "sha256": "2b8b2f623d6f0747d7c752acb74350b7038fc159495a954ad1488b1cb12cdcd0"
+    },
+    {
+      "path": "scripts/task16v/build_ui_probe.sh",
+      "bytes": 1402,
+      "sha256": "2b82ddad512117c4b07ec1fc7d4b91b8aec52af80e6230493541b661a3be4cdd"
+    },
+    {
+      "path": "scripts/task16v/native_upgrade.py",
+      "bytes": 19276,
+      "sha256": "3a987f266b5e0d81aecb64dd9b3892315dffcabb801144f363cc39bad84a5f49"
+    },
+    {
+      "path": "scripts/task16v/package_evidence.py",
+      "bytes": 3164,
+      "sha256": "355906fab7700227e24052a5e804572645801d41b7433c3296ece435f28f38e0"
+    },
+    {
+      "path": "scripts/task16v/readonly_inventory.py",
+      "bytes": 5988,
+      "sha256": "5277c49314afe7f65b33b0a95fbe6a5a09fe73bfa27f91e1b295a0ea8c6adfdb"
+    },
+    {
+      "path": "scripts/task16v/run_native.sh",
+      "bytes": 226,
+      "sha256": "ca9833a70e866c256ddc53a7754f47775314e0702923a6293ede9b13ab44e524"
+    },
+    {
+      "path": "scripts/task16v/test_readonly_inventory.py",
+      "bytes": 6499,
+      "sha256": "bdef17e63831cb1e23c2ecd60e53340f50c4bee7c6271e06e2e3b24e8d1ebb12"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/AndroidManifest.xml",
+      "bytes": 858,
+      "sha256": "c7192dd9ef0f7018649b4d843a6724eaf3beee688866b693ee35a309aabe8c03"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/Ime.java",
+      "bytes": 571,
+      "sha256": "5b240140b588068008325701be16f4549a7283796f1dac0bdc98c92db9b1fe9c"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/Probe.java",
+      "bytes": 5444,
+      "sha256": "84edd03940c1a331bf9a69e4ff006681e9039f8ce842ff37e4383897fc2e5586"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/TypeTextReceiver.java",
+      "bytes": 869,
+      "sha256": "818d51d260f0d7be20d01df401bf5406d75148415fe30016c804bba765d906dc"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/ime_manifest.xml",
+      "bytes": 692,
+      "sha256": "5d80ad0c40661bbb857b1115f6ae7784c0a1a03bb64397c89efb31e0e4b65416"
+    },
+    {
+      "path": "scripts/task16v/ui_probe/res/xml/input_method.xml",
+      "bytes": 251,
+      "sha256": "552709daea21c0ebd9d7c74f01d716e726ef86f843e9dc8ab3c2931fb3a4e61e"
+    },
+    {
+      "path": "test/task16v_legacy_draft_visibility_test.dart",
+      "bytes": 4092,
+      "sha256": "75bb275482a6cb643fc29ced8958c84b4347c71bf6831bbc6b5f611563207281"
+    }
+  ]
+}

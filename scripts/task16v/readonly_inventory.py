@@ -13,7 +13,9 @@ import sqlite3
 import tempfile
 
 TABLES = ('audio_assets', 'module_definitions', 'session_templates',
-          'current_draft', 'session_runs', 'diary_author', 'diary_public')
+          'current_draft', 'session_runs', 'diary_author', 'diary_public',
+          'app_settings', 'app_counters', 'content_revisions', 'run_events',
+          'history_attachments', 'capsule_imports', 'legacy_v2_documents')
 
 def digest(path):
     h = hashlib.sha256()

@@ -97,6 +97,15 @@ c.execute('begin immediate');c.execute("update diary_author set payload=?",('y'*
         (self.root/'audio').symlink_to(outside,target_is_directory=True)
         v=module.inventory(self.root)
         self.assertEqual(next(iter(v['media'].values()))['state'],'SYMLINK_NOT_FOLLOWED')
+    def test_queue_and_scope_settings_are_counted_but_never_disclosed(self):
+        c=self.db();c.execute('create table app_settings(name text,value text)')
+        c.execute('insert into app_settings values (?,?)',('alchemist_diary_queue:private-id',json.dumps({'scope':'google:PRIVATE_OWNER_SUBJECT','credential':'PRIVATE_TOKEN_NOT_OUTPUT','entry':{'message':'PRIVATE_CONTENT'}})))
+        c.commit();c.close()
+        v=module.inventory(self.root)
+        self.assertEqual(v['tables']['app_settings']['count'],1)
+        output=json.dumps(v)
+        for secret in ['PRIVATE_OWNER_SUBJECT','PRIVATE_TOKEN_NOT_OUTPUT','PRIVATE_CONTENT','private-id']:
+            self.assertNotIn(secret,output)
     def test_legacy_external_path_not_followed(self):
         c=self.db();c.execute("insert into audio_assets values ('id','/private/elsewhere',null)");c.commit();c.close()
         self.assertIn('LEGACY_OR_UNSAFE_MEDIA_PATH',module.inventory(self.root)['classes'])

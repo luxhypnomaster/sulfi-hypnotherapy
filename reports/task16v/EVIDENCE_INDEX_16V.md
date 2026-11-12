@@ -16,7 +16,7 @@ Git baseline24 cbe05240d463b9dafbe9a12ee831c967bdbf6113; source25 012f7f69b7ad99
 
 ## Regressions
 
-TESTS_16V.md, FLUTTER_SUMMARY_16V.json, logs/*.log/jsonl. RED/GREEN legacy scope regression source `test/task16v_legacy_draft_visibility_test.dart`; source-only patch3Dart files. Read-only copy tool `scripts/task16v/readonly_inventory.py`,9 tests including WAL/hot rollback journal and unchanged source bytes. Test fixtures explicitly not real Google users.
+TESTS_16V.md, FLUTTER_SUMMARY_16V.json, logs/*.log/jsonl. RED/GREEN legacy scope regression source `test/task16v_legacy_draft_visibility_test.dart`; source-only patch3Dart files. Read-only copy tool `scripts/task16v/readonly_inventory.py`,10local tests (9в последнем CI) including WAL/hot rollback journal and unchanged source bytes. Test fixtures explicitly not real Google users.
 
 ## Native UI / runtime
 
@@ -27,7 +27,9 @@ UPGRADE_REPRO_16V.md + NATIVE_UI_UPGRADE_RUN*.json + screenshots/XML. Failed and
 - https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43257458828 — regression PASS; native correctly BLOCKED.
 - https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43259518712 — real3UI imports shown, naming mismatch/recorder environment failure; helper corruption mechanism reproduced.
 - https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43262343945 — optional IME setup failure, no MASTER baseline; no update PASS.
-- Последний core native run43264197801: его фактический результат фиксируется в UPGRADE_REPRO; не считать факт запуска PASS.
+- https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43265893487 — accepted populated UI core24→25/cold proof; INVENTORY_*_UI_16V.json,3audio/2modules/template/current/history unchanged. Diary empty не считается PASS.
+- https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43269227639 — final full regression CI,434Flutter+1SKIP,3CLIENT,46+24Node,9Python/analyze/format PASS. App tree unchanged since this source.
+- https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43273089509 — final follow-up UI driver blocked; no populated update acceptance, RUN12 retained. Do not substitute this failed setup for run8 evidence.
 
 Основной harness не вставляет SQLite rows. Отдельный helper corruption fixture не касается базы Sulfi. Native APK24/25 hashes/cert сохранены; не создавалась Sulfi APK26. Test-helper APK/key не распространяются и не включены в evidence archive.
 
@@ -36,3 +38,7 @@ UPGRADE_REPRO_16V.md + NATIVE_UI_UPGRADE_RUN*.json + screenshots/XML. Failed and
 OWNER_RECOVERY_PLAN_16V.md, RECOVERY_LIMITATIONS_16V.md, SAFE_READONLY_DIAGNOSTIC.md, ACQUISITION_OPTIONS_16V.md: физические данные UNKNOWN, отдельное согласование доступа, никаких небезопасных инструкций. ACCEPTANCE_16V.csv сохраняет все35критериев, Code/Native/Owner отдельно. Итог BLOCKED_STOP_SHIP.
 
 [Существующая папка отчётов№16](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z): только новые файлы16V. DRIVE_UPLOADS_16V.json + DRIVE_READBACK_16V.json фиксируют IDs/parent/размер/SHA чтения. EVIDENCE_16V.zip и SHA256SUMS_16V.txt — дополнительный неизменный комплект без APK и без личных материалов. Наличие ZIP не означает восстановление владельца.
+
+## Комплект
+
+EVIDENCE_16V.zip содержит reports/task16v, immutable docs/task16v, scripts/task16v, узкий product patch, regression source и workflow. Исключены APK/JKS/реальные БД/аудио/токены, generated delivery receipts и повторяющиеся PNG запусков6/7/11/12 (XML/JSON и representative failure PNG оставлены). EVIDENCE_MANIFEST_16V.json внутри ZIP перечисляет каждый включённый файл с SHA256/размером. SHA256SUMS_16V.txt проверяет целый ZIP. Позднейшие DRIVE_READBACK/DELIVERY receipts являются отдельными файлами, не рекурсивной частью архива.

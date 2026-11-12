@@ -1,0 +1,187 @@
+{
+  "task": "16-V",
+  "verifiedAt": "2026-11-12T22:19:14.997022+00:00",
+  "allVerified": true,
+  "reports": {
+    "allVerified": true,
+    "kind": "REQUIRED_STANDALONE_REPORTS_RAW_BYTE_AND_PARENT_READBACK",
+    "verifiedAt": "2026-11-12T22:17:57.237857+00:00",
+    "files": [
+      {
+        "file": "ROOT_CAUSE_16V.md",
+        "id": "1o6qEeoVt5v-zsWrUj5gL4Qn3hwu9PTae",
+        "size": 9202,
+        "sha256": "d5ed6ed12b3fa8a9a9fc976718185dafe391a8400932d3615b392d154be50b97",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "DIFF_AUDIT_16V.md",
+        "id": "1gsXc3AQt5_Np3V6swfXpi8nY8LHOTy2i",
+        "size": 10574,
+        "sha256": "e44729aca138e87e407d4df306d18d22f8bebfd1d8f41fbdb60d7b94e4a72fe7",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "OWNER_RECOVERY_PLAN_16V.md",
+        "id": "1a1456B2r5oeaZeP2rZzZ-JzeI_sRskib",
+        "size": 9422,
+        "sha256": "d818ed1c0b833e6cae67872c9002fe66f32508bfaab2c85511e340b2f122c3b4",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "RECOVERY_LIMITATIONS_16V.md",
+        "id": "1NAq1OZVkVslgRxccperJCGDdg_HEBola",
+        "size": 2584,
+        "sha256": "a1025b86a99353d410bc9084ff2260773129c2ce6180771bb00becd14fe98744",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "SAFE_READONLY_DIAGNOSTIC.md",
+        "id": "12dPz-IoMdFjtUz6omobM_bq7M32nDwIF",
+        "size": 4163,
+        "sha256": "c3d64fdc30d6f2268110482431def360c8405e3557bf28cbc1e992d6a4522532",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "CHANGES_16V.md",
+        "id": "1dufAPpsLg43alqm-BJvei7ZIdJbTIuCH",
+        "size": 1789,
+        "sha256": "8010fca1005b2c64628c0605171b670f4a1f90b21217ac111d1729d614de0966",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "TESTS_16V.md",
+        "id": "1cQp43tZGOT-6AiC1lU3MLpq2FsYp-_bk",
+        "size": 5366,
+        "sha256": "822542af0be35e0ab7e5ac61fb731a53141bba48f5fa03ccdd89c2917fbe9ee6",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "ISSUES_16V.md",
+        "id": "1iGh4WWHgRu9PeaYinY43ZDVt8NAKZ0zY",
+        "size": 3948,
+        "sha256": "b2844520a11baeffd50e82b688d70de8dc7df030991c9bb4bedb118b60920bb5",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "UPGRADE_REPRO_16V.md",
+        "id": "1YIiCfarhz3ZV9gv5HeTF1mSvSrMBQ9Pa",
+        "size": 8500,
+        "sha256": "c30e00fa8c9373bac6c98b6dcc871e09a94e22a9f80b6c79c8a81a3ae587fc88",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "DEPENDENCY_SAFETY_16V.md",
+        "id": "1Au18Qh3yx8zvd90FaboITgyZbQrVY8PU",
+        "size": 4434,
+        "sha256": "cf8723e0bfc8d39fdd277078fbb32232a3ba388d19653149c812cf8a189598f1",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "ACQUISITION_OPTIONS_16V.md",
+        "id": "1XAHanu1PmxVzxS_o4B_pA2qLNtK3Dq8u",
+        "size": 4983,
+        "sha256": "7a7659fe0d63cd2a18a23a4c0b859b863b201f59a89d860a711c0158a5eba40e",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "ACCEPTANCE_16V.csv",
+        "id": "147MCW12qbdGsmumYjizuqHsXsWnWSaWe",
+        "size": 8401,
+        "sha256": "332a67d94f5de1dda6b0752c6d10d9fcad989444b9cc994950c3cccd7ba032f5",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "RESULT_16V.md",
+        "id": "1UT6togG9Td5eNfbrODNErrb41ReZP1lT",
+        "size": 6941,
+        "sha256": "88de89d487d5b18903dcd7a43f736f6fb246311603a440ef38d65fba59efc905",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      },
+      {
+        "file": "EVIDENCE_INDEX_16V.md",
+        "id": "1ldHGmAUzFCuPE8YIpYQGyupcM9j1ADjU",
+        "size": 5385,
+        "sha256": "e945ede6b4316e4d933a5f85d5f56ef69f5a105eea1cd07bc00fc29c2a425a07",
+        "parent": [
+          "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+        ],
+        "verified": true
+      }
+    ]
+  },
+  "evidenceFiles": [
+    {
+      "file": "EVIDENCE_16V.zip",
+      "id": "147CM72Cun9aCB9gqyHY9DBbpQlYy-8Ji",
+      "bytes": 5595190,
+      "sha256": "bb589092eb3cc45095ffe9d556503d8c68f988fc65ff7119e391fbd699e166bf",
+      "parent": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "verified": true
+    },
+    {
+      "file": "EVIDENCE_MANIFEST_16V.json",
+      "id": "1FN2Cp-dA24k71aQwSVJUfDNUydUDDobC",
+      "bytes": 28645,
+      "sha256": "8bce8dcc2abebf02e34cfb3fbb773cbd171c1b7ef7e50b59c5eaafbdee9a5014",
+      "parent": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "verified": true
+    },
+    {
+      "file": "SHA256SUMS_16V.txt",
+      "id": "1ns07YH0YTvu4zyE2xpkaED3xa_8aSI_7",
+      "bytes": 83,
+      "sha256": "e99dd95d13dae2d3b883a9fc1cbff941468c5a33aff2a932b8fc43e733d4e022",
+      "parent": [
+        "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z"
+      ],
+      "verified": true
+    }
+  ],
+  "zipCRCAnd157ManifestEntries": "PASS",
+  "productAPK26": "NOT_BUILT_STOP_SHIP",
+  "ownerRecovery": "BLOCKED_PHYSICAL_BYTES_UNKNOWN"
+}

@@ -28,3 +28,24 @@ Existing exact signed MASTER24 asset736432720 SHA a242d8222af27c936f44c86b47e2cf
 - Даже populated controlled update24→25 PASS не доказывает сохранность телефона и не разрешает APK26 без полного RCA/backup/review.
 
 Актуальный последний результат и inventories дополняются отдельно ниже, без переписывания исторических неудач.
+
+## Реально полученный populated core proof — run43265893487
+
+Через UI **именно APK24** созданы3аудиотрека, из них2с одинаковым названием и разными ID, модуль «Индукция Элмана вариант 2» с3различными audio IDs, второй модуль с4секундной паузой,1template/current draft с фазой/модулем и1настоящий interrupted session run. Никакого SQL seeding. Реальные media paths/SHA/durations и полные payload в before/after/cold inventory.
+
+`native_update24_to25` и `cold_restart25` PASS: normal `adb install -r` exact25 без uninstall, все указанные строки неизменны,3media SHA равны, PRAGMA integrity_check=ok/schema9. Отдельные INVENTORY_BEFORE24_UI_16V.json, INVENTORY_AFTER25_UI_16V.json, INVENTORY_COLD25_UI_16V.json, INVENTORY_DIFF_UI_16V.json; основной NATIVE_UI_UPGRADE_RUN8.json сохранён.
+
+Не делать ложных выводов из нулей: diary_author0 помечен NOT_EXERCISED_EMPTY, а не preservation PASS. Recorder24 не создан. Экспортная капсула не сохранена из-за uppercase SAVE selector. История действительно существует и сохранилась, но её UI-case ошибочно ожидал Home вместо правильного автоматического перехода в interrupted history. Post25 module visibility-case ошибочно требовал точный label без Tab suffix. В source-harness эти ожидания исправлены, app код не менялся.
+
+## Остальные попытки / blockers
+
+Native9 compile-only failure второго тестового APK (aapt manifest basename), не product build/data proof; исправлено и оба helper локально пересобраны.
+Native10 43268899509 с первым шагом recorder24 снова привёл к adb offline, поэтому gate BLOCKED, обновление с этой неполной базой запрещено. Это воспроизводимое ограничение данного стенда; **не** диагноз физического recorder и не сохранность записанного файла. Повторять этот недоступный аппаратный шаг бесконечно не будем; доступные core проверки выполняются независимо.
+
+## Заключительный follow-up — run43273089509
+
+Source7de676e, completed FAILURE: первые два UI imports24 PASS, затем CANNOT_RETURN_HOME; populated before gate не выполнен. UPDATE намеренно BLOCKED с STOP_SHIP_INVALID_UI_BASELINE_NO_UPGRADE_PROOF; cold comparison BLOCKED, поскольку не подтверждена фактическая APK25. Это сбой стенда, не app data-loss reproduction и не preservation PASS. NATIVE_UI_UPGRADE_RUN12.json + SHA-verified screenshots/XML сохранены. Повтор native-corruption probe на helper-only DB вновь подтвердил default-handler risk.
+
+Run11 43271209292 импортировал файлы, но fallback ввод добавлял имя к исходному; его import flags не засчитываются как требуемое совпадение названий. Strict visible-field assertion исправлен в driver. Ни run11, ни run12 не заменяют валидный populated core run8. Больше повторов недоступного recorder/нестабильного стенда не назначаем.
+
+**Итог:** NATIVE_UI_UPGRADE_CURRENT.json остаётся run8. Контролируемые3audio/2modules/template/current/history сохранены при exact24→25 и cold restart; полный authenticated diary/recorder/capsule/native candidate26/owner recovery НЕ пройдены. Новая Sulfi APK26 не построена.

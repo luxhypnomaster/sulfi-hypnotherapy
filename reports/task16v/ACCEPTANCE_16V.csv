@@ -32,5 +32,5 @@ REL-03,P0,Native physical-style UI-created update и сохранность пр
 REL-04,P0,End-to-end playback library/session + diary reopen не нарушены,PARTIAL,PASS,PARTIAL,BLOCKED,TESTS_16V.md,No candidate26 native library/session/diary full lifecycle
 REL-05,P0,Flutter/Node/analyze/format security regression PASS,PASS,PASS,NOT_RUN,NOT_RUN,FLUTTER_SUMMARY_16V.json;CI_EVIDENCE_16V.json;TESTS_16V.md,434 Flutter PASS +1 opt-in live SKIP;46+24 Node;3CLIENT;9Python;format/analyze
 REL-06,P0,Отдельный draft PR и ни одного server GAS/main/ACL deployment,PASS,PASS,PASS,NOT_RUN,PR46;REMOTE_BASELINES_16V.json;FINAL_BOUNDARIES_16V.json,PR45/main/GAS/ACL/Sulfi signing/old APKs preserved
-REL-07,P0,Отчёты в старой папке №16 без удаления и с readback,PARTIAL,PASS,NOT_RUN,NOT_RUN,DRIVE_UPLOADS_16V.json,All final reports/readback must complete before PASS
+REL-07,P0,Отчёты в старой папке №16 без удаления и с readback,PASS,PASS,NOT_RUN,NOT_RUN,DRIVE_UPLOADS_16V.json;DRIVE_READBACK_16V.json,"Existing Task16 folder, new16V files only; old reports preserved"
 REL-08,P0,Результат owner phone не подменён emulator PASS,PASS,PASS,PARTIAL,NOT_RUN,RESULT_16V.md,No emulator or fixture test substituted for owner Android recovery

@@ -1,0 +1,20 @@
+{
+  "task": "16-V",
+  "branch": "hotfix/task16v-p0-data-preservation",
+  "baselineAPK25Source": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "apk24Source": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+  "lastFullRegressionSource": "c73daa697433c23086ffeeced75bd14b8632da77",
+  "runtimeAppTreeMatchesTestedSource": true,
+  "changedProductFiles": [
+    "lib/services/alchemist_diary_api.dart",
+    "lib/services/diary_api.dart",
+    "lib/services/diary_controller.dart"
+  ],
+  "productSourceOnlyNotCompiledIntoCandidate26": true,
+  "nativeBaselineProofRunsUnmodifiedAPK24And25NotHotfix26": true,
+  "productBlobs": {
+    "lib/services/alchemist_diary_api.dart": "8e541f296394b46e16fb9aa65707c349ad043013",
+    "lib/services/diary_api.dart": "edcf12fdfb5e2d7488203d06fc5808dda5e37faa",
+    "lib/services/diary_controller.dart": "ca555f3c25350efcb9b55a0b2cd09e98b41c11f7"
+  }
+}

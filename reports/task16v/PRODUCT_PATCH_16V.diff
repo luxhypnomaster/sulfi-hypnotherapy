@@ -1,0 +1,47 @@
+diff --git a/lib/services/alchemist_diary_api.dart b/lib/services/alchemist_diary_api.dart
+index 7cc4c21..8e541f2 100644
+--- a/lib/services/alchemist_diary_api.dart
++++ b/lib/services/alchemist_diary_api.dart
+@@ -133,6 +133,14 @@ class AlchemistDiaryApi extends DiaryApi {
+       ? 'public'
+       : 'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:$_subject'))}';
+   @override
++  // APK24's server-restored drafts used google:<verified subject>. Accept that
++  // exact legacy owner only after server verification; never rewrite the row or
++  // broaden this alias to another Google account, guest, or client role.
++  bool canReadAuthorDraftScope(Object? scope) =>
++      _verifiedRole == 'MASTER' &&
++      _subject != null &&
++      (super.canReadAuthorDraftScope(scope) || scope == 'google:$_subject');
++  @override
+   Future<void> authenticateReader(String token) async {
+     await _verifyIdentity(token);
+   }
+diff --git a/lib/services/diary_api.dart b/lib/services/diary_api.dart
+index abac7a9..edcf12f 100644
+--- a/lib/services/diary_api.dart
++++ b/lib/services/diary_api.dart
+@@ -89,6 +89,8 @@ class DiaryApi {
+   Future<bool> refreshRejectedIdentity() async => false;
+   void rejectIdentity() {}
+   String get readerScope => 'public';
++  bool canReadAuthorDraftScope(Object? scope) =>
++      scope == null || scope == readerScope;
+   int get identityGeneration => 0;
+   Future<void> authenticateReader(String token) async =>
+       throw const DiaryApiException('Личный сервер не подключён');
+diff --git a/lib/services/diary_controller.dart b/lib/services/diary_controller.dart
+index 6f1cf83..ca555f3 100644
+--- a/lib/services/diary_controller.dart
++++ b/lib/services/diary_controller.dart
+@@ -274,9 +274,7 @@ class DiaryController extends ChangeNotifier {
+     drafts = (api?.supportsServerIdentity ?? false)
+         ? work
+               .where(
+-                (e) =>
+-                    e.extra['_alchemistScope'] == null ||
+-                    e.extra['_alchemistScope'] == scope,
++                (e) => api!.canReadAuthorDraftScope(e.extra['_alchemistScope']),
+               )
+               .toList()
+         : work;

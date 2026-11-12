@@ -36,3 +36,14 @@ Baseline: APK24 cbe05240d463b9dafbe9a12ee831c967bdbf6113; APK25 012f7f69b7ad99c0
 Runtime подтверждение отдельного риска: Android35 run43259518712, controlled helper DB. Default RW изменил SHA повреждённого файла без исключения; read-only noop handler сохранил исходный SHA и вернул SQLiteDatabaseCorruptException. Полное before/after в DEPENDENCY_SAFETY_16V.md. **Инцидент владельца по-прежнему UNKNOWN**, поскольку наличие corruption до его upgrade не установлено.
 
 Контролируемый native update run43265893487 сохранил3UI-created audio,2modules,1template,1history и их media SHA. Это не опровергает наблюдение владельца: его собственные объекты невидимы без ошибки, forensic bytes UNKNOWN. Его update действительно происходил; не маркируем его как «никогда не запускался». Machine-readable OWNER_OBSERVATION_16V.json отделён от formal owner recovery QA, которого ещё не было.
+
+## Механизм, совместимый с «пусто без ошибки», но НЕ подтверждённый для владельца
+
+При предпосылке реальной corruption native default RW-handler может заменить DB без исключения (helper-native доказательство). Далее:
+
+1. app_database.onCreate создаёт новые пустые таблицы9 — обычный bootstrap может завершиться успешно без error screen.
+2. LibraryService.initialize при пустых audio_assets/content_revisions/plans имеет пустой retained set; generated `audio/asset_*` считает сиротами и удаляет (read-only source audit, initialize lines≈100–175).
+3. main собирает пустой author/public/private-cache set; DiaryMediaStore.collect(empty) может удалить не referenced diary media.
+4. ModuleCatalog/LibraryRepository/DiaryAuthorRepository возвращают пустые списки; UI выглядит нормально, но пуст.
+
+**Разделение доказательств:** native helper подтвердил только destructive/error-recovery поведение Android handler; пункты2–4 следуют из проверенного существующего кода при указанных пустых входах. Не вносили corruption в actual Sulfi DB, не вызывали этот путь на телефоне владельца. Наличие исходной corruption/срабатывание chain у владельца UNKNOWN. Это не окончательный owner root cause; версия не заменяет forensic bytes/log evidence и не даёт права на repair/GC/new APK.
