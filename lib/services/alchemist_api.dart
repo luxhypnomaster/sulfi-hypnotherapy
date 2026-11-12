@@ -29,6 +29,7 @@ class AlchemistApi {
     this.identityScope,
     this.identityEpoch,
     this.onUnauthorized,
+    this.onAuthenticationFailure,
     this.maxAttempts = 3,
     Future<void> Function(Duration)? delay,
     AlchemistDiagnostics? diagnostics,
@@ -54,6 +55,7 @@ class AlchemistApi {
   final DiaryRequest connection;
   final Future<String?> Function()? credential;
   final Future<bool> Function()? onUnauthorized;
+  final void Function()? onAuthenticationFailure;
   final Future<void> Function(Duration) delay;
   final AlchemistDiagnostics diagnostics;
   final Duration callTimeout;
@@ -160,6 +162,7 @@ class AlchemistApi {
           status: e.status,
           code: e.code,
         );
+        if (e.status == 401) onAuthenticationFailure?.call();
         if (!refreshed &&
             e.status == 401 &&
             onUnauthorized != null &&

@@ -35,6 +35,12 @@ class AlchemistDiaryApi extends DiaryApi {
   final DiaryMediaStore media;
   final DiaryRequest? connection;
   String? _token;
+  bool _identityRejected = false;
+  @override
+  void rejectIdentity() {
+    _identityRejected = true;
+  }
+
   Future<void> Function(DiaryEntry)? beforePublication;
   bool Function()? workInterrupted;
   void Function(String)? workStage;
@@ -99,7 +105,9 @@ class AlchemistDiaryApi extends DiaryApi {
   DateTime? get identityExpiresAt => _identityExpiresAt;
   @override
   bool get readerAuthenticated =>
-      _token != null && (_identityExpiresAt?.isAfter(clock().toUtc()) ?? false);
+      !_identityRejected &&
+      _token != null &&
+      (_identityExpiresAt?.isAfter(clock().toUtc()) ?? false);
   @override
   Future<String?> verifiedIdentityToken() async {
     if (_identityExpiresAt == null ||
@@ -178,6 +186,7 @@ class AlchemistDiaryApi extends DiaryApi {
     _verifiedRole = role;
     _identityExpiresAt = until;
     _token = token;
+    _identityRejected = false;
   }
 
   Database get db => capsules.database;
@@ -189,6 +198,7 @@ class AlchemistDiaryApi extends DiaryApi {
     identityEpoch: () => identityGeneration,
     credential: verifiedIdentityToken,
     onUnauthorized: _forceRefresh,
+    onAuthenticationFailure: rejectIdentity,
   );
   @override
   bool get supportsAdvancedPublication => true;
@@ -196,6 +206,7 @@ class AlchemistDiaryApi extends DiaryApi {
   void clearSession() {
     _accountGeneration++;
     _token = null;
+    _identityRejected = false;
     _subject = null;
     _verifiedRole = null;
     _identityExpiresAt = null;

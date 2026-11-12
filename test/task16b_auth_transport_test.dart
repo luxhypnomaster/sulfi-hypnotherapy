@@ -122,6 +122,64 @@ void main() {
       await f.close();
     }
   });
+  test('G1 server-rejected cached token stops showing authenticated without erasing identity or drafts', () async {
+    final f = await Fixture15.open(), sdk = Restore16b();
+    var reject = false;
+    final api = AlchemistDiaryApi(
+      endpoint16b,
+      capsules: f.c.capsules!,
+      media: DiaryMediaStore(
+        Directory('${f.root.path}/media'),
+        pick: (_) async => null,
+        probe: (_) async => null,
+      ),
+      connection: (_, _, _, body) async {
+        final operation = jsonDecode(body!)['operation'];
+        if (operation == 'auth.whoami') {
+          return ok16b({
+            'subject': 'controlled-owner',
+            'role': 'MASTER',
+            'expiresAt':
+                DateTime.now()
+                    .toUtc()
+                    .add(const Duration(hours: 1))
+                    .millisecondsSinceEpoch ~/
+                1000,
+          });
+        }
+        if (reject) {
+          return DiaryResponse(
+            200,
+            jsonEncode({
+              'ok': false,
+              'status': 401,
+              'error': {'code': 'AUTHENTICATION_FAILED'},
+            }),
+          );
+        }
+        return ok16b({});
+      },
+    );
+    try {
+      api.bindIdentity(sdk);
+      await api.authenticateReader('first');
+      final scope = api.readerScope;
+      expect(api.readerAuthenticated, true);
+      reject = true;
+      await expectLater(
+        api.author.call('catalog.list', {}),
+        throwsA(isA<DiaryApiException>()),
+      );
+      expect(api.readerAuthenticated, false);
+      expect(api.readerScope, scope);
+      expect(sdk.logouts, 0);
+      reject = false;
+      await api.authenticateReader('second');
+      expect(api.readerAuthenticated, true);
+    } finally {
+      await f.close();
+    }
+  });
   test('G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry', () async {
     for (final fault in [
       const SocketException('private@example.test'),

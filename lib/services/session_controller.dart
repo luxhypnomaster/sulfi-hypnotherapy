@@ -137,6 +137,7 @@ class SessionController extends ChangeNotifier {
       identityScope: () => diary?.api?.readerScope ?? 'public',
       identityEpoch: () => diary?.api?.identityGeneration ?? 0,
       onUnauthorized: diary?.api?.refreshRejectedIdentity,
+      onAuthenticationFailure: diary?.api?.rejectIdentity,
       credential: !authenticated
           ? (diary?.api?.readerAuthenticated == true
                 ? () => diary!.api!.verifiedIdentityToken()

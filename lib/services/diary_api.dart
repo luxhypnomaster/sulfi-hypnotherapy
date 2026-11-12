@@ -87,6 +87,7 @@ class DiaryApi {
   Future<bool> restoreIdentity() async => false;
   Future<void> refreshIdentity() async {}
   Future<bool> refreshRejectedIdentity() async => false;
+  void rejectIdentity() {}
   String get readerScope => 'public';
   int get identityGeneration => 0;
   Future<void> authenticateReader(String token) async =>
