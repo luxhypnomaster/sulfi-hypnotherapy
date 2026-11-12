@@ -9,3 +9,5 @@
 - APK24/25 и их исходники сохранены; они не резервные копии личных материалов. Новый номер сборки не подготовлен; отсутствие APK26 здесь преднамеренный STOP-SHIP.
 
 Дополнение бинарного аудита: в обеих APK запрещены Android auto-backup/fullBackupContent и cloud/device extraction. Стандартная Google OS-копия не предполагается и не обещается; существование какого-либо внешнего/OEM архива нужно доказать отдельно.
+
+В native Android35 установлен destructive/corrective-open риск default SQLite corruption handler на контролируемой helper DB: RW changed corrupt bytes without exception; readonly noop сохранил bytes с ошибкой. Это отдельный дополнительный STOP-SHIP, а не доказательство corruption или удаления owner DB. Широкий backend fork/подмена signing ради поспешной APK не делались.

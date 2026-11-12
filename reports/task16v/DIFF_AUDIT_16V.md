@@ -32,3 +32,11 @@ APK24 readerScope `google:<verified-sub>`, APK25 `account:sha256(alchemist:endpo
 ## Реальный бинарный readback
 
 `BINARY_METADATA_16V.json`: обе MASTER APK independently SHA/apksigner/aapt прочитаны; permissions identical, root SQLite name и тот же endpoint/Web Client ID присутствуют в kernel. Полный manifest dump сохранён. Наличие строк kernel — вспомогательное evidence build config, не runtime owner identity. В обеих APK `allowBackup=false`, `fullBackupContent=false` и data_extraction_rules исключают cloud/device transfer. Поэтому стандартный Google Android backup не обещается как источник recovery. Вариант debug допускает run-as на disposable CI, но способ доступа к единственному телефону без ПК не доказан.
+
+## Проверка ниже Dart-уровня
+
+Все native DEX24/25 побайтно равны (17 файлов). Реальная sqflite Database.open имеет default Android corruption handler на RW-open; readonly open использует noop. Подробнее DEPENDENCY_SAFETY_16V.md. Утверждение об отсутствии delete/recreate относится к собственному Dart/Android-коду проекта, не гарантирует поведения Android SQLite при corruption. Этот риск проверяется отдельно; owner физические файлы UNKNOWN. Pinned backend не менялся.
+
+## Flutter engine / native assets
+
+Реальные libflutter.so и libsqlite3.so во всех трёх ABI одинаковы (SHA readback). Три libdartjni.so имеют разные полные SHA, но каждый отличается ровно20 байтами внутри .note.gnu.build-id; все остальные байты одинаковы, включая .text/.rodata/.data/dynamic symbols. Не маскируем это как одинаковые полные JNI SHA: точные данные ENGINE_LIBRARY_COMPARISON_16V.json, DARTJNI_ELF_COMPARISON_16V.json, DARTJNI_BYTE_DIFF_16V.json. Таким образом engine/backend code replacement в этих native библиотеках не найден; это не proof owner runtime files.

@@ -22,3 +22,7 @@
 Итог native UI-created baseline/update проверок — UPGRADE_REPRO_16V.md и machine-readable inventories. Оригинальные неудачные harness runs сохранены. Пустой before-state нельзя засчитать. Google auth не подменялся fixtures в APK. Ни physical owner sandbox, ни реальный Google MASTER24 UI diary, ни все lifecycle B/C, ни owner recovery не испытаны: BLOCKED.
 
 Новая Sulfi APK26 не построена. Вспомогательная Instrumentation APK — только отдельный test helper на disposable CI emulator, не продукт/не recovery-кандидат/не для владельца; Sulfi package/certificate не меняет и никакого доступа к данным владельца не имеет. Подмена результатов физического Android отсутствует.
+
+## Native dependency fault probe
+
+Run43259518712, controlled **helper-only** DB: default RW corruption changes SHA without exception; readonly noop-handler retains SHA and throws corruption. Source/binary/runtime механизм подтверждён. Это не native UI upgrade сохранность и не owner RCA/recovery. Никакой DB injection/corruption в Sulfi для этого probe не выполнялась.

@@ -1,0 +1,65 @@
+{
+  "libraries": [
+    {
+      "path": "lib/arm64-v8a/libVkLayer_khronos_validation.so",
+      "apk24": "ae445f7e74d402e3a367adb230b1edd9841899fcb3310166e5cc96a09ad37a3f",
+      "apk25": "ae445f7e74d402e3a367adb230b1edd9841899fcb3310166e5cc96a09ad37a3f",
+      "equal": true
+    },
+    {
+      "path": "lib/arm64-v8a/libdartjni.so",
+      "apk24": "9aceee19bb0bc9fc90cb2e0181b61312c96b0aa76ffca535f44ce61913ffc185",
+      "apk25": "7d4641f6431dfede3850cc9a343ad2552373dd9489275c390120105816487c8a",
+      "equal": false
+    },
+    {
+      "path": "lib/arm64-v8a/libflutter.so",
+      "apk24": "5b368215d1ee0dff3ef83f830477185f32d05705663fd028e50e840487617a2f",
+      "apk25": "5b368215d1ee0dff3ef83f830477185f32d05705663fd028e50e840487617a2f",
+      "equal": true
+    },
+    {
+      "path": "lib/arm64-v8a/libsqlite3.so",
+      "apk24": "081df67ee9ab852daea6a0679427e90fc89a0245d06f93dafe2309875c609c5c",
+      "apk25": "081df67ee9ab852daea6a0679427e90fc89a0245d06f93dafe2309875c609c5c",
+      "equal": true
+    },
+    {
+      "path": "lib/armeabi-v7a/libdartjni.so",
+      "apk24": "9a15f4d5314a14dbdb2ca1e1ce3a62701d8b21c276806827b2e073937d84cc73",
+      "apk25": "08cee9c6180edfed29a1f1e3e916f2778c99f9c5f620642ef7e26744233cab3d",
+      "equal": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libflutter.so",
+      "apk24": "2438408d30b60cf9b2154de2f68b0b092ef6e9806aeec931ca7fd179d08c8fb4",
+      "apk25": "2438408d30b60cf9b2154de2f68b0b092ef6e9806aeec931ca7fd179d08c8fb4",
+      "equal": true
+    },
+    {
+      "path": "lib/armeabi-v7a/libsqlite3.so",
+      "apk24": "5f331b44ef2549f1e3fa2153ad22d60d85c5a43766e4690a29cc49a0652db772",
+      "apk25": "5f331b44ef2549f1e3fa2153ad22d60d85c5a43766e4690a29cc49a0652db772",
+      "equal": true
+    },
+    {
+      "path": "lib/x86_64/libdartjni.so",
+      "apk24": "7fcc8d37a44884f1faa70d87d54aa77a6160d37adb0ae3ccbc73fc419ba5c81d",
+      "apk25": "099e10bce435dfb60192a3fc0d3dd34e788783950f136f4a40b22ffec11a0dd4",
+      "equal": false
+    },
+    {
+      "path": "lib/x86_64/libflutter.so",
+      "apk24": "0f27ac976023ceb674e7e8d5616f7b6456b3ec0bd56601b75fedb7a1e3669d0b",
+      "apk25": "0f27ac976023ceb674e7e8d5616f7b6456b3ec0bd56601b75fedb7a1e3669d0b",
+      "equal": true
+    },
+    {
+      "path": "lib/x86_64/libsqlite3.so",
+      "apk24": "c773c3a25e4c11a450cc700ac95d665c3a1ae75ad426a204fc9b7a7a69b0e191",
+      "apk25": "c773c3a25e4c11a450cc700ac95d665c3a1ae75ad426a204fc9b7a7a69b0e191",
+      "equal": true
+    }
+  ],
+  "allNativeLibrariesEqual": false
+}

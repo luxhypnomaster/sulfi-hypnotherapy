@@ -26,3 +26,9 @@ Baseline: APK24 cbe05240d463b9dafbe9a12ee831c967bdbf6113; APK25 012f7f69b7ad99c0
 ## Что не установлено
 
 `DB_FILE_MISSING`, `ROWS_ABSENT`, `PATH_CHANGED`, `SCHEMA_MIGRATION_ERROR`, `FILE_BYTES_MISSING_REFERENCES_PRESENT`, `UI_LOAD_EXCEPTION`, `ALTERNATIVE_ACCOUNT_SCOPE` на телефоне владельца — UNKNOWN. Ни одна гипотеза не объявляется диагнозом без копии/безопасной наблюдаемой информации. Итог native evidence и ограничения — UPGRADE_REPRO_16V.md.
+
+## Существенное уточнение native dependency
+
+`DEPENDENCY_SAFETY_16V.md`: реальный DEX24/25 идентичен и подтверждает default Android corruption handler на RW-open. Он может удалить повреждённый файл до Dart catch. Поэтому code-аудит отсутствия fallback в main.dart НЕ считается доказательством общей безопасности открытия повреждённой БД. Runtime fault probe выполняется только на helper-owned disposable DB, не над базой Sulfi и не у владельца. Наличие corruption на телефоне UNKNOWN; весь инцидент этим не объясняется без evidence. Эта неопределённость сохраняет STOP-SHIP.
+
+Runtime подтверждение отдельного риска: Android35 run43259518712, controlled helper DB. Default RW изменил SHA повреждённого файла без исключения; read-only noop handler сохранил исходный SHA и вернул SQLiteDatabaseCorruptException. Полное before/after в DEPENDENCY_SAFETY_16V.md. **Инцидент владельца по-прежнему UNKNOWN**, поскольку наличие corruption до его upgrade не установлено.

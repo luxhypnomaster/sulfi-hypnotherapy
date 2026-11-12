@@ -47,6 +47,11 @@ jobs:
       ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
       GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
     steps:
+      - name: P0 STOP-SHIP forbids building or signing any Sulfi candidate
+        if: github.ref == 'refs/heads/hotfix/task16v-p0-data-preservation' && github.event_name == 'workflow_dispatch' && inputs.build_mode != 'checks'
+        run: |
+          echo 'BLOCKED: Task16V preservation/recovery gates are not accepted. No Sulfi APK build/sign/upload is allowed.'
+          exit 1
       - uses: actions/checkout@v4
         with:
           persist-credentials: false

@@ -1,0 +1,215 @@
+[
+  {
+    "abi": "arm64-v8a",
+    "apks": [
+      {
+        "apk": "24",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "38e9379daced67020b5bbc958145cc2db6872d58e6f682d2d1cd9491407b8c91"
+          },
+          ".dynsym": {
+            "bytes": 8136,
+            "sha256": "62f57845c5fc6d4ce38edf82bf48f9dce6ef5366908db88b0df5fbe36e7d1b91"
+          },
+          ".dynstr": {
+            "bytes": 8890,
+            "sha256": "d9aeffe9708ab774e59afb7d678e036902e63a2a2d0026a3a0d0b4c69f2aa68d"
+          },
+          ".rodata": {
+            "bytes": 1552,
+            "sha256": "eaf12b72c7582786f72ac77317aad431713c86eae685ab603caf8af105aff03b"
+          },
+          ".text": {
+            "bytes": 45072,
+            "sha256": "f03f35f54e417b96dc67332ac0e051bae35e32235ec24f4af350b8111f50ae5a"
+          },
+          ".data": {
+            "bytes": 1784,
+            "sha256": "4c7923626067db35875c2a906fbf633df40667f9aa0335ed8e9f44d0f25b5386"
+          }
+        }
+      },
+      {
+        "apk": "25",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "dc288e9cb151f86a89b22c32285ebc9ae761278ef12ed950310040f3b9d6434e"
+          },
+          ".dynsym": {
+            "bytes": 8136,
+            "sha256": "62f57845c5fc6d4ce38edf82bf48f9dce6ef5366908db88b0df5fbe36e7d1b91"
+          },
+          ".dynstr": {
+            "bytes": 8890,
+            "sha256": "d9aeffe9708ab774e59afb7d678e036902e63a2a2d0026a3a0d0b4c69f2aa68d"
+          },
+          ".rodata": {
+            "bytes": 1552,
+            "sha256": "eaf12b72c7582786f72ac77317aad431713c86eae685ab603caf8af105aff03b"
+          },
+          ".text": {
+            "bytes": 45072,
+            "sha256": "f03f35f54e417b96dc67332ac0e051bae35e32235ec24f4af350b8111f50ae5a"
+          },
+          ".data": {
+            "bytes": 1784,
+            "sha256": "4c7923626067db35875c2a906fbf633df40667f9aa0335ed8e9f44d0f25b5386"
+          }
+        }
+      }
+    ],
+    "equalSections": {
+      ".note.gnu.build-id": false,
+      ".dynsym": true,
+      ".dynstr": true,
+      ".rodata": true,
+      ".text": true,
+      ".data": true
+    }
+  },
+  {
+    "abi": "armeabi-v7a",
+    "apks": [
+      {
+        "apk": "24",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "a388e1db74e3b5b32bba71ba5f7c04457bad803af434ed403f5eeddfab8860e4"
+          },
+          ".dynsym": {
+            "bytes": 5440,
+            "sha256": "d5cd9cf90ac12d4e3b36d5a0b6be67fc24ff75033ca9ae4d431d13fc84d21eff"
+          },
+          ".dynstr": {
+            "bytes": 8908,
+            "sha256": "53fa18f555acbda4bc3bbadb4f1014adda5984b3417cc9057f83179a3e177723"
+          },
+          ".rodata": {
+            "bytes": 1544,
+            "sha256": "b9d91f37e58af6eb4c6180cd6c209d1d8b70041ac40ab9b4771feed15051ef1f"
+          },
+          ".text": {
+            "bytes": 27124,
+            "sha256": "c33496e72b5c49b1bf1dd63dce5089d470220d1edba4886b9069e5aefe89b572"
+          },
+          ".data": {
+            "bytes": 892,
+            "sha256": "d5e8a923a3baa5677490ffbca6831e4695f0af77cd2f41393fff96975c5ac1d5"
+          }
+        }
+      },
+      {
+        "apk": "25",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "3e84b1333b944ed8ded8098cca7cd279b5fd65045a786d953c1e13589bd9d210"
+          },
+          ".dynsym": {
+            "bytes": 5440,
+            "sha256": "d5cd9cf90ac12d4e3b36d5a0b6be67fc24ff75033ca9ae4d431d13fc84d21eff"
+          },
+          ".dynstr": {
+            "bytes": 8908,
+            "sha256": "53fa18f555acbda4bc3bbadb4f1014adda5984b3417cc9057f83179a3e177723"
+          },
+          ".rodata": {
+            "bytes": 1544,
+            "sha256": "b9d91f37e58af6eb4c6180cd6c209d1d8b70041ac40ab9b4771feed15051ef1f"
+          },
+          ".text": {
+            "bytes": 27124,
+            "sha256": "c33496e72b5c49b1bf1dd63dce5089d470220d1edba4886b9069e5aefe89b572"
+          },
+          ".data": {
+            "bytes": 892,
+            "sha256": "d5e8a923a3baa5677490ffbca6831e4695f0af77cd2f41393fff96975c5ac1d5"
+          }
+        }
+      }
+    ],
+    "equalSections": {
+      ".note.gnu.build-id": false,
+      ".dynsym": true,
+      ".dynstr": true,
+      ".rodata": true,
+      ".text": true,
+      ".data": true
+    }
+  },
+  {
+    "abi": "x86_64",
+    "apks": [
+      {
+        "apk": "24",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "5f1f54a3deb31858ec77a4d2d1031fc5c5d00bcfcc0a20799132a869350409fa"
+          },
+          ".dynsym": {
+            "bytes": 8136,
+            "sha256": "0424c9ea5115a1f933e39d4afd67094aba76b3c6fe144d51332fecbaa85d2e86"
+          },
+          ".dynstr": {
+            "bytes": 8890,
+            "sha256": "d9aeffe9708ab774e59afb7d678e036902e63a2a2d0026a3a0d0b4c69f2aa68d"
+          },
+          ".rodata": {
+            "bytes": 1568,
+            "sha256": "77d904655ba779bcdeddaf2daed684641ca603a8927bb6620bd35605b2f585ba"
+          },
+          ".text": {
+            "bytes": 49408,
+            "sha256": "3dab9d3538bce6efe4b871cc2f095c15b1fed74ff9ea6e14a9038f3baefda43f"
+          },
+          ".data": {
+            "bytes": 1784,
+            "sha256": "4c7923626067db35875c2a906fbf633df40667f9aa0335ed8e9f44d0f25b5386"
+          }
+        }
+      },
+      {
+        "apk": "25",
+        "sections": {
+          ".note.gnu.build-id": {
+            "bytes": 36,
+            "sha256": "c8c995e8a48a11c0dbd1ddaa46f9ae1d5bb23e4b87625059e53162fa36ca6083"
+          },
+          ".dynsym": {
+            "bytes": 8136,
+            "sha256": "0424c9ea5115a1f933e39d4afd67094aba76b3c6fe144d51332fecbaa85d2e86"
+          },
+          ".dynstr": {
+            "bytes": 8890,
+            "sha256": "d9aeffe9708ab774e59afb7d678e036902e63a2a2d0026a3a0d0b4c69f2aa68d"
+          },
+          ".rodata": {
+            "bytes": 1568,
+            "sha256": "77d904655ba779bcdeddaf2daed684641ca603a8927bb6620bd35605b2f585ba"
+          },
+          ".text": {
+            "bytes": 49408,
+            "sha256": "3dab9d3538bce6efe4b871cc2f095c15b1fed74ff9ea6e14a9038f3baefda43f"
+          },
+          ".data": {
+            "bytes": 1784,
+            "sha256": "4c7923626067db35875c2a906fbf633df40667f9aa0335ed8e9f44d0f25b5386"
+          }
+        }
+      }
+    ],
+    "equalSections": {
+      ".note.gnu.build-id": false,
+      ".dynsym": true,
+      ".dynstr": true,
+      ".rodata": true,
+      ".text": true,
+      ".data": true
+    }
+  }
+]
