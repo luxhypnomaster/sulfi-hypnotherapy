@@ -1,0 +1,7 @@
+00:00 +0: loading /dev/shm/sulfi16b/test/task16_catalog_ui_test.dart
+00:00 +0: /dev/shm/sulfi16b/test/task16_catalog_ui_test.dart: offline publication card saves edited annotation at 200% font with keyboard; client never sees author editor
+00:05 +1: loading /dev/shm/sulfi16b/test/task16b_queue_catalog_test.dart
+00:05 +1: /dev/shm/sulfi16b/test/task16b_queue_catalog_test.dart: G2/G4 persistent existing queue survives worker restart; pause/cancel preserve source; other account cannot resume
+00:06 +2: /dev/shm/sulfi16b/test/task16b_queue_catalog_test.dart: G2 authoritative offset after lost chunk response, 100% is not verified, receipt reuse and owner isolation
+00:06 +3: /dev/shm/sulfi16b/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+00:10 +4: All tests passed!
