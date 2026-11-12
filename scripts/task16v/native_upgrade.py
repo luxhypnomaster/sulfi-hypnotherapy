@@ -7,16 +7,23 @@ CASES=[];ACTIONS=[];inventories={}
 def adb(*args,binary=False,check=True):
  r=subprocess.run(['adb',*args],capture_output=True,timeout=55,check=check)
  return r.stdout if binary else r.stdout.decode(errors='replace')
+def probe(op='dump',value=None,index=0):
+ args=['shell','am','instrument','-w','-e','op',op]
+ if value is not None:args+=['-e','value',base64.b64encode(value.encode()).decode(),'-e','index',str(index)]
+ raw=adb(*args,'org.alchemist.p0probe/.Probe')
+ if 'INSTRUMENTATION_RESULT: failure=' in raw:raise AssertionError(raw[-500:])
+ return raw
 def tree():
- adb('shell','uiautomator','dump','/sdcard/task16v-window.xml',check=False)
- raw=adb('shell','cat','/sdcard/task16v-window.xml',check=False)
- try:return list(ET.fromstring(raw).iter('node'))
- except ET.ParseError:return []
+ raw=probe();match=re.search(r'INSTRUMENTATION_RESULT: payload=([^\s]+)',raw)
+ if not match:return []
+ xml=base64.b64decode(match[1]).decode()
+ (OUT/'latest-window.xml').write_text(xml)
+ return list(ET.fromstring(xml).iter('node'))
 def label(n):return (n.get('text','')+' '+n.get('content-desc','')).strip()
 def shot(name):
  try:
   (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
-  (OUT/(name+'.xml')).write_text(adb('shell','cat','/sdcard/task16v-window.xml',check=False))
+  (OUT/(name+'.xml')).write_text((OUT/'latest-window.xml').read_text() if (OUT/'latest-window.xml').exists() else '')
  except Exception as error:
   (OUT/(name+'-capture-error.txt')).write_text(type(error).__name__)
 def tap(n):
@@ -31,15 +38,13 @@ def click(text,exact=False,attempts=3):
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
 def text(value,index=0):
- ns=[]
- for _ in range(8):
-  ns=[n for n in tree() if n.get('class')=='android.widget.EditText']
-  if len(ns)>index:break
+ for _ in range(12):
+  if len([n for n in tree() if n.get('class')=='android.widget.EditText'])>index:break
   time.sleep(1)
- assert len(ns)>index,'NO_EDIT_FIELD'
-
- tap(ns[index]);adb('shell','input','keycombination','KEYCODE_CTRL_LEFT','KEYCODE_A');adb('shell','input','text',value.replace(' ','%s'));adb('shell','input','keyevent','4');time.sleep(.5)
- ACTIONS.append({'action':'UI_text','value':value,'index':index})
+ else:raise AssertionError('NO_EDIT_FIELD')
+ assert 'INSTRUMENTATION_RESULT: changed=true' in probe('text',value,index),'NATIVE_UI_TEXT_FAILED'
+ time.sleep(.5)
+ ACTIONS.append({'action':'UI_accessibility_set_text','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
  for _ in range(25):
@@ -87,6 +92,7 @@ def inventory(name):
  inventories[name]=v;report();return v
 def install():
  assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','DISPOSABLE_EMULATOR_REQUIRED'
+ assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();shot('24-clean')
@@ -104,18 +110,19 @@ def import_audio(filename,title):
  assert any(title in label(n) for n in tree()),'IMPORTED_NOT_VISIBLE';shot('24-import-'+filename)
  return {'createdBy':'UI_system_picker','title':title}
 def record_audio():
- home();click('Библиотека');click('Записать свой трек');text('UI recorded original');click('Начать запись')
- for _ in range(3):
-  ns=tree();allow=next((n for n in ns if 'permission_allow_foreground_only_button' in n.get('resource-id','') or 'permission_allow_button' in n.get('resource-id','')),None)
-  if allow is None:break
-  tap(allow);time.sleep(1)
- time.sleep(4);click('Завершить',exact=True);time.sleep(2);click('Сохранить трек');time.sleep(2)
+ home();click('Библиотека');click('Записать свой трек');text('UI recorded original')
+ ns=tree();finish=next((n for n in ns if n.get('content-desc')=='Завершить'),None)
+ assert finish is not None,'FINISH_CONTROL_NOT_FOUND'
+ click('Начать запись');time.sleep(.5)
+ ns=tree();allow=next((n for n in ns if 'permission_allow_foreground_only_button' in n.get('resource-id','') or 'permission_allow_button' in n.get('resource-id','')),None)
+ if allow is not None:tap(allow)
+ time.sleep(4);tap(finish);time.sleep(2);click('Сохранить трек');time.sleep(2)
  assert any('UI recorded original' in label(n) for n in tree()),'RECORDED_NOT_VISIBLE'
  return {'createdBy':'native_microphone_UI','hardware':'emulator_virtual_microphone'}
 def module(title,tracks,pause=False):
  home();click('Шаблоны');click('Модули',exact=True);click('Создать модуль');text(title)
  click('Добавить трек');time.sleep(1)
- for t in tracks:click(t)
+ for t in tracks:click(t,exact=True)
  adb('shell','input','keyevent','4');time.sleep(1)
  if pause:
   click('Добавить паузу');time.sleep(1)
@@ -177,7 +184,7 @@ try:
  time.sleep(2)
  for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
  case('ui_native_recording',record_audio)
- case('ui_module_elman',lambda:module('Elman variant 2',['UI same title','UI third track','UI third track']))
+ case('ui_module_elman',lambda:module('Индукция Элмана вариант 2',['UI same title','UI third track','UI third track']))
  case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
  case('ui_diary_auth_boundary',diary_boundary)
  case('before24_inventory',before)

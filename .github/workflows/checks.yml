@@ -287,6 +287,9 @@ jobs:
             "$TOOLS/apksigner" verify --print-certs "$RUNNER_TEMP/task16v-apks/master$N.apk" | grep -E 'certificate SHA-256 digest|certificate SHA-1 digest'
             "$TOOLS/aapt" dump badging "$RUNNER_TEMP/task16v-apks/master$N.apk" | head -1
           done
+      - name: Compile disposable Android UI accessibility probe (not Sulfi APK)
+        if: steps.kvm.outputs.available == 'true'
+        run: bash scripts/task16v/build_ui_probe.sh
       - name: Native UI creation then normal update; no DB writes by harness
         if: steps.kvm.outputs.available == 'true'
         uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
