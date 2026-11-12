@@ -1,0 +1,533 @@
+{
+  "fixture": "created through unmodified APK24 Android UI; no SQL/DB injection",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_24",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "uninstall": false,
+        "databaseInjected": false,
+        "unicodeIME": true,
+        "actualElmanFixtureTitle": "Индукция Элмана вариант 2"
+      }
+    },
+    {
+      "case": "native_dependency_corruption",
+      "status": "PASS",
+      "details": {
+        "default_rw": {
+          "before_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "after_sha256": "fcc764519d2c607f2501288ae7200254f30f2a4c0eb78ea63a5c3385357e44bd",
+          "exists": true,
+          "exception": "none",
+          "bytesUnchanged": false
+        },
+        "guard_readonly": {
+          "before_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "after_sha256": "f7fc9f6d9daf4ba3253827533e2dd0d4fdeb437eafc2043a403f797613309e03",
+          "exists": true,
+          "exception": "SQLiteDatabaseCorruptException",
+          "bytesUnchanged": true
+        },
+        "kind": "DISPOSABLE_HELPER_DB_ONLY_NOT_SULFI_OR_OWNER"
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "BLOCKED",
+      "reason": "NATIVE_IME_INPUT_FAILED:Broadcasting: Intent { act=org.alchemist.p0probe.TYPE_TEXT flg=0x400000 cmp=org.alchemist.p0probe/.TypeTextReceiver (has extras) }\nBroadcast completed: result=0, data=\"NO_INPUT_CONNECTION\"\n"
+    },
+    {
+      "case": "ui_import_2",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI same title"
+      }
+    },
+    {
+      "case": "ui_import_3",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI third track"
+      }
+    },
+    {
+      "case": "ui_module_elman",
+      "status": "BLOCKED",
+      "reason": "TRACK_ROW_NOT_FOUND:UI same title"
+    },
+    {
+      "case": "ui_module_pause",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "ui_template",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "ui_history",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "ui_capsule_export",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "ui_diary_auth_boundary",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "before24_inventory",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "native_update24_to25",
+      "status": "BLOCKED",
+      "reason": "STOP_SHIP_INVALID_UI_BASELINE_NO_UPGRADE_PROOF"
+    },
+    {
+      "case": "ui_after25",
+      "status": "BLOCKED",
+      "reason": "CANNOT_RETURN_HOME"
+    },
+    {
+      "case": "cold_restart25",
+      "status": "BLOCKED",
+      "reason": "NO_BASELINE"
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "Show roots"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-1.wav"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-2.wav"
+    },
+    {
+      "action": "native_IME_commitText_with_UI_readback",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-3.wav"
+    },
+    {
+      "action": "native_IME_commitText_with_UI_readback",
+      "value": "UI third track",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить"
+    },
+    {
+      "action": "tap",
+      "label": "Шаблоны"
+    },
+    {
+      "action": "tap",
+      "label": "Модули"
+    },
+    {
+      "action": "tap",
+      "label": "Создать модуль"
+    },
+    {
+      "action": "native_IME_commitText_with_UI_readback",
+      "value": "Индукция Элмана вариант 2",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Добавить трек"
+    }
+  ],
+  "inventories": {
+    "after-ui-import-task16v-2.wav": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "6064d05836012d9ba6bb6c9bca364435"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "16210bb461b4e86cf6aff9119932c866",
+            "title": "UI same title",
+            "filePath": "asset_16210bb461b4e86cf6aff9119932c866.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-12T17:01:26.908134Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:16210bb461b4e86cf6aff9119932c866:8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"logicalId\":\"16210bb461b4e86cf6aff9119932c866\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"createdAt\":\"2026-11-12T17:01:26.908134Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"16210bb461b4e86cf6aff9119932c866\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T17:00:37.055644Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "368dbec0873d84dc621867cc0a8fda07736ad1fa6127539699a852f157cfedd2"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "284e5decde4eafcdc2789ad0c42cac3dd9e9e71df3309be21d74f28141564327"
+        },
+        "files/audio/asset_16210bb461b4e86cf6aff9119932c866.wav": {
+          "bytes": 529244,
+          "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "8f75d68cadcde66ea9b8a27d583f6aa3f538c623b99f698e4356255c74ac5074"
+    },
+    "after-ui-import-task16v-3.wav": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "6064d05836012d9ba6bb6c9bca364435"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "16210bb461b4e86cf6aff9119932c866",
+            "title": "UI same title",
+            "filePath": "asset_16210bb461b4e86cf6aff9119932c866.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-12T17:01:26.908134Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "a2d22da54f2ed02cbaf537821b27acc9",
+            "title": "UI third track",
+            "filePath": "asset_a2d22da54f2ed02cbaf537821b27acc9.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-12T17:01:48.442677Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:16210bb461b4e86cf6aff9119932c866:8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"logicalId\":\"16210bb461b4e86cf6aff9119932c866\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"createdAt\":\"2026-11-12T17:01:26.908134Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"16210bb461b4e86cf6aff9119932c866\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:a2d22da54f2ed02cbaf537821b27acc9:ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047\",\"logicalId\":\"a2d22da54f2ed02cbaf537821b27acc9\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"createdAt\":\"2026-11-12T17:01:48.442677Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a2d22da54f2ed02cbaf537821b27acc9\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T17:00:37.055644Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "abd63e8f2c12865ae3010a538b69fda3393e56aad3efee124b2724b42df3421f"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "284e5decde4eafcdc2789ad0c42cac3dd9e9e71df3309be21d74f28141564327"
+        },
+        "files/audio/asset_16210bb461b4e86cf6aff9119932c866.wav": {
+          "bytes": 529244,
+          "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979"
+        },
+        "files/audio/asset_a2d22da54f2ed02cbaf537821b27acc9.wav": {
+          "bytes": 529244,
+          "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "d0040e3fb661051d8d8aff3452d2c96a85ec4f6e72479faeaa282253572ec93c"
+    },
+    "cold25": {
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "6064d05836012d9ba6bb6c9bca364435"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "16210bb461b4e86cf6aff9119932c866",
+            "title": "UI same title",
+            "filePath": "asset_16210bb461b4e86cf6aff9119932c866.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-12T17:01:26.908134Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "a2d22da54f2ed02cbaf537821b27acc9",
+            "title": "UI third track",
+            "filePath": "asset_a2d22da54f2ed02cbaf537821b27acc9.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-12T17:01:48.442677Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:16210bb461b4e86cf6aff9119932c866:8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"logicalId\":\"16210bb461b4e86cf6aff9119932c866\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"createdAt\":\"2026-11-12T17:01:26.908134Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"16210bb461b4e86cf6aff9119932c866\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"8360272c3d3c1153dcc46d27191b7918394ea173b3b7980176b7679680a682f4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:a2d22da54f2ed02cbaf537821b27acc9:ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047\",\"logicalId\":\"a2d22da54f2ed02cbaf537821b27acc9\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"createdAt\":\"2026-11-12T17:01:48.442677Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a2d22da54f2ed02cbaf537821b27acc9\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"ad158d606e1373c0ca81dba6ea4212a8bd14c54c0f5aec6484f292a4a8ade047\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-12T17:00:37.055644Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "abd63e8f2c12865ae3010a538b69fda3393e56aad3efee124b2724b42df3421f"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "ae7a902b2c6a907bfb7aa23bd8afdb01318842e1bbbfcf408c0037ce97847f1d"
+        },
+        "files/audio/asset_16210bb461b4e86cf6aff9119932c866.wav": {
+          "bytes": 529244,
+          "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979"
+        },
+        "files/audio/asset_a2d22da54f2ed02cbaf537821b27acc9.wav": {
+          "bytes": 529244,
+          "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "be3dc1ec0951617d16b51342dcf1d729b5241285f12d58b7d81fd4e22afaef56"
+    }
+  }
+}

@@ -48,7 +48,13 @@ def text(value,index=0):
  assert len(ns)>index,'NO_EDIT_FIELD'
  tap(ns[index]);time.sleep(.6)
  if IME:
-  result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+  result=''
+  for _ in range(8):
+   result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+   if 'UI_TEXT_COMMITTED' in result:break
+   time.sleep(.5)
+   fresh=[n for n in tree() if n.get('class')=='android.widget.EditText']
+   if len(fresh)>index:tap(fresh[index])
   assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-200:]
   method='native_IME_commitText'
  else:
@@ -112,6 +118,7 @@ def install():
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'))
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
+ adb('shell','svc','wifi','disable',check=False);adb('shell','svc','data','disable',check=False)
  for _ in range(10):
   listing=adb('shell','ime','list','-s',check=False)
   if 'org.alchemist.p0probe' in listing:break
