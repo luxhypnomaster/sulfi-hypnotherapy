@@ -56,7 +56,7 @@ assert len(rows)==35 and set(states)=={r['ID'] for r in rows}
 for row in rows:
  for k,v in zip(['Status','Code','Native','Owner','Evidence','Remaining'],states[row['ID']]):row[k]=v
 with (reports/'ACCEPTANCE_16V.csv').open('w',newline='') as f:
- w=csv.DictWriter(f,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
+ w=csv.DictWriter(f,fieldnames=rows[0].keys(),lineterminator='\n');w.writeheader();w.writerows(rows)
 counts=dict(collections.Counter(r['Status'] for r in rows));assert sum(counts.values())==35
 (reports/'ACCEPTANCE_COUNTS_16V.json').write_text(json.dumps({'criteria':35,'status':'BLOCKED_STOP_SHIP','counts':counts,'owner':'PHYSICAL_BYTES_UNKNOWN'},indent=2))
 print(counts)

@@ -241,7 +241,7 @@ def ui_after():
  home();click('Шаблоны');click('Модули');ns=tree();shot('25-modules')
  mt=[json.loads(r['payload'])['title'] for r in inventories['before24']['rows']['module_definitions']]
  assert all(any(t in label(n) for n in ns) for t in mt),'MODULES_MISSING_FROM_UI'
- return {'allUIAudioAndModulesVisible':True,'defaultLibraryLabels':default[:35]}
+ return {'allUIAudioAndModulesVisible':True,'nativeLibraryAudioObserved':playing,'physicalHeardSound':'NOT_RUN','defaultLibraryLabels':default[:35]}
 try:
  case('install_24',install)
  assert CASES[-1]['status']=='PASS','INSTALL_PRECONDITION_FAILED_NO_DATA_PROOF'
