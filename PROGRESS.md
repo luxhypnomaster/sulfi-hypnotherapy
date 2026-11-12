@@ -360,3 +360,9 @@ Branch fix/task16b-auth-transfer-publication/worktree /dev/shm/sulfi16b fromc895
 - Existing ZIP export regression preserved with clarified labels; actual Flutter cover/category screenshots captured using synthetic fixture only.
 - Pooled HTTP loopback benchmark records 20→1 TCP connections; not presented as real GAS or cellular latency. Server source candidate has distinct signed token errors and safe request correlation; no deploy.
 - Two APK25 candidates will use existing signing/package and existing GAS6; exact source checks required before private draft upload. APK24 and old artifacts untouched. Native update and physical owner checks remain separate gates.
+
+### №16-Б — signed pair25 / отчётная контрольная точка
+
+App source012f7f69b7ad99c0d44f2a442d9649aa1481117e проверен local+CI:433 Flutter PASS,client3,Node46+24,schemas/format/analyze PASS. Checks43162781960; build43163688437 attempt2 SUCCESS (attempt1 failed external Kotlin POM resolution,source unchanged). Private draft442553188; master asset738283668,client738283907. Оба APK реально скачаны, SHA и V2 certificate совпадают с GitHub/старым ключом; compiled endpoint/WebID verified. APK24 preserved.
+
+Native emulator QA43165399224 запущен от того же source012f,пока NOT_CONCLUDED; отдельные synthetic audio/history/template/diary fixtures. Google/owner physical acceptance25 NOT_RUN. Отчётный commit после012f меняет только документы/отчёты; build source остаётся012f. Никакого GAS deploy/main/signing/Drive ACL change. Матрица80 и результат уточняются после native readback.

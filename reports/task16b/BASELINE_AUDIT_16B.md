@@ -28,3 +28,9 @@ App24 и draftassets736432720/736433144 сохраняются, certificate SHA2
 ## Измерения / блокеры
 
 Read-only authorization-status workflow main запрошен43156961962; он не создаётпубликаций/bootstrap. Benchmarks в sandbox должны измерять actual requests/attempts/phase/elapsed+distribution; Wi-Fi/mobile/DNS/TLS на телефоне бездоступа владельца NOT_RUN. Не выводить полныеe.toString/URL/email/sub/token; trace толькоoperation/requestId/phase/status/code/count/ms. Live write/deploy и физическая приёмка BLOCKED доотдельных действий владельца, независимыйкод/CI продолжаются.
+
+## Read-only результат и сохранность базовой поставки
+
+GitHub Actions 43156961962 завершён успешно: runtimeHealthVerified, webAudienceConfigured, Script ownerOnly/private; две разные серверные identity и role check подтверждены. Полный client install остаётся PARTIAL. Точные безопасные поля — SERVER_STATUS_G0.json. Main на момент повторной сверки остаётся 0800f34f759686b18f459cd9914d22e7f1f521e9.
+
+Повторный GET assets APK24 подтвердил исходные size/digest/updated_at; см. APK24_MASTER_PRESERVED.json и APK24_CLIENT_PRESERVED.json. `git diff c895291 -- docs/task16 reports/task16 reports/task16a android` пуст: старые матрицы, отчёты и Android signing/package конфигурация сохранены.

@@ -317,5 +317,6 @@
 ## №16-Б — продолжение №16/16-А
 - [x] G0 фактический аудит и read-only runtime/ACL status.
 - [x] G1–G4 кандидат: единая SDK identity, owner-bound транспорт и существующая очередь, отдельный каталог/анонс, обложка/категории.
-- [ ] G5 exact-source CI, две APK25 и обновление APK24 на эмуляторе — отчёты reports/task16b.
+- [x] G5 exact-source CI433 PASS и две подписанные APK25 с download/certificate/config readback.
+- [ ] Native emulator update24→25: run43165399224; результаты отдельно от физической приёмки.
 - [ ] G6 физический MASTER → три трека → дневник → CLIENT → offline; новые live server checks после отдельного разрешения на candidate deploy.

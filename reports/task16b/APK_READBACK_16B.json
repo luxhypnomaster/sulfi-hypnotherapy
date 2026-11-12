@@ -1,0 +1,40 @@
+{
+  "sourceSha": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "buildRun": 43163688437,
+  "buildAttempt": 2,
+  "releaseId": 442553188,
+  "releaseUrl": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-89fd5ff3b9d445c2d347",
+  "draft": true,
+  "verifiedBinaryDownload": "AUTHENTICATED_GITHUB_ASSET_BYTES",
+  "apksigner": "PASS_IN_EXACT_SOURCE_ACTIONS_JOB",
+  "assets": [
+    {
+      "edition": "client",
+      "id": 738283907,
+      "name": "sulfi-client-test-25.apk",
+      "bytes": 193781493,
+      "sha256": "c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73",
+      "certificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "certificateSha1": "8eb995f14b65676fdff30548ce361aec1f479256",
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-client-test-25.apk",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 25,
+      "versionName": "0.4.17",
+      "compiledConfig": "PASS_BYTE_READBACK"
+    },
+    {
+      "edition": "master",
+      "id": 738283668,
+      "name": "sulfi-master-test-25.apk",
+      "bytes": 193781457,
+      "sha256": "d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9",
+      "certificateSha256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "certificateSha1": "8eb995f14b65676fdff30548ce361aec1f479256",
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-master-test-25.apk",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 25,
+      "versionName": "0.4.17",
+      "compiledConfig": "PASS_BYTE_READBACK"
+    }
+  ]
+}

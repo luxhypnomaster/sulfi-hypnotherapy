@@ -1,0 +1,10 @@
+{
+  "sourceSha": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "branch": "fix/task16b-auth-transfer-publication",
+  "checks": 43162781960,
+  "apk24Preserved": true,
+  "deploymentChanged": false,
+  "buildAttempt": 2,
+  "build": 43163688437,
+  "emulator": 43165399224
+}

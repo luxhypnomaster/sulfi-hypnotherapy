@@ -1,0 +1,28 @@
+// Synthetic queue UI only; no claims of Google login, live transfer or Android.
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sulfi_hypnotherapy/services/session_controller.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_api.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_catalog.dart';
+import 'package:sulfi_hypnotherapy/ui/alchemist_sync_screen.dart';
+import '../../test/support/task15_fixture.dart';
+import '../../test/support/task15_harness.dart';
+class RenderController extends SessionController {
+ RenderController(Fixture15 f):super(repository:f.c.repository,library:f.c.library,capsules:f.c.capsules);
+ late final service=AlchemistCatalog(this,api:AlchemistApi(Uri.parse('https://script.google.com/macros/s/CONTROLLED/exec'),identityScope:()=> 'opaque-synthetic-owner',credential:()async=>'CONTROLLED_ONLY'));
+ @override AlchemistCatalog get catalog=>service;
+}
+void main(){testWidgets('queue actual widget stages, bytes, retries and safe reasons',(t)async{
+ final f=(await t.runAsync(Fixture15.open))!,c=RenderController((await Future.value(f)));
+ try {
+  await t.runAsync(()async{
+   for(final entry in [('a','Модуль — контрольная фикстура','server_verifying'),('b','Обложка — контрольная фикстура','transferring'),('c','Дневниковый анонс — контрольная фикстура','diary_verifying')]) {
+    await f.db.insert('app_settings',{'name':'alchemist_card:${entry.$1}','value':jsonEncode({'ownerBinding':c.catalog.api!.ownerBinding,'card':{'title':entry.$2},'_work':{'phase':'failed','stage':entry.$3,'bytes':262144,'totalBytes':600000,'attempts':2,'networkRetries':1,'code':'NETWORK_CONNECTION_ABORT','message':'Соединение прервалось. Исходник сохранён.'}})});
+   }
+  });
+  await show15(t,f,AlchemistSyncScreen(controller:c));await io15(t);
+  expect(find.textContaining('NETWORK_CONNECTION_ABORT'),findsWidgets);expect(find.text('Продолжить'),findsWidgets);
+  await capture15(t,'task16b-queue-details');await t.pumpWidget(const SizedBox());
+ }finally{c.dispose();await t.runAsync(f.close);}
+});}

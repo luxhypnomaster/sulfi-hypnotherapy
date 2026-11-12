@@ -1,0 +1,20 @@
+// Actual loopback network phase capture, not live GAS, Google consent, DNS or TLS.
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_http.dart';
+import 'package:sulfi_hypnotherapy/services/alchemist_diagnostics.dart';
+void main(){test('real TCP loopback connect/headers/body redacted trace',()async{
+ final previous=HttpOverrides.current;HttpOverrides.global=null;
+ final server=await HttpServer.bind(InternetAddress.loopbackIPv4,0);
+ server.listen((request)async {await request.drain<void>();request.response.headers.contentType=ContentType.json;request.response.write('{"ok":true,"status":200,"result":{}}');await request.response.close();});
+ try {
+  final trace=AlchemistDiagnostics.instance.begin();
+  final response=await const AlchemistHttp().request('POST',Uri.parse('http://127.0.0.1:${server.port}'),{'content-type':'application/json'},jsonEncode({'operation':'catalog.get','traceId':trace}));
+  expect(response.status,200);final events=AlchemistDiagnostics.instance.events.where((e)=>e['traceId']==trace).toList();
+  expect(events.map((e)=>e['phase']),containsAll(['connect_including_dns_tls','headers','body']));
+  final file=File('reports/task16b/TRANSFER_TRACE_16B.json');final out=jsonDecode(await file.readAsString());
+  out['loopbackScope']='REAL_TCP_LOOPBACK_PLAIN_HTTP_NO_GOOGLE_OR_TLS';out['loopbackNetworkEvents']=events;
+  await file.writeAsString('${const JsonEncoder.withIndent('  ').convert(out)}\n');
+ }finally{await server.close(force:true);HttpOverrides.global=previous;}
+});}

@@ -1,5 +1,19 @@
-# №16-Б — исходная локализация
+# №16-Б — причины и пределы диагностики
 
-CONFIRMED CODE: stale ID-token without refresh, unconditional SDKsignOut on interactive entry, live authenticatedfeed uses stale_token; no retry HttpException connectionabort;5minheaders times3attempts can holdUI; editor interrupts transfer ondispose; prepare allocatesnewdraft withoutlookup; cover persisted onlyafterupload. Этиусловиявоспроизводимы localcontrolledtests; телефонная конкретнаяпричина должна бытьпроверена вновь.
+Дата: 12.11.2026. Ветка: `fix/task16b-auth-transfer-publication`. Кандидат приложения: `012f7f69b7ad99c0d44f2a442d9649aa1481117e`. Draft PR: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/45 . Продолжение №16/16-А, не №17.
 
-CANDIDATE: provider tokenexpired во времяlongupload; AndroidradioDNS/outage; authcertfetch transient; Googlequota; Drivecommitlatency. Нельзяподменять traces предположением Google too slow. OWNEROBSERVED initialrealGoogle MASTER/CLIENT passed; laterauth/networkfailures and incompletecatalogcommit. OldCI green не доказывает physicalcurrentPASS.
+| Наблюдение | Подтверждённая причина в прежнем коде | Исправление и доказательство |
+|---|---|---|
+| После успешного входа позднее требуется вход снова | RAM ID token истекал, официальный SDK restore/refresh отсутствовал; интерактивный вход предварительно делал signOut | Lightweight SDK restore + singleflight; G1 тесты управляют временем, проверяют обновление и запрет смены identity при refresh |
+| Connection abort прекращает отправку | HttpException не входил в retry policy | Код NETWORK_CONNECTION_ABORT, ограниченные повторы только допустимых идемпотентных операций; тест потери ответа после принятого блока |
+| Дневник/карточка долго удерживает экран | Синхронное ожидание всей цепочки UI; headers до пяти минут, повторные обращения | Работа в существующей persisted очереди; editor navigation не управляет жизнью worker; один HTTP call ограничен суммарным deadline |
+| Уход с карточки обрывает загрузку | interrupted включал !mounted | Worker принадлежит приложению, пауза только по явному действию, смене аккаунта или Android lifecycle |
+| Почти одинаковые карточки | prepare всегда создавал ID | Lookup exact revision + singleflight; одновременные Prepare возвращают сохранённый ID |
+| Выбранная обложка исчезает после сбоя | Локальная ссылка сохранялась только после сетевой загрузки; startup collector не знал обложек | Сначала локальная копия/preview/persist; отдельная проверка SHA/receipt; cover references включены в существующий collector |
+| 100% не означает публикацию | Счётчик байтов мог не объяснять последующие verify/commit | Раздельные фазы bytes_acked, server_verifying, catalog commit; финальный status только после readback |
+
+Причина DNS errno7 на конкретном телефоне НЕ установлена: доступны снимки ошибки, но нет системного сетевого трассирования устройства. Радиосеть, DNS/VPN, переключение Wi-Fi/mobile, квота и задержка Google остаются кандидатами. Мы воспроизводим классы ошибок контролируемо, а не утверждаем, что обнаружили причину конкретного радиообрыва.
+
+Новые тесты выявили два дефекта собственной промежуточной реализации: self-await в callback singleflight prepare и непригодный PNG в тестовой фикстуре. Оба исправлены до подготовки APK; финальный тест проверяет декодированный preview и отдельную публикацию настоящих PNG-байтов. Промежуточные неуспешные прогоны не выдаются за успешную приёмку.
+
+Первоначальные MASTER/CLIENT входы и разрешение/запрет контрольной публикации подтверждены владельцем для APK24. Read-only status действующего GAS6 подтверждает два разных аккаунта и PARTIAL_CLIENT_READ_INSTALL_NOT_VERIFIED. Это не полный Android E2E и не новая проверка Google-входа APK25.

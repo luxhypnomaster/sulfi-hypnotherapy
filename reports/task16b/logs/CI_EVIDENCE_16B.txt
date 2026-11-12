@@ -1,0 +1,7 @@
+Source: 012f7f69b7ad99c0d44f2a442d9649aa1481117e
+https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43162781960
+Conclusion: success
+verify	Validate offline Task15 JSON schemas and contract fixtures	2026-11-12T05:40:40.4342126Z PASS: 13 JSON schemas; 4 Dart-checked fixtures; 10 negative + unknown-category/OpenAPI checks; no network
+verify	Run dart format --output=none --set-exit-if-changed lib test	2026-11-12T05:40:56.1388230Z Formatted 172 files (0 changed) in 1.77 seconds.
+verify	Run flutter analyze --fatal-infos	2026-11-12T05:41:11.5396008Z No issues found! (ran in 14.1s)
+verify	Flutter tests with failure summaries	2026-11-12T05:46:39.6978721Z Flutter tests: passed=433, failures=0, success=True
