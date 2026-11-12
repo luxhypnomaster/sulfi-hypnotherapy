@@ -1,0 +1,19 @@
+{
+  "reportFolder": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
+  "resultId": "19mUU0HERZ9o1smBGBMhO-tFxCFNsp7Lt",
+  "resultSha256": "f0044457e25e161c433bf7e07552ed9f7c273941c8627e4bc06c6e1df17c8952",
+  "rawDriveResultReadback": "BYTE_IDENTICAL",
+  "matrixReadableLastCriterion": "REL-10",
+  "oldAcceptance24Bytes": 39443,
+  "oldAcceptance24Modified": "2026-11-11T18:44:58.674Z",
+  "preservedMain": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+  "originalFilesDeleted": false,
+  "driveAclChanged": false,
+  "apksOnDrive": false,
+  "archiveDriveId": "1c5RsrKTdA_mje7lsowqufwhSFmxnyA-S",
+  "archiveBytes": 4997572,
+  "archiveSha256": "7576d6b9bfdbc1c283a4275d58c2eb38601aee04f0d0192f4fcb3f839b72402b",
+  "archiveRawDriveReadback": "BYTE_IDENTICAL",
+  "manifestEntriesVerified": 65,
+  "archiveContainsApk": false
+}

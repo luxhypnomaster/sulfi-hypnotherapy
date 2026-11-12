@@ -36,3 +36,7 @@ GitHub Actions `apksigner verify --print-certs`, `aapt dump badging` и поис
 Открыть GitHub ссылку в браузере, где выполнен вход владельца в GitHub. Если получен404, проверить этот вход и доступ к private repository; Google-вход в Сульфи — отдельная авторизация. Для тестировщика без repo access владелец скачивает CLIENT APK и передаёт сам файл через Android Quick Share. Исходники/токены не передавать, репозиторий/релиз публичными не делать.
 
 MASTER устанавливать поверх MASTER24 без удаления приложения и очистки данных. CLIENT — отдельный package/sandbox. Если Android пишет конфликт, остановиться и передать точный текст: не советуем удалять старое приложение. Приёмка APK25 реальными Google-пользователями и офлайн-звук на двух телефонах NOT_RUN. Native emulator результаты отдельно в EMULATOR_16B.md; их нельзя называть физической приёмкой владельца.
+
+## Android emulator readback
+
+Run43165399224 подтвердил установку25 поверх24 с сохранением четырёх групп данных,SQLite integrity,CLIENT sandbox и реальный capsule export/import. Дополнительный probe43196379265 подтвердил native AudioTrack и screen-off playback на неизменных24/25;одно ожидание Home после сеанса осталось BLOCKED. Подробности в EMULATOR_16B.md. Это не испытание двух физических телефонов и не настоящий Google E2E.

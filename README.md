@@ -218,3 +218,5 @@ CI выпускает author/test `ru.sulfi.sulfi_hypnotherapy` и отдель�
 
 ### Продолжение №16-Б
 Кандидат `0.4.17+25` из `fix/task16b-auth-transfer-publication`: документация [docs/task16b/00_START_HERE.md](docs/task16b/00_START_HERE.md), фактические результаты [reports/task16b](reports/task16b). Физическая приёмка нового кандидата и разрешение на deployment отделены от CI. Текущий GAS6/APK24 не заменяются автоматически.
+
+Две подписанные APK25 для ручной приёмки №16-Б: [MASTER](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-master-test-25.apk), [CLIENT](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-89fd5ff3b9d445c2d347/sulfi-client-test-25.apk). Это private draft: владельцу нужен GitHub login в браузере,тестировщику без repo access можно передать сам APK через Quick Share. MASTER ставится поверх24 без uninstall. SHA/certificate/source и ограничения приёмки — [APK_INFO_16B](reports/task16b/APK_INFO_16B.md).

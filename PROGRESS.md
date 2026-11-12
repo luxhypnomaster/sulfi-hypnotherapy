@@ -366,3 +366,13 @@ Branch fix/task16b-auth-transfer-publication/worktree /dev/shm/sulfi16b fromc895
 App source012f7f69b7ad99c0d44f2a442d9649aa1481117e проверен local+CI:433 Flutter PASS,client3,Node46+24,schemas/format/analyze PASS. Checks43162781960; build43163688437 attempt2 SUCCESS (attempt1 failed external Kotlin POM resolution,source unchanged). Private draft442553188; master asset738283668,client738283907. Оба APK реально скачаны, SHA и V2 certificate совпадают с GitHub/старым ключом; compiled endpoint/WebID verified. APK24 preserved.
 
 Native emulator QA43165399224 запущен от того же source012f,пока NOT_CONCLUDED; отдельные synthetic audio/history/template/diary fixtures. Google/owner physical acceptance25 NOT_RUN. Отчётный commit после012f меняет только документы/отчёты; build source остаётся012f. Никакого GAS deploy/main/signing/Drive ACL change. Матрица80 и результат уточняются после native readback.
+
+### №16-Б — завершение доступной автономной проверки
+
+Неизменные APK25 source012f:local+CI433 PASS,Node46+24,client3,schemas/format/analyze PASS;сертификат/package/version/compiled config и реальные скачанные файлы PASS. Native smoke43165399224 сохраняет audio/history/template/diary при update24→25,CLIENT isolation и capsule export/import PASS. Initial audio snapshots/counter fixture исправлены только в QA. Corrected probe43196379265 подтверждает library/session/screen-off AudioTrack на24/25,7PASS/1BLOCKED (ожидание Home после сеанса не поймано);слышимость/реальные Google/две физические телефоны NOT_RUN.
+
+Все80 критериев оценены раздельно по Code/Emulator/Live/Owner;оригинальные147/отчёты16/16-А сохранены. Серверный candidate JWT/trace не deployed,требует отдельного разрешения;GAS6/source1a0/main0800/signing/APK24 сохранены. Отчётный scope не равен закрытию всего№16.
+
+### №16-Б — отчёты и байтовый readback
+
+Итоговая матрица80:37 PASS/41 PARTIAL/2 BLOCKED. RESULT_16B.md Drive id19mUU0HERZ9o1smBGBMhO-tFxCFNsp7Lt; исходный текст скачан обратно и byte-identical. EVIDENCE_16B.zip id1c5RsrKTdA_mje7lsowqufwhSFmxnyA-S,4997572bytes,SHA7576d6b9bfdbc1c283a4275d58c2eb38601aee04f0d0192f4fcb3f839b72402b; реальный raw readback и65 manifest entries проверены. APK внутри архива/на Drive отсутствуют. Индексы/receipt отдельно. Старые16/16-А/147 сохранены,main0800f34/GAS6/signing не менялись.

@@ -1,0 +1,464 @@
+{
+  "run": 43194766281,
+  "runnerSource": "b3bdb7056c33ffde2eee4ca1e16eea3b09738953",
+  "apkSource": "012f7f69b7ad99c0d44f2a442d9649aa1481117e",
+  "physical": "NOT_RUN",
+  "GoogleUsers": "NOT_RUN",
+  "cases": [
+    {
+      "case": "control24_install",
+      "status": "PASS",
+      "details": {
+        "versionCode": 24,
+        "launched": true
+      }
+    },
+    {
+      "case": "control24_seed",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "control24_library",
+      "status": "PASS",
+      "details": {
+        "mode": "library",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": false
+          },
+          {
+            "attempt": 3,
+            "active": false
+          },
+          {
+            "attempt": 4,
+            "active": false
+          },
+          {
+            "attempt": 5,
+            "active": false
+          },
+          {
+            "attempt": 6,
+            "active": false
+          },
+          {
+            "attempt": 7,
+            "active": false
+          },
+          {
+            "attempt": 8,
+            "active": true
+          }
+        ],
+        "ui": [
+          " Назад",
+          " 1 аудио · 0:12",
+          " Библиотека",
+          " Облачный каталог",
+          " Каталог модулей",
+          " Записать свой трек",
+          " О приложении и данных",
+          " Все категории",
+          " Общие",
+          " Установки",
+          " Мои",
+          " + Добавить аудио",
+          " EMU AAC fixture\nВыход\n0:12",
+          " Прослушать EMU AAC fixture",
+          " Действия с аудио"
+        ],
+        "appLogs": [
+          "11-12 09:53:14.051  3836  3836 I ExoPlayerImpl: Init 1ecb746 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 09:53:16.762  3836  4226 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 09:53:19.023  3836  4258 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 09:53:19.172  3836  4226 D MediaCodec: keep callback message for reclaim",
+          "11-12 09:53:19.884  3836  4226 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 09:53:20.429  3836  4226 D AudioTrack: getTimestamp_l(16): device stall time corrected using current time 158186747118"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN"
+      }
+    },
+    {
+      "case": "control24_session",
+      "status": "BLOCKED",
+      "error": "AssertionError:PLAYBACK_NOT_OBSERVED_WITH_10_SAMPLES"
+    },
+    {
+      "case": "candidate25_install",
+      "status": "PASS",
+      "details": {
+        "versionCode": 25
+      }
+    },
+    {
+      "case": "candidate25_seed",
+      "status": "PASS",
+      "details": {
+        "rowsSeeded": 1,
+        "sha256": "d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069",
+        "schema": 9,
+        "seedMethod": "controlled SQLite precondition, not UI import"
+      }
+    },
+    {
+      "case": "candidate25_library",
+      "status": "PASS",
+      "details": {
+        "mode": "library",
+        "observed": true,
+        "samples": [
+          {
+            "attempt": 0,
+            "active": false
+          },
+          {
+            "attempt": 1,
+            "active": false
+          },
+          {
+            "attempt": 2,
+            "active": false
+          },
+          {
+            "attempt": 3,
+            "active": false
+          },
+          {
+            "attempt": 4,
+            "active": false
+          },
+          {
+            "attempt": 5,
+            "active": true
+          }
+        ],
+        "ui": [
+          " Назад",
+          " 1 аудио · 0:12",
+          " Библиотека",
+          " Каталог",
+          " Каталог модулей",
+          " Записать свой трек",
+          " О приложении и данных",
+          " Все категории",
+          " Общие",
+          " Установки",
+          " Мои",
+          " + Добавить аудио",
+          " EMU AAC fixture\nВыход\n0:12",
+          " Прослушать EMU AAC fixture",
+          " Действия с аудио"
+        ],
+        "appLogs": [
+          "11-12 09:55:19.543  5269  5269 I ExoPlayerImpl: Init 4ac00da [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+          "11-12 09:55:21.064  5269  5418 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+          "11-12 09:55:22.495  5269  5436 I MediaCodec: MediaCodec will operate in async mode",
+          "11-12 09:55:22.675  5269  5418 D MediaCodec: keep callback message for reclaim",
+          "11-12 09:55:23.642  5269  5418 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+          "11-12 09:55:24.333  5269  5418 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 282091473466"
+        ],
+        "actualHeardSound": "NOT_RUN",
+        "googleUsers": "NOT_RUN"
+      }
+    },
+    {
+      "case": "candidate25_session",
+      "status": "BLOCKED",
+      "error": "AssertionError:PLAYBACK_NOT_OBSERVED_WITH_10_SAMPLES"
+    }
+  ],
+  "probes": [
+    {
+      "mode": "library",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": false
+        },
+        {
+          "attempt": 4,
+          "active": false
+        },
+        {
+          "attempt": 5,
+          "active": false
+        },
+        {
+          "attempt": 6,
+          "active": false
+        },
+        {
+          "attempt": 7,
+          "active": false
+        },
+        {
+          "attempt": 8,
+          "active": true
+        }
+      ],
+      "ui": [
+        " Назад",
+        " 1 аудио · 0:12",
+        " Библиотека",
+        " Облачный каталог",
+        " Каталог модулей",
+        " Записать свой трек",
+        " О приложении и данных",
+        " Все категории",
+        " Общие",
+        " Установки",
+        " Мои",
+        " + Добавить аудио",
+        " EMU AAC fixture\nВыход\n0:12",
+        " Прослушать EMU AAC fixture",
+        " Действия с аудио"
+      ],
+      "appLogs": [
+        "11-12 09:53:14.051  3836  3836 I ExoPlayerImpl: Init 1ecb746 [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 09:53:16.762  3836  4226 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 09:53:19.023  3836  4258 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 09:53:19.172  3836  4226 D MediaCodec: keep callback message for reclaim",
+        "11-12 09:53:19.884  3836  4226 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 09:53:20.429  3836  4226 D AudioTrack: getTimestamp_l(16): device stall time corrected using current time 158186747118"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN"
+    },
+    {
+      "mode": "session",
+      "observed": false,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": false
+        },
+        {
+          "attempt": 4,
+          "active": false
+        },
+        {
+          "attempt": 5,
+          "active": false
+        },
+        {
+          "attempt": 6,
+          "active": false
+        },
+        {
+          "attempt": 7,
+          "active": false
+        },
+        {
+          "attempt": 8,
+          "active": false
+        },
+        {
+          "attempt": 9,
+          "active": false
+        }
+      ],
+      "ui": [
+        " Самогипноз. Сульфи. Ваш внутренний навигатор.",
+        " О приложении и данных",
+        " Дневник",
+        " Дневник",
+        " Сессия №1",
+        " 12.11 · 09:54",
+        " Тема / запрос и заметка",
+        " Тема / запрос",
+        " Действия сессии",
+        " Структура сессии",
+        " Открыть конструктор",
+        " 0:12\n1 фаза · 0 модулей · 1 трек\nДлительность\n0:12",
+        " 1\nФаза: Нераспределённые\n0:12\n0:12",
+        " Прослушать EMU AAC fixture",
+        " EMU AAC fixture",
+        " 0:12",
+        " Шаблон",
+        " Выбрать шаблон",
+        " НАЧАТЬ ТРАНСФОРМАЦИЮ",
+        " Записаться\nк мастеру",
+        " Библиотека",
+        " Шаблоны\nи модули",
+        " История"
+      ],
+      "appLogs": [],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN"
+    },
+    {
+      "mode": "library",
+      "observed": true,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": false
+        },
+        {
+          "attempt": 4,
+          "active": false
+        },
+        {
+          "attempt": 5,
+          "active": true
+        }
+      ],
+      "ui": [
+        " Назад",
+        " 1 аудио · 0:12",
+        " Библиотека",
+        " Каталог",
+        " Каталог модулей",
+        " Записать свой трек",
+        " О приложении и данных",
+        " Все категории",
+        " Общие",
+        " Установки",
+        " Мои",
+        " + Добавить аудио",
+        " EMU AAC fixture\nВыход\n0:12",
+        " Прослушать EMU AAC fixture",
+        " Действия с аудио"
+      ],
+      "appLogs": [
+        "11-12 09:55:19.543  5269  5269 I ExoPlayerImpl: Init 4ac00da [AndroidXMedia3/1.9.2] [emu64xa, sdk_gphone64_x86_64, Google, 35]",
+        "11-12 09:55:21.064  5269  5418 I DMCodecAdapterFactory: Creating an asynchronous MediaCodec adapter for track type audio",
+        "11-12 09:55:22.495  5269  5436 I MediaCodec: MediaCodec will operate in async mode",
+        "11-12 09:55:22.675  5269  5418 D MediaCodec: keep callback message for reclaim",
+        "11-12 09:55:23.642  5269  5418 W fi_hypnotherapy: Accessing hidden method Landroid/media/AudioTrack;->getLatency()I (unsupported, reflection, allowed)",
+        "11-12 09:55:24.333  5269  5418 D AudioTrack: getTimestamp_l(17): device stall time corrected using current time 282091473466"
+      ],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN"
+    },
+    {
+      "mode": "session",
+      "observed": false,
+      "samples": [
+        {
+          "attempt": 0,
+          "active": false
+        },
+        {
+          "attempt": 1,
+          "active": false
+        },
+        {
+          "attempt": 2,
+          "active": false
+        },
+        {
+          "attempt": 3,
+          "active": false
+        },
+        {
+          "attempt": 4,
+          "active": false
+        },
+        {
+          "attempt": 5,
+          "active": false
+        },
+        {
+          "attempt": 6,
+          "active": false
+        },
+        {
+          "attempt": 7,
+          "active": false
+        },
+        {
+          "attempt": 8,
+          "active": false
+        },
+        {
+          "attempt": 9,
+          "active": false
+        }
+      ],
+      "ui": [
+        " Самогипноз. Сульфи. Ваш внутренний навигатор.",
+        " О приложении и данных",
+        " Дневник",
+        " Дневник",
+        " Сессия №1",
+        " 12.11 · 09:56",
+        " Тема / запрос и заметка",
+        " Тема / запрос",
+        " Действия сессии",
+        " Структура сессии",
+        " Открыть конструктор",
+        " 0:12\n1 фаза · 0 модулей · 1 трек\nДлительность\n0:12",
+        " 1\nФаза: Нераспределённые\n0:12\n0:12",
+        " Прослушать EMU AAC fixture",
+        " EMU AAC fixture",
+        " 0:12",
+        " Шаблон",
+        " Выбрать шаблон",
+        " НАЧАТЬ ТРАНСФОРМАЦИЮ",
+        " Записаться\nк мастеру",
+        " Библиотека",
+        " Шаблоны\nи модули",
+        " История"
+      ],
+      "appLogs": [],
+      "actualHeardSound": "NOT_RUN",
+      "googleUsers": "NOT_RUN"
+    }
+  ]
+}

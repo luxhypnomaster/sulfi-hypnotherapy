@@ -25,3 +25,13 @@
 Подробности APK/подписей/скачивания — APK_INFO_16B.md, эмулятора — EMULATOR_16B.md. CI не заменяет Google consent/Testing, сеть физического телефона и звук. Полный большой live E2E прежнего №16 не повторялся ради отчёта. Новые live backend diagnostics не проверены: deployment запрещён до отдельного согласования.
 
 Промежуточные прогоны находили реальный narrow toolbar overflow и дефекты новых тестовых фикстур; исправления подтверждены повторными targeted и окончательным полным exact-source CI. Старые failed/cancelled runs сохраняются; успешным объявлен только указанный итоговый run.
+
+## Native подтверждения
+
+- Smoke43165399224:6 PASS/2 BLOCKED,реальное update24→25 сохраняет audio/history/template/diary,CLIENT sandbox и capsule UI export/import PASS.
+- Сравнение43194766281:library playback подтверждён на24 и25,session оставался BLOCKED из-за искусственного counter invariant.
+- Counter reproduction:1 дополнительный локальный тест PASS.
+- Corrected probe43196379265:7 PASS/1 BLOCKED;на24 и25 реальные AudioTrack library/session и screen-off=true. Один оставшийся navigation expectation не принят.
+- Физические Google users,Wi-Fi/mobile и слышимость реальных3треков владельцем NOT_RUN.
+
+Реальные raw/structured результаты: EMULATOR_16B.json,PLAYBACK_PROBE_16B.json,PLAYBACK_PROBE_CORRECTED_16B.json. APK25 не пересобирались после первоначальной подписанной пары;изменялись только test harness и отчёты,app source tree сохраняет012f7f.

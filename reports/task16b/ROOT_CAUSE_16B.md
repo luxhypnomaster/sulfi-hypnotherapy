@@ -17,3 +17,9 @@
 Новые тесты выявили два дефекта собственной промежуточной реализации: self-await в callback singleflight prepare и непригодный PNG в тестовой фикстуре. Оба исправлены до подготовки APK; финальный тест проверяет декодированный preview и отдельную публикацию настоящих PNG-байтов. Промежуточные неуспешные прогоны не выдаются за успешную приёмку.
 
 Первоначальные MASTER/CLIENT входы и разрешение/запрет контрольной публикации подтверждены владельцем для APK24. Read-only status действующего GAS6 подтверждает два разных аккаунта и PARTIAL_CLIENT_READ_INSTALL_NOT_VERIFIED. Это не полный Android E2E и не новая проверка Google-входа APK25.
+
+## Дополнительная диагностика звука
+
+Smoke43165399224 первоначально не подтвердил native preview и session playback. Сравнение43194766281 показало настоящее AudioTrack-воспроизведение в библиотеке на обеих APK24/25 после нескольких замеров: первый одиночный snapshot оказался слишком ранним для холодного software emulator decoder. Это CONFIRMED_TEST_OBSERVATION_LIMITATION,не дефект новой APK.
+
+Session probe оставался BLOCKED на обеих версиях. В синтетическую тестовую SQLite был вставлен history displayNumber1,но app_counters.session не выставлен в1. Обычный repository правильно пытался выделить номер1 и получал UNIQUE conflict. Реальный локальный reproduction reports/task16b/logs/COUNTER_FIXTURE_16B.log подтверждает: неконсистентная фикстура падает,после установки счётчика следующий run имеет номер2. Исправлены только disposable QA preconditions; пользовательские базы и код плеера не менялись. Повторный native probe43196379265 подтвердил native library/session playback и screen-off AudioTrack на обеих версиях. Остался отдельный navigation expectation BLOCKED;он не переобъявлен успехом.

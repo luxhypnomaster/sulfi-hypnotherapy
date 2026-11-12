@@ -1,0 +1,27 @@
+Source012f7f69b7ad99c0d44f2a442d9649aa1481117e
+https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43165399224
+Conclusion success; real Google/physical QA NOT_RUN
+emulator_qa	Hardware gate before installing any emulator image	2026-11-12T06:03:13.5658370Z [36;1m  echo 'KVM_GATE=PASS'[0m
+emulator_qa	Hardware gate before installing any emulator image	2026-11-12T06:03:13.5659284Z [36;1m  echo 'KVM_GATE=BLOCKED_NO_DEVICE; NO_SYSTEM_IMAGE_INSTALLED'[0m
+emulator_qa	Hardware gate before installing any emulator image	2026-11-12T06:03:13.5926618Z KVM_GATE=PASS
+emulator_qa	Download existing immutable APKs (read-only, no signing/OAuth secrets)	2026-11-12T06:03:13.6030246Z [36;1mprint('APK24_AND_EXACT_SOURCE_APK25_DIGESTS_VERIFIED')[0m
+emulator_qa	Download existing immutable APKs (read-only, no signing/OAuth secrets)	2026-11-12T06:03:29.1759693Z APK24_AND_EXACT_SOURCE_APK25_DIGESTS_VERIFIED
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:06:13.2411843Z EMULATOR_CASE=install24_launch:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:06:38.5408238Z EMULATOR_CASE=synthetic_local_fixture:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:07:21.4752330Z EMULATOR_CASE=update24_to25_preserves_data:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:07:47.7735499Z EMULATOR_CASE=library_native_preview:BLOCKED
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:08:07.1380719Z EMULATOR_CASE=session_screen_off_playback:BLOCKED
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:08:27.5556011Z EMULATOR_CASE=client25_package_isolation:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:08:53.4457880Z EMULATOR_CASE=guest_restart_state:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:10:31.5925644Z EMULATOR_CASE=capsule_ui_export:PASS
+emulator_qa	Run existing APKs on actual Android emulator (synthetic local data)	2026-11-12T06:10:31.6014933Z EMULATOR_QA_COMPLETE; NO_REAL_GOOGLE_IDENTITIES
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5086998Z [36;1m    for row in v['cases']: print('EMULATOR_RESULT='+json.dumps(row,separators=(',',':')))[0m
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5087519Z [36;1melse: print('EMULATOR_QA=BLOCKED_OR_NOT_RUN; NO_GOOGLE_USERS')[0m
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5539570Z EMULATOR_RESULT={"case":"install24_launch","status":"PASS","details":{"versionCode":24,"launched":true}}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5542201Z EMULATOR_RESULT={"case":"synthetic_local_fixture","status":"PASS","details":{"rowsSeeded":1,"sha256":"d47c993b9b9f9f8c58d31e4ab29aa5eee34ec6f73e67dd576ca3ccfb51a1c069","schema":9,"seedMethod":"controlled SQLite precondition, not UI import"}}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5545210Z EMULATOR_RESULT={"case":"update24_to25_preserves_data","status":"PASS","details":{"versionCode":25,"dataPreserved":true,"audioHistoryTemplateDiary":"ALL_PRESERVED","sqliteIntegrity":"ok"}}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5547115Z EMULATOR_RESULT={"case":"library_native_preview","status":"BLOCKED","error":"AssertionError:NATIVE_PLAYBACK_NOT_OBSERVED"}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5548729Z EMULATOR_RESULT={"case":"session_screen_off_playback","status":"BLOCKED","error":"AssertionError:SESSION_PLAYBACK_NOT_OBSERVED"}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5550562Z EMULATOR_RESULT={"case":"client25_package_isolation","status":"PASS","details":{"distinctPackageSqlite":true,"emptyOwnLibrary":true,"schema":9}}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5552542Z EMULATOR_RESULT={"case":"guest_restart_state","status":"PASS","details":{"guestVisible":true,"authenticatedLogout":"NOT_RUN_NO_GOOGLE_ACCOUNT","rolesNotInjected":true}}
+emulator_qa	Record fixed-schema evidence even when artifact quota is exceeded	2026-11-12T06:10:49.5556039Z EMULATOR_RESULT={"case":"capsule_ui_export","status":"PASS","details":{"exportControlReached":true,"completedLocalExportImport":true,"zipBytes":9689,"sha256":"a01b1c3f51d4e63fa40d778fb1e5ceab9687cd288190f75c56fce67639e64442","clientImportedExactAudio":true,"noDriveOrGoogleAccounts":true}}

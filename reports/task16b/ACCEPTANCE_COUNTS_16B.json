@@ -1,10 +1,11 @@
 {
   "total": 80,
   "counts": {
-    "PASS": 36,
-    "PARTIAL": 42,
+    "PASS": 37,
+    "PARTIAL": 41,
     "BLOCKED": 2
   },
   "physical25": "NOT_RUN",
-  "full16Acceptance": "OPEN"
+  "full16Acceptance": "OPEN",
+  "newLiveServerDeployment": "NOT_AUTHORIZED_NOT_RUN"
 }
