@@ -22,5 +22,29 @@
   {
     "file": "CHANGES_16V.md",
     "id": "1dufAPpsLg43alqm-BJvei7ZIdJbTIuCH"
+  },
+  {
+    "file": "TESTS_16V.md",
+    "id": "1cQp43tZGOT-6AiC1lU3MLpq2FsYp-_bk"
+  },
+  {
+    "file": "ISSUES_16V.md",
+    "id": "1iGh4WWHgRu9PeaYinY43ZDVt8NAKZ0zY"
+  },
+  {
+    "file": "UPGRADE_REPRO_16V.md",
+    "id": "1YIiCfarhz3ZV9gv5HeTF1mSvSrMBQ9Pa"
+  },
+  {
+    "file": "DEPENDENCY_SAFETY_16V.md",
+    "id": "1Au18Qh3yx8zvd90FaboITgyZbQrVY8PU"
+  },
+  {
+    "file": "ACQUISITION_OPTIONS_16V.md",
+    "id": "1XAHanu1PmxVzxS_o4B_pA2qLNtK3Dq8u"
+  },
+  {
+    "file": "ACCEPTANCE_16V.csv",
+    "id": "147MCW12qbdGsmumYjizuqHsXsWnWSaWe"
   }
 ]

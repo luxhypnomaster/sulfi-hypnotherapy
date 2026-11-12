@@ -1,0 +1,10 @@
+{
+  "criteria": 35,
+  "status": "BLOCKED_STOP_SHIP",
+  "counts": {
+    "PASS": 14,
+    "PARTIAL": 17,
+    "BLOCKED": 4
+  },
+  "owner": "PHYSICAL_BYTES_UNKNOWN"
+}

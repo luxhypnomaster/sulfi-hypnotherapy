@@ -24,3 +24,5 @@
 - Recovery writes/миграцию/обновление согласовывать отдельно после доказательств и review.
 
 Первый необходимый человеческий этап — согласовать технически допустимый доступ и snapshot, **не** переустановку или импорт. Пока этого нет, физическое восстановление владельца BLOCKED.
+
+Уточнение journal: учитывать также `library.sqlite-journal`, не только WAL/SHM. В native24 inventories действительно присутствовал нулевой rollback journal; pinned sqflite WAL_ENABLED_BY_DEFAULT=false и explicit WAL metadata в APK не добавлялась. Режим/sidecars телефона UNKNOWN. Диагностический tool копирует/хеширует и rollback journal; неполная копия без hot journal не годится для recovery.

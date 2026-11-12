@@ -4,6 +4,8 @@ import json
 import pathlib
 import sqlite3
 import tempfile
+import subprocess
+import sys
 import unittest
 
 spec = importlib.util.spec_from_file_location('readonly16v', pathlib.Path(__file__).with_name('readonly_inventory.py'))
@@ -61,6 +63,40 @@ class ReadOnly16V(unittest.TestCase):
     def test_bad_payload_is_reported_without_rewrite(self):
         c=self.db();c.execute("insert into diary_author values ('invalid','{')");c.commit();c.close()
         self.assertIn('MALFORMED_PAYLOAD_PRESERVED',module.inventory(self.root)['classes'])
+    def test_rollback_journal_is_inventoried_and_source_preserved(self):
+        c=self.db();c.close()
+        journal=self.root/'library.sqlite-journal';journal.write_bytes(b'')
+        v=module.inventory(self.root)
+        self.assertIn('library.sqlite-journal',v['databaseFiles'])
+        self.assertEqual(v['databaseFiles']['library.sqlite-journal']['bytes'],0)
+        self.assertEqual(journal.read_bytes(),b'')
+        self.assertTrue(v['sourceUnchanged'])
+    def test_hot_rollback_crash_copy_never_recovers_or_changes_source(self):
+        script="""import sqlite3,sys,time
+c=sqlite3.connect(sys.argv[1]);c.execute('pragma journal_mode=DELETE');c.execute('pragma synchronous=FULL');c.execute('pragma cache_size=4')
+c.execute('create table diary_author(id text,payload text)');c.executemany('insert into diary_author values (?,?)',[(str(i),'x'*4096) for i in range(200)]);c.commit()
+c.execute('begin immediate');c.execute("update diary_author set payload=?",('y'*4096,));print('READY',flush=True);time.sleep(300)
+"""
+        child=subprocess.Popen([sys.executable,'-c',script,str(self.root/'library.sqlite')],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        try:
+            self.assertEqual(child.stdout.readline().strip(),'READY')
+        finally:
+            child.kill();child.wait(timeout=10)
+            child.stdout.close();child.stderr.close()
+        journal=self.root/'library.sqlite-journal'
+        self.assertGreater(journal.stat().st_size,0)
+        before={p.name:p.read_bytes() for p in self.root.glob('library.sqlite*')}
+        v=module.inventory(self.root)
+        self.assertIn('library.sqlite-journal',v['databaseFiles'])
+        self.assertIn('SQLITE_READ_ERROR',v['classes'])
+        self.assertTrue(v['sourceUnchanged'])
+        self.assertEqual(before,{p.name:p.read_bytes() for p in self.root.glob('library.sqlite*')})
+    def test_symlink_audio_directory_not_followed(self):
+        c=self.db();c.execute("insert into audio_assets values ('id','outside.m4a',null)");c.commit();c.close()
+        outside=self.root/'outside';outside.mkdir();(outside/'outside.m4a').write_bytes(b'PRIVATE_DO_NOT_FOLLOW')
+        (self.root/'audio').symlink_to(outside,target_is_directory=True)
+        v=module.inventory(self.root)
+        self.assertEqual(next(iter(v['media'].values()))['state'],'SYMLINK_NOT_FOLLOWED')
     def test_legacy_external_path_not_followed(self):
         c=self.db();c.execute("insert into audio_assets values ('id','/private/elsewhere',null)");c.commit();c.close()
         self.assertIn('LEGACY_OR_UNSAFE_MEDIA_PATH',module.inventory(self.root)['classes'])

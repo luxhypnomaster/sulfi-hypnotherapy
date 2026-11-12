@@ -8,7 +8,7 @@
 - Полный `flutter test --reporter json` — **434 PASS / 1 intentional opt-in live SKIP**, failures0. FLUTTER_SUMMARY_16V.json + logs/flutter-tests.jsonl. Пропущенный live тест не объявляется пройденным, production E2E не повторялся.
 - CLIENT defines: `task5_client_build_test.dart`, `task15_client_test.dart` — **3 PASS**. Это fixtures, не реальные Google пользователи.
 - Node Alchemist security/domain — **46 PASS**; old diary — **24 PASS**, серверный код не менялся/deploy не выполнялся.
-- Python read-only diagnostic — **6 PASS**: intact WAL rows, unchanged source .sqlite/WAL/SHM bytes, absent DB not created, corrupt DB not reset, missing media references preserved, invalid JSON preserved, external path not followed (отдельные assertions объединены в6 cases).
+- Python read-only diagnostic — **9 PASS**: intact WAL rows, unchanged source .sqlite/WAL/SHM bytes, absent DB not created, corrupt DB not reset, missing media references preserved, invalid JSON preserved, external path not followed (отдельные assertions объединены в6 cases).
 - Legacy scope regression — RED на исходном25, GREEN с узким patch; две controlled subjects, CLIENT/guest deny, exact original diary row/order/media bytes retained. Подробные RED/GREEN logs.
 
 ## CI PASS — именно автоматические регрессии
@@ -26,3 +26,5 @@
 ## Native dependency fault probe
 
 Run43259518712, controlled **helper-only** DB: default RW corruption changes SHA without exception; readonly noop-handler retains SHA and throws corruption. Source/binary/runtime механизм подтверждён. Это не native UI upgrade сохранность и не owner RCA/recovery. Никакой DB injection/corruption в Sulfi для этого probe не выполнялась.
+
+Последние3 Python cases расширяют первоначальные6: нулевой rollback journal inventory, hot rollback journal после SIGKILL незавершённой транзакции (недеструктивный readonly отказ на derivative copy), symlink audio directory not followed. Исходные DB/sidecars сохранены byte-for-byte. Это локальные controlled tests, не owner recovery.

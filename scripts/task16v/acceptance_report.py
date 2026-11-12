@@ -35,7 +35,7 @@ states={
 'REL-02':('BLOCKED','NOT_RUN','NOT_RUN','NOT_RUN','RESULT_16V.md','No candidate26 because safety gates unaccepted; no signing changes'),
 'REL-03':('BLOCKED','PARTIAL','BLOCKED','NOT_RUN','UPGRADE_REPRO_16V.md','No actual signed candidate26 full UI-created native preservation proof'),
 'REL-04':('PARTIAL','PASS','PARTIAL','BLOCKED','TESTS_16V.md','No candidate26 native library/session/diary full lifecycle'),
-'REL-05':('PASS','PASS','NOT_RUN','NOT_RUN','FLUTTER_SUMMARY_16V.json;CI_EVIDENCE_16V.json;TESTS_16V.md','434 Flutter PASS +1 opt-in live SKIP;46+24 Node;3CLIENT;6Python;format/analyze'),
+'REL-05':('PASS','PASS','NOT_RUN','NOT_RUN','FLUTTER_SUMMARY_16V.json;CI_EVIDENCE_16V.json;TESTS_16V.md','434 Flutter PASS +1 opt-in live SKIP;46+24 Node;3CLIENT;9Python;format/analyze'),
 'REL-06':('PASS','PASS','PASS','NOT_RUN','PR46;REMOTE_BASELINES_16V.json;FINAL_BOUNDARIES_16V.json','PR45/main/GAS/ACL/Sulfi signing/old APKs preserved'),
 'REL-07':('PARTIAL','PASS','NOT_RUN','NOT_RUN','DRIVE_UPLOADS_16V.json','All final reports/readback must complete before PASS'),
 'REL-08':('PASS','PASS','PARTIAL','NOT_RUN','RESULT_16V.md','No emulator or fixture test substituted for owner Android recovery'),

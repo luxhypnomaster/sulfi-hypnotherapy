@@ -50,11 +50,11 @@ def text(value,index=0):
  if IME:
   result=''
   for _ in range(8):
-   result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+   result=adb('shell','am','broadcast','-n','org.alchemist.p0ime/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
    if 'UI_TEXT_COMMITTED' in result:break
    time.sleep(.5)
-   fresh=[n for n in tree() if n.get('class')=='android.widget.EditText']
-   if len(fresh)>index:tap(fresh[index])
+   # The IME has a separate package, so probe termination cannot kill it.
+   # Keep the focused UI field; wait for its real Android InputConnection.
   assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-200:]
   method='native_IME_commitText'
  else:
@@ -68,7 +68,7 @@ def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
  for _ in range(25):
   ns=tree()
-  if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in ns):return
+  if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in ns) or any('ИСТОРИЯ · №' in label(n) for n in ns):return
   allow=next((n for n in ns if 'permission_allow' in n.get('resource-id','')),None)
   if allow is not None:tap(allow)
   time.sleep(2)
@@ -88,6 +88,10 @@ def case(name,fn):
  except Exception as e:
   CASES.append({'case':name,'status':'BLOCKED','reason':str(e)[:3000]});shot('failure-'+name)
  finally:report();print('NATIVE16V_CASE='+json.dumps(CASES[-1],ensure_ascii=False),flush=True)
+def package_info():
+ raw=adb('shell','dumpsys','package',PKG)
+ m=re.search(r'versionCode=(\d+)',raw)
+ return {'versionCode':int(m[1]) if m else None,'dataDirs':re.findall(r'dataDir=(\S+)',raw)[:2]}
 def inventory(name):
  # Read copies only. Preserve SQLite+WAL+SHM together; never touch original DB.
  raw=adb('exec-out','run-as',PKG,'tar','-cf','-','files','shared_prefs',binary=True,check=False)
@@ -99,7 +103,7 @@ def inventory(name):
    for m in z:
     if not m.isfile():continue
     b=z.extractfile(m).read();files[m.name]={'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
-    if m.name in ['files/library.sqlite','files/library.sqlite-wal','files/library.sqlite-shm']:(d/pathlib.Path(m.name).name).write_bytes(b)
+    if m.name in ['files/library.sqlite','files/library.sqlite-journal','files/library.sqlite-wal','files/library.sqlite-shm']:(d/pathlib.Path(m.name).name).write_bytes(b)
   assert (d/'library.sqlite').exists(),'DB_FILE_MISSING'
   c=sqlite3.connect('file:'+str(d/'library.sqlite')+'?mode=ro',uri=True)
   headers={'integrity':c.execute('pragma integrity_check').fetchone()[0],'version':c.execute('pragma user_version').fetchone()[0]}
@@ -109,22 +113,24 @@ def inventory(name):
   c.close()
  capsule=adb('exec-out','cat','/sdcard/Download/task16v-ui-before24.zip',binary=True,check=False)
  if capsule.startswith(b'PK'):files['external/Download/task16v-ui-before24.zip']={'bytes':len(capsule),'sha256':hashlib.sha256(capsule).hexdigest()}
- v={'database':headers,'rows':rows,'files':files,'snapshot_sha256':hashlib.sha256(raw).hexdigest()}
+ v={'package':package_info(),'database':headers,'rows':rows,'files':files,'snapshot_sha256':hashlib.sha256(raw).hexdigest()}
  inventories[name]=v;report();return v
 def install():
  global IME,ELMAN_TITLE
  assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','DISPOSABLE_EMULATOR_REQUIRED'
  assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
+ assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/ime.apk'))
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'))
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
  adb('shell','svc','wifi','disable',check=False);adb('shell','svc','data','disable',check=False)
  for _ in range(10):
   listing=adb('shell','ime','list','-s',check=False)
-  if 'org.alchemist.p0probe' in listing:break
+  if 'org.alchemist.p0ime/' in listing:break
   time.sleep(1)
  try:
-  adb('shell','ime','enable','org.alchemist.p0probe/.Ime');adb('shell','ime','set','org.alchemist.p0probe/.Ime');IME=True
+  ime_id=next(x.strip() for x in listing.splitlines() if x.strip().startswith('org.alchemist.p0ime/'))
+  adb('shell','ime','enable',ime_id);adb('shell','ime','set',ime_id);IME=True
  except Exception as error:
   IME=False;ELMAN_TITLE='Elman variant 2'
   print('NATIVE16V_IME_OPTIONAL_BLOCKED='+str(error)[:700],flush=True)
@@ -145,7 +151,11 @@ def import_audio(filename,title):
  return {'createdBy':'UI_system_picker','title':title}
 def record_audio():
  home();click('Библиотека');click('Записать свой трек');text('UI recorded original')
- ns=tree();finish=next((n for n in ns if n.get('content-desc')=='Завершить'),None)
+ finish=None
+ for _ in range(5):
+  ns=tree();finish=next((n for n in ns if label(n)=='Завершить'),None)
+  if finish is not None:break
+  adb('shell','input','swipe','360','1010','360','490','650');time.sleep(.4)
  assert finish is not None,'FINISH_CONTROL_NOT_FOUND'
  click('Начать запись');time.sleep(.5)
  ns=tree();allow=next((n for n in ns if 'permission_allow_foreground_only_button' in n.get('resource-id','') or 'permission_allow_button' in n.get('resource-id','')),None)
@@ -169,18 +179,27 @@ def module(title,tracks,pause=False):
  click('Сохранить модуль');time.sleep(1)
  assert any(title in label(n) for n in tree()),'MODULE_NOT_VISIBLE'
  return {'title':title,'UI_dependencies':tracks,'pauseAdded':pause}
+def native_audio_active():
+ uid=adb('shell','cmd','package','list','packages','-U',PKG)
+ match=re.search(r'uid:(\d+)',uid);assert match,'NO_APP_UID'
+ for _ in range(15):
+  raw=adb('shell','dumpsys','audio')
+  rows=[line.strip() for line in raw.splitlines() if re.search(r'(?:u/pid|uid/pid|uid)[:=]\s*'+match[1]+r'(?:/|\b)',line)]
+  if any(re.search(r'state[:=]\s*(?:started|3)\b',line,re.I) for line in rows):return True
+  time.sleep(.5)
+ return False
 def create_template():
  home();click('Открыть конструктор');click('Добавить фазу');click('Индукция');click('Добавить',exact=True);click('Модуль',exact=True)
  click(ELMAN_TITLE);click('Сохранить',exact=True);text('UI Elman program');click('Сохранить',exact=True);time.sleep(1);click('Применить',exact=True);time.sleep(1)
  home();return {'createdBy':'native_UI_structure_and_template','containsModule':True}
 def create_history():
- home();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(4);shot('24-native-session')
+ home();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');playing=native_audio_active();shot('24-native-session')
  # Actual crash/reopen on disposable emulator, never the owner phone.
  restart();v=inventory('after-ui-history24');assert v['rows']['session_runs'],'NO_UI_CREATED_HISTORY'
- return {'createdBy':'UI_session_then_disposable_force_stop','runs':len(v['rows']['session_runs']),'statuses':[r['status'] for r in v['rows']['session_runs']]}
+ return {'createdBy':'UI_session_then_disposable_force_stop','nativeAudioObserved':playing,'physicalHeardSound':'NOT_RUN','runs':len(v['rows']['session_runs']),'statuses':[r['status'] for r in v['rows']['session_runs']]}
 def export_capsule():
  home();click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');click('Создать резервную копию');time.sleep(2)
- text('task16v-ui-before24.zip');click('Save',exact=True);time.sleep(3)
+ text('task16v-ui-before24.zip');click('SAVE',exact=True);time.sleep(3)
  raw=adb('exec-out','cat','/sdcard/Download/task16v-ui-before24.zip',binary=True)
  import zipfile
  with zipfile.ZipFile(io.BytesIO(raw)) as z:assert z.testzip() is None,'EXPORTED_ZIP_CRC_FAILED'
@@ -191,12 +210,13 @@ def diary_boundary():
   raise AssertionError('REAL_MASTER_GOOGLE_LOGIN_REQUIRED_BY_IMMUTABLE_APK24; no UI draft creation possible offline; no fake identity or SQL substitute')
  raise AssertionError('AUTHOR_WORKSPACE_AVAILABLE_NEEDS_SEPARATE_UI_DIARY_DRIVER')
 def before():
- home();v=inventory('before24')
+ home();v=inventory('before24');assert v['package']['versionCode']==24,'BASELINE_NOT_APK24'
  assert len(v['rows']['audio_assets'])>=3,'NOT_ENOUGH_UI_AUDIO'
  assert len(v['rows']['module_definitions'])>=1,'NO_UI_MODULE'
  shot('24-before-upgrade');return {'tracks':len(v['rows']['audio_assets']),'modules':len(v['rows']['module_definitions']),'integrity':v['database']['integrity']}
 def compare(name):
- v=inventory(name);old=inventories.get('before24');assert old,'NO_BASELINE'
+ v=inventory(name);assert v['package']['versionCode']==25,'COMPARE_NOT_ACTUALLY_APK25'
+ old=inventories.get('before24');assert old,'NO_BASELINE'
  assert any(c['case']=='before24_inventory' and c['status']=='PASS' for c in CASES),'INVALID_BASELINE_UI_CREATION_FAILED'
  assert len(old['rows']['audio_assets'])>=3 and len(old['rows']['module_definitions'])>=1,'EMPTY_BASELINE_CANNOT_PASS_UPGRADE'
  missing={}
@@ -217,7 +237,8 @@ def ui_after():
  default=[label(n) for n in ns if label(n)]
  click('Мои',exact=True);ns=tree();titles=[r['title'] for r in inventories['before24']['rows']['audio_assets']]
  absent=[t for t in titles if not any(t in label(n) for n in ns)];assert not absent,'TRACKS_MISSING_FROM_UI:'+repr(absent)
- shot('25-personal-library');home();click('Шаблоны');click('Модули',exact=True);ns=tree();shot('25-modules')
+ shot('25-personal-library');click('Прослушать UI third track',exact=True);playing=native_audio_active();assert playing,'NATIVE_LIBRARY_AUDIO_NOT_OBSERVED'
+ home();click('Шаблоны');click('Модули');ns=tree();shot('25-modules')
  mt=[json.loads(r['payload'])['title'] for r in inventories['before24']['rows']['module_definitions']]
  assert all(any(t in label(n) for n in ns) for t in mt),'MODULES_MISSING_FROM_UI'
  return {'allUIAudioAndModulesVisible':True,'defaultLibraryLabels':default[:35]}

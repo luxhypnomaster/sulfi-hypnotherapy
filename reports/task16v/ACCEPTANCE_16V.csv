@@ -1,0 +1,36 @@
+ID,Priority,Criterion,Status,Code,Native,Owner,Evidence,Remaining
+INV-01,P0,Факт обычного update без uninstall зафиксирован без повторного вопроса,PASS,PASS,NOT_RUN,PASS,ROOT_CAUSE_16V.md,Normal update confirmed by owner; not asked again
+INV-02,P0,"Подтверждено, что физическое удаление не объявляется фактом без evidence",PASS,PASS,NOT_RUN,NOT_RUN,ROOT_CAUSE_16V.md,Physical bytes UNKNOWN; no deletion/recovery claim
+INV-03,P0,До расследования заморожены публикация новых APK и destructive operations,PASS,PASS,NOT_RUN,NOT_RUN,PROGRESS.md;checks.yml STOP-SHIP,No Sulfi APK26 built; owner device untouched
+INV-04,P0,Проверены package/cert/build variant и реальные APK24/25,PASS,PASS,PASS,NOT_RUN,APK24_APK25_READBACK_16V.json;BINARY_METADATA_16V.json,"Both real immutable APKs, native apksigner/aapt; not owner install inspection"
+INV-05,P0,Проверены фактические пути SQLite и WAL/SHM до/после,PARTIAL,PASS,PARTIAL,BLOCKED,DIFF_AUDIT_16V.md;native inventories,Owner actual SQLite/WAL/media paths unavailable
+INV-06,P0,"Проверена запись и загрузка media/audio file paths, temp/copy/migration",PARTIAL,PASS,PARTIAL,BLOCKED,DIFF_AUDIT_16V.md;native UI evidence,Owner files unavailable; no original media writes performed
+INV-07,P0,"Проверены schema migrations, onCreate/onUpgrade, error fallbacks",PASS,PASS,PASS,NOT_RUN,DEPENDENCY_SAFETY_16V.md;NATIVE_UI_UPGRADE_RUN5.json,Audit found default native corruption handler risk; not fixed or proven owner cause
+INV-08,P0,Проверены scope/filter/Google owner identity до/после №16-Б,PASS,PASS,PARTIAL,BLOCKED,ROOT_CAUSE_16V.md;legacy scope RED/GREEN logs,Same-owner alias proven in controlled domain test; actual Google lifecycle blocked
+INV-09,P0,Проверены очистки queues/GC/init без удаления исходников,PARTIAL,PASS,PARTIAL,BLOCKED,DIFF_AUDIT_16V.md,Startup audio/diary/history collectors audited; owner snapshot/safety not proven
+INV-10,P0,Root cause минимально воспроизводим или маркирован NOT_REPRODUCED,PASS,PASS,PARTIAL,BLOCKED,ROOT_CAUSE_16V.md;UPGRADE_REPRO_16V.md,Full owner incident NOT_REPRODUCED; legacy filter and helper corruption mechanism separately reproduced
+REP-01,P0,"APK24 данные созданы обычной UI последовательностью в Android, не только SQLite fixture",PARTIAL,NOT_RUN,PASS,NOT_RUN,NATIVE_UI_UPGRADE_CURRENT.json,Controlled tracks/modules created via UI; real Google diary not created
+REP-02,P0,"В тесте есть треки recorded/imported, 2 модуля и точные 3 зависимости",PARTIAL,NOT_RUN,PARTIAL,NOT_RUN,UPGRADE_REPRO_16V.md,Recorded24 and all requested graph fixtures must pass in actual native lifecycle
+REP-03,P0,В тесте есть текстовый и мультимедийный diary drafts,BLOCKED,PARTIAL,BLOCKED,NOT_RUN,UPGRADE_REPRO_16V.md,Immutable connected24 requires real Google MASTER for diary UI; no fake identities
+REP-04,P0,"В тесте есть шаблон, история, капсула/очередь при применимости",PARTIAL,PARTIAL,PARTIAL,NOT_RUN,UPGRADE_REPRO_16V.md,See actual template/history/capsule cases; authenticated failed/pending queue not created
+REP-05,P0,Штатная upgrade APK24→25 без uninstall воспроизведена,PASS,NOT_RUN,PASS,NOT_RUN,NATIVE_UI_UPGRADE_CURRENT.json;UPGRADE_REPRO_16V.md,Controlled populated UI dataset only; owner state UNKNOWN; full G1 still BLOCKED
+REP-06,P0,"Before/after media SHA, IDs, counts, SQLite integrity собраны",PARTIAL,PASS,PARTIAL,BLOCKED,readonly-tool-tests.log;native inventories,"Only acquired controlled data, not owner SQLite/media or complete authenticated dataset"
+REP-07,P0,Поведение без Google и с Google/refresh проверено отдельно,PARTIAL,PASS,PARTIAL,BLOCKED,TESTS_16V.md,No real Google MASTER/refresh/account-switch native proof
+REP-08,P0,Offline / cold restart / temporary DNS error не скрывают старые данные,PARTIAL,PASS,PARTIAL,BLOCKED,TESTS_16V.md;native lifecycle cases,Full DNS/cold/offline behavior on owner data not proven
+REP-09,P0,Неверный профиль/CLIENT не получает чужие private materials,PARTIAL,PASS,PARTIAL,BLOCKED,legacy scope GREEN;CLIENT unit3;native guest boundary,Real two-account Google native privacy QA not run
+FIX-01,P0,Исправление минимально и привязано к подтверждённой причине,PARTIAL,PASS,PARTIAL,BLOCKED,CHANGES_16V.md;ROOT_CAUSE_16V.md,"Minimal alias addresses confirmed partial defect, not entire owner incident"
+FIX-02,P0,При неуспешном открытии БД нет silent fallback на пустую БД,BLOCKED,BLOCKED,BLOCKED,NOT_RUN,DEPENDENCY_SAFETY_16V.md,Dart no-fallback is insufficient: default Android RW corruption handler can replace corrupt DB
+FIX-03,P0,"При необходимости миграции есть snapshot, atomic transition, rollback",PARTIAL,NOT_RUN,NOT_RUN,BLOCKED,OWNER_RECOVERY_PLAN_16V.md,No migration introduced or run; any recovery writes require consented snapshot/atomic staging/rollback
+FIX-04,P0,Старые media bytes сохраняются неизменными либо documented exception,PARTIAL,PASS,PARTIAL,BLOCKED,legacy scope unchanged-row/media test;native inventories,No candidate26/owner media preservation proof
+FIX-05,P0,"Старые локальные IDs, module dependencies и diary block order сохранены",PARTIAL,PASS,PARTIAL,BLOCKED,legacy scope block-order regression;native inventories,No full diary UI-created/candidate26/owner graph proof
+FIX-06,P0,Recovery не нарушает Google identity и author/client ACL,PARTIAL,PASS,PARTIAL,BLOCKED,TESTS_16V.md,Alias exact server-verified subject MASTER only; actual Google native QA blocked
+FIX-07,P0,OWNER_RECOVERY_PLAN описывает доказанные безопасные действия,PASS,PASS,NOT_RUN,NOT_RUN,OWNER_RECOVERY_PLAN_16V.md;ACQUISITION_OPTIONS_16V.md,No phone actions currently; future acquisition/recovery requires separate consent and proof
+FIX-08,P0,"Если данные физически отсутствуют, нет ложного обещания восстановления",PASS,PASS,NOT_RUN,NOT_RUN,RECOVERY_LIMITATIONS_16V.md,"No assumption of missing physical bytes, existing OS backup or automatic cloud recovery"
+REL-01,P0,Hotfix APK26 не готовится до безопасного RCA/fix/gates,PASS,PASS,NOT_RUN,NOT_RUN,PROGRESS.md;checks.yml,Sulfi APK26 not built or offered; signing/build guard in hotfix branch
+REL-02,P0,"Candidate26 имеет тот же package/cert и versionCode >25, если вообще выпущен",BLOCKED,NOT_RUN,NOT_RUN,NOT_RUN,RESULT_16V.md,No candidate26 because safety gates unaccepted; no signing changes
+REL-03,P0,Native physical-style UI-created update и сохранность пройдены после fix,BLOCKED,PARTIAL,BLOCKED,NOT_RUN,UPGRADE_REPRO_16V.md,No actual signed candidate26 full UI-created native preservation proof
+REL-04,P0,End-to-end playback library/session + diary reopen не нарушены,PARTIAL,PASS,PARTIAL,BLOCKED,TESTS_16V.md,No candidate26 native library/session/diary full lifecycle
+REL-05,P0,Flutter/Node/analyze/format security regression PASS,PASS,PASS,NOT_RUN,NOT_RUN,FLUTTER_SUMMARY_16V.json;CI_EVIDENCE_16V.json;TESTS_16V.md,434 Flutter PASS +1 opt-in live SKIP;46+24 Node;3CLIENT;9Python;format/analyze
+REL-06,P0,Отдельный draft PR и ни одного server GAS/main/ACL deployment,PASS,PASS,PASS,NOT_RUN,PR46;REMOTE_BASELINES_16V.json;FINAL_BOUNDARIES_16V.json,PR45/main/GAS/ACL/Sulfi signing/old APKs preserved
+REL-07,P0,Отчёты в старой папке №16 без удаления и с readback,PARTIAL,PASS,NOT_RUN,NOT_RUN,DRIVE_UPLOADS_16V.json,All final reports/readback must complete before PASS
+REL-08,P0,Результат owner phone не подменён emulator PASS,PASS,PASS,PARTIAL,NOT_RUN,RESULT_16V.md,No emulator or fixture test substituted for owner Android recovery

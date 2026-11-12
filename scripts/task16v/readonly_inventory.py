@@ -1,6 +1,6 @@
 """Read an already acquired, consented forensic COPY. Never contacts a phone.
 
-SQLite/WAL/SHM are copied to a temporary analysis directory. The input files are
+SQLite/rollback-journal/WAL/SHM are copied to a temporary analysis directory. The input files are
 opened only for reading; SQLite never opens the source. Output contains hashes,
 counts and classifications, not titles, text, Google subjects or credentials.
 """
@@ -37,7 +37,7 @@ def inventory(root):
     originals = {}
     with tempfile.TemporaryDirectory(prefix='task16v-analysis-') as tmp:
         stage = pathlib.Path(tmp)
-        for suffix in ('', '-wal', '-shm'):
+        for suffix in ('', '-journal', '-wal', '-shm'):
             p = root / ('library.sqlite' + suffix)
             if not p.exists():
                 continue
@@ -73,7 +73,7 @@ def inventory(root):
                                 continue
                             media = root / 'audio' / rel
                             key = fingerprint(row.get('id'))
-                            if media.is_symlink():
+                            if (root / 'audio').is_symlink() or media.is_symlink():
                                 evidence['media'][key] = {'state': 'SYMLINK_NOT_FOLLOWED'}
                             elif not media.is_file():
                                 evidence['media'][key] = {'state': 'FILE_BYTES_MISSING_REFERENCES_PRESENT'}

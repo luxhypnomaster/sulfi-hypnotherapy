@@ -40,3 +40,5 @@ APK24 readerScope `google:<verified-sub>`, APK25 `account:sha256(alchemist:endpo
 ## Flutter engine / native assets
 
 Реальные libflutter.so и libsqlite3.so во всех трёх ABI одинаковы (SHA readback). Три libdartjni.so имеют разные полные SHA, но каждый отличается ровно20 байтами внутри .note.gnu.build-id; все остальные байты одинаковы, включая .text/.rodata/.data/dynamic symbols. Не маскируем это как одинаковые полные JNI SHA: точные данные ENGINE_LIBRARY_COMPARISON_16V.json, DARTJNI_ELF_COMPARISON_16V.json, DARTJNI_BYTE_DIFF_16V.json. Таким образом engine/backend code replacement в этих native библиотеках не найден; это не proof owner runtime files.
+
+Уточнение journal: учитывать также `library.sqlite-journal`, не только WAL/SHM. В native24 inventories действительно присутствовал нулевой rollback journal; pinned sqflite WAL_ENABLED_BY_DEFAULT=false и explicit WAL metadata в APK не добавлялась. Режим/sidecars телефона UNKNOWN. Диагностический tool копирует/хеширует и rollback journal; неполная копия без hot journal не годится для recovery.

@@ -8,3 +8,5 @@
 6. **Harness, not app defects**: run1 Element bounds bug + invalid empty before acceptance (исправлен обязательным baseline gate); run2 file picker timing/media registration, emulator offline; run4 exact evidence shows media card PREVIEW instead of actual filename selection. Это не списание P0 на владельца и не замена реального теста synthetic SQLite.
 7. **CI delivery**: GitHub artifact quota exhausted; старые artifacts не удалялись. Native synthetic-only JSON/XML/screens transferred in SHA-verified chunks through private CI logs. Один YAML guard registration failure исправлен; cancelled stale probe не засчитывается.
 8. **Owner safety**: normal update факт не переспросили, uninstall/clear/cache/downgrade/import/logout/замены личных объектов не предлагали. Main/PR45/old APK/GAS/Drive ACL/signing не изменялись.
+
+Owner evidence update: владелец сообщил по памяти «Пустые списки без ошибки». Не является forensic bytes evidence; различие rows absent vs filtered по-прежнему UNKNOWN. Ошибка пользователя/удаление приложения не предполагаются.
