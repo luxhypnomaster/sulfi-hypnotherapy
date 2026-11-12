@@ -33,18 +33,23 @@ def click(text,exact=False,attempts=3):
  for _ in range(attempts):
   ns=tree()
   for n in sorted(ns,key=lambda n: 0 if n.get('text')==text else 1):
-   if (text in [n.get('text'),n.get('content-desc')]) if exact else text in label(n):
+   if (text in [n.get('text'),n.get('content-desc')] or ' '.join(text.split()) in [' '.join((n.get(k) or '').split()) for k in ['text','content-desc']]) if exact else ' '.join(text.split()) in ' '.join(label(n).split()):
     ACTIONS.append({'action':'tap','label':text});tap(n);return
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
 def text(value,index=0):
+ ns=[]
  for _ in range(12):
-  if len([n for n in tree() if n.get('class')=='android.widget.EditText'])>index:break
+  ns=[n for n in tree() if n.get('class')=='android.widget.EditText']
+  if len(ns)>index:break
   time.sleep(1)
- else:raise AssertionError('NO_EDIT_FIELD')
- assert 'INSTRUMENTATION_RESULT: changed=true' in probe('text',value,index),'NATIVE_UI_TEXT_FAILED'
- time.sleep(.5)
- ACTIONS.append({'action':'UI_accessibility_set_text','value':value,'index':index})
+ assert len(ns)>index,'NO_EDIT_FIELD'
+ tap(ns[index]);time.sleep(.6)
+ result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+ assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-120:]
+ time.sleep(.4);adb('shell','input','keyevent','4');time.sleep(.4)
+ assert any(value in label(n) for n in tree()),'UI_INPUT_READBACK_MISMATCH'
+ ACTIONS.append({'action':'native_IME_commitText_with_UI_readback','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
  for _ in range(25):
@@ -88,11 +93,14 @@ def inventory(name):
    if table.startswith('sqlite_') or table=='android_metadata':continue
    c.row_factory=sqlite3.Row;rows[table]=[dict(r) for r in c.execute('select * from '+table)]
   c.close()
+ capsule=adb('exec-out','cat','/sdcard/Download/task16v-ui-before24.zip',binary=True,check=False)
+ if capsule.startswith(b'PK'):files['external/Download/task16v-ui-before24.zip']={'bytes':len(capsule),'sha256':hashlib.sha256(capsule).hexdigest()}
  v={'database':headers,'rows':rows,'files':files,'snapshot_sha256':hashlib.sha256(raw).hexdigest()}
  inventories[name]=v;report();return v
 def install():
  assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','DISPOSABLE_EMULATOR_REQUIRED'
  assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
+ adb('shell','ime','enable','org.alchemist.p0probe/.Ime');adb('shell','ime','set','org.alchemist.p0probe/.Ime')
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
  assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();shot('24-clean')
@@ -108,6 +116,7 @@ def import_audio(filename,title):
   click('Show roots',exact=True);click('Downloads',exact=True);time.sleep(1)
  click(filename,exact=True);time.sleep(3);text(title);click('Сохранить',exact=True);time.sleep(1)
  assert any(title in label(n) for n in tree()),'IMPORTED_NOT_VISIBLE';shot('24-import-'+filename)
+ inventory('after-ui-import-'+filename)
  return {'createdBy':'UI_system_picker','title':title}
 def record_audio():
  home();click('Библиотека');click('Записать свой трек');text('UI recorded original')
@@ -120,9 +129,13 @@ def record_audio():
  assert any('UI recorded original' in label(n) for n in tree()),'RECORDED_NOT_VISIBLE'
  return {'createdBy':'native_microphone_UI','hardware':'emulator_virtual_microphone'}
 def module(title,tracks,pause=False):
- home();click('Шаблоны');click('Модули',exact=True);click('Создать модуль');text(title)
+ home();click('Шаблоны');click('Модули');click('Создать модуль');text(title)
  click('Добавить трек');time.sleep(1)
- for t in tracks:click(t,exact=True)
+ seen={}
+ for t in tracks:
+  ns=tree();matches=[n for n in ns if label(n).split('\n')[0]==t and n.get('clickable')=='true']
+  idx=seen.get(t,0);assert len(matches)>idx,'TRACK_ROW_NOT_FOUND:'+t
+  tap(matches[idx]);seen[t]=idx+1
  adb('shell','input','keyevent','4');time.sleep(1)
  if pause:
   click('Добавить паузу');time.sleep(1)
@@ -131,6 +144,22 @@ def module(title,tracks,pause=False):
  click('Сохранить модуль');time.sleep(1)
  assert any(title in label(n) for n in tree()),'MODULE_NOT_VISIBLE'
  return {'title':title,'UI_dependencies':tracks,'pauseAdded':pause}
+def create_template():
+ home();click('Открыть конструктор');click('Добавить фазу');click('Индукция');click('Добавить',exact=True);click('Модуль',exact=True)
+ click('Индукция Элмана вариант 2');click('Сохранить',exact=True);text('UI Elman program');click('Сохранить',exact=True);time.sleep(1);click('Применить',exact=True);time.sleep(1)
+ home();return {'createdBy':'native_UI_structure_and_template','containsModule':True}
+def create_history():
+ home();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(4);shot('24-native-session')
+ # Actual crash/reopen on disposable emulator, never the owner phone.
+ restart();v=inventory('after-ui-history24');assert v['rows']['session_runs'],'NO_UI_CREATED_HISTORY'
+ return {'createdBy':'UI_session_then_disposable_force_stop','runs':len(v['rows']['session_runs']),'statuses':[r['status'] for r in v['rows']['session_runs']]}
+def export_capsule():
+ home();click('Библиотека');click('О приложении и данных');click('Резервная копия и обновления');click('Создать резервную копию');time.sleep(2)
+ text('task16v-ui-before24.zip');click('Save',exact=True);time.sleep(3)
+ raw=adb('exec-out','cat','/sdcard/Download/task16v-ui-before24.zip',binary=True)
+ import zipfile
+ with zipfile.ZipFile(io.BytesIO(raw)) as z:assert z.testzip() is None,'EXPORTED_ZIP_CRC_FAILED'
+ return {'createdBy':'native_UI_SAF_export','sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
 def diary_boundary():
  home();click('Дневник');ns=tree();shot('24-diary-author-boundary')
  if not any('Новая запись' in label(n) for n in ns):
@@ -146,11 +175,11 @@ def compare(name):
  assert any(c['case']=='before24_inventory' and c['status']=='PASS' for c in CASES),'INVALID_BASELINE_UI_CREATION_FAILED'
  assert len(old['rows']['audio_assets'])>=3 and len(old['rows']['module_definitions'])>=1,'EMPTY_BASELINE_CANNOT_PASS_UPGRADE'
  missing={}
- for table in ['audio_assets','module_definitions','session_templates','diary_author']:
+ for table in ['audio_assets','module_definitions','session_templates','current_draft','session_runs','diary_author']:
   absent=[r for r in old['rows'][table] if r not in v['rows'][table]]
   if absent:missing[table]=absent
  for p,b in old['files'].items():
-  if p.startswith(('files/audio/','files/diary_media/')) and v['files'].get(p)!=b:missing[p]=b
+  if p.startswith(('files/audio/','files/diary_media/','files/history_media/','external/')) and v['files'].get(p)!=b:missing[p]=b
  assert not missing,'PRESERVATION_FAILURE:'+json.dumps(missing)
  assert v['database']['integrity']=='ok','INTEGRITY_FAILED'
  return {'exactRowsAndMediaPreserved':True,'audio':len(v['rows']['audio_assets']),'modules':len(v['rows']['module_definitions']),'diary':len(v['rows']['diary_author'])}
@@ -183,10 +212,13 @@ try:
   adb('push',str(fixture),path)
   adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file://'+path,check=False)
  time.sleep(2)
+ if os.environ.get('P0_QA_SCOPE')=='recording':case('ui_native_recording24',record_audio)
  for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
- case('ui_native_recording',record_audio)
- case('ui_module_elman',lambda:module('Индукция Элмана вариант 2',['UI same title','UI third track','UI third track']))
+ case('ui_module_elman',lambda:module('Индукция Элмана вариант 2',['UI same title','UI same title','UI third track']))
  case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
+ case('ui_template',create_template)
+ case('ui_history',create_history)
+ case('ui_capsule_export',export_capsule)
  case('ui_diary_auth_boundary',diary_boundary)
  case('before24_inventory',before)
  case('native_update24_to25',upgrade)

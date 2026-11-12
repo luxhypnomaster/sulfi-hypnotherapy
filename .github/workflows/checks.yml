@@ -8,6 +8,11 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      p0_scope:
+        description: 'UI upgrade core, or optional native recorder24 gate'
+        type: choice
+        options: [core, recording]
+        default: core
       p0_native:
         description: '16V immutable APK24 UI-created update investigation; no build/signing'
         type: boolean
@@ -291,6 +296,8 @@ jobs:
         if: steps.kvm.outputs.available == 'true'
         run: bash scripts/task16v/build_ui_probe.sh
       - name: Native UI creation then normal update; no DB writes by harness
+        env:
+          P0_QA_SCOPE: ${{ inputs.p0_scope }}
         if: steps.kvm.outputs.available == 'true'
         uses: reactivecircus/android-emulator-runner@324029e2f414c084d8b15ba075288885e74aef9c
         with:
@@ -299,8 +306,8 @@ jobs:
           target: google_apis
           profile: pixel_2
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -feature -Vulkan -no-snapshot -cores 2 -noaudio -no-boot-anim -camera-back none -memory 3072
-          script: python3 scripts/task16v/native_upgrade.py
+          emulator-options: -no-window -gpu swiftshader_indirect -feature -Vulkan -no-snapshot -cores 2 -noaudio -no-boot-anim -camera-back none -memory 1536
+          script: bash scripts/task16v/run_native.sh
       - name: Preserve synthetic-only native evidence
         if: always()
         continue-on-error: true
