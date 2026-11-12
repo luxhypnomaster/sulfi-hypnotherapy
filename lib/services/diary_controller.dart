@@ -274,9 +274,7 @@ class DiaryController extends ChangeNotifier {
     drafts = (api?.supportsServerIdentity ?? false)
         ? work
               .where(
-                (e) =>
-                    e.extra['_alchemistScope'] == null ||
-                    e.extra['_alchemistScope'] == scope,
+                (e) => api!.canReadAuthorDraftScope(e.extra['_alchemistScope']),
               )
               .toList()
         : work;

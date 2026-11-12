@@ -89,6 +89,8 @@ class DiaryApi {
   Future<bool> refreshRejectedIdentity() async => false;
   void rejectIdentity() {}
   String get readerScope => 'public';
+  bool canReadAuthorDraftScope(Object? scope) =>
+      scope == null || scope == readerScope;
   int get identityGeneration => 0;
   Future<void> authenticateReader(String token) async =>
       throw const DiaryApiException('Личный сервер не подключён');

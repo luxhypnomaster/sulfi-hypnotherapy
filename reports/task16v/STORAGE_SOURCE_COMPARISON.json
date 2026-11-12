@@ -1,0 +1,80 @@
+[
+  {
+    "file": "lib/data/app_database.dart",
+    "old_blob": "7082da7ee04d949c8ca00722065d56d7afe1b52d",
+    "new_blob": "7082da7ee04d949c8ca00722065d56d7afe1b52d",
+    "equal": true
+  },
+  {
+    "file": "lib/data/library_repository.dart",
+    "old_blob": "e1aa9f468ff6bef7a8024948cdce0ae384b2aae7",
+    "new_blob": "e1aa9f468ff6bef7a8024948cdce0ae384b2aae7",
+    "equal": true
+  },
+  {
+    "file": "lib/data/module_catalog.dart",
+    "old_blob": "ff8008855d973103f80f204d994812f7280734df",
+    "new_blob": "ff8008855d973103f80f204d994812f7280734df",
+    "equal": true
+  },
+  {
+    "file": "lib/data/session_repository.dart",
+    "old_blob": "ebc26663bc4e2c29aec54046adbf922224eee5a9",
+    "new_blob": "ebc26663bc4e2c29aec54046adbf922224eee5a9",
+    "equal": true
+  },
+  {
+    "file": "lib/models/audio_asset.dart",
+    "old_blob": "b2d567ff756ead0f432825dc493cb062fd711941",
+    "new_blob": "b2d567ff756ead0f432825dc493cb062fd711941",
+    "equal": true
+  },
+  {
+    "file": "lib/services/library_service.dart",
+    "old_blob": "e0a46a9445b5010040b241f768248b8bb2c983ac",
+    "new_blob": "e0a46a9445b5010040b241f768248b8bb2c983ac",
+    "equal": true
+  },
+  {
+    "file": "lib/services/access_policy.dart",
+    "old_blob": "ec20d4a07e137c5563f728436496fc121f9979be",
+    "new_blob": "ec20d4a07e137c5563f728436496fc121f9979be",
+    "equal": true
+  },
+  {
+    "file": "lib/services/diary_media_store.dart",
+    "old_blob": "24028dea121b211730e3b5d4b61e59b64398f827",
+    "new_blob": "24028dea121b211730e3b5d4b61e59b64398f827",
+    "equal": true
+  },
+  {
+    "file": "lib/services/capsule_service.dart",
+    "old_blob": "9a288b93d41a63450d3bba7fd810c08ba1279f61",
+    "new_blob": "9a288b93d41a63450d3bba7fd810c08ba1279f61",
+    "equal": true
+  },
+  {
+    "file": "android/app/build.gradle.kts",
+    "old_blob": "c968605824fcb53d082fc36ddc3c7c459be45ece",
+    "new_blob": "c968605824fcb53d082fc36ddc3c7c459be45ece",
+    "equal": true
+  },
+  {
+    "file": "android/app/src/main/AndroidManifest.xml",
+    "old_blob": "65d0b69712517f4963ffca29c0824be621acd851",
+    "new_blob": "65d0b69712517f4963ffca29c0824be621acd851",
+    "equal": true
+  },
+  {
+    "file": "android/app/src/main/kotlin/ru/sulfi/sulfi_hypnotherapy/MainActivity.kt",
+    "old_blob": "b27da896d82f005260877cfaf8a550ea5560beed",
+    "new_blob": "b27da896d82f005260877cfaf8a550ea5560beed",
+    "equal": true
+  },
+  {
+    "file": "pubspec.lock",
+    "old_blob": "df601405bf082a78f097349e66372f93a0db79c0",
+    "new_blob": "df601405bf082a78f097349e66372f93a0db79c0",
+    "equal": true
+  }
+]
