@@ -1,0 +1,93 @@
+{
+  "nativeRun": 43265893487,
+  "owner": "PHYSICAL_BYTES_UNKNOWN",
+  "tables": {
+    "audio_assets": {
+      "before": 3,
+      "after": 3,
+      "cold": 3,
+      "status": "PASS"
+    },
+    "module_definitions": {
+      "before": 2,
+      "after": 2,
+      "cold": 2,
+      "status": "PASS"
+    },
+    "session_templates": {
+      "before": 1,
+      "after": 1,
+      "cold": 1,
+      "status": "PASS"
+    },
+    "current_draft": {
+      "before": 1,
+      "after": 1,
+      "cold": 1,
+      "status": "PASS"
+    },
+    "session_runs": {
+      "before": 1,
+      "after": 1,
+      "cold": 1,
+      "status": "PASS"
+    },
+    "diary_author": {
+      "before": 0,
+      "after": 0,
+      "cold": 0,
+      "status": "NOT_EXERCISED_EMPTY"
+    }
+  },
+  "media": [
+    {
+      "path": "files/audio/asset_b2a0c827ba32aeca2a23708985c06b41.wav",
+      "bytes": 529244,
+      "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+      "afterAndColdUnchanged": true
+    },
+    {
+      "path": "files/audio/asset_d91cf2cab981c178adb79f7b06b04465.wav",
+      "bytes": 529244,
+      "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+      "afterAndColdUnchanged": true
+    },
+    {
+      "path": "files/audio/asset_28dfc99e05d90ce35940952db46d58a1.wav",
+      "bytes": 529244,
+      "sha256": "b86ab4834b132fda9592a33f50f47e148fb1decca6fe3d7f7861c3bfcbb59979",
+      "afterAndColdUnchanged": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "010a30be345511e13986c27dc390b377",
+      "title": "Индукция Элмана вариант 2",
+      "audioIDs": [
+        "d91cf2cab981c178adb79f7b06b04465",
+        "b2a0c827ba32aeca2a23708985c06b41",
+        "28dfc99e05d90ce35940952db46d58a1"
+      ],
+      "pauseMs": []
+    },
+    {
+      "id": "04259404af35936effa28aef90179f72",
+      "title": "UI timed module",
+      "audioIDs": [
+        "28dfc99e05d90ce35940952db46d58a1"
+      ],
+      "pauseMs": [
+        4000
+      ]
+    }
+  ],
+  "duplicateTitleCounts": {
+    "UI same title": 2,
+    "UI third track": 1
+  },
+  "sqliteIntegrity": {
+    "before24": "ok",
+    "after25": "ok",
+    "cold25": "ok"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "observation": "OWNER_REPORTED",
+  "standardUpdate": "MASTER APK24 to MASTER APK25",
+  "uninstall": false,
+  "uiAfterUpdate": {
+    "ownTracks": "MISSING_FROM_UI",
+    "ownModules": "MISSING_FROM_UI",
+    "diaryDrafts": "MISSING_FROM_UI",
+    "visibleLoadError": false
+  },
+  "physicalSQLiteAndMedia": "UNKNOWN",
+  "ownerInterventionsByCodex": "NONE",
+  "artifactReadbackScope": "GitHub APK pair only, not owner installed APK/filesystem",
+  "note": "Controlled emulator PASS does not disprove the owner incident"
+}

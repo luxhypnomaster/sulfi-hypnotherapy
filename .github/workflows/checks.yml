@@ -35,7 +35,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}
+  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}
   cancel-in-progress: true
 
 jobs:
