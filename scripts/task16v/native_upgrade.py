@@ -4,8 +4,10 @@ OUT=pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-evidence';OUT.mkdir(exist_o
 APK=pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-apks'
 PKG='ru.sulfi.sulfi_hypnotherapy'
 CASES=[];ACTIONS=[];inventories={}
+IME=False;ELMAN_TITLE='Индукция Элмана вариант 2'
 def adb(*args,binary=False,check=True):
- r=subprocess.run(['adb',*args],capture_output=True,timeout=55,check=check)
+ r=subprocess.run(['adb',*args],capture_output=True,timeout=55,check=False)
+ if check and r.returncode:raise RuntimeError('ADB_FAILED:'+str(args[:4])+':'+r.stderr.decode(errors='replace')[-800:]+r.stdout.decode(errors='replace')[-800:])
  return r.stdout if binary else r.stdout.decode(errors='replace')
 def probe(op='dump',value=None,index=0):
  args=['shell','am','instrument','-w','-e','op',op]
@@ -45,11 +47,17 @@ def text(value,index=0):
   time.sleep(1)
  assert len(ns)>index,'NO_EDIT_FIELD'
  tap(ns[index]);time.sleep(.6)
- result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
- assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-120:]
+ if IME:
+  result=adb('shell','am','broadcast','-n','org.alchemist.p0probe/.TypeTextReceiver','-a','org.alchemist.p0probe.TYPE_TEXT','--es','value',base64.b64encode(value.encode()).decode())
+  assert 'UI_TEXT_COMMITTED' in result,'NATIVE_IME_INPUT_FAILED:'+result[-200:]
+  method='native_IME_commitText'
+ else:
+  assert value.isascii(),'UNICODE_INPUT_NOT_AVAILABLE'
+  adb('shell','input','keycombination','KEYCODE_CTRL_LEFT','KEYCODE_A')
+  adb('shell','input','text',value.replace(' ','%s'));method='native_keyboard_key_events'
  time.sleep(.4);adb('shell','input','keyevent','4');time.sleep(.4)
  assert any(value in label(n) for n in tree()),'UI_INPUT_READBACK_MISMATCH'
- ACTIONS.append({'action':'native_IME_commitText_with_UI_readback','value':value,'index':index})
+ ACTIONS.append({'action':method+'_with_UI_readback','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
  for _ in range(25):
@@ -98,13 +106,23 @@ def inventory(name):
  v={'database':headers,'rows':rows,'files':files,'snapshot_sha256':hashlib.sha256(raw).hexdigest()}
  inventories[name]=v;report();return v
 def install():
+ global IME,ELMAN_TITLE
  assert adb('shell','getprop','ro.kernel.qemu').strip()=='1','DISPOSABLE_EMULATOR_REQUIRED'
  assert 'Success' in adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
- adb('shell','ime','enable','org.alchemist.p0probe/.Ime');adb('shell','ime','set','org.alchemist.p0probe/.Ime')
+ assert 'Success' in adb('install','-r',str(APK/'master24.apk'))
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  adb('shell','cmd','connectivity','airplane-mode','enable',check=False)
- assert 'Success' in adb('install','-r',str(APK/'master24.apk'));launch();shot('24-clean')
- return {'versionCode':24,'uninstall':False,'databaseInjected':False}
+ for _ in range(10):
+  listing=adb('shell','ime','list','-s',check=False)
+  if 'org.alchemist.p0probe' in listing:break
+  time.sleep(1)
+ try:
+  adb('shell','ime','enable','org.alchemist.p0probe/.Ime');adb('shell','ime','set','org.alchemist.p0probe/.Ime');IME=True
+ except Exception as error:
+  IME=False;ELMAN_TITLE='Elman variant 2'
+  print('NATIVE16V_IME_OPTIONAL_BLOCKED='+str(error)[:700],flush=True)
+ launch();shot('24-clean')
+ return {'versionCode':24,'uninstall':False,'databaseInjected':False,'unicodeIME':IME,'actualElmanFixtureTitle':ELMAN_TITLE}
 def import_audio(filename,title):
  home();click('Библиотека');click('+ Добавить аудио');time.sleep(1)
  # Wait for DocumentsUI before resolving its drawer; no invisible stale taps.
@@ -146,7 +164,7 @@ def module(title,tracks,pause=False):
  return {'title':title,'UI_dependencies':tracks,'pauseAdded':pause}
 def create_template():
  home();click('Открыть конструктор');click('Добавить фазу');click('Индукция');click('Добавить',exact=True);click('Модуль',exact=True)
- click('Индукция Элмана вариант 2');click('Сохранить',exact=True);text('UI Elman program');click('Сохранить',exact=True);time.sleep(1);click('Применить',exact=True);time.sleep(1)
+ click(ELMAN_TITLE);click('Сохранить',exact=True);text('UI Elman program');click('Сохранить',exact=True);time.sleep(1);click('Применить',exact=True);time.sleep(1)
  home();return {'createdBy':'native_UI_structure_and_template','containsModule':True}
 def create_history():
  home();click('НАЧАТЬ ТРАНСФОРМАЦИЮ');time.sleep(4);shot('24-native-session')
@@ -198,6 +216,7 @@ def ui_after():
  return {'allUIAudioAndModulesVisible':True,'defaultLibraryLabels':default[:35]}
 try:
  case('install_24',install)
+ assert CASES[-1]['status']=='PASS','INSTALL_PRECONDITION_FAILED_NO_DATA_PROOF'
  case('native_dependency_corruption',lambda:json.loads(re.search(r'INSTRUMENTATION_RESULT: dependency_probe=([^\r\n]+)',probe('corruption')).group(1)))
  adb('shell','mkdir','-p','/sdcard/Download')
  # Generate a harmless PCM WAV fixture (not the Sulfi voice), then register
@@ -214,7 +233,7 @@ try:
  time.sleep(2)
  if os.environ.get('P0_QA_SCOPE')=='recording':case('ui_native_recording24',record_audio)
  for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
- case('ui_module_elman',lambda:module('Индукция Элмана вариант 2',['UI same title','UI same title','UI third track']))
+ case('ui_module_elman',lambda:module(ELMAN_TITLE,['UI same title','UI same title','UI third track']))
  case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
  case('ui_template',create_template)
  case('ui_history',create_history)
