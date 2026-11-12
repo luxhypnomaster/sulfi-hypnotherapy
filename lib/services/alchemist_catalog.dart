@@ -628,6 +628,10 @@ class AlchemistCatalog {
       await _store(draft);
     } catch (e) {
       draft['status'] = interrupted?.call() == true ? 'paused' : 'failed';
+      if (draft['localCover'] != null &&
+          !const ['verified', 'published'].contains(draft['coverStatus'])) {
+        draft['coverStatus'] = 'failed';
+      }
       final failure = AlchemistFailure.from(e);
       draft['error'] = failure.message;
       draft['errorCode'] = failure.code;

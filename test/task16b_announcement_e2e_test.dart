@@ -80,6 +80,7 @@ void main() {
         authorRepository: DiaryAuthorRepository(f.db),
         policy: f.c.policy,
         api: diaryApi,
+        mediaStore: diaryApi.media,
       );
       c = SessionController(
         repository: f.c.repository,
@@ -98,7 +99,13 @@ void main() {
           reader = AlchemistApi(endpoint, connection: connection);
       final root = (await LocalCatalogSource.currentIndex(f.c.capsules!))
           .singleWhere((r) => r.key.content.id == module.id);
+      final cover = await diaryApi.media.importFile(DiaryBlockType.image, (
+        path: 'test/fixtures/task16b_cover.png',
+        name: 'fixture.png',
+      ));
       final draft = await catalog.prepare(root);
+      draft['localCover'] = cover.media!.toMap();
+      draft['coverStatus'] = 'local';
       draft['card']['shortAnnotation'] = 'Три точных трека';
       draft['card']['visibility'] = 'public';
       await catalog.save(draft);
@@ -124,7 +131,14 @@ void main() {
       final published = await diaryApi.publish(entry, session, published: true);
       expect(published.status, DiaryStatus.published);
       final stats = await remote.call('test.stats', {});
-      expect(stats['blobs'], 3);
+      expect(
+        stats['blobs'],
+        4,
+        reason: 'Three tracks plus independently verified cover',
+      );
+      final committed = (await catalog.drafts()).single;
+      expect(committed['card']['coverAssetId'], isNotNull);
+      expect(committed['coverStatus'], 'published');
       final again = await prepareCatalogAnnouncement(
         catalog,
         (await catalog.drafts()).single,
