@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task16g_finalize:
+        description: '16G full regression then gated signed pair/native25→26; no GAS changes'
+        type: boolean
+        default: false
       task16g_storage:
         description: '16G exact native no-delete SQLite handler fault gate; no Sulfi build'
         type: boolean
@@ -385,3 +389,97 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
           script: bash scripts/task16g/run_guard_probe.sh
+
+  candidate16g:
+    needs: verify
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task16g_finalize == true && inputs.build_mode == 'checks'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - name: Require successful exact callback gate and compatible public configuration
+        run: |
+          python3 - <<'PYCODE'
+          import pathlib,json,hashlib,os
+          root=pathlib.Path('.')
+          native=json.loads((root/'reports/task16g/NATIVE_STORAGE_16G.json').read_text())
+          code=(root/'third_party/sqflite_android/android/src/main/java/com/tekartik/sqflite/StorageSafety.java').read_bytes()
+          assert hashlib.sha256(code).hexdigest()==native['productionSHA256']
+          assert native['guard_rw']['originalBytesUnchanged'] and native['guard_ro']['originalBytesUnchanged']
+          assert 'version: 0.4.18+26' in (root/'pubspec.yaml').read_text()
+          public=json.loads((root/'server/alchemist/android-oauth-public.json').read_text())
+          assert os.environ['GOOGLE_WEB_CLIENT_ID']==public['webClientId']
+          from urllib.parse import urlparse
+          endpoint=urlparse(os.environ['ALCHEMIST_API'])
+          assert endpoint.scheme=='https' and endpoint.netloc=='script.google.com' and endpoint.path.endswith('/exec') and not endpoint.query
+          PYCODE
+          test -e /dev/kvm
+          ! gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/tags/task16g-qa-pair-26 > /dev/null 2>&1
+      - name: Restore existing test key without modification
+        env:
+          KEY_B64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KEY_B64"
+          printf '%s' "$KEY_B64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
+          chmod 600 "$RUNNER_TEMP/sulfi-test.keystore"
+      - name: Build one immutable pair
+        env:
+          SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
+          SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+          SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
+        run: |
+          flutter pub get --enforce-lockfile
+          mkdir -p "$RUNNER_TEMP/task16g-apks"
+          flutter build apk --debug --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task16g-apks/master26.apk"
+          flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task16g-apks/client26.apk"
+      - name: Verify both certificates, package/version and SHA; read immutable baseline25
+        run: |
+          bash scripts/task16g/verify_pair.sh
+          gh api -H 'Accept: application/octet-stream' repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/738283668 > "$RUNNER_TEMP/task16g-apks/master25.apk"
+          echo 'd0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9  '"$RUNNER_TEMP/task16g-apks/master25.apk" | sha256sum -c -
+          bash scripts/task16v/build_ui_probe.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Actual UI-created immutable25→candidate26 and companion smoke
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: python3 scripts/task16g/native_upgrade.py
+      - name: Private draft pair only after all controlled gates
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          d=json.loads((root/'task16g-evidence/NATIVE_UI_UPGRADE_16G.json').read_text())
+          cases={x['case']:x for x in d['cases']}
+          for name in ['before25_inventory','native_update25_to26','ui_after26','cold_restart26','client26_program_labels']:assert cases[name]['status']=='PASS',name
+          (root/'task16g-notes.md').write_text('Ограниченный кандидат №16-Г 0.4.18+26. Не production release. Source '+os.environ['SOURCE_SHA']+'. Controlled regressions/native25→26 PASS. Реальные Google MASTER/CLIENT, микрофон, слышимость и owner device QA NOT_RUN. Ставить только по отдельному решению владельца, обновлением без удаления. GAS6/main/ACL/signing сохранены. При конфликте подписи STOP, не uninstall. SHA и размеры в APK_PAIR_16G.json.')
+          PYCODE
+          gh release create task16g-qa-pair-26 --repo luxhypnomaster/sulfi-hypnotherapy --target "$SOURCE_SHA" --draft --title '№16-Г: ограниченная пара кандидатов26, owner QA не пройдена' --notes-file "$RUNNER_TEMP/task16g-notes.md"
+          gh release upload task16g-qa-pair-26 "$RUNNER_TEMP/task16g-apks/master26.apk" "$RUNNER_TEMP/task16g-apks/client26.apk" "$RUNNER_TEMP/task16g-apks/APK_PAIR_16G.json" --repo luxhypnomaster/sulfi-hypnotherapy

@@ -141,8 +141,9 @@ void main() {
           'id': 'kept-$table',
           'payload': '{"audio":["audio1","audio2"]}',
         };
-        if (table == 'session_runs')
+        if (table == 'session_runs') {
           row.addAll({'displayNumber': 1, 'status': 'interrupted'});
+        }
         if (table == 'diary_author') row['updatedAt'] = '2026-11-13';
         await db.insert(table, row);
       }
