@@ -1,3 +1,5 @@
+import 'alchemist_diagnostics.dart';
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -236,7 +238,7 @@ class DiaryController extends ChangeNotifier {
   bool get authorWorkspace =>
       authorRepository != null &&
       (!(api?.supportsServerIdentity ?? false) ||
-          api?.verifiedRole == 'MASTER') &&
+          api?.verifiedRole != 'CLIENT') &&
       !(policy?.clientEdition ?? false) &&
       (policy != null || identity == null || _localAuthor);
   bool get authenticated => (api?.supportsServerIdentity ?? false)
@@ -247,7 +249,9 @@ class DiaryController extends ChangeNotifier {
   String? error;
   int _loadGeneration = 0;
   Future<void> load() async {
-    final generation = ++_loadGeneration, scope = api?.readerScope ?? 'public';
+    final generation = ++_loadGeneration;
+    await api?.loadLocalIdentityHint();
+    final scope = api?.readerScope ?? 'public';
     if (scope != _readScope) {
       await reads.switchReader(scope == 'public' ? null : scope);
       _readScope = scope;
@@ -274,7 +278,9 @@ class DiaryController extends ChangeNotifier {
     drafts = (api?.supportsServerIdentity ?? false)
         ? work
               .where(
-                (e) => api!.canReadAuthorDraftScope(e.extra['_alchemistScope']),
+                (e) =>
+                    e.extra['_alchemistScope'] == 'local-device' ||
+                    api!.canReadAuthorDraftScope(e.extra['_alchemistScope']),
               )
               .toList()
         : work;
@@ -344,8 +350,28 @@ class DiaryController extends ChangeNotifier {
       entry.toMap(),
     ); // Validate before writing; failed drafts never poison stored JSON.
     if (api?.supportsServerIdentity ?? false) {
+      final existing = (await authorRepository!.entries())
+          .where((e) => e.id == entry.id)
+          .firstOrNull;
+      final scope =
+          existing?.extra['_alchemistScope'] ?? entry.extra['_alchemistScope'];
+      if (existing != null &&
+          scope != 'local-device' &&
+          !api!.canReadAuthorDraftScope(scope)) {
+        throw const DiaryApiException(
+          'Черновик принадлежит другому аккаунту.',
+          DiaryFailure.authorization,
+        );
+      }
       entry = entry.copyWith(
-        extra: {...entry.extra, '_alchemistScope': api!.readerScope},
+        extra: {
+          ...entry.extra,
+          '_alchemistScope':
+              scope ??
+              (api!.readerScope == 'public'
+                  ? 'local-device'
+                  : api!.readerScope),
+        },
       );
     }
     await authorRepository!.save(entry);
@@ -361,10 +387,19 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void>? _restoring;
-  Future<void> restoreSignIn() =>
-      _restoring ??= _restoreSignIn().whenComplete(() => _restoring = null);
+  DiaryFailure? _restoreFailure;
+  Future<void> restoreSignIn() {
+    if (_restoring case final active?) return active;
+    late final Future<void> pending;
+    pending = _restoreSignIn().whenComplete(() {
+      if (identical(_restoring, pending)) _restoring = null;
+    });
+    return _restoring = pending;
+  }
+
   Future<void> _restoreSignIn() async {
     if (_closed) return;
+    _restoreFailure = null;
     if (!(api?.supportsServerIdentity ?? false)) return;
     final optOut = await repository.database.query(
       'app_settings',
@@ -373,6 +408,7 @@ class DiaryController extends ChangeNotifier {
     );
     if (optOut.firstOrNull?['value'] == '1' || api!.readerAuthenticated) return;
     final generation = _authGeneration;
+    _restoreFailure = null;
     try {
       if (!await api!.restoreIdentity() || generation != _authGeneration) {
         return;
@@ -387,7 +423,14 @@ class DiaryController extends ChangeNotifier {
       await load();
     } catch (e) {
       // Network loss is not logout and does not delete authority/drafts.
-      error = AlchemistFailure.from(e).message;
+      final failure = AlchemistFailure.from(e);
+      _restoreFailure = failure.kind;
+      error = failure.message;
+      AlchemistDiagnostics.instance.stage(
+        failure.kind == DiaryFailure.network
+            ? 'SESSION_RESTORE_OFFLINE'
+            : 'SESSION_RESTORE_ERROR',
+      );
       notifyListeners();
     }
   }
@@ -395,6 +438,16 @@ class DiaryController extends ChangeNotifier {
   /// Uses the platform account chooser. Local editing and server permissions
   /// remain separate: a network failure never deletes the author's drafts.
   Future<void> signInAuthor() async {
+    if (api?.supportsServerIdentity ?? false) {
+      await restoreSignIn();
+      if (api!.readerAuthenticated) return;
+      if (_restoreFailure == DiaryFailure.network) {
+        throw DiaryApiException(
+          error ?? 'Сеть недоступна. Повторите позже.',
+          DiaryFailure.network,
+        );
+      }
+    }
     if (!canSignIn || authorBusy) {
       throw const DiaryApiException('Вход автора недоступен');
     }
@@ -422,6 +475,7 @@ class DiaryController extends ChangeNotifier {
       if (generation != _authGeneration) return;
       if (api?.supportsServerIdentity ?? false) {
         await api!.authenticateReader(result.idToken);
+        api!.setAccountLabel(result.email);
         if (generation != _authGeneration) return;
         policy?.applyVerifiedServerRole(api!.verifiedRole);
         await repository.database.insert('app_settings', {
@@ -472,9 +526,14 @@ class DiaryController extends ChangeNotifier {
         }
       }
     } finally {
-      authorBusy = false;
+      if (generation == _authGeneration) authorBusy = false;
       notifyListeners();
     }
+  }
+
+  Future<void> switchGoogleAccount() async {
+    await logout();
+    await signInAuthor();
   }
 
   Future<void> pauseReaders() async {
@@ -486,6 +545,8 @@ class DiaryController extends ChangeNotifier {
   Future<void> logout() async {
     ++_authGeneration;
     ++_loadGeneration;
+    authorBusy = false;
+    _restoring = null;
     if (api?.supportsServerIdentity ?? false) {
       await repository.database.insert('app_settings', {
         'name': 'alchemist_restore_disabled',

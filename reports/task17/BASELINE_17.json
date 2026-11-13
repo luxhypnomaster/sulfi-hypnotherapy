@@ -1,0 +1,58 @@
+{
+  "pulls/45": {
+    "head": "24a51c5e47140131c9e8d214a60b841fa32179b5",
+    "base": "feat/task16-alchemist-full-server",
+    "draft": true,
+    "merged": false
+  },
+  "pulls/46": {
+    "head": "b0cb53f374e651be70df98e479be9605280177b3",
+    "base": "fix/task16b-auth-transfer-publication",
+    "draft": true,
+    "merged": false
+  },
+  "pulls/47": {
+    "head": "25ecdf984a831a288bf85e14119a5e054144ccf9",
+    "base": "hotfix/task16v-p0-data-preservation",
+    "draft": true,
+    "merged": false
+  },
+  "git/ref/heads/main": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+  "releases/444069048": {
+    "id": 444069048,
+    "draft": true,
+    "source": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+    "assets": [
+      {
+        "id": 743160433,
+        "name": "APK_PAIR_16G.json",
+        "size": 780,
+        "digest": "sha256:415d0446845748a704ad2a279e165a981b6d460e667a5f0e393794f456182e79"
+      },
+      {
+        "id": 743160430,
+        "name": "client26.apk",
+        "size": 193782061,
+        "digest": "sha256:0e9dee30d62b0a05097652d159ea0c035b4c1bad424e662516ede822dbe64a0c"
+      },
+      {
+        "id": 743152377,
+        "name": "FAULT_APP_16G.json",
+        "size": 2242,
+        "digest": "sha256:f71c334200f0d79769b22f1c3f8b2dba25b798491f8e2392400ccaa706204c28"
+      },
+      {
+        "id": 743160429,
+        "name": "master26.apk",
+        "size": 193782021,
+        "digest": "sha256:0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a"
+      },
+      {
+        "id": 743152365,
+        "name": "NATIVE_UI_UPGRADE_16G.json",
+        "size": 196162,
+        "digest": "sha256:915d2d61a8f3bc3cfbd348181b6fa3264e617d36a78afebe4fc7f4a1756ba9f6"
+      }
+    ]
+  }
+}

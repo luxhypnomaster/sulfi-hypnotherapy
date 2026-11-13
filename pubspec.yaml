@@ -29,6 +29,8 @@ dependencies:
 
 # Pinned upstream2.4.5, narrow no-delete Android corruption handler (16G).
 dependency_overrides:
+  google_sign_in_android:
+    path: third_party/google_sign_in_android
   sqflite_android:
     path: third_party/sqflite_android
 

@@ -1,3 +1,4 @@
+import 'alchemist_diagnostics.dart';
 import 'diary_read_state.dart';
 
 import 'dart:convert';
@@ -48,6 +49,44 @@ class AlchemistDiaryApi extends DiaryApi {
   String? _queueError;
   @override
   String? get queueError => _queueError;
+  String? _localScope, _localRole, _accountLabel;
+  bool _hintLoaded = false;
+  @override
+  String? get accountLabel => _accountLabel;
+  @override
+  void setAccountLabel(String value) => _accountLabel = value;
+  @override
+  Future<void> loadLocalIdentityHint() async {
+    if (_hintLoaded || _subject != null) return;
+    final generation = _accountGeneration;
+    final disabled = await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['alchemist_restore_disabled'],
+    );
+    if (disabled.firstOrNull?['value'] == '1') return;
+    final rows = await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['alchemist_identity_hint'],
+    );
+    if (generation != _accountGeneration || _subject != null) return;
+    if (rows.isNotEmpty) {
+      try {
+        final hint = jsonDecode(rows.single['value'] as String);
+        if (hint['role'] == 'MASTER' &&
+            hint['scope'] is String &&
+            RegExp(r'^account:[a-f0-9]{64}$').hasMatch(hint['scope'])) {
+          _localScope = hint['scope'];
+          _localRole = 'MASTER';
+        }
+      } catch (_) {
+        /* Invalid hints never grant authority or erase data. */
+      }
+    }
+    _hintLoaded = true;
+  }
+
   String? _subject;
   String? _verifiedRole;
   DateTime? _identityExpiresAt;
@@ -57,9 +96,29 @@ class AlchemistDiaryApi extends DiaryApi {
   @override
   void bindIdentity(DiaryIdentity identity) => _identity = identity;
   @override
-  Future<bool> restoreIdentity() =>
-      _refreshing ??= _restore().whenComplete(() => _refreshing = null);
+  Future<bool> restoreIdentity() => _singleRefresh();
+  Future<bool> _singleRefresh({bool force = false}) {
+    if (_refreshing case final active?) return active;
+    late final Future<bool> pending;
+    pending = _restore(force: force).whenComplete(() {
+      if (identical(_refreshing, pending)) _refreshing = null;
+    });
+    return _refreshing = pending;
+  }
+
   Future<bool> _restore({bool force = false}) async {
+    AlchemistDiagnostics.instance.stage(
+      force ? 'TOKEN_REFRESH_START' : 'SESSION_RESTORE_START',
+    );
+    final disabled = await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['alchemist_restore_disabled'],
+    );
+    if (disabled.firstOrNull?['value'] == '1') {
+      AlchemistDiagnostics.instance.stage('SESSION_RESTORE_NEEDS_USER');
+      return false;
+    }
     if (!force &&
         readerAuthenticated &&
         _identityExpiresAt!.isAfter(
@@ -67,6 +126,7 @@ class AlchemistDiaryApi extends DiaryApi {
         )) {
       return true;
     }
+    await loadLocalIdentityHint();
     final identity = _identity;
     if (identity is! RestorableDiaryIdentity) return false;
     final generation = _accountGeneration,
@@ -82,13 +142,17 @@ class AlchemistDiaryApi extends DiaryApi {
       );
     }
     if (result == null || force && result.idToken == previous) return false;
-    await _verifyIdentity(result.idToken, expectedSubject: subject);
+    await _verifyIdentity(
+      result.idToken,
+      expectedSubject: subject,
+      expectedScope: readerScope == 'public' ? null : readerScope,
+    );
+    _accountLabel = result.email;
+    AlchemistDiagnostics.instance.stage('SESSION_RESTORE_OK');
     return true;
   }
 
-  Future<bool> _forceRefresh() =>
-      _refreshing ??= _restore(force: true)
-          .whenComplete(() => _refreshing = null);
+  Future<bool> _forceRefresh() => _singleRefresh(force: true);
   @override
   Future<void> refreshIdentity() async {
     await verifiedIdentityToken();
@@ -130,22 +194,31 @@ class AlchemistDiaryApi extends DiaryApi {
   int get identityGeneration => _accountGeneration;
   @override
   String get readerScope => _subject == null
-      ? 'public'
+      ? (_localScope ?? 'public')
       : 'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:$_subject'))}';
   @override
   // APK24's server-restored drafts used google:<verified subject>. Accept that
   // exact legacy owner only after server verification; never rewrite the row or
   // broaden this alias to another Google account, guest, or client role.
   bool canReadAuthorDraftScope(Object? scope) =>
-      _verifiedRole == 'MASTER' &&
-      _subject != null &&
-      (super.canReadAuthorDraftScope(scope) || scope == 'google:$_subject');
+      (_verifiedRole == 'MASTER' &&
+          _subject != null &&
+          (super.canReadAuthorDraftScope(scope) ||
+              scope == 'google:$_subject')) ||
+      (_subject == null &&
+          _localRole == 'MASTER' &&
+          scope == _localScope &&
+          _localScope != null);
   @override
   Future<void> authenticateReader(String token) async {
     await _verifyIdentity(token);
   }
 
-  Future<void> _verifyIdentity(String token, {String? expectedSubject}) async {
+  Future<void> _verifyIdentity(
+    String token, {
+    String? expectedSubject,
+    String? expectedScope,
+  }) async {
     final generation = _accountGeneration;
     final identity = await AlchemistApi(
       base,
@@ -179,7 +252,10 @@ class AlchemistDiaryApi extends DiaryApi {
     if (!until.isAfter(clock().toUtc())) {
       throw const DiaryApiException('Вход истёк', DiaryFailure.authorization);
     }
-    if (expectedSubject != null && identity['subject'] != expectedSubject) {
+    final verifiedScope =
+        'account:${sha256.convert(utf8.encode('alchemist:${base.toString()}:${identity['subject']}'))}';
+    if (expectedScope != null && verifiedScope != expectedScope ||
+        expectedSubject != null && identity['subject'] != expectedSubject) {
       throw const AlchemistFailure(
         'Google выбрал другой аккаунт. Войдите явно перед продолжением.',
         401,
@@ -190,11 +266,27 @@ class AlchemistDiaryApi extends DiaryApi {
     if (_subject != null && _subject != identity['subject']) {
       _accountGeneration++;
     }
+    AlchemistDiagnostics.instance.stage(
+      role == 'MASTER' ? 'SERVER_WHOAMI_MASTER' : 'SERVER_WHOAMI_CLIENT',
+    );
     _subject = identity['subject'] as String;
     _verifiedRole = role;
     _identityExpiresAt = until;
     _token = token;
     _identityRejected = false;
+    _localScope = readerScope;
+    _localRole = _verifiedRole;
+    _hintLoaded = true;
+    await db.insert('app_settings', {
+      'name': 'alchemist_identity_hint',
+      'value': jsonEncode({'scope': readerScope, 'role': _verifiedRole}),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    if (generation != _accountGeneration) {
+      throw const DiaryApiException(
+        'Вход отменён выходом из аккаунта',
+        DiaryFailure.authorization,
+      );
+    }
   }
 
   Database get db => capsules.database;
@@ -213,9 +305,14 @@ class AlchemistDiaryApi extends DiaryApi {
   @override
   void clearSession() {
     _accountGeneration++;
+    _refreshing = null;
     _token = null;
     _identityRejected = false;
     _subject = null;
+    _localScope = null;
+    _localRole = null;
+    _accountLabel = null;
+    _hintLoaded = false;
     _verifiedRole = null;
     _identityExpiresAt = null;
   }

@@ -1,0 +1,18 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task17_auth_test.dart
+00:00 +0: /dev/shm/sulfi17/test/task17_auth_test.dart: 17 G1 same-owner cold/expiry restore without chooser; logout intent blocks SDK restore and private hints
+00:00 +1: /dev/shm/sulfi17/test/task17_auth_test.dart: 17 G1 offline local author draft before Google does not reveal or rescope other account draft
+00:01 +2: /dev/shm/sulfi17/test/task17_auth_test.dart: 17 G1 explicit logout invalidates pending chooser without clearing a newer login busy state
+00:01 +3: /dev/shm/sulfi17/test/task17_auth_test.dart: 17 G0 trace opt-in, bounded TTL, safe codes and explicit redacted export
+00:01 +4: loading /dev/shm/sulfi17/test/task16b_auth_transport_test.dart
+00:01 +4: /dev/shm/sulfi17/test/task16b_auth_transport_test.dart: G1 official restore shares refreshed RAM identity; offline is not logout; wrong restored account fails closed
+00:03 +5: /dev/shm/sulfi17/test/task16b_auth_transport_test.dart: G1 server-rejected cached token stops showing authenticated without erasing identity or drafts
+00:03 +6: /dev/shm/sulfi17/test/task16b_auth_transport_test.dart: G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry
+00:03 +7: /dev/shm/sulfi17/test/task16b_auth_transport_test.dart: G1-G2 retry cannot send old task after account switch during backoff; 401 refresh is bounded
+00:03 +8: loading /dev/shm/sulfi17/test/task16a_auth_test.dart
+00:04 +8: /dev/shm/sulfi17/test/task16a_auth_test.dart: server CLIENT in master edition cannot become author using email or local toggle; owner in client edition retains server MASTER
+00:04 +9: /dev/shm/sulfi17/test/task16a_auth_test.dart: account switch while HTTP is pending discards the response, with no retry or stale body exposure
+00:04 +10: /dev/shm/sulfi17/test/task16a_auth_test.dart: official catalog provenance survives reload without changing canonical revisions; personal copy remains editable and local export needs no API
+00:04 +11: loading /dev/shm/sulfi17/test/task16a_transfer_test.dart
+00:05 +11: /dev/shm/sulfi17/test/task16a_transfer_test.dart: catalog reflects existing verified login and logout instead of showing a second login
+00:07 +12: /dev/shm/sulfi17/test/task16a_transfer_test.dart: capsule retains official provenance, exact revisions and client rights; malformed metadata cannot grant MASTER
+00:07 +13: All tests passed!

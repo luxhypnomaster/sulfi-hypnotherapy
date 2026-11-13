@@ -1,0 +1,15 @@
+{
+  "upstream": "google_sign_in_android7.2.18",
+  "files": {
+    "android/settings.gradle.kts": "7ce7089d96ce52e22cb218af5593f36b7fc956ab91019ea5ee2fd8e1aacf9f8f",
+    "android/build.gradle.kts": "3c0740c0669fc685c541a6a179902b8e7ff08006c742a3f7a249005de9b2b1fb",
+    "android/lint-baseline.xml": "d7cf05a56007e5b92b20f39b8f26593e1a34375eae7a691df23c8c4c1c29feaa",
+    "lib/google_sign_in_android.dart": "c6ad6424fabc6ebcd4aa2032f90eae674fc753c1ea21308af57239c7ac9a4935",
+    "android/src/main/AndroidManifest.xml": "b9e70fbc750402a43b7e0ae6ec4047414a0f1a2c389c12f5685b6619d69aa923",
+    "android/src/test/kotlin/io/flutter/plugins/googlesignin/GoogleSignInTest.kt": "7073aa038da3b5958ceba6ff8c392d3ad4bbe960f658602dba67fcfb4e0fc781",
+    "android/src/main/res/raw/keep.xml": "15335293ac52fbf7143fcfd1c354cbe59db43c3b87134ac251d5126c6c592217",
+    "android/src/main/kotlin/io/flutter/plugins/googlesignin/Messages.kt": "b8746e9826d7d79acb0945cf7b2708974b6c8924b5c2245a2faf1b6fc8f93eaa",
+    "android/src/main/kotlin/io/flutter/plugins/googlesignin/GoogleSignInPlugin.kt": "f5d3632eb9c88d4b7a480e14d6dad8440aa9474b1739bab8d16f621d67e0411e",
+    "lib/src/messages.g.dart": "a57abe3162f6e583de1a6596613d6664cfff4fb3ab758096ea779200a37eae39"
+  }
+}

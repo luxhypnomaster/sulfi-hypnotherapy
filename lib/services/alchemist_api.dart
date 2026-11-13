@@ -110,12 +110,20 @@ class AlchemistApi {
     String operation,
     Map<String, dynamic> parameters,
   ) async {
-    final originalScope = identityScope?.call(),
-        originalEpoch = identityEpoch?.call(),
-        trace = diagnostics.begin();
+    var originalScope = identityScope?.call();
+    final originalEpoch = identityEpoch?.call(), trace = diagnostics.begin();
+    var initialBinding = originalScope == 'public';
     final watch = Stopwatch()..start();
     var refreshed = false;
-    void checkScope() {
+    void checkScope(bool afterCredential) {
+      // A cold silent restore establishes the first verified identity before
+      // any request is sent. Existing identities and logout epochs stay frozen.
+      if (afterCredential &&
+          initialBinding &&
+          originalEpoch == identityEpoch?.call()) {
+        originalScope = identityScope?.call();
+        initialBinding = false;
+      }
       if (originalScope != identityScope?.call() ||
           originalEpoch != identityEpoch?.call()) {
         throw const AlchemistApiException(
@@ -128,7 +136,7 @@ class AlchemistApi {
     }
 
     for (var attempt = 0; ; attempt++) {
-      checkScope();
+      checkScope(false);
       final left = callTimeout - watch.elapsed;
       if (left <= Duration.zero) {
         throw AlchemistFailure.from(TimeoutException('deadline'));
@@ -151,7 +159,7 @@ class AlchemistApi {
         );
         return result;
       } catch (error) {
-        checkScope();
+        checkScope(false);
         final e = AlchemistFailure.from(error);
         diagnostics.record(
           trace,
@@ -173,7 +181,7 @@ class AlchemistApi {
             }.contains(e.code)) {
           refreshed = true;
           if (await onUnauthorized!()) {
-            checkScope();
+            checkScope(false);
             continue;
           }
         }
@@ -212,11 +220,11 @@ class AlchemistApi {
     Map<String, dynamic> parameters,
     String trace,
     int attempt,
-    void Function() checkScope,
+    void Function(bool) checkScope,
   ) async {
     final clock = Stopwatch()..start();
     final token = await credential?.call();
-    checkScope();
+    checkScope(true);
     diagnostics.record(
       trace,
       operation,
@@ -224,6 +232,7 @@ class AlchemistApi {
       clock.elapsedMilliseconds,
       attempt: attempt,
     );
+    diagnostics.stage('HTTP_REQUEST_START');
     var response = await connection(
       'POST',
       endpoint,
@@ -236,7 +245,7 @@ class AlchemistApi {
         'credential': ?token,
       }),
     );
-    checkScope();
+    checkScope(false);
     diagnostics.record(
       trace,
       operation,
@@ -263,7 +272,7 @@ class AlchemistApi {
       response = await connection('GET', target, {
         'Accept': 'application/json',
       }, null);
-      checkScope();
+      checkScope(false);
     }
     if (response.status != 200) {
       final e = AlchemistFailure.server(

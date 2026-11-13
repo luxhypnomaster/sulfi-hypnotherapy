@@ -88,6 +88,9 @@ class DiaryApi {
   Future<void> refreshIdentity() async {}
   Future<bool> refreshRejectedIdentity() async => false;
   void rejectIdentity() {}
+  Future<void> loadLocalIdentityHint() async {}
+  String? get accountLabel => null;
+  void setAccountLabel(String value) {}
   String get readerScope => 'public';
   bool canReadAuthorDraftScope(Object? scope) =>
       scope == null || scope == readerScope;
