@@ -682,7 +682,7 @@ void main() {
       await t.runAsync(preview.close);
       await t.runAsync(() async {
         final targetDb = await openAppDatabase(
-          '${root.path}/restored-db',
+          '${root.path}/restored/db',
           factory: databaseFactoryFfi,
         );
         try {
