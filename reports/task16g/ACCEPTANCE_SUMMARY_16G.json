@@ -1,0 +1,13 @@
+{
+  "criteria": 33,
+  "counts": {
+    "PASS": 18,
+    "BLOCKED": 3,
+    "PARTIAL": 12
+  },
+  "controlledUpgrade": false,
+  "fullCI": true,
+  "pairReadbackVerified": false,
+  "ownerGoogleDrivePhysicalQA": "NOT_RUN",
+  "status": "BLOCKED_CANDIDATE_WITHHELD"
+}

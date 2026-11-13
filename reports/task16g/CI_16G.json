@@ -1,0 +1,330 @@
+{
+  "conclusion": "",
+  "createdAt": "2026-11-13T02:14:18Z",
+  "headSha": "11909895da4f2967b77f12a8b8da98ff50b370d5",
+  "jobs": [
+    {
+      "completedAt": "2026-11-13T02:22:59Z",
+      "conclusion": "success",
+      "databaseId": 131640826117,
+      "name": "verify",
+      "startedAt": "2026-11-13T02:14:22Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "P0 STOP-SHIP forbids building or signing any Sulfi candidate",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run ./.github/actions/setup-flutter",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Validate offline Task15 JSON schemas and contract fixtures",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run node --test server/google_apps_script/test/backend.test.mjs",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run node --test server/alchemist/test/*.test.mjs",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run node scripts/alchemist/build.mjs \"$RUNNER_TEMP/alchemist-source\"",
+          "number": 9,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run flutter pub get --enforce-lockfile",
+          "number": 10,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run dart format --output=none --set-exit-if-changed lib test",
+          "number": 11,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run flutter analyze --fatal-infos",
+          "number": 12,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Flutter tests with failure summaries",
+          "number": 13,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Preserve test report",
+          "number": 14,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client",
+          "number": 15,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Verify configured cloud endpoint before embedding it",
+          "number": 16,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Require accepted real two-account server before final pair",
+          "number": 17,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Restore persistent user-test signing key",
+          "number": 18,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Build author APK (explicit configuration, no invented endpoint)",
+          "number": 19,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Record public APK diagnostics",
+          "number": 20,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 21,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 22,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Build separate client test APK (same code and persistent key)",
+          "number": 23,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Record client APK diagnostics",
+          "number": 24,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 25,
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 26,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run ./.github/actions/setup-flutter",
+          "number": 50,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 51,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 52,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 53,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131640826117"
+    },
+    {
+      "completedAt": "2026-11-13T02:14:20Z",
+      "conclusion": "skipped",
+      "databaseId": 131640827817,
+      "name": "regressions",
+      "startedAt": "2026-11-13T02:14:20Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131640827817"
+    },
+    {
+      "completedAt": "2026-11-13T02:14:20Z",
+      "conclusion": "skipped",
+      "databaseId": 131640827986,
+      "name": "emulator_qa",
+      "startedAt": "2026-11-13T02:14:20Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131640827986"
+    },
+    {
+      "completedAt": "2026-11-13T02:14:20Z",
+      "conclusion": "skipped",
+      "databaseId": 131640828150,
+      "name": "storage16g",
+      "startedAt": "2026-11-13T02:14:20Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131640828150"
+    },
+    {
+      "completedAt": "2026-11-13T02:14:20Z",
+      "conclusion": "skipped",
+      "databaseId": 131640828155,
+      "name": "native_upgrade",
+      "startedAt": "2026-11-13T02:14:20Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131640828155"
+    },
+    {
+      "completedAt": "0001-01-01T00:00:00Z",
+      "conclusion": "",
+      "databaseId": 131644290629,
+      "name": "candidate16g",
+      "startedAt": "2026-11-13T02:23:02Z",
+      "status": "in_progress",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run ./.github/actions/setup-flutter",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Require successful exact callback gate and compatible public configuration",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Restore existing test key without modification",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "",
+          "name": "Build one immutable pair",
+          "number": 7,
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "",
+          "name": "Verify both certificates, package/version and SHA; read immutable baseline25",
+          "number": 8,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Actual UI-created immutable25\u2192candidate26 and companion smoke",
+          "number": 9,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Private draft pair only after all controlled gates",
+          "number": 10,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run ./.github/actions/setup-flutter",
+          "number": 18,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 19,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/checkout@v4",
+          "number": 20,
+          "status": "pending"
+        }
+      ],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471/job/131644290629"
+    }
+  ],
+  "status": "in_progress",
+  "updatedAt": "2026-11-13T02:23:02Z",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471"
+}
