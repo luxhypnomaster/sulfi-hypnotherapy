@@ -401,6 +401,7 @@ jobs:
     timeout-minutes: 65
     permissions:
       contents: write
+      actions: read
     env:
       GH_TOKEN: ${{ github.token }}
       ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
@@ -409,6 +410,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Reuse only proven identical full regression source
+        if: inputs.task16g_reuse_verify == true
+        run: python3 scripts/task16g/reuse_verify.py
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -432,9 +436,6 @@ jobs:
           PYCODE
           test -e /dev/kvm
           ! gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/tags/task16g-qa-pair-26 > /dev/null 2>&1
-      - name: Reuse only proven identical full regression source
-        if: inputs.task16g_reuse_verify == true
-        run: python3 scripts/task16g/reuse_verify.py
       - name: Restore existing test key without modification
         env:
           KEY_B64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}

@@ -3,6 +3,7 @@ import collections
 import csv
 import json
 import pathlib
+import subprocess
 
 root = pathlib.Path(__file__).resolve().parents[2]
 reports = root / 'reports/task16g'
@@ -16,6 +17,17 @@ ci_path = reports / 'CI_16G.json'
 ci = json.loads(ci_path.read_text()) if ci_path.exists() else {}
 full = any(x['name'] == 'verify' and x['conclusion'] == 'success'
            for x in ci.get('jobs', []))
+prior_path = reports / 'REGRESSION_CI_16G.json'
+if not full and prior_path.exists():
+    prior = json.loads(prior_path.read_text())
+    validated = any(x['name'] == 'verify' and x['conclusion'] == 'success'
+                    for x in prior.get('jobs', []))
+    unchanged = subprocess.run(
+        ['git', 'diff', '--quiet', prior['headSha'], '--', 'lib', 'android',
+         'third_party', 'test', 'server', 'pubspec.yaml', 'pubspec.lock'],
+        cwd=root, check=False).returncode == 0
+    full = validated and unchanged
+
 pair = reports / 'APK_READBACK_16G.json'
 pair_verified = pair.exists() and json.loads(pair.read_text()).get('allVerified') is True
 delivery = reports / 'DRIVE_READBACK_16G.json'
