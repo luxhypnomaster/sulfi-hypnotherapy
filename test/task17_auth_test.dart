@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_diary_api.dart';

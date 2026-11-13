@@ -1,3 +1,7 @@
+# №17 — текущая корректировка
+
+G0:доказаныклиентскиеостановкидоHTTP;G1/G2контролируемыепроверкипройдены. [Точкапродолжения](reports/task17/PROGRESS.md) · [ROOTCAUSE](reports/task17/ROOT_CAUSE_17.md). DraftPR48, main/GAS6/подпись/ACL/старые№16сохранены. APK17ещёнет;настоящиеGoogle/дваAndroidNOT_RUN.
+
 # №16-Г — текущий приоритет
 
 - [x] G0:7файлов/manifest/33критерия, PR45/46 ancestry, отдельная ветка.

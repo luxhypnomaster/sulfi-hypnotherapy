@@ -690,17 +690,80 @@ class AlchemistDiaryApi extends DiaryApi {
     }
   }
 
+  String _publicationRevision(DiaryEntry entry, bool? published) {
+    final editable = Map<String, dynamic>.from(jsonDecode(_editable(entry)))
+      ..remove('version')
+      ..remove('status');
+    return sha256
+        .convert(
+          utf8.encode(
+            canonicalContent({'entry': editable, 'published': published}),
+          ),
+        )
+        .toString();
+  }
+
   @override
   Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {
-    await db.insert('app_settings', {
-      'name': 'alchemist_diary_queue:${entry.id}',
-      'value': jsonEncode({
-        'ownerBinding': author.ownerBinding,
-        'entry': entry.toMap(),
-        'published': published,
-        'status': 'pending',
-      }),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final owner = author.ownerBinding;
+    if (owner == null)
+      throw const AlchemistFailure(
+        'Подтвердите Google-аккаунт перед первой отправкой.',
+        401,
+        'IDENTITY_REQUIRED',
+        DiaryFailure.authorization,
+      );
+    final revision = _publicationRevision(entry, published);
+    await db.transaction((tx) async {
+      final name = 'alchemist_diary_queue:${entry.id}';
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [name],
+      );
+      final old = rows.isEmpty
+          ? null
+          : Map<String, dynamic>.from(
+              jsonDecode(rows.single['value'] as String),
+            );
+      if (old != null && old['ownerBinding'] != owner) {
+        throw const AlchemistFailure(
+          'Задача принадлежит другому аккаунту.',
+          401,
+          'ACCOUNT_CHANGED',
+          DiaryFailure.authorization,
+        );
+      }
+      if (old != null &&
+          (old['publicationRevision'] == revision ||
+              old['status'] == 'complete' &&
+                  old['confirmedRevision'] == revision))
+        return;
+      if (old != null &&
+          const [
+            'running',
+            'preparing',
+            'pausing',
+            'queued',
+          ].contains(old['_work']?['phase'])) {
+        throw const AlchemistFailure(
+          'Сначала завершите текущую отправку редакции.',
+          409,
+          'REVISION_IN_FLIGHT',
+        );
+      }
+      await tx.insert('app_settings', {
+        'name': name,
+        'value': jsonEncode({
+          'ownerBinding': owner,
+          'entry': entry.toMap(),
+          'published': published,
+          'publicationRevision': revision,
+          'status': 'pending',
+          if (old?['_work'] != null) '_work': old!['_work'],
+        }),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 
   Future<void> sendQueued(
@@ -726,6 +789,7 @@ class AlchemistDiaryApi extends DiaryApi {
         DiaryFailure.authorization,
       );
     }
+    if (q['status'] == 'complete') return;
     final e = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
     final current = await db.query(
       'diary_author',
@@ -774,7 +838,9 @@ class AlchemistDiaryApi extends DiaryApi {
       where: 'name=?',
       whereArgs: ['alchemist_diary_queue:$id'],
     );
-    return rows.firstOrNull?['value'] as String?;
+    final raw = rows.firstOrNull?['value'] as String?;
+    if (raw != null && jsonDecode(raw)['status'] == 'complete') return null;
+    return raw;
   }
 
   String _editable(DiaryEntry e) => canonicalContent({
@@ -823,11 +889,34 @@ class AlchemistDiaryApi extends DiaryApi {
         }, conflictAlgorithm: ConflictAlgorithm.replace);
       }
       if (queued != null) {
-        await tx.delete(
+        final name = 'alchemist_diary_queue:${result.id}';
+        final latest = await tx.query(
           'app_settings',
-          where: 'name=? AND value=?',
-          whereArgs: ['alchemist_diary_queue:${result.id}', queued],
+          where: 'name=?',
+          whereArgs: [name],
         );
+        final sent = Map<String, dynamic>.from(jsonDecode(queued));
+        if (latest.isNotEmpty) {
+          final current = Map<String, dynamic>.from(
+            jsonDecode(latest.single['value'] as String),
+          );
+          if (current['ownerBinding'] == sent['ownerBinding'] &&
+              current['publicationRevision'] == sent['publicationRevision'] &&
+              canonicalContent(current['entry']) ==
+                  canonicalContent(sent['entry'])) {
+            current['status'] = conflict ? 'conflict_committed' : 'complete';
+            current['confirmedRevision'] = _publicationRevision(
+              result,
+              current['published'] as bool?,
+            );
+            await tx.update(
+              'app_settings',
+              {'value': jsonEncode(current)},
+              where: 'name=?',
+              whereArgs: [name],
+            );
+          }
+        }
       }
     });
     if (conflict) {
@@ -847,8 +936,9 @@ class AlchemistDiaryApi extends DiaryApi {
       where: 'name LIKE ?',
       whereArgs: ['alchemist_diary_queue:%'],
     )) {
-      final q = jsonDecode(row['value'] as String),
-          entry = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
+      final q = jsonDecode(row['value'] as String);
+      if (q['status'] == 'complete' || q['_work'] != null) continue;
+      final entry = DiaryEntry.fromMap(Map<String, dynamic>.from(q['entry']));
       if (q['ownerBinding'] != null &&
           q['ownerBinding'] != author.ownerBinding) {
         continue;

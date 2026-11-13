@@ -1,3 +1,7 @@
+# №17 — авторизация, очередь и каталог в работе
+
+G0:доказаныклиентскиеостановкидоHTTP;G1/G2контролируемыепроверкипройдены. [Точкапродолжения](reports/task17/PROGRESS.md) · [ROOTCAUSE](reports/task17/ROOT_CAUSE_17.md). DraftPR48, main/GAS6/подпись/ACL/старые№16сохранены. APK17ещёнет;настоящиеGoogle/дваAndroidNOT_RUN.
+
 # №16-Г — кандидаты 0.4.18+26, физическая приёмка впереди
 
 [Результат](reports/task16g/RESULT_16G.md) · [33 критерия:22 PASS/11 PARTIAL](reports/task16g/ACCEPTANCE_16G.csv) · [Два APK в закрытом draft](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-6cd4718e5ea711c5c181) · [Android-протокол](reports/task16g/OWNER_PHONE_QA_16G.md) · [Отчёты на Drive](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z).

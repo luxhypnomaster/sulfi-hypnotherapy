@@ -1,0 +1,7 @@
+Analyzing sulfi17...                                            
+
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/alchemist_diary_api.dart:710:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/alchemist_diary_api.dart:741:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/session_controller.dart:46:11 • curly_braces_in_flow_control_structures
+
+3 issues found. (ran in 3.2s)

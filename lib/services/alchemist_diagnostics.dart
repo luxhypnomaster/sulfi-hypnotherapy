@@ -11,8 +11,14 @@ class AlchemistDiagnostics extends ChangeNotifier {
     bool enabled = false,
     Duration ttl = const Duration(minutes: 20),
   }) : _enabled = enabled && kDebugMode,
+       // ignore: prefer_initializing_formals
        _ttl = ttl;
   bool _enabled;
+  String _build = 'unknown';
+  void setBuild(String value) {
+    if (RegExp(r'^\d+\.\d+\.\d+\+\d+$').hasMatch(value)) _build = value;
+  }
+
   final Duration _ttl;
   final Stopwatch _age = Stopwatch()..start();
   bool get enabled => _enabled;
@@ -32,6 +38,7 @@ class AlchemistDiagnostics extends ChangeNotifier {
 
   String export() => jsonEncode({
     'kind': 'SULFI_QA_REDACTED_TRACE',
+    'build': _build,
     'events': events
         .map((e) => Map<String, Object?>.from(e)..remove('taskId'))
         .toList(),
@@ -45,6 +52,9 @@ class AlchemistDiagnostics extends ChangeNotifier {
 
   static final instance = AlchemistDiagnostics();
   final List<Map<String, Object?>> _events = [];
+  Map<String, Object?>? _measurement;
+  Map<String, Object?>? get lastMeasurement =>
+      _measurement == null ? null : Map.unmodifiable(_measurement!);
   List<Map<String, Object?>> get events {
     _prune();
     return List.unmodifiable(
@@ -62,14 +72,13 @@ class AlchemistDiagnostics extends ChangeNotifier {
     int? status,
     String? code,
   }) {
-    if (!enabled) return;
     _prune();
     if (!RegExp(r'^[a-f0-9]{32}$').hasMatch(traceId) ||
         !RegExp(r'^[a-zA-Z]+\.[a-zA-Z]+$').hasMatch(operation) ||
         !RegExp(r'^[a-z_]{1,32}$').hasMatch(phase)) {
       return;
     }
-    _events.add({
+    final event = <String, Object?>{
       'atMs': _age.elapsedMilliseconds,
       'traceId': traceId,
       if (Zone.current[#alchemistTask] case final String taskId
@@ -82,7 +91,9 @@ class AlchemistDiagnostics extends ChangeNotifier {
       'status': ?status,
       if (code != null && RegExp(r'^[A-Z0-9_]{1,80}$').hasMatch(code))
         'code': code,
-    });
+    };
+    _measurement = event;
+    if (enabled) _events.add(event);
     if (_events.length > 200) _events.removeAt(0);
     notifyListeners();
   }
