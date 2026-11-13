@@ -1,0 +1,20 @@
+[
+  {
+    "file": "NATIVE_UI_UPGRADE_16G.json",
+    "bytes": 31400,
+    "sha256": "dfcc306adb4b73b459ca4570ca7b16322608b0d23576bd84090efb9bf92caf67",
+    "verified": true
+  },
+  {
+    "file": "failure-ui_module_elman.png",
+    "bytes": 104330,
+    "sha256": "8f5122c4439fb2662abcc134d6458578bd09a7a90d75543d604a3f9f2157fef8",
+    "verified": true
+  },
+  {
+    "file": "failure-ui_module_elman.xml",
+    "bytes": 5672,
+    "sha256": "5de39862aab4ad6d0644f0a15676457dc19b1ea003fe045adb86b6b2be5d0b4c",
+    "verified": true
+  }
+]

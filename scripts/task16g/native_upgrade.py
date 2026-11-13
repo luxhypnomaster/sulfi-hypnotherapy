@@ -32,7 +32,19 @@ def shot(name):
 def tap(n):
  p=[int(i) for i in re.findall(r'\d+',n.get('bounds',''))]
  adb('shell','input','tap',str((p[0]+p[2])//2),str((p[1]+p[3])//2));time.sleep(.5)
+def dismiss_ime():
+ # Flutter semantics may expose footer bounds beneath Gboard. A semantic node
+ # marked enabled is not proof a physical coordinate is unobstructed.
+ for _ in range(3):
+  state=adb('shell','dumpsys','input_method')
+  shown=re.search(r'\bmInputShown=(true|false)\b',state)
+  assert shown is not None,'IME_VISIBILITY_UNOBSERVABLE_STOP_BEFORE_TAP'
+  if shown[1]=='false':return
+  ACTIONS.append({'action':'dismiss_observed_keyboard','visibility':'mInputShown=true'})
+  adb('shell','input','keyevent','KEYCODE_BACK');time.sleep(.8)
+ raise AssertionError('IME_STILL_VISIBLE_STOP_BEFORE_FOOTER_TAP')
 def click(text,exact=False,attempts=3):
+ if text in ['Сохранить модуль','Сохранить','Применить']:dismiss_ime()
  for _ in range(attempts):
   ns=tree()
   for n in sorted(ns,key=lambda n: 0 if n.get('text')==text else 1):
