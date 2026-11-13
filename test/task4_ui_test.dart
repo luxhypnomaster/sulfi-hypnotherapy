@@ -405,7 +405,7 @@ void main() {
     (t) async {
       final db = (await t.runAsync(
         () => openAppDatabase(
-          '${root.path}/diary.db',
+          '${root.path}/diary-sandbox/diary.db',
           factory: databaseFactoryFfi,
         ),
       ))!;

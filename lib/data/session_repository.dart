@@ -323,7 +323,7 @@ class SqliteSessionRepository implements SessionRepository {
     final draft = await loadDraft();
     if (draft != null && uses(draft.plan)) refs.add('Текущая конфигурация');
     for (final t in await templates()) {
-      if (uses(t.plan)) refs.add('Шаблон «${t.name}»');
+      if (uses(t.plan)) refs.add('Программа «${t.name}»');
     }
     for (final run in await history()) {
       if (run.active && uses(run.snapshot.plan)) {

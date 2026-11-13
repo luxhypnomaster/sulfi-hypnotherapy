@@ -466,7 +466,7 @@ void main() {
       );
       await t.pumpAndSettle();
       expect(find.text('Библиотека'), findsOneWidget);
-      expect(find.text('Шаблоны\nи модули'), findsOneWidget);
+      expect(find.text('Программы\nи модули'), findsOneWidget);
       expect(find.text('История'), findsOneWidget);
       expect(find.textContaining('мастеру'), findsOneWidget);
       final topic = find.text(c.draft.topicText);

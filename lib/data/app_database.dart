@@ -4,20 +4,24 @@ import 'dart:convert';
 
 import 'v4_migration.dart';
 import 'content_revision_store.dart';
+import 'storage_preflight.dart';
 
 Future<Database> openAppDatabase(
   String path, {
   DatabaseFactory? factory,
-}) => (factory ?? databaseFactory).openDatabase(
-  path,
-  options: OpenDatabaseOptions(
-    version: 9,
-    onConfigure: (db) async {
-      await db.execute('PRAGMA foreign_keys = ON');
-      await db.execute('PRAGMA secure_delete = ON');
-    },
-    onCreate: (db, version) async {
-      await db.execute('''CREATE TABLE audio_assets (
+}) async {
+  final backend = factory ?? databaseFactory;
+  await preflightStorage(path, backend);
+  return backend.openDatabase(
+    path,
+    options: OpenDatabaseOptions(
+      version: 9,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+        await db.execute('PRAGMA secure_delete = ON');
+      },
+      onCreate: (db, version) async {
+        await db.execute('''CREATE TABLE audio_assets (
         id TEXT PRIMARY KEY,title TEXT NOT NULL,filePath TEXT NOT NULL UNIQUE,
         durationMs INTEGER NOT NULL CHECK(durationMs > 0),format TEXT NOT NULL,
         createdAt TEXT NOT NULL,category TEXT NOT NULL,
@@ -25,65 +29,67 @@ Future<Database> openAppDatabase(
         description TEXT NOT NULL DEFAULT '',section TEXT NOT NULL DEFAULT 'general',
         tags TEXT NOT NULL DEFAULT '[]',source TEXT NOT NULL DEFAULT 'imported'
       )''');
-      await _createSessionTables(db);
-      await _createV4Tables(db);
-      await _createDiaryTables(db);
-      await _addIdentity(db);
-      await _addAccessSettings(db);
-      await _addHistoryAttachments(db);
-      await _addContentRevisions(db);
-    },
-    onUpgrade: (db, oldVersion, newVersion) async {
-      if (oldVersion < 2) {
-        // Additive migration: no rename/delete of audio metadata or media files.
-        await db.execute(
-          "ALTER TABLE audio_assets ADD COLUMN description TEXT NOT NULL DEFAULT ''",
-        );
-        await db.execute(
-          "ALTER TABLE audio_assets ADD COLUMN section TEXT NOT NULL DEFAULT 'general'",
-        );
-        await db.execute(
-          "ALTER TABLE audio_assets ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'",
-        );
-        await db.execute(
-          "ALTER TABLE audio_assets ADD COLUMN source TEXT NOT NULL DEFAULT 'imported'",
-        );
         await _createSessionTables(db);
-      }
-      if (oldVersion < 3) {
         await _createV4Tables(db);
-        for (final table in [
-          'session_templates',
-          'current_draft',
-          'session_runs',
-        ]) {
-          for (final row in await db.query(table)) {
-            final original = row['payload'] as String;
-            await db.insert('legacy_v2_documents', {
-              'kind': table,
-              'documentId': row['id'].toString(),
-              'payload': original,
-            }, conflictAlgorithm: ConflictAlgorithm.ignore);
-            final updated = migratePlanDocument(
-              Map<String, dynamic>.from(jsonDecode(original)),
-            );
-            await db.update(
-              table,
-              {'payload': jsonEncode(updated)},
-              where: 'id=?',
-              whereArgs: [row['id']],
-            );
+        await _createDiaryTables(db);
+        await _addIdentity(db);
+        await _addAccessSettings(db);
+        await _addHistoryAttachments(db);
+        await _addContentRevisions(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Additive migration: no rename/delete of audio metadata or media files.
+          await db.execute(
+            "ALTER TABLE audio_assets ADD COLUMN description TEXT NOT NULL DEFAULT ''",
+          );
+          await db.execute(
+            "ALTER TABLE audio_assets ADD COLUMN section TEXT NOT NULL DEFAULT 'general'",
+          );
+          await db.execute(
+            "ALTER TABLE audio_assets ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'",
+          );
+          await db.execute(
+            "ALTER TABLE audio_assets ADD COLUMN source TEXT NOT NULL DEFAULT 'imported'",
+          );
+          await _createSessionTables(db);
+        }
+        if (oldVersion < 3) {
+          await _createV4Tables(db);
+          for (final table in [
+            'session_templates',
+            'current_draft',
+            'session_runs',
+          ]) {
+            for (final row in await db.query(table)) {
+              final original = row['payload'] as String;
+              await db.insert('legacy_v2_documents', {
+                'kind': table,
+                'documentId': row['id'].toString(),
+                'payload': original,
+              }, conflictAlgorithm: ConflictAlgorithm.ignore);
+              final updated = migratePlanDocument(
+                Map<String, dynamic>.from(jsonDecode(original)),
+              );
+              await db.update(
+                table,
+                {'payload': jsonEncode(updated)},
+                where: 'id=?',
+                whereArgs: [row['id']],
+              );
+            }
           }
         }
-      }
-      if (oldVersion < 5) await _createDiaryTables(db);
-      if (oldVersion < 6) await _addIdentity(db);
-      if (oldVersion < 7) await _addAccessSettings(db);
-      if (oldVersion < 8) await _addHistoryAttachments(db);
-      if (oldVersion < 9) await _addContentRevisions(db);
-    },
-  ),
-);
+        if (oldVersion < 5) await _createDiaryTables(db);
+        if (oldVersion < 6) await _addIdentity(db);
+        if (oldVersion < 7) await _addAccessSettings(db);
+        if (oldVersion < 8) await _addHistoryAttachments(db);
+        if (oldVersion < 9) await _addContentRevisions(db);
+      },
+    ),
+  );
+}
+
 Future<void> _addIdentity(DatabaseExecutor db) async {
   final columns = (await db.rawQuery('PRAGMA table_info(audio_assets)'))
       .map((r) => r['name'])

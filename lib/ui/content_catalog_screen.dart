@@ -169,8 +169,8 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
           installedDescription =
               '«${r.payload['title'] ?? r.payload['name'] ?? r.key.content.id}» — ${switch (r.key.content.type) {
                 ContentType.track => 'Библиотека',
-                ContentType.module => 'Шаблоны и модули → Модули',
-                ContentType.template => 'Шаблоны и модули → Шаблоны',
+                ContentType.module => 'Программы и модули → Модули',
+                ContentType.template => 'Программы и модули → Программы',
               }}';
         });
       }
@@ -245,7 +245,7 @@ class _ContentCatalogScreenState extends State<ContentCatalogScreen> {
                   child: Text(switch (t) {
                     ContentType.track => 'Треки',
                     ContentType.module => 'Модули',
-                    ContentType.template => 'Шаблоны',
+                    ContentType.template => 'Программы',
                   }),
                 ),
             ],

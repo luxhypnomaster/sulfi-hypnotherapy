@@ -1,0 +1,134 @@
+[
+  {
+    "id": 43406075443,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "721722fb18ed6aec9b188af78b92e1fb60c00a44",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T10:02:51Z",
+    "updated_at": "2026-11-13T10:03:42Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43406075443"
+  },
+  {
+    "id": 43403971950,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "c3b8f06b5fc600e5ab20af5424ae66d4702b9c86",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T09:45:28Z",
+    "updated_at": "2026-11-13T09:57:40Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43403971950"
+  },
+  {
+    "id": 43362294034,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "0e0c4b8171cece30620feae85796379bde01d901",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T03:57:04Z",
+    "updated_at": "2026-11-13T04:04:25Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43362294034"
+  },
+  {
+    "id": 43360904610,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "80f5b70bf29ed72830946fba3c2541cbf77a837f",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T03:44:04Z",
+    "updated_at": "2026-11-13T03:51:21Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43360904610"
+  },
+  {
+    "id": 43359522821,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "aea52d1cc3569d7c000c3a15b71608e9ac1c10c7",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T03:31:23Z",
+    "updated_at": "2026-11-13T03:38:46Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43359522821"
+  },
+  {
+    "id": 43357227695,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T03:11:04Z",
+    "updated_at": "2026-11-13T03:25:13Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43357227695"
+  },
+  {
+    "id": 43354403069,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "78d6b5cacbc5c985b260bb4b986f59b4094f1591",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T02:45:51Z",
+    "updated_at": "2026-11-13T03:08:07Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43354403069"
+  },
+  {
+    "id": 43354022909,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "4c5075551e49ea6e07086b6638fdcb7acac2679a",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T02:42:28Z",
+    "updated_at": "2026-11-13T02:44:06Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43354022909"
+  },
+  {
+    "id": 43350711471,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "11909895da4f2967b77f12a8b8da98ff50b370d5",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T02:14:18Z",
+    "updated_at": "2026-11-13T02:35:16Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471"
+  },
+  {
+    "id": 43349365194,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "fc676895d9e621a68dfb96c36b9dd50a66075c8b",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-11-13T02:03:20Z",
+    "updated_at": "2026-11-13T02:10:07Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43349365194"
+  },
+  {
+    "id": 43348833732,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "28810ef32a60a350026cd06c530a2b4d692e66d6",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "created_at": "2026-11-13T01:59:00Z",
+    "updated_at": "2026-11-13T02:01:14Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43348833732"
+  },
+  {
+    "id": 43347643988,
+    "name": "Flutter checks and Android debug APK",
+    "event": "workflow_dispatch",
+    "head_sha": "1391b0334e2ffcca47d05e5ec94c5727a9234666",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T01:48:48Z",
+    "updated_at": "2026-11-13T01:51:20Z",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43347643988"
+  }
+]

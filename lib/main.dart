@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'data/storage_preflight.dart';
 
 import 'data/alchemist_diary_repository.dart';
 import 'services/alchemist_diary_api.dart';
@@ -72,13 +72,13 @@ class _BootstrapState extends State<_Bootstrap> {
       final root = await getApplicationSupportDirectory();
       await root.create(recursive: true);
       final cache = await getTemporaryDirectory();
-      await CapsuleService.cleanWorkspace(cache);
       final capsuleWorkspace = Directory(p.join(cache.path, 'sulfi-capsules'));
-      await CapsuleService.cleanWorkspace(capsuleWorkspace);
       final repository = await SqliteLibraryRepository.open(
         p.join(root.path, 'library.sqlite'),
       );
       _repository = repository;
+      await CapsuleService.cleanWorkspace(cache);
+      await CapsuleService.cleanWorkspace(capsuleWorkspace);
       final policy = AccessPolicy(database: repository.database);
       await policy.load();
       final sessions = SqliteSessionRepository(repository.database, policy);
@@ -211,59 +211,8 @@ class _BootstrapState extends State<_Bootstrap> {
         },
       );
       await diary.load();
-      // Startup only: include private drafts even while logged out. Never run
-      // collection during imports/Undo, and never touch the personal audio dir.
-      final allDiaryEntries = [
-        ...await diary.authorRepository!.entries(),
-        ...await diary.repository.published(),
-      ];
-      var privateCacheValid = true;
-      for (final row in await repository.database.query(
-        'app_settings',
-        where: 'name LIKE ?',
-        whereArgs: ['alchemist_private_entry:%'],
-      )) {
-        try {
-          final value = jsonDecode(row['value'] as String);
-          allDiaryEntries.add(
-            DiaryEntry.fromMap(Map<String, dynamic>.from(value['entry'])),
-          );
-        } catch (_) {
-          privateCacheValid = false;
-        }
-      }
-      if (privateCacheValid &&
-          diary.authorRepository!.invalidIds.isEmpty &&
-          diary.repository.invalidIds.isEmpty) {
-        final coverRows = await repository.database.query(
-          'app_settings',
-          where: 'name LIKE ?',
-          whereArgs: ['alchemist_card:%'],
-        );
-        final coverPaths = <String>{};
-        var coversValid = true;
-        for (final row in coverRows) {
-          try {
-            final cover = jsonDecode(row['value'] as String)['localCover'];
-            if (cover is Map) {
-              final file = diaryMedia.file(
-                DiaryMedia.fromMap(Map<String, dynamic>.from(cover)),
-              );
-              if (file != null) coverPaths.add(file.path);
-            }
-          } catch (_) {
-            coversValid = false;
-          }
-        }
-        if (coversValid) {
-          await diaryMedia.collect({
-            ...coverPaths,
-            for (final e in allDiaryEntries)
-              for (final b in e.blocks)
-                if (diaryMedia.file(b.media)?.path case final String path) path,
-          });
-        }
-      }
+      // Startup never reclaims audio/diary/history media. Visibility, cache
+      // completeness or a missing row is not ownership evidence for deletion.
       if (diary.api != null) unawaited(diary.sync());
       final historyMedia = DiaryMediaStore(
         Directory(p.join(root.path, 'history_media')),
@@ -276,11 +225,6 @@ class _BootstrapState extends State<_Bootstrap> {
         repository.database,
         historyMedia,
       );
-      try {
-        await historyAttachments.collect();
-      } catch (_) {
-        /* Corrupt metadata must preserve media, not block startup. */
-      }
       final controller = SessionController(
         repository: sessions,
         historyAttachments: historyAttachments,
@@ -301,6 +245,7 @@ class _BootstrapState extends State<_Bootstrap> {
           androidStopForegroundOnPause: false,
         ),
       );
+      await markStorageReady(p.join(root.path, 'library.sqlite'));
       if (mounted) setState(() => _library = library);
       unawaited(diary.restoreSignIn());
     } catch (_) {
@@ -347,7 +292,7 @@ class _BootstrapState extends State<_Bootstrap> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Text(
-                          'Не удалось открыть приложение. Проверьте свободное место и повторите попытку. Данные не сброшены.',
+                          'Не удалось безопасно открыть локальные данные. Автоматический сброс и очистка не выполняются. Не удаляйте приложение. Проверьте свободное место и повторите попытку.',
                         ),
                         const SizedBox(height: 16),
                         FilledButton(

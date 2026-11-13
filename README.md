@@ -1,4 +1,14 @@
-# №16-В P0 — STOP-SHIP
+# №16-Г — кандидаты 0.4.18+26, физическая приёмка впереди
+
+[Результат](reports/task16g/RESULT_16G.md) · [33 критерия:22 PASS/11 PARTIAL](reports/task16g/ACCEPTANCE_16G.csv) · [Два APK в закрытом draft](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-6cd4718e5ea711c5c181) · [Android-протокол](reports/task16g/OWNER_PHONE_QA_16G.md) · [Отчёты на Drive](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z).
+
+Ветка `fix/task16g-stabilize-programs`, draft PR47. Native no-delete callback, проверка производной копии SQLite/WAL/journal и отключение startup media GC защищают будущие данные. Реальный Android35 UI-created MASTER25→26/cold/integrity/IDs/mediaSHA/nativeAudio/CLIENT labels и3ошибки bootstrap PASS. Full verify:448Flutter/3CLIENT/46+24Node PASS. Пара независимо скачана: SHA/размер/package/версия/прежний сертификат/compiled config PASS. Это signed debug QA candidates, не production и не физически проверенные APK.
+
+Google MASTER/CLIENT, live Drive, авторизованные diary drafts, два телефона, слышимость и CLIENT25→26 ещё NOT_RUN; №16 не закрыт. Установка только по решению владельца поверх25 без удаления/очистки; при конфликте подписи STOP. «Программы» меняют только надписи: SQLite schema9/template IDs/API/капсулы прежние. Старые APK/сервер6/main/signing/ACL сохранены. Восстановление старых тестовых объектов исключено новым решением; неизвестная причина телефона из №16-В не переименована в исправленный диагноз. Семь отчётов доставлены и проверены raw SHA/parent; APK на Drive нет.
+
+# №16-В P0 — исторический STOP-SHIP (приоритет обновлён №16-Г)
+
+Решение №16-Г выше заменяет требование восстановления прежних тестовых объектов будущей приёмкой MASTER25→candidate26. Нижеследующее — исходный исторический вывод №16-В, не новая инструкция восстанавливать старые объекты. Его UNKNOWN root cause не отменён.
 
 После штатного MASTER24→25 владелец сообщает об отсутствии треков, модулей и черновиков. Физическое состояние данных **UNKNOWN**, восстановление **BLOCKED**. Новую APK не выдавать. Никаких uninstall/clear/downgrade/import или действий с единственным телефоном.
 

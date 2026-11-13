@@ -313,7 +313,7 @@ void main() {
       }
       expect(saves, 2);
       await show(t, TemplatesScreen(controller: c, player: player));
-      await t.tap(find.byTooltip('Действия шаблона').first);
+      await t.tap(find.byTooltip('Действия программы').first);
       await io(t);
       await t.tap(find.text('Экспортировать на устройство'));
       await io(t);
@@ -422,7 +422,7 @@ void main() {
       await screenshot(t, 'task14-diary-installed-link');
       await t.tap(find.text('Открыть'));
       await io(t);
-      expect(find.text('ШАБЛОНЫ'), findsOneWidget);
+      expect(find.text('ПРОГРАММЫ'), findsOneWidget);
       await t.pumpWidget(const SizedBox());
       await io(t);
       final track = local.revisions.firstWhere(
@@ -643,6 +643,13 @@ void main() {
       expect(unchanged.blocks.first.text, 'Сохранённый абзац');
       await t.runAsync(() => db.execute('DROP TRIGGER fail_diary_audio'));
       await t.tap(find.text('Добавить в дневник'));
+      for (
+        var wait = 0;
+        wait < 40 && find.byType(RecorderScreen).evaluate().isNotEmpty;
+        wait++
+      ) {
+        await io(t);
+      }
       await io(t);
       await screenshot(t, 'diary-after-save');
       expect(find.byType(RecorderScreen), findsNothing);
@@ -682,7 +689,7 @@ void main() {
       await t.runAsync(preview.close);
       await t.runAsync(() async {
         final targetDb = await openAppDatabase(
-          '${root.path}/restored-db',
+          '${root.path}/restored/db',
           factory: databaseFactoryFfi,
         );
         try {

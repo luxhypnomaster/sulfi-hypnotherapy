@@ -167,7 +167,7 @@ class HomeComposition extends StatelessWidget {
                     onPressed: busy ? null : onLibrary,
                   ),
                   _NavButton(
-                    label: 'Шаблоны\nи модули',
+                    label: 'Программы\nи модули',
                     icon: Icons.layers_outlined,
                     onPressed: busy ? null : onTemplates,
                   ),
@@ -220,7 +220,7 @@ class HomeComposition extends StatelessWidget {
                                         if (!await confirmAction(
                                           context,
                                           'Удалить все данные?',
-                                          'Библиотека, шаблоны, текущая конфигурация и история будут удалены с этого устройства. Исходные файлы останутся на месте.',
+                                          'Библиотека, программы, текущая конфигурация и история будут удалены с этого устройства. Исходные файлы останутся на месте.',
                                           confirm: 'Удалить всё',
                                         )) {
                                           return;
@@ -824,7 +824,7 @@ class _TemplateStrip extends StatelessWidget {
             ? null
             : 'Архивный · ${controller.draft.archiveName}') ??
         controller.draft.baseTemplateName ??
-        'Выбрать шаблон';
+        'Выбрать программу';
     return Tooltip(
       message: title,
       child: InkWell(
@@ -848,7 +848,7 @@ class _TemplateStrip extends StatelessWidget {
                     Icon(Icons.menu_book_outlined, size: 17, color: ink),
                     SizedBox(width: 3),
                     Text(
-                      'Шаблон',
+                      'Программа',
                       style: TextStyle(
                         fontSize: 10,
                         color: ink,

@@ -411,7 +411,7 @@ void main() {
       await reopened.close();
     }
   });
-  test('Task14 installer checks storage before writes, reconciles abandoned files, and reopens after restart', () async {
+  test('Task14 installer checks storage before writes, retains abandoned files, and reopens after restart', () async {
     var free = 1 << 30;
     final bounded = CapsuleService(
       database: b.database,
@@ -435,7 +435,12 @@ void main() {
         .writeAsBytes([1, 2, 3]);
     await CapsuleService.cleanWorkspace(destination.workspace);
     await target.initialize();
-    expect(await target.directory.list().length, 1);
+    expect(await target.directory.list().length, 2);
+    expect(
+      await File(p.join(target.directory.path, 'asset_capsule_abandoned.wav'))
+          .readAsBytes(),
+      [1, 2, 3],
+    );
     local = await LocalCatalogSource.open(bounded, zip);
     final reopened = local.revisions.singleWhere(
       (v) => v.key.token == r.key.token,

@@ -392,9 +392,9 @@ class _StructureScreenState extends State<StructureScreen> {
                   _run(() async {
                     if (await confirmAction(
                       context,
-                      'Обновить исходный шаблон?',
-                      'Будет создана новая версия шаблона «${c.baseTemplate?.name}». История не изменится.',
-                      confirm: 'Обновить шаблон',
+                      'Обновить исходную программу?',
+                      'Будет создана новая версия программы «${c.baseTemplate?.name}». История не изменится.',
+                      confirm: 'Обновить программу',
                     )) {
                       await c.overwriteBase();
                     }
@@ -414,7 +414,7 @@ class _StructureScreenState extends State<StructureScreen> {
               if (c.baseTemplate != null)
                 const PopupMenuItem(
                   value: 'overwrite',
-                  child: Text('Обновить исходный шаблон'),
+                  child: Text('Обновить исходную программу'),
                 ),
             ],
           ),
@@ -442,7 +442,7 @@ class _StructureScreenState extends State<StructureScreen> {
                       children: [
                         Expanded(
                           child: NeonButton(
-                            label: 'Выбрать другой шаблон',
+                            label: 'Выбрать другую программу',
                             stacked: true,
                             icon: Icons.layers_outlined,
                             onPressed: _busy ? null : _choose,
@@ -479,7 +479,7 @@ class _StructureScreenState extends State<StructureScreen> {
                       children: [
                         Expanded(
                           child: NeonButton(
-                            label: 'Вернуть из шаблона',
+                            label: 'Вернуть из программы',
                             stacked: false,
                             icon: Icons.restore,
                             onPressed: _busy || c.baseTemplate == null
@@ -487,7 +487,7 @@ class _StructureScreenState extends State<StructureScreen> {
                                 : () => _run(() async {
                                     if (await confirmAction(
                                       context,
-                                      'Вернуть настройки шаблона?',
+                                      'Вернуть настройки программы?',
                                       'Текущие дорожки и паузы будут заменены. Тема и заметки сохранятся.',
                                       confirm: 'Вернуть',
                                     )) {
@@ -500,7 +500,7 @@ class _StructureScreenState extends State<StructureScreen> {
                         const SizedBox(width: 6),
                         Expanded(
                           child: NeonButton(
-                            label: 'Сохранить как шаблон',
+                            label: 'Сохранить как программу',
                             stacked: false,
                             icon: Icons.save_outlined,
                             onPressed: _busy

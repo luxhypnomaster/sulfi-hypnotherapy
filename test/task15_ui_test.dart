@@ -43,6 +43,13 @@ void main() {
         expect(find.text('Ваше пространство'), findsOneWidget);
         await t.ensureVisible(find.text('Клиент'));
         await t.tap(find.text('Клиент'));
+        for (
+          var wait = 0;
+          wait < 40 && f.c.policy.mode != LocalMode.client;
+          wait++
+        ) {
+          await io15(t);
+        }
         await io15(t);
         expect(f.c.policy.mode, LocalMode.client);
         expect(find.text('Режим: Клиент'), findsOneWidget);
@@ -66,6 +73,13 @@ void main() {
         expect(find.text('Режим: Клиент'), findsOneWidget);
         await t.ensureVisible(find.text('Автор'));
         await t.tap(find.text('Автор'));
+        for (
+          var wait = 0;
+          wait < 40 && f.c.policy.mode != LocalMode.author;
+          wait++
+        ) {
+          await io15(t);
+        }
         await io15(t);
         expect(f.c.policy.mode, LocalMode.author);
         Navigator.of(t.element(find.text('Ваше пространство'))).pop();

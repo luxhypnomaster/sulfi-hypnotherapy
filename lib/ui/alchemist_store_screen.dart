@@ -293,7 +293,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
               DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
               DropdownMenuItem(value: 'track', child: Text('Треки')),
               DropdownMenuItem(value: 'module', child: Text('Модули')),
-              DropdownMenuItem(value: 'template', child: Text('Шаблоны')),
+              DropdownMenuItem(value: 'template', child: Text('Программы')),
               DropdownMenuItem(value: 'session', child: Text('Сессии')),
             ],
             onChanged: loading

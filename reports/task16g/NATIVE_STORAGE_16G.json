@@ -1,0 +1,41 @@
+{
+  "healthyCreateAndReopen": "PASS",
+  "guard_rw": {
+    "before": {
+      "": "e68929e954634508a91a82f9e010f19c4660a041dac07bea688187a482c20bfd",
+      "-wal": "ABSENT",
+      "-shm": "ABSENT",
+      "-journal": "ABSENT"
+    },
+    "after": {
+      "": "e68929e954634508a91a82f9e010f19c4660a041dac07bea688187a482c20bfd",
+      "-wal": "ABSENT",
+      "-shm": "ABSENT",
+      "-journal": "ABSENT"
+    },
+    "exception": "SQLiteDatabaseCorruptException",
+    "originalBytesUnchanged": true
+  },
+  "guard_ro": {
+    "before": {
+      "": "e68929e954634508a91a82f9e010f19c4660a041dac07bea688187a482c20bfd",
+      "-wal": "ABSENT",
+      "-shm": "ABSENT",
+      "-journal": "ABSENT"
+    },
+    "after": {
+      "": "e68929e954634508a91a82f9e010f19c4660a041dac07bea688187a482c20bfd",
+      "-wal": "ABSENT",
+      "-shm": "ABSENT",
+      "-journal": "ABSENT"
+    },
+    "exception": "SQLiteDatabaseCorruptException",
+    "originalBytesUnchanged": true
+  },
+  "productionSource": "third_party/sqflite_android/.../StorageSafety.java",
+  "ownerData": "NONE",
+  "run": 43347643988,
+  "source": "1391b0334e2ffcca47d05e5ec94c5727a9234666",
+  "jobDurationSeconds": 148,
+  "productionSHA256": "62f94d95b95a20afe7998728616b433138684a9e5298f8aaaaf40e254a5d40f9"
+}

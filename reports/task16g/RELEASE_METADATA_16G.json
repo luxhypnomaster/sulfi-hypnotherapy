@@ -1,0 +1,44 @@
+{
+  "id": 444069048,
+  "draft": true,
+  "tag_name": "task16g-qa-pair-26",
+  "target_commitish": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+  "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-6cd4718e5ea711c5c181",
+  "assets": [
+    {
+      "id": 743160433,
+      "name": "APK_PAIR_16G.json",
+      "size": 780,
+      "digest": "sha256:415d0446845748a704ad2a279e165a981b6d460e667a5f0e393794f456182e79",
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/APK_PAIR_16G.json"
+    },
+    {
+      "id": 743160430,
+      "name": "client26.apk",
+      "size": 193782061,
+      "digest": "sha256:0e9dee30d62b0a05097652d159ea0c035b4c1bad424e662516ede822dbe64a0c",
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/client26.apk"
+    },
+    {
+      "id": 743152377,
+      "name": "FAULT_APP_16G.json",
+      "size": 2242,
+      "digest": "sha256:f71c334200f0d79769b22f1c3f8b2dba25b798491f8e2392400ccaa706204c28",
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/FAULT_APP_16G.json"
+    },
+    {
+      "id": 743160429,
+      "name": "master26.apk",
+      "size": 193782021,
+      "digest": "sha256:0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a",
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/master26.apk"
+    },
+    {
+      "id": 743152365,
+      "name": "NATIVE_UI_UPGRADE_16G.json",
+      "size": 196162,
+      "digest": "sha256:915d2d61a8f3bc3cfbd348181b6fa3264e617d36a78afebe4fc7f4a1756ba9f6",
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/NATIVE_UI_UPGRADE_16G.json"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+00:00 +0: loading /dev/shm/sulfi16v/test/task16g_storage_test.dart
+00:00 +0: genuine fresh install succeeds, later missing DB with marker fails closed
+00:00 +1: missing DB with inherited audio does not create empty library or clean media
+00:00 +2: missing DB with WAL/journal evidence never creates or removes files
+00:00 +3: corrupt header leaves original DB, sidecars and private media byte-identical
+00:00 +4: zero byte DB is not treated as first install
+00:00 +5: valid SQLite with missing required table fails before RW bootstrap
+00:00 +6: invalid JSON graph is not silently filtered into empty UI
+00:00 +7: unknown version never creates new tables or rewrites old data
+00:00 +8: live WAL rows read from derivative; source SQLite/WAL/SHM bytes untouched
+00:00 +9: healthy reopen retains same-title distinct IDs, graph, drafts and schema9
+00:00 +10: interrupted hot rollback journal fails closed without source writes
+00:00 +11: All tests passed!

@@ -1,0 +1,32 @@
+[
+  {
+    "file": "NATIVE_UI_UPGRADE_16G.json",
+    "bytes": 196162,
+    "sha256": "915d2d61a8f3bc3cfbd348181b6fa3264e617d36a78afebe4fc7f4a1756ba9f6",
+    "verified": true
+  },
+  {
+    "file": "25-before-upgrade.png",
+    "bytes": 845876,
+    "sha256": "fc5312af0e04e9003745298f06cc2991c8e882cbd2bf54ab38405d9b2fdbb6d9",
+    "verified": true
+  },
+  {
+    "file": "26-client-programs.png",
+    "bytes": 1165993,
+    "sha256": "8affc572f56c32e0eedaf9172a0c2cdc4c3f4d7e54dda93fe4aad153510b6d99",
+    "verified": true
+  },
+  {
+    "file": "26-library.png",
+    "bytes": 58787,
+    "sha256": "61299a6c118f6cb555729041befc925b29b70615b5afa1c8c7f55b33bfa25728",
+    "verified": true
+  },
+  {
+    "file": "26-modules.png",
+    "bytes": 911423,
+    "sha256": "d2849e14bef8352fcf10d278d58b0a3d01544ff4124c6ded2461a56d5d5f1c23",
+    "verified": true
+  }
+]

@@ -241,7 +241,7 @@ void main() {
   });
 
   test(
-    'startup removes abandoned imports but preserves committed audio',
+    'startup retains abandoned bytes and committed audio without automatic GC',
     () async {
       final saved = (await service.prepareImport())!;
       await service.save(saved);
@@ -251,8 +251,8 @@ void main() {
       ).writeAsBytes([0]);
       await service.initialize();
       expect(await service.fileFor(saved).exists(), isTrue);
-      expect(await service.fileFor(abandoned).exists(), isFalse);
-      expect(await partial.exists(), isFalse);
+      expect(await service.fileFor(abandoned).exists(), isTrue);
+      expect(await partial.exists(), isTrue);
       expect((await repository.list()).single.id, saved.id);
     },
   );

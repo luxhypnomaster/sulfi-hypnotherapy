@@ -1,0 +1,11 @@
+{
+  "upstream2_4_5ChangedFiles": [
+    "android/src/main/java/com/tekartik/sqflite/Database.java"
+  ],
+  "schemaVersion": 9,
+  "persistedTemplateWireAndIDs": "UNCHANGED",
+  "appAndroidSigningAndPackageSource": "UNCHANGED",
+  "serverAndOldDiarySource": "UNCHANGED",
+  "productionHandlerSHA256": "62f94d95b95a20afe7998728616b433138684a9e5298f8aaaaf40e254a5d40f9",
+  "realGoogleUsers": "NOT_RUN"
+}

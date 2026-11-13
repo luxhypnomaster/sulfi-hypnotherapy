@@ -136,7 +136,7 @@ class _BackupScreenState extends State<BackupScreen> {
   static const _labels = {
     'audio_assets': 'Аудиозаписи',
     'module_definitions': 'Модули',
-    'session_templates': 'Шаблоны',
+    'session_templates': 'Программы',
     'current_draft': 'Текущий план',
     'session_runs': 'История',
     'run_events': 'События',

@@ -172,6 +172,70 @@ void main() {
         await LocalCatalogSource.installedRevision(client.c.capsules!, root),
         true,
       );
+      // 16G: publish the existing template/program with exact module dependencies,
+      // then edit only its diary text and install into the same CLIENT sandbox.
+      final phaseId = await f.c.createPhase('induction');
+      await f.c.addModule(phaseId, module);
+      final program = await f.c.saveAsTemplate(
+        'Программа Элмана',
+        'Три трека и паузы',
+      );
+      final programRoot = (await LocalCatalogSource.currentIndex(f.c.capsules!))
+          .singleWhere((r) => r.key.content.id == program.id);
+      final programDraft = await catalog.prepare(programRoot);
+      programDraft['card']['shortAnnotation'] = 'Проверенная программа';
+      programDraft['card']['visibility'] = 'public';
+      final beforeProgram = await remote.call('test.stats', {});
+      await catalog.publish(programDraft);
+      expect(programDraft['status'], 'published');
+      expect(programDraft['publishedRevision'], isNotNull);
+      expect(
+        (await remote.call('test.stats', {}))['uploaded'],
+        beforeProgram['uploaded'],
+        reason: 'Program reuses committed module audio and uploads no duplicate blobs',
+      );
+      final announcement = await prepareCatalogAnnouncement(
+        catalog,
+        programDraft,
+      );
+      final programPost = await diaryApi.publish(
+        announcement,
+        session,
+        published: true,
+      );
+      final beforeTextEdit = await remote.call('test.stats', {});
+      final editedPost = await diaryApi.publish(
+        programPost.copyWith(title: 'Обновлённый текст программы'),
+        session,
+        published: true,
+      );
+      expect(editedPost.contentLinks.single.key.token, programRoot.key.token);
+      expect(
+        (await remote.call('test.stats', {}))['uploaded'],
+        beforeTextEdit['uploaded'],
+      );
+      final programReference = await reader.call('catalog.resolveReference', {
+        'logicalId': programRoot.key.content.id,
+        'revisionId': programRoot.key.revision,
+        'digest': programRoot.key.digest,
+      });
+      await installer.install(programReference);
+      await client.c.reload();
+      expect(client.c.assets, hasLength(3));
+      expect(client.c.templates.single.id, program.id);
+      expect(
+        client.c.templates.single.plan.allSteps.where(
+          (s) => s.audioAssetId != null,
+        ),
+        hasLength(3),
+      );
+      expect(
+        await LocalCatalogSource.installedRevision(
+          client.c.capsules!,
+          programRoot,
+        ),
+        true,
+      );
     } finally {
       c?.dispose();
       diary?.dispose();

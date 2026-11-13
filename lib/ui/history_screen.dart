@@ -152,7 +152,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           await confirmAction(
             context,
             'Удалить запись истории?',
-            'Аудиофайлы и шаблоны останутся на устройстве.',
+            'Аудиофайлы и программы останутся на устройстве.',
             confirm: 'Удалить',
           )) {
         final attachments =
@@ -221,7 +221,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ),
                           const PopupMenuItem(
                             value: 'template',
-                            child: Text('Создать шаблон из сессии'),
+                            child: Text('Создать программу из сессии'),
                           ),
                           const PopupMenuItem(
                             value: 'rename',

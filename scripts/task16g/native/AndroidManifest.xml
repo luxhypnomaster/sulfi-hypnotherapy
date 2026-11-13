@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.alchemist.storageprobe">
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="35" />
+    <application android:label="Disposable storage guard QA" android:debuggable="true" />
+    <instrumentation android:name="org.alchemist.storageprobe.GuardProbe" android:targetPackage="org.alchemist.storageprobe" />
+</manifest>

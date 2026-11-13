@@ -37,7 +37,7 @@ Future<void> saveModuleCopyDialog(
   if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Модуль сохранён в «Шаблоны и модули» → «Модули»'),
+        content: Text('Модуль сохранён в «Программы и модули» → «Модули»'),
       ),
     );
   }

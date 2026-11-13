@@ -1,0 +1,70 @@
+{
+  "allVerified": true,
+  "checkedAtUTC": "2026-11-13T10:10:35.517499+00:00",
+  "folder": "1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z",
+  "files": [
+    {
+      "file": "CHANGES_16G.md",
+      "id": "1SARWL-F50qUdwM4aWYqIcim89L8b8LxV",
+      "bytes": 4736,
+      "sha256": "d35fbadb7736642bd0249671a35ddec5db845e74ac77d5a884e05711511ac3e6",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "OWNER_PHONE_QA_16G.md",
+      "id": "1AuXMbU1k3B5PHmsEVp0iAGw5YdU1Bc45",
+      "bytes": 4750,
+      "sha256": "497d23d6086a25d28c55526415d59a938d342974113605b25d569a1fa01df582",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "ISSUES_16G.md",
+      "id": "1e5HnBSIQcCP7R_X2vx2UDcqC_IIS55Jv",
+      "bytes": 4836,
+      "sha256": "c699075554eb140a568a4d0e0c28174d7ddf42b360799ff1a92849b730fedcba",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "RESULT_16G.md",
+      "id": "1sv19PxBR_vg2XmVeJqev0pl92V6HegWB",
+      "bytes": 12107,
+      "sha256": "d5f42ebfa63a27d059913f2485d5ed7689169c92d157f0f7dc152f8774805314",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "TESTS_16G.md",
+      "id": "1kNeZKGZp1w8f1NnSBu8I8Q0K1U8g4DVr",
+      "bytes": 10112,
+      "sha256": "2d79083845dca592a575a48fa45f24dcebc1c704a7d192721506c213fd57dc4b",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "ACCEPTANCE_16G.csv",
+      "id": "1VoiDyRDmQE9DqKHnji2ohM7K7VWN8Si9",
+      "bytes": 9813,
+      "sha256": "1d6efa85fe2e5fe5d010cf8ff9fc4556dc91752bc6af3459efcfc897694df25e",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    },
+    {
+      "file": "CODEX_EFFICIENCY_16G.md",
+      "id": "1x5brFYRzYNE_Qrfwm5_73dcv22MlfByw",
+      "bytes": 14960,
+      "sha256": "b4e9605bdcf671d1dc5639a5d3d8580b820ef7dc3dbc6f5f950bcec53807159b",
+      "parentVerified": true,
+      "rawBytesVerified": true
+    }
+  ],
+  "oldReportsChanged": false,
+  "APKsUploadedToDrive": false,
+  "finalMatrixCounts": {
+    "PASS": 22,
+    "PARTIAL": 11,
+    "BLOCKED": 0
+  }
+}

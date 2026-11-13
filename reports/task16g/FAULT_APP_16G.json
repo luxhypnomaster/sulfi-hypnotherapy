@@ -1,0 +1,44 @@
+{
+  "kind": "DISPOSABLE_EMULATOR_APP26_FAULT_ONLY",
+  "ownerData": "NONE",
+  "googleIdentities": "NONE",
+  "primaryDatasetCreatedBy": "APK25_UI_THEN_NORMAL_UPDATE26",
+  "cases": [
+    {
+      "case": "actual_app_corrupt_boot",
+      "status": "PASS",
+      "originalSourceAndMediaUnchanged": true,
+      "input": {
+        "files/library.sqlite": "7d778367771cc1a87d454396f417ccce1f998b7b724470812ad827ce41fc9cd8",
+        "files/library.sqlite-journal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "files/audio/asset_f838f5ec025728a5120ce47e2d932141.wav": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+        "files/audio/asset_e71234f2e5a9264834cfd1d9bb8e1254.wav": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+        "files/audio/asset_e80e945d02d0022a93efdb79ff75e951.wav": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+        "files/library.sqlite.storage-ready": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+      },
+      "after": {
+        "files/library.sqlite": "7d778367771cc1a87d454396f417ccce1f998b7b724470812ad827ce41fc9cd8",
+        "files/library.sqlite-journal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "files/audio/asset_f838f5ec025728a5120ce47e2d932141.wav": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+        "files/audio/asset_e71234f2e5a9264834cfd1d9bb8e1254.wav": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+        "files/audio/asset_e80e945d02d0022a93efdb79ff75e951.wav": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+        "files/library.sqlite.storage-ready": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+      },
+      "errorUI": true
+    },
+    {
+      "case": "actual_app_missing_db_with_marker_and_media",
+      "status": "PASS",
+      "sourceBackupAndMediaUnchanged": true,
+      "emptyLibraryNotCreated": true,
+      "errorUI": true
+    },
+    {
+      "case": "actual_app_missing_db_legacy_media_without_marker",
+      "status": "PASS",
+      "sourceBackupAndMediaUnchanged": true,
+      "emptyLibraryNotCreated": true,
+      "errorUI": true
+    }
+  ]
+}
