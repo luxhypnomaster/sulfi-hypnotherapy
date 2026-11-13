@@ -1,0 +1,12 @@
+diff --git a/test/task17_ui_test.dart b/test/task17_ui_test.dart
+index 680f5f1..0af1c65 100644
+--- a/test/task17_ui_test.dart
++++ b/test/task17_ui_test.dart
+@@ -169,6 +169,7 @@ void main() {
+           f,
+           DiaryReader(entry: entry, preview: true, publicationReview: true),
+           size: const Size(360, 640),
++          scale: 2,
+         );
+         FilledButton confirm() => t.widget<FilledButton>(
+           find.byKey(const Key('diary-confirm-publication')),
