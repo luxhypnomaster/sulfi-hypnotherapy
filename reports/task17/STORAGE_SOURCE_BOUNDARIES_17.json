@@ -1,0 +1,14 @@
+{
+  "comparedTo": "25ecdf984a831a288bf85e14119a5e054144ccf9",
+  "unchanged": {
+    "lib/data/app_database.dart": true,
+    "lib/services/library_service.dart": true,
+    "lib/services/capsule_service.dart": true,
+    "third_party/sqflite_android": true,
+    "android/app/build.gradle.kts": true,
+    "android/app/src/main/kotlin/ru/sulfi/sulfi_hypnotherapy/MainActivity.kt": true
+  },
+  "schema": 9,
+  "ownerDeviceTouched": false,
+  "native27Tests": "PENDING"
+}

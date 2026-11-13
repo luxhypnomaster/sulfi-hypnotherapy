@@ -50,9 +50,13 @@ Future<void> showSpaceSheet(
             builder: (context, _) => Column(
               children: [
                 Text(
-                  library.policy.clientEdition
-                      ? 'Редакция: CLIENT'
-                      : 'Редакция: MASTER · локальные материалы',
+                  library.policy.serverIdentityRequired
+                      ? (library.policy.clientEdition
+                            ? 'Редакция: CLIENT'
+                            : 'Редакция: MASTER · локальные материалы')
+                      : (library.policy.isAuthor
+                            ? 'Режим: Автор'
+                            : 'Режим: Клиент'),
                 ),
                 if (!library.policy.clientEdition &&
                     !library.policy.serverIdentityRequired)

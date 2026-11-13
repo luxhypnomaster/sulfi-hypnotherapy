@@ -22,5 +22,9 @@ for edition,suffix in [('master',''),('client','.clienttest')]:
 
  out.append({'edition':edition,'package':package,'versionCode':27,'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'certificateSHA256':'0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6'})
 value={'source':os.environ['GITHUB_SHA'],'pair':out,'ownerQA':'NOT_RUN','liveGAS':'EXISTING6_NO_DEPLOY'}
-(root/'APK_PAIR_17.json').write_text(json.dumps(value,indent=2)+'\n');print('APK_PAIR_17='+json.dumps(value))
+receipt=root/'APK_PAIR_17.json'
+if receipt.exists():
+ assert json.loads(receipt.read_text())==value, 'CACHE_PROVENANCE_OR_BYTES_MISMATCH'
+else: receipt.write_text(json.dumps(value,indent=2)+'\n')
+print('APK_PAIR_17='+json.dumps(value))
 PY

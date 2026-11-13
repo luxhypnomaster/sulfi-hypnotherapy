@@ -220,7 +220,7 @@ class AlchemistDiaryApi extends DiaryApi {
     String? expectedSubject,
     String? expectedScope,
   }) async {
-    final generation = _accountGeneration;
+    var generation = _accountGeneration;
     final identity = await AlchemistApi(
       base,
       connection: connection,
@@ -266,6 +266,8 @@ class AlchemistDiaryApi extends DiaryApi {
     }
     if (_subject != null && _subject != identity['subject']) {
       _accountGeneration++;
+      generation =
+          _accountGeneration; // Our verified switch, not a later logout.
     }
     AlchemistDiagnostics.instance.stage(
       role == 'MASTER' ? 'SERVER_WHOAMI_MASTER' : 'SERVER_WHOAMI_CLIENT',
