@@ -288,10 +288,15 @@ try:
   adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file://'+path,check=False)
  time.sleep(2)
  if os.environ.get('P0_QA_SCOPE')=='recording':case('ui_native_recording24',record_audio)
- for i in range(1,4):case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
+ for i in range(1,4):
+  case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
+  assert CASES[-1]['status']=='PASS','UI_IMPORT_SETUP_FAILED_STOP_WITHOUT_REPEATING'
  case('ui_module_elman',lambda:module(ELMAN_TITLE,['UI same title','UI same title','UI third track']))
+ assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
  case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
+ assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
  case('ui_template',create_template)
+ assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
  case('ui_history',create_history)
  assert not any(c['status']!='PASS' for c in CASES),'UI_BASELINE_SETUP_BLOCKED'
  # Capsule roundtrip is covered by controlled Dart tests; no redundant SAF save flow.
@@ -311,7 +316,7 @@ finally:
   for i,chunk in enumerate(chunks):print('NATIVE16G_CHUNK='+name+':'+str(i)+':'+str(len(chunks))+':'+chunk,flush=True)
  emit('NATIVE_UI_UPGRADE_16G.json',(OUT/'NATIVE_UI_UPGRADE_16G.json').read_bytes())
  for p in sorted(OUT.glob('*.png')):
-  if p.name in ['25-library.png','25-modules.png','24-before-upgrade.png'] or p.name.startswith('failure-'):
+  if p.name in ['26-library.png','26-modules.png','25-before-upgrade.png','26-client-programs.png'] or p.name.startswith('failure-'):
    emit(p.name,p.read_bytes())
  for p in sorted(OUT.glob('failure-*.xml')):emit(p.name,p.read_bytes())
  if any(c['status']!='PASS' for c in CASES if c['case']!='ui_diary_auth_boundary'):

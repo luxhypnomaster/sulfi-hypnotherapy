@@ -13,3 +13,9 @@
 ## NOT_RUN / не заменять fixtures
 
 Настоящие Google MASTER+CLIENT consent/restore/refresh, production Drive publication/download, физическое Wi-Fi/mobile переключение, реальный микрофон, слышимость всех3треков человеком, два телефона и owner future-data25→26 приёмка. Старые тестовые объекты не восстанавливаются по решению владельца13.11. Root cause прежнего телефона UNKNOWN не переписывается.
+
+## Финальная полная регрессия — реально PASS
+
+Verify job CI43350711471 source11909895da4f2967b77f12a8b8da98ff50b370d5: **448FlutterPASS/0fail/1opt-inliveSKIP,3CLIENT,46Alchemist+24legacyNode**, analyze/format/schema checksPASS. Полный workflow тогда FAILED только на поздней установке Emulator SDK (No space left), уже после успешной сборки/cert проверки пары; это НЕ общий CI PASS. Raw archive logs прочитаны, REGRESSION_16G.json и REGRESSION_CI_16G.json фиксируют границы. Built pair193782021/193782061bytes NOT_ISSUED, private draft не создавался.
+
+Новый candidate CI43354403069 source78d6b5cacbc5c985b260bb4b986f59b4094f1591 проверил actual GitHub verify-job success и равенство7Gittrees приложения/Android/vendor/test/server/pubspec с1190989; полные тесты не повторялись. NativeStorage callbackSHA тот же, что G1 native proof433476. Исправления после1190989 касались CI resource/evidence gating и отчётов. Результат native25→26 и новой pair readback будет добавлен отдельно.

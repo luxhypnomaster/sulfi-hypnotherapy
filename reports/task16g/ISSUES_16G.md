@@ -8,3 +8,5 @@
 6. Native recording/emulator failures16V не повторяются без новой гипотезы; никаких утверждений о физическом микрофоне. G4 новый UI harness объяснён фактом launcher из старого failureXML и использует resume/explicit Home.
 7. Private GitHub draft доступен только авторизованным владельцам/участникам репозитория; открытый релиз/исходники/Drive ACL не меняются. Если safe pair будет выдана, владелец может передать уже скачанную APK через Quick Share. На Google Диск APK не загружаются.
 8. До финального controlled G4 gate кандидат не выдаётся. При критическом data/security или невалидном populated upgrade — BLOCKED, даже если build подписан. Фактический окончательный статус в RESULT_16G.
+
+CI ограничения: первые APK26 действительно были подписаны, но не выданы из-за NoSpaceLeft при установке Emulator SDK (до boot/UI). Resource fix освобождает только disposable build/cache/NDK и проверяет≥8GiB, не удаляет старые Actions artifacts/релизы/пользовательские файлы. Второй ранний CI evidence gate требовал actions:read; узкое read-only право добавлено, Google ACL не менялись. Все попытки сохранены в CODEX_EFFICIENCY; проблема не выдана за Android data-loss reproduction.

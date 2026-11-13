@@ -467,6 +467,12 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Reclaim disposable build intermediates before emulator SDK install
         run: bash scripts/task16g/free_runner_disk.sh
+      - name: Quarantine built binaries internally for retry without rebuild
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/task16g-apks
+          key: task16g-quarantine-built-pair-${{ github.sha }}
       - name: Actual UI-created immutable25→candidate26 and companion smoke
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -477,6 +483,9 @@ jobs:
           cores: 2
           ram-size: 1536M
           disable-animations: true
+          disk-size: 3G
+          emulator-boot-timeout: 180
+          pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
           script: python3 scripts/task16g/native_upgrade.py
       - name: Private draft pair only after all controlled gates
