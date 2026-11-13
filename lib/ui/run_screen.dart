@@ -153,7 +153,7 @@ class _RunScreenState extends State<RunScreen> {
         title: const Text('Сессия'),
         content: SingleChildScrollView(
           child: Text(
-            '№${e.run!.displayNumber} · ${e.run!.status.label}\nШаблон: ${e.run!.snapshot.baseTemplateName ?? 'Без шаблона'}\nФаза: ${entry?.phase.title ?? '—'}\nМодуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}\nЭлемент: ${e.step?.title ?? '—'}\n${e.step?.durationMs == null ? 'Длительность не задана: пауза завершается вручную.\n' : ''}План при старте: ${formatDuration(e.run!.snapshot.plan.totalMs)}\nВыполнено: ${e.run!.completedStepIds.length} · пропущено: ${e.run!.skippedStepIds.length}',
+            '№${e.run!.displayNumber} · ${e.run!.status.label}\nПрограмма: ${e.run!.snapshot.baseTemplateName ?? 'Без программы'}\nФаза: ${entry?.phase.title ?? '—'}\nМодуль: ${entry?.moduleId == null ? 'Отдельный элемент' : entry!.child.title}\nЭлемент: ${e.step?.title ?? '—'}\n${e.step?.durationMs == null ? 'Длительность не задана: пауза завершается вручную.\n' : ''}План при старте: ${formatDuration(e.run!.snapshot.plan.totalMs)}\nВыполнено: ${e.run!.completedStepIds.length} · пропущено: ${e.run!.skippedStepIds.length}',
           ),
         ),
         actions: [
@@ -942,7 +942,7 @@ class _RunScreenState extends State<RunScreen> {
     final entries = e.timeline.entries;
     final fields = [
       (
-        'Шаблон: ${e.run!.snapshot.baseTemplateName ?? 'Без шаблона'}',
+        'Программа: ${e.run!.snapshot.baseTemplateName ?? 'Без программы'}',
         _duration(entries),
       ),
       (

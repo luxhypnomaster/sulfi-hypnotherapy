@@ -93,7 +93,7 @@ Future<ContentLink?> pickPublishedDiaryContent(BuildContext context) async {
           const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              'Сначала опубликуйте трек, модуль или шаблон в каталоге.',
+              'Сначала опубликуйте трек, модуль или программу в каталоге.',
             ),
           ),
         for (final card in items)

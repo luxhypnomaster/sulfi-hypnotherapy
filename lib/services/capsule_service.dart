@@ -192,7 +192,7 @@ class CapsuleService {
           final row = (records['session_templates'] as List)
               .where((r) => r['id'] == templateId)
               .firstOrNull;
-          if (row == null) throw const FormatException('Шаблон не найден');
+          if (row == null) throw const FormatException('Программа не найдена');
           originalTitle = SessionTemplate.fromMap(jsonDecode(row['payload']))
               .name;
           selectedTemplates.add(Map<String, dynamic>.from(row));
@@ -625,7 +625,7 @@ class CapsuleService {
             );
             _validatePlan(template.plan);
             if (template.id != row['id']) {
-              throw const FormatException('Несогласованный ID шаблона');
+              throw const FormatException('Несогласованный ID программы');
             }
           }
           if (table == 'current_draft') {

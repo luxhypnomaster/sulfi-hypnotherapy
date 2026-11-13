@@ -36,7 +36,7 @@ Future<SessionTemplate?> saveTemplateDialog(
 }) async {
   final result = await askDetails(
     context,
-    title: 'Сохранить как шаблон',
+    title: 'Сохранить как программу',
     name: initialName ?? '',
     hint: !(plan ?? c.draft.plan).hasExitAudio
         ? 'Аудиовыход не назначен. При завершении будет доступна текстовая ориентация.'
@@ -84,7 +84,7 @@ Future<bool> loadTemplateSafely(
       builder: (context) => AlertDialog(
         title: const Text('Текущая конфигурация изменена'),
         content: const Text(
-          'Сохранить её как отдельный шаблон перед переключением? Тема и заметки останутся.',
+          'Сохранить её как отдельную программу перед переключением? Тема и заметки останутся.',
         ),
         actions: [
           TextButton(
@@ -97,7 +97,7 @@ Future<bool> loadTemplateSafely(
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, 'save'),
-            child: const Text('Сохранить как шаблон'),
+            child: const Text('Сохранить как программу'),
           ),
         ],
       ),

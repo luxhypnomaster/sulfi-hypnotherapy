@@ -7,7 +7,7 @@ const diaryCategories = <String, String>{
   'announcements': 'Объявления',
   'appointment': 'Запись на приём',
   'critical_updates': 'Критические обновления приложения',
-  'new_content': 'Новые модули и шаблоны',
+  'new_content': 'Новые модули и программы',
 };
 
 /// Optional local/future-contract metadata. Unknown keys stay in DiaryEntry.extra.

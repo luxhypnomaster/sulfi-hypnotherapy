@@ -336,7 +336,7 @@ void main() {
         }
         expect(find.text('Установлено'), findsOneWidget);
         expect(
-          find.textContaining('Шаблоны и модули → Модули'),
+          find.textContaining('Программы и модули → Модули'),
           findsOneWidget,
         );
         expect(b.c.assets, hasLength(3));

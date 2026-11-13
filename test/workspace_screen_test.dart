@@ -148,7 +148,7 @@ void main() {
       for (final label in [
         'НАЧАТЬ ТРАНСФОРМАЦИЮ',
         'Библиотека',
-        'Шаблоны\nи модули',
+        'Программы\nи модули',
         'История',
       ]) {
         expect(find.text(label).hitTestable(), findsOneWidget);

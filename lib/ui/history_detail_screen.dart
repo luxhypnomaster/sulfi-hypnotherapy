@@ -80,7 +80,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
         !await confirmAction(
           context,
           'Открыть архив в редакторе?',
-          'При применении он заменит текущую конфигурацию. История и шаблоны останутся прежними.',
+          'При применении он заменит текущую конфигурацию. История и программы останутся прежними.',
           confirm: 'Открыть',
         )) {
       return;
@@ -223,7 +223,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                 if (r.snapshot.baseTemplateId != null ||
                     r.snapshot.baseTemplateName != null)
                   Text(
-                    'Описание исходного шаблона: ${r.snapshot.baseTemplateDescription == null
+                    'Описание исходной программы: ${r.snapshot.baseTemplateDescription == null
                         ? 'Нет данных'
                         : r.snapshot.baseTemplateDescription!.isEmpty
                         ? 'Не задано'

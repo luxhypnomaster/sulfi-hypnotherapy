@@ -19,14 +19,14 @@ class TemplatesModulesScreen extends StatelessWidget {
   Widget build(BuildContext context) => DefaultTabController(
     length: 2,
     child: LeatherScaffold(
-      title: 'Шаблоны и модули',
+      title: 'Программы и модули',
       child: Column(
         children: [
           const TabBar(
             indicatorColor: neonLime,
             labelColor: neonLime,
             tabs: [
-              Tab(text: 'Шаблоны'),
+              Tab(text: 'Программы'),
               Tab(text: 'Модули'),
             ],
           ),

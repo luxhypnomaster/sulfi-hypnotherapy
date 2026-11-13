@@ -313,7 +313,7 @@ void main() {
       }
       expect(saves, 2);
       await show(t, TemplatesScreen(controller: c, player: player));
-      await t.tap(find.byTooltip('Действия шаблона').first);
+      await t.tap(find.byTooltip('Действия программы').first);
       await io(t);
       await t.tap(find.text('Экспортировать на устройство'));
       await io(t);
@@ -422,7 +422,7 @@ void main() {
       await screenshot(t, 'task14-diary-installed-link');
       await t.tap(find.text('Открыть'));
       await io(t);
-      expect(find.text('ШАБЛОНЫ'), findsOneWidget);
+      expect(find.text('ПРОГРАММЫ'), findsOneWidget);
       await t.pumpWidget(const SizedBox());
       await io(t);
       final track = local.revisions.firstWhere(

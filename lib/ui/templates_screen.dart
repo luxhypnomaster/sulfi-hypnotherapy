@@ -86,8 +86,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
   Future<void> _create() => _run(() async {
     final result = await askDetails(
       context,
-      title: 'Создать шаблон',
-      hint: 'Создаётся пустой шаблон. Затем вы сможете собрать его рабочую копию и явно обновить исходный шаблон.',
+      title: 'Создать программу',
+      hint: 'Создаётся пустая программа. Затем вы сможете собрать её рабочую копию и явно обновить исходную программу.',
     );
     if (result == null) return;
     final t = await c.saveAsTemplate(
@@ -119,7 +119,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     if (['rename', 'delete'].contains(action) &&
         !c.policy.canEditMaterial('template', t.id, t.origin)) {
       throw StateError(
-        'Общий шаблон изменяет только автор. Сохраните личный вариант.',
+        'Общую программу изменяет только автор. Сохраните личный вариант.',
       );
     }
     if (action == 'rename') {
@@ -174,7 +174,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       if (!mounted) return;
       if (!await confirmAction(
         context,
-        'Удалить шаблон?',
+        'Удалить программу?',
         '«${t.name}» будет удалён. Текущая конфигурация, история и аудиофайлы сохранятся.',
         confirm: 'Удалить',
       )) {
@@ -224,7 +224,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
           TextField(
             decoration: InputDecoration(
               isDense: true,
-              labelText: 'Найти шаблон',
+              labelText: 'Найти программу',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: DropdownButton<String>(
                 value: origin,
@@ -245,7 +245,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(24),
                       child: Text(
-                        'Шаблонов пока нет. Создайте свой или сохраните текущую конфигурацию.',
+                        'Программ пока нет. Создайте свою или сохраните текущую конфигурацию.',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -279,7 +279,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                         ),
                         onTap: _busy ? null : () => _select(t),
                         trailing: PopupMenuButton<String>(
-                          tooltip: 'Действия шаблона',
+                          tooltip: 'Действия программы',
                           enabled: !_busy,
                           onSelected: (v) {
                             if (v == 'edit') {
@@ -336,7 +336,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       return widget.embedded
           ? content
           : LeatherScaffold(
-              title: widget.selecting ? 'Выбрать шаблон' : 'Шаблоны',
+              title: widget.selecting ? 'Выбрать программу' : 'Программы',
               child: content,
             );
     },

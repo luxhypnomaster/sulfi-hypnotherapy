@@ -1,3 +1,12 @@
+# №16-Г — текущий приоритет
+
+- [x] G0:7файлов/manifest/33критерия, PR45/46 ancestry, отдельная ветка.
+- [x] G1 controlled: native no-delete handler, derivative-copy preflight, startup GC отключён;11storage negative/WAL/hot-journal cases; same-owner scoped alias сохранён. Полный native upgrade ещё G4.
+- [x] G2 controlled: existing Google singleflight/role/transport preserved; program/module/diary text-only/CLIENT graph regression добавлен; real Google/Drive/phone NOT_RUN.
+- [x] G3: пользовательские Программы, сохранены template IDs/table/wire/capsule;3new+23reused tests PASS.
+- [ ] G4: full exact-source regressions, controlled native25→candidate and signed pair only if safe; owner QA отдельно.
+- [ ] K-034/K-036 FUTURE ONLY: «Курс → Программа → Фаза → Модуль → Трек/Пауза». Ни курса/анкеты/подбора, ни новых экранов/редизайна в16G нет.
+
 # №16-В P0 data preservation
 
 - [x] Зафиксировать normal update owner fact, physical bytes UNKNOWN; STOP-SHIP.

@@ -1690,7 +1690,7 @@ void main() {
       await t.pumpAndSettle();
       expect(find.text('Создать модуль'), findsOneWidget);
       expect(find.text('Из текущей'), findsNothing);
-      await t.tap(find.text('Шаблоны'));
+      await t.tap(find.text('Программы'));
       await t.pumpAndSettle();
       await t.tap(find.text('Из текущей'));
       await t.pumpAndSettle();
@@ -1733,7 +1733,7 @@ void main() {
       expect(strip.top, greaterThanOrEqualTo(frame.top));
       expect(portrait.height, lessThanOrEqualTo(360 * 185 / 683));
       expect(find.text('Сессия №1'), findsOneWidget);
-      expect(find.text('Шаблоны\nи модули'), findsOneWidget);
+      expect(find.text('Программы\nи модули'), findsOneWidget);
       expect(find.text('Борьба с перееданием. Часть 3'), findsOneWidget);
       expect(
         t.widget<Text>(find.text('Борьба с перееданием. Часть 3')).maxLines,
@@ -1744,7 +1744,7 @@ void main() {
         lessThan(t.getTopLeft(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ')).dy),
       );
       await capture(t, 'home-approved-layout');
-      await t.tap(find.text('Шаблоны\nи модули'));
+      await t.tap(find.text('Программы\nи модули'));
       await t.pumpAndSettle();
       expect(find.byType(TemplatesModulesScreen), findsOneWidget);
       await t.pumpWidget(const SizedBox());
@@ -1772,7 +1772,7 @@ void main() {
         );
         expect(t.takeException(), isNull);
         expect(find.text('НАЧАТЬ ТРАНСФОРМАЦИЮ').hitTestable(), findsOneWidget);
-        expect(find.text('Шаблоны\nи модули').hitTestable(), findsOneWidget);
+        expect(find.text('Программы\nи модули').hitTestable(), findsOneWidget);
         await t.ensureVisible(find.byKey(const Key('active-template')));
         await t.pumpAndSettle();
         expect(find.text('Борьба с перееданием. Часть 3'), findsOneWidget);

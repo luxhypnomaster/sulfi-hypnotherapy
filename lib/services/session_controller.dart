@@ -621,7 +621,7 @@ class SessionController extends ChangeNotifier {
   }) async {
     await flush();
     if (name.trim().isEmpty) {
-      throw const LibraryException('Введите название шаблона.');
+      throw const LibraryException('Введите название программы.');
     }
     final now = DateTime.now().toUtc();
     final template = SessionTemplate(
@@ -666,11 +666,11 @@ class SessionController extends ChangeNotifier {
     await flush();
     final old = baseTemplate;
     if (old == null) {
-      throw const LibraryException('Исходный шаблон недоступен.');
+      throw const LibraryException('Исходная программа недоступна.');
     }
     if (!policy.canEditMaterial('template', old.id, old.origin)) {
       throw const LibraryException(
-        'Общий шаблон изменяет только автор. Сохраните как новый.',
+        'Общую программу изменяет только автор. Сохраните как новую.',
       );
     }
     final updated = SessionTemplate(
@@ -706,7 +706,7 @@ class SessionController extends ChangeNotifier {
     final t = baseTemplate;
     if (t == null) {
       throw const LibraryException(
-        'Исходный шаблон недоступен. Сохраните текущую конфигурацию как новый.',
+        'Исходная программа недоступна. Сохраните текущую конфигурацию как новую.',
       );
     }
     await loadTemplate(t);
