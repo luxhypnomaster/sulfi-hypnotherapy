@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task16g_delivery:
+        description: 'Upload exact cached pair to existing private draft after actual native safety PASS; no emulator/build/signing'
+        type: boolean
+        default: false
       task16g_fault:
         description: 'Native fail-closed app QA on cached signed26, no build or signing'
         type: boolean
@@ -56,7 +60,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -572,3 +576,34 @@ jobs:
           script: bash scripts/task16g/run_cached_qa.sh
       - name: Gate one private draft pair on healthy upgrade and actual app fault safety
         run: bash scripts/task16g/publish_cached_pair.sh
+
+  delivery16g:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task16g_delivery == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require actual previous native safety and unchanged complete tests
+        run: |
+          python3 scripts/task16g/reuse_verify.py
+          python3 scripts/task16g/verify_delivery.py
+      - uses: actions/cache/restore@v4
+        id: pair
+        with:
+          path: ${{ runner.temp }}/task16g-apks
+          key: task16g-quarantine-built-pair-9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c
+      - name: Require existing immutable cache
+        run: test '${{ steps.pair.outputs.cache-hit }}' = true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Upload unchanged verified APKs into existing private draft only
+        run: bash scripts/task16g/publish_existing.sh

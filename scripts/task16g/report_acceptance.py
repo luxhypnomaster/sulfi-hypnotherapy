@@ -13,6 +13,10 @@ cases = {x['case']: x for x in native.get('cases', [])}
 upgrade = all(cases.get(name, {}).get('status') == 'PASS' for name in (
     'before25_inventory', 'native_update25_to26', 'ui_after26', 'cold_restart26'))
 companion = cases.get('client26_program_labels', {}).get('status') == 'PASS'
+fault_path = reports / 'FAULT_APP_16G.json'
+fault = json.loads(fault_path.read_text()) if fault_path.exists() else {}
+fault_cases = fault.get('cases', [])
+fault_pass = len(fault_cases) == 3 and all(x.get('status') == 'PASS' for x in fault_cases)
 ci_path = reports / 'CI_16G.json'
 ci = json.loads(ci_path.read_text()) if ci_path.exists() else {}
 full = any(x['name'] == 'verify' and x['conclusion'] == 'success'
@@ -40,12 +44,12 @@ rows = {
     'G0-03': ('PASS', 'PASS', 'NOT_RUN', 'Owner13.11 scope/README; old objects recovery explicitly excluded; phone root cause UNKNOWN retained'),
     'G0-04': ('PASS', 'PASS', 'NOT_RUN', 'BASELINE_16G.md; existing identity/queue/catalog kept, narrow pinned SQLite callback patch'),
     'DAT-01': ('PASS', 'PASS', 'PASS', 'NATIVE_STORAGE_16G.json; exact production callback RW/RO corruption SHA unchanged, run43347643988'),
-    'DAT-02': ('PASS', 'PASS', 'PARTIAL', 'G1 negative11 + library retention; startup collectors removed; no actual owner corrupt boot claimed'),
+    'DAT-02': ('PASS', 'PASS', 'PASS' if fault_pass else 'PARTIAL', 'G1 negative11 + retained media; FAULT_APP_16G.json actual app corrupt/missing-db only if PASS; owner data never touched'),
     'DAT-03': ('PASS' if upgrade else 'BLOCKED', 'PASS', 'PASS' if upgrade else 'BLOCKED', 'NATIVE_UI_UPGRADE_16G.json; UI-created MASTER25→26 graph/history/current; physical owner NOT_RUN'),
     'DAT-04': ('PASS' if upgrade else 'PARTIAL', 'PASS', 'PASS' if upgrade else 'BLOCKED', 'Native before/after/cold SHA;3distinct wave bytes,2same display titles/distinct IDs; fixture rows not SQL seeded'),
     'DAT-05': ('PASS', 'PASS', 'NOT_RUN', 'PR46 legacy scope RED/GREEN retained; same server-verified subject domain test; real Google UI NOT_RUN'),
     'DAT-06': ('PASS', 'PASS', 'NOT_RUN', 'Legacy alias deny other subjects/CLIENT/guest; actual2Google users still owner QA'),
-    'DAT-07': ('PARTIAL', 'PASS', 'PARTIAL', 'Dart production preflight11cases incl WAL/hot rollback journal; Android exact callback fault PASS; all actual app/hardware fault combinations NOT_RUN'),
+    'DAT-07': ('PARTIAL', 'PASS', 'PARTIAL', 'Dart preflight11 incl WAL/hot journal; native exact callback + FAULT_APP_16G.json; full Android WAL/hot-journal interruption matrix and physical hardware NOT_RUN'),
     'DAT-08': ('PASS', 'PASS', 'PASS' if upgrade else 'NOT_RUN', 'Schema9, no DDL/table/ID/template rewrite; marker auxiliary file only; SCOPE_VERIFY_16G.json'),
     'AUTH-01': ('PARTIAL', 'PASS', 'NOT_RUN', 'Existing shared DiaryController/SDK in profile+shield, role/widget tests; real Google both entrypoints NOT_RUN'),
     'AUTH-02': ('PARTIAL', 'PASS', 'NOT_RUN', 'Clock/refresh singleflight/offline is not logout tests PASS; actual SDK restore after phone restart NOT_RUN'),
@@ -61,10 +65,10 @@ rows = {
     'UI-02': ('PASS', 'PASS', 'NOT_RUN', 'Internal ContentType.template/session_templates/ID/wire/ContentLink/capsule unchanged; SCOPE_VERIFY_16G.json'),
     'UI-03': ('PASS', 'PASS', 'NOT_RUN', 'Legacy custom name+IDs/digest/plan+module3tracks capsule roundtrip; no user naming rewrite'),
     'UI-04': ('PASS', 'PASS', 'NOT_RUN', 'Only terms/storage/stabilization; no course/questionnaire/new artwork; K034/K036 future backlog'),
-    'REL-01': ('PASS' if full else 'BLOCKED', 'PASS' if full else 'BLOCKED', 'NOT_RUN', 'CI_16G.json full verify job; never substitute targeted tests for failed final suite'),
+    'REL-01': ('PASS' if full else 'BLOCKED', 'PASS' if full else 'BLOCKED', 'NOT_RUN', 'REGRESSION_CI_16G.json verify43350711471 SUCCESS source1190989; actual remote reuse gate + identical seven app/test/server trees; latest native job separate'),
     'REL-02': ('PARTIAL' if upgrade else 'BLOCKED', 'PASS', 'PASS' if upgrade else 'BLOCKED', 'Controlled MASTER25→candidate native inventory/audio only; physical owner+CLIENT25 update and real offline hearing NOT_RUN'),
     'REL-03': ('PASS', 'PASS', 'PASS' if upgrade else 'BLOCKED', 'Workflow withholds pair unless full checks and populated upgrade/CLIENT smoke PASS; owner approval still needed to install'),
-    'REL-04': ('PASS' if pair_verified else 'BLOCKED', 'PASS' if pair_verified else 'NOT_RUN', 'PASS' if pair_verified else 'NOT_RUN', 'APK_READBACK_16G.json exact source/sizes/SHA/package/cert if gates accepted; otherwise NO issued APK'),
+    'REL-04': ('PASS' if pair_verified else 'BLOCKED', 'PASS', 'PASS' if pair_verified else 'NOT_RUN', 'BUILD_ATTEMPTS_16G.json identical signed binaries internally built/cert checked; APK_READBACK_16G.json only after accepted gates; otherwise NO issued APK'),
     'REL-05': ('PASS', 'PASS', 'NOT_RUN', 'RESULT_16G/OWNER_PHONE_QA_16G distinguish controlled PASS from real Google/Drive/physical NOT_RUN'),
     'REL-06': ('PASS' if delivered else 'PARTIAL', 'PASS', 'NOT_RUN', 'DRIVE_READBACK_16G.json;7required reports in existing16folder; no overwrite16B/16V'),
     'EFF-01': ('PASS', 'PASS', 'NOT_RUN', 'CODEX_EFFICIENCY_16G.md lists actual runs/cancellation/failures/durations; owner quota UNKNOWN, no invented percentages'),
@@ -84,7 +88,7 @@ with (reports / 'ACCEPTANCE_16G.csv').open('w', newline='') as f:
     writer.writerows(matrix)
 counts = dict(collections.Counter(r['Итог'] for r in matrix))
 result = {'criteria': 33, 'counts': counts, 'controlledUpgrade': upgrade,
-          'fullCI': full, 'pairReadbackVerified': bool(pair_verified),
+          'fullCI': full, 'actualAppFaultChecks': fault_pass, 'pairReadbackVerified': bool(pair_verified),
           'ownerGoogleDrivePhysicalQA': 'NOT_RUN',
           'status': 'CONTROLLED_CANDIDATE_OWNER_QA_PENDING' if pair_verified else 'BLOCKED_CANDIDATE_WITHHELD'}
 (reports / 'ACCEPTANCE_SUMMARY_16G.json').write_text(json.dumps(result, indent=2) + '\n')

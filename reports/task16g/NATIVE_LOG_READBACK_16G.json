@@ -1,20 +1,32 @@
 [
   {
     "file": "NATIVE_UI_UPGRADE_16G.json",
-    "bytes": 34117,
-    "sha256": "feabdb30aa00406d28075511eaa898ba7ce397551be886d6803801dd417a721a",
+    "bytes": 196162,
+    "sha256": "915d2d61a8f3bc3cfbd348181b6fa3264e617d36a78afebe4fc7f4a1756ba9f6",
     "verified": true
   },
   {
-    "file": "failure-ui_module_elman.png",
-    "bytes": 702934,
-    "sha256": "7e2f7c27ecb6b5376656a0f83ff7dbd2c1a8546b32178c3d97757001f0354f0b",
+    "file": "25-before-upgrade.png",
+    "bytes": 845876,
+    "sha256": "fc5312af0e04e9003745298f06cc2991c8e882cbd2bf54ab38405d9b2fdbb6d9",
     "verified": true
   },
   {
-    "file": "failure-ui_module_elman.xml",
-    "bytes": 5704,
-    "sha256": "e7534cf3981e8bcec925e8a47cdea09e1283543875977ece0ea4e63f671e32cd",
+    "file": "26-client-programs.png",
+    "bytes": 1165993,
+    "sha256": "8affc572f56c32e0eedaf9172a0c2cdc4c3f4d7e54dda93fe4aad153510b6d99",
+    "verified": true
+  },
+  {
+    "file": "26-library.png",
+    "bytes": 58787,
+    "sha256": "61299a6c118f6cb555729041befc925b29b70615b5afa1c8c7f55b33bfa25728",
+    "verified": true
+  },
+  {
+    "file": "26-modules.png",
+    "bytes": 911423,
+    "sha256": "d2849e14bef8352fcf10d278d58b0a3d01544ff4124c6ded2461a56d5d5f1c23",
     "verified": true
   }
 ]

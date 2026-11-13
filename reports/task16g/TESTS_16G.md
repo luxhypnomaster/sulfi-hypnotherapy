@@ -18,9 +18,19 @@
 
 Существующие shared SDK identity, singleflight restore/refresh, 401/403/DNS/abort, owner-bound queue/retry проверены без переписывания слоя. Расширенный тест использует настоящий Dart-клиент и production JS через loopback: модуль с тремя разными треками/паузами/обложкой → authoritative commit → программа со всеми зависимостями → запись дневника/ContentLink → текстовое обновление без повторной передачи неизменных бинарных файлов → выборочная CLIENT-установка точного графа, повтор без дублей. Это **не живые Google-аккаунты и не production Drive**.
 
-## Native APK25→26 и ошибки bootstrap
+## Native APK25→26: PASS controlled
 
-Фактический итог текущего native CI, before/after/cold inventories, SHA медиа и разрешение/запрет выдачи пары добавляются в RESULT_16G.md. Первые инфраструктурные падения до запуска приложения не считаются испытанием обновления. Два прежних UI-драйвера остановились до обновления; сохранены отдельные receipts/screens. Последний выявленный дефект драйвера — клавиатура закрывала footer Save, несмотря на enabled semantics; исправление проверяет реальный mInputShown и не нажимает под клавиатурой.
+[CI43403971950](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43403971950), native driver sourcec3b8f06b5fc600e5ab20af5424ae66d4702b9c86, APKproducer9b94f24: **13 PASS / 1 NOT_RUN**. Реальный Android35/KVM; неизменённая MASTER25 установлена без удаления. Через UI/system picker созданы3разных WAV,2одинаковых названия при разных IDs/bytes;2модуля (3трека и общийтрек+пауза5секунд),1программа с полным трёхтрековым графом, текущая композиция и1история interrupted. Пауза5сек установлена настоящим вертикальным жестом по bounds маховика и подтверждена в SQLite. Никаких SQL seed/подмены identity.
+
+Штатный `adb install -r` подписанной MASTER26 поверх25: **PASS**. SQLite schema9/integrityOK; exact rows/IDs/граф/история/current и SHA медиа сохранены сразу после update и после cold restart. Все3трека и2модуля видны в UI, наблюдалось native AudioTrack started для UID приложения. Это не подтверждение слышимости человеком. Свежая CLIENT26 установлена в отдельный sandbox: новые надписи «Программы» PASS; обновление CLIENT25→26 здесь не выполнялось.
+
+## Actual app fail-closed: 3 PASS
+
+После healthy update использован тот же UI-created набор в одноразовом эмуляторе. Только в нём намеренно повреждён заголовок DB, затем DB перемещена в сохранённый backup, затем убран ready-marker. Во всех3состояниях приложение показывает безопасную ошибку, не пустую библиотеку; исходные файлы и медиа после приготовления fault неизменны по SHA, новая пустая DB не создана. FAULT_APP_16G.json хранит точные до/после fingerprints. Ничего не делалось с телефоном владельца.
+
+5native JSON/PNG-подтверждений восстановлены из фактического полного CI лога с SHA-проверкой: NATIVE_LOG_READBACK_16G.json. NATIVE_UI_UPGRADE_16G.json SHA915d2d61a8f3bc3cfbd348181b6fa3264e617d36a78afebe4fc7f4a1756ba9f6; FAULT_APP_16G.json SHAf71c334200f0d79769b22f1c3f8b2dba25b798491f8e2392400ccaa706204c28. Снимки: screens/25-before-upgrade.png,26-library.png,26-modules.png,26-client-programs.png.
+
+Полный CI43403971950 завершился FAILURE **только позднее**, на создании GitHub draft: GITHUB_TOKEN integration403. Native step SUCCESS подтверждён реальным GitHub API. Повтор Android/сборки не нужен: существующим авторизованным доступом создан один private draft444069048; отдельный delivery job переносит неизменную cached pair после проверки обоих прежних successful test steps и SHA receipts. Фактический результат скачивания/подписей — APK_READBACK_16G.json и RESULT_16G.md, не предположение об успехе upload.
 
 ## NOT_RUN: участие человека
 

@@ -4,10 +4,13 @@
 - [x] G1 controlled: native no-delete handler, derivative-copy preflight, startup GC отключён;11storage negative/WAL/hot-journal cases; same-owner scoped alias сохранён. Полный native upgrade ещё G4.
 - [x] G2 controlled: existing Google singleflight/role/transport preserved; program/module/diary text-only/CLIENT graph regression добавлен; real Google/Drive/phone NOT_RUN.
 - [x] G3: пользовательские Программы, сохранены template IDs/table/wire/capsule;3new+23reused tests PASS.
-- [ ] G4: full exact-source regressions, controlled native25→candidate and signed pair only if safe; owner QA отдельно.
+- [x] G4 full verify:448Flutter/3CLIENT/46+24Node/analyze/format PASS source1190989; дальнейшие executable trees идентичны.
+- [ ] G4 native25→candidate, fail-closed app QA и signed pair только при доказанной безопасности; owner Google/Drive/two-phone QA отдельно.
 - [ ] K-034/K-036 FUTURE ONLY: «Курс → Программа → Фаза → Модуль → Трек/Пауза». Ни курса/анкеты/подбора, ни новых экранов/редизайна в16G нет.
 
 # №16-В P0 data preservation
+
+Историческая постановка. В текущем №16-Г владелец исключил извлечение/recovery старых объектов; старые пункты24→candidate/forensic ниже не являются планом16G. Новый controlled gate —25→26 на UI-created тестовых данных; исторический UNKNOWN не переименован в PASS.
 
 - [x] Зафиксировать normal update owner fact, physical bytes UNKNOWN; STOP-SHIP.
 - [x] Exact APK/source/storage/Android read-only audit; отдельная hotfix-ветка012f7f69 и draft PR46.
