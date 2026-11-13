@@ -3,3 +3,7 @@ docs/mvp-2026-11-05/SULFI_MVP_ALL_SPECS_RU.txt whitespace=-blank-at-eol
 
 # Preserve raw forensic test output including terminal padding.
 reports/task16v/logs/* -whitespace
+
+# Pinned upstream dependency retained verbatim except documented safety patch.
+third_party/sqflite_android/** -whitespace
+reports/task16g/*.log -whitespace

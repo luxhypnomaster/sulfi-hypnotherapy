@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task16g_storage:
+        description: '16G exact native no-delete SQLite handler fault gate; no Sulfi build'
+        type: boolean
+        default: false
       p0_scope:
         description: 'UI upgrade core, or optional native recorder24 gate'
         type: choice
@@ -40,7 +44,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -349,3 +353,35 @@ jobs:
           cat "$RUNNER_TEMP/task16v-test-summary.json"
           exit "$STATUS"
       - run: flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client
+
+  storage16g:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && inputs.task16g_storage == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Require emulator acceleration
+        run: |
+          test -e /dev/kvm || { echo 'BLOCKED_NO_KVM'; exit 1; }
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Compile exact production callback and disposable instrumentation
+        run: bash scripts/task16g/build_guard_probe.sh
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: bash scripts/task16g/run_guard_probe.sh

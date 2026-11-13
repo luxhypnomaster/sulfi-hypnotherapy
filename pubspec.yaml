@@ -27,6 +27,11 @@ dependencies:
   unorm_dart: 0.3.2
   video_player: 2.14.1
 
+# Pinned upstream2.4.5, narrow no-delete Android corruption handler (16G).
+dependency_overrides:
+  sqflite_android:
+    path: third_party/sqflite_android
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
