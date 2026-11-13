@@ -1,0 +1,3 @@
+# №17 — фактические затраты
+
+G0:1ZIP download,10files/9MANIFESTdigests/67criteria.5живыхDocsполученыоднимbatch и сохраненыдляпоиска;из-заизбыточноговыводаостальныетекстычитаютсяадресно.1flutterpubgetlocked,1rootcausetestfile:2REDреальныхproductionпутей,неошибкакомпиляции. Live1read-onlyGET200 sourceconfirmed;большойliveE2Eнеповторялся. FullCI/build/native17:0. Ownerquota%UNKNOWN,оценокна глазнет. Рабочаяпамятьdevshmпредыдущегоruntimeутрачена;ветка16G25ecсохраненавGit,восстановленановаяworktree,чужиеuntrackedнеизменены.
