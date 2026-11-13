@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task16g_reuse_verify:
+        description: 'Reuse actual successful1190989 verify only if app/test/server trees match live CI API'
+        type: boolean
+        default: false
       task16g_finalize:
         description: '16G full regression then gated signed pair/native25→26; no GAS changes'
         type: boolean
@@ -48,7 +52,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -392,7 +396,7 @@ jobs:
 
   candidate16g:
     needs: verify
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task16g_finalize == true && inputs.build_mode == 'checks'
+    if: always() && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task16g_finalize == true && inputs.build_mode == 'checks' && (needs.verify.result == 'success' || inputs.task16g_reuse_verify == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 65
     permissions:
@@ -428,6 +432,9 @@ jobs:
           PYCODE
           test -e /dev/kvm
           ! gh api repos/luxhypnomaster/sulfi-hypnotherapy/releases/tags/task16g-qa-pair-26 > /dev/null 2>&1
+      - name: Reuse only proven identical full regression source
+        if: inputs.task16g_reuse_verify == true
+        run: python3 scripts/task16g/reuse_verify.py
       - name: Restore existing test key without modification
         env:
           KEY_B64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
@@ -457,6 +464,8 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      - name: Reclaim disposable build intermediates before emulator SDK install
+        run: bash scripts/task16g/free_runner_disk.sh
       - name: Actual UI-created immutable25→candidate26 and companion smoke
         uses: reactivecircus/android-emulator-runner@v2
         with:
