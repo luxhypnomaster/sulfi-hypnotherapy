@@ -19,4 +19,6 @@ Existing GoogleDiaryIdentity/DiaryController, AlchemistApi, transfer queue/catal
 
 ## G4
 
-Version0.4.18+26 для ограниченного кандидата; свободен среди existing releases. Условный manual workflow из trusted16Gbranch: full checks → прежний signing key → одна pair build → certificate/package/SHA → actual UI25→26/cold/CLIENT smoke → только затем private draft assets. При опасном/непроверенном native gate файлы не выдаются. Не используется CLASPRC_JSON, нет GAS deploy/OAuth settings/Drive ACL mutations. Допустимость выдачи фиксируется в RESULT_16G по фактическому CI.
+Version0.4.18+26 для ограниченного кандидата; свободен среди existing releases. Условный manual workflow из trusted16Gbranch: full checks → прежний signing key → certificate/package/SHA → actual UI25→26/cold/CLIENT smoke → только затем private draft assets. При опасном/непроверенном native gate файлы не выдаются. Не используется CLASPRC_JSON, нет GAS deploy/OAuth settings/Drive ACL mutations. Допустимость выдачи фиксируется в RESULT_16G по фактическому CI.
+
+Подписанные внутренние сборки трёх CI-попыток дали идентичные SHA пары. Для native QA повторно используется только неизменный producer9b94f24 из приватного CI-кэша: без Flutter/Gradle rebuild и без доступа к signing secrets. Отдельный свежий native runner устранил измеренное ограничение свободного места. Драйвер требует реальные UI-объекты и SQL readback производной копии; нажатия Save защищены от перекрывающей экранной клавиатуры. Финальные ссылки допустимы только после всех gates.

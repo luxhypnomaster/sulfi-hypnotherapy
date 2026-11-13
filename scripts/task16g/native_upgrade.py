@@ -44,7 +44,7 @@ def dismiss_ime():
   adb('shell','input','keyevent','KEYCODE_BACK');time.sleep(.8)
  raise AssertionError('IME_STILL_VISIBLE_STOP_BEFORE_FOOTER_TAP')
 def click(text,exact=False,attempts=3):
- if text in ['Сохранить модуль','Сохранить','Применить']:dismiss_ime()
+ if text in ['Сохранить модуль','Сохранить','Применить','Добавить паузу']:dismiss_ime()
  for _ in range(attempts):
   ns=tree()
   for n in sorted(ns,key=lambda n: 0 if n.get('text')==text else 1):
@@ -204,7 +204,13 @@ def module(title,tracks,pause=False):
  if pause:
   click('Добавить паузу');time.sleep(1)
   # Genuine vertical seconds wheel gesture; no model injection.
-  adb('shell','input','swipe','542','670','542','555','700');click('Применить');time.sleep(1)
+  wheel=next((n for n in tree() if 'Секунды' in label(n)),None)
+  assert wheel is not None,'SECONDS_WHEEL_NOT_FOUND'
+  x1,y1,x2,y2=map(int,re.findall(r'\d+',wheel.get('bounds','')))
+  assert y2-y1>80,'SECONDS_WHEEL_BOUNDS_INVALID'
+  x=(x1+x2)//2;span=y2-y1
+  adb('shell','input','swipe',str(x),str(y1+span*3//4),str(x),str(y1+span//4),'700')
+  click('Применить');time.sleep(1)
  click('Сохранить модуль');time.sleep(2)
  # A title in the editor is not evidence that Save completed. Wait for the
  # actual committed definition and inspect only derivative SQLite snapshots.
@@ -213,12 +219,13 @@ def module(title,tracks,pause=False):
  assert len(saved)==1,'MODULE_SAVE_NOT_COMMITTED'
  stored=saved[0]
  assert len([item for item in stored['items'] if item.get('audioAssetId')])==len(tracks),'MODULE_GRAPH_NOT_COMMITTED'
+ if pause:assert any(item.get('kind')=='silence' and (item.get('durationMs') or 0)>0 for item in stored['items']),'POSITIVE_UI_PAUSE_NOT_COMMITTED'
  # Legacy25 may keep its editor route after the SQL commit. Discard only the
  # working editor after proving the complete definition is already stored.
  closed=False
  for _ in range(8):
   ns=tree()
-  if any('Поиск модулей' in label(n) for n in ns):closed=True;break
+  if any(label(n)=='Создать модуль' for n in ns):closed=True;break
   discard=next((n for n in ns if label(n)=='Отбросить' and n.get('enabled')!='false'),None)
   if discard is not None:tap(discard)
   else:adb('shell','input','keyevent','4');time.sleep(.5)

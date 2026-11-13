@@ -48,13 +48,14 @@ proof = {'kind': 'DISPOSABLE_EMULATOR_APP26_FAULT_ONLY', 'ownerData': 'NONE',
 try:
     assert ui.adb('shell', 'getprop', 'ro.kernel.qemu').strip() == '1'
     reused = os.environ.get('TASK16G_REUSE_UI_BASELINE') == '1'
-    if reused:
+    partial = os.environ.get('TASK16G_REUSE_PARTIAL_UI_BASELINE') == '1'
+    if reused or partial:
         assert ui.package_info()['versionCode'] == 26
         ui.launch()
         healthy = ui.inventory('healthy26_reused_ui_fixture')
         assert len(healthy['rows']['audio_assets']) >= 3
-        assert len(healthy['rows']['module_definitions']) >= 2
-        proof['primaryDatasetCreatedBy'] = 'APK25_UI_THEN_NORMAL_UPDATE26'
+        if reused:assert len(healthy['rows']['module_definitions']) >= 2
+        proof['primaryDatasetCreatedBy'] = ('APK25_UI_THEN_NORMAL_UPDATE26' if reused else 'APK25_UI_PARTIAL_SETUP_THEN_DISPOSABLE_UPDATE26_NOT_ACCEPTED_HEALTHY_UPGRADE')
     else:
         assert 'Success' in ui.adb('install', str(pathlib.Path(os.environ['RUNNER_TEMP']) / 'task16v-ui-probe/probe.apk'))
         assert 'Success' in ui.adb('install', str(ui.APK / 'master26.apk'))

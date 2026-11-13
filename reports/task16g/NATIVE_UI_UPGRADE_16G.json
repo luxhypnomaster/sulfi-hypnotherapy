@@ -41,7 +41,7 @@
     {
       "case": "ui_module_elman",
       "status": "BLOCKED",
-      "reason": "MODULE_SAVE_NOT_COMMITTED"
+      "reason": "SAVED_MODULE_ROUTE_NOT_CLOSED"
     },
     {
       "case": "driver",
@@ -161,6 +161,10 @@
       "enabled": "true"
     },
     {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
       "action": "tap",
       "label": "Сохранить модуль",
       "enabled": "true"
@@ -183,17 +187,17 @@
         "app_settings": [
           {
             "name": "diary_reader_identity",
-            "value": "2ce42bc37c829a3571bb4daab58fc629"
+            "value": "9bc14647f1f92e33ef0a289354598456"
           }
         ],
         "audio_assets": [
           {
-            "id": "e32c3f65153d775252bb101471f30230",
+            "id": "a113f3d969dc657ec809ea43c35fc70b",
             "title": "UI same title",
-            "filePath": "asset_e32c3f65153d775252bb101471f30230.wav",
+            "filePath": "asset_a113f3d969dc657ec809ea43c35fc70b.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:19.938548Z",
+            "createdAt": "2026-11-13T04:01:57.312065Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -210,14 +214,14 @@
         "capsule_imports": [],
         "content_revisions": [
           {
-            "id": "track:e32c3f65153d775252bb101471f30230:d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"logicalId\":\"e32c3f65153d775252bb101471f30230\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T03:49:19.938548Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"e32c3f65153d775252bb101471f30230\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:a113f3d969dc657ec809ea43c35fc70b:f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"logicalId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T04:01:57.312065Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a113f3d969dc657ec809ea43c35fc70b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"schema\":1,\"type\":\"track\"}"
           }
         ],
         "current_draft": [
           {
             "id": 1,
-            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T03:48:44.955029Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T04:01:09.962815Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
           }
         ],
         "diary_author": [],
@@ -234,7 +238,7 @@
       "files": {
         "files/library.sqlite": {
           "bytes": 159744,
-          "sha256": "6c1ecee0cb5f5078606d855bcaecc1c8ef8b6e5b2af3ebb6ffcca49ab5eae538"
+          "sha256": "c60a3397aa77c0988f4358f5335d03507363d8ba9788fdf35f34b57004857021"
         },
         "files/library.sqlite-journal": {
           "bytes": 0,
@@ -242,9 +246,9 @@
         },
         "files/profileInstalled": {
           "bytes": 24,
-          "sha256": "72ee56861ba36b055ad969700d7991fd7ee337f052536f41b02e9b55a603bc46"
+          "sha256": "7a7a0f68000e265b893d05a89fcd31e1562dd320c51a4927efe1bca2bee5b84b"
         },
-        "files/audio/asset_e32c3f65153d775252bb101471f30230.wav": {
+        "files/audio/asset_a113f3d969dc657ec809ea43c35fc70b.wav": {
           "bytes": 529244,
           "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
         },
@@ -265,7 +269,7 @@
           "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
         }
       },
-      "snapshot_sha256": "280c77ce29f13b099c4f53bfd3701e2a38250a2790f652729e7114f9313cef5d"
+      "snapshot_sha256": "aa4e879f405f11e8d9121a40532ae9e7bc8917cbce3bc999b6397c77cec20e13"
     },
     "after-ui-import-task16v-2.wav": {
       "package": {
@@ -283,17 +287,17 @@
         "app_settings": [
           {
             "name": "diary_reader_identity",
-            "value": "2ce42bc37c829a3571bb4daab58fc629"
+            "value": "9bc14647f1f92e33ef0a289354598456"
           }
         ],
         "audio_assets": [
           {
-            "id": "e32c3f65153d775252bb101471f30230",
+            "id": "a113f3d969dc657ec809ea43c35fc70b",
             "title": "UI same title",
-            "filePath": "asset_e32c3f65153d775252bb101471f30230.wav",
+            "filePath": "asset_a113f3d969dc657ec809ea43c35fc70b.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:19.938548Z",
+            "createdAt": "2026-11-13T04:01:57.312065Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -307,12 +311,12 @@
             "authorManaged": 0
           },
           {
-            "id": "7b41a41e72f3cd8fc5582a3fb6e85b52",
+            "id": "0fafeaadc72a5ddbaf671b12bf38a0d4",
             "title": "UI same title",
-            "filePath": "asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav",
+            "filePath": "asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:54.083295Z",
+            "createdAt": "2026-11-13T04:02:36.704137Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -329,18 +333,18 @@
         "capsule_imports": [],
         "content_revisions": [
           {
-            "id": "track:e32c3f65153d775252bb101471f30230:d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"logicalId\":\"e32c3f65153d775252bb101471f30230\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T03:49:19.938548Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"e32c3f65153d775252bb101471f30230\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:a113f3d969dc657ec809ea43c35fc70b:f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"logicalId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T04:01:57.312065Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a113f3d969dc657ec809ea43c35fc70b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"schema\":1,\"type\":\"track\"}"
           },
           {
-            "id": "track:7b41a41e72f3cd8fc5582a3fb6e85b52:f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"logicalId\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T03:49:54.083295Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:0fafeaadc72a5ddbaf671b12bf38a0d4:1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"logicalId\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T04:02:36.704137Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"schema\":1,\"type\":\"track\"}"
           }
         ],
         "current_draft": [
           {
             "id": 1,
-            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T03:48:44.955029Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T04:01:09.962815Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
           }
         ],
         "diary_author": [],
@@ -357,7 +361,7 @@
       "files": {
         "files/library.sqlite": {
           "bytes": 159744,
-          "sha256": "9e7cb0be2be3b289af7672b8715c9d00c4a5d4651e949368ea82ef91b274018f"
+          "sha256": "ba5d705d07bddf4b9d20b637dcee0fd68d3f1b6602451fc80a0edc0c51f51c0c"
         },
         "files/library.sqlite-journal": {
           "bytes": 0,
@@ -365,13 +369,13 @@
         },
         "files/profileInstalled": {
           "bytes": 24,
-          "sha256": "72ee56861ba36b055ad969700d7991fd7ee337f052536f41b02e9b55a603bc46"
+          "sha256": "7a7a0f68000e265b893d05a89fcd31e1562dd320c51a4927efe1bca2bee5b84b"
         },
-        "files/audio/asset_e32c3f65153d775252bb101471f30230.wav": {
+        "files/audio/asset_a113f3d969dc657ec809ea43c35fc70b.wav": {
           "bytes": 529244,
           "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
         },
-        "files/audio/asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav": {
+        "files/audio/asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav": {
           "bytes": 529244,
           "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
         },
@@ -392,7 +396,7 @@
           "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
         }
       },
-      "snapshot_sha256": "3f051c1bd21bdefbcd92aff63c3f39d4ddd468abc61f3bfc603d84ffa7c5d78c"
+      "snapshot_sha256": "2c61df2d6b1cb12787a2574032e1a3da0f935356ea34867239e0ee003b85af7f"
     },
     "after-ui-import-task16v-3.wav": {
       "package": {
@@ -410,17 +414,17 @@
         "app_settings": [
           {
             "name": "diary_reader_identity",
-            "value": "2ce42bc37c829a3571bb4daab58fc629"
+            "value": "9bc14647f1f92e33ef0a289354598456"
           }
         ],
         "audio_assets": [
           {
-            "id": "e32c3f65153d775252bb101471f30230",
+            "id": "a113f3d969dc657ec809ea43c35fc70b",
             "title": "UI same title",
-            "filePath": "asset_e32c3f65153d775252bb101471f30230.wav",
+            "filePath": "asset_a113f3d969dc657ec809ea43c35fc70b.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:19.938548Z",
+            "createdAt": "2026-11-13T04:01:57.312065Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -434,12 +438,12 @@
             "authorManaged": 0
           },
           {
-            "id": "7b41a41e72f3cd8fc5582a3fb6e85b52",
+            "id": "0fafeaadc72a5ddbaf671b12bf38a0d4",
             "title": "UI same title",
-            "filePath": "asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav",
+            "filePath": "asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:54.083295Z",
+            "createdAt": "2026-11-13T04:02:36.704137Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -453,12 +457,12 @@
             "authorManaged": 0
           },
           {
-            "id": "cba494e31321e41f9a7b8a59ddca4d3c",
+            "id": "5f3b49f132b5d3ffc4cf0b15d2d1cc4a",
             "title": "UI third track",
-            "filePath": "asset_cba494e31321e41f9a7b8a59ddca4d3c.wav",
+            "filePath": "asset_5f3b49f132b5d3ffc4cf0b15d2d1cc4a.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:50:24.714384Z",
+            "createdAt": "2026-11-13T04:03:09.749334Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -475,22 +479,22 @@
         "capsule_imports": [],
         "content_revisions": [
           {
-            "id": "track:e32c3f65153d775252bb101471f30230:d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"logicalId\":\"e32c3f65153d775252bb101471f30230\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T03:49:19.938548Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"e32c3f65153d775252bb101471f30230\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:a113f3d969dc657ec809ea43c35fc70b:f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"logicalId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T04:01:57.312065Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a113f3d969dc657ec809ea43c35fc70b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"schema\":1,\"type\":\"track\"}"
           },
           {
-            "id": "track:7b41a41e72f3cd8fc5582a3fb6e85b52:f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"logicalId\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T03:49:54.083295Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:0fafeaadc72a5ddbaf671b12bf38a0d4:1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"logicalId\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T04:02:36.704137Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"schema\":1,\"type\":\"track\"}"
           },
           {
-            "id": "track:cba494e31321e41f9a7b8a59ddca4d3c:f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9\",\"logicalId\":\"cba494e31321e41f9a7b8a59ddca4d3c\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-13T03:50:24.714384Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"cba494e31321e41f9a7b8a59ddca4d3c\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:5f3b49f132b5d3ffc4cf0b15d2d1cc4a:d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f\",\"logicalId\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-13T04:03:09.749334Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f\",\"schema\":1,\"type\":\"track\"}"
           }
         ],
         "current_draft": [
           {
             "id": 1,
-            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T03:48:44.955029Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T04:01:09.962815Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
           }
         ],
         "diary_author": [],
@@ -507,7 +511,7 @@
       "files": {
         "files/library.sqlite": {
           "bytes": 159744,
-          "sha256": "3936704f97d30ab17865b911a1e6ae2334d5e915149f4336daa1694af0d4f06b"
+          "sha256": "0bebf5ecb8c56c20d4110778a3c081edbf0e5b70eae6f6e21d16f4f58a749ba4"
         },
         "files/library.sqlite-journal": {
           "bytes": 0,
@@ -515,17 +519,17 @@
         },
         "files/profileInstalled": {
           "bytes": 24,
-          "sha256": "72ee56861ba36b055ad969700d7991fd7ee337f052536f41b02e9b55a603bc46"
+          "sha256": "7a7a0f68000e265b893d05a89fcd31e1562dd320c51a4927efe1bca2bee5b84b"
         },
-        "files/audio/asset_e32c3f65153d775252bb101471f30230.wav": {
+        "files/audio/asset_a113f3d969dc657ec809ea43c35fc70b.wav": {
           "bytes": 529244,
           "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
         },
-        "files/audio/asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav": {
+        "files/audio/asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav": {
           "bytes": 529244,
           "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
         },
-        "files/audio/asset_cba494e31321e41f9a7b8a59ddca4d3c.wav": {
+        "files/audio/asset_5f3b49f132b5d3ffc4cf0b15d2d1cc4a.wav": {
           "bytes": 529244,
           "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
         },
@@ -546,7 +550,7 @@
           "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
         }
       },
-      "snapshot_sha256": "bbcbb7954901d51c9e9b9c75f5cb07e3f6a31dcfd8107b3d2349e9f2235118b5"
+      "snapshot_sha256": "840fb814e745305cfcacfd01cf32b4be671dcaa1d7f768c313598f54dfd90325"
     },
     "after-ui-module-elman": {
       "package": {
@@ -564,17 +568,17 @@
         "app_settings": [
           {
             "name": "diary_reader_identity",
-            "value": "2ce42bc37c829a3571bb4daab58fc629"
+            "value": "9bc14647f1f92e33ef0a289354598456"
           }
         ],
         "audio_assets": [
           {
-            "id": "e32c3f65153d775252bb101471f30230",
+            "id": "a113f3d969dc657ec809ea43c35fc70b",
             "title": "UI same title",
-            "filePath": "asset_e32c3f65153d775252bb101471f30230.wav",
+            "filePath": "asset_a113f3d969dc657ec809ea43c35fc70b.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:19.938548Z",
+            "createdAt": "2026-11-13T04:01:57.312065Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -588,12 +592,12 @@
             "authorManaged": 0
           },
           {
-            "id": "7b41a41e72f3cd8fc5582a3fb6e85b52",
+            "id": "0fafeaadc72a5ddbaf671b12bf38a0d4",
             "title": "UI same title",
-            "filePath": "asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav",
+            "filePath": "asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:49:54.083295Z",
+            "createdAt": "2026-11-13T04:02:36.704137Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -607,12 +611,12 @@
             "authorManaged": 0
           },
           {
-            "id": "cba494e31321e41f9a7b8a59ddca4d3c",
+            "id": "5f3b49f132b5d3ffc4cf0b15d2d1cc4a",
             "title": "UI third track",
-            "filePath": "asset_cba494e31321e41f9a7b8a59ddca4d3c.wav",
+            "filePath": "asset_5f3b49f132b5d3ffc4cf0b15d2d1cc4a.wav",
             "durationMs": 12000,
             "format": "wav",
-            "createdAt": "2026-11-13T03:50:24.714384Z",
+            "createdAt": "2026-11-13T04:03:09.749334Z",
             "category": "freeform",
             "fileSizeBytes": 529244,
             "description": "",
@@ -629,22 +633,26 @@
         "capsule_imports": [],
         "content_revisions": [
           {
-            "id": "track:e32c3f65153d775252bb101471f30230:d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"logicalId\":\"e32c3f65153d775252bb101471f30230\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T03:49:19.938548Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"e32c3f65153d775252bb101471f30230\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"d3ba6e28b0c003f1bc2adaf70289c8582da527271e768d19471bfa57f1dc64ec\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:a113f3d969dc657ec809ea43c35fc70b:f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"logicalId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-13T04:01:57.312065Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"a113f3d969dc657ec809ea43c35fc70b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f8d383747d8a366b1e9e2fad737dab168a097ea5f9fa358e96bde4f9e9749a7e\",\"schema\":1,\"type\":\"track\"}"
           },
           {
-            "id": "track:7b41a41e72f3cd8fc5582a3fb6e85b52:f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"logicalId\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T03:49:54.083295Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"7b41a41e72f3cd8fc5582a3fb6e85b52\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"f875a18c764e31b47267d960c0fb1723caa74a14c0d0e4027a6f4412f4ec47ad\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:0fafeaadc72a5ddbaf671b12bf38a0d4:1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"logicalId\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-13T04:02:36.704137Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"1823837ea62ca802e678a9b10df9925fb85bdeeb9c5a24a5c554fa159e7ba77b\",\"schema\":1,\"type\":\"track\"}"
           },
           {
-            "id": "track:cba494e31321e41f9a7b8a59ddca4d3c:f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9",
-            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9\",\"logicalId\":\"cba494e31321e41f9a7b8a59ddca4d3c\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-13T03:50:24.714384Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"cba494e31321e41f9a7b8a59ddca4d3c\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"f83bc94d0ed46c961477c1e8f75583ac09254aa1057ab31a4ddea8a78cd438e9\",\"schema\":1,\"type\":\"track\"}"
+            "id": "track:5f3b49f132b5d3ffc4cf0b15d2d1cc4a:d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f\",\"logicalId\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-13T04:03:09.749334Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"d908069c08720992486a52ac69ec0966dbb361e57499bcb0cb54b48f1961758f\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:13e92733352cd4466630472d1600292e:fcb71a59b45d15cd3a9e779154f41048a05b60bdbd1e301755468bc066e406e6",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"fcb71a59b45d15cd3a9e779154f41048a05b60bdbd1e301755468bc066e406e6\",\"logicalId\":\"13e92733352cd4466630472d1600292e\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"13e92733352cd4466630472d1600292e\",\"items\":[{\"audioAssetId\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"a0d99cac3e32351358f4ab65d2e3ccf6\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"a7422231777b0fece01278756117267d\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"2d01b98032ce35fb0ecff341ddf63f58\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-13T04:03:59.473038Z\",\"version\":1},\"revision\":\"fcb71a59b45d15cd3a9e779154f41048a05b60bdbd1e301755468bc066e406e6\",\"schema\":1,\"type\":\"module\"}"
           }
         ],
         "current_draft": [
           {
             "id": 1,
-            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T03:48:44.955029Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-13T04:01:09.962815Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
           }
         ],
         "diary_author": [],
@@ -653,7 +661,12 @@
         "diary_sync": [],
         "history_attachments": [],
         "legacy_v2_documents": [],
-        "module_definitions": [],
+        "module_definitions": [
+          {
+            "id": "13e92733352cd4466630472d1600292e",
+            "payload": "{\"id\":\"13e92733352cd4466630472d1600292e\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-13T04:03:59.473038Z\",\"items\":[{\"id\":\"a0d99cac3e32351358f4ab65d2e3ccf6\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"0fafeaadc72a5ddbaf671b12bf38a0d4\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"a7422231777b0fece01278756117267d\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"a113f3d969dc657ec809ea43c35fc70b\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"2d01b98032ce35fb0ecff341ddf63f58\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5f3b49f132b5d3ffc4cf0b15d2d1cc4a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          }
+        ],
         "run_events": [],
         "session_runs": [],
         "session_templates": []
@@ -661,7 +674,7 @@
       "files": {
         "files/library.sqlite": {
           "bytes": 159744,
-          "sha256": "3936704f97d30ab17865b911a1e6ae2334d5e915149f4336daa1694af0d4f06b"
+          "sha256": "3ba4124adda54a9838d5e5ea24f35b5a5821894b851ce1c4992410fef37c3230"
         },
         "files/library.sqlite-journal": {
           "bytes": 0,
@@ -669,17 +682,17 @@
         },
         "files/profileInstalled": {
           "bytes": 24,
-          "sha256": "72ee56861ba36b055ad969700d7991fd7ee337f052536f41b02e9b55a603bc46"
+          "sha256": "7a7a0f68000e265b893d05a89fcd31e1562dd320c51a4927efe1bca2bee5b84b"
         },
-        "files/audio/asset_e32c3f65153d775252bb101471f30230.wav": {
+        "files/audio/asset_a113f3d969dc657ec809ea43c35fc70b.wav": {
           "bytes": 529244,
           "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
         },
-        "files/audio/asset_7b41a41e72f3cd8fc5582a3fb6e85b52.wav": {
+        "files/audio/asset_0fafeaadc72a5ddbaf671b12bf38a0d4.wav": {
           "bytes": 529244,
           "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
         },
-        "files/audio/asset_cba494e31321e41f9a7b8a59ddca4d3c.wav": {
+        "files/audio/asset_5f3b49f132b5d3ffc4cf0b15d2d1cc4a.wav": {
           "bytes": 529244,
           "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
         },
@@ -700,7 +713,7 @@
           "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
         }
       },
-      "snapshot_sha256": "bbcbb7954901d51c9e9b9c75f5cb07e3f6a31dcfd8107b3d2349e9f2235118b5"
+      "snapshot_sha256": "69eba3c62292d73d32bccab4e075daca515774cdb1791f1b0d104c1bcb10e0b4"
     }
   }
 }

@@ -569,8 +569,6 @@ jobs:
           pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
-          script: |
-            python3 scripts/task16g/native_upgrade.py
-            TASK16G_REUSE_UI_BASELINE=1 python3 scripts/task16g/app_fault.py
+          script: bash scripts/task16g/run_cached_qa.sh
       - name: Gate one private draft pair on healthy upgrade and actual app fault safety
         run: bash scripts/task16g/publish_cached_pair.sh

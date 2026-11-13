@@ -1,21 +1,27 @@
-# №16-Г — фактические проверки
+# №16-Г — протокол фактических проверок
 
-## PASS controlled
+Дата: 13.11.2026 UTC. Полностью проверенный runtime/test source: `11909895da4f2967b77f12a8b8da98ff50b370d5`. Производитель неизменной пары APK26: `9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c`. После него менялись только CI, native-драйвер и отчёты. Равенство семи Git trees (`lib`, `android`, `third_party`, `test`, `server`, pubspec.yaml/lock) проверяется в GitHub Actions перед повторным использованием регрессии и APK, а не принимается на доверии.
 
-- Пакет7files/6MANIFEST digests/33criteria:1проверка G0. PR45/46 ancestry/diff: общий APK25 source012f7f69; бранч16G отb0cb53f. Исторические full audits не повторялись.
-- Storage11tests: missing DB+media/marker/sidecars, zero-byte, corrupt header, partial schema, invalid JSON, unknown version, WAL derivative read без source writes, healthy same-title/different-ID graph reopen, hot rollback journal после прерванной транзакции. Exact DB/sidecars/media fingerprint equality на отрицательных кейсах. G1_STORAGE_FINAL.log.
-- Реальная Android35 instrumentation exact StorageSafety.java: run43347643988 SUCCESS, source1391b0334e2ffcca47d05e5ec94c5727a9234666,148sec. Healthy create/reopen; corrupt RW и RO throw SQLiteDatabaseCorruptException, originalSHA/sidecars untouched. NATIVE_STORAGE_16G.json. Helper-only disposable DB, не owner sandbox; production source SHA pinned перед candidate build.
-- Existing auth/queue/role targeted10PASS. Extended catalog program test1PASS: actual Dart+production JS черезloopback, module3differenttracks+pauses → authoritative program catalog commit → diary text update no retransmission → CLIENT exact selective install. Fixtures не реальные Google credentials.
-- G3:3new legacy/capsule/MASTER+CLIENT program widget tests +23existing diary/workspace=26PASS. Legacy user custom name/ID unchanged, internal template wire/digest preserved.
-- G4fixture isolation target task4_ui+task5_ui:28PASS,59sec; новый guard не ослаблен. Отдельные test failures/повторы учтены CODEX_EFFICIENCY, не скрыты итоговым PASS.
-- Final local analyzer PASS;176Dart files format PASS. Полный Flutter/Node exact-source CI и native APK25→26 фиксируются после завершения отдельно.
+## Полная регрессия: PASS
 
-## NOT_RUN / не заменять fixtures
+[Verify job CI43350711471](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43350711471): **448 Flutter PASS, 0 FAIL, 1 opt-in live SKIP; 3 CLIENT PASS; 46 Alchemist Node + 24 старого дневника PASS**. Analyze, форматирование 176 Dart-файлов, schema/contract fixtures/негативные проверки PASS. Числа сверены с полным архивом лога: REGRESSION_16G.json, REGRESSION_CI_16G.json. Весь тот workflow завершился FAILURE позднее, при установке Emulator SDK: успешный verify job не называется успешным workflow.
 
-Настоящие Google MASTER+CLIENT consent/restore/refresh, production Drive publication/download, физическое Wi-Fi/mobile переключение, реальный микрофон, слышимость всех3треков человеком, два телефона и owner future-data25→26 приёмка. Старые тестовые объекты не восстанавливаются по решению владельца13.11. Root cause прежнего телефона UNKNOWN не переписывается.
+Адресные проверки до полной регрессии: 11 storage; 10 auth/queue/roles; расширенная цепочка program/catalog — 1; 3 новых program/legacy widget + 23 существующих; 28 изолированных UI-fixture; 11 повторных проверок реальных прежних падений. Эти перекрывающиеся числа НЕ суммируются с 448 как независимые тесты. Подробности и все повторы — CODEX_EFFICIENCY_16G.md, CI_RUNS_16G.json.
 
-## Финальная полная регрессия — реально PASS
+## Хранение и совместимость
 
-Verify job CI43350711471 source11909895da4f2967b77f12a8b8da98ff50b370d5: **448FlutterPASS/0fail/1opt-inliveSKIP,3CLIENT,46Alchemist+24legacyNode**, analyze/format/schema checksPASS. Полный workflow тогда FAILED только на поздней установке Emulator SDK (No space left), уже после успешной сборки/cert проверки пары; это НЕ общий CI PASS. Raw archive logs прочитаны, REGRESSION_16G.json и REGRESSION_CI_16G.json фиксируют границы. Built pair193782021/193782061bytes NOT_ISSUED, private draft не создавался.
+- 11 storage-тестов: отсутствующая DB при медиа/marker/sidecars, нулевой файл, повреждённый заголовок, неполная схема, неверный JSON, неизвестная версия, WAL, горячий rollback journal после прерванной транзакции, одинаковые названия при разных IDs/bytes, здоровое повторное открытие. Производственный preflight проверяет производную копию; SHA исходных DB/sidecars/media сравниваются до/после.
+- [Android35 instrumentation43347643988](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43347643988): PASS, 148 секунд. Проверен точный production StorageSafety.java SHA62f94d95b95a20afe7998728616b433138684a9e5298f8aaaaf40e254a5d40f9. Healthy create/reopen; corrupt RW/RO дают SQLiteDatabaseCorruptException; исходные байты/sidecars сохраняются. Это disposable helper, не личная база владельца.
+- Schema9/DDL/постоянные пути, template IDs/table/wire/ContentLink сохранены. Legacy capsule roundtrip сохраняет IDs, digest, граф и пользовательское старое имя. Правило PR46 допускает legacy scope только того же server-verified MASTER; другой account/CLIENT/guest запрещены.
 
-Новый candidate CI43354403069 source78d6b5cacbc5c985b260bb4b986f59b4094f1591 проверил actual GitHub verify-job success и равенство7Gittrees приложения/Android/vendor/test/server/pubspec с1190989; полные тесты не повторялись. NativeStorage callbackSHA тот же, что G1 native proof433476. Исправления после1190989 касались CI resource/evidence gating и отчётов. Результат native25→26 и новой pair readback будет добавлен отдельно.
+## Авторизация, каталог и дневник: controlled PASS
+
+Существующие shared SDK identity, singleflight restore/refresh, 401/403/DNS/abort, owner-bound queue/retry проверены без переписывания слоя. Расширенный тест использует настоящий Dart-клиент и production JS через loopback: модуль с тремя разными треками/паузами/обложкой → authoritative commit → программа со всеми зависимостями → запись дневника/ContentLink → текстовое обновление без повторной передачи неизменных бинарных файлов → выборочная CLIENT-установка точного графа, повтор без дублей. Это **не живые Google-аккаунты и не production Drive**.
+
+## Native APK25→26 и ошибки bootstrap
+
+Фактический итог текущего native CI, before/after/cold inventories, SHA медиа и разрешение/запрет выдачи пары добавляются в RESULT_16G.md. Первые инфраструктурные падения до запуска приложения не считаются испытанием обновления. Два прежних UI-драйвера остановились до обновления; сохранены отдельные receipts/screens. Последний выявленный дефект драйвера — клавиатура закрывала footer Save, несмотря на enabled semantics; исправление проверяет реальный mInputShown и не нажимает под клавиатурой.
+
+## NOT_RUN: участие человека
+
+Настоящие MASTER/CLIENT Google consent/restore/refresh; live GAS6→Drive publication/download; два diary drafts через авторизованный Android UI; физические Wi-Fi/mobile переключения; реальный микрофон; слышимость трёх треков; два телефона; обновление CLIENT25→26 с личными объектами; физическая приёмка MASTER25→26. Никакие fixtures, AudioTrack state или пустая diary-таблица не засчитываются вместо этих проверок. Старые тестовые объекты не восстанавливались по решению владельца; прежний root cause телефона UNKNOWN.
