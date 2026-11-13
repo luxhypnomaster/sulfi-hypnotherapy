@@ -24,6 +24,7 @@ def tree():
 def label(n):return (n.get('text','')+' '+n.get('content-desc','')).strip()
 def shot(name):
  try:
+  tree() # Keep XML contemporaneous with the screenshot, including dialogs.
   (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
   (OUT/(name+'.xml')).write_text((OUT/'latest-window.xml').read_text() if (OUT/'latest-window.xml').exists() else '')
  except Exception as error:
@@ -36,7 +37,8 @@ def click(text,exact=False,attempts=3):
   ns=tree()
   for n in sorted(ns,key=lambda n: 0 if n.get('text')==text else 1):
    if (text in [n.get('text'),n.get('content-desc')] or ' '.join(text.split()) in [' '.join((n.get(k) or '').split()) for k in ['text','content-desc']]) if exact else ' '.join(text.split()) in ' '.join(label(n).split()):
-    ACTIONS.append({'action':'tap','label':text});tap(n);return
+    if n.get('enabled')=='false':continue
+    ACTIONS.append({'action':'tap','label':text,'enabled':n.get('enabled')});tap(n);return
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
 def text(value,index=0):
@@ -191,9 +193,26 @@ def module(title,tracks,pause=False):
   click('Добавить паузу');time.sleep(1)
   # Genuine vertical seconds wheel gesture; no model injection.
   adb('shell','input','swipe','542','670','542','555','700');click('Применить');time.sleep(1)
- click('Сохранить модуль');time.sleep(1)
- assert any(title in label(n) for n in tree()),'MODULE_NOT_VISIBLE'
- return {'title':title,'UI_dependencies':tracks,'pauseAdded':pause}
+ click('Сохранить модуль');time.sleep(2)
+ # A title in the editor is not evidence that Save completed. Wait for the
+ # actual committed definition and inspect only derivative SQLite snapshots.
+ v=inventory('after-ui-module-'+('pause' if pause else 'elman'))
+ saved=[json.loads(row['payload']) for row in v['rows']['module_definitions'] if json.loads(row['payload'])['title']==title]
+ assert len(saved)==1,'MODULE_SAVE_NOT_COMMITTED'
+ stored=saved[0]
+ assert len([item for item in stored['items'] if item.get('audioAssetId')])==len(tracks),'MODULE_GRAPH_NOT_COMMITTED'
+ # Legacy25 may keep its editor route after the SQL commit. Discard only the
+ # working editor after proving the complete definition is already stored.
+ closed=False
+ for _ in range(8):
+  ns=tree()
+  if any('Поиск модулей' in label(n) for n in ns):closed=True;break
+  discard=next((n for n in ns if label(n)=='Отбросить' and n.get('enabled')!='false'),None)
+  if discard is not None:tap(discard)
+  else:adb('shell','input','keyevent','4');time.sleep(.5)
+ assert closed,'SAVED_MODULE_ROUTE_NOT_CLOSED'
+ return {'title':title,'UI_dependencies':tracks,'pauseAdded':pause,'committedID':stored['id'],'storedItemCount':len(stored['items']),'SQLReadbackOnly':True}
+
 def native_audio_active():
  uid=adb('shell','cmd','package','list','packages','-U',PKG)
  match=re.search(r'uid:(\d+)',uid);assert match,'NO_APP_UID'
