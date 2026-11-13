@@ -1,5 +1,5 @@
 {
-  "issued": false,
+  "issued": true,
   "pairs": [
     {
       "source": "11909895da4f2967b77f12a8b8da98ff50b370d5",
@@ -73,5 +73,8 @@
   ],
   "firstNativeSDKFailure": "No space left before emulator SDK install",
   "secondAVDBootFailure": "Available5193.86MB needs7372.80MB; no app driver execution",
-  "thirdAVDFailure": "3Gconfig but image minimum still7372.80MB,available4616.27MB; no native app script"
+  "thirdAVDFailure": "3Gconfig but image minimum still7372.80MB,available4616.27MB; no native app script",
+  "issuedProducer": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+  "issuedPrivateDraft": 444069048,
+  "otherBuilds": "Internal identical SHA only, no separate issuance"
 }

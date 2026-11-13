@@ -1,6 +1,10 @@
-# №16-Г — стабилизация, кандидат ещё не принят
+# №16-Г — кандидаты 0.4.18+26, физическая приёмка впереди
 
-Ветка `fix/task16g-stabilize-programs`, [пакет](docs/task16g/00_START_HERE.md). Владелец исключил восстановление прежних тестовых объектов; неизвестная причина телефона из №16-В не переписывается. Цель — будущая сохранность, авторизация и каталог. Narrow native no-delete callback, проверка derivative-copy до RW и отключение startup media GC проходят адресные controlled tests. «Шаблоны» становятся «Программы» только в надписях; SQLite schema9/template IDs/API/капсулы прежние. Старые APK/сервер6/main/signing/ACL не меняются. Выдача кандидатов только после G4 controlled gates; physical owner QA не объявлена PASS.
+[Результат](reports/task16g/RESULT_16G.md) · [33 критерия:22 PASS/11 PARTIAL](reports/task16g/ACCEPTANCE_16G.csv) · [Два APK в закрытом draft](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-6cd4718e5ea711c5c181) · [Android-протокол](reports/task16g/OWNER_PHONE_QA_16G.md) · [Отчёты на Drive](https://drive.google.com/drive/folders/1jVvv6kEm5uUWol92QvJDwqbDkl5oz-5z).
+
+Ветка `fix/task16g-stabilize-programs`, draft PR47. Native no-delete callback, проверка производной копии SQLite/WAL/journal и отключение startup media GC защищают будущие данные. Реальный Android35 UI-created MASTER25→26/cold/integrity/IDs/mediaSHA/nativeAudio/CLIENT labels и3ошибки bootstrap PASS. Full verify:448Flutter/3CLIENT/46+24Node PASS. Пара независимо скачана: SHA/размер/package/версия/прежний сертификат/compiled config PASS. Это signed debug QA candidates, не production и не физически проверенные APK.
+
+Google MASTER/CLIENT, live Drive, авторизованные diary drafts, два телефона, слышимость и CLIENT25→26 ещё NOT_RUN; №16 не закрыт. Установка только по решению владельца поверх25 без удаления/очистки; при конфликте подписи STOP. «Программы» меняют только надписи: SQLite schema9/template IDs/API/капсулы прежние. Старые APK/сервер6/main/signing/ACL сохранены. Восстановление старых тестовых объектов исключено новым решением; неизвестная причина телефона из №16-В не переименована в исправленный диагноз. Семь отчётов доставлены и проверены raw SHA/parent; APK на Drive нет.
 
 # №16-В P0 — исторический STOP-SHIP (приоритет обновлён №16-Г)
 

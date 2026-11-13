@@ -4,7 +4,7 @@
 - Отключена startup очистка неопределённых аудио/дневниковых/исторических файлов. Схема9, IDs и постоянные пути сохранены; прежняя причина потери данных на телефоне остаётся неизвестной.
 - Пользовательские «Шаблоны» → «Программы» в MASTER/CLIENT; внутренние template API/таблицы/капсулы и пользовательские названия прежние.
 - Расширена проверка существующей цепочки module3tracks → program → diary ContentLink → selective CLIENT install без повторной загрузки неизменных медиа.
-- Полная controlled регрессия:448 Flutter/3CLIENT/46+24Node PASS. Выдача подписанной пары зависит от native25→26 и отрицательных bootstrap gates: точный статус в reports/task16g/RESULT_16G.md. Реальные Google/Drive/два телефона NOT_RUN, GAS6/signing/ACL/main не менялись.
+- Полная controlled регрессия:448 Flutter/3CLIENT/46+24Node PASS. Native25→26/cold/integrity/mediaSHA/CLIENTlabels13PASS и3appfaultPASS; подписанная пара выдана в закрытом draft и независимо скачана/проверена. Точные ссылки/SHA в reports/task16g/RESULT_16G.md. Реальные Google/Drive/два телефона NOT_RUN, GAS6/signing/ACL/main не менялись.
 
 ## 0.4.17+25 · №16-Б, кандидат исправлений для приёмки
 

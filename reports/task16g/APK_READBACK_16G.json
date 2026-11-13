@@ -1,0 +1,45 @@
+{
+  "allVerified": true,
+  "checkedAtUTC": "2026-11-13T10:04:57.691975+00:00",
+  "source": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+  "runtimeTestSource": "11909895da4f2967b77f12a8b8da98ff50b370d5",
+  "nativeQA": 43403971950,
+  "deliveryCI": 43406075443,
+  "privateDraftID": 444069048,
+  "privateDraftURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-6cd4718e5ea711c5c181",
+  "pair": [
+    {
+      "edition": "master",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 26,
+      "bytes": 193782021,
+      "sha256": "0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "assetID": 743160429,
+      "downloadURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/master26.apk",
+      "signatureVerified": true,
+      "packageVersionVerified": true,
+      "compiledExistingGAS6Endpoint": true,
+      "compiledPublicWebClientID": true,
+      "compiledNativeNoResetGuard": true,
+      "actualDownloadCompleted": true
+    },
+    {
+      "edition": "client",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 26,
+      "bytes": 193782061,
+      "sha256": "0e9dee30d62b0a05097652d159ea0c035b4c1bad424e662516ede822dbe64a0c",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "assetID": 743160430,
+      "downloadURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-6cd4718e5ea711c5c181/client26.apk",
+      "signatureVerified": true,
+      "packageVersionVerified": true,
+      "compiledExistingGAS6Endpoint": true,
+      "compiledPublicWebClientID": true,
+      "compiledNativeNoResetGuard": true,
+      "actualDownloadCompleted": true
+    }
+  ],
+  "physicalGoogleDriveOwnerQA": "NOT_RUN"
+}

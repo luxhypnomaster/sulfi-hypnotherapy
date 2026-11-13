@@ -5,7 +5,8 @@
 - [x] G2 controlled: existing Google singleflight/role/transport preserved; program/module/diary text-only/CLIENT graph regression добавлен; real Google/Drive/phone NOT_RUN.
 - [x] G3: пользовательские Программы, сохранены template IDs/table/wire/capsule;3new+23reused tests PASS.
 - [x] G4 full verify:448Flutter/3CLIENT/46+24Node/analyze/format PASS source1190989; дальнейшие executable trees идентичны.
-- [ ] G4 native25→candidate, fail-closed app QA и signed pair только при доказанной безопасности; owner Google/Drive/two-phone QA отдельно.
+- [x] G4 controlled:actualUI25→26/cold/integrity/rows/mediaSHA/nativeAudio/CLIENTlabels13PASS+3appfaultPASS; pair26issuedprivateDraft/independentdownloadcertSHAconfigPASS;7Drive reports rawreadbackPASS.
+- [ ] G4 owner:реальныеGoogle/Drive/два телефона/слышимость/CLIENT25update и полныйаппаратныйWALfaultmatrix —11PARTIAL,№16не закрыт.
 - [ ] K-034/K-036 FUTURE ONLY: «Курс → Программа → Фаза → Модуль → Трек/Пауза». Ни курса/анкеты/подбора, ни новых экранов/редизайна в16G нет.
 
 # №16-В P0 data preservation

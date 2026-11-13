@@ -35,3 +35,9 @@
 ## NOT_RUN: участие человека
 
 Настоящие MASTER/CLIENT Google consent/restore/refresh; live GAS6→Drive publication/download; два diary drafts через авторизованный Android UI; физические Wi-Fi/mobile переключения; реальный микрофон; слышимость трёх треков; два телефона; обновление CLIENT25→26 с личными объектами; физическая приёмка MASTER25→26. Никакие fixtures, AudioTrack state или пустая diary-таблица не засчитываются вместо этих проверок. Старые тестовые объекты не восстанавливались по решению владельца; прежний root cause телефона UNKNOWN.
+
+## Выдача и независимое скачивание: PASS
+
+[Delivery-onlyCI43406075443](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43406075443) SUCCESS; источник721722fb18ed6aec9b188af78b92e1fb60c00a44. Нет повторного emulator/build/signing/Flutter suite. Actual native receipts и шаг предыдущегоCI проверены, прежние7app/testtrees1190989 идентичны. Одна неизменная параproducer9b перенесена в существующий private draft444069048.
+
+ОбеAPK затем независимо скачаны с GitHub: SHA/размер/сертификат/package/версия26/compiledGAS6endpoint/WebClientID/nativeDexguardPASS. APK_READBACK_16G.json. MASTER193782021байт SHA0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a; CLIENT193782061байт SHA0e9dee30d62b0a05097652d159ea0c035b4c1bad424e662516ede822dbe64a0c. Это signed debug QA builds со стабильной существующей подписью, не production release и не физически проверенные APK.
