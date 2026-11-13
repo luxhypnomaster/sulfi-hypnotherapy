@@ -1,0 +1,8 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task17_ui_test.dart
+00:00 +0: /dev/shm/sulfi17/test/task17_ui_test.dart: 17 new category resolves existing case/whitespace while legacy IDs stay unchanged
+00:00 +1: /dev/shm/sulfi17/test/task17_ui_test.dart: 17 verification is not 0/0 upload; pause causes and permission waits remain distinct
+00:00 +2: /dev/shm/sulfi17/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+00:02 +3: /dev/shm/sulfi17/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+00:05 +4: loading /dev/shm/sulfi17/test/task16_catalog_ui_test.dart
+00:05 +4: /dev/shm/sulfi17/test/task16_catalog_ui_test.dart: offline publication card saves edited annotation at 200% font with keyboard; client never sees author editor
+00:10 +5: All tests passed!

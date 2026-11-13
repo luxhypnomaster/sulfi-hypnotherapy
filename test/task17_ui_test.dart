@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
+import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
+import 'package:sulfi_hypnotherapy/services/diary_api.dart';
+import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
+import 'package:sulfi_hypnotherapy/ui/diary_editor.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_catalog.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_work_queue.dart';
 import 'package:sulfi_hypnotherapy/services/catalog_categories.dart';
@@ -11,6 +15,29 @@ import 'package:sulfi_hypnotherapy/ui/diary_reader.dart';
 import 'support/task15_fixture.dart';
 import 'support/task15_harness.dart';
 import 'task15_export_test.dart' show seed15;
+
+class EnqueueFailure17 extends DiaryApi {
+  EnqueueFailure17() : super(Uri.parse('https://example.test'));
+  int enqueues = 0;
+  @override
+  bool get supportsServerIdentity => true;
+  @override
+  bool get supportsAdvancedPublication => true;
+  @override
+  bool get readerAuthenticated => true;
+  @override
+  String get verifiedRole => 'MASTER';
+  @override
+  String get readerScope => 'account:controlled';
+  @override
+  Future<void> enqueueDurablePublication(
+    DiaryEntry entry, {
+    bool? published,
+  }) async {
+    enqueues++;
+    throw const DiaryApiException('CONTROLLED_ENQUEUE_FAILURE');
+  }
+}
 
 void main() {
   test('17 new category resolves existing case/whitespace while legacy IDs stay unchanged', () {
@@ -167,6 +194,61 @@ void main() {
         );
         await t.pumpWidget(const SizedBox());
       } finally {
+        await t.runAsync(f.close);
+      }
+    },
+  );
+  testWidgets(
+    '17 five editor taps open one review; enqueue failure preserves editor and exact local draft',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!;
+      final api = EnqueueFailure17();
+      final d = DiaryController(
+        DiaryRepository(f.db),
+        authorRepository: DiaryAuthorRepository(f.db),
+        api: api,
+        policy: f.c.policy,
+      );
+      final entry = DiaryEntry(
+        id: 'enqueue17',
+        title: 'Заголовок',
+        message: 'Обычный текст без кнопки',
+        blocks: const [],
+        createdAt: DateTime.utc(2026, 11, 13),
+        updatedAt: DateTime.utc(2026, 11, 13),
+      );
+      try {
+        await show15(t, f, DiaryEditor(diary: d, entry: entry));
+        final button = t.widget<FilledButton>(
+          find.widgetWithText(FilledButton, 'К публикации'),
+        );
+        for (var i = 0; i < 5; i++) {
+          button.onPressed!();
+        }
+        await io15(t);
+        expect(
+          find
+              .byType(DiaryReader)
+              .evaluate()
+              .where((e) => !(e.widget as DiaryReader).calculateOnly),
+          hasLength(1),
+        );
+        await t.tap(find.byKey(const Key('diary-confirm-publication')));
+        await io15(t);
+        expect(api.enqueues, 1);
+        expect(find.byType(DiaryEditor), findsOneWidget);
+        expect(find.text('CONTROLLED_ENQUEUE_FAILURE'), findsOneWidget);
+        final saved = (await t.runAsync(() => d.authorRepository!.entries()))!
+            .single;
+        expect(saved.id, entry.id);
+        expect(saved.title, entry.title);
+        expect(saved.message, entry.message);
+        expect(saved.blocks, isEmpty);
+        expect(t.takeException(), isNull);
+        await capture15(t, 'task17-enqueue-failure-editor');
+        await t.pumpWidget(const SizedBox());
+      } finally {
+        d.dispose();
         await t.runAsync(f.close);
       }
     },

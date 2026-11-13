@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task17_finalize:
+        description: 'Task17 full verify, unchanged signing, private cache27 + disposable25/26 upgrades; NEVER GAS deploy'
+        type: boolean
+        default: false
       task16g_delivery:
         description: 'Upload exact cached pair to existing private draft after actual native safety PASS; no emulator/build/signing'
         type: boolean
@@ -607,3 +611,149 @@ jobs:
           java-version: '21'
       - name: Upload unchanged verified APKs into existing private draft only
         run: bash scripts/task16g/publish_existing.sh
+
+  candidate17:
+    needs: verify
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task17-stable-auth-queue' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task17_finalize == true && inputs.build_mode == 'checks'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    env:
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - name: Verify exact public configuration and immutable storage guard
+        run: |
+          node scripts/alchemist/check-build-config.mjs
+          python3 - <<'PYCODE'
+          import pathlib,json,hashlib,os
+          assert 'version: 0.4.19+27' in pathlib.Path('pubspec.yaml').read_text()
+          guard=pathlib.Path('third_party/sqflite_android/android/src/main/java/com/tekartik/sqflite/StorageSafety.java').read_bytes()
+          assert hashlib.sha256(guard).hexdigest()==json.loads(pathlib.Path('reports/task16g/NATIVE_STORAGE_16G.json').read_text())['productionSHA256']
+          assert os.environ['GOOGLE_WEB_CLIENT_ID']==json.loads(pathlib.Path('server/alchemist/android-oauth-public.json').read_text())['webClientId']
+          PYCODE
+      - name: Read existing signing key on trusted manual branch only
+        env:
+          KEY_B64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KEY_B64"
+          umask 077
+          printf '%s' "$KEY_B64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
+      - name: Build exact-source MASTER and CLIENT candidates27
+        env:
+          SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
+          SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+          SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
+        run: |
+          flutter pub get --enforce-lockfile
+          mkdir -p "$RUNNER_TEMP/task17-apks"
+          flutter build apk --debug --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task17-apks/master27.apk"
+          flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task17-apks/client27.apk"
+          bash scripts/task17/verify_pair.sh
+      - name: Quarantine only, no APK delivery before native safety gates
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/task17-apks
+          key: task17-quarantine-pair-${{ github.sha }}
+      - name: Erase temporary runner signing copy
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sulfi-test.keystore"
+
+  native17:
+    needs: candidate17
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task17-stable-auth-queue' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task17_finalize == true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - edition: master
+            baseline: 25
+            asset: '738283668'
+            sha: d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9
+          - edition: master
+            baseline: 26
+            asset: '743160429'
+            sha: 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a
+          - edition: client
+            baseline: 25
+            asset: '738283907'
+            sha: c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    env:
+      TASK17_EDITION: ${{ matrix.edition }}
+      TASK17_BASELINE: ${{ matrix.baseline }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task17-apks
+          key: task17-quarantine-pair-${{ github.sha }}
+          fail-on-cache-miss: true
+      - name: Reclaim only disposable host toolchains before SDK install
+        run: bash scripts/task16g/prepare_native_runner.sh
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-35 build-tools;36.0.0
+      - name: Verify candidate and baseline bytes; build disposable UI probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_ASSET: ${{ matrix.asset }}
+          BASE_SHA: ${{ matrix.sha }}
+        run: |
+          bash scripts/task17/verify_pair.sh
+          gh api -H 'Accept: application/octet-stream' "repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/$BASE_ASSET" > "$RUNNER_TEMP/task17-apks/$TASK17_EDITION$TASK17_BASELINE.apk"
+          echo "$BASE_SHA  $RUNNER_TEMP/task17-apks/$TASK17_EDITION$TASK17_BASELINE.apk" | sha256sum -c -
+          bash scripts/task16v/build_ui_probe.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: UI-created native baseline to27 and cold data verification
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          emulator-boot-timeout: 180
+          pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: python3 scripts/task17/native_upgrade.py
+      - name: Preserve native evidence (fixture data only)
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: task17-native-${{ matrix.edition }}-${{ matrix.baseline }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/task17-evidence/NATIVE_UI_UPGRADE_17.json
+            ${{ runner.temp }}/task17-evidence/*.png
+            ${{ runner.temp }}/task17-evidence/failure-*.xml
+          retention-days: 14
+          if-no-files-found: ignore

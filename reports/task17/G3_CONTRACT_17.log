@@ -1,0 +1,5 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task17_google_android_test.dart
+00:00 +0: /dev/shm/sulfi17/test/task17_google_android_test.dart: 17 SDK automatic recovery never falls back to unapproved accounts; explicit button remains separate
+00:00 +1: loading /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart
+00:00 +1: /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install
+00:03 +2: All tests passed!
