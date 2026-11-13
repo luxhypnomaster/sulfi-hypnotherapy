@@ -41,29 +41,39 @@ def error_boot():
     raise AssertionError('NO_FAIL_CLOSED_ERROR_UI')
 
 
+# Snapshot helper must not overwrite the completed primary upgrade receipt.
+ui.report = lambda: None
 proof = {'kind': 'DISPOSABLE_EMULATOR_APP26_FAULT_ONLY', 'ownerData': 'NONE',
          'googleIdentities': 'NONE', 'primaryDatasetCreatedBy': 'ANDROID_UI', 'cases': []}
 try:
     assert ui.adb('shell', 'getprop', 'ro.kernel.qemu').strip() == '1'
-    assert 'Success' in ui.adb('install', str(pathlib.Path(os.environ['RUNNER_TEMP']) / 'task16v-ui-probe/probe.apk'))
-    assert 'Success' in ui.adb('install', str(ui.APK / 'master26.apk'))
-    assert ui.package_info()['versionCode'] == 26
-    ui.adb('shell', 'wm', 'size', '720x1280')
-    ui.adb('shell', 'wm', 'density', '280')
-    ui.adb('shell', 'cmd', 'connectivity', 'airplane-mode', 'enable', check=False)
-    ui.adb('shell', 'svc', 'wifi', 'disable', check=False)
-    ui.adb('shell', 'svc', 'data', 'disable', check=False)
-    fixture = ui.OUT / 'fault-fixture.wav'
-    with wave.open(str(fixture), 'wb') as stream:
-        stream.setparams((1, 2, 22050, 0, 'NONE', 'not compressed'))
-        stream.writeframes(struct.pack('<h', 1000) * 22050 * 12)
-    ui.adb('push', str(fixture), '/sdcard/Download/task16g-fault.wav')
-    ui.adb('shell', 'am', 'broadcast', '-a', 'android.intent.action.MEDIA_SCANNER_SCAN_FILE',
-           '-d', 'file:///sdcard/Download/task16g-fault.wav', check=False)
-    ui.launch()
-    ui.import_audio('task16g-fault.wav', 'UI fault kept audio')
-    healthy = ui.inventory('healthy26_fault_fixture')
-    assert len(healthy['rows']['audio_assets']) == 1
+    reused = os.environ.get('TASK16G_REUSE_UI_BASELINE') == '1'
+    if reused:
+        assert ui.package_info()['versionCode'] == 26
+        ui.launch()
+        healthy = ui.inventory('healthy26_reused_ui_fixture')
+        assert len(healthy['rows']['audio_assets']) >= 3
+        assert len(healthy['rows']['module_definitions']) >= 2
+        proof['primaryDatasetCreatedBy'] = 'APK25_UI_THEN_NORMAL_UPDATE26'
+    else:
+        assert 'Success' in ui.adb('install', str(pathlib.Path(os.environ['RUNNER_TEMP']) / 'task16v-ui-probe/probe.apk'))
+        assert 'Success' in ui.adb('install', str(ui.APK / 'master26.apk'))
+        ui.adb('shell', 'wm', 'size', '720x1280')
+        ui.adb('shell', 'wm', 'density', '280')
+        ui.adb('shell', 'cmd', 'connectivity', 'airplane-mode', 'enable', check=False)
+        ui.adb('shell', 'svc', 'wifi', 'disable', check=False)
+        ui.adb('shell', 'svc', 'data', 'disable', check=False)
+        fixture = ui.OUT / 'fault-fixture.wav'
+        with wave.open(str(fixture), 'wb') as stream:
+            stream.setparams((1, 2, 22050, 0, 'NONE', 'not compressed'))
+            stream.writeframes(struct.pack('<h', 1000) * 22050 * 12)
+        ui.adb('push', str(fixture), '/sdcard/Download/task16g-fault.wav')
+        ui.adb('shell', 'am', 'broadcast', '-a', 'android.intent.action.MEDIA_SCANNER_SCAN_FILE',
+               '-d', 'file:///sdcard/Download/task16g-fault.wav', check=False)
+        ui.launch()
+        ui.import_audio('task16g-fault.wav', 'UI fault kept audio')
+        healthy = ui.inventory('healthy26_fault_fixture')
+        assert len(healthy['rows']['audio_assets']) == 1
     ui.adb('shell', 'am', 'force-stop', ui.PKG)
     payload = b'INVALID_SQLITE!!'
     assert len(payload) == 16
@@ -99,6 +109,7 @@ try:
 except Exception as error:
     proof['cases'].append({'case': 'fault_driver', 'status': 'BLOCKED', 'reason': str(error)[:1800]})
 finally:
+    (ui.OUT / 'FAULT_APP_16G.json').write_text(json.dumps(proof, indent=2) + '\n')
     print('FAULT_APP_16G=' + json.dumps(proof), flush=True)
 if any(case['status'] != 'PASS' for case in proof['cases']):
     raise SystemExit(2)

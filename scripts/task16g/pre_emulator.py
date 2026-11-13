@@ -9,4 +9,4 @@ size = config.get('disk.dataPartition.size', '').strip()
 assert size in {'3G', '3072M', '3221225472'}, 'AVD_PARTITION_NOT_PINNED:' + size
 free = shutil.disk_usage(folder).free
 print('AVD16G_PARTITION=' + size + ';FREE_BYTES=' + str(free))
-assert free >= 4 * 1024**3, 'AVD_CAPACITY_GATE_BLOCKED; no blind boot wait'
+assert free >= 10 * 1024**3, 'AVD_CAPACITY_GATE_BLOCKED; no blind boot wait'

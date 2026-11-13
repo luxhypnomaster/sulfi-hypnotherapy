@@ -512,7 +512,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 16
     permissions:
-      contents: read
+      contents: write
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
@@ -540,6 +540,8 @@ jobs:
             f=folder/(item['edition']+'26.apk')
             assert hashlib.sha256(f.read_bytes()).hexdigest()==item['sha256']
           PYCODE
+      - name: Free disposable native-only host from unrelated preinstalled SDKs
+        run: bash scripts/task16g/prepare_native_runner.sh
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -567,4 +569,8 @@ jobs:
           pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
-          script: python3 scripts/task16g/app_fault.py
+          script: |
+            python3 scripts/task16g/native_upgrade.py
+            TASK16G_REUSE_UI_BASELINE=1 python3 scripts/task16g/app_fault.py
+      - name: Gate one private draft pair on healthy upgrade and actual app fault safety
+        run: bash scripts/task16g/publish_cached_pair.sh

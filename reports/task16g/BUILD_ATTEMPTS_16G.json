@@ -46,8 +46,32 @@
       ],
       "ownerQA": "NOT_RUN",
       "liveGAS": "EXISTING6_NO_DEPLOY"
+    },
+    {
+      "source": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+      "pair": [
+        {
+          "edition": "master",
+          "package": "ru.sulfi.sulfi_hypnotherapy",
+          "versionCode": 26,
+          "bytes": 193782021,
+          "sha256": "0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a",
+          "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+        },
+        {
+          "edition": "client",
+          "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+          "versionCode": 26,
+          "bytes": 193782061,
+          "sha256": "0e9dee30d62b0a05097652d159ea0c035b4c1bad424e662516ede822dbe64a0c",
+          "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+        }
+      ],
+      "ownerQA": "NOT_RUN",
+      "liveGAS": "EXISTING6_NO_DEPLOY"
     }
   ],
   "firstNativeSDKFailure": "No space left before emulator SDK install",
-  "secondAVDBootFailure": "Available5193.86MB needs7372.80MB; no app driver execution"
+  "secondAVDBootFailure": "Available5193.86MB needs7372.80MB; no app driver execution",
+  "thirdAVDFailure": "3Gconfig but image minimum still7372.80MB,available4616.27MB; no native app script"
 }
