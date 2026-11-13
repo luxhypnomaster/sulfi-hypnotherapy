@@ -110,7 +110,7 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                       color: transferYellow,
                                     ),
                                     Text(
-                                      'Текущий файл: ${(progress * 100).floor()}% · принято ${work['bytes']} из ${work['totalBytes']} байт',
+                                      'Подтверждённые байты: ${(progress * 100).floor()}% · принято ${work['bytes']} из ${work['totalBytes']} байт',
                                     ),
                                   ] else if (const [
                                     'running',
