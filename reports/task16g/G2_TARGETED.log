@@ -1,0 +1,33 @@
+00:00 +0: loading /dev/shm/sulfi16v/test/task16b_auth_transport_test.dart
+00:00 +0: /dev/shm/sulfi16v/test/task16b_auth_transport_test.dart: G1 official restore shares refreshed RAM identity; offline is not logout; wrong restored account fails closed
+00:01 +1: /dev/shm/sulfi16v/test/task16b_auth_transport_test.dart: G1 server-rejected cached token stops showing authenticated without erasing identity or drafts
+00:01 +2: /dev/shm/sulfi16v/test/task16b_auth_transport_test.dart: G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry
+00:01 +3: /dev/shm/sulfi16v/test/task16b_auth_transport_test.dart: G1-G2 retry cannot send old task after account switch during backoff; 401 refresh is bounded
+00:01 +4: loading /dev/shm/sulfi16v/test/task16b_queue_catalog_test.dart
+00:04 +4: /dev/shm/sulfi16v/test/task16b_queue_catalog_test.dart: G2/G4 persistent existing queue survives worker restart; pause/cancel preserve source; other account cannot resume
+00:04 +5: /dev/shm/sulfi16v/test/task16b_queue_catalog_test.dart: G2 authoritative offset after lost chunk response, 100% is not verified, receipt reuse and owner isolation
+00:05 +6: /dev/shm/sulfi16v/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+00:07 +7: loading /dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart
+test/task16b_announcement_e2e_test.dart:177:49: Error: Property 'first' cannot be accessed on 'List<PhaseInstance>?' because it is potentially null.
+ - 'List' is from 'dart:core'.
+ - 'PhaseInstance' is from 'package:sulfi_hypnotherapy/models/modular_plan.dart' ('lib/models/modular_plan.dart').
+Try accessing using ?. instead.
+      await f.c.addModule(f.c.draft.plan.phases.first.id, module);
+                                                ^^^^^
+00:08 +7 -1: loading /dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart [E]
+  Failed to load "/dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart":
+  Compilation failed for testPath=/dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart: test/task16b_announcement_e2e_test.dart:177:49: Error: Property 'first' cannot be accessed on 'List<PhaseInstance>?' because it is potentially null.
+   - 'List' is from 'dart:core'.
+   - 'PhaseInstance' is from 'package:sulfi_hypnotherapy/models/modular_plan.dart' ('lib/models/modular_plan.dart').
+  Try accessing using ?. instead.
+        await f.c.addModule(f.c.draft.plan.phases.first.id, module);
+                                                  ^^^^^
+  .
+00:08 +7 -1: loading /dev/shm/sulfi16v/test/task16a_auth_test.dart
+00:09 +7 -1: /dev/shm/sulfi16v/test/task16a_auth_test.dart: server CLIENT in master edition cannot become author using email or local toggle; owner in client edition retains server MASTER
+00:09 +8 -1: /dev/shm/sulfi16v/test/task16a_auth_test.dart: account switch while HTTP is pending discards the response, with no retry or stale body exposure
+00:09 +9 -1: /dev/shm/sulfi16v/test/task16a_auth_test.dart: official catalog provenance survives reload without changing canonical revisions; personal copy remains editable and local export needs no API
+00:10 +10 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart: loading /dev/shm/sulfi16v/test/task16b_announcement_e2e_test.dart

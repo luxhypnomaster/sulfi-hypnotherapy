@@ -1,0 +1,15 @@
+00:00 +0: loading /dev/shm/sulfi16v/test/task15_crash_test.dart
+00:00 +0: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry
+00:10 +0 -1: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry [E]
+  Expected: <4>
+    Actual: <7>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task15_crash_test.dart 145:11                  main.<fn>
+  
+00:10 +0 -1: G3 real subprocess SIGKILL after commit, reopen, reconcile and retry
+00:19 +1 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi16v/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry

@@ -643,6 +643,13 @@ void main() {
       expect(unchanged.blocks.first.text, 'Сохранённый абзац');
       await t.runAsync(() => db.execute('DROP TRIGGER fail_diary_audio'));
       await t.tap(find.text('Добавить в дневник'));
+      for (
+        var wait = 0;
+        wait < 40 && find.byType(RecorderScreen).evaluate().isNotEmpty;
+        wait++
+      ) {
+        await io(t);
+      }
       await io(t);
       await screenshot(t, 'diary-after-save');
       expect(find.byType(RecorderScreen), findsNothing);

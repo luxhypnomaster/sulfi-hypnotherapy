@@ -1,0 +1,30 @@
+00:00 +0: loading /dev/shm/sulfi16v/test/task16g_programs_test.dart
+00:00 +0: /dev/shm/sulfi16v/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+00:00 +1: /dev/shm/sulfi16v/test/task16g_programs_test.dart: program tab label in MASTER leaves legacy rows untouched
+00:01 +2: /dev/shm/sulfi16v/test/task16g_programs_test.dart: program tab label in CLIENT leaves legacy rows untouched
+00:02 +3: loading /dev/shm/sulfi16v/test/task15_diary_test.dart
+00:02 +3: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY categories, unknown fields, quiet edit, reannounce, manual/time/combined UTC expiry archive
+00:03 +4: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY deterministic rotation newest then normal/high fairness, stable build and explicit advance
+00:03 +5: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media
+00:03 +6: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY diff metadata/reorder/reannounce zero upload, one new image one upload; private path never public
+00:03 +7: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY future metadata cannot reach legacy API even when authenticated
+00:03 +8: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate
+00:03 +9: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY reader opens unread, last real page confirmation removes Home only; preview has no effects
+00:05 +10: /dev/shm/sulfi16v/test/task15_diary_test.dart: DAY author exact ContentLink picker uses registry, saves draft and original fields
+00:07 +11: loading /dev/shm/sulfi16v/test/workspace_screen_test.dart
+00:07 +11: /dev/shm/sulfi16v/test/workspace_screen_test.dart: second wheel carries minutes; minute wheel preserves seconds and clamps
+00:07 +12: /dev/shm/sulfi16v/test/workspace_screen_test.dart: home has one navigation row and opening it does not create a history record
+00:08 +13: /dev/shm/sulfi16v/test/workspace_screen_test.dart: small phone keeps start and navigation visible and returns from clock through structure
+00:09 +14: /dev/shm/sulfi16v/test/workspace_screen_test.dart: default sections are described and section add assigns a zero pause
+00:10 +15: /dev/shm/sulfi16v/test/workspace_screen_test.dart: session card distinguishes empty plan and explicitly labelled duration
+00:10 +16: /dev/shm/sulfi16v/test/workspace_screen_test.dart: clock stays on one screen and only vertical wheel drags change local time
+00:10 +17: /dev/shm/sulfi16v/test/workspace_screen_test.dart: approved clock has three actions and stops preview without starting a session
+00:10 +18: /dev/shm/sulfi16v/test/workspace_screen_test.dart: structure imports a selection from real library UI with zero initial delay
+00:10 +19: /dev/shm/sulfi16v/test/workspace_screen_test.dart: pause editor keeps wheel changes local until Apply and protects original template
+00:11 +20: /dev/shm/sulfi16v/test/workspace_screen_test.dart: closing clock editor discards only pending pause edit
+00:11 +21: /dev/shm/sulfi16v/test/workspace_screen_test.dart: wheel emits one haptic click for each accepted detent and none at minute boundary
+00:11 +22: /dev/shm/sulfi16v/test/workspace_screen_test.dart: 25 blocks scroll, groups collapse, and menu reorder keeps attached delay
+00:11 +23: /dev/shm/sulfi16v/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:12 +24: /dev/shm/sulfi16v/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:12 +25: /dev/shm/sulfi16v/test/workspace_screen_test.dart: optional workspace visual artifacts
+00:12 +26: All tests passed!

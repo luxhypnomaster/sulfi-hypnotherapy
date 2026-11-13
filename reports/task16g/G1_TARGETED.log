@@ -1,0 +1,50 @@
+00:00 +0: loading /dev/shm/sulfi16v/test/task16g_storage_test.dart
+00:00 +0: /dev/shm/sulfi16v/test/task16g_storage_test.dart: genuine fresh install succeeds, later missing DB with marker fails closed
+00:00 +1: /dev/shm/sulfi16v/test/task16g_storage_test.dart: missing DB with inherited audio does not create empty library or clean media
+00:00 +2: /dev/shm/sulfi16v/test/task16g_storage_test.dart: missing DB with WAL/journal evidence never creates or removes files
+00:00 +3: /dev/shm/sulfi16v/test/task16g_storage_test.dart: corrupt header leaves original DB, sidecars and private media byte-identical
+00:00 +4: /dev/shm/sulfi16v/test/task16g_storage_test.dart: zero byte DB is not treated as first install
+00:00 +5: /dev/shm/sulfi16v/test/task16g_storage_test.dart: valid SQLite with missing required table fails before RW bootstrap
+00:00 +6: /dev/shm/sulfi16v/test/task16g_storage_test.dart: invalid JSON graph is not silently filtered into empty UI
+00:00 +7: /dev/shm/sulfi16v/test/task16g_storage_test.dart: unknown version never creates new tables or rewrites old data
+00:00 +8: /dev/shm/sulfi16v/test/task16g_storage_test.dart: live WAL rows read from derivative; source SQLite/WAL/SHM bytes untouched
+00:00 +9: /dev/shm/sulfi16v/test/task16g_storage_test.dart: healthy reopen retains same-title distinct IDs, graph, drafts and schema9
+00:00 +10: loading /dev/shm/sulfi16v/test/library_service_test.dart
+00:01 +10: /dev/shm/sulfi16v/test/library_service_test.dart: canceled system picker creates neither metadata nor files
+00:01 +11: /dev/shm/sulfi16v/test/library_service_test.dart: legacy external path migrates bytes preserving its stable ID; lost source stays visible
+00:01 +12: /dev/shm/sulfi16v/test/library_service_test.dart: copies mp3 and preserves it after external original is removed
+00:01 +13: /dev/shm/sulfi16v/test/library_service_test.dart: copies m4a and preserves it after external original is removed
+00:01 +14: /dev/shm/sulfi16v/test/library_service_test.dart: copies wav and preserves it after external original is removed
+00:01 +15: /dev/shm/sulfi16v/test/library_service_test.dart: uppercase extension is accepted and duplicate names do not overwrite
+00:01 +16: /dev/shm/sulfi16v/test/library_service_test.dart: unsupported extension, empty file and missing source are rejected
+00:01 +17: /dev/shm/sulfi16v/test/library_service_test.dart: decoder failure cleans private copy without deleting original
+00:01 +18: /dev/shm/sulfi16v/test/library_service_test.dart: unknown and zero durations are rejected and cleaned
+00:01 +19: /dev/shm/sulfi16v/test/library_service_test.dart: canceling metadata editor can discard draft safely
+00:01 +20: /dev/shm/sulfi16v/test/library_service_test.dart: rename, category, IDs and private files survive reopening database
+00:01 +21: /dev/shm/sulfi16v/test/library_service_test.dart: empty or excessive title is rejected without saving metadata
+00:01 +22: /dev/shm/sulfi16v/test/library_service_test.dart: delete removes metadata and private file, keeps original
+00:01 +23: /dev/shm/sulfi16v/test/library_service_test.dart: missing private file can still be deleted from library
+00:01 +24: /dev/shm/sulfi16v/test/library_service_test.dart: startup retains abandoned bytes and committed audio without automatic GC
+00:01 +25: /dev/shm/sulfi16v/test/library_service_test.dart: reset removes all imported data without touching external files
+00:01 +26: /dev/shm/sulfi16v/test/library_service_test.dart: metadata cannot escape private audio directory
+00:01 +27: loading /dev/shm/sulfi16v/test/task16v_legacy_draft_visibility_test.dart
+00:02 +27: /dev/shm/sulfi16v/test/task16v_legacy_draft_visibility_test.dart: 16V legacy APK24 draft scope is readable only by same verified MASTER without row/media rewrite
+00:02 +28: loading /dev/shm/sulfi16v/test/task15_crash_test.dart
+00:03 +28: /dev/shm/sulfi16v/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry
+00:13 +28 -1: /dev/shm/sulfi16v/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry [E]
+  Expected: <1>
+    Actual: <4>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task15_crash_test.dart 126:13                  main.<fn>
+  
+00:13 +28 -1: /dev/shm/sulfi16v/test/task15_crash_test.dart: G3 real subprocess SIGKILL after commit, reopen, reconcile and retry
+00:22 +29 -1: loading /dev/shm/sulfi16v/test/task4_migration_test.dart
+00:22 +29 -1: /dev/shm/sulfi16v/test/task4_migration_test.dart: real SQLite v5→v6 retains every old column, payload, stable ID and audio byte
+00:22 +30 -1: loading /dev/shm/sulfi16v/test/v42_migration_test.dart
+00:23 +30 -1: /dev/shm/sulfi16v/test/v42_migration_test.dart: G01 P05: SQLite v3 to v4 adds diary only; audio bytes, catalog, draft, template, frozen history/events identical
+00:23 +31 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi16v/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry
