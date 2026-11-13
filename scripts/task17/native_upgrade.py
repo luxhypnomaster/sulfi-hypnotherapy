@@ -103,7 +103,7 @@ def home():
  raise AssertionError('CANNOT_RETURN_HOME')
 def restart():adb('shell','am','force-stop',PKG);launch()
 def report():
- v={'fixture':'created through immutable baseline APK Android UI; no SQL/DB injection','baseline':BASE,'target':27,'edition':EDITION,'source':os.environ.get('GITHUB_SHA'),'googleIdentities':'NOT_RUN_NO_REAL_ACCOUNT','ownerPhone':'NOT_TOUCHED','cases':CASES,'actions':ACTIONS,'inventories':inventories}
+ v={'fixture':'created through immutable baseline APK Android UI; no SQL/DB injection','baseline':BASE,'target':27,'edition':EDITION,'source':os.environ.get('TASK17_APK_SOURCE',os.environ.get('GITHUB_SHA')),'driverSource':os.environ.get('GITHUB_SHA'),'googleIdentities':'NOT_RUN_NO_REAL_ACCOUNT','ownerPhone':'NOT_TOUCHED','cases':CASES,'actions':ACTIONS,'inventories':inventories}
  (OUT/'NATIVE_UI_UPGRADE_17.json').write_text(json.dumps(v,ensure_ascii=False,indent=2))
 def case(name,fn):
  print('NATIVE17_START='+name,flush=True)

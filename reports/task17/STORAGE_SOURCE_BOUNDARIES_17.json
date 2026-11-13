@@ -10,5 +10,7 @@
   },
   "schema": 9,
   "ownerDeviceTouched": false,
-  "native27Tests": "PENDING"
+  "native27Tests": "PENDING",
+  "actualAPK26Producer": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+  "apk26ToPR47RuntimeUnchanged": true
 }
