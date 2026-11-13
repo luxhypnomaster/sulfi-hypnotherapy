@@ -1,0 +1,39 @@
+{
+  "name": "Дополнение №16-Г к Заданию №16",
+  "date": "2026-11-13",
+  "task": "16-G",
+  "criterion_count": 33,
+  "source": "User-approved priority: DATA, AUTH, CATALOG; P1 rename UI template to program; course future only",
+  "files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 9630,
+      "sha256": "57471e361cbfd88f509fad895a062bb91340af5c7b9186b43a5a32220d1cfec1"
+    },
+    {
+      "path": "01_STAGES_AND_GATES.md",
+      "bytes": 9658,
+      "sha256": "35615d9d179c98da8ef9041791959e736d8cf5b574f72659a122a55217f1c982"
+    },
+    {
+      "path": "02_OWNER_ACCEPTANCE_AND_SCOPE.md",
+      "bytes": 5895,
+      "sha256": "9af9829da8033edd4a8a840d6af6ccfda6b94808ba3842e09706cf71c50d5985"
+    },
+    {
+      "path": "03_EFFICIENCY_AND_REPORTING.md",
+      "bytes": 4818,
+      "sha256": "e4bd6c7fe58220796eff194d7cae7698e982789cab460ee513e8e384bcd7d1bf"
+    },
+    {
+      "path": "04_REPORT_TEMPLATE.md",
+      "bytes": 2298,
+      "sha256": "9e92b6b105266c4da6748562d10378112a292726a909ef2610d88495d1c3261f"
+    },
+    {
+      "path": "ACCEPTANCE_16G.csv",
+      "bytes": 6533,
+      "sha256": "78bbe7643df8f7af1d6dfecb1ce07c62ac81d6465bcb9b8f9ef3a4b594fb5449"
+    }
+  ]
+}
