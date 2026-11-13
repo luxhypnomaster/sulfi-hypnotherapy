@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task16g_fault:
+        description: 'Native fail-closed app QA on cached signed26, no build or signing'
+        type: boolean
+        default: false
       task16g_reuse_verify:
         description: 'Reuse actual successful1190989 verify only if app/test/server trees match live CI API'
         type: boolean
@@ -52,7 +56,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -502,3 +506,65 @@ jobs:
           PYCODE
           gh release create task16g-qa-pair-26 --repo luxhypnomaster/sulfi-hypnotherapy --target "$SOURCE_SHA" --draft --title '№16-Г: ограниченная пара кандидатов26, owner QA не пройдена' --notes-file "$RUNNER_TEMP/task16g-notes.md"
           gh release upload task16g-qa-pair-26 "$RUNNER_TEMP/task16g-apks/master26.apk" "$RUNNER_TEMP/task16g-apks/client26.apk" "$RUNNER_TEMP/task16g-apks/APK_PAIR_16G.json" --repo luxhypnomaster/sulfi-hypnotherapy
+
+  appfault16g:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/task16g-stabilize-programs' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task16g_fault == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    permissions:
+      contents: read
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Reuse real successful full tests only for identical runtime trees
+        run: python3 scripts/task16g/reuse_verify.py
+      - name: Restore quarantined signed pair without build or secret access
+        id: pair
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task16g-apks
+          key: task16g-quarantine-built-pair-9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c
+      - name: Require exact cached producer
+        run: |
+          test '${{ steps.pair.outputs.cache-hit }}' = true
+          python3 - <<'PYCODE'
+          import pathlib,os,json,hashlib
+          folder=pathlib.Path(os.environ['RUNNER_TEMP'])/'task16g-apks'
+          pair=json.loads((folder/'APK_PAIR_16G.json').read_text())
+          assert pair['source']=='9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c'
+          for item in pair['pair']:
+            f=folder/(item['edition']+'26.apk')
+            assert hashlib.sha256(f.read_bytes()).hexdigest()==item['sha256']
+          PYCODE
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Minimal SDK and UI helper only, no Flutter/Gradle/NDK build
+        run: |
+          sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+          bash scripts/task16v/build_ui_probe.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          emulator-boot-timeout: 180
+          pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: python3 scripts/task16g/app_fault.py

@@ -271,54 +271,58 @@ def client_smoke():
   return {'isolatedPackage':PKG,'versionCode':26,'GoogleIdentity':'NOT_RUN'}
  finally:PKG=old
 
-try:
- case('install_25',install)
- assert CASES[-1]['status']=='PASS','INSTALL_PRECONDITION_FAILED_NO_DATA_PROOF'
- adb('shell','mkdir','-p','/sdcard/Download')
- # Generate a harmless PCM WAV fixture (not the Sulfi voice), then register
- # each actual file with Android MediaScanner so DocumentsUI knows its MIME.
- import wave,math,struct
- fixture=OUT/'ui-source.wav'
- for i in range(1,4):
-  with wave.open(str(fixture),'wb') as w:
-   w.setparams((1,2,22050,0,'NONE','not compressed'))
-   w.writeframes(b''.join(struct.pack('<h',int(1800*math.sin(j*2*math.pi*(220+i*20)/22050))) for j in range(22050*12)))
-  path='/sdcard/Download/task16v-'+str(i)+'.wav'
-  adb('push',str(fixture),path)
-  adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file://'+path,check=False)
- time.sleep(2)
- if os.environ.get('P0_QA_SCOPE')=='recording':case('ui_native_recording24',record_audio)
- for i in range(1,4):
-  case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
-  assert CASES[-1]['status']=='PASS','UI_IMPORT_SETUP_FAILED_STOP_WITHOUT_REPEATING'
- case('ui_module_elman',lambda:module(ELMAN_TITLE,['UI same title','UI same title','UI third track']))
- assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
- case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
- assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
- case('ui_template',create_template)
- assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
- case('ui_history',create_history)
- assert not any(c['status']!='PASS' for c in CASES),'UI_BASELINE_SETUP_BLOCKED'
- # Capsule roundtrip is covered by controlled Dart tests; no redundant SAF save flow.
- CASES.append({'case':'ui_diary_auth_boundary','status':'NOT_RUN','reason':'Immutable25 author UI requires real Google MASTER; no fake accounts or SQL injection'})
- case('before25_inventory',before)
- case('native_update25_to26',upgrade)
- case('ui_after26',ui_after)
- case('cold_restart26',lambda:(restart(),compare('cold26'))[-1])
- case('client26_program_labels',client_smoke)
-except Exception as e:
- CASES.append({'case':'driver','status':'BLOCKED','reason':str(e)[:1500]});report()
-finally:
- report()
- def emit(name,data):
-  enc=base64.b64encode(data).decode();chunks=[enc[i:i+12000] for i in range(0,len(enc),12000)]
-  print('NATIVE16G_DIGEST='+name+':'+hashlib.sha256(data).hexdigest(),flush=True)
-  for i,chunk in enumerate(chunks):print('NATIVE16G_CHUNK='+name+':'+str(i)+':'+str(len(chunks))+':'+chunk,flush=True)
- emit('NATIVE_UI_UPGRADE_16G.json',(OUT/'NATIVE_UI_UPGRADE_16G.json').read_bytes())
- for p in sorted(OUT.glob('*.png')):
-  if p.name in ['26-library.png','26-modules.png','25-before-upgrade.png','26-client-programs.png'] or p.name.startswith('failure-'):
-   emit(p.name,p.read_bytes())
- for p in sorted(OUT.glob('failure-*.xml')):emit(p.name,p.read_bytes())
- if any(c['status']!='PASS' for c in CASES if c['case']!='ui_diary_auth_boundary'):
-  print('NATIVE16G_RELEASE_GATE=BLOCKED; do not equate completed driver with accepted upgrade',flush=True)
-  raise SystemExit(2)
+def main():
+    try:
+     case('install_25',install)
+     assert CASES[-1]['status']=='PASS','INSTALL_PRECONDITION_FAILED_NO_DATA_PROOF'
+     adb('shell','mkdir','-p','/sdcard/Download')
+     # Generate a harmless PCM WAV fixture (not the Sulfi voice), then register
+     # each actual file with Android MediaScanner so DocumentsUI knows its MIME.
+     import wave,math,struct
+     fixture=OUT/'ui-source.wav'
+     for i in range(1,4):
+      with wave.open(str(fixture),'wb') as w:
+       w.setparams((1,2,22050,0,'NONE','not compressed'))
+       w.writeframes(b''.join(struct.pack('<h',int(1800*math.sin(j*2*math.pi*(220+i*20)/22050))) for j in range(22050*12)))
+      path='/sdcard/Download/task16v-'+str(i)+'.wav'
+      adb('push',str(fixture),path)
+      adb('shell','am','broadcast','-a','android.intent.action.MEDIA_SCANNER_SCAN_FILE','-d','file://'+path,check=False)
+     time.sleep(2)
+     if os.environ.get('P0_QA_SCOPE')=='recording':case('ui_native_recording24',record_audio)
+     for i in range(1,4):
+      case('ui_import_'+str(i),lambda i=i:import_audio('task16v-'+str(i)+'.wav','UI same title' if i<3 else 'UI third track'))
+      assert CASES[-1]['status']=='PASS','UI_IMPORT_SETUP_FAILED_STOP_WITHOUT_REPEATING'
+     case('ui_module_elman',lambda:module(ELMAN_TITLE,['UI same title','UI same title','UI third track']))
+     assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
+     case('ui_module_pause',lambda:module('UI timed module',['UI third track'],True))
+     assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
+     case('ui_template',create_template)
+     assert CASES[-1]['status']=='PASS','UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING'
+     case('ui_history',create_history)
+     assert not any(c['status']!='PASS' for c in CASES),'UI_BASELINE_SETUP_BLOCKED'
+     # Capsule roundtrip is covered by controlled Dart tests; no redundant SAF save flow.
+     CASES.append({'case':'ui_diary_auth_boundary','status':'NOT_RUN','reason':'Immutable25 author UI requires real Google MASTER; no fake accounts or SQL injection'})
+     case('before25_inventory',before)
+     case('native_update25_to26',upgrade)
+     case('ui_after26',ui_after)
+     case('cold_restart26',lambda:(restart(),compare('cold26'))[-1])
+     case('client26_program_labels',client_smoke)
+    except Exception as e:
+     CASES.append({'case':'driver','status':'BLOCKED','reason':str(e)[:1500]});report()
+    finally:
+     report()
+     def emit(name,data):
+      enc=base64.b64encode(data).decode();chunks=[enc[i:i+12000] for i in range(0,len(enc),12000)]
+      print('NATIVE16G_DIGEST='+name+':'+hashlib.sha256(data).hexdigest(),flush=True)
+      for i,chunk in enumerate(chunks):print('NATIVE16G_CHUNK='+name+':'+str(i)+':'+str(len(chunks))+':'+chunk,flush=True)
+     emit('NATIVE_UI_UPGRADE_16G.json',(OUT/'NATIVE_UI_UPGRADE_16G.json').read_bytes())
+     for p in sorted(OUT.glob('*.png')):
+      if p.name in ['26-library.png','26-modules.png','25-before-upgrade.png','26-client-programs.png'] or p.name.startswith('failure-'):
+       emit(p.name,p.read_bytes())
+     for p in sorted(OUT.glob('failure-*.xml')):emit(p.name,p.read_bytes())
+     if any(c['status']!='PASS' for c in CASES if c['case']!='ui_diary_auth_boundary'):
+      print('NATIVE16G_RELEASE_GATE=BLOCKED; do not equate completed driver with accepted upgrade',flush=True)
+      raise SystemExit(2)
+
+if __name__ == "__main__":
+ main()
