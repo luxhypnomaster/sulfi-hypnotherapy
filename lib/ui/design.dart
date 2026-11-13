@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/audio_asset.dart';
 
+const transferYellow = Color(0xFFFFFF00);
 const neonPink = Color(0xFFFF168F);
 const neonLime = Color(0xFFA6FF2E);
 const antiqueGold = Color(0xFFD6A452);

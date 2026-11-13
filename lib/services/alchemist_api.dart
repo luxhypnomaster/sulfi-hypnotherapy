@@ -106,6 +106,43 @@ class AlchemistApi {
           }.contains(op) &&
           p['sessionId'] is String;
 
+  void _checkInterrupted() {
+    final stop = Zone.current[#alchemistInterrupted];
+    if (stop is bool Function() && stop()) {
+      throw const AlchemistApiException(
+        'Передача приостановлена.',
+        0,
+        'TRANSFER_PAUSED',
+        DiaryFailure.network,
+      );
+    }
+  }
+
+  /// Read authoritative state before replaying an uncertain keyed mutation.
+  /// The GET never grants a receipt by inference: replay still uses the SAME
+  /// requestId so GAS returns its receipt or a safe precondition conflict.
+  Future<void> reconcileUncertain(
+    String operation,
+    Map<String, dynamic> p,
+  ) async {
+    final catalog =
+        operation.startsWith('catalog.') && p['catalogItemId'] is String;
+    final diary = operation.startsWith('entry.') && p['entryId'] is String;
+    if (!catalog && !diary) return;
+    _checkInterrupted();
+    diagnostics.stage('SERVER_COMMIT_UNCERTAIN');
+    try {
+      await call(catalog ? 'catalog.get' : 'entry.get', {
+        if (catalog) 'catalogItemId': p['catalogItemId'],
+        if (diary) 'entryId': p['entryId'],
+      });
+    } on AlchemistFailure catch (e) {
+      if (e.status != 404) {
+        rethrow; // A missing create may safely replay its key.
+      }
+    }
+  }
+
   Future<Map<String, dynamic>> call(
     String operation,
     Map<String, dynamic> parameters,
@@ -137,6 +174,7 @@ class AlchemistApi {
 
     for (var attempt = 0; ; attempt++) {
       checkScope(false);
+      _checkInterrupted();
       final left = callTimeout - watch.elapsed;
       if (left <= Duration.zero) {
         throw AlchemistFailure.from(TimeoutException('deadline'));
@@ -198,6 +236,15 @@ class AlchemistApi {
             e.retryable,
           );
         }
+        _checkInterrupted();
+        if (parameters['requestId'] is String) {
+          final remaining = callTimeout - watch.elapsed;
+          if (remaining <= Duration.zero) {
+            throw AlchemistFailure.from(TimeoutException('deadline'));
+          }
+          await reconcileUncertain(operation, parameters).timeout(remaining);
+          checkScope(false);
+        }
         diagnostics.record(
           trace,
           operation,
@@ -232,6 +279,7 @@ class AlchemistApi {
       clock.elapsedMilliseconds,
       attempt: attempt,
     );
+    _checkInterrupted();
     diagnostics.stage('HTTP_REQUEST_START');
     var response = await connection(
       'POST',

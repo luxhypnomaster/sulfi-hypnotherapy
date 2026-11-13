@@ -1,3 +1,4 @@
+import 'alchemist_work_queue.dart' show initialQueuedWork;
 import 'alchemist_diagnostics.dart';
 import 'diary_read_state.dart';
 
@@ -434,6 +435,14 @@ class AlchemistDiaryApi extends DiaryApi {
   ) async {
     _checkEntryOwner(state);
     final p = state['pending'];
+    if (p['attempted'] == true) {
+      await author.reconcileUncertain(
+        p['operation'],
+        Map<String, dynamic>.from(p['parameters']),
+      );
+    }
+    p['attempted'] = true;
+    await _save(id, state);
     final result = await author.call(
       p['operation'],
       Map<String, dynamic>.from(p['parameters']),
@@ -489,7 +498,7 @@ class AlchemistDiaryApi extends DiaryApi {
       }
     }
     final blocks = <Map<String, dynamic>>[];
-    for (final b in e.blocks) {
+    for (final b in e.blocks.where((b) => b.substantive)) {
       check?.call();
       if (workInterrupted?.call() == true) {
         throw const DiaryApiException(
@@ -600,7 +609,10 @@ class AlchemistDiaryApi extends DiaryApi {
             },
     );
     if (!publish) {
-      final local = _entry(result).copyWith(blocks: e.blocks, extra: e.extra);
+      final local = _entry(result).copyWith(
+        blocks: e.blocks,
+        extra: {...e.extra, '_alchemistScope': readerScope},
+      );
       await _commitLocal(local, queued);
       return local;
     }
@@ -615,7 +627,11 @@ class AlchemistDiaryApi extends DiaryApi {
     }
     final local = _entry(verified).copyWith(
       blocks: e.blocks,
-      extra: {...e.extra, 'publication': verified['publication']},
+      extra: {
+        ...e.extra,
+        '_alchemistScope': readerScope,
+        'publication': verified['publication'],
+      },
     );
     await _commitLocal(local, queued);
     return local;
@@ -634,7 +650,10 @@ class AlchemistDiaryApi extends DiaryApi {
     if (state['pending'] != null) await _recover(e.id, state);
     final queued = await _queued(e.id);
     final local = _entry(await _mutate(e.id, state, 'entry.unpublish', {}))
-        .copyWith(blocks: e.blocks, extra: e.extra);
+        .copyWith(
+          blocks: e.blocks,
+          extra: {...e.extra, '_alchemistScope': readerScope},
+        );
     await _commitLocal(local, queued);
     return local;
   }
@@ -704,15 +723,25 @@ class AlchemistDiaryApi extends DiaryApi {
   }
 
   @override
-  Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {
+  Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) =>
+      _enqueue(entry, published: published);
+  @override
+  Future<void> enqueueDurablePublication(DiaryEntry entry, {bool? published}) =>
+      _enqueue(entry, published: published, durable: true);
+  Future<void> _enqueue(
+    DiaryEntry entry, {
+    bool? published,
+    bool durable = false,
+  }) async {
     final owner = author.ownerBinding;
-    if (owner == null)
+    if (owner == null) {
       throw const AlchemistFailure(
         'Подтвердите Google-аккаунт перед первой отправкой.',
         401,
         'IDENTITY_REQUIRED',
         DiaryFailure.authorization,
       );
+    }
     final revision = _publicationRevision(entry, published);
     await db.transaction((tx) async {
       final name = 'alchemist_diary_queue:${entry.id}';
@@ -737,8 +766,22 @@ class AlchemistDiaryApi extends DiaryApi {
       if (old != null &&
           (old['publicationRevision'] == revision ||
               old['status'] == 'complete' &&
-                  old['confirmedRevision'] == revision))
+                  old['confirmedRevision'] == revision)) {
+        if (durable && old['_work'] == null) {
+          old['_work'] = initialQueuedWork(
+            old,
+            owner,
+            complete: old['status'] == 'complete',
+          );
+          await tx.update(
+            'app_settings',
+            {'value': jsonEncode(old)},
+            where: 'name=?',
+            whereArgs: [name],
+          );
+        }
         return;
+      }
       if (old != null &&
           const [
             'running',
@@ -752,16 +795,18 @@ class AlchemistDiaryApi extends DiaryApi {
           'REVISION_IN_FLIGHT',
         );
       }
+      final value = <String, dynamic>{
+        'ownerBinding': owner,
+        'entry': entry.toMap(),
+        'published': published,
+        'publicationRevision': revision,
+        'status': 'pending',
+        if (old?['_work'] != null) '_work': old!['_work'],
+      };
+      if (durable) value['_work'] = initialQueuedWork(value, owner);
       await tx.insert('app_settings', {
         'name': name,
-        'value': jsonEncode({
-          'ownerBinding': owner,
-          'entry': entry.toMap(),
-          'published': published,
-          'publicationRevision': revision,
-          'status': 'pending',
-          if (old?['_work'] != null) '_work': old!['_work'],
-        }),
+        'value': jsonEncode(value),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     });
   }

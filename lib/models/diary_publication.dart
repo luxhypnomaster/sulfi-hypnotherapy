@@ -1,3 +1,4 @@
+import 'content_revision.dart' show canonicalContent;
 import 'diary_entry.dart';
 import 'session_plan.dart';
 
@@ -121,3 +122,46 @@ List<DiaryEntry> diaryRotation(
   }
   return result;
 }
+
+/// Compare public edits, ignoring private file locations and transport receipts.
+/// Unknown/unhashed local media stay distinct until their bytes are verified.
+String diaryEditFingerprint(DiaryEntry e) => canonicalContent({
+  'title': e.title,
+  'message': e.message,
+  'order': e.order,
+  'publication': DiaryPublication.of(e).toMap(),
+  'links': e.contentLinks.map((l) => l.toMap()).toList(),
+  'blocks': [
+    for (final b in e.blocks.where((b) => b.substantive))
+      {
+        'id': b.id,
+        'type': b.type.name,
+        'text': b.text,
+        'caption': b.caption,
+        'label': b.label,
+        'altText': b.altText,
+        'width': b.width,
+        'height': b.height,
+        'durationMs': b.durationMs,
+        if (b.media case final m?)
+          'media': {
+            'hash': m.hash,
+            'mime': m.mime,
+            'bytes': m.bytes,
+            if (m.hash == null) ...{
+              'assetId': m.assetId,
+              'locator': m.locator,
+              'localPath': m.localPath,
+            },
+          },
+      },
+  ],
+});
+
+String diaryEntryLabel(DiaryEntry e) => e.status == DiaryStatus.draft
+    ? 'Черновик'
+    : e.status == DiaryStatus.unpublished
+    ? 'Снято с публикации'
+    : e.number == null
+    ? 'Опубликовано'
+    : 'Запись №${e.number}';

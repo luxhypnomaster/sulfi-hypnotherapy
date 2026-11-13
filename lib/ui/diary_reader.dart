@@ -25,9 +25,10 @@ class DiaryReader extends StatefulWidget {
     this.fromJournal = false,
     this.onLayout,
     this.calculateOnly = false,
+    this.publicationReview = false,
   });
   final DiaryEntry entry;
-  final bool preview, fromJournal, calculateOnly;
+  final bool preview, fromJournal, calculateOnly, publicationReview;
   final void Function(DiaryLayout, double, double)? onLayout;
   final DiaryController? diary;
   @override
@@ -40,6 +41,7 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   DiaryLayout? layout;
   DiaryAudio? audio;
   bool calculating = false;
+  final visited = <int>{};
   @override
   void initState() {
     super.initState();
@@ -116,6 +118,9 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
           layout = value;
           calculating = false;
           page = value.pageFor(readingAnchor);
+          visited
+            ..clear()
+            ..add(page);
           if (readingAnchor == null &&
               !widget.preview &&
               !widget.calculateOnly) {
@@ -136,7 +141,10 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   Future<void> turn(int next) async {
     await audio?.navigationPause();
     if (mounted) {
-      setState(() => page = next.clamp(0, layout!.pages.length - 1));
+      setState(() {
+        page = next.clamp(0, layout!.pages.length - 1);
+        visited.add(page);
+      });
       if (!widget.preview && !widget.calculateOnly) {
         await widget.diary?.textProgress(entry, page);
       }
@@ -314,6 +322,22 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                   page: page,
                   count: layout!.pages.length,
                   onPage: turn,
+                ),
+              if (widget.publicationReview && layout != null)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: FilledButton(
+                    key: const Key('diary-confirm-publication'),
+                    onPressed:
+                        calculating || visited.length != layout!.pages.length
+                        ? null
+                        : () => Navigator.pop(context, true),
+                    child: Text(
+                      visited.length == layout!.pages.length
+                          ? 'Опубликовать запись'
+                          : 'Просмотрите все страницы (${visited.length}/${layout!.pages.length})',
+                    ),
+                  ),
                 ),
             ],
           ),

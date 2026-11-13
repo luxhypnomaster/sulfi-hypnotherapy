@@ -77,20 +77,15 @@ Future<void> commitAnnouncementDependency(
       'Для анонса читателям явно выберите «Для всех читателей» в карточке материала.',
     );
   }
-  if ((draft['card']['shortAnnotation'] as String).trim().isEmpty) {
-    draft['card']['shortAnnotation'] = entry.message;
-    await catalog.save(draft);
-  }
-  await catalog.publish(
-    draft,
-    interrupted: interrupted,
-    onStage: onStage,
-    progress: progress,
-  );
-  if (draft['publishedRevision'] != expected ||
-      draft['status'] != 'published') {
+  // Publishing a diary post must never silently publish its catalog object.
+  // The explicit catalog action owns media upload and its separate receipt.
+  final receipt = await catalog.remote.call('catalog.get', {
+    'catalogItemId': id,
+  });
+  if (receipt['immutableRevisionId'] != expected ||
+      receipt['publicationState'] != 'published') {
     throw const FormatException(
-      'Точная версия материала не подтверждена. Анонс сохранён на телефоне.',
+      'Сначала отдельно опубликуйте точную версию материала в каталоге. Анонс сохранён на телефоне.',
     );
   }
 }

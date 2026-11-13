@@ -374,6 +374,18 @@ class DiaryController extends ChangeNotifier {
         },
       );
     }
+    final localPublished = (await authorRepository!.entries())
+        .where((e) => e.id == entry.id && e.status == DiaryStatus.published)
+        .firstOrNull;
+    final snapshot =
+        published.where((e) => e.id == entry.id).firstOrNull ?? localPublished;
+    if (snapshot != null) {
+      entry = entry.copyWith(
+        status: diaryEditFingerprint(entry) == diaryEditFingerprint(snapshot)
+            ? DiaryStatus.published
+            : DiaryStatus.draft,
+      );
+    }
     await authorRepository!.save(entry);
     await load();
   }
@@ -531,6 +543,21 @@ class DiaryController extends ChangeNotifier {
     }
   }
 
+  Future<void> verifyGoogleRights() async {
+    final token = await api?.verifiedIdentityToken();
+    if (token == null) {
+      throw const DiaryApiException(
+        'Нужен Google-вход',
+        DiaryFailure.authorization,
+      );
+    }
+    // auth.whoami only; no pilot provisioning, ACL or server mutations.
+    await api!.authenticateReader(token);
+    policy?.applyVerifiedServerRole(api!.verifiedRole);
+    _localAuthor = api!.verifiedRole == 'MASTER';
+    await load();
+  }
+
   Future<void> switchGoogleAccount() async {
     await logout();
     await signInAuthor();
@@ -572,8 +599,11 @@ class DiaryController extends ChangeNotifier {
     error = null;
     notifyListeners();
     await pauseReaders();
-    await identity?.signOut();
-    await load();
+    try {
+      await identity?.signOut();
+    } finally {
+      await load();
+    }
   }
 
   Future<DiaryAuthorSession> _cloudSession() async {

@@ -11,6 +11,7 @@ import '../models/session_plan.dart';
 import '../services/diary_controller.dart';
 import '../services/diary_api.dart';
 import 'diary_reader.dart';
+import 'alchemist_sync_screen.dart';
 import 'design.dart';
 import 'session_scope.dart';
 import 'recorder_screen.dart';
@@ -114,51 +115,56 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
 
   Future<void> cloud({bool? publish}) async {
     if (busy) return;
-    if (!await save() || !mounted) return;
-    if (publish == true) {
-      final problem =
-          value.publicationErrorFor(
-            advanced: widget.diary.api?.supportsAdvancedPublication ?? false,
-          ) ??
-          previewIssue;
-      if (problem != null) {
-        setState(() => error = problem);
-        return;
-      }
-      final confirm = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Опубликовать запись?'),
-          content: Text('«${value.displayTitle}» станет доступна читателям.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Отмена'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Опубликовать'),
-            ),
-          ],
-        ),
-      );
-      if (confirm != true) return;
-    }
-    timer?.cancel();
-    if (!mounted) return;
     setState(() => busy = true);
+    timer?.cancel();
     try {
+      if (!await save() || !mounted) return;
+      if (publish == true) {
+        final problem =
+            value.publicationErrorFor(
+              advanced: widget.diary.api?.supportsAdvancedPublication ?? false,
+            ) ??
+            previewIssue;
+        if (problem != null) {
+          setState(() => error = problem);
+          return;
+        }
+        FocusScope.of(context).unfocus();
+        final confirm = await Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DiaryReader(
+              entry: value,
+              preview: true,
+              publicationReview: true,
+              diary: widget.diary,
+            ),
+          ),
+        );
+        if (confirm != true || !mounted) return;
+      }
       final controller = SessionScope.maybeOf(context)?.controller;
       if (widget.diary.api?.supportsServerIdentity == true &&
           controller?.capsules != null) {
-        await widget.diary.api!.enqueuePublication(value, published: publish);
+        await widget.diary.signInAuthor();
+        await widget.diary.api!.enqueueDurablePublication(
+          value,
+          published: publish,
+        );
         await controller!.cloudQueue.enqueue(
           'alchemist_diary_queue:${value.id}',
         );
         if (mounted) {
-          setState(
-            () =>
-                saved = 'В очереди приложения. Результат — на экране передач.',
+          unawaited(
+            Navigator.pushReplacement<void, void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AlchemistSyncScreen(
+                  controller: controller,
+                  focusName: 'alchemist_diary_queue:${value.id}',
+                ),
+              ),
+            ),
           );
         }
         return;
@@ -870,22 +876,22 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       child: const Text('Сохранить черновик'),
                     ),
                     if (widget.diary.api != null &&
-                        (widget.diary.policy?.isAuthor ?? true))
+                        (widget.diary.policy?.clientEdition != true))
                       TextButton(
                         onPressed: busy ? null : () => cloud(),
                         child: const Text('Сохранить на Диск'),
                       ),
-                    if (widget.diary.policy?.isAuthor ?? true)
+                    if (widget.diary.policy?.clientEdition != true)
                       FilledButton(
                         style: FilledButton.styleFrom(
                           backgroundColor: neonLime,
                           foregroundColor: ink,
                         ),
                         onPressed: busy ? null : () => cloud(publish: true),
-                        child: const Text('Опубликовать'),
+                        child: const Text('К публикации'),
                       ),
                     if (entry.status == DiaryStatus.published &&
-                        (widget.diary.policy?.isAuthor ?? true))
+                        (widget.diary.policy?.clientEdition != true))
                       TextButton(
                         onPressed: busy ? null : () => cloud(publish: false),
                         child: const Text('Снять публикацию'),

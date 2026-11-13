@@ -123,6 +123,7 @@ void main() {
       await q.enqueue(name);
       await settle17(q, 'running');
       await q.pauseAll();
+      q.foreground();
       await q.recover();
       expect(q.rows.single['_work']['phase'], 'pausing');
       final resume = await q.enqueue(name);

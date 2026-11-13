@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'alchemist_errors.dart';
+import 'diary_api.dart';
+import 'alchemist_work_queue.dart';
 import '../models/diary_entry.dart';
 import 'alchemist_content_upload.dart';
 
@@ -44,7 +46,7 @@ class AlchemistCatalog {
   }
 
   final _preparing = <String, Future<Map<String, dynamic>>>{};
-  Future<void> _store(Map<String, dynamic> card) async {
+  Future<void> _store(Map<String, dynamic> card, {bool enqueue = false}) async {
     await db.transaction((tx) async {
       final name = 'alchemist_card:${card['catalogItemId']}';
       final rows = await tx.query(
@@ -56,6 +58,26 @@ class AlchemistCatalog {
         final previous = jsonDecode(rows.single['value'] as String);
         if (previous['_work'] != null) card['_work'] = previous['_work'];
       }
+      if (enqueue) {
+        final revision = queueRevision(card), work = card['_work'];
+        if (work is Map &&
+            work['revision'] != revision &&
+            const [
+              'running',
+              'preparing',
+              'pausing',
+              'queued',
+            ].contains(work['phase'])) {
+          throw const AlchemistFailure(
+            'Дождитесь текущей передачи перед новой редакцией.',
+            409,
+            'REVISION_IN_FLIGHT',
+          );
+        }
+        if (work is! Map || work['revision'] != revision) {
+          card['_work'] = initialQueuedWork(card, api!.ownerBinding!);
+        }
+      }
       await tx.insert('app_settings', {
         'name': name,
         'value': jsonEncode(card),
@@ -63,7 +85,7 @@ class AlchemistCatalog {
     });
   }
 
-  Future<void> save(Map<String, dynamic> card) async {
+  Future<void> save(Map<String, dynamic> card, {bool enqueue = false}) async {
     if (!controller.library.policy.isAuthor) {
       throw const FormatException('Авторский режим недоступен');
     }
@@ -76,7 +98,31 @@ class AlchemistCatalog {
       );
     }
     if (owner != null) card['ownerBinding'] = owner;
-    await _store(card);
+    if (enqueue && owner == null) {
+      throw const AlchemistFailure(
+        'Нужен Google-вход.',
+        401,
+        'AUTH_REQUIRED',
+        DiaryFailure.authorization,
+      );
+    }
+    await _store(card, enqueue: enqueue);
+    final author = (card['card']?['authorDisplayName'] as String? ?? '').trim();
+    if (author.isNotEmpty) {
+      await db.insert('app_settings', {
+        'name': 'alchemist_author_profile:${owner ?? 'device'}',
+        'value': author,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
+
+  Future<String> authorDefault() async {
+    final rows = await db.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['alchemist_author_profile:${api?.ownerBinding ?? 'device'}'],
+    );
+    return rows.firstOrNull?['value'] as String? ?? '';
   }
 
   Future<Map<String, dynamic>> prepare(
@@ -124,7 +170,7 @@ class AlchemistCatalog {
         'categoryIds': <String>[],
         'tags': <String>[],
         'language': 'ru',
-        'authorDisplayName': '',
+        'authorDisplayName': await authorDefault(),
         'visibility': 'private',
         'releaseNotes': '',
         'coverAssetId': null,
@@ -386,6 +432,15 @@ class AlchemistCatalog {
       );
     }
     final pending = Map<String, dynamic>.from(draft['pending']);
+    if (pending['attempted'] == true) {
+      await remote.reconcileUncertain(
+        pending['operation'],
+        Map<String, dynamic>.from(pending['parameters']),
+      );
+    }
+    pending['attempted'] = true;
+    draft['pending'] = pending;
+    await _store(draft);
     final result = await remote.call(
       pending['operation'],
       Map<String, dynamic>.from(pending['parameters']),

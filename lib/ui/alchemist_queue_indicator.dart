@@ -47,6 +47,7 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
       unawaited(widget.controller.cloudQueue.pauseAll());
     }
     if (state == AppLifecycleState.resumed) {
+      widget.controller.cloudQueue.foreground();
       unawaited(
         widget.controller.diary?.restoreSignIn() ?? Future<void>.value(),
       );
@@ -65,7 +66,9 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
     listenable: widget.controller.cloudQueue,
     builder: (context, _) {
       final queue = widget.controller.cloudQueue;
-      if (!widget.controller.policy.isAuthor || queue.pendingCount == 0) {
+      if (widget.controller.policy.clientEdition ||
+          widget.controller.catalog.api?.ownerBinding == null ||
+          queue.pendingCount == 0) {
         return const SizedBox.shrink();
       }
       return Material(
@@ -83,12 +86,15 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Row(
                 children: [
-                  const Icon(Icons.sync, size: 18, color: neonPink),
+                  const Icon(Icons.sync, size: 18, color: transferYellow),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Передачи: ${queue.pendingCount} · ${alchemistStageLabel(queue.rows.where((r) => !const ['complete', 'cancelled'].contains(r['_work']?['phase'])).firstOrNull?['_work']?['stage'])}',
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: transferYellow,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

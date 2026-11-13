@@ -42,8 +42,10 @@ class SessionController extends ChangeNotifier {
     if (diary != null && diary!.onAccountLogout == null) {
       diary!.onAccountLogout = () {
         _catalogIdentity?.invalidate();
-        if (_cloudQueue != null)
+        _cloudQueue?.invalidateOwner();
+        if (_cloudQueue != null) {
           unawaited(_cloudQueue!.pauseAll(reason: 'OWNER_CHANGED'));
+        }
         if (preview != null) unawaited(preview!.stop());
       };
     }

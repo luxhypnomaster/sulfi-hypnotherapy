@@ -99,6 +99,8 @@ class DiaryApi {
       throw const DiaryApiException('Личный сервер не подключён');
   void clearSession() {}
   Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {}
+  Future<void> enqueueDurablePublication(DiaryEntry entry, {bool? published}) =>
+      enqueuePublication(entry, published: published);
   Future<int> flushPending(DiaryAuthorSession session) async => 0;
   final Uri base;
   final DiaryRequest _request;

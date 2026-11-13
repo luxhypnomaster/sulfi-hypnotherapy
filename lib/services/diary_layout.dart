@@ -1,3 +1,5 @@
+import '../models/diary_publication.dart' show diaryEntryLabel;
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -53,7 +55,7 @@ String diaryDate(DateTime date) {
 }
 
 String diaryMeta(DiaryEntry e) =>
-    '${e.number == null ? 'Черновик' : 'Запись №${e.number}'} · ${diaryDate(e.createdAt)}';
+    '${diaryEntryLabel(e)} · ${diaryDate(e.createdAt)}';
 double diaryMeasure(
   String text,
   double width,

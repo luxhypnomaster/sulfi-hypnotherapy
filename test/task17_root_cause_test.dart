@@ -46,6 +46,7 @@ void main() {
       expect(sent, 0);
       expect(work['attempts'] ?? 0, 0);
       expect(work['code'], 'LIFECYCLE_PAUSED');
+      q.foreground();
       await q.enqueue(name);
       for (var i = 0; i < 80 && sent == 0; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 10));

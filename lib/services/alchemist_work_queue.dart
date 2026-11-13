@@ -16,6 +16,8 @@ import 'alchemist_errors.dart';
 
 String alchemistStageLabel(Object? phase) =>
     const {
+      'restoring': 'Проверка Google-сессии и прав',
+      'diary_committed': 'Запись дневника подтверждена сервером',
       'queued': 'Ожидает отправки',
       'running': 'Выполняется',
       'transferring': 'Передача файла',
@@ -33,6 +35,43 @@ String alchemistStageLabel(Object? phase) =>
       'pausing': 'Завершается текущий запрос',
     }[phase] ??
     'Ожидание';
+
+String alchemistWorkLabel(Map work) {
+  if (work['phase'] == 'paused') {
+    return const {
+          'USER_PAUSED': 'Пауза пользователем',
+          'LIFECYCLE_PAUSED': 'Пауза после сворачивания',
+          'OWNER_CHANGED': 'Нужен исходный Google-аккаунт',
+          'APP_RESTART': 'Пауза после перезапуска',
+        }[work['pauseReason'] ?? work['code']] ??
+        'Передача приостановлена';
+  }
+  return const {
+        'queued': 'В очереди',
+        'preparing': 'Проверка подключения и прав',
+        'running': 'Выполняется',
+        'complete': 'Подтверждено сервером',
+        'waiting_auth': 'Ожидает Google-вход',
+        'waiting_permission': 'Нужны права сервера',
+        'waiting_network':
+            'Ожидает сеть — нажмите «Продолжить» после подключения',
+        'pausing': 'Завершается текущий запрос',
+        'failed': 'Сбой — можно повторить',
+        'cancelled': 'Отправка отменена',
+      }[work['phase']] ??
+      'Ожидание';
+}
+
+double? alchemistFileProgress(Map work) {
+  if (!const ['transferring', 'bytes_acked'].contains(work['stage']) ||
+      work['phase'] != 'running') {
+    return null;
+  }
+  final total = work['totalBytes'], bytes = work['bytes'];
+  return total is num && bytes is num && total > 0
+      ? (bytes / total).clamp(0.0, 1.0).toDouble()
+      : null;
+}
 
 class QueueEnqueueResult {
   const QueueEnqueueResult(this.phase, {this.existing = false, this.reason});
@@ -55,6 +94,22 @@ String queueRevision(Map<String, dynamic> row) => sha256
       ),
     )
     .toString();
+
+Map<String, dynamic> initialQueuedWork(
+  Map<String, dynamic> row,
+  String owner, {
+  bool complete = false,
+}) => {
+  'phase': complete ? 'complete' : 'queued',
+  'stage': complete ? 'diary_committed' : 'queued',
+  'code': null,
+  'message': null,
+  'revision': queueRevision(row),
+  'taskId': newId(),
+  'ownerBinding': owner,
+  'attempts': 0,
+  'resumeRequested': false,
+};
 
 /// One runner over the existing card and diary outbox records. No second queue.
 /// Survives editor navigation. Android suspension cooperatively pauses work;
@@ -82,6 +137,19 @@ class AlchemistWorkQueue extends ChangeNotifier {
   final _pauseCodes = <String, String>{};
   final _resumeRequested = <String>{};
   String? _activeName;
+  String _runnerEpoch =
+      newId(); // Local execution intent, never Google identity.
+  bool _backgroundPaused = false;
+  void foreground() => _backgroundPaused = false;
+  void invalidateOwner() {
+    _runnerEpoch = newId();
+    for (final row in rows) {
+      final name = row['_name'] as String;
+      _stops[name] = true;
+      _pauseCodes[name] = 'OWNER_CHANGED';
+    }
+  }
+
   final _cancelled = <String>{};
   Future<void> _progress = Future.value();
   void _recordProgress(String name, Map<String, dynamic> values) {
@@ -200,6 +268,27 @@ class AlchemistWorkQueue extends ChangeNotifier {
           reason: 'ALREADY_COMMITTED',
         );
       }
+      if (_backgroundPaused) {
+        _stops[name] = true;
+        _pauseCodes[name] = 'LIFECYCLE_PAUSED';
+        value['_work'] = {
+          ...work,
+          'phase': _activeName == name ? 'pausing' : 'paused',
+          'code': 'LIFECYCLE_PAUSED',
+          'pauseReason': 'LIFECYCLE_PAUSED',
+        };
+        await tx.update(
+          'app_settings',
+          {'value': jsonEncode(value)},
+          where: 'name=?',
+          whereArgs: [name],
+        );
+        return const QueueEnqueueResult(
+          'paused',
+          existing: true,
+          reason: 'LIFECYCLE_PAUSED',
+        );
+      }
       if (_activeName == name) {
         if (work['revision'] != null && work['revision'] != revision) {
           throw const AlchemistFailure(
@@ -211,6 +300,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
         if (_stops[name] == true) {
           _resumeRequested.add(name);
           work['resumeRequested'] = true;
+          work['runnerEpoch'] = _runnerEpoch;
           value['_work'] = work;
           await tx.update(
             'app_settings',
@@ -230,7 +320,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
           reason: 'ALREADY_RUNNING',
         );
       }
-      if (work['revision'] == revision && phase == 'queued') {
+      if (work['revision'] == revision &&
+          phase == 'queued' &&
+          work['runnerEpoch'] == _runnerEpoch &&
+          _stops[name] != true) {
         return const QueueEnqueueResult('queued', existing: true);
       }
       final same = work['revision'] == revision;
@@ -247,6 +340,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
         'revision': revision,
         'taskId': same ? work['taskId'] ?? newId() : newId(),
         'ownerBinding': current,
+        'runnerEpoch': _runnerEpoch,
+        'pauseReason': null,
         'attempts': same ? work['attempts'] ?? 0 : 0,
         'resumeRequested': false,
       };
@@ -301,6 +396,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
   }
 
   Future<void> pauseAll({String reason = 'LIFECYCLE_PAUSED'}) async {
+    if (reason == 'LIFECYCLE_PAUSED') _backgroundPaused = true;
     for (final row in List<Map<String, dynamic>>.of(rows)) {
       if (!const [
         'complete',
@@ -318,11 +414,12 @@ class AlchemistWorkQueue extends ChangeNotifier {
     if (_running) return;
     for (final row in List<Map<String, dynamic>>.of(rows)) {
       if (!const [
-        'complete',
-        'cancelled',
-        'paused',
-        'failed',
-      ].contains(row['_work']?['phase'])) {
+            'complete',
+            'cancelled',
+            'paused',
+            'failed',
+          ].contains(row['_work']?['phase']) &&
+          row['_work']?['runnerEpoch'] != _runnerEpoch) {
         await _patch(row['_name'], {'phase': 'paused', 'code': 'APP_RESTART'});
       }
     }
@@ -335,18 +432,33 @@ class AlchemistWorkQueue extends ChangeNotifier {
       return;
     }
     _running = true;
+    final pumpOwner = owner(), pumpEpoch = _runnerEpoch;
     try {
       while (!_closed) {
+        if (owner() != pumpOwner || _runnerEpoch != pumpEpoch) break;
         await refresh();
         final row = rows
-            .where((v) => v['_work']?['phase'] == 'queued')
+            .where(
+              (v) =>
+                  v['_work']?['phase'] == 'queued' &&
+                  v['_work']?['runnerEpoch'] == _runnerEpoch,
+            )
             .firstOrNull;
         if (row == null) break;
         final name = row['_name'] as String, originalOwner = owner();
         bool stop() =>
-            _closed || _stops[name] == true || owner() != originalOwner;
+            _closed ||
+            _backgroundPaused ||
+            _runnerEpoch != pumpEpoch ||
+            _stops[name] == true ||
+            owner() != originalOwner;
         if (stop()) {
-          await pause(name, reason: _pauseCodes[name] ?? 'OWNER_CHANGED');
+          await pause(
+            name,
+            reason:
+                _pauseCodes[name] ??
+                (_backgroundPaused ? 'LIFECYCLE_PAUSED' : 'OWNER_CHANGED'),
+          );
           continue;
         }
         _activeName = name;
@@ -367,7 +479,9 @@ class AlchemistWorkQueue extends ChangeNotifier {
               : (retries[trace] ?? 0);
           _recordProgress(name, {
             'traceId': trace,
-            'networkRetries': retries.values.fold<int>(0, (n, v) => n + v),
+            'networkRetries':
+                (row['_work']?['networkRetries'] as int? ?? 0) +
+                retries.values.fold<int>(0, (n, v) => n + v),
           });
         }
 
@@ -402,7 +516,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 }
               },
             ),
-            zoneValues: {#alchemistTask: row['_work']?['taskId']},
+            zoneValues: {
+              #alchemistTask: row['_work']?['taskId'],
+              #alchemistInterrupted: stop,
+            },
           );
           await _progress;
           await _patch(name, {
