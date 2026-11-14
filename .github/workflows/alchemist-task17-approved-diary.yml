@@ -1,0 +1,43 @@
+name: Task17 narrowly approved Diary patch or rollback (TRUSTED MAIN ONLY)
+on:
+  workflow_dispatch:
+    inputs:
+      execute_approved_patch:
+        description: 'Separate owner approval of exact Diary-only diff and rollback6 is required; default is OFF'
+        type: boolean
+        default: false
+      mode:
+        description: 'Apply only to existing version6 or roll back our verified Diary-only version; no bootstrap'
+        type: choice
+        options: [inspect, apply, rollback]
+        default: inspect
+permissions:
+  contents: read
+concurrency:
+  group: alchemist-production
+  cancel-in-progress: false
+jobs:
+  approved_diary_only:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && (inputs.mode == 'inspect' || inputs.execute_approved_patch == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Validate subset and stop conditions before credentials
+        run: node --test scripts/task17/test_approved_diary_patch.mjs
+      - name: Install pinned SDK before loading repository OAuth
+        run: npm install --prefix "$RUNNER_TEMP/task17-clasp" --ignore-scripts --no-audit --no-fund @google/clasp@3.4.1
+      - name: Existing Script and deployment only; no bootstrap or ACL change
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+          TASK17_APPROVED: ${{ inputs.mode == 'inspect' && 'READ_ONLY_INSPECTION' || 'DIARY_ONLY_WITH_ROLLBACK6' }}
+          TASK17_PATCH_MODE: ${{ inputs.mode }}
+        run: node scripts/task17/approved_diary_patch.mjs
+      - name: Remove private transient work and credential
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/task17-approved-diary" "$RUNNER_TEMP/task17-approved.clasprc.json"

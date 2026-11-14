@@ -1,0 +1,13 @@
+{
+  "kind": "READ_ONLY_GIT_SOURCE_DRY_RUN_NOT_LIVE",
+  "source": "1a0cf8e5a60144075eec793767953586bfa319a2",
+  "files": 23,
+  "changed": [
+    "Diary"
+  ],
+  "diaryBefore": "2d9c9c5cccd8a0ea5c4ab36ab4ea1341e0253ef270a4d2debfc2e713dd27eec7",
+  "diaryAfter": "e8402c7fd04ff1507832d92b858720fd6958626c1004b21bafcc24be8c49692f",
+  "googleCalls": 0,
+  "initialConfig": "CONTROLLED_FIXTURE",
+  "deployment": "NOT_RUN_NEEDS_OWNER_APPROVAL"
+}

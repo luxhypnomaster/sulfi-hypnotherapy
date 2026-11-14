@@ -1,0 +1,15 @@
+{
+  "permission": "owner explicit only three files and inspect",
+  "approvedSnapshot": "ef8471954dd53d9d719a757a55ea77e87365c643",
+  "previousMain": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+  "main": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "paths": [
+    ".github/workflows/alchemist-task17-approved-diary.yml",
+    "scripts/task17/approved_diary_patch.mjs",
+    "scripts/task17/test_approved_diary_patch.mjs"
+  ],
+  "changedFiles": 3,
+  "GASwrites": false,
+  "mode": "inspect",
+  "execute_approved_patch": false
+}

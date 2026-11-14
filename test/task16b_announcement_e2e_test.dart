@@ -35,24 +35,34 @@ void main() {
     );
     HttpOverrides.global = null;
     final http = HttpClient();
-    var failUpload = true;
+    var failUpload = true, losePublishReply = true;
+    final calls = <Map<String, dynamic>>[];
     Future<DiaryResponse> connection(
       String method,
       Uri uri,
       Map<String, String> headers,
       String? body,
     ) async {
-      if (failUpload && jsonDecode(body!)['operation'] == 'media.beginUpload') {
+      final envelope = Map<String, dynamic>.from(jsonDecode(body!));
+      calls.add(envelope);
+      if (failUpload && envelope['operation'] == 'media.beginUpload') {
         throw const SocketException('controlled DNS outage');
       }
       final request = await http.postUrl(Uri.parse('http://127.0.0.1:$port'));
       headers.forEach(request.headers.set);
-      request.add(utf8.encode(body!));
+      request.add(utf8.encode(body));
       final response = await request.close();
-      return DiaryResponse(
+      final result = DiaryResponse(
         response.statusCode,
         await utf8.decoder.bind(response).join(),
       );
+      if (losePublishReply && envelope['operation'] == 'catalog.publish') {
+        losePublishReply = false;
+        throw const SocketException(
+          'controlled lost reply AFTER real domain commit',
+        );
+      }
+      return result;
     }
 
     final f = await Fixture15.open(),
@@ -93,7 +103,7 @@ void main() {
         connection: connection,
         credential: () async => 'TEST_OWNER',
         identityScope: () => diaryApi.readerScope,
-        maxAttempts: 1,
+        maxAttempts: 3,
       );
       final catalog = AlchemistCatalog(c, api: remote),
           reader = AlchemistApi(endpoint, connection: connection);
@@ -128,8 +138,52 @@ void main() {
       );
       expect((await reader.call('feed.list', {}))['entries'], isEmpty);
       failUpload = false;
+      await catalog.publish(draft);
+      expect(
+        (await reader.call('feed.list', {}))['entries'],
+        isEmpty,
+        reason: 'Catalog publication does not create a diary post',
+      );
       final published = await diaryApi.publish(entry, session, published: true);
       expect(published.status, DiaryStatus.published);
+      final publishCalls = calls
+          .where((c) => c['operation'] == 'catalog.publish')
+          .toList();
+      expect(publishCalls, hasLength(2));
+      expect(
+        publishCalls[0]['parameters']['requestId'],
+        publishCalls[1]['parameters']['requestId'],
+      );
+      final firstCommit = calls.indexOf(publishCalls.first),
+          replay = calls.indexOf(publishCalls.last);
+      expect(
+        calls
+            .sublist(firstCommit + 1, replay)
+            .any((c) => c['operation'] == 'catalog.get'),
+        true,
+        reason: 'Uncertain real domain commit is reconciled before keyed receipt replay',
+      );
+      final short = DiaryEntry(
+        id: 'short17-domain',
+        title: 'Короткая запись',
+        message: 'Добавь себе в библиотеку',
+        blocks: const [],
+        createdAt: DateTime.now().toUtc(),
+        updatedAt: DateTime.now().toUtc(),
+      );
+      final shortPost = await diaryApi.publish(short, session, published: true);
+      expect(shortPost.status, DiaryStatus.published);
+      final feed = (await reader.call('feed.list', {}))['entries'] as List;
+      final shortPublic = feed
+          .map((e) => e['entry'])
+          .singleWhere((e) => e['id'] == short.id);
+      expect(shortPublic['message'], short.message);
+      expect(shortPublic['blocks'], isEmpty);
+      expect(
+        shortPublic['contentLinks'] ?? [],
+        isEmpty,
+        reason: 'Author text is not an invented action',
+      );
       final stats = await remote.call('test.stats', {});
       expect(
         stats['blobs'],

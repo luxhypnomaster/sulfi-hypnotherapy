@@ -1,0 +1,13 @@
+{
+  "run": 43515852713,
+  "attempt": 2,
+  "allThreeNativeLanes": "NOT_RUN_BEFORE_EMULATOR",
+  "cause": "GitHub draft release asset GET403 for contents:read integration token",
+  "candidateBuild": "PASS",
+  "appSource": "85ff50736c6be28bda55cf759f232d8347f3ad3e",
+  "cacheKey": "task17-quarantine-pair-85ff50736c6be28bda55cf759f232d8347f3ad3e",
+  "correction": "Manual trusted branch native-only reuse with job contents:write, required by GitHub private draft reads; no repo privacy or Google ACL changes",
+  "noRebuild": true,
+  "noFullTestRerun": true,
+  "ownerPhysical": "NOT_RUN"
+}

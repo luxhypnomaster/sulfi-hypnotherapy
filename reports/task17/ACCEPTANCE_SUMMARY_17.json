@@ -1,0 +1,16 @@
+{
+  "criteria": 67,
+  "counts": {
+    "PASS": 9,
+    "PARTIAL": 56,
+    "BLOCKED": 2
+  },
+  "fullVerifyPass": true,
+  "pipelineConclusion": "failure",
+  "nativeUpgradeThreeLanes": true,
+  "pairReadbackVerified": true,
+  "driveReadback": true,
+  "GooglePhysical": "NOT_RUN",
+  "serverPatch": "WAITING_OWNER_APPROVAL",
+  "overall": "PARTIAL_NOT_ACCEPTED"
+}

@@ -278,12 +278,11 @@ packages:
     source: hosted
     version: "7.2.0"
   google_sign_in_android:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: google_sign_in_android
-      sha256: "312e74b3e839896ff30ed98310da4cc24dbfa19ad060b1612f7718d5afa66480"
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/google_sign_in_android"
+      relative: true
+    source: path
     version: "7.2.18"
   google_sign_in_ios:
     dependency: transitive

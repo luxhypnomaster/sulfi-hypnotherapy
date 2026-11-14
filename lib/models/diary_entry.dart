@@ -184,9 +184,6 @@ class DiaryEntry {
     }
     if (title.trim().isEmpty) return 'Заполните название записи';
     if (message.trim().isEmpty) return 'Заполните короткое послание';
-    if (!blocks.any((b) => b.substantive)) {
-      return 'Добавьте содержательный блок';
-    }
     return null;
   }
 

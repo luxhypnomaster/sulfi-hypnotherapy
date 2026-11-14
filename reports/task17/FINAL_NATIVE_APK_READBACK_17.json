@@ -1,0 +1,120 @@
+{
+  "allVerified": true,
+  "method": "metadata parent + raw downloaded byte equality + size + SHA256",
+  "verifiedAt": "2026-11-14T16:34:22.768809+00:00",
+  "scope": "final native and APK reports; APK binaries are GitHub only",
+  "files": [
+    {
+      "name": "RESULT_17.md",
+      "id": "1so3KqDMfpQgEUGQeZ-83lvDHu8S9Cer1",
+      "size": 7862,
+      "sha256": "e2ef44b447a180bee92e495e3837e32cb4c1a08651a67186a45e5793459b5735",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "ROOT_CAUSE_17.md",
+      "id": "1-3sWKbNGI0x4GVKhztOGB7WJyBtFdRnx",
+      "size": 12347,
+      "sha256": "55a8570dfe724fecc1733bc6d12a566b49ba43e00ece53f908d3d1ab5047543e",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "TESTS_17.md",
+      "id": "1gUhhBSU-0hiWEgVx-ARQ19dp8JNKZoqY",
+      "size": 5270,
+      "sha256": "ea6d20cf3ac9178c88bbba5d56d07ace867742c8b398cd89c0d85375a09a9f1b",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "MIGRATION_17.md",
+      "id": "10bSdNw-PeX9J0DPEJ0OMqcCiDxOOb300",
+      "size": 3330,
+      "sha256": "e69910235a77e011d5e2d8ce8b337e98b2a38aa922b172f49862a1c28c4d3999",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "PHONE_QA_17.md",
+      "id": "1alNQIRbD_kJ5t3ymhVqjmpS-5ZMxRCri",
+      "size": 4607,
+      "sha256": "c3c098a81ebc66272b95c3c79a1478a53964677fbf9c999efc8cd46c9000b145",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "1mUB6v_XyBnLbXJ9AwMRWxkOb7jlY0_86",
+      "size": 3471,
+      "sha256": "e230a0a2926f6ddfd1f24d000309983c9f19b73850d5b7a131168761acf40914",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "CODEX_EFFICIENCY_17.md",
+      "id": "1edzjk7YJtfJ7ikwbFhl-Sa5Dq5lgXwcV",
+      "size": 11241,
+      "sha256": "ab27b0b092ec2409d97285795a40245c44712de387cc809d12aeb0f804f99837",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "CHANGES_17.md",
+      "id": "1gg8agI1nY-rsoC9mg-rp4ppiRmijMyCv",
+      "size": 3163,
+      "sha256": "2ce4b5e41abaf6bd04ab9d6568fa9a452a6554496365efe50b2db6d1ba175c34",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "ISSUES_17.md",
+      "id": "1QIsnhkWQllXQY0X_79j24rVGHpDb2CIH",
+      "size": 3676,
+      "sha256": "fb488be317713d949f7f8698acb67033170ff2275c0f5f1e4507038e356c4867",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "ACCEPTANCE_17.csv",
+      "id": "1-rviNJ9GZIM9-JarHuorDB0uUCvIaBav",
+      "size": 20640,
+      "sha256": "4c4a50c77f2b824f4f52c4bf49fdf466befcf0e3e363768dfb4435e9996a8008",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "APK_PAIR_17.json",
+      "id": "1fs2vWBOu4t7GW_nmyYHZngcPeTQsBa3N",
+      "size": 1855,
+      "sha256": "5e5ec2615d6c107c558d0dd23d13d32e9d519a71c1fa0323421d8935f4731a1f",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "ACCEPTANCE_SUMMARY_17.json",
+      "id": "1StODyEVodqAArrpaJ6ujjOBFTH4yCbVt",
+      "size": 355,
+      "sha256": "c47fee2c89d7e329a1f6c30762b083836e37882c1f16091b7217d6054903f9ce",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "NATIVE_APK_FINAL_PROOF_17.json",
+      "id": "1wVjPwkrqWgN5vK0CGleY-g64Tt4KuZ6G",
+      "size": 1126,
+      "sha256": "81ff044e596ebb8fc69412935d18f9996534f1fec2bcd729e2a5746b08f072a9",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    },
+    {
+      "name": "NATIVE_APK_FINAL_EVIDENCE_17.zip",
+      "id": "1kc1PxgFbLlq3-jRUSg2lO8oFDMQCNBZU",
+      "size": 4014358,
+      "sha256": "61820ee2805a2ea26780d12459610683b42b6cbcedc691dcaee3b395cb217be4",
+      "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI",
+      "verified": true
+    }
+  ]
+}

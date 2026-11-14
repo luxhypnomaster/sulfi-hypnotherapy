@@ -1,0 +1,93 @@
+{
+  "id": 43548636228,
+  "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228",
+  "status": "completed",
+  "conclusion": "failure",
+  "jobs": [
+    {
+      "id": 132305696287,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 132305697172,
+      "name": "delivery16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305697448,
+      "name": "appfault16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305697525,
+      "name": "storage16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305697608,
+      "name": "delivery17",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305697858,
+      "name": "native17_cached",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305725652,
+      "name": "regressions",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305734310,
+      "name": "native_upgrade",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132305739828,
+      "name": "emulator_qa",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132307693418,
+      "name": "candidate17",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 132307695124,
+      "name": "candidate16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132310281448,
+      "name": "native17 (client, 25, 738283907, c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 132310281466,
+      "name": "native17 (master, 25, 738283668, d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 132310281526,
+      "name": "native17 (master, 26, 743160429, 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a)",
+      "status": "completed",
+      "conclusion": "failure"
+    }
+  ]
+}

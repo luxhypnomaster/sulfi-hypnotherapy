@@ -1,0 +1,16 @@
+✔ approved subset changes exactly Diary, preserves initial config/vendor/manifest and all other bytes (4.913019ms)
+✔ unpublished HEAD cannot be overwritten (0.550083ms)
+✔ candidate diagnostic Router/JWT cannot leak into baseline subset (0.430355ms)
+✔ file names and manifest are fail closed (0.283869ms)
+✔ only exact old and expected new Diary digests permitted (0.799441ms)
+✔ readback verifies every byte/type, not just one source name (1.231108ms)
+✔ deployment must retain exact endpoint, execution identity, access and ID (0.537364ms)
+✔ runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard (0.468242ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94.019615

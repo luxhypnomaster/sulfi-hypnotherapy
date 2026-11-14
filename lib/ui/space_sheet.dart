@@ -7,6 +7,7 @@ import '../services/session_controller.dart';
 import '../services/preview_player.dart';
 import '../services/access_policy.dart';
 import 'backup_screen.dart';
+import 'google_account_panel.dart';
 import 'content_catalog_screen.dart';
 
 Future<void> showSpaceSheet(
@@ -32,6 +33,10 @@ Future<void> showSpaceSheet(
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
+          if (controller?.diary != null) ...[
+            GoogleAccountPanel(diary: controller!.diary!),
+            const Divider(),
+          ],
           const Text(
             'Личные аудио, планы и история хранятся на этом устройстве. Дневник имеет отдельную настройку публикаций. Удаление приложения удалит локальные данные: создайте внешнюю ZIP-копию.',
           ),
@@ -45,7 +50,13 @@ Future<void> showSpaceSheet(
             builder: (context, _) => Column(
               children: [
                 Text(
-                  library.policy.isAuthor ? 'Режим: Автор' : 'Режим: Клиент',
+                  library.policy.serverIdentityRequired
+                      ? (library.policy.clientEdition
+                            ? 'Редакция: CLIENT'
+                            : 'Редакция: MASTER · локальные материалы')
+                      : (library.policy.isAuthor
+                            ? 'Режим: Автор'
+                            : 'Режим: Клиент'),
                 ),
                 if (!library.policy.clientEdition &&
                     !library.policy.serverIdentityRequired)
@@ -133,7 +144,7 @@ Future<void> showSpaceSheet(
             label: const Text('Удалить все данные приложения'),
           ),
           const SizedBox(height: 12),
-          const Text('Сульфи · 0.4.12+17', textAlign: TextAlign.center),
+          const InstalledBuildLabel(),
         ],
       ),
     ),

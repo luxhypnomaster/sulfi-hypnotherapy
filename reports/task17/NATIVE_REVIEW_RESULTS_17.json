@@ -1,0 +1,40 @@
+{
+  "rows": [
+    {
+      "baseline": 26,
+      "edition": "master",
+      "api": 34,
+      "job": 132413250955,
+      "run": 43583577375,
+      "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+      "driverSource": "56a9b362718f48bef83eca8daf24d3e58a0431ca",
+      "counts": {
+        "PASS": 5,
+        "BLOCKED": 2
+      },
+      "updatedTo27": false,
+      "evidence": "reports/task17/native_api34_attempt2/master26"
+    },
+    {
+      "baseline": 25,
+      "edition": "master",
+      "api": 34,
+      "job": 132413251139,
+      "run": 43583577375,
+      "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+      "driverSource": "56a9b362718f48bef83eca8daf24d3e58a0431ca",
+      "counts": {
+        "PASS": 13,
+        "NOT_RUN": 1
+      },
+      "updatedTo27": true,
+      "evidence": "reports/task17/native_api34_attempt2/master25"
+    }
+  ],
+  "nativeGate": "BLOCKED_MASTER26",
+  "APK": "NOT_ISSUED",
+  "physicalGoogle": "NOT_RUN",
+  "mainModified": false,
+  "serverWrites": false,
+  "adminReadback": "BLOCKED_NEEDS_TRUSTED_MAIN_INSPECT"
+}

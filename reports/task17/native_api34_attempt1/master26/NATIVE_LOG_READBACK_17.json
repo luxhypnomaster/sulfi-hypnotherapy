@@ -1,0 +1,20 @@
+[
+  {
+    "file": "NATIVE_UI_UPGRADE_17.json",
+    "bytes": 35373,
+    "sha256": "80fef504ade522395fd6a034f0b0ed2e53f30289ee0b65a6111a28b627ce1347",
+    "verified": true
+  },
+  {
+    "file": "failure-ui_module_pause.png",
+    "bytes": 708919,
+    "sha256": "388fb35b009a9968b7d7abeef1c67aa4bc074332f407cf2267b5ddca254b4613",
+    "verified": true
+  },
+  {
+    "file": "failure-ui_module_pause.xml",
+    "bytes": 5890,
+    "sha256": "5d816d4e39cf0f1b0bf18bc9f9187671ce3bba9847da54fcf2fe1d8dda6b2ebc",
+    "verified": true
+  }
+]

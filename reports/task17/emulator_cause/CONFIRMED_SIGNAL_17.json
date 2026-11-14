@@ -1,0 +1,38 @@
+{
+  "run": 43610436406,
+  "job": 132494133764,
+  "driver": "9a8e60a",
+  "baseline": 26,
+  "targetInstalled": false,
+  "emulatorVersion": "37.2.13",
+  "observation": {
+    "childPid": 3080,
+    "observedChildNames": [
+      "Name:\temulator.task17",
+      "Name:\tqemu-system-x86"
+    ],
+    "sampleCount": 350,
+    "schema": 1,
+    "avdLaunch": true,
+    "exitCode": -11,
+    "signal": "SIGSEGV",
+    "wrapperReceivedSignals": [],
+    "before": {
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+      "memory.current": "5592883200",
+      "memory.max": "max",
+      "memory.peak": "7450726400",
+      "MemAvailable": "7115680 kB"
+    },
+    "after": {
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+      "memory.current": "958513152",
+      "memory.max": "max",
+      "memory.peak": "7466684416",
+      "MemAvailable": "7142180 kB"
+    },
+    "durationSeconds": 350.65
+  },
+  "conclusion": "HOST_QEMU_SIGSEGV_BEFORE_CANDIDATE; not normal cleanup; no recorded cgroup oom kill",
+  "faultingFunction": "UNKNOWN_NO_STACK"
+}

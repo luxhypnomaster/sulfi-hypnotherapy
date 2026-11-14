@@ -1,0 +1,12 @@
+{
+  "run": 43515852713,
+  "source": "85ff50736c6be28bda55cf759f232d8347f3ad3e",
+  "firstBuild": "Gradle flutter loader classpath Kotlin stdlib2.2.21 not found at official plugin portal; stopped before Sulfi compilation",
+  "readOnlyHypothesisCheck": {
+    "plugins.gradle.org_POM_HEAD": 200,
+    "repo.maven.apache.org_POM_HEAD": 200
+  },
+  "action": "gh run rerun --failed, bounded once; successful verify468PASS reused; no runtime changes",
+  "native": "NOT_STARTED_PREVIOUS_ATTEMPT",
+  "attempt": 1
+}

@@ -1,0 +1,16 @@
+{
+  "comparedTo": "25ecdf984a831a288bf85e14119a5e054144ccf9",
+  "unchanged": {
+    "lib/data/app_database.dart": true,
+    "lib/services/library_service.dart": true,
+    "lib/services/capsule_service.dart": true,
+    "third_party/sqflite_android": true,
+    "android/app/build.gradle.kts": true,
+    "android/app/src/main/kotlin/ru/sulfi/sulfi_hypnotherapy/MainActivity.kt": true
+  },
+  "schema": 9,
+  "ownerDeviceTouched": false,
+  "native27Tests": "CLIENT25_PASS_MASTER25_MASTER26_BLOCKED_BEFORE_CANDIDATE",
+  "actualAPK26Producer": "9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c",
+  "apk26ToPR47RuntimeUnchanged": true
+}

@@ -1,0 +1,45 @@
+{
+  "task": "№17",
+  "title": "Стабилизация авторизации, очереди, публикаций и каталога",
+  "date": "2026-11-13",
+  "source": "owner physical QA and existing Google Docs + Codex reports",
+  "files": {
+    "04_AUTH_QUEUE_TRACE.md": {
+      "sha256": "861f09c3c7b28dc0a37aa2405abe462df2be09d2bd49b6e8563e884466290a61",
+      "bytes": 5405
+    },
+    "05_RELEASE_SECURITY_ROLLBACK.md": {
+      "sha256": "5e7c5a82e091339512bc0eb6f58a861acc5f06f4625ba15cc2591161c8249a03",
+      "bytes": 6293
+    },
+    "08_CODEX_COMMAND.txt": {
+      "sha256": "37e8b270226c94648d6f6c41c8ea417500863d454fb8b206619f0de361b4b1a1",
+      "bytes": 2859
+    },
+    "01_TECHNICAL_SPEC_17.md": {
+      "sha256": "6ec59ad8cda7284e79e4f3a80699753dad566ce5a726adeca145c486076d7be0",
+      "bytes": 22980
+    },
+    "00_START_HERE.md": {
+      "sha256": "39d92a620609567e9f7dfdb60146e8043b12484c9e61be8f524be26e5492cf14",
+      "bytes": 6320
+    },
+    "03_OWNER_PHONE_QA_17.md": {
+      "sha256": "9fd5b967a3df07769f2dc335327f980d32f35438561d57693b52511f831f2ef4",
+      "bytes": 10635
+    },
+    "06_SCOPE_TRACEABILITY.md": {
+      "sha256": "3ee972b002756cad1659a4322b989b0057fe5b4f183fcb906a169a3d47487bb0",
+      "bytes": 5148
+    },
+    "02_ACCEPTANCE_17.csv": {
+      "sha256": "f24942b4cf0cbf013022a306149cf727033e1d0e959f4726b4ca7f997f1ede5f",
+      "bytes": 14072
+    },
+    "07_DELIVERY_REPORTS.md": {
+      "sha256": "b48480970ef1728ad80a1ca20b3063049f8d1fd856f8af4def888831bffcacd2",
+      "bytes": 4241
+    }
+  },
+  "acceptance_criteria": 67
+}

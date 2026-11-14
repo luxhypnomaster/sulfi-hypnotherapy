@@ -1,0 +1,12 @@
+[
+  {
+    "rendererRequested": "swangle",
+    "rawJobLogSHA256": "36cb7da97d2da61f4bca3c901843c0768a8fe792fe5c75e590805393c17755bf",
+    "bytes": 425226
+  },
+  {
+    "rendererRequested": "lavapipe",
+    "rawJobLogSHA256": "9a3d4a148f82f580ac9160b95ec153b06aa1960d74f5042f257d77337c45d69e",
+    "bytes": 422721
+  }
+]

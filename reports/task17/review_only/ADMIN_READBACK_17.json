@@ -1,0 +1,161 @@
+{
+  "run": 43584729310,
+  "mainSource": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "readOnly": true,
+  "scriptId": "1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc",
+  "title": "Сервер Проекта Алхимик",
+  "deploymentId": "AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg",
+  "versionNumber": 6,
+  "executeAs": "USER_DEPLOYING",
+  "access": "ANYONE_ANONYMOUS",
+  "ownerVerified": true,
+  "headEqualsVersion6": true,
+  "pinned21Files": "PASS",
+  "all23Types": "PASS",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "files": [
+    {
+      "name": "Access",
+      "type": "SERVER_JS",
+      "bytes": 3030,
+      "sha256": "a783d52984ca42edde63fccf0a1daadbea2dd2a55c87baa76679932f007755de"
+    },
+    {
+      "name": "appsscript",
+      "type": "JSON",
+      "bytes": 437,
+      "sha256": "8d05e89451a96d39feb8f290892019f6288cd4598430498d3efa1acde7e52c80"
+    },
+    {
+      "name": "AtomicStore",
+      "type": "SERVER_JS",
+      "bytes": 7234,
+      "sha256": "2beddd314de002c8958dd6a3543c3905e686a97ff0f767027d6d913dddff6c21"
+    },
+    {
+      "name": "Bootstrap",
+      "type": "SERVER_JS",
+      "bytes": 3022,
+      "sha256": "435d97081bf0bf43182e670982669970072a1ce42dbbcf52d07a9b0120e67f48"
+    },
+    {
+      "name": "Catalog",
+      "type": "SERVER_JS",
+      "bytes": 17383,
+      "sha256": "4a1f43cf7063ee0187ea59583136512e15654b559e29ee26d1d812118e8d583d"
+    },
+    {
+      "name": "Diary",
+      "type": "SERVER_JS",
+      "bytes": 9771,
+      "sha256": "2d9c9c5cccd8a0ea5c4ab36ab4ea1341e0253ef270a4d2debfc2e713dd27eec7"
+    },
+    {
+      "name": "GasFiles",
+      "type": "SERVER_JS",
+      "bytes": 2834,
+      "sha256": "14733f7a9b1a75b6e5b3dd7172879c523ef30191986244ae07db66fa992a8dd1"
+    },
+    {
+      "name": "GasFolders",
+      "type": "SERVER_JS",
+      "bytes": 2569,
+      "sha256": "f9afdbbc605aae81911ba6971b68032c431904db5a1339e3a14254ea763226cc"
+    },
+    {
+      "name": "GasTransfer",
+      "type": "SERVER_JS",
+      "bytes": 4568,
+      "sha256": "1bcb447ded5321bbde20dd3f5533e77e61e86bd182d5119a3b1b2e099e51a7d7"
+    },
+    {
+      "name": "GoogleJwt",
+      "type": "SERVER_JS",
+      "bytes": 4451,
+      "sha256": "8207779c7627bb233cda77fdf8421cb00875fa28c14dc0dcc2250bcf16a96caa"
+    },
+    {
+      "name": "InitialConfig",
+      "type": "SERVER_JS",
+      "bytes": 429,
+      "sha256": "7a73a6beb95dce158f6166af48d1c9fe193c72de5f35cf1224179302aa3b008a"
+    },
+    {
+      "name": "Library",
+      "type": "SERVER_JS",
+      "bytes": 1267,
+      "sha256": "2b05535cdbc703fd225349d1380a88081de241f92e22fe8f8d5f0c9ffc25ba5a"
+    },
+    {
+      "name": "Manifest",
+      "type": "SERVER_JS",
+      "bytes": 4148,
+      "sha256": "c47a576551cc58f1cddf42429d7ea4a171df6e62013245f149dd0c08d5c8c1ef"
+    },
+    {
+      "name": "MediaRuntime",
+      "type": "SERVER_JS",
+      "bytes": 2599,
+      "sha256": "cfe4efeb7288686c1aa31f086132e627b87acd30877ea87af3eb5aece04a2875"
+    },
+    {
+      "name": "Mime",
+      "type": "SERVER_JS",
+      "bytes": 1135,
+      "sha256": "dbeb65be77a2f7cc37a2bd86b80d93402ae125649aa3c7d1fc07d189e557dae9"
+    },
+    {
+      "name": "Operations",
+      "type": "SERVER_JS",
+      "bytes": 8210,
+      "sha256": "309330ef5729f8aa6fe724fa5adfc54dbf889466b7bd4e02f1653814eab33d66"
+    },
+    {
+      "name": "PilotAuthorization",
+      "type": "SERVER_JS",
+      "bytes": 3881,
+      "sha256": "3da773fc7b4db27d2223d722f13c5b54bed589030ead4043b96dd41adfdae303"
+    },
+    {
+      "name": "RateLimit",
+      "type": "SERVER_JS",
+      "bytes": 937,
+      "sha256": "896da2b85bc1df36557c44abfe2a185497c5ee3ad9d5b82028e070e78e1bba1d"
+    },
+    {
+      "name": "Router",
+      "type": "SERVER_JS",
+      "bytes": 6393,
+      "sha256": "86a35ccfc6d31a51e11c11e3876fd771b3633f65f97009377367e77d68b60aad"
+    },
+    {
+      "name": "RsaVendor",
+      "type": "SERVER_JS",
+      "bytes": 342576,
+      "sha256": "0f605bac99199651a664ce17971385f17a383ac8030ce280da2fb533524adeb1"
+    },
+    {
+      "name": "Sha256",
+      "type": "SERVER_JS",
+      "bytes": 2875,
+      "sha256": "39d2563d16f511b39387f3ccf7ce12308561e2b631f26050ca4df039b741d1f9"
+    },
+    {
+      "name": "Storage",
+      "type": "SERVER_JS",
+      "bytes": 1948,
+      "sha256": "d4e402bcfc5dffb0a95e8d4742beaf4a590cce3bb81872680a673b775393889e"
+    },
+    {
+      "name": "Transfer",
+      "type": "SERVER_JS",
+      "bytes": 6233,
+      "sha256": "202bcdb2699b4b9d4a451a78e98e43135eefdb6d8029d35fbe8898bbea1343bf"
+    }
+  ],
+  "parseMethod": "only visible safe scalar fields; GitHub-masked structural braces not reconstructed; no hidden values inferred",
+  "writesToGAS": false
+}

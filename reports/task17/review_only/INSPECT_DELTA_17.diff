@@ -1,0 +1,81 @@
+diff --git a/.github/workflows/alchemist-task17-approved-diary.yml b/.github/workflows/alchemist-task17-approved-diary.yml
+index acdd777..7dc5026 100644
+--- a/.github/workflows/alchemist-task17-approved-diary.yml
++++ b/.github/workflows/alchemist-task17-approved-diary.yml
+@@ -9,8 +9,8 @@ on:
+       mode:
+         description: 'Apply only to existing version6 or roll back our verified Diary-only version; no bootstrap'
+         type: choice
+-        options: [apply, rollback]
+-        default: apply
++        options: [inspect, apply, rollback]
++        default: inspect
+ permissions:
+   contents: read
+ concurrency:
+@@ -18,7 +18,7 @@ concurrency:
+   cancel-in-progress: false
+ jobs:
+   approved_diary_only:
+-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.execute_approved_patch == true
++    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && (inputs.mode == 'inspect' || inputs.execute_approved_patch == true)
+     runs-on: ubuntu-24.04
+     timeout-minutes: 10
+     steps:
+@@ -35,7 +35,7 @@ jobs:
+       - name: Existing Script and deployment only; no bootstrap or ACL change
+         env:
+           CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+-          TASK17_APPROVED: DIARY_ONLY_WITH_ROLLBACK6
++          TASK17_APPROVED: ${{ inputs.mode == 'inspect' && 'READ_ONLY_INSPECTION' || 'DIARY_ONLY_WITH_ROLLBACK6' }}
+           TASK17_PATCH_MODE: ${{ inputs.mode }}
+         run: node scripts/task17/approved_diary_patch.mjs
+       - name: Remove private transient work and credential
+diff --git a/scripts/task17/approved_diary_patch.mjs b/scripts/task17/approved_diary_patch.mjs
+index 0cf915d..6c04c48 100644
+--- a/scripts/task17/approved_diary_patch.mjs
++++ b/scripts/task17/approved_diary_patch.mjs
+@@ -32,8 +32,9 @@ export function deploymentVersion(d){
+  return d.deploymentConfig.versionNumber;
+ }
+ async function main(){
+- if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||process.env.TASK17_APPROVED!=='DIARY_ONLY_WITH_ROLLBACK6')fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
+- const mode=process.env.TASK17_PATCH_MODE;if(!['apply','rollback'].includes(mode))fail('MODE_REQUIRED');
++ if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||!['READ_ONLY_INSPECTION','DIARY_ONLY_WITH_ROLLBACK6'].includes(process.env.TASK17_APPROVED))fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
++ const mode=process.env.TASK17_PATCH_MODE;if(!['inspect','apply','rollback'].includes(mode))fail('MODE_REQUIRED');
++ if(mode!=='inspect'&&process.env.TASK17_APPROVED!=='DIARY_ONLY_WITH_ROLLBACK6')fail('PRODUCTION_WRITE_NOT_APPROVED');
+  const temp=process.env.RUNNER_TEMP;if(!temp||!process.env.CLASPRC_JSON)fail('OWNER_OAUTH_UNAVAILABLE');
+  const credential=join(temp,'task17-approved.clasprc.json'),work=join(temp,'task17-approved-diary');
+  const execute=promisify(execFile);let client;
+@@ -53,6 +54,13 @@ async function main(){
+   const config=indexed(base).get('InitialConfig')?.source;
+   const match=/^var AlchemistInitialConfig=(\{[\s\S]*\});\s*$/.exec(config||'');if(!match)fail('INITIAL_CONFIG_FORMAT_UNEXPECTED');
+   const identity=JSON.parse(match[1]);if(identity.sourceSha!==TARGET.baseSource||identity.ownerSubject!==actor.sub||identity.ownerEmail!==TARGET.owner)fail('BASELINE_OWNER_OR_SOURCE_MISMATCH');
++  if(mode==='inspect'){
++   if(current!==6)fail('LIVE_VERSION_NOT6_STOP');
++   planPatch(base,head);
++   const manifest=JSON.parse(indexed(base).get('appsscript').source);
++   console.log('TASK17_ADMIN_INSPECTION='+JSON.stringify({readOnly:true,scriptId:project.scriptId,title:project.title,deploymentId:before.deploymentId,versionNumber:current,deploymentConfig:before.deploymentConfig,entryPoints:before.entryPoints,ownerVerified:true,headEqualsVersion6:true,allPinnedSourcesVerified:true,oauthScopes:manifest.oauthScopes||[],files:base.map(f=>({name:f.name,type:f.type,bytes:Buffer.byteLength(f.source),sha256:sha(f.source)}))}));
++   return; // STOP before workspace creation, clasp push/version/deploy/rollback.
++  }
+   mkdirSync(work,{recursive:true,mode:0o700});const source=join(work,'source');mkdirSync(source,{recursive:true,mode:0o700});
+   writeFileSync(join(work,'.clasp.json'),JSON.stringify({scriptId:TARGET.script,rootDir:source}));
+   const cli=join(temp,'task17-clasp/node_modules/.bin/clasp');
+diff --git a/scripts/task17/test_approved_diary_patch.mjs b/scripts/task17/test_approved_diary_patch.mjs
+index 8bf5746..4419eec 100644
+--- a/scripts/task17/test_approved_diary_patch.mjs
++++ b/scripts/task17/test_approved_diary_patch.mjs
+@@ -19,3 +19,13 @@ test('only exact old and expected new Diary digests permitted',()=>{const {files
+ test('readback verifies every byte/type, not just one source name',()=>{const {files}=fixture();compareFiles(files,structuredClone(files));const changed=structuredClone(files);changed[0].source+='mutation';assert.throws(()=>compareFiles(changed,files),/READBACK/);});
+ test('deployment must retain exact endpoint, execution identity, access and ID',()=>{const d={deploymentId:TARGET.deployment,deploymentConfig:{versionNumber:6},entryPoints:[{entryPointType:'WEB_APP',webApp:{url:'https://script.google.com/macros/s/'+TARGET.deployment+'/exec',entryPointConfig:{executeAs:'USER_DEPLOYING',access:'ANYONE_ANONYMOUS'}}}]};assert.equal(deploymentVersion(d),6);for(const key of ['deploymentId']){const bad=structuredClone(d);bad[key]='other';assert.throws(()=>deploymentVersion(bad),/MISMATCH/);}const bad=structuredClone(d);bad.entryPoints[0].webApp.entryPointConfig.executeAs='USER_ACCESSING';assert.throws(()=>deploymentVersion(bad),/MISMATCH/);});
+ test('runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard',()=>{const s=readFileSync(new URL('./approved_diary_patch.mjs',import.meta.url),'utf8');assert.ok(s.indexOf('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED')<s.indexOf('writeFileSync(credential'));assert.doesNotMatch(s,/create-script|system\.initialize|permissions\.create|drive\.googleapis/);});
++
++test('inspection returns before any production writer and readonly grant cannot select writer',()=>{
++ const s=readFileSync(new URL('./approved_diary_patch.mjs',import.meta.url),'utf8');
++ const begin=s.indexOf("if(mode==='inspect')"),end=s.indexOf('return; // STOP before workspace');
++ assert.ok(begin>0&&end>begin&&end<s.indexOf('const cli='));
++ const block=s.slice(begin,end);
++ assert.doesNotMatch(block,/await clasp|await deploy|writeFileSync|mkdirSync/);
++ assert.match(block,/LIVE_VERSION_NOT6_STOP/);assert.match(block,/planPatch\(base,head\)/);
++ assert.match(s,/mode!==.inspect.&&process.env.TASK17_APPROVED!==.DIARY_ONLY_WITH_ROLLBACK6./);
++});

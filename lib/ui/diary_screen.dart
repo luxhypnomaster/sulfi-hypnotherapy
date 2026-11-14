@@ -13,6 +13,8 @@ import '../services/diary_layout.dart';
 import 'diary_editor.dart';
 import 'diary_reader.dart';
 import 'design.dart';
+import 'session_scope.dart';
+import '../services/alchemist_work_queue.dart';
 export 'diary_editor.dart';
 export 'diary_reader.dart';
 export 'diary_legacy_pagination.dart';
@@ -154,11 +156,36 @@ class _DiaryScreenState extends State<DiaryScreen> {
     final snapshot = d.published.where((p) => p.id == e.id).firstOrNull;
     final hasDraft =
         snapshot != null &&
-        (snapshot.body != e.body ||
-            snapshot.title != e.title ||
-            snapshot.message != e.message ||
-            snapshot.blocks.map((b) => b.toMap().toString()).join() !=
-                e.blocks.map((b) => b.toMap().toString()).join());
+        diaryEditFingerprint(snapshot) != diaryEditFingerprint(e);
+    final queue = SessionScope.maybeOf(context)?.controller;
+    final work = queue?.capsules == null
+        ? null
+        : queue!.cloudQueue.rows
+                  .where((r) => r['_name'] == 'alchemist_diary_queue:${e.id}')
+                  .firstOrNull?['_work']
+              as Map?;
+    final pending =
+        work != null &&
+        !const ['complete', 'cancelled'].contains(work['phase']);
+    final publication = DiaryPublication.of(snapshot ?? e);
+    final expired =
+        publication.authorClosed ||
+        (publication.validUntil?.isBefore(DateTime.now().toUtc()) ?? false);
+    final confirmed = snapshot != null || e.status == DiaryStatus.published;
+    final statusColor = pending
+        ? transferYellow
+        : expired || e.status == DiaryStatus.unpublished
+        ? Colors.grey
+        : confirmed
+        ? Colors.greenAccent
+        : neonPink;
+    final statusIcon = pending
+        ? Icons.outbox_outlined
+        : expired || e.status == DiaryStatus.unpublished
+        ? Icons.archive_outlined
+        : confirmed
+        ? Icons.check_circle_outline
+        : Icons.edit_note;
     return Container(
       key: ValueKey(e.id),
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -202,10 +229,28 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '${e.number == null ? 'Черновик' : '№${e.number}'}  ${e.displayTitle}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            Icon(statusIcon, color: statusColor, size: 20),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                '${diaryEntryLabel(e)}  ${e.displayTitle}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                        if (pending)
+                          Text(
+                            alchemistWorkLabel(work),
+                            style: const TextStyle(
+                              color: transferYellow,
+                              fontSize: 11,
+                            ),
+                          ),
                         Text(
                           diaryDate(e.createdAt),
                           style: const TextStyle(fontSize: 11),
@@ -232,7 +277,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                   DiaryBlockType.video => 'Видео',
                                 },
                                 style: const TextStyle(
-                                  color: neonLime,
+                                  color: neonPink,
                                   fontSize: 11,
                                 ),
                               ),
@@ -240,7 +285,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         ),
                         if (author)
                           Text(
-                            snapshot != null
+                            confirmed
                                 ? (hasDraft
                                       ? 'Опубликовано · есть черновик'
                                       : 'Опубликовано')
@@ -298,7 +343,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: d,
+    listenable: Listenable.merge([
+      d,
+      if (SessionScope.maybeOf(context)?.controller.capsules != null)
+        SessionScope.maybeOf(context)!.controller.cloudQueue,
+    ]),
     builder: (context, _) {
       final cloudSignedIn =
           (d.api?.supportsServerIdentity ?? false) || d.policy != null

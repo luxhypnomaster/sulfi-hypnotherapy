@@ -1,0 +1,11 @@
+{
+  "version": "37.2.12",
+  "build": "16428233",
+  "archive": "https://dl.google.com/android/repository/emulator-linux_x64-16428233.zip",
+  "publisher": "https://developer.android.com/studio/emulator_archive",
+  "publishedSHA256": "b08fc43d8608d2955f607f1b287beb525041e730086bdca3af152accac3af9c1",
+  "publisherPageSHA256": "f985014d55bc05b3fff8776367487f66c1b6f0571db682de90dc09e9f4a5505d",
+  "channel": "Stable",
+  "date": "2026-10-01",
+  "applicationDowngraded": false
+}

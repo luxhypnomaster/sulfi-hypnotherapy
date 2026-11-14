@@ -106,16 +106,61 @@ class AlchemistApi {
           }.contains(op) &&
           p['sessionId'] is String;
 
+  void _checkInterrupted() {
+    final stop = Zone.current[#alchemistInterrupted];
+    if (stop is bool Function() && stop()) {
+      throw const AlchemistApiException(
+        'Передача приостановлена.',
+        0,
+        'TRANSFER_PAUSED',
+        DiaryFailure.network,
+      );
+    }
+  }
+
+  /// Read authoritative state before replaying an uncertain keyed mutation.
+  /// The GET never grants a receipt by inference: replay still uses the SAME
+  /// requestId so GAS returns its receipt or a safe precondition conflict.
+  Future<void> reconcileUncertain(
+    String operation,
+    Map<String, dynamic> p,
+  ) async {
+    final catalog =
+        operation.startsWith('catalog.') && p['catalogItemId'] is String;
+    final diary = operation.startsWith('entry.') && p['entryId'] is String;
+    if (!catalog && !diary) return;
+    _checkInterrupted();
+    diagnostics.stage('SERVER_COMMIT_UNCERTAIN');
+    try {
+      await call(catalog ? 'catalog.get' : 'entry.get', {
+        if (catalog) 'catalogItemId': p['catalogItemId'],
+        if (diary) 'entryId': p['entryId'],
+      });
+    } on AlchemistFailure catch (e) {
+      if (e.status != 404) {
+        rethrow; // A missing create may safely replay its key.
+      }
+    }
+  }
+
   Future<Map<String, dynamic>> call(
     String operation,
     Map<String, dynamic> parameters,
   ) async {
-    final originalScope = identityScope?.call(),
-        originalEpoch = identityEpoch?.call(),
-        trace = diagnostics.begin();
+    var originalScope = identityScope?.call();
+    final originalEpoch = identityEpoch?.call(), trace = diagnostics.begin();
+    var initialBinding = originalScope == 'public';
     final watch = Stopwatch()..start();
     var refreshed = false;
-    void checkScope() {
+    void checkScope(bool afterCredential) {
+      // A cold silent restore establishes the first verified identity before
+      // any request is sent. Existing identities and logout epochs stay frozen.
+      if (afterCredential &&
+          initialBinding &&
+          originalEpoch == identityEpoch?.call()) {
+        originalScope = identityScope?.call();
+        initialBinding = false;
+      }
       if (originalScope != identityScope?.call() ||
           originalEpoch != identityEpoch?.call()) {
         throw const AlchemistApiException(
@@ -128,7 +173,8 @@ class AlchemistApi {
     }
 
     for (var attempt = 0; ; attempt++) {
-      checkScope();
+      checkScope(false);
+      _checkInterrupted();
       final left = callTimeout - watch.elapsed;
       if (left <= Duration.zero) {
         throw AlchemistFailure.from(TimeoutException('deadline'));
@@ -151,7 +197,7 @@ class AlchemistApi {
         );
         return result;
       } catch (error) {
-        checkScope();
+        checkScope(false);
         final e = AlchemistFailure.from(error);
         diagnostics.record(
           trace,
@@ -173,7 +219,7 @@ class AlchemistApi {
             }.contains(e.code)) {
           refreshed = true;
           if (await onUnauthorized!()) {
-            checkScope();
+            checkScope(false);
             continue;
           }
         }
@@ -189,6 +235,15 @@ class AlchemistApi {
             e.kind,
             e.retryable,
           );
+        }
+        _checkInterrupted();
+        if (parameters['requestId'] is String) {
+          final remaining = callTimeout - watch.elapsed;
+          if (remaining <= Duration.zero) {
+            throw AlchemistFailure.from(TimeoutException('deadline'));
+          }
+          await reconcileUncertain(operation, parameters).timeout(remaining);
+          checkScope(false);
         }
         diagnostics.record(
           trace,
@@ -212,11 +267,11 @@ class AlchemistApi {
     Map<String, dynamic> parameters,
     String trace,
     int attempt,
-    void Function() checkScope,
+    void Function(bool) checkScope,
   ) async {
     final clock = Stopwatch()..start();
     final token = await credential?.call();
-    checkScope();
+    checkScope(true);
     diagnostics.record(
       trace,
       operation,
@@ -224,6 +279,8 @@ class AlchemistApi {
       clock.elapsedMilliseconds,
       attempt: attempt,
     );
+    _checkInterrupted();
+    diagnostics.stage('HTTP_REQUEST_START');
     var response = await connection(
       'POST',
       endpoint,
@@ -236,7 +293,7 @@ class AlchemistApi {
         'credential': ?token,
       }),
     );
-    checkScope();
+    checkScope(false);
     diagnostics.record(
       trace,
       operation,
@@ -263,7 +320,7 @@ class AlchemistApi {
       response = await connection('GET', target, {
         'Accept': 'application/json',
       }, null);
-      checkScope();
+      checkScope(false);
     }
     if (response.status != 200) {
       final e = AlchemistFailure.server(

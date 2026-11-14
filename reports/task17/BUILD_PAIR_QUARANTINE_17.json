@@ -1,0 +1,29 @@
+{
+  "issued": false,
+  "reason": "Native gate pending; original3lanes prerequisite403 before emulator; no APK release",
+  "run": 43515852713,
+  "attempt": 2,
+  "metadata": {
+    "source": "85ff50736c6be28bda55cf759f232d8347f3ad3e",
+    "pair": [
+      {
+        "edition": "master",
+        "package": "ru.sulfi.sulfi_hypnotherapy",
+        "versionCode": 27,
+        "bytes": 193822185,
+        "sha256": "f065c45d269b800cdcfc967c0c5b7f3e06b4355c9e15ff45bdfd02da0243c9c6",
+        "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+      },
+      {
+        "edition": "client",
+        "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+        "versionCode": 27,
+        "bytes": 193822221,
+        "sha256": "a2f4cdef7869ae1b57ba6337bf550997ee36c3acacddadab33a14f75c513071e",
+        "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+      }
+    ],
+    "ownerQA": "NOT_RUN",
+    "liveGAS": "EXISTING6_NO_DEPLOY"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": 43515852713,
+  "source": "85ff50736c6be28bda55cf759f232d8347f3ad3e",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43515852713",
+  "status": "in_progress",
+  "conclusion": null,
+  "jobs": [
+    {
+      "id": 132197499183,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 132197501166,
+      "name": "storage16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132197501364,
+      "name": "delivery16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132197501477,
+      "name": "emulator_qa",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132197501599,
+      "name": "native_upgrade",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132197501890,
+      "name": "appfault16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132197502033,
+      "name": "regressions",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 132201806908,
+      "name": "candidate17",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 132201809787,
+      "name": "candidate16g",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ]
+}

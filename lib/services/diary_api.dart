@@ -88,6 +88,9 @@ class DiaryApi {
   Future<void> refreshIdentity() async {}
   Future<bool> refreshRejectedIdentity() async => false;
   void rejectIdentity() {}
+  Future<void> loadLocalIdentityHint() async {}
+  String? get accountLabel => null;
+  void setAccountLabel(String value) {}
   String get readerScope => 'public';
   bool canReadAuthorDraftScope(Object? scope) =>
       scope == null || scope == readerScope;
@@ -96,6 +99,8 @@ class DiaryApi {
       throw const DiaryApiException('Личный сервер не подключён');
   void clearSession() {}
   Future<void> enqueuePublication(DiaryEntry entry, {bool? published}) async {}
+  Future<void> enqueueDurablePublication(DiaryEntry entry, {bool? published}) =>
+      enqueuePublication(entry, published: published);
   Future<int> flushPending(DiaryAuthorSession session) async => 0;
   final Uri base;
   final DiaryRequest _request;

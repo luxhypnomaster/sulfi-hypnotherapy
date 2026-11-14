@@ -1,0 +1,22 @@
+{
+  "id": 43513716062,
+  "source": "5cfb8a10dfa11be8718a8692126c39b7179212bc",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43513716062",
+  "fullFlutter": {
+    "passed": 457,
+    "failed": 11
+  },
+  "failures": {
+    "legacyLocalModeLabelAssertions": 10,
+    "verifiedAccountSwitchSelfGenerationGuard": 1
+  },
+  "build": "SKIPPED_TEST_GATE",
+  "native": "SKIPPED_TEST_GATE",
+  "artifacts": "STORAGE_QUOTA_NO_DELETION_REQUESTED",
+  "directJobLogRead": "403; gh run view ZIP read succeeded",
+  "fixes": [
+    "Preserve legacy offline mode labels; connected edition and verified server role remain separate",
+    "Distinguish our verified subject switch epoch from external logout epoch"
+  ],
+  "targeted": "15 valid UI/auth PASS plus one nonexistent filename loading error; actual legacy-scope file separately1PASS. SDK late logout race preserved."
+}

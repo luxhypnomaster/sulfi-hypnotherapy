@@ -1,0 +1,297 @@
+[
+  {
+    "file": "reports/task17/ACCEPTANCE_17.csv",
+    "bytes": 20640,
+    "sha256": "4c4a50c77f2b824f4f52c4bf49fdf466befcf0e3e363768dfb4435e9996a8008"
+  },
+  {
+    "file": "reports/task17/ACCEPTANCE_SUMMARY_17.json",
+    "bytes": 355,
+    "sha256": "c47fee2c89d7e329a1f6c30762b083836e37882c1f16091b7217d6054903f9ce"
+  },
+  {
+    "file": "reports/task17/APK_PAIR_17.json",
+    "bytes": 1855,
+    "sha256": "5e5ec2615d6c107c558d0dd23d13d32e9d519a71c1fa0323421d8935f4731a1f"
+  },
+  {
+    "file": "reports/task17/CHANGES_17.md",
+    "bytes": 3163,
+    "sha256": "2ce4b5e41abaf6bd04ab9d6568fa9a452a6554496365efe50b2db6d1ba175c34"
+  },
+  {
+    "file": "reports/task17/CODEX_EFFICIENCY_17.md",
+    "bytes": 11241,
+    "sha256": "ab27b0b092ec2409d97285795a40245c44712de387cc809d12aeb0f804f99837"
+  },
+  {
+    "file": "reports/task17/DELIVERY_CI_17.json",
+    "bytes": 4716,
+    "sha256": "bd70a042144c23a4a1e8da244d98b4114db2dca15ff8b58df38c55f557904a26"
+  },
+  {
+    "file": "reports/task17/ISSUES_17.md",
+    "bytes": 3676,
+    "sha256": "fb488be317713d949f7f8698acb67033170ff2275c0f5f1e4507038e356c4867"
+  },
+  {
+    "file": "reports/task17/MIGRATION_17.md",
+    "bytes": 3330,
+    "sha256": "e69910235a77e011d5e2d8ce8b337e98b2a38aa922b172f49862a1c28c4d3999"
+  },
+  {
+    "file": "reports/task17/NATIVE_26_GREEN_CI_17.json",
+    "bytes": 5108,
+    "sha256": "9a351acfea293ed13fcbe2a7b092d54c1f6a8f920df5153f3af91253efe01aba"
+  },
+  {
+    "file": "reports/task17/NATIVE_APK_FINAL_PROOF_17.json",
+    "bytes": 1126,
+    "sha256": "81ff044e596ebb8fc69412935d18f9996534f1fec2bcd729e2a5746b08f072a9"
+  },
+  {
+    "file": "reports/task17/NATIVE_CLIENT25_17.json",
+    "bytes": 199421,
+    "sha256": "ea3aeeb16e3366e97b6162e6662adfeac862e649bafb8e175e49c4ed1dc95870"
+  },
+  {
+    "file": "reports/task17/NATIVE_MASTER25_17.json",
+    "bytes": 270140,
+    "sha256": "87f04641575962301ed453cd0217c931d8276df8bf43896e87bbb6cc7a182dd3"
+  },
+  {
+    "file": "reports/task17/NATIVE_MASTER26_17.json",
+    "bytes": 272064,
+    "sha256": "15fb16dac155772e1dbcd21ea5e6c80b7a9a6b2c835402ea73b10bb18c687640"
+  },
+  {
+    "file": "reports/task17/PHONE_QA_17.md",
+    "bytes": 4607,
+    "sha256": "c3c098a81ebc66272b95c3c79a1478a53964677fbf9c999efc8cd46c9000b145"
+  },
+  {
+    "file": "reports/task17/PRIVATE_DELIVERY_CHECKPOINT_17.json",
+    "bytes": 483,
+    "sha256": "f860ac20109ca99e08643c1c7e5835a961a8ad9d723f74c2da6becb157d66911"
+  },
+  {
+    "file": "reports/task17/PROGRESS.md",
+    "bytes": 3471,
+    "sha256": "e230a0a2926f6ddfd1f24d000309983c9f19b73850d5b7a131168761acf40914"
+  },
+  {
+    "file": "reports/task17/RELEASE_METADATA_17.json",
+    "bytes": 1257,
+    "sha256": "115cc96450cee232dc395c8b261f10ddd83b2a1a5d437226a3e9518926c54b0e"
+  },
+  {
+    "file": "reports/task17/RESULT_17.md",
+    "bytes": 7862,
+    "sha256": "e2ef44b447a180bee92e495e3837e32cb4c1a08651a67186a45e5793459b5735"
+  },
+  {
+    "file": "reports/task17/ROOT_CAUSE_17.md",
+    "bytes": 12347,
+    "sha256": "55a8570dfe724fecc1733bc6d12a566b49ba43e00ece53f908d3d1ab5047543e"
+  },
+  {
+    "file": "reports/task17/TESTS_17.md",
+    "bytes": 5270,
+    "sha256": "ea6d20cf3ac9178c88bbba5d56d07ace867742c8b398cd89c0d85375a09a9f1b"
+  },
+  {
+    "file": "reports/task17/emulator_cause/CONFIRMED_SIGNAL_17.json",
+    "bytes": 1130,
+    "sha256": "1154068b7ef103c6b43325565ea58db4c36a0df03f9967d45ac1d4e95c87de75"
+  },
+  {
+    "file": "reports/task17/emulator_cause/INVESTIGATION_17.md",
+    "bytes": 2820,
+    "sha256": "a1cbfa268b1be00604639662f4d45c38e2f4907f3ff2dfd560fc52848690e176"
+  },
+  {
+    "file": "reports/task17/emulator_cause/OFFICIAL_PIN_17.json",
+    "bytes": 474,
+    "sha256": "5ee6616dd631def13a2e09143c1efbb5885e6d5d12d1a8b05fb1461afb6c6f38"
+  },
+  {
+    "file": "reports/task17/head_rollback/DELIVERY_STOP_17.json",
+    "bytes": 137,
+    "sha256": "b5d8176e2e07c981613b4219cc5326df336a36df7cffbf1f87a2c86a6fed70c9"
+  },
+  {
+    "file": "reports/task17/head_rollback/HOST_LOG_PROVENANCE_17.json",
+    "bytes": 316,
+    "sha256": "37bd3c03655e4a785608191c53fbbcdf29c10e0a366f8ed473318501ec9ad541"
+  },
+  {
+    "file": "reports/task17/head_rollback/SAFE_HEAD_ROLLBACK_17.md",
+    "bytes": 4629,
+    "sha256": "253c475b4cc08eb074c4b832a3a2934c8817dbb847f50f61ab3272a82d7f4a37"
+  },
+  {
+    "file": "reports/task17/native_final26_pin12/NATIVE_LOG_READBACK_17.json",
+    "bytes": 672,
+    "sha256": "44b9fedb39d90607c83af2bac6fbe505b88924733aafbd3c806853dc4bdd35f7"
+  },
+  {
+    "file": "reports/task17/native_final26_pin12/NATIVE_UI_UPGRADE_17.json",
+    "bytes": 272064,
+    "sha256": "15fb16dac155772e1dbcd21ea5e6c80b7a9a6b2c835402ea73b10bb18c687640"
+  },
+  {
+    "file": "reports/task17/native_final26_pin12/screens/25-before-upgrade.png",
+    "bytes": 845635,
+    "sha256": "9e6faa2fb73327c5f4df4aaf22f8faf8ba18e0e026099b12a6c995859f6ce795"
+  },
+  {
+    "file": "reports/task17/native_final26_pin12/screens/26-library.png",
+    "bytes": 59752,
+    "sha256": "9cbeec1c6b1e826b6ce483dd92323a1b92209920228bba202c53fc841bc030ca"
+  },
+  {
+    "file": "reports/task17/native_final26_pin12/screens/26-modules.png",
+    "bytes": 958980,
+    "sha256": "2ece327b6e447621741a6e0c386e065d55ad0440e9d8ca9582c832ffe7f39375"
+  },
+  {
+    "file": "reports/task17/pin12_first/NATIVE_LOG_READBACK_17.json",
+    "bytes": 672,
+    "sha256": "c0ef50cb5e96d91cea7929a46c243b9f2310e1a6620245a9dfe089a66497e3dc"
+  },
+  {
+    "file": "reports/task17/pin12_first/NATIVE_UI_UPGRADE_17.json",
+    "bytes": 271288,
+    "sha256": "dcfaac6f8e29f8e21e9ffce2bce64fa9176cb0db2f2b02bd6d3a1d3692280c14"
+  },
+  {
+    "file": "reports/task17/pin12_first/screens/25-before-upgrade.png",
+    "bytes": 845956,
+    "sha256": "c04fef92766de142f3083a74cb3ab2948157662ddfe2841e08fcf998252147d0"
+  },
+  {
+    "file": "reports/task17/pin12_first/screens/26-library.png",
+    "bytes": 59930,
+    "sha256": "f3b90118062c759c4932bb32eef8faf88919b419dc3955bf06a3d89def232a3f"
+  },
+  {
+    "file": "reports/task17/pin12_first/screens/26-modules.png",
+    "bytes": 959242,
+    "sha256": "7d6227bec78d2bc3342dc32c7cd2c83a6a297bc3796d43ed0fcae98c2503b0ac"
+  },
+  {
+    "file": "reports/task17/pin12_ready/NATIVE_LOG_READBACK_17.json",
+    "bytes": 518,
+    "sha256": "7fe5edaa3d5e304c0255feec262fc7cc3834e50cb89e5784053a74fa6c7d093f"
+  },
+  {
+    "file": "reports/task17/pin12_ready/NATIVE_UI_UPGRADE_17.json",
+    "bytes": 50735,
+    "sha256": "ffedf7fe8c4f074b0f338fd6bac4a0d0f052496a2d1bd2667a1f980479dbbbbc"
+  },
+  {
+    "file": "reports/task17/pin12_ready/screens/failure-ui_template.png",
+    "bytes": 102394,
+    "sha256": "f4d03f4eff49d7f3d5a0b87a5181d25a8402ac87a54f25c2e20304940c1b3595"
+  },
+  {
+    "file": "reports/task17/pin12_ready/screens/failure-ui_template.xml",
+    "bytes": 4592,
+    "sha256": "db0864e3c46612a13778061b3efef651929fcc55c86c696453dd382147a4e5fc"
+  },
+  {
+    "file": "reports/task17/process_signal/NATIVE_LOG_READBACK_17.json",
+    "bytes": 176,
+    "sha256": "2d3cf60d626e20f2b65862b3359639c80bbb1532fb40d978fdc81ddedff00b63"
+  },
+  {
+    "file": "reports/task17/process_signal/NATIVE_UI_UPGRADE_17.json",
+    "bytes": 36140,
+    "sha256": "dbec251f4584c577362fa639236762cadd1628f624528b09d2da94acba76d1a6"
+  },
+  {
+    "file": "reports/task17/process_signal/PROCESS_TERMINATION.json",
+    "bytes": 764,
+    "sha256": "b344bc17a4775de4f1b2fb07deda8b766528cd2e61a547ac94aa79b21b626bd2"
+  },
+  {
+    "file": "scripts/task17/approved_diary_patch.mjs",
+    "bytes": 11277,
+    "sha256": "ada90dc9c4f7148a2e5a83318031c543c72be6f193623d3e156703550710a9cc"
+  },
+  {
+    "file": "scripts/task17/delivery_gate.py",
+    "bytes": 3168,
+    "sha256": "b4a639a0437fdcee58274e7ec597a08a7e945750c46cf31c0505e6bb6598f46b"
+  },
+  {
+    "file": "scripts/task17/monitor_emulator.py",
+    "bytes": 2377,
+    "sha256": "f7169527d09221b26e653ab8fc2f1fd354eaa3752751c9bcdbe18c6701429ebf"
+  },
+  {
+    "file": "scripts/task17/native_upgrade.py",
+    "bytes": 26357,
+    "sha256": "08b756b7a244903d15cf7ce8b014feff9d7ddbc715a54bc71b0cc3c6d8743602"
+  },
+  {
+    "file": "scripts/task17/pre_emulator.py",
+    "bytes": 4080,
+    "sha256": "60906ce0814844d2b9a26470917bf99e2fd0674070746d89a39e28c237e32d80"
+  },
+  {
+    "file": "scripts/task17/read_native_log.py",
+    "bytes": 1770,
+    "sha256": "ab46c02d5cfeb9d8345937e8538cc933652311859f5c96e1b6be8760bddfaed6"
+  },
+  {
+    "file": "scripts/task17/record_drive_readback.py",
+    "bytes": 1076,
+    "sha256": "99e6432e5181dc19e484ea2d669f40057ea4ad6dc5ab8c2dd83c1822425ca5be"
+  },
+  {
+    "file": "scripts/task17/report_acceptance.py",
+    "bytes": 11228,
+    "sha256": "54da616022fa8771b53d2e7a4db0618b78df040e3d31d4428ff28c5a89aa35ae"
+  },
+  {
+    "file": "scripts/task17/reuse_verified_pair.py",
+    "bytes": 1959,
+    "sha256": "d45a89d06ebeef68d5cdad8674c7a6df4dee4a4cdc47aef2514c58797944fb76"
+  },
+  {
+    "file": "scripts/task17/run_native.sh",
+    "bytes": 1342,
+    "sha256": "b4eb59e02d45897f689b24eb4d9d7178019dcb0d96dd9a07d287ea8e51ea7c7f"
+  },
+  {
+    "file": "scripts/task17/test_approved_diary_patch.mjs",
+    "bytes": 5309,
+    "sha256": "0b6d392cb5f6f1af11856fbd9818390be45026dcd7426bc8cdaa3336210c2fb4"
+  },
+  {
+    "file": "scripts/task17/test_delivery_gate.py",
+    "bytes": 5153,
+    "sha256": "b4b7e2ec715268268e93eef3a62db09d5ec19e91230a280948eb8c7872304124"
+  },
+  {
+    "file": "scripts/task17/test_monitor_emulator.py",
+    "bytes": 1006,
+    "sha256": "c11e1df8fbcc1f5e36d995a88223ce4a8b0a152815aed4c729fc2eb524125734"
+  },
+  {
+    "file": "scripts/task17/test_native_navigation.py",
+    "bytes": 2600,
+    "sha256": "09603839dadaf5aed80591c78fd1e4660b73d48e865183309dddcdaca863a5b2"
+  },
+  {
+    "file": "scripts/task17/verify_downloaded_apks.py",
+    "bytes": 2618,
+    "sha256": "9497d828677aabb8abff1889309e5b407734abd6108d965df43acc51a5984ce6"
+  },
+  {
+    "file": "scripts/task17/verify_pair.sh",
+    "bytes": 2144,
+    "sha256": "7d7ccd330d4a53531c97e2a2a01007be2afad292cd303357969765fb8d9038f6"
+  }
+]

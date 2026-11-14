@@ -1,0 +1,12 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task17_root_cause_test.dart
+00:00 +0: /dev/shm/sulfi17/test/task17_root_cause_test.dart: 17 G0 lifecycle before dispatch: zero attempts is not a user pause; same owner resume dispatches
+00:00 +1: /dev/shm/sulfi17/test/task17_root_cause_test.dart: 17 G0 cold same-owner restore changes scope before protected HTTP, not account switch
+00:00 +2: loading /dev/shm/sulfi17/test/task16b_queue_catalog_test.dart
+00:01 +2: /dev/shm/sulfi17/test/task16b_queue_catalog_test.dart: G2/G4 persistent existing queue survives worker restart; pause/cancel preserve source; other account cannot resume
+00:01 +3: /dev/shm/sulfi17/test/task16b_queue_catalog_test.dart: G2 authoritative offset after lost chunk response, 100% is not verified, receipt reuse and owner isolation
+00:01 +4: /dev/shm/sulfi17/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+00:04 +5: loading /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart
+00:04 +5: /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install
+00:05 +6: loading /dev/shm/sulfi17/test/task16_catalog_integration_test.dart
+00:06 +6: /dev/shm/sulfi17/test/task16_catalog_integration_test.dart: local cross-language author → production JS domain → client selective install, metadata-only retry and revoke
+00:08 +7: All tests passed!

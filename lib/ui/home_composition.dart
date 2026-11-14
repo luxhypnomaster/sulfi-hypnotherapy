@@ -203,7 +203,7 @@ class HomeComposition extends StatelessWidget {
                         right: 4,
                         child: IconButton(
                           key: const Key('home-space'),
-                          tooltip: 'О приложении и данных',
+                          tooltip: 'Аккаунт, права и данные',
                           constraints: const BoxConstraints(
                             minWidth: 48,
                             minHeight: 48,
@@ -231,7 +231,7 @@ class HomeComposition extends StatelessWidget {
                                       }),
                                 ),
                           icon: const Icon(Icons.shield_outlined),
-                          color: neonPink,
+                          color: transferYellow,
                         ),
                       ),
                     ],

@@ -16,6 +16,8 @@ import '../services/alchemist_catalog.dart';
 import '../services/local_content_catalog.dart';
 import '../services/session_controller.dart';
 import 'design.dart';
+import 'alchemist_sync_screen.dart';
+import '../services/catalog_categories.dart';
 import 'session_actions.dart';
 
 Future<void> preparePublication(
@@ -31,6 +33,17 @@ Future<void> preparePublication(
       (r) => r.key.content.type == type && r.key.content.id == id,
     );
     final draft = await c.catalog.prepare(root);
+    if (!catalogOnly) {
+      final receipt = await c.catalog.remote.call('catalog.get', {
+        'catalogItemId': draft['catalogItemId'],
+      });
+      if (receipt['publicationState'] != 'published' ||
+          receipt['immutableRevisionId'] != root.key.revision) {
+        throw const FormatException(
+          'Сначала добавьте эту версию в каталог отдельной командой.',
+        );
+      }
+    }
     final announcement = catalogOnly
         ? null
         : await prepareCatalogAnnouncement(c.catalog, draft);
@@ -114,7 +127,7 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
           !busy &&
           !transferring &&
           widget.service.controller.policy.isAuthor) {
-        unawaited(save());
+        unawaited(save(background: true));
       }
     });
   }
@@ -150,12 +163,15 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
     }
   }
 
-  Future<void> save({bool publish = false}) async {
+  Future<void> save({bool publish = false, bool background = false}) async {
     if (busy) return;
-    setState(() {
-      busy = true;
-      paused = false;
-    });
+    if (!background) {
+      setState(() {
+        busy = true;
+        paused = false;
+      });
+    }
+    autosave?.cancel();
     try {
       for (final f in fields.entries) {
         card[f.key] = ['tags', 'categoryIds'].contains(f.key)
@@ -167,7 +183,6 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
             : f.value.text;
       }
       draft['card'] = card;
-      await widget.service.save(draft);
       if (publish) {
         if ((card['title'] as String).trim().isEmpty ||
             (card['shortAnnotation'] as String).trim().isEmpty) {
@@ -177,16 +192,33 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
             'METADATA_REQUIRED',
           );
         }
+        await widget.service.controller.ensurePublicationIdentity();
+        await widget.service.save(draft, enqueue: true);
         await widget.service.controller.cloudQueue.enqueue(
           'alchemist_card:${draft['catalogItemId']}',
         );
-        progress = 'В очереди приложения. Можно перейти на другой экран.';
+        progress = 'В очереди приложения.';
+        if (mounted) {
+          unawaited(
+            Navigator.pushReplacement<void, void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AlchemistSyncScreen(
+                  controller: widget.service.controller,
+                  focusName: 'alchemist_card:${draft['catalogItemId']}',
+                ),
+              ),
+            ),
+          );
+        }
+      } else {
+        await widget.service.save(draft);
       }
       if (mounted) setState(() => error = null);
     } catch (e) {
       if (mounted) setState(() => error = AlchemistFailure.from(e).message);
     } finally {
-      if (mounted) setState(() => busy = false);
+      if (mounted && !background) setState(() => busy = false);
     }
   }
 
@@ -275,13 +307,8 @@ class _CatalogCardEditorState extends State<CatalogCardEditor> {
                   ),
                   TextButton(
                     onPressed: () {
-                      final value = input.text.trim();
-                      if (value.isEmpty ||
-                          value.length > 60 ||
-                          value.contains(',') ||
-                          RegExp(r'[\x00-\x1f]').hasMatch(value)) {
-                        return;
-                      }
+                      final value = newCatalogCategory(input.text, known);
+                      if (value == null) return;
                       refresh(() {
                         known.add(value);
                         selected.add(value);

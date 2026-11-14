@@ -1,0 +1,20 @@
+{
+  "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "run": 43548636228,
+  "fullVerify": "PASS",
+  "pipelineConclusion": "failure",
+  "flutter": {
+    "passed": 469,
+    "failed": 0
+  },
+  "clientCompileTimeTests": 3,
+  "nodeAlchemist": 47,
+  "nodeLegacy": 24,
+  "analyze": "PASS",
+  "format185": "PASS",
+  "schemas": "PASS",
+  "lockedPubGet": "PASS",
+  "verifyLogSHA256": "c559bb0e7bce51dc3f78d0ffc2bdcdb8bfe77a67d8810e996ce8b5df3465bba0",
+  "physicalGoogle": "NOT_RUN",
+  "issuedAPK": false
+}

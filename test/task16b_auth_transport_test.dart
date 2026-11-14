@@ -189,7 +189,7 @@ void main() {
       TimeoutException('private@example.test'),
     ]) {
       var n = 0;
-      final d = AlchemistDiagnostics();
+      final d = AlchemistDiagnostics(enabled: true);
       final api = AlchemistApi(
         endpoint16b,
         diagnostics: d,

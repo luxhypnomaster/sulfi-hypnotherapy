@@ -1,0 +1,26 @@
+{
+  "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "pair": [
+    {
+      "edition": "master",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 27,
+      "bytes": 193822221,
+      "sha256": "2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    },
+    {
+      "edition": "client",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 27,
+      "bytes": 193822253,
+      "sha256": "8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    }
+  ],
+  "ownerQA": "NOT_RUN",
+  "liveGAS": "EXISTING6_NO_DEPLOY",
+  "delivery": "QUARANTINED_NOT_ISSUED",
+  "reason": "MASTER25 and MASTER26 native gates BLOCKED before candidate install; no release/delivery dispatched",
+  "run": 43548636228
+}

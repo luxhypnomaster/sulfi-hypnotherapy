@@ -1,0 +1,10 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart
+00:00 +0: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install
+00:01 +0 -1: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install [E]
+  Сервер временно недоступен. Данные и прогресс сохранены.
+  package:sulfi_hypnotherapy/services/alchemist_api.dart 231:11  AlchemistApi.call
+  
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi17/test/task16b_announcement_e2e_test.dart: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install

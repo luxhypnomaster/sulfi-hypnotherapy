@@ -86,6 +86,14 @@ class AlchemistFailure extends DiaryApiException {
         DiaryFailure.conflict,
       );
     }
+    if (const [400, 404, 413, 415, 422].contains(status)) {
+      return AlchemistFailure(
+        'Сервер отклонил данные ($code). Черновик сохранён; исправьте причину перед повтором.',
+        status,
+        code,
+        DiaryFailure.invalidData,
+      );
+    }
     return AlchemistFailure(
       status == 429
           ? 'Достигнут лимит запросов. Передача приостановлена; повторите позже.'

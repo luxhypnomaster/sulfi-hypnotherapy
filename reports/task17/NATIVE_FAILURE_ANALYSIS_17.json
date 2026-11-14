@@ -1,0 +1,29 @@
+{
+  "run": 43546879054,
+  "driver": "9340241cbd7f88bd4b093fca6645d9ea5aa88889",
+  "apkSource": "85ff50736c6be28bda55cf759f232d8347f3ad3e",
+  "master25": {
+    "upgrade": "PASS",
+    "coldRowsAndMedia": "PASS",
+    "newOfflineDraft": "BLOCKED_TEST_FIELD_INDEX_CHANGED_BY_KEYBOARD_SCROLL"
+  },
+  "master26": {
+    "baselineUIAudioAndFirstModule": "PASS",
+    "upgrade": "NOT_RUN",
+    "pauseScreen": "EMULATOR_ADB_DISCONNECT_BEFORE_UPGRADE"
+  },
+  "client25": {
+    "baselineUIAudioAndFirstModule": "PASS",
+    "upgrade": "NOT_RUN",
+    "pauseScreen": "UIAUTOMATION_TIMEOUT_BEFORE_UPGRADE"
+  },
+  "graphicsObserved": {
+    "emulatorVersion": "37.2.13.0",
+    "backend": "gfxstream Swiftshader indirect",
+    "requestedRAM": 1536,
+    "actualMinimumRAM": 2560,
+    "freeHostBytesBeforeBoot": 26586378240
+  },
+  "newHypothesis": "Software graphics/framebuffer instability on animated legacy watch; OOM not proven. Next bounded attempt uses physical720x1280 and modern swiftshader plus independent screenshot and host diagnostics. Do not repeat again without new evidence.",
+  "fieldCorrection": "Reset actual scroll before title/message; tolerate visibility reordering, but require exact SQLite title/message/scope and cold preservation. No SQL seed."
+}

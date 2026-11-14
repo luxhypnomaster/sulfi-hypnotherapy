@@ -1,0 +1,15 @@
+00:00 +0: loading /dev/shm/sulfi17/test/task17_catalog_session_test.dart
+00:00 +0: 17 G0 catalog API constructed before login must see later shared login and explicit logout
+00:00 +0 -1: 17 G0 catalog API constructed before login must see later shared login and explicit logout [E]
+  Expected: 'first'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task17_catalog_session_test.dart 57:7          main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi17/test/task17_catalog_session_test.dart: 17 G0 catalog API constructed before login must see later shared login and explicit logout

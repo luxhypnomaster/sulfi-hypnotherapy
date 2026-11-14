@@ -1,0 +1,93 @@
+// REVIEW ONLY until separately approved and copied to trusted main.
+// No project creation, Drive, bootstrap, OAuth-config or repository writes.
+import {createHash} from 'node:crypto';
+import {readFileSync,writeFileSync,mkdirSync,rmSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+export const TARGET={script:'1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc',deployment:'AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg',name:'Сервер Проекта Алхимик',owner:'luxhypnomaster@gmail.com',baseSource:'1a0cf8e5a60144075eec793767953586bfa319a2',oldDiary:'2d9c9c5cccd8a0ea5c4ab36ab4ea1341e0253ef270a4d2debfc2e713dd27eec7',newDiary:'e8402c7fd04ff1507832d92b858720fd6958626c1004b21bafcc24be8c49692f'};
+export const OLD="if(!r.manifest.entry.blocks.some(function(b){return b.type==='text'&&b.text.trim()||b.mediaRef||b.link;}))fail('EMPTY_ENTRY');";
+export const NEW="if(!r.manifest.entry.message.trim()&&!r.manifest.entry.blocks.some(function(b){return b.type==='text'&&b.text.trim()||b.mediaRef||b.link;}))fail('EMPTY_ENTRY');";
+export const PINNED_FILES={"Access": "a783d52984ca42edde63fccf0a1daadbea2dd2a55c87baa76679932f007755de", "AtomicStore": "2beddd314de002c8958dd6a3543c3905e686a97ff0f767027d6d913dddff6c21", "Bootstrap": "435d97081bf0bf43182e670982669970072a1ce42dbbcf52d07a9b0120e67f48", "Catalog": "4a1f43cf7063ee0187ea59583136512e15654b559e29ee26d1d812118e8d583d", "Diary": "2d9c9c5cccd8a0ea5c4ab36ab4ea1341e0253ef270a4d2debfc2e713dd27eec7", "GasFiles": "14733f7a9b1a75b6e5b3dd7172879c523ef30191986244ae07db66fa992a8dd1", "GasFolders": "f9afdbbc605aae81911ba6971b68032c431904db5a1339e3a14254ea763226cc", "GasTransfer": "1bcb447ded5321bbde20dd3f5533e77e61e86bd182d5119a3b1b2e099e51a7d7", "GoogleJwt": "8207779c7627bb233cda77fdf8421cb00875fa28c14dc0dcc2250bcf16a96caa", "Library": "2b05535cdbc703fd225349d1380a88081de241f92e22fe8f8d5f0c9ffc25ba5a", "Manifest": "c47a576551cc58f1cddf42429d7ea4a171df6e62013245f149dd0c08d5c8c1ef", "MediaRuntime": "cfe4efeb7288686c1aa31f086132e627b87acd30877ea87af3eb5aece04a2875", "Mime": "dbeb65be77a2f7cc37a2bd86b80d93402ae125649aa3c7d1fc07d189e557dae9", "Operations": "309330ef5729f8aa6fe724fa5adfc54dbf889466b7bd4e02f1653814eab33d66", "PilotAuthorization": "3da773fc7b4db27d2223d722f13c5b54bed589030ead4043b96dd41adfdae303", "RateLimit": "896da2b85bc1df36557c44abfe2a185497c5ee3ad9d5b82028e070e78e1bba1d", "Router": "86a35ccfc6d31a51e11c11e3876fd771b3633f65f97009377367e77d68b60aad", "RsaVendor": "0f605bac99199651a664ce17971385f17a383ac8030ce280da2fb533524adeb1", "Sha256": "39d2563d16f511b39387f3ccf7ce12308561e2b631f26050ca4df039b741d1f9", "Storage": "d4e402bcfc5dffb0a95e8d4742beaf4a590cce3bb81872680a673b775393889e", "Transfer": "202bcdb2699b4b9d4a451a78e98e43135eefdb6d8029d35fbe8898bbea1343bf"};
+export const sha=s=>createHash('sha256').update(s).digest('hex');
+const fail=code=>{throw Error(code);};
+export function indexed(files){
+ if(!Array.isArray(files))fail('INVALID_SOURCE');const map=new Map();
+ for(const f of files){if(!/^[A-Za-z][A-Za-z0-9_ -]{0,100}$/.test(f.name)||!['SERVER_JS','JSON'].includes(f.type)||typeof f.source!=='string'||map.has(f.name))fail('UNSAFE_SOURCE_FILE');map.set(f.name,f);}
+ return map;
+}
+export function planPatch(base,head,pins=PINNED_FILES,target=TARGET){
+ const a=indexed(base),b=indexed(head),names=[...Object.keys(pins),'InitialConfig','appsscript'].sort();
+ if(JSON.stringify([...a.keys()].sort())!==JSON.stringify(names)||a.size!==b.size)fail('SOURCE_MANIFEST_MISMATCH');
+ for(const [name,f] of a){if(f.type!==(name==='appsscript'?'JSON':'SERVER_JS'))fail('SOURCE_TYPE_MISMATCH');const h=b.get(name);if(!h||h.type!==f.type||sha(h.source)!==sha(f.source))fail('UNPUBLISHED_HEAD_DIFFERS_STOP');if(pins[name]&&sha(f.source)!==pins[name])fail('BASELINE_SOURCE_HASH_MISMATCH');}
+ const d=a.get('Diary');if(d.type!=='SERVER_JS'||sha(d.source)!==target.oldDiary||d.source.split(OLD).length!==2)fail('DIARY_PATCH_PRECONDITION');
+ const next=d.source.replace(OLD,NEW);if(sha(next)!==target.newDiary)fail('DIARY_PATCH_DIGEST_MISMATCH');
+ return base.map(f=>f.name==='Diary'?{...f,source:next}:{...f});
+}
+export function compareFiles(actual,expected){const a=indexed(actual),b=indexed(expected);if(a.size!==b.size)fail('SOURCE_READBACK_MISMATCH');for(const [n,f] of b){const x=a.get(n);if(!x||x.type!==f.type||sha(x.source)!==sha(f.source))fail('SOURCE_READBACK_MISMATCH');}}
+export function deploymentVersion(d){
+ const web=d.entryPoints?.find(x=>x.entryPointType==='WEB_APP')?.webApp;
+ if(d.deploymentId!==TARGET.deployment||web?.url!=='https://script.google.com/macros/s/'+TARGET.deployment+'/exec'||web.entryPointConfig?.executeAs!=='USER_DEPLOYING'||web.entryPointConfig?.access!=='ANYONE_ANONYMOUS')fail('DEPLOYMENT_IDENTITY_OR_CONFIG_MISMATCH');
+ return d.deploymentConfig.versionNumber;
+}
+// Planning only: never writes HEAD. Apps Script has no atomic content CAS.
+export function rollbackHeadPlan(base,active,head,exclusiveWriter=false,pins=PINNED_FILES,target=TARGET){
+ const patched=planPatch(base,base,pins,target);
+ const same=(a,b)=>{try{compareFiles(a,b);return true;}catch{return false;}};
+ if(!same(active,base)&&!same(active,patched))fail('ACTIVE_FOREIGN_VERSION_STOP');
+ if(same(head,base))return {head:'BASE6',writeHead:false,restore:'NOT_NEEDED'};
+ if(!same(head,patched))return {head:'FOREIGN',writeHead:false,restore:'BLOCKED_PRESERVE_FOREIGN_HEAD'};
+ return {head:'OUR_PATCH',writeHead:false,restore:exclusiveWriter?'ELIGIBLE_SEPARATELY_APPROVED_RECHECK_AND_READBACK':'BLOCKED_NEEDS_EXCLUSIVE_WRITER'};
+}
+async function main(){
+ if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||!['READ_ONLY_INSPECTION','DIARY_ONLY_WITH_ROLLBACK6'].includes(process.env.TASK17_APPROVED))fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
+ const mode=process.env.TASK17_PATCH_MODE;if(!['inspect','apply','rollback'].includes(mode))fail('MODE_REQUIRED');
+ if(mode!=='inspect'&&process.env.TASK17_APPROVED!=='DIARY_ONLY_WITH_ROLLBACK6')fail('PRODUCTION_WRITE_NOT_APPROVED');
+ const temp=process.env.RUNNER_TEMP;if(!temp||!process.env.CLASPRC_JSON)fail('OWNER_OAUTH_UNAVAILABLE');
+ const credential=join(temp,'task17-approved.clasprc.json'),work=join(temp,'task17-approved-diary');
+ const execute=promisify(execFile);let client;
+ try{
+  JSON.parse(process.env.CLASPRC_JSON);writeFileSync(credential,process.env.CLASPRC_JSON,{mode:0o600});delete process.env.CLASPRC_JSON;
+  const root=join(temp,'task17-clasp/node_modules/@google/clasp/build/src/auth');
+  const {FileCredentialStore}=await import(pathToFileURL(join(root,'file_credential_store.js')));
+  const {getAuthorizedOAuth2Client}=await import(pathToFileURL(join(root,'auth.js')));
+  const store=new FileCredentialStore(credential),saved=await store.load('default');client=await getAuthorizedOAuth2Client(store,'default');
+  const refreshed=await client.refreshAccessToken(),idToken=refreshed.credentials.id_token;if(!idToken)fail('OWNER_IDENTITY_REQUIRED');
+  const actor=(await client.verifyIdToken({idToken,audience:saved.client_id})).getPayload();if(actor.email!==TARGET.owner||actor.email_verified!==true)fail('WRONG_DEPLOY_OWNER');
+  const api='https://script.googleapis.com/v1/projects/'+TARGET.script;
+  async function get(path){return (await client.request({method:'GET',url:api+path})).data;}
+  const project=await get('');if(project.scriptId!==TARGET.script||project.title!==TARGET.name)fail('PINNED_PROJECT_MISMATCH');
+  const before=await get('/deployments/'+TARGET.deployment),current=deploymentVersion(before);
+  const base=(await get('/content?versionNumber=6')).files,head=(await get('/content')).files;
+  const config=indexed(base).get('InitialConfig')?.source;
+  const match=/^var AlchemistInitialConfig=(\{[\s\S]*\});\s*$/.exec(config||'');if(!match)fail('INITIAL_CONFIG_FORMAT_UNEXPECTED');
+  const identity=JSON.parse(match[1]);if(identity.sourceSha!==TARGET.baseSource||identity.ownerSubject!==actor.sub||identity.ownerEmail!==TARGET.owner)fail('BASELINE_OWNER_OR_SOURCE_MISMATCH');
+  if(mode==='inspect'){
+   if(current!==6)fail('LIVE_VERSION_NOT6_STOP');
+   planPatch(base,head);
+   const manifest=JSON.parse(indexed(base).get('appsscript').source);
+   console.log('TASK17_ADMIN_INSPECTION='+JSON.stringify({readOnly:true,scriptId:project.scriptId,title:project.title,deploymentId:before.deploymentId,versionNumber:current,deploymentConfig:before.deploymentConfig,entryPoints:before.entryPoints,ownerVerified:true,headEqualsVersion6:true,allPinnedSourcesVerified:true,oauthScopes:manifest.oauthScopes||[],files:base.map(f=>({name:f.name,type:f.type,bytes:Buffer.byteLength(f.source),sha256:sha(f.source)}))}));
+   return; // STOP before workspace creation, clasp push/version/deploy/rollback.
+  }
+  mkdirSync(work,{recursive:true,mode:0o700});const source=join(work,'source');mkdirSync(source,{recursive:true,mode:0o700});
+  writeFileSync(join(work,'.clasp.json'),JSON.stringify({scriptId:TARGET.script,rootDir:source}));
+  const cli=join(temp,'task17-clasp/node_modules/.bin/clasp');
+  async function clasp(args){const r=await execute(cli,['-A',credential,'--json',...args],{cwd:work,timeout:180000,maxBuffer:2*1024*1024,env:{...process.env,DEBUG:''}});return args[0]==='push'?null:JSON.parse(r.stdout);}
+  async function deploy(version){await clasp(['create-deployment','--versionNumber',String(version),'--deploymentId',TARGET.deployment,'--description','Task17 approved Diary-only; rollback6']);if(deploymentVersion(await get('/deployments/'+TARGET.deployment))!==version)fail('DEPLOYMENT_READBACK_MISMATCH');}
+  if(mode==='rollback'){
+   if(current===6){console.log('TASK17_ROLLBACK_ALREADY6_NO_WRITE');return;}
+   const active=(await get('/content?versionNumber='+current)).files;
+   compareFiles(active,planPatch(base,base));await deploy(6);console.log('TASK17_ROLLBACK_CONFIRMED_VERSION6');return;
+  }
+  if(current!==6)fail('LIVE_VERSION_NOT6_STOP');
+  const files=planPatch(base,head);for(const f of files)writeFileSync(join(source,f.name+(f.type==='JSON'?'.json':'.js')),f.source,{mode:0o600});
+  await clasp(['push','--force']);compareFiles((await get('/content')).files,files);
+  const v=(await clasp(['create-version','Task17 approved Diary-only '+TARGET.newDiary])).versionNumber;
+  if(!Number.isSafeInteger(v)||v<=6)fail('INVALID_IMMUTABLE_VERSION');compareFiles((await get('/content?versionNumber='+v)).files,files);
+  await deploy(v);
+  console.log('TASK17_DIARY_PATCH_DEPLOYMENT_VERIFIED='+JSON.stringify({version:v,previous:6,diarySha256:TARGET.newDiary,changedFiles:['Diary'],initialConfigSourceRetained:TARGET.baseSource,physicalGoogle:'NOT_RUN'}));
+ }catch(e){const code=/^[A-Z0-9_]{1,100}$/.test(e.message||'')?e.message:'APPROVED_PATCH_FAILED_REDACTED_CHECK_DEPLOYMENT_BEFORE_RETRY';throw Error(code);}
+ finally{delete process.env.CLASPRC_JSON;rmSync(credential,{force:true});rmSync(work,{recursive:true,force:true});}
+}
+if(process.argv[1]&&pathToFileURL(resolve(process.argv[1])).href===import.meta.url){try{await main();}catch(e){console.error(e.message);process.exitCode=1;}}

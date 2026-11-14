@@ -1,0 +1,9 @@
+{
+  "gate": "actual readonly GitHub run/repo query",
+  "run": 43548636228,
+  "expected": "STOP_FAILED_PIPELINE",
+  "observedExit": 1,
+  "stopBeforeReleaseAndCache": true,
+  "noReleaseWrite": true,
+  "noSigningOrCloud": true
+}

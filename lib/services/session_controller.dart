@@ -1,3 +1,4 @@
+import 'diary_api.dart';
 import 'alchemist_announcement.dart';
 import 'alchemist_work_queue.dart';
 import 'alchemist_diary_api.dart';
@@ -41,7 +42,10 @@ class SessionController extends ChangeNotifier {
     if (diary != null && diary!.onAccountLogout == null) {
       diary!.onAccountLogout = () {
         _catalogIdentity?.invalidate();
-        if (_cloudQueue != null) unawaited(_cloudQueue!.pauseAll());
+        _cloudQueue?.invalidateOwner();
+        if (_cloudQueue != null) {
+          unawaited(_cloudQueue!.pauseAll(reason: 'OWNER_CHANGED'));
+        }
         if (preview != null) unawaited(preview!.stop());
       };
     }
@@ -126,7 +130,9 @@ class SessionController extends ChangeNotifier {
   }
 
   AlchemistApi alchemistApi({bool authenticated = true}) {
-    const endpoint = String.fromEnvironment('SULFI_ALCHEMIST_API');
+    final endpoint = (diary?.api?.supportsServerIdentity ?? false)
+        ? diary!.api!.base.toString()
+        : const String.fromEnvironment('SULFI_ALCHEMIST_API');
     if (endpoint.isEmpty) {
       throw const FormatException(
         'Облачный сервер ещё не подключён в этой сборке. Локальные данные доступны.',
@@ -139,9 +145,14 @@ class SessionController extends ChangeNotifier {
       onUnauthorized: diary?.api?.refreshRejectedIdentity,
       onAuthenticationFailure: diary?.api?.rejectIdentity,
       credential: !authenticated
-          ? (diary?.api?.readerAuthenticated == true
-                ? () => diary!.api!.verifiedIdentityToken()
-                : null)
+          ? () async {
+              final api = diary?.api;
+              if (api?.supportsServerIdentity == true &&
+                  (api!.readerAuthenticated || api.readerScope != 'public')) {
+                return api.verifiedIdentityToken();
+              }
+              return null;
+            }
           : () async {
               if (diary?.api?.supportsServerIdentity ?? false) {
                 return diary!.api!.verifiedIdentityToken();
@@ -159,14 +170,33 @@ class SessionController extends ChangeNotifier {
 
   AlchemistCatalog get catalog => _catalog ??= AlchemistCatalog(
     this,
-    api: const String.fromEnvironment('SULFI_ALCHEMIST_API').isEmpty
-        ? null
-        : alchemistApi(),
+    api:
+        (diary?.api?.supportsServerIdentity ?? false) ||
+            const String.fromEnvironment('SULFI_ALCHEMIST_API').isNotEmpty
+        ? alchemistApi()
+        : null,
   );
+  Future<void> ensurePublicationIdentity() async {
+    if (diary?.api?.supportsServerIdentity ?? false) {
+      await diary!.restoreSignIn();
+      await diary!.api!.verifiedIdentityToken();
+      policy.applyVerifiedServerRole(diary!.api!.verifiedRole);
+      if (!diary!.api!.readerAuthenticated ||
+          diary!.api!.verifiedRole != 'MASTER' ||
+          policy.clientEdition) {
+        throw const DiaryApiException(
+          'Сервер не разрешил публикацию для этого аккаунта.',
+          DiaryFailure.blocked,
+        );
+      }
+    }
+  }
+
   AlchemistWorkQueue? _cloudQueue;
   AlchemistWorkQueue get cloudQueue => _cloudQueue ??= AlchemistWorkQueue(
     db: capsules!.database,
     owner: () => catalog.api?.ownerBinding,
+    prepare: ensurePublicationIdentity,
     send: (name, value, stop, stage, progress) async {
       if (name.startsWith('alchemist_card:')) {
         await catalog.publish(

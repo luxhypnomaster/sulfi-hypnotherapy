@@ -98,7 +98,7 @@ void main() {
           throwsA(isA<Exception>()),
         );
         identity.token = 'master-fixture';
-        await d.signInAuthor();
+        await d.switchGoogleAccount();
         expect(api.verifiedRole, 'MASTER');
         expect(d.authenticated, true);
         expect(f.c.policy.isAuthor, !clientEdition);
@@ -106,7 +106,10 @@ void main() {
         await d.logout();
         expect(d.authenticated, false);
         expect(api.verifiedRole, isNull);
-        expect(d.authorWorkspace, false);
+        expect(
+          d.authorWorkspace,
+          !clientEdition,
+        ); // Local workspace, no cloud authority.
         expect(f.c.policy.isAuthor, false);
         await expectLater(
           api.verifiedIdentityToken(),

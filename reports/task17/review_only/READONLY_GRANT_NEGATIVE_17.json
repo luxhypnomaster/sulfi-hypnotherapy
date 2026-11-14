@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "apply",
+    "exit": 1,
+    "stop": "PRODUCTION_WRITE_NOT_APPROVED",
+    "GoogleCalls": 0
+  },
+  {
+    "mode": "rollback",
+    "exit": 1,
+    "stop": "PRODUCTION_WRITE_NOT_APPROVED",
+    "GoogleCalls": 0
+  }
+]

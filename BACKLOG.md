@@ -1,3 +1,7 @@
+# №17 — текущая корректировка
+
+MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независимо скачана и проверена, готова к приёмке. [Точка продолжения](reports/task17/PROGRESS.md) · [Результат](reports/task17/RESULT_17.md). Draft PR48; main/GAS6/подпись/ACL/старые №16 сохранены. Настоящие Google и два Android NOT_RUN, №17 не закрыто.
+
 # №16-Г — текущий приоритет
 
 - [x] G0:7файлов/manifest/33критерия, PR45/46 ancestry, отдельная ветка.
@@ -342,3 +346,12 @@
 - [x] G1–G4 кандидат: единая SDK identity, owner-bound транспорт и существующая очередь, отдельный каталог/анонс, обложка/категории.
 - [ ] G5 exact-source CI, две APK25 и обновление APK24 на эмуляторе — отчёты reports/task16b.
 - [ ] G6 физический MASTER → три трека → дневник → CLIENT → offline; новые live server checks после отдельного разрешения на candidate deploy.
+
+## №17 — общая Google-сессия, существующая очередь и каталог
+
+- [x] G0 CODE/CONTROLLED: точные source/PR baseline, RED→GREEN причины lifecycle pause, cold scope restore, frozen catalog credential и неверного version label; opt-in trace без секретов.
+- [x] G1/G2 CODE/CONTROLLED: shared identity/role, silent recovery и explicit logout; durable atomic intent, same-owner Resume, status readback и идемпотентность без второй очереди.
+- [x] G3/G4 CODE/CONTROLLED: раздельные каталог/дневник, точные ContentLink и зависимости, preview→queue, focus/profile/category guards и честные статусы/байты.
+- [ ] G5: все три actual native upgrade gates, независимый download/cert readback и выдача пары27; текущее состояние в reports/task17/PROGRESS.md.
+- [ ] Отдельное разрешение на узкий short-message Diary patch в существующем GAS. main/OAuth/ACL/signing не меняются.
+- [ ] OWNER: Google MASTER+CLIENT,15/30/60мин, реальный модуль3треков/программа→дневник→CLIENT→слышимое offline. CI не заменяет физическую приёмку.

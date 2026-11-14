@@ -1,0 +1,48 @@
+{
+  "run": 43548636228,
+  "appSource": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "lanes": [
+    {
+      "lane": "MASTER25",
+      "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+      "cases": {
+        "BLOCKED": 2
+      },
+      "candidateInstalled": false,
+      "blockedReasons": [
+        "HOME_NOT_READY:[\"Pixel Launcher isn't responding\", 'Close app', 'Wait']",
+        "INSTALL_PRECONDITION_FAILED_NO_DATA_PROOF"
+      ]
+    },
+    {
+      "lane": "MASTER26",
+      "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+      "cases": {
+        "PASS": 5,
+        "BLOCKED": 2
+      },
+      "candidateInstalled": false,
+      "blockedReasons": [
+        "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' timed out after 55 seconds",
+        "UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING"
+      ]
+    },
+    {
+      "lane": "CLIENT25",
+      "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+      "cases": {
+        "PASS": 12,
+        "NOT_RUN": 1
+      },
+      "candidateInstalled": true,
+      "blockedReasons": []
+    }
+  ],
+  "threeLaneSafetyGate": "BLOCKED",
+  "apkDelivery": "NOT_ISSUED",
+  "rerun": "NOT_DISPATCHED_NO_PROVEN_NEW_EMULATOR_HYPOTHESIS",
+  "hostOOM": "NOT_PROVEN",
+  "diagnosticDefect": "rg missing on hosted runner hid dmesg filter; grep fallback now prepared, no emulator rerun",
+  "rawReceiptReadback": "SHA256_VERIFIED",
+  "ownerDevice": "NOT_TOUCHED"
+}
