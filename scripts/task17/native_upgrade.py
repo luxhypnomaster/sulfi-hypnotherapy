@@ -303,8 +303,22 @@ def ui_after():
  mt=[json.loads(r['payload'])['title'] for r in inventories['beforeBaseline']['rows']['module_definitions']]
  assert all(any(t in label(n) for n in ns) for t in mt),'MODULES_MISSING_FROM_UI'
  return {'allUIAudioAndModulesVisible':True,'nativeLibraryAudioObserved':playing,'physicalHeardSound':'NOT_RUN','defaultLibraryLabels':default[:35]}
+def diary_editor_ready(nodes):
+ return (any('редактор записи' in label(n).casefold() for n in nodes)
+         and sum(n.get('class')=='android.widget.EditText' for n in nodes)>=2
+         and any('сохранить черновик' in label(n).casefold() for n in nodes))
+def open_diary_editor():
+ # Network banner/layout completion can move a physical target between dump
+ # and tap. Never type into the journal search just because it is EditText0.
+ for _ in range(3):
+  if diary_editor_ready(tree()):return
+  click('Новая запись')
+  for _ in range(6):
+   if diary_editor_ready(tree()):return
+   time.sleep(.5)
+ raise AssertionError('DIARY_EDITOR_ROUTE_NOT_READY_NO_TYPING')
 def local_draft_after():
- home();click('Дневник');click('Новая запись')
+ home();click('Дневник');open_diary_editor()
  # Keyboard auto-scroll changes which EditText nodes remain visible. Reset the
  # actual list before selecting the two header fields; exact SQL values below
  # prove these are title/message, never an injected or accidentally edited block.

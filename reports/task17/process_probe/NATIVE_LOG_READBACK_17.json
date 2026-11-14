@@ -1,0 +1,38 @@
+[
+  {
+    "file": "NATIVE_UI_UPGRADE_17.json",
+    "bytes": 197698,
+    "sha256": "b59b6a74e266c9849c30a8caacc34596431b724b24ad2868e59c36ea2dae23d2",
+    "verified": true
+  },
+  {
+    "file": "25-before-upgrade.png",
+    "bytes": 845615,
+    "sha256": "2e247da31ce7147615f2b7d836c21a8a7e08f2dc89c8e21ce53446b677234188",
+    "verified": true
+  },
+  {
+    "file": "26-library.png",
+    "bytes": 59773,
+    "sha256": "33bd8f610c3131fdea8e2a44af49349e44a383d910f76c345fcb01796c34820f",
+    "verified": true
+  },
+  {
+    "file": "26-modules.png",
+    "bytes": 959030,
+    "sha256": "21ba206ca8991b177b38af90deda3a0f80f84aaab85b8224a60ae6bfedb493da",
+    "verified": true
+  },
+  {
+    "file": "failure-local_draft_after27.png",
+    "bytes": 1134091,
+    "sha256": "395c5dc39407aa473bc7f8c9664cc2dafc803cbaefe76053c6e4f30f3eb751f0",
+    "verified": true
+  },
+  {
+    "file": "failure-local_draft_after27.xml",
+    "bytes": 5079,
+    "sha256": "4f1200cee062ac5b36704535281d0c5102c365ab44ce2423f676838cb74a7436",
+    "verified": true
+  }
+]

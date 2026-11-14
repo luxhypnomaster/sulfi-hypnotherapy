@@ -1,11 +1,14 @@
 """Record actual child termination and host resource evidence, never guest memory."""
-import json,os,pathlib,signal,subprocess,sys,time
+import json,os,pathlib,signal,subprocess,sys,time,re
 
 def counters():
  out={}
  for name in ['memory.events','memory.current','memory.max','memory.peak']:
-  p=pathlib.Path('/sys/fs/cgroup')/name
-  if p.exists():out[name]=p.read_text().strip()
+  try:
+   groups=pathlib.Path('/proc/self/cgroup').read_text().splitlines();leaf=next((l.split('::',1)[1] for l in groups if l.startswith('0::')),'/')
+   p=pathlib.Path('/sys/fs/cgroup')/leaf.lstrip('/')/name
+   if p.exists():out[name]=p.read_text().strip()
+  except OSError:pass
  try:
   for line in pathlib.Path('/proc/meminfo').read_text().splitlines():
    if line.startswith('MemAvailable:'):out['MemAvailable']=line.split(':',1)[1].strip()
@@ -29,7 +32,7 @@ def monitor(command,folder):
    samples.append(sample)
   time.sleep(1)
  code=child.wait()
- result={'schema':1,'avdLaunch':'-avd' in command,'exitCode':code,'signal':signal.Signals(-code).name if code<0 else None,'wrapperReceivedSignals':requested,'before':before,'after':counters(),'durationSeconds':round(time.time()-started,2),'samples':samples}
+ result={'childPid':child.pid,'observedChildNames':sorted({l for v in samples for l in v.get('childStatus',[]) if l.startswith('Name:')}),'sampleCount':len(samples),'schema':1,'avdLaunch':'-avd' in command,'exitCode':code,'signal':signal.Signals(-code).name if code<0 else None,'wrapperReceivedSignals':requested,'before':before,'after':counters(),'durationSeconds':round(time.time()-started,2),'samples':samples}
  p=folder/('EMULATOR_FORENSIC_'+str(os.getpid())+'.json');p.write_text(json.dumps(result,indent=2)+'\n')
  # Terminal proof emitted immediately, even when adb and the native driver die.
  print('EMULATOR_TERMINATION='+json.dumps({k:v for k,v in result.items() if k!='samples'}),flush=True)

@@ -885,7 +885,7 @@ jobs:
         run: |
           python3 - <<'PYREAD'
           import pathlib,json,os
-          for p in pathlib.Path(os.environ['RUNNER_TEMP'],'task17-evidence').glob('EMULATOR_FORENSIC_*.json'):
+          for p in set(pathlib.Path(os.environ['RUNNER_TEMP']).rglob('EMULATOR_FORENSIC_*.json'))|set(pathlib.Path('/tmp/android-runner').rglob('EMULATOR_FORENSIC_*.json')):
             v=json.loads(p.read_text()); print('EMULATOR_FINAL_PROOF='+json.dumps(v,separators=(',',':')))
           PYREAD
       - name: Preserve native evidence (fixture data only)
