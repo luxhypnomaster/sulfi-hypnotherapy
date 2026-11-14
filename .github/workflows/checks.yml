@@ -815,10 +815,6 @@ jobs:
       matrix:
         include:
           - edition: master
-            baseline: 25
-            asset: '738283668'
-            sha: d0c8704673434b43fc7ceebbaceff4c3f2075a780964063c06dffeed03bc50c9
-          - edition: master
             baseline: 26
             asset: '743160429'
             sha: 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a
@@ -832,6 +828,7 @@ jobs:
       TASK17_APK_SOURCE: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
       TASK17_EDITION: ${{ matrix.edition }}
       TASK17_BASELINE: ${{ matrix.baseline }}
+      TASK17_GLES_EXPERIMENT: swangle
     steps:
       - uses: actions/checkout@v4
         with:
@@ -880,7 +877,7 @@ jobs:
           emulator-boot-timeout: 180
           pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
           script: bash scripts/task17/run_native.sh
       - name: Preserve native evidence (fixture data only)
         if: always()
