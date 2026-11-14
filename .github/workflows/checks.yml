@@ -845,6 +845,10 @@ jobs:
           path: ${{ runner.temp }}/task17-apks
           key: task17-quarantine-pair-85ff50736c6be28bda55cf759f232d8347f3ad3e
           fail-on-cache-miss: true
+      - name: Read-only exact source and cached pair preflight before Android setup
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/task17/reuse_verified_pair.py
       - name: Reclaim only disposable host toolchains before SDK install
         run: bash scripts/task16g/prepare_native_runner.sh
       - uses: actions/setup-java@v4
@@ -860,7 +864,6 @@ jobs:
           BASE_ASSET: ${{ matrix.asset }}
           BASE_SHA: ${{ matrix.sha }}
         run: |
-          python3 scripts/task17/reuse_verified_pair.py
           bash scripts/task17/verify_pair.sh
           gh api -H 'Accept: application/octet-stream' "repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/$BASE_ASSET" > "$RUNNER_TEMP/task17-apks/$TASK17_EDITION$TASK17_BASELINE.apk"
           echo "$BASE_SHA  $RUNNER_TEMP/task17-apks/$TASK17_EDITION$TASK17_BASELINE.apk" | sha256sum -c -

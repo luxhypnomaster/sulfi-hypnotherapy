@@ -3,7 +3,7 @@ import hashlib,json,os,pathlib,subprocess
 REPO='luxhypnomaster/sulfi-hypnotherapy';SOURCE='85ff50736c6be28bda55cf759f232d8347f3ad3e';RUN=43515852713
 assert os.environ['GITHUB_EVENT_NAME']=='workflow_dispatch' and os.environ['GITHUB_REF']=='refs/heads/fix/task17-stable-auth-queue' and os.environ['GITHUB_REPOSITORY']==REPO
 
-def gh(path):return json.loads(subprocess.check_output(['gh','api','repos/'+REPO+'/'+path]))
+def gh(path):return json.loads(subprocess.check_output(['gh','api','repos/'+REPO+('/'+path if path else '')]))
 assert gh('')['private'] is True
 run=gh('actions/runs/'+str(RUN));assert run['head_sha']==SOURCE and run['event']=='workflow_dispatch'
 jobs=gh('actions/runs/'+str(RUN)+'/jobs?per_page=100')['jobs']
