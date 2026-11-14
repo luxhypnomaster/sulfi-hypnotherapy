@@ -238,3 +238,7 @@ CI выпускает author/test `ru.sulfi.sulfi_hypnotherapy` и отдель�
 
 ### Продолжение №16-Б
 Кандидат `0.4.17+25` из `fix/task16b-auth-transfer-publication`: документация [docs/task16b/00_START_HERE.md](docs/task16b/00_START_HERE.md), фактические результаты [reports/task16b](reports/task16b). Физическая приёмка нового кандидата и разрешение на deployment отделены от CI. Текущий GAS6/APK24 не заменяются автоматически.
+
+### №17 — стабилизация общей сессии и передачи
+
+Работа ведётся в `fix/task17-stable-auth-queue`, [draft PR48](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/48), от необъединённого PR47. App snapshot `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, кандидат `0.4.19+27`. Состояние native gates и доступность проверенной пары: [reports/task17/PROGRESS.md](reports/task17/PROGRESS.md), [матрица67критериев](reports/task17/ACCEPTANCE_17.csv). До успешного native upgrade gate и raw APK/cert readback выдача заблокирована. Автоматические тесты не подтверждают Google-вход на двух телефонах. GAS6 не обновляется автоматически; узкий Diary diff требует отдельного разрешения по [плану](reports/task17/SERVER_CHANGE_REQUEST_17.md).

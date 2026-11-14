@@ -1,13 +1,27 @@
 # №17 — сохранность и обновление
 
-Схема SQLite9, пути локального audio/diary/history media, template IDs и модели не мигрируются. STORAGE_SOURCE_BOUNDARIES_17.json подтверждает byte-identical data bootstrap/library/capsule/native storage guard/signing/MainActivity относительно PR47. Android Back handler не изменялся.
+Приложения `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, `0.4.19+27`. SQLite schema9, audio/media paths, template IDs, bootstrap/library/capsule, signing и native storage guard неизменны относительно фактического source APK26 и PR47: STORAGE_SOURCE_BOUNDARIES_17.json. Android Back handler не переписывался.
 
-Новые состояния/intent/profile/identity hints используют существующий app_settings; таблицы не сбрасываются, нет GC/orphan cleanup, удаления, импорта поверх базы или автоматического восстановления пустой БД. Unsigned/unowned старые задачи не получают cloud owner автоматически. Старые APK и source SHA сохраняются.
+Новые intent/profile/logout/identity hints используют существующий app_settings. DDL/GC/reset/orphan cleanup/import поверх живой БД не добавлены. Owner hint не credential и не разрешение публиковать. Старые задачи не перепривязываются к чужому owner. Имеющиеся файлы/IDs сохраняются.
 
-Native gate PENDING: три независимых Android35 sandbox с baseline MASTER25, MASTER26, CLIENT25. Данные создаются UI:3 различных аудио (два одинаковых display title),2 модуля включая положительную паузу, программа, текущая конфигурация и история. Нормальное `adb install -r` в disposable emulator, затем сравнение IDs/полных строк и SHA медиа/integrity, cold restart. Ни uninstall, ни clear, ни downgrade не применяются. UI-before-Google drafts на старых immutable APK могут быть недоступны: такой пробел нельзя закрыть SQL-seeding. Новый offline MASTER draft после обновления проверяется отдельно и не выдаётся за upgrade старого Google draft.
+## Native доказательства
 
-Сертификат ожидается прежний SHA2560b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6; packages MASTER ru.sulfi.sulfi_hypnotherapy и CLIENT ru.sulfi.sulfi_hypnotherapy.clienttest. VersionCode27 >25/26. Выдача пары только после native safety и raw artifact readback; пока PENDING.
+| Lane | CI outcome | Фактические cases |
+|---|---|---|
+| MASTER25→27 | failure | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| MASTER26→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| CLIENT25→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
 
-Rollback Android: исправленная сборка с БОЛЬШИМ versionCode и сохранённой схемой/подписью. Не предлагать downgrade/uninstall/clear. Git revert не является резервной копией персонального аудио. При installer conflict STOP и диагностика без удаления приложения.
+Только UI-created disposable fixture data; копии SQLite/WAL/SHM читаются для полного сравнения строк, integrity и SHA медиа. Ни uninstall, ни clear, ни downgrade не применяются. Отсутствующие legacy Google drafts честно NOT_RUN: их нельзя создать без реального аккаунта или заменить SQL fixture. Новый offline draft после upgrade проверяется отдельно.
 
-Серверный rollback после отдельно разрешённого патча — восстановление прежней immutable deployment version6, без удаления Drive или private data. Пока сервер не менялся, rollback не выполнялся.
+## APK и подпись
+
+APK27 НЕ выданы. Собранные бинарники остаются в приватном карантине до полного native gate и независимой проверки скачанных файлов.
+
+Ожидаемые package: MASTER `ru.sulfi.sulfi_hypnotherapy`, CLIENT `ru.sulfi.sulfi_hypnotherapy.clienttest`. VersionCode27 больше25/26. Прежний cert SHA256 `0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6`. CI проверяет aapt/apksigner, compiled endpoint/WebClientID и DEX storage guard. Raw release readback требуется дополнительно; наличие cache не считается доставкой.
+
+## Откат и ограничения
+
+Android rollback — отдельная исправленная сборка с БОЛЬШИМ versionCode, прежней подписью/схемой. Не устанавливать старый APK поверх нового, не удалять приложение/данные. При installer conflict STOP с сообщением ошибки. Git/APK не являются резервной копией персонального аудио. Физическое обновление владельца до27 — NOT_RUN.
+
+Существующий GAS не менялся. Предложенный отдельно согласуемый серверный rollback ограничен возвратом того же deployment к immutable version6; ни Drive данные, ни OAuth/ACL не откатываются/удаляются. SERVER_CHANGE_REQUEST_17.md содержит конкретный diff/readback/STOP conditions.

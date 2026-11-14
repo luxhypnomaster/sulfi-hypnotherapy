@@ -1,26 +1,34 @@
-# №17 — проверки (checkpoint до завершения CI)
+# №17 — протокол проверок
+
+Источник приложений `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`. [CI](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228); verify=success, build=success. Точные raw logs и JSON receipts хранятся рядом; счётчики предыдущих прогонов не суммируются как независимые тесты.
 
 ## CODE / CONTROLLED
 
-- G0: два production-path RED до исправлений; дополнительный frozen-public-credential RED. Точные тесты и логи сохранены.
-- G1:13 targeted PASS (пересекающиеся серии не суммируются как новые тесты).
-- G2/G3:19 auth/queue/root/diary/shared-session/SDK/production-domain-loopback PASS. Потеря ответа после commit проверяется с прежним requestId и промежуточным GET.
-- G4:5 новых unit/widget PASS; отдельный существующий catalog UI200% font PASS. Проверены focus/selection/composing, профиль автора, категории, все страницы preview и отсутствие read-state writes,5 нажатий→1 review, ошибка enqueue сохраняет editor и точный draft.
-- Node candidate47 PASS (46 прежних+новый short-message security); analyze без замечаний;185 lib/test files format без изменений. Эти числа относятся к перечисленным прогонам, не к ещё работающему full CI.
-- Точный старый Diary.js GAS6: новый short-only regression RED. Candidate server diff GREEN. Этот RED означает воспроизведение ограничения старого сервера, не успешную live публикацию.
+- G0: production-path RED lifecycle USER_PAUSED, cold restore ACCOUNT_CHANGED и frozen null catalog credential; исправления GREEN. ROOT_CAUSE_17.md содержит файлы/тесты и пределы доказательства.
+- G1: адресный набор13PASS; SDK-boundary test проверяет один authorized/autoSelect запрос и отсутствие unapproved fallback. Persistent logout и late SDK race проверены отдельно.
+- G2/G3: пересекающийся адресный набор19PASS: atomic enqueue,5 taps/restart, Resume during HTTP, owner isolation,401/403/network, late restore, durable diary, потерянный ответ реального JS commit. Dart→production-domain JS loopback — CONTROLLED, а не Google/Drive LIVE.
+- G4: шесть новых unit/widget проверок, включая последний RED→GREEN published-author label при пустом feed. Focus/selection/composing и editable profile, category IDs, preview всех страниц без read-state writes,5 taps→один review, ошибка enqueue сохраняет точный draft/editor.
+- Прежний catalog font200%+keyboard тест и отдельный MediaQuery preview200% PASS; PREVIEW_200_TEST_17.diff делает дополнительный вариант воспроизводимым.
+- Финальный verify: lockfile pub get, schema/contract fixtures, Node backend suites, dart format, flutter analyze, полный Flutter набор, CLIENT compile-time tests. Точное число из финального лога фиксируется в CI_FINAL_RESULTS_17.json после завершения run, а не по прогнозу.
+- Security delivery guard:9Python tests PASS (public repo/release, untested trees, pending/failed build/native, missing lane, existing assets отвергаются).
+- Отдельный review-only серверный инструмент:8Node tests PASS, Git-source dry-run23files с единственным изменением Diary. Google API/deploy не запускались.
 
-## Полный CI / Android
+## Native Android35
 
-[https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43513716062](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43513716062), source `85ff50736c6be28bda55cf759f232d8347f3ad3e`: PENDING. Он запускает locked dependencies, схемы/контракты, оба JS backend suites, формат/analyze, весь Flutter набор, CLIENT compile-time тесты. Затем отдельный job собирает signed MASTER/CLIENT27, сверяет cert/packages/config/storage guard. Три fresh Android35 jobs проверяют UI-created MASTER25→27, MASTER26→27 и CLIENT25→27. Их фактические результаты будут дописаны; запуск job не равен PASS.
+| Lane | Результат | Cases |
+|---|---|---|
+| MASTER25→27 | failure | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| MASTER26→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| CLIENT25→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
 
-Локальный /dev/kvm отсутствует. Бесполезная установка эмулятора не выполнялась. Исходная SQLite и медиа создаются через Android UI в disposable CI; SQL используется только для чтения копий SQLite/WAL/SHM и сравнений после обновления. Физические устройства владельца не затрагиваются.
+Baseline материалы создаёт Android UI:3WAV files (два одинаковых display title),2модуля с положительной паузой, программа, текущая конфигурация, история. Затем native upgrade/cold restart, exact rows/media SHA/integrity и UI видимость. AudioTrack — подтверждение состояния native аудио, **не человеческой слышимости**. SQL только read-only; Google identities не подделываются. Legacy Google drafts недоступны без настоящего входа: NOT_RUN. Новый offline MASTER draft после upgrade отдельный case.
+
+Локально /dev/kvm отсутствует; установки ненужного local emulator не выполнялись. Все реальные native установки — disposable GitHub CI, не телефон владельца.
+
+## Неуспехи и повторы
+
+Полная хронология с причинами в CODEX_EFFICIENCY_17.md. Старые fail receipts сохранены, новые PASS не стирают историю. Нельзя считать blocked driver с пустой baseline доказательством успешной миграции.
 
 ## LIVE / OWNER
 
-Read-only health HTTP200 с исходником существующего сервера. Настоящий Google Android login обоих аккаунтов,15/30/60мин, сетевые переключения и человеческая слышимость трёх установленных треков — NOT_RUN. Controlled identities в loopback/SDK tests не являются настоящими Google-пользователями.
-
-## Обновление полного CI
-
-Run43515852713/source85ff507: verify SUCCESS468FlutterPASS/0FAIL; CLIENT edition дополнительные тестыPASS; Node47 и старый backendPASS; схемы/format/analyzePASS. Build attempt1 FAILED на недоступном official org.jetbrains.kotlin:kotlin-stdlib:2.2.21 до компиляции Sulfi. Official plugins.gradle.org и repo.maven.apache.org POM HEAD200 после сбоя; один bounded `gh run rerun --failed`, успешный verify не повторялся (его старые timestamps сохранены в attempt2). НовыхAPK не выдано. Artifact storage quota не обходилась удалением старых artifacts. Native results покаPENDING.
-
-Preview при200%: отдельный локальный MediaQuery-вариант того же widget testPASS; PREVIEW_200_TEST_17.diff и PREVIEW_200_17.log делают вариант воспроизводимым. Это не физическийAndroid. Delivery safety7Pythoncontrolled testsPASS: public repo/release, незавершённыйCI, недостающийnative, изменённыйruntime и попыткаoverwrite assets отвергаются.
+Read-only health существующего GAS HTTP200/source совпал с исторической6. Число active deployment через admin API NOT_RUN. Нет LIVE deployment патча, новой тестовой публикации через Google аккаунт или доступа к устройствам владельца. Реальные2Google,15/30/60мин, network/provider revoke, offline hearing3tracks — NOT_RUN. Старое подтверждение владельца diary26→client25 — отдельное историческое наблюдение, не Task17 PASS.
