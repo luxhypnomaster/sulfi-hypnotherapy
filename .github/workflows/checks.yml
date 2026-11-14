@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       task17_native_cached:
-        description: 'Native-only cached signed85ff507 pair; reuse actual468/full build PASS, no rebuild/sign/full-test/deploy'
+        description: 'MASTER-only API34 comparison; cached signed fbdaa7b pair, verified469/build PASS, no rebuild/sign/deploy'
         type: boolean
         default: false
       task17_delivery:

@@ -20,7 +20,7 @@ export function indexed(files){
 export function planPatch(base,head,pins=PINNED_FILES,target=TARGET){
  const a=indexed(base),b=indexed(head),names=[...Object.keys(pins),'InitialConfig','appsscript'].sort();
  if(JSON.stringify([...a.keys()].sort())!==JSON.stringify(names)||a.size!==b.size)fail('SOURCE_MANIFEST_MISMATCH');
- for(const [name,f] of a){const h=b.get(name);if(!h||h.type!==f.type||sha(h.source)!==sha(f.source))fail('UNPUBLISHED_HEAD_DIFFERS_STOP');if(pins[name]&&sha(f.source)!==pins[name])fail('BASELINE_SOURCE_HASH_MISMATCH');}
+ for(const [name,f] of a){if(f.type!==(name==='appsscript'?'JSON':'SERVER_JS'))fail('SOURCE_TYPE_MISMATCH');const h=b.get(name);if(!h||h.type!==f.type||sha(h.source)!==sha(f.source))fail('UNPUBLISHED_HEAD_DIFFERS_STOP');if(pins[name]&&sha(f.source)!==pins[name])fail('BASELINE_SOURCE_HASH_MISMATCH');}
  const d=a.get('Diary');if(d.type!=='SERVER_JS'||sha(d.source)!==target.oldDiary||d.source.split(OLD).length!==2)fail('DIARY_PATCH_PRECONDITION');
  const next=d.source.replace(OLD,NEW);if(sha(next)!==target.newDiary)fail('DIARY_PATCH_DIGEST_MISMATCH');
  return base.map(f=>f.name==='Diary'?{...f,source:next}:{...f});

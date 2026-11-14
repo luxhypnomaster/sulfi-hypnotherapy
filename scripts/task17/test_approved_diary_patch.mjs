@@ -29,3 +29,7 @@ test('inspection returns before any production writer and readonly grant cannot 
  assert.match(block,/LIVE_VERSION_NOT6_STOP/);assert.match(block,/planPatch\(base,head\)/);
  assert.match(s,/mode!==.inspect.&&process.env.TASK17_APPROVED!==.DIARY_ONLY_WITH_ROLLBACK6./);
 });
+test('pinned JS source cannot be retyped as JSON even with identical bytes',()=>{
+ const {files,pins,target}=fixture();files.find(f=>f.name==='GoogleJwt').type='JSON';
+ assert.throws(()=>planPatch(files,files,pins,target),/SOURCE_TYPE_MISMATCH/);
+});

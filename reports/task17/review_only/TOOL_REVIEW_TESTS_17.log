@@ -1,17 +1,18 @@
-✔ approved subset changes exactly Diary, preserves initial config/vendor/manifest and all other bytes (4.157501ms)
-✔ unpublished HEAD cannot be overwritten (0.719333ms)
-✔ candidate diagnostic Router/JWT cannot leak into baseline subset (0.331109ms)
-✔ file names and manifest are fail closed (0.456785ms)
-✔ only exact old and expected new Diary digests permitted (0.816546ms)
-✔ readback verifies every byte/type, not just one source name (0.640256ms)
-✔ deployment must retain exact endpoint, execution identity, access and ID (0.289528ms)
-✔ runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard (0.910866ms)
-✔ inspection returns before any production writer and readonly grant cannot select writer (0.611683ms)
-ℹ tests 9
+✔ approved subset changes exactly Diary, preserves initial config/vendor/manifest and all other bytes (4.912796ms)
+✔ unpublished HEAD cannot be overwritten (0.5483ms)
+✔ candidate diagnostic Router/JWT cannot leak into baseline subset (0.341164ms)
+✔ file names and manifest are fail closed (0.420972ms)
+✔ only exact old and expected new Diary digests permitted (0.819921ms)
+✔ readback verifies every byte/type, not just one source name (1.304136ms)
+✔ deployment must retain exact endpoint, execution identity, access and ID (0.434993ms)
+✔ runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard (0.390267ms)
+✔ inspection returns before any production writer and readonly grant cannot select writer (0.567308ms)
+✔ pinned JS source cannot be retyped as JSON even with identical bytes (0.467781ms)
+ℹ tests 10
 ℹ suites 0
-ℹ pass 9
+ℹ pass 10
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 105.779773
+ℹ duration_ms 101.317551

@@ -49,7 +49,7 @@ index 0000000..7dc5026
 +        run: rm -rf "$RUNNER_TEMP/task17-approved-diary" "$RUNNER_TEMP/task17-approved.clasprc.json"
 diff --git a/scripts/task17/approved_diary_patch.mjs b/scripts/task17/approved_diary_patch.mjs
 new file mode 100644
-index 0000000..6c04c48
+index 0000000..5500644
 --- /dev/null
 +++ b/scripts/task17/approved_diary_patch.mjs
 @@ -0,0 +1,84 @@
@@ -75,7 +75,7 @@ index 0000000..6c04c48
 +export function planPatch(base,head,pins=PINNED_FILES,target=TARGET){
 + const a=indexed(base),b=indexed(head),names=[...Object.keys(pins),'InitialConfig','appsscript'].sort();
 + if(JSON.stringify([...a.keys()].sort())!==JSON.stringify(names)||a.size!==b.size)fail('SOURCE_MANIFEST_MISMATCH');
-+ for(const [name,f] of a){const h=b.get(name);if(!h||h.type!==f.type||sha(h.source)!==sha(f.source))fail('UNPUBLISHED_HEAD_DIFFERS_STOP');if(pins[name]&&sha(f.source)!==pins[name])fail('BASELINE_SOURCE_HASH_MISMATCH');}
++ for(const [name,f] of a){if(f.type!==(name==='appsscript'?'JSON':'SERVER_JS'))fail('SOURCE_TYPE_MISMATCH');const h=b.get(name);if(!h||h.type!==f.type||sha(h.source)!==sha(f.source))fail('UNPUBLISHED_HEAD_DIFFERS_STOP');if(pins[name]&&sha(f.source)!==pins[name])fail('BASELINE_SOURCE_HASH_MISMATCH');}
 + const d=a.get('Diary');if(d.type!=='SERVER_JS'||sha(d.source)!==target.oldDiary||d.source.split(OLD).length!==2)fail('DIARY_PATCH_PRECONDITION');
 + const next=d.source.replace(OLD,NEW);if(sha(next)!==target.newDiary)fail('DIARY_PATCH_DIGEST_MISMATCH');
 + return base.map(f=>f.name==='Diary'?{...f,source:next}:{...f});
@@ -139,10 +139,10 @@ index 0000000..6c04c48
 +if(process.argv[1]&&pathToFileURL(resolve(process.argv[1])).href===import.meta.url){try{await main();}catch(e){console.error(e.message);process.exitCode=1;}}
 diff --git a/scripts/task17/test_approved_diary_patch.mjs b/scripts/task17/test_approved_diary_patch.mjs
 new file mode 100644
-index 0000000..4419eec
+index 0000000..6de15e1
 --- /dev/null
 +++ b/scripts/task17/test_approved_diary_patch.mjs
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,35 @@
 +// Controlled source/metadata fixtures, never Google credentials or live deployment.
 +import {test} from 'node:test';
 +import assert from 'node:assert/strict';
@@ -173,4 +173,8 @@ index 0000000..4419eec
 + assert.doesNotMatch(block,/await clasp|await deploy|writeFileSync|mkdirSync/);
 + assert.match(block,/LIVE_VERSION_NOT6_STOP/);assert.match(block,/planPatch\(base,head\)/);
 + assert.match(s,/mode!==.inspect.&&process.env.TASK17_APPROVED!==.DIARY_ONLY_WITH_ROLLBACK6./);
++});
++test('pinned JS source cannot be retyped as JSON even with identical bytes',()=>{
++ const {files,pins,target}=fixture();files.find(f=>f.name==='GoogleJwt').type='JSON';
++ assert.throws(()=>planPatch(files,files,pins,target),/SOURCE_TYPE_MISMATCH/);
 +});
