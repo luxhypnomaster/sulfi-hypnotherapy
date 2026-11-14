@@ -1,3 +1,7 @@
+# Latest: admin inspect PASS, production STOP
+
+SERVER_ADMIN_RESULT_17.md: owner allowed exact3files+inspect; main b88637a, CI43584729310PASS, actualversion6/HEADsame/23files+types verified. Apply/rollback NOT_APPROVED. MASTER25→27 API34PASS13; MASTER26 baselinehostBLOCKED; APK NOT_ISSUED. Earlier checkpoint history follows.
+
 # Актуальное продолжение ограниченного review
 
 Сначала CONTINUATION_REVIEW_17.md и NATIVE_REVIEW_RESULTS_17.json. Appfbd не менялся. Read-only inspector tool03a0ea8 подготовлен/10testsPASS; production/main write запрещены, запрос разрешения только main3files+inspect pending. MASTER25→27 API34 PASS13, MASTER26 API34 host crash BEFOREcandidate BLOCKED, CLIENT25 API35 прежнийPASS12. Последний native43583577375 FAILURE в целом; не blind retry. Пара не выдана. Ниже сохранён прежний checkpoint как история.

@@ -32,3 +32,7 @@ Run43583577375 completed FAILURE (один lane PASS, второй BLOCKED). И�
 Проверенные границы: main0800f34... неизменён; production workflow не имеет dry-run и НЕ запускался; новый inspect tool в main НЕ перенесён. Административная version/23файла/executeAs/access LIVE остаются BLOCKED, не PASS. До согласованного read-only main запуска не запрашивается разрешение применять Diary patch или rollback. Действующее разрешение — только preparation/review.
 
 Затраты продолжения:2cached native cycles (43582943729:новаяAPI34гипотеза;43583577375:исправление подтверждённого navigation driver по XML). Ни fullFlutter, ни APK build/sign не повторялись. Дополнительные server-checks автоматически на push:43582947578,43583183562,43583582178,43583699206 SUCCESS; не объявлены живым сервером. Native navigation1unittest с4assertionsPASS, server tool10NodePASS,2отдельных negative grant processesPASS. Проценты пользовательской квоты неизвестны. Последующие повторные VM не запускались.
+
+
+## Более позднее разрешение и actual admin PASS
+Владелец разрешил3files+inspect. Main b88637a содержит только согласованные3файла ef84719; CI43584729310SUCCESS, actualversion6/HEADsame/full23hash/type/executeAs/access PASS. Production apply/rollback НЕ разрешены и НЕ выполнялись. SERVER_ADMIN_RESULT_17.md / review_only/ADMIN_READBACK_17.json — актуальное состояние; прежний текст BLOCKED выше сохранён как хронология, а не текущая блокировка. MASTER26native остаётся BLOCKED, APKневыданы.
