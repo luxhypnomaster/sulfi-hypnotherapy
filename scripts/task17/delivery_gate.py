@@ -26,7 +26,7 @@ for name in ['verify','candidate17']:
 lanes={}
 proofs=[(RUN,SOURCE,132310281448,'native17','client',25),
         (43583577375,'56a9b362718f48bef83eca8daf24d3e58a0431ca',132413251139,'native17_cached','master',25),
-        (43586282741,'fb108fb8e775dda4aa266840e8d6f67145cfb1b5',132421357694,'native17_cached','master',26)]
+        (43614090740,'45aca0ce0a0eda8e7a554a6308ac5df002e94557',132505244736,'native17_cached','master',26)]
 for rid,driver,jid,prefix,edition,baseline in proofs:
     rr=gh('actions/runs/'+str(rid))
     assert rr['head_sha']==driver and rr['status']=='completed'
