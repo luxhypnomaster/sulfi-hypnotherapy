@@ -828,7 +828,8 @@ jobs:
       TASK17_APK_SOURCE: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
       TASK17_EDITION: ${{ matrix.edition }}
       TASK17_BASELINE: ${{ matrix.baseline }}
-      TASK17_GLES_EXPERIMENT: lavapipe
+      TASK17_GLES_EXPERIMENT: swiftshader
+      TASK17_PROCESS_FORENSIC: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -877,8 +878,16 @@ jobs:
           emulator-boot-timeout: 180
           pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           disable-animations: true
-          emulator-options: -no-window -gpu lavapipe -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          emulator-options: -no-window -gpu swiftshader -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
           script: bash scripts/task17/run_native.sh
+      - name: Read process exit evidence before ephemeral runner cleanup
+        if: always()
+        run: |
+          python3 - <<'PYREAD'
+          import pathlib,json,os
+          for p in pathlib.Path(os.environ['RUNNER_TEMP'],'task17-evidence').glob('EMULATOR_FORENSIC_*.json'):
+            v=json.loads(p.read_text()); print('EMULATOR_FINAL_PROOF='+json.dumps(v,separators=(',',':')))
+          PYREAD
       - name: Preserve native evidence (fixture data only)
         if: always()
         continue-on-error: true

@@ -15,3 +15,14 @@ if os.environ.get('TASK17_GLES_EXPERIMENT') in {'swangle','lavapipe'}:
  help_text=result.stdout+result.stderr
  assert os.environ['TASK17_GLES_EXPERIMENT'] in help_text.lower(),'RENDERER_NOT_ADVERTISED_STOP_NO_BLIND_BOOT'
  print('TASK17_EXPERIMENT_RENDERER='+os.environ['TASK17_GLES_EXPERIMENT']+'; no UI/data assertions removed')
+
+if os.environ.get('TASK17_PROCESS_FORENSIC')=='true':
+ import shlex
+ original=pathlib.Path(os.environ['ANDROID_HOME'])/'emulator/emulator'
+ real=original.with_name('emulator.task17-real')
+ assert not real.exists(),'EMULATOR_ALREADY_WRAPPED_STOP'
+ original.rename(real)
+ monitor=pathlib.Path(__file__).with_name('monitor_emulator.py').resolve()
+ original.write_text('#!/bin/sh\n# TASK17_MONITOR_WRAPPER\nexec /usr/bin/python3 '+shlex.quote(str(monitor))+' '+shlex.quote(str(real))+' "$@"\n')
+ original.chmod(0o755)
+ print('TASK17_CHILD_EXIT_MONITOR_INSTALLED; no renderer/app modification')
