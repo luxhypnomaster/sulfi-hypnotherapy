@@ -18,3 +18,17 @@ Rollback: переключение существующего deployment обр�
 6. Rollback-script: `clasp create-deployment --versionNumber 6 --deploymentId EXISTING` с readback deployment и health. Никакого удаления новой immutable version, пользовательских записей или Drive-байтов. При неопределённом результате не повторять слепо; сначала GET deployment.
 
 Необходимое разрешение касается именно one-condition Diary diff и строго ограниченного доверенного workflow/применения к существующему deployment. Оно не распространяется на объединение всего PR48, другие изменения main, ACL/OAuth, bootstrap, удаление данных или старый дневник. До разрешения весь production write STOP WAITING_APPROVAL.
+
+## Подготовленный исполняемый вариант для просмотра
+
+На feature-ветке подготовлены ровно три файла для отдельного согласования (в main НЕ копировались):
+
+- `.github/workflows/alchemist-task17-approved-diary.yml` — manual-only, только main, default execute_approved_patch=false, repository CLASPRC_JSON после unit gate, без environment secret.
+- `scripts/task17/approved_diary_patch.mjs` — immutable version6/HEAD/full23-file SHA checks, pinned Script/deployment/owner, однократное изменение Diary, version/readback и ограниченный rollback6. Ни create-script, ни bootstrap, ни Drive ACL/API, ни OAuth properties не вызываются.
+- `scripts/task17/test_approved_diary_patch.mjs` —8 controlled тестов stop conditions, проверки byte-for-byte diff/readback, target и отсутствия broad deployment действий.
+
+Дополнительный dry-run на реальных20 JS+RSA исходниках Git deployed-source1a0cf8... (InitialConfig/manifest — контролируемые fixtures, не прочитанные Google данные):23 файла, изменён только Diary, SHA совпали с утверждённым diff. `SERVER_APPROVED_DRYRUN_17.json`. Прямой запуск в текущем окружении немедленно останавливается `SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED` до чтения credentials. Ни workflow, ни Google API из этого инструмента не запускались. Это CODE/CONTROLLED доказательство, не LIVE deployment PASS.
+
+Для применения нужно отдельное прямое разрешение: перенести только эти три проверяемых файла доверенного инструмента в main и запустить Diary-only apply на существующем Script/deployment. Это НЕ разрешение merge всего PR48/изменения Android в main. Если HEAD Script отличается от immutable version6 или любой baseline hash не совпадает, инструмент STOP до push. При неопределённом результате нужен readback, а не слепой повтор. Rollback разрешает вернуть только этот проверенный Diary-only deployment на version6, без удаления данных или восстановления чужих HEAD-правок.
+
+InitialConfig sourceSha специально сохраняется как historical baseline: после узкого patch числовая версия deployment и SHA полного readback являются доказательством нового кода; один runtime sourceSha не используется как ложное подтверждение version6.

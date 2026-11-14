@@ -17,7 +17,7 @@ def accepted_native(edition,base):
     cases={c['case']:c for c in v.get('cases',[])}
     required={'install_baseline','ui_import_1','ui_import_2','ui_import_3','ui_module_elman','ui_module_pause','ui_template','ui_history','beforeBaseline_inventory','native_update_to27','ui_afterCandidate','cold_restart27'}
     if edition=='master':required.add('local_draft_after27')
-    return (v.get('source')=='85ff50736c6be28bda55cf759f232d8347f3ad3e' and
+    return (v.get('source')=='fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568' and
             required.issubset(cases) and
             all(c['status']=='PASS' for c in cases.values() if c['case']!='ui_diary_auth_boundary'))
 upgrade=all(accepted_native(edition,base) for edition,base in [('master',25),('master',26),('client',25)])

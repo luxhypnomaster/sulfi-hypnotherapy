@@ -13,7 +13,7 @@ on:
         type: boolean
         default: false
       task17_delivery:
-        description: 'Restore exact85ff507 pair only AFTER real successful43515852713/native3; existing private draft only, no rebuild/sign/deploy'
+        description: 'Restore exactfbdaa7b pair only AFTER real successful43548636228/native3; existing private draft only, no rebuild/sign/deploy'
         type: boolean
         default: false
       task17_release_id:
@@ -780,7 +780,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       TASK17_RELEASE_ID: ${{ inputs.task17_release_id }}
-      PAIR_SOURCE_SHA: 85ff50736c6be28bda55cf759f232d8347f3ad3e
+      PAIR_SOURCE_SHA: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
       ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
       GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
     steps:
@@ -790,7 +790,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/task17-apks
-          key: task17-quarantine-pair-85ff50736c6be28bda55cf759f232d8347f3ad3e
+          key: task17-quarantine-pair-fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
           fail-on-cache-miss: true
       - name: Require actual successful native gates, unchanged runtime, private repo and exact empty draft
         run: python3 scripts/task17/delivery_gate.py

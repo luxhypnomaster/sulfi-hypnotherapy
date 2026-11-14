@@ -9,21 +9,18 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SOURCE='85ff50736c6be28bda55cf759f232d8347f3ad3e'
+SOURCE='fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568'
 class DeliveryGate(unittest.TestCase):
     def check_gate(self, mutation=None):
         current='a'*40
         jobs=[{'name':n,'conclusion':'success'} for n in ['verify','candidate17']]
         for i,(e,b) in enumerate([('master',25),('master',26),('client',25)]):
-            jobs.append({'id':i,'name':f'native17_cached ({e}, {b}, asset, sha)','conclusion':'success','steps':[{'name':'UI-created native baseline to27 and cold data verification','conclusion':'success'}]})
+            jobs.append({'id':i,'name':f'native17 ({e}, {b}, asset, sha)','conclusion':'success','steps':[{'name':'UI-created native baseline to27 and cold data verification','conclusion':'success'}]})
         tree=[{'path':p,'sha':p} for p in ['lib','android','third_party','test','server','pubspec.yaml','pubspec.lock']]
         data={
           '':{'private':True},
-          'actions/runs/43515852713':{'head_sha':SOURCE,'status':'completed','conclusion':'success','head_branch':'fix/task17-stable-auth-queue','event':'workflow_dispatch'},
-          'actions/runs/43515852713/jobs?per_page=100':{'jobs':jobs[:2]},
-          'actions/runs/43546879054':{'head_sha':'9340241cbd7f88bd4b093fca6645d9ea5aa88889','status':'completed','conclusion':'success','head_branch':'fix/task17-stable-auth-queue','event':'workflow_dispatch'},
-          'actions/runs/43546879054/jobs?per_page=100':{'jobs':jobs[2:]},
-          'git/commits/9340241cbd7f88bd4b093fca6645d9ea5aa88889':{'tree':{'sha':'original'}},
+          'actions/runs/43548636228':{'head_sha':SOURCE,'status':'completed','conclusion':'success','head_branch':'fix/task17-stable-auth-queue','event':'workflow_dispatch'},
+          'actions/runs/43548636228/jobs?per_page=100':{'jobs':jobs},
           'git/commits/'+SOURCE:{'tree':{'sha':'original'}},'git/commits/'+current:{'tree':{'sha':'current'}},
           'git/trees/original':{'tree':tree},'git/trees/current':{'tree':[dict(x) for x in tree]},
           'releases/123':{'draft':True,'tag_name':'task17-qa-pair-27','target_commitish':SOURCE,'assets':[]},
@@ -43,15 +40,15 @@ class DeliveryGate(unittest.TestCase):
     def test_public_repo_denied(self):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d[''].update(private=False))
     def test_pending_ci_denied(self):
-        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43546879054'].update(status='in_progress'))
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228'].update(status='in_progress'))
     def test_missing_native_denied(self):
-        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43546879054/jobs?per_page=100']['jobs'].pop())
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228/jobs?per_page=100']['jobs'].pop())
     def test_untested_runtime_denied(self):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d['git/trees/current']['tree'][0].update(sha='changed'))
     def test_failed_native_denied(self):
-        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43546879054/jobs?per_page=100']['jobs'][0].update(conclusion='failure'))
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228/jobs?per_page=100']['jobs'][0].update(conclusion='failure'))
     def test_failed_build_denied(self):
-        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43515852713/jobs?per_page=100']['jobs'][1].update(conclusion='failure'))
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228/jobs?per_page=100']['jobs'][1].update(conclusion='failure'))
     def test_public_release_denied(self):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d['releases/123'].update(draft=False))
     def test_existing_assets_not_overwritten(self):
