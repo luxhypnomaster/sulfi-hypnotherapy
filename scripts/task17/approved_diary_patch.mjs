@@ -32,8 +32,9 @@ export function deploymentVersion(d){
  return d.deploymentConfig.versionNumber;
 }
 async function main(){
- if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||process.env.TASK17_APPROVED!=='DIARY_ONLY_WITH_ROLLBACK6')fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
- const mode=process.env.TASK17_PATCH_MODE;if(!['apply','rollback'].includes(mode))fail('MODE_REQUIRED');
+ if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||!['READ_ONLY_INSPECTION','DIARY_ONLY_WITH_ROLLBACK6'].includes(process.env.TASK17_APPROVED))fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
+ const mode=process.env.TASK17_PATCH_MODE;if(!['inspect','apply','rollback'].includes(mode))fail('MODE_REQUIRED');
+ if(mode!=='inspect'&&process.env.TASK17_APPROVED!=='DIARY_ONLY_WITH_ROLLBACK6')fail('PRODUCTION_WRITE_NOT_APPROVED');
  const temp=process.env.RUNNER_TEMP;if(!temp||!process.env.CLASPRC_JSON)fail('OWNER_OAUTH_UNAVAILABLE');
  const credential=join(temp,'task17-approved.clasprc.json'),work=join(temp,'task17-approved-diary');
  const execute=promisify(execFile);let client;
@@ -53,6 +54,13 @@ async function main(){
   const config=indexed(base).get('InitialConfig')?.source;
   const match=/^var AlchemistInitialConfig=(\{[\s\S]*\});\s*$/.exec(config||'');if(!match)fail('INITIAL_CONFIG_FORMAT_UNEXPECTED');
   const identity=JSON.parse(match[1]);if(identity.sourceSha!==TARGET.baseSource||identity.ownerSubject!==actor.sub||identity.ownerEmail!==TARGET.owner)fail('BASELINE_OWNER_OR_SOURCE_MISMATCH');
+  if(mode==='inspect'){
+   if(current!==6)fail('LIVE_VERSION_NOT6_STOP');
+   planPatch(base,head);
+   const manifest=JSON.parse(indexed(base).get('appsscript').source);
+   console.log('TASK17_ADMIN_INSPECTION='+JSON.stringify({readOnly:true,scriptId:project.scriptId,title:project.title,deploymentId:before.deploymentId,versionNumber:current,deploymentConfig:before.deploymentConfig,entryPoints:before.entryPoints,ownerVerified:true,headEqualsVersion6:true,allPinnedSourcesVerified:true,oauthScopes:manifest.oauthScopes||[],files:base.map(f=>({name:f.name,type:f.type,bytes:Buffer.byteLength(f.source),sha256:sha(f.source)}))}));
+   return; // STOP before workspace creation, clasp push/version/deploy/rollback.
+  }
   mkdirSync(work,{recursive:true,mode:0o700});const source=join(work,'source');mkdirSync(source,{recursive:true,mode:0o700});
   writeFileSync(join(work,'.clasp.json'),JSON.stringify({scriptId:TARGET.script,rootDir:source}));
   const cli=join(temp,'task17-clasp/node_modules/.bin/clasp');

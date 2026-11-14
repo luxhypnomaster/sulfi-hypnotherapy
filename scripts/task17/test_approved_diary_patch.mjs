@@ -19,3 +19,13 @@ test('only exact old and expected new Diary digests permitted',()=>{const {files
 test('readback verifies every byte/type, not just one source name',()=>{const {files}=fixture();compareFiles(files,structuredClone(files));const changed=structuredClone(files);changed[0].source+='mutation';assert.throws(()=>compareFiles(changed,files),/READBACK/);});
 test('deployment must retain exact endpoint, execution identity, access and ID',()=>{const d={deploymentId:TARGET.deployment,deploymentConfig:{versionNumber:6},entryPoints:[{entryPointType:'WEB_APP',webApp:{url:'https://script.google.com/macros/s/'+TARGET.deployment+'/exec',entryPointConfig:{executeAs:'USER_DEPLOYING',access:'ANYONE_ANONYMOUS'}}}]};assert.equal(deploymentVersion(d),6);for(const key of ['deploymentId']){const bad=structuredClone(d);bad[key]='other';assert.throws(()=>deploymentVersion(bad),/MISMATCH/);}const bad=structuredClone(d);bad.entryPoints[0].webApp.entryPointConfig.executeAs='USER_ACCESSING';assert.throws(()=>deploymentVersion(bad),/MISMATCH/);});
 test('runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard',()=>{const s=readFileSync(new URL('./approved_diary_patch.mjs',import.meta.url),'utf8');assert.ok(s.indexOf('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED')<s.indexOf('writeFileSync(credential'));assert.doesNotMatch(s,/create-script|system\.initialize|permissions\.create|drive\.googleapis/);});
+
+test('inspection returns before any production writer and readonly grant cannot select writer',()=>{
+ const s=readFileSync(new URL('./approved_diary_patch.mjs',import.meta.url),'utf8');
+ const begin=s.indexOf("if(mode==='inspect')"),end=s.indexOf('return; // STOP before workspace');
+ assert.ok(begin>0&&end>begin&&end<s.indexOf('const cli='));
+ const block=s.slice(begin,end);
+ assert.doesNotMatch(block,/await clasp|await deploy|writeFileSync|mkdirSync/);
+ assert.match(block,/LIVE_VERSION_NOT6_STOP/);assert.match(block,/planPatch\(base,head\)/);
+ assert.match(s,/mode!==.inspect.&&process.env.TASK17_APPROVED!==.DIARY_ONLY_WITH_ROLLBACK6./);
+});

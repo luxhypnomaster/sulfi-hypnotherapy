@@ -9,8 +9,8 @@ on:
       mode:
         description: 'Apply only to existing version6 or roll back our verified Diary-only version; no bootstrap'
         type: choice
-        options: [apply, rollback]
-        default: apply
+        options: [inspect, apply, rollback]
+        default: inspect
 permissions:
   contents: read
 concurrency:
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   approved_diary_only:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.execute_approved_patch == true
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && (inputs.mode == 'inspect' || inputs.execute_approved_patch == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Existing Script and deployment only; no bootstrap or ACL change
         env:
           CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
-          TASK17_APPROVED: DIARY_ONLY_WITH_ROLLBACK6
+          TASK17_APPROVED: ${{ inputs.mode == 'inspect' && 'READ_ONLY_INSPECTION' || 'DIARY_ONLY_WITH_ROLLBACK6' }}
           TASK17_PATCH_MODE: ${{ inputs.mode }}
         run: node scripts/task17/approved_diary_patch.mjs
       - name: Remove private transient work and credential

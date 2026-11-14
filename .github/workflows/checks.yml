@@ -822,18 +822,14 @@ jobs:
             baseline: 26
             asset: '743160429'
             sha: 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a
-          - edition: client
-            baseline: 25
-            asset: '738283907'
-            sha: c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     permissions:
       contents: write
       actions: read
     env:
-      PAIR_SOURCE_SHA: 85ff50736c6be28bda55cf759f232d8347f3ad3e
-      TASK17_APK_SOURCE: 85ff50736c6be28bda55cf759f232d8347f3ad3e
+      PAIR_SOURCE_SHA: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
+      TASK17_APK_SOURCE: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
       TASK17_EDITION: ${{ matrix.edition }}
       TASK17_BASELINE: ${{ matrix.baseline }}
     steps:
@@ -843,7 +839,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/task17-apks
-          key: task17-quarantine-pair-85ff50736c6be28bda55cf759f232d8347f3ad3e
+          key: task17-quarantine-pair-fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
           fail-on-cache-miss: true
       - name: Read-only exact source and cached pair preflight before Android setup
         env:
@@ -874,7 +870,7 @@ jobs:
       - name: UI-created native baseline to27 and cold data verification
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 34
           arch: x86_64
           target: google_apis
           profile: pixel_2
