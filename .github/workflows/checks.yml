@@ -828,7 +828,7 @@ jobs:
       TASK17_APK_SOURCE: fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
       TASK17_EDITION: ${{ matrix.edition }}
       TASK17_BASELINE: ${{ matrix.baseline }}
-      TASK17_GLES_EXPERIMENT: swangle
+      TASK17_GLES_EXPERIMENT: lavapipe
     steps:
       - uses: actions/checkout@v4
         with:
@@ -877,7 +877,7 @@ jobs:
           emulator-boot-timeout: 180
           pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           disable-animations: true
-          emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          emulator-options: -no-window -gpu lavapipe -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
           script: bash scripts/task17/run_native.sh
       - name: Preserve native evidence (fixture data only)
         if: always()

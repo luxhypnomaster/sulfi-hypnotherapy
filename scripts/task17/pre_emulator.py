@@ -9,9 +9,9 @@ config.update({'hw.lcd.width':'720','hw.lcd.height':'1280','hw.lcd.density':'280
 p.write_text('\n'.join(k+'='+v for k,v in config.items())+'\n')
 print('TASK17_AVD_PHYSICAL=720x1280;GPU='+os.environ.get('TASK17_GLES_EXPERIMENT','swiftshader')+';FREE_BYTES='+str(free))
 
-if os.environ.get('TASK17_GLES_EXPERIMENT')=='swangle':
+if os.environ.get('TASK17_GLES_EXPERIMENT') in {'swangle','lavapipe'}:
  tool=pathlib.Path(os.environ['ANDROID_HOME'])/'emulator/emulator'
  result=subprocess.run([str(tool),'-help-gpu'],capture_output=True,text=True,timeout=15)
  help_text=result.stdout+result.stderr
- assert 'swangle' in help_text.lower(),'SWANGLE_NOT_ADVERTISED_STOP_NO_BLIND_BOOT'
- print('TASK17_EXPERIMENT=host GLES via ANGLE over SwiftShader; direct swiftshader replaced; no UI/data assertions removed')
+ assert os.environ['TASK17_GLES_EXPERIMENT'] in help_text.lower(),'RENDERER_NOT_ADVERTISED_STOP_NO_BLIND_BOOT'
+ print('TASK17_EXPERIMENT_RENDERER='+os.environ['TASK17_GLES_EXPERIMENT']+'; no UI/data assertions removed')
