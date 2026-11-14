@@ -37,3 +37,12 @@ GitHub artifact storage quota получена; старые artifacts НЕ уд
 ## Следующий запуск
 
 Начать с PROGRESS.md, CI_17.json, acceptance/native/download receipts; не повторять G0 и успешный full verify ради отчётов. Установка на реальные телефоны и Google consent/15/30/60min — человеческий этап. Пока blocker независим, можно завершать проверяемые отчёты/скачивание, не выдумывая LIVE/OWNER PASS.
+
+
+## Окончательный срез 14.11.2026
+
+43548636228 завершился: verifySUCCESS469Flutter/3CLIENT/47Node/24legacy; buildSUCCESS. CLIENT25 lane12PASS+1legacyGoogleNOT_RUN. MASTER25 BLOCKED PixelLauncherANR до baseline; MASTER26 BLOCKED baseline watch UIAutomation timeout/qemu termination до candidate. Новых native повторов не запущено. В dmesg сборе обнаружен missingrg; подготовлен grep fallback и проверен bash syntax, но это не доказательство OOM и не причина повторять VM.
+
+Пять job logs получены после run; master26 первый ответ оказался invalidZIP, один повтор ЧТЕНИЯ получил полный файл и SHA verified receipts. Дополнительный urllib read во время active run получил302, blob transport failure; никаких URL/token в итоговых отчётах. Это не emulator rerun. Raw receipts/screens всех трёх lanes проверены и сохранены. Quarantined fbd pair metadata сохранена отдельно от85, ни release27, ни delivery workflow не запускались.
+
+При возобновлении этого цикла9Python delivery и8Node tool tests повторены один раз как небольшие final guards; большой verify не повторялся. Owner approval на узкий серверный patch запрошен, не получен. Отсутствие ответа не трактуется как разрешение. Отчёты дополняются в папке17 с raw SHA/parent readback; APK на Drive не копируются.

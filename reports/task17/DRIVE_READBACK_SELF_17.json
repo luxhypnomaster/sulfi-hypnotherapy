@@ -1,0 +1,11 @@
+{
+  "name": "DRIVE_READBACK_17.json",
+  "id": "1ZGya_ePWsgkwkVe0NZtj8yC_-XlnT0Dv",
+  "parents": [
+    "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  ],
+  "size": 4279,
+  "sha256": "562dbdfc9db9acb2c74be7d57cc919234882081a5f3910415d22edc2bf166a84",
+  "verified": true,
+  "method": "external SHA proof of uploaded and downloaded Drive receipt; no recursive self hash"
+}

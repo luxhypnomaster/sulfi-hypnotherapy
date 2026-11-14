@@ -1,0 +1,20 @@
+[
+  {
+    "file": "NATIVE_UI_UPGRADE_17.json",
+    "bytes": 689,
+    "sha256": "d3f29cf2aa3827ef9a54b7819957017b989e40d4293993e0fe3f82097b6dfa03",
+    "verified": true
+  },
+  {
+    "file": "failure-install_baseline.png",
+    "bytes": 568920,
+    "sha256": "68e703469c65c1a96f1ab51d73dac41b7cdfa590bab3e0f066048bb42243a6d2",
+    "verified": true
+  },
+  {
+    "file": "failure-install_baseline.xml",
+    "bytes": 2002,
+    "sha256": "73adc0c050c843cb26ee511b8d4a9455c6878ace6e047ba81affa6ca2dd1f147",
+    "verified": true
+  }
+]

@@ -11,3 +11,12 @@ HTTPS allowlist и GAS redirect guard не ослаблялись, bearer не �
 Каталог public/private использует существующий серверный ACL. Дневниковый анонс не может скрыто опубликовать материал. ContentLink указывает exact typed logical ID/revision/digest; обычный авторский текст не превращается в CTA. CLIENT publish denied проверяется controlled серверными тестами; реальный второй Google-аккаунт NOT_RUN.
 
 Workflow Task17 использует signing secrets только в доверенной ветке при workflow_dispatch. CLASPRC_JSON не передаётся feature-коду, PR/fork, эмулятору или reports upload. Main/live GAS/OAuth/ACL/ключи/приватность GitHub не менялись. Candidate Diary.js diff требует отдельного approval; ранее накопленные GoogleJwt.js/Router.js не должны попасть в deployment автоматически.
+
+
+## Доверенные CI и узкий серверный инструмент
+
+Native jobs получают contents:write только на ручном запуске доверенной ветки: GitHub требует это для чтения baseline assets из PRIVATE draft. Ни репозиторий, ни Drive не открываются. Emulator не получает CLASPRC_JSON или signing key; сборочный job удаляет свою временную копию ключа после проверки. Cached delivery не подписывает и не перестраивает APK;9отрицательных тестов проверяют запрет выдачи при отсутствующем native lane/непроверенном runtime/публичном repo или release/overwrite assets.
+
+Подготовленный серверный инструмент состоит ровно из workflow и двух JS-файлов scripts/task17. В main их пока нет. Он manual-only/main-only/defaultOFF; репозиторный CLASPRC_JSON передаётся только после8controlled тестов и установки pinned clasp. Перед push проверяются immutable version6, неизменённый HEAD,20JS+vendor SHA,23file manifest, existing Script/deployment/owner, execution identity/access. Меняется только Diary. InitialConfig/manifest/private config сохраняются. Весь feature server с накопленными GoogleJwt/Router изменениями не развёртывается. При неизвестном исходе STOP→readback, не blind repeat. Никаких Google API/deploy из этого инструмента пока не было.
+
+Разрешение на server apply и ограниченный rollback6 запрошено отдельно по п.05 ТЗ. По умолчанию развёртывание запрещено; отсутствие ответа не является согласием. Никакие приватные credentials не предлагается присылать в чат.

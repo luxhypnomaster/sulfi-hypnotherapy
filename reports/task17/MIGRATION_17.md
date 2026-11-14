@@ -8,9 +8,9 @@
 
 | Lane | CI outcome | Фактические cases |
 |---|---|---|
-| MASTER25→27 | failure | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
-| MASTER26→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
-| CLIENT25→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| MASTER25→27 | failure | install_baseline=BLOCKED; driver=BLOCKED |
+| MASTER26→27 | failure | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=BLOCKED; driver=BLOCKED |
+| CLIENT25→27 | success | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=PASS; ui_template=PASS; ui_history=PASS; ui_diary_auth_boundary=NOT_RUN; beforeBaseline_inventory=PASS; native_update_to27=PASS; ui_afterCandidate=PASS; cold_restart27=PASS |
 
 Только UI-created disposable fixture data; копии SQLite/WAL/SHM читаются для полного сравнения строк, integrity и SHA медиа. Ни uninstall, ни clear, ни downgrade не применяются. Отсутствующие legacy Google drafts честно NOT_RUN: их нельзя создать без реального аккаунта или заменить SQL fixture. Новый offline draft после upgrade проверяется отдельно.
 

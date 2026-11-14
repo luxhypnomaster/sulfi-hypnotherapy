@@ -87,8 +87,8 @@ notes={
 'G4-11':'Private scoped editable author/rightsholder default restored in next card; no Google ownership assertion.',
 'G4-12':'NFC/case/whitespace matching only NEW category input, both legacy variants unchanged.',
 'G4-13':'Reader Back functions untouched; only optional publicationReview footer/page visited tracking added.',
-'G5-01':'STORAGE_SOURCE_BOUNDARIES_17.json + actual native lanes if available; physical Google draft/WAL crash matrix not inferred.',
-'G5-02':'Pair/cert/version/config/bytes only after CI and raw release download readback; else no issued APK.',
+'G5-01':'43548636228: CLIENT25→27 twelve cases PASS; legacy Google draft NOT_RUN. MASTER25 launcher ANR, MASTER26 baseline watch/host stopped before candidate; NATIVE_FINAL_ANALYSIS_17.json. Three-lane gate BLOCKED.',
+'G5-02':'Both exact-source fbd signed27 builds PASS, cert/pkg/config guard verified by CI; MASTER native safety BLOCKED so no release/delivery/raw download links, APK_PAIR intentionally absent.',
 'G5-03':'SERVER_DIARY_PATCH_17.diff + source inventory; NO DEPLOY; existing GAS6/main/OAuth/ACL/signing unchanged.',
 'G5-04':'Every67 source row retained; CODE/CONTROLLED/LIVE/OWNER separate; no fake physical PASS.',
 'G5-05':'New17 folder only; Drive raw readback before delivery PASS; old16 unmodified.',
@@ -111,6 +111,6 @@ for row in rows:
     if key=='G5-05':row['Controlled']='PASS' if delivered else 'PARTIAL';row['Status']='PASS' if delivered else 'PARTIAL'
 with (r/'ACCEPTANCE_17.csv').open('w',newline='') as f:
     w=csv.DictWriter(f,fieldnames=rows[0].keys(),lineterminator='\n');w.writeheader();w.writerows(rows)
-summary={'criteria':67,'counts':dict(collections.Counter(x['Status'] for x in rows)), 'fullCI':full,'nativeUpgradeThreeLanes':upgrade,'pairReadbackVerified':pairpass,'driveReadback':delivered,'GooglePhysical':'NOT_RUN','serverPatch':'WAITING_OWNER_APPROVAL','overall':'PARTIAL_NOT_ACCEPTED'}
+summary={'criteria':67,'counts':dict(collections.Counter(x['Status'] for x in rows)), 'fullVerifyPass':full,'pipelineConclusion':ci.get('conclusion'),'nativeUpgradeThreeLanes':upgrade,'pairReadbackVerified':pairpass,'driveReadback':delivered,'GooglePhysical':'NOT_RUN','serverPatch':'WAITING_OWNER_APPROVAL','overall':'PARTIAL_NOT_ACCEPTED'}
 (r/'ACCEPTANCE_SUMMARY_17.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps(summary))

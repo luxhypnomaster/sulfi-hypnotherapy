@@ -1,31 +1,31 @@
-# №17 — контрольная точка
+# №17 — продолжить с BLOCKED native, не начинать заново
 
-Срез 2026-11-14T03:17:07+00:00. Не начинать G0 заново. Workspace `/dev/shm/sulfi17`, ветка `fix/task17-stable-auth-queue`, draft PR48 base PR47 НЕ merged. Latest Git HEAD может включать только отчёты/инструменты; app source **fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568**.
+14.11.2026. Workspace /dev/shm/sulfi17, branch fix/task17-stable-auth-queue, draft PR48 base PR47 НЕ merged. Приложения frozen source **fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568**, 0.4.19+27. Последующие коммиты только harness/docs/tools; app/runtime trees прежние. main0800f34... не менялся.
 
-## Текущий CI
+## Реальные результаты
 
-[https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228), verify=success, candidate17=success, whole=in_progress/pending.
+CI43548636228 COMPLETED/FAILURE. Verify **469Flutter+3CLIENT+47Node+24legacy PASS**, schema/lock/analyze/format PASS. Обе подписанные APK27 построены с прежним cert/pkg/config/DEXguard. Metadata в BUILD_PAIR_QUARANTINE_SOURCE_FBD_17.json; **НЕ ВЫДАНЫ**.
 
-| Lane | Outcome |
-|---|---|
-|master25|failure|
-|master26|in_progress|
-|client25|in_progress|
+- CLIENT25→27:12native cases PASS,1legacy Google draft NOT_RUN. UI созданные3трека/2модуля+пауза/программа/история/current; после native update и cold exactrows/media/integrity/UI/nativeAudioTrack PASS. Не человеческая слышимость.
+- MASTER25: Pixel Launcher ANR до baseline creation; install_baseline BLOCKED. Снимок/XML подтверждены SHA.
+- MASTER26:3UI imports+первыйmodule PASS; старый watch UIAutomation55sec timeout, затем qemu отсутствует/ADB offline. Candidate27 НЕ установлен. OOM/причина qemu termination не доказаны.
 
-APK27 НЕ выданы. Собранные бинарники остаются в приватном карантине до полного native gate и независимой проверки скачанных файлов.
+Rawlogs /dev/shm/task17-final-{verify,candidate,master25,master26,client25}.log. Receipts/screens SHA verified в reports/task17/native_attempt_fbdaa7b, отдельные root NATIVE_MASTER25/MASTER26/CLIENT25_17.json. Прежние934/85 не смешивать. NATIVE_FINAL_ANALYSIS_17.json. Missingrg помешал dmesg filter; grep fallback подготовлен и bash-n PASS, VM не перезапускался. Два invalid/EOF log read повтора — чтение, не emulator.
 
-Нельзя dispatch delivery пока run in_progress: concurrency прервёт его. Сначала дождаться actual3native gate и прочитать логи/JSON SHA через read_native_log.py. При новом fail не blind retry; screenshots/hostdiagnostics→подтверждённая причина или BLOCKED. Предыдущий run934 receipts сохранены в native_attempt_9340241, не подмешивать к финальным fbd.
+## Не повторять
 
-## После CI
+Нет новой доказанной emulator hypothesis: НЕ blind rerun/master matrix, не rebuild/fullverify ради отчётов. Локально KVM отсутствует. Новый host/image/версию emulator выбирать только с обоснованием и новой driver trace. До всех native gates не выдавать пару, не просить владельца рисковать установкой.
 
-Если3native PASS: delivery_gate.py pins fbd/43548636228 и cache task17-quarantine-pair-fbd(fullSHA); требует successfulwholeCI+unchangedruntime+privateemptydraft. RootCLI может создать пустой private tag task17-qa-pair-27 targetfbd только после gate. Delivery-only cachedbytes, no rebuild/sign. Потом независимый rawdownload2assets, cert/pkg/version/config/SHA/DEXguard→APK_PAIR_17.json. Никакого APK в Drive. Если native BLOCKED, не выпускать APK и не выдумывать links.
+Delivery gate намеренно pins failed43548636228 и сейчас проверенно STOP до release/cache; никаких draft27/assets/upload не создано. Native_cached helper всё ещё pinned старым85 и не подходит fbd; для будущего reuse нужны exact fbd APK SHA/coretree и успешные фактические verify/build + отдельные native receipts. Gate не обходить и старую пару85 не выдавать. Старые APK25/26 остаются.
 
-Обновить финальные CI JSON,67matrix и отчёты, Drive raw SHA/size/parent readback. Уже8files IDs в DRIVE_FILES_17.json, обновлять их, не дублировать. Новые required acceptance/efficiency/readback дополнить. Новый folder17 https://drive.google.com/drive/folders/1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI; старый16 не менять. Не запускать старый /dev/shm/task17-write-reports.py: он затрёт свежие результаты.
+## Сервер / человек
 
-## Разрешение / внешние блокеры
+GAS6/source1a0cf8... health200; current numeric admin read NOT_RUN. Main/Google OAuth/ACL/signing/device/старый дневник не менялись. Short-message Diary one-condition patch подтверждён RED→GREEN, НЕ deployed. SERVER_CHANGE_REQUEST_17.md содержит diff и rollback6. Ровно3reviewed tool files (workflow main-only/defaultOFF + approved_diary_patch.mjs + test_approved_diary_patch.mjs),8unit tests и Gitbaseline23file dryrun PASS. Разрешение на эти3файла в main + этот patch/ограниченный rollback запрошено, **не получено**. Не deploy всю feature server: GoogleJwt/Router имеют накопленные чужие undeployed изменения. Не повторять авторизацию/не просить ПК/секреты.
 
-GAS6/дневник/OAuth/ACL/main/signing/userdevices не менялись. Серверный one-condition Diary patch подготовлен в SERVER_CHANGE_REQUEST_17.md. Для отдельного approval ровно3tool files: workflow alchemist-task17-approved-diary.yml + approved_diary_patch.mjs + test_approved_diary_patch.mjs. Не копировать вmain/не dispatchдоразрешения.8controlled testsPASS/23file dryrun, ONLYDiarydiff. GoogleJwt/Router feature нельзя deploy. Numeric admin currentversion пока NOT_RUN; public health source совпал с исторической6.
+OWNER реальные2Google,15/30/60мин, реальный module/program→ContentLink→CLIENTofflineheard3tracks NOT_RUN. PHONE_QA готов, но установка только после безопасной выдачи. При installer conflict НЕ uninstall/clear/downgrade. Существующие личные данные не затронуты.
 
-OWNER Google2accounts,15/30/60min, module/program→ContentLink→CLIENTofflineheard3tracks NOT_RUN. Private GitHub download требует loginownerChrome; второй телефон можно QuickShare без repoaccess. При installer conflict НЕ uninstall/clear/downgrade.
+## Отчёты / инструменты
 
-Инструменты: env -u GH_TOKEN gh (envtokeninvalid), pushcredentialhelpergh. SHM для крупных файлов; /workspace/task17-delivery для small Drive uploads. No KVMlocal, noagents. Логи gh run view после wholecompleted, прямой APIredirect403. Native rawchunks не выводить. Все документы17 сохранять в отдельной папке.
+Отдельный folder17: https://drive.google.com/drive/folders/1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI ; folder16 не менять. DRIVE_FILES_17.json сохраняет exactIDs (update, не duplicate); DRIVE_READBACK_17.json подтверждает raw size/hash/parent. Матрица67ID, Code/Controlled/Live/Owner отдельно. APK_PAIR_17.json отсутствует намеренно: safe pair не выдана. В Google Drive только отчёты/доказательства, ни одного APK.
+
+Для мелких report uploads /workspace/task17-delivery; для больших файлов SHM. env -u GH_TOKEN gh, pushcredentialhelpergh. Не печатать rawbase64/SAS/tokens. Log gh run view доступен после wholecompleted. Noagents. Старые helpers /dev/shm/task17-write-reports.py и finalize generator НЕ запускать: затрут финальные факты. Начинать следующий цикл с этого checkpoint, ISSUES_17 и actual receipt files.

@@ -1,11 +1,11 @@
 # №17 — результат продолжения
 
-Срез: 2026-11-14T03:17:07+00:00. Общая приёмка **PARTIAL, НЕ ЗАКРЫТА**. APK27 НЕ выданы. Собранные бинарники остаются в приватном карантине до полного native gate и независимой проверки скачанных файлов.
+Срез: 2026-11-14T03:22:58+00:00. Общая приёмка **PARTIAL, НЕ ЗАКРЫТА**. APK27 НЕ выданы. Собранные бинарники остаются в приватном карантине до полного native gate и независимой проверки скачанных файлов.
 
 ## Точные исходники и границы
 
 - Приложения: `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, версия `0.4.19+27`, ветка `fix/task17-stable-auth-queue`, [draft PR48](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/48). PR47 — база, а не объединённый main. Отдельные checkpoint-коммиты G0–G4 и CI-инструменты сохранены в этой ветке.
-- [Полный CI / сборка / три native lane](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228): verify **success**, build **success**; состояние всего run — in_progress/pending. Последующие изменения отчётов/инструмента не подменяют source APK.
+- [Полный CI / сборка / три native lane](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228): verify **success**, build **success**; состояние всего run — completed/failure. Последующие изменения отчётов/инструмента не подменяют source APK.
 - main `0800f34f759686b18f459cd9914d22e7f1f521e9` не изменён. PR45/46/47/48 не считаются автоматически merged.
 - Действующий GAS: прежний Script/deployment, историческая version6, health source `1a0cf8e5a60144075eec793767953586bfa319a2`. Read-only health HTTP200. Текущий административный numeric version readback **NOT_RUN**, сам health это число не доказывает. Production write, bootstrap, OAuth и ACL не выполнялись.
 
@@ -25,9 +25,9 @@ G4: обязательный предпросмотр всех страниц, �
 
 | Обновление | CI outcome | Фактические cases |
 |---|---|---|
-| MASTER25→27 | failure | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
-| MASTER26→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
-| CLIENT25→27 | in_progress | JSON receipt ещё не прочитан обратно; запуск не равен PASS. |
+| MASTER25→27 | failure | install_baseline=BLOCKED; driver=BLOCKED |
+| MASTER26→27 | failure | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=BLOCKED; driver=BLOCKED |
+| CLIENT25→27 | success | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=PASS; ui_template=PASS; ui_history=PASS; ui_diary_auth_boundary=NOT_RUN; beforeBaseline_inventory=PASS; native_update_to27=PASS; ui_afterCandidate=PASS; cold_restart27=PASS |
 
 SQL используется только для чтения копий. Данные создаются через UI, обновление обычное `adb install -r` в disposable CI. Это не устройства владельца. Legacy Google drafts на старых APK требуют настоящего входа: **NOT_RUN**, не заменены SQL-seeding. Новый offline draft после обновления проверяется отдельно. Capsule/SQLite/WAL fault tests отделены от native UI; они не выданы за Google E2E.
 

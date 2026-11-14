@@ -30,5 +30,29 @@
   "PROGRESS.md": {
     "id": "1mUB6v_XyBnLbXJ9AwMRWxkOb7jlY0_86",
     "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "CODEX_EFFICIENCY_17.md": {
+    "id": "1edzjk7YJtfJ7ikwbFhl-Sa5Dq5lgXwcV",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "CHANGES_17.md": {
+    "id": "1gg8agI1nY-rsoC9mg-rp4ppiRmijMyCv",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "ISSUES_17.md": {
+    "id": "1QIsnhkWQllXQY0X_79j24rVGHpDb2CIH",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "ACCEPTANCE_17.csv": {
+    "id": "1-rviNJ9GZIM9-JarHuorDB0uUCvIaBav",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "EVIDENCE_17.zip": {
+    "id": "1ZdvpjIzpivDdeizwEEo7KVl1yfI9quwd",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
+  },
+  "DRIVE_READBACK_17.json": {
+    "id": "1ZGya_ePWsgkwkVe0NZtj8yC_-XlnT0Dv",
+    "parent": "1fXpE8oU3HSE1g89jQppUxFPBgJLh7LqI"
   }
 }

@@ -2,8 +2,8 @@
   "id": 43548636228,
   "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
   "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43548636228",
-  "status": "in_progress",
-  "conclusion": "",
+  "status": "completed",
+  "conclusion": "failure",
   "jobs": [
     {
       "id": 132305696287,
@@ -74,8 +74,8 @@
     {
       "id": 132310281448,
       "name": "native17 (client, 25, 738283907, c42c709cce5aaf7a0354e7f86a5d908837ac07b875bfba014a9788cf6f4cbf73)",
-      "status": "in_progress",
-      "conclusion": ""
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "id": 132310281466,
@@ -86,8 +86,8 @@
     {
       "id": 132310281526,
       "name": "native17 (master, 26, 743160429, 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a)",
-      "status": "in_progress",
-      "conclusion": ""
+      "status": "completed",
+      "conclusion": "failure"
     }
   ]
 }

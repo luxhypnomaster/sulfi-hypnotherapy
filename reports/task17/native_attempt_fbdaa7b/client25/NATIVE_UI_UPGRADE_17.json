@@ -1,0 +1,1994 @@
+{
+  "fixture": "created through immutable baseline APK Android UI; no SQL/DB injection",
+  "baseline": 25,
+  "target": 27,
+  "edition": "client",
+  "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "driverSource": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_baseline",
+      "status": "PASS",
+      "details": {
+        "versionCode": 25,
+        "uninstall": false,
+        "databaseInjected": false,
+        "unicodeIME": false,
+        "actualElmanFixtureTitle": "Elman variant 2"
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI same title"
+      }
+    },
+    {
+      "case": "ui_import_2",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI same title"
+      }
+    },
+    {
+      "case": "ui_import_3",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI third track"
+      }
+    },
+    {
+      "case": "ui_module_elman",
+      "status": "PASS",
+      "details": {
+        "title": "Elman variant 2",
+        "UI_dependencies": [
+          "UI same title",
+          "UI same title",
+          "UI third track"
+        ],
+        "pauseAdded": false,
+        "committedID": "9adce8acbc9189750ad3eaba6e6ad9ba",
+        "storedItemCount": 3,
+        "SQLReadbackOnly": true
+      }
+    },
+    {
+      "case": "ui_module_pause",
+      "status": "PASS",
+      "details": {
+        "title": "UI timed module",
+        "UI_dependencies": [
+          "UI third track"
+        ],
+        "pauseAdded": true,
+        "committedID": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+        "storedItemCount": 2,
+        "SQLReadbackOnly": true
+      }
+    },
+    {
+      "case": "ui_template",
+      "status": "PASS",
+      "details": {
+        "createdBy": "native_UI_structure_and_template",
+        "containsModule": true
+      }
+    },
+    {
+      "case": "ui_history",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_session_then_disposable_force_stop",
+        "nativeAudioObserved": true,
+        "physicalHeardSound": "NOT_RUN",
+        "runs": 1,
+        "statuses": [
+          "interrupted"
+        ]
+      }
+    },
+    {
+      "case": "ui_diary_auth_boundary",
+      "status": "NOT_RUN",
+      "reason": "Immutable baseline author UI requires real Google MASTER; no fake accounts or SQL injection"
+    },
+    {
+      "case": "beforeBaseline_inventory",
+      "status": "PASS",
+      "details": {
+        "tracks": 3,
+        "modules": 2,
+        "integrity": "ok"
+      }
+    },
+    {
+      "case": "native_update_to27",
+      "status": "PASS",
+      "details": {
+        "exactRowsAndMediaPreserved": true,
+        "audio": 3,
+        "modules": 2,
+        "diary": 0
+      }
+    },
+    {
+      "case": "ui_afterCandidate",
+      "status": "PASS",
+      "details": {
+        "allUIAudioAndModulesVisible": true,
+        "nativeLibraryAudioObserved": true,
+        "physicalHeardSound": "NOT_RUN",
+        "defaultLibraryLabels": [
+          "Назад",
+          "3 аудио · 0:36",
+          "Библиотека",
+          "Каталог",
+          "Каталог модулей",
+          "Записать свой трек",
+          "О приложении и данных",
+          "Все категории",
+          "Общие",
+          "Установки",
+          "Мои",
+          "+ Добавить аудио",
+          "UI third track\nДругое\n0:12",
+          "Прослушать UI third track",
+          "Действия с аудио",
+          "UI same title\nДругое\n0:12",
+          "Прослушать UI same title",
+          "Действия с аудио",
+          "UI same title\nДругое\n0:12",
+          "Прослушать UI same title",
+          "Действия с аудио"
+        ]
+      }
+    },
+    {
+      "case": "cold_restart27",
+      "status": "PASS",
+      "details": {
+        "exactRowsAndMediaPreserved": true,
+        "audio": 3,
+        "modules": 2,
+        "diary": 0
+      }
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Show roots",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-1.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-2.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-3.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI third track",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Шаблоны",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модули",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Создать модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "Elman variant 2",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Добавить трек",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Шаблоны",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модули",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Создать модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI timed module",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Добавить трек",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "tap",
+      "label": "Добавить паузу",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Применить",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Открыть конструктор",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Добавить фазу",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Индукция",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Добавить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Elman variant 2",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI Elman program",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Применить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "НАЧАТЬ ТРАНСФОРМАЦИЮ",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Мои",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Прослушать UI third track",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Программы",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модули",
+      "enabled": "true"
+    }
+  ],
+  "inventories": {
+    "after-ui-import-task16v-1.wav": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:12:57.575485Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "47835a560f4c992271ae202473021e10bec0c6ae7cc0f373a4f409a3dc00dc01"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "685691fc38b32eeeeafa77ab3f8421adeadbb946af53c0282084b674006d2565"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "875cffeee370711a0f0d1aca8d68c7881637fb77bf3286002f74083a1d3407b9"
+    },
+    "after-ui-import-task16v-2.wav": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:12:57.575485Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "900dd80b15315e44ab1f65ce36c41885d103de9dbf1b9a23798998e9960c15f6"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "685691fc38b32eeeeafa77ab3f8421adeadbb946af53c0282084b674006d2565"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "5093d59b9956ea12e8916d5ecee58c52294ab1d989d6355133712b78e30d90f1"
+    },
+    "after-ui-import-task16v-3.wav": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:12:57.575485Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "b5e7f56485b650b24c2b4c5e75edf58d2edeb7b23bfc109fdd3b95eba50a9546"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "685691fc38b32eeeeafa77ab3f8421adeadbb946af53c0282084b674006d2565"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "62f69c3bde1f686fdedd9a8b658ac06dd0cb613bbbf116b62986e603ef41be1a"
+    },
+    "after-ui-module-elman": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:12:57.575485Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          }
+        ],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "e6e54bc22fb098a741fd0de8bdb66c347399265e0160deb7716220ab86d733b6"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "685691fc38b32eeeeafa77ab3f8421adeadbb946af53c0282084b674006d2565"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "1abd186fb9bfc0e3043e7f0b4f647a70f0492fb73a53ce30c174bebf6e5866e2"
+    },
+    "after-ui-module-pause": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "module:a26b0ce65d4e9f5a0e9e57dc84fc9fa6:bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"logicalId\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"items\":[{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\"},{\"audioAssetId\":null,\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":5000,\"groupId\":null,\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"UI timed module\",\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"version\":1},\"revision\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"schema\":1,\"type\":\"module\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:12:57.575485Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          },
+          {
+            "id": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+            "payload": "{\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"title\":\"UI timed module\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"items\":[{\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\",\"audioAssetId\":null,\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":5000}]}"
+          }
+        ],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 167936,
+          "sha256": "7b053b97e0d41bd8b69d4cb11e297ffcad029f93fd6bf649d248a2cbf9e8d96c"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "685691fc38b32eeeeafa77ab3f8421adeadbb946af53c0282084b674006d2565"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "f2dc8c83883979f8b3b3d51364a5aa01476107093696081caa71c51cbf0c6a34"
+    },
+    "after-ui-history24": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [
+          {
+            "name": "session",
+            "value": 1
+          }
+        ],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          },
+          {
+            "name": "pending_history",
+            "value": "f225ac398f6ff8a80ac32c8c175a41f5"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "module:a26b0ce65d4e9f5a0e9e57dc84fc9fa6:bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"logicalId\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"items\":[{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\"},{\"audioAssetId\":null,\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":5000,\"groupId\":null,\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"UI timed module\",\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"version\":1},\"revision\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "template:20a306dafbc3cf88f68d1712c6b68b41:5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"logicalId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"parent\":null,\"payload\":{\"author\":null,\"baseRevision\":1,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"description\":\"\",\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"isDefault\":false,\"name\":\"UI Elman program\",\"origin\":\"personal\",\"plan\":{\"exitStepId\":null,\"groups\":[],\"phases\":[{\"children\":[{\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"enabled\":true,\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"sourceRevision\":{\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"type\":\"module\"},\"title\":\"Elman variant 2\"}],\"enabled\":true,\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"title\":\"Индукция\",\"typeId\":\"induction\"}],\"steps\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}]},\"updatedAt\":\"2026-11-14T03:15:55.893348Z\",\"version\":1},\"revision\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"schema\":1,\"type\":\"template\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:15:56.021899Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          },
+          {
+            "id": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+            "payload": "{\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"title\":\"UI timed module\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"items\":[{\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\",\"audioAssetId\":null,\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":5000}]}"
+          }
+        ],
+        "run_events": [
+          {
+            "id": 1,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"started\",\"timestamp\":\"2026-11-14T03:16:04.087120Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":0,\"elapsedMs\":0,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 2,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"delay_started\",\"timestamp\":\"2026-11-14T03:16:04.094503Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":1,\"elapsedMs\":1,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 3,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"block_started\",\"timestamp\":\"2026-11-14T03:16:04.822370Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 4,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"process_interrupted\",\"timestamp\":\"2026-11-14T03:16:13.850382Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          }
+        ],
+        "session_runs": [
+          {
+            "id": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "displayNumber": 1,
+            "status": "interrupted",
+            "payload": "{\"id\":\"f225ac398f6ff8a80ac32c8c175a41f5\",\"displayNumber\":1,\"startedUtcOffsetMinutes\":0,\"skippedStepIds\":[],\"completedStepIds\":[],\"name\":\"14.11.26 · 03:16\",\"snapshot\":{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"audioMetadata\":{\"5d82a90a289e81e7699f631eadbd205a\":{\"title\":\"UI third track\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\"},\"3e01ae93b5ef684c0f58311cda0be234\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\"},\"95eae09e550745c1e4cd36eeb52a7387\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\"}},\"executionFingerprint\":\"v1:d331487802db322220ecff74df6012743489556bf2b63cb7c5dde4ee1a209460\",\"updatedAt\":\"2026-11-14T03:16:04.072304Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"},\"startedAt\":\"2026-11-14T03:16:04.083829Z\",\"endedAt\":\"2026-11-14T03:16:04.795313Z\",\"status\":\"interrupted\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"userNotes\":null,\"lastCheckpointAt\":\"2026-11-14T03:16:13.844624Z\",\"endEstimated\":true}"
+          }
+        ],
+        "session_templates": [
+          {
+            "id": "20a306dafbc3cf88f68d1712c6b68b41",
+            "payload": "{\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"name\":\"UI Elman program\",\"description\":\"\",\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"version\":1,\"isDefault\":false,\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"updatedAt\":\"2026-11-14T03:15:55.893348Z\"}"
+          }
+        ]
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 180224,
+          "sha256": "d151956e8d572d54cba9746f12c07e101781a8aebf200b4eea0c9148f724b033"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "981f04e900055bbe395376506272ded3387c8d9a5049e84a5446d4e57d660b27"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "deb8897d4f1ab59f288421cf34b5dd51113e9cfb64fb650b2bfdddfbacd04386"
+    },
+    "beforeBaseline": {
+      "package": {
+        "versionCode": 25,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [
+          {
+            "name": "session",
+            "value": 1
+          }
+        ],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "module:a26b0ce65d4e9f5a0e9e57dc84fc9fa6:bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"logicalId\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"items\":[{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\"},{\"audioAssetId\":null,\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":5000,\"groupId\":null,\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"UI timed module\",\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"version\":1},\"revision\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "template:20a306dafbc3cf88f68d1712c6b68b41:5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"logicalId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"parent\":null,\"payload\":{\"author\":null,\"baseRevision\":1,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"description\":\"\",\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"isDefault\":false,\"name\":\"UI Elman program\",\"origin\":\"personal\",\"plan\":{\"exitStepId\":null,\"groups\":[],\"phases\":[{\"children\":[{\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"enabled\":true,\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"sourceRevision\":{\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"type\":\"module\"},\"title\":\"Elman variant 2\"}],\"enabled\":true,\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"title\":\"Индукция\",\"typeId\":\"induction\"}],\"steps\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}]},\"updatedAt\":\"2026-11-14T03:15:55.893348Z\",\"version\":1},\"revision\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"schema\":1,\"type\":\"template\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:15:56.021899Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          },
+          {
+            "id": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+            "payload": "{\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"title\":\"UI timed module\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"items\":[{\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\",\"audioAssetId\":null,\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":5000}]}"
+          }
+        ],
+        "run_events": [
+          {
+            "id": 1,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"started\",\"timestamp\":\"2026-11-14T03:16:04.087120Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":0,\"elapsedMs\":0,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 2,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"delay_started\",\"timestamp\":\"2026-11-14T03:16:04.094503Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":1,\"elapsedMs\":1,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 3,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"block_started\",\"timestamp\":\"2026-11-14T03:16:04.822370Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 4,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"process_interrupted\",\"timestamp\":\"2026-11-14T03:16:13.850382Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          }
+        ],
+        "session_runs": [
+          {
+            "id": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "displayNumber": 1,
+            "status": "interrupted",
+            "payload": "{\"id\":\"f225ac398f6ff8a80ac32c8c175a41f5\",\"displayNumber\":1,\"startedUtcOffsetMinutes\":0,\"skippedStepIds\":[],\"completedStepIds\":[],\"name\":\"14.11.26 · 03:16\",\"snapshot\":{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"audioMetadata\":{\"5d82a90a289e81e7699f631eadbd205a\":{\"title\":\"UI third track\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\"},\"3e01ae93b5ef684c0f58311cda0be234\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\"},\"95eae09e550745c1e4cd36eeb52a7387\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\"}},\"executionFingerprint\":\"v1:d331487802db322220ecff74df6012743489556bf2b63cb7c5dde4ee1a209460\",\"updatedAt\":\"2026-11-14T03:16:04.072304Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"},\"startedAt\":\"2026-11-14T03:16:04.083829Z\",\"endedAt\":\"2026-11-14T03:16:04.795313Z\",\"status\":\"interrupted\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"userNotes\":null,\"lastCheckpointAt\":\"2026-11-14T03:16:13.844624Z\",\"endEstimated\":true}"
+          }
+        ],
+        "session_templates": [
+          {
+            "id": "20a306dafbc3cf88f68d1712c6b68b41",
+            "payload": "{\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"name\":\"UI Elman program\",\"description\":\"\",\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"version\":1,\"isDefault\":false,\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"updatedAt\":\"2026-11-14T03:15:55.893348Z\"}"
+          }
+        ]
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 180224,
+          "sha256": "cc763f7a03ecde6c672f7e4fe7d746750b567a3f153adfb44fcf843c0e81fcc2"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "981f04e900055bbe395376506272ded3387c8d9a5049e84a5446d4e57d660b27"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "267fa8b9a46c0fe2a8d13f4d0cde1f1472eb2a31be60759df0b1d9006a22ec51"
+    },
+    "afterCandidate": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [
+          {
+            "name": "session",
+            "value": 1
+          }
+        ],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "module:a26b0ce65d4e9f5a0e9e57dc84fc9fa6:bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"logicalId\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"items\":[{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\"},{\"audioAssetId\":null,\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":5000,\"groupId\":null,\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"UI timed module\",\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"version\":1},\"revision\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "template:20a306dafbc3cf88f68d1712c6b68b41:5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"logicalId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"parent\":null,\"payload\":{\"author\":null,\"baseRevision\":1,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"description\":\"\",\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"isDefault\":false,\"name\":\"UI Elman program\",\"origin\":\"personal\",\"plan\":{\"exitStepId\":null,\"groups\":[],\"phases\":[{\"children\":[{\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"enabled\":true,\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"sourceRevision\":{\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"type\":\"module\"},\"title\":\"Elman variant 2\"}],\"enabled\":true,\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"title\":\"Индукция\",\"typeId\":\"induction\"}],\"steps\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}]},\"updatedAt\":\"2026-11-14T03:15:55.893348Z\",\"version\":1},\"revision\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"schema\":1,\"type\":\"template\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:15:56.021899Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          },
+          {
+            "id": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+            "payload": "{\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"title\":\"UI timed module\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"items\":[{\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\",\"audioAssetId\":null,\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":5000}]}"
+          }
+        ],
+        "run_events": [
+          {
+            "id": 1,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"started\",\"timestamp\":\"2026-11-14T03:16:04.087120Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":0,\"elapsedMs\":0,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 2,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"delay_started\",\"timestamp\":\"2026-11-14T03:16:04.094503Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":1,\"elapsedMs\":1,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 3,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"block_started\",\"timestamp\":\"2026-11-14T03:16:04.822370Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 4,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"process_interrupted\",\"timestamp\":\"2026-11-14T03:16:13.850382Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          }
+        ],
+        "session_runs": [
+          {
+            "id": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "displayNumber": 1,
+            "status": "interrupted",
+            "payload": "{\"id\":\"f225ac398f6ff8a80ac32c8c175a41f5\",\"displayNumber\":1,\"startedUtcOffsetMinutes\":0,\"skippedStepIds\":[],\"completedStepIds\":[],\"name\":\"14.11.26 · 03:16\",\"snapshot\":{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"audioMetadata\":{\"5d82a90a289e81e7699f631eadbd205a\":{\"title\":\"UI third track\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\"},\"3e01ae93b5ef684c0f58311cda0be234\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\"},\"95eae09e550745c1e4cd36eeb52a7387\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\"}},\"executionFingerprint\":\"v1:d331487802db322220ecff74df6012743489556bf2b63cb7c5dde4ee1a209460\",\"updatedAt\":\"2026-11-14T03:16:04.072304Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"},\"startedAt\":\"2026-11-14T03:16:04.083829Z\",\"endedAt\":\"2026-11-14T03:16:04.795313Z\",\"status\":\"interrupted\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"userNotes\":null,\"lastCheckpointAt\":\"2026-11-14T03:16:13.844624Z\",\"endEstimated\":true}"
+          }
+        ],
+        "session_templates": [
+          {
+            "id": "20a306dafbc3cf88f68d1712c6b68b41",
+            "payload": "{\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"name\":\"UI Elman program\",\"description\":\"\",\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"version\":1,\"isDefault\":false,\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"updatedAt\":\"2026-11-14T03:15:55.893348Z\"}"
+          }
+        ]
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 180224,
+          "sha256": "cc763f7a03ecde6c672f7e4fe7d746750b567a3f153adfb44fcf843c0e81fcc2"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "53d8f8665f85ce0bc199ce7392b1be846e6f51bb9e6d5198e0d3930edde75e5b"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "6c45d25d2ad27a3b92e32d72ea0f1bc79a3a5c81abbf9ef0c940050c65231fe8"
+    },
+    "coldCandidate": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [
+          {
+            "name": "session",
+            "value": 1
+          }
+        ],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "796fa28277b22a7b047824f095a657d6"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "95eae09e550745c1e4cd36eeb52a7387",
+            "title": "UI same title",
+            "filePath": "asset_95eae09e550745c1e4cd36eeb52a7387.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:23.559289Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "3e01ae93b5ef684c0f58311cda0be234",
+            "title": "UI same title",
+            "filePath": "asset_3e01ae93b5ef684c0f58311cda0be234.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:13:50.167537Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5d82a90a289e81e7699f631eadbd205a",
+            "title": "UI third track",
+            "filePath": "asset_5d82a90a289e81e7699f631eadbd205a.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-14T03:14:16.150876Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:95eae09e550745c1e4cd36eeb52a7387:0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"logicalId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-14T03:13:23.559289Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"95eae09e550745c1e4cd36eeb52a7387\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"0fc2516ff4754cc835d5761e81e7ea18c6883e9f2dd6abe3ef7023b9a69c22d0\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:3e01ae93b5ef684c0f58311cda0be234:853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"logicalId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-14T03:13:50.167537Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"3e01ae93b5ef684c0f58311cda0be234\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"853a91782f50c5e8f645fdee1c67c27299340b8d63197b8a895f98127090897e\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5d82a90a289e81e7699f631eadbd205a:3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"logicalId\":\"5d82a90a289e81e7699f631eadbd205a\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-14T03:14:16.150876Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5d82a90a289e81e7699f631eadbd205a\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"3cd85ebadaf7a9ad2c36c4c63323dbc6b15428fd89fa05a523126d0bcbf64ae4\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:9adce8acbc9189750ad3eaba6e6ad9ba:8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"version\":1},\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "module:a26b0ce65d4e9f5a0e9e57dc84fc9fa6:bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"logicalId\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"items\":[{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\"},{\"audioAssetId\":null,\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":5000,\"groupId\":null,\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"UI timed module\",\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"version\":1},\"revision\":\"bb570fcb34eab3b3daa949f6d82c3860ed922adfd2fbee36c04acec8aff89026\",\"schema\":1,\"type\":\"module\"}"
+          },
+          {
+            "id": "template:20a306dafbc3cf88f68d1712c6b68b41:5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"logicalId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"parent\":null,\"payload\":{\"author\":null,\"baseRevision\":1,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"description\":\"\",\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"isDefault\":false,\"name\":\"UI Elman program\",\"origin\":\"personal\",\"plan\":{\"exitStepId\":null,\"groups\":[],\"phases\":[{\"children\":[{\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"enabled\":true,\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"items\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"sourceRevision\":{\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"type\":\"module\"},\"title\":\"Elman variant 2\"}],\"enabled\":true,\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"title\":\"Индукция\",\"typeId\":\"induction\"}],\"steps\":[{\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\"}]},\"updatedAt\":\"2026-11-14T03:15:55.893348Z\",\"version\":1},\"revision\":\"5b781e352de68f0afeae46ac09a4372a3d08bb0886e2c64df96fcd2de3dae363\",\"schema\":1,\"type\":\"template\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-14T03:15:56.021899Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "9adce8acbc9189750ad3eaba6e6ad9ba",
+            "payload": "{\"id\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:14:55.487175Z\",\"items\":[{\"id\":\"904a4c590a02848360db6af7faff981b\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"eb9217e41ac5f28a9533953558de8294\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"dc29dd370251d4a6001afbfc2d8366fc\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          },
+          {
+            "id": "a26b0ce65d4e9f5a0e9e57dc84fc9fa6",
+            "payload": "{\"id\":\"a26b0ce65d4e9f5a0e9e57dc84fc9fa6\",\"title\":\"UI timed module\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-14T03:15:28.506176Z\",\"items\":[{\"id\":\"6d3ac64e640b60cfbcf03967ee4beb18\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"85234166334b407189f3a21039e4c3fa\",\"kind\":\"silence\",\"title\":\"Пауза\",\"audioAssetId\":null,\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":5000}]}"
+          }
+        ],
+        "run_events": [
+          {
+            "id": 1,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"started\",\"timestamp\":\"2026-11-14T03:16:04.087120Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":0,\"elapsedMs\":0,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 2,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"delay_started\",\"timestamp\":\"2026-11-14T03:16:04.094503Z\",\"stepIndex\":0,\"phase\":\"delay\",\"playheadMs\":1,\"elapsedMs\":1,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 3,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"block_started\",\"timestamp\":\"2026-11-14T03:16:04.822370Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          },
+          {
+            "id": 4,
+            "runId": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "payload": "{\"eventType\":\"process_interrupted\",\"timestamp\":\"2026-11-14T03:16:13.850382Z\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"skippedStepIds\":[],\"completedStepIds\":[]}"
+          }
+        ],
+        "session_runs": [
+          {
+            "id": "f225ac398f6ff8a80ac32c8c175a41f5",
+            "displayNumber": 1,
+            "status": "interrupted",
+            "payload": "{\"id\":\"f225ac398f6ff8a80ac32c8c175a41f5\",\"displayNumber\":1,\"startedUtcOffsetMinutes\":0,\"skippedStepIds\":[],\"completedStepIds\":[],\"name\":\"14.11.26 · 03:16\",\"snapshot\":{\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"audioMetadata\":{\"5d82a90a289e81e7699f631eadbd205a\":{\"title\":\"UI third track\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\"},\"3e01ae93b5ef684c0f58311cda0be234\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\"},\"95eae09e550745c1e4cd36eeb52a7387\":{\"title\":\"UI same title\",\"durationMs\":12000,\"format\":\"wav\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\"}},\"executionFingerprint\":\"v1:d331487802db322220ecff74df6012743489556bf2b63cb7c5dde4ee1a209460\",\"updatedAt\":\"2026-11-14T03:16:04.072304Z\",\"baseTemplateId\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"baseTemplateVersion\":1,\"baseTemplateName\":\"UI Elman program\",\"baseTemplateDescription\":\"\",\"baseFingerprint\":\"{\\\"steps\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}],\\\"phases\\\":[{\\\"id\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"typeId\\\":\\\"induction\\\",\\\"title\\\":\\\"Индукция\\\",\\\"enabled\\\":true,\\\"children\\\":[{\\\"id\\\":\\\"49b7bf88270a0d7bbd96c15c299770f4\\\",\\\"title\\\":\\\"Elman variant 2\\\",\\\"definitionId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"definitionVersion\\\":1,\\\"sourceRevision\\\":{\\\"type\\\":\\\"module\\\",\\\"logicalId\\\":\\\"9adce8acbc9189750ad3eaba6e6ad9ba\\\",\\\"revision\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\",\\\"digest\\\":\\\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\\\"},\\\"baseFingerprint\\\":\\\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\\\",\\\"enabled\\\":true,\\\"items\\\":[{\\\"id\\\":\\\"d255fa01fa569b639d6a8429c6f73d14\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"3e01ae93b5ef684c0f58311cda0be234\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"3f7f65088ef1f44aac2b77d32db6ff35\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI same title\\\",\\\"audioAssetId\\\":\\\"95eae09e550745c1e4cd36eeb52a7387\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000},{\\\"id\\\":\\\"e35020564abdcca5b231cbc2fd65a741\\\",\\\"kind\\\":\\\"audio\\\",\\\"title\\\":\\\"UI third track\\\",\\\"audioAssetId\\\":\\\"5d82a90a289e81e7699f631eadbd205a\\\",\\\"groupId\\\":\\\"358ee2964c1e8f0b47fce1e52fe4ad19\\\",\\\"description\\\":\\\"\\\",\\\"delayBeforeSeconds\\\":0,\\\"durationMs\\\":12000}]}]}],\\\"groups\\\":[],\\\"exitStepId\\\":null}\",\"topicText\":\"\",\"notes\":\"\"},\"startedAt\":\"2026-11-14T03:16:04.083829Z\",\"endedAt\":\"2026-11-14T03:16:04.795313Z\",\"status\":\"interrupted\",\"stepIndex\":0,\"phase\":\"audio\",\"playheadMs\":10,\"elapsedMs\":688,\"userNotes\":null,\"lastCheckpointAt\":\"2026-11-14T03:16:13.844624Z\",\"endEstimated\":true}"
+          }
+        ],
+        "session_templates": [
+          {
+            "id": "20a306dafbc3cf88f68d1712c6b68b41",
+            "payload": "{\"id\":\"20a306dafbc3cf88f68d1712c6b68b41\",\"name\":\"UI Elman program\",\"description\":\"\",\"plan\":{\"steps\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}],\"phases\":[{\"id\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"typeId\":\"induction\",\"title\":\"Индукция\",\"enabled\":true,\"children\":[{\"id\":\"49b7bf88270a0d7bbd96c15c299770f4\",\"title\":\"Elman variant 2\",\"definitionId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"definitionVersion\":1,\"sourceRevision\":{\"type\":\"module\",\"logicalId\":\"9adce8acbc9189750ad3eaba6e6ad9ba\",\"revision\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\",\"digest\":\"8b7b2ce9954206cf6256eb0abb2a167683dcb346b7a0e85f7bb5fff157f061da\"},\"baseFingerprint\":\"{id: d255fa01fa569b639d6a8429c6f73d14, kind: audio, title: UI same title, audioAssetId: 3e01ae93b5ef684c0f58311cda0be234, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: 3f7f65088ef1f44aac2b77d32db6ff35, kind: audio, title: UI same title, audioAssetId: 95eae09e550745c1e4cd36eeb52a7387, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}|{id: e35020564abdcca5b231cbc2fd65a741, kind: audio, title: UI third track, audioAssetId: 5d82a90a289e81e7699f631eadbd205a, groupId: 358ee2964c1e8f0b47fce1e52fe4ad19, description: , delayBeforeSeconds: 0, durationMs: 12000}\",\"enabled\":true,\"items\":[{\"id\":\"d255fa01fa569b639d6a8429c6f73d14\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"3e01ae93b5ef684c0f58311cda0be234\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"3f7f65088ef1f44aac2b77d32db6ff35\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"95eae09e550745c1e4cd36eeb52a7387\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"e35020564abdcca5b231cbc2fd65a741\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"5d82a90a289e81e7699f631eadbd205a\",\"groupId\":\"358ee2964c1e8f0b47fce1e52fe4ad19\",\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}]}],\"groups\":[],\"exitStepId\":null},\"version\":1,\"isDefault\":false,\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"createdAt\":\"2026-11-14T03:15:55.893348Z\",\"updatedAt\":\"2026-11-14T03:15:55.893348Z\"}"
+          }
+        ]
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 180224,
+          "sha256": "cc763f7a03ecde6c672f7e4fe7d746750b567a3f153adfb44fcf843c0e81fcc2"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "53d8f8665f85ce0bc199ce7392b1be846e6f51bb9e6d5198e0d3930edde75e5b"
+        },
+        "files/audio/asset_95eae09e550745c1e4cd36eeb52a7387.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_3e01ae93b5ef684c0f58311cda0be234.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_5d82a90a289e81e7699f631eadbd205a.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "1cfd1af65895c7ec7c66fda685544496b5a400cd4c882296f20505ccb6723ed5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "6c45d25d2ad27a3b92e32d72ea0f1bc79a3a5c81abbf9ef0c940050c65231fe8"
+    }
+  }
+}

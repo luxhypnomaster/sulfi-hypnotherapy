@@ -1,0 +1,18 @@
+{
+  "appSource": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "mainSHA": "0800f34f759686b18f459cd9914d22e7f1f521e9",
+  "mainUnchanged": true,
+  "runtimeTreeHashes": {
+    "lib": "90b093c3bf4cfd0e56af3a6c234748b8b375a5ef",
+    "android": "3ca3667c37c1c486eaf3dd6e10620c1fb5e027fb",
+    "third_party": "771728209d58a752626de83a81617ffc63dc9d37",
+    "test": "3fb2abb90b51711ad0c4bbdc3cfe9a51971868b7",
+    "server": "f675019565a96360de2542d8ea6f589aa8d077df",
+    "pubspec.yaml": "3f336786aeabfd671fc06825c0eb48390551a2d4",
+    "pubspec.lock": "0969411b396c70c94ab97a9300853cf4d9dc383a"
+  },
+  "liveGASWrites": false,
+  "ownerDeviceTouched": false,
+  "noRelease27Created": true,
+  "postAPKSourceChanges": "report/readback/acceptance utilities, reviewed server approval tools, run_native.sh grep fallback; no lib/android/third_party/test/server/pubspec tree changes"
+}
