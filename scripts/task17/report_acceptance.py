@@ -26,12 +26,12 @@ pairpass=pair.get('allVerified') is True and pair.get('ownerQA')=='NOT_RUN'
 drive=json.loads((r/'DRIVE_READBACK_17.json').read_text()) if (r/'DRIVE_READBACK_17.json').exists() else {}
 delivered=drive.get('allVerified') is True
 notes={
-'G0-01':'BASELINE_17.json; PR45/46/47 draft/unmerged; live source health matches known6. Numeric current admin deployment read NOT_RUN.',
+'G0-01':'BASELINE_17.json; PR45/46/47/48 not auto-merged. Authorized admin inspect43584729310 actual deployment6/HEADsame/23files PASS; main only three separately approved inspect files.',
 'G0-02':'ROOT_CAUSE_17.md; GoogleDiaryIdentity→shared DiaryController/API→all entrypoints. No independent backend proven.',
 'G0-03':'Historical owner text+image only; old-phone trace unavailable. New opt-in safe trace tested; no invented replay of owner history.',
 'G0-04':'G0_RED.log exact lifecycle production path RED→GREEN; task17_root_cause_test.dart.',
 'G0-05':'CATALOG_SESSION_RED_17.log; frozen null credential RED→dynamic shared credential GREEN.',
-'G0-06':'Literal space_sheet version audited; replaced by DeviceFiles.diagnostics; candidate aapt readback pending/see APK pair.',
+'G0-06':'Literal space_sheet version audited; DeviceFiles.diagnostics; actual downloaded pair aapt version0.4.19+27 PASS.',
 'G1-01':'task17_auth_test; shared role/session controlled. Actual MASTER Google NOT_RUN.',
 'G1-02':'task16a_auth_test and client role deny; actual second Google NOT_RUN.',
 'G1-03':'Clock-advanced SDK-boundary recovery controlled; actual15/30/60min Google MASTER NOT_RUN.',
@@ -87,9 +87,9 @@ notes={
 'G4-11':'Private scoped editable author/rightsholder default restored in next card; no Google ownership assertion.',
 'G4-12':'NFC/case/whitespace matching only NEW category input, both legacy variants unchanged.',
 'G4-13':'Reader Back functions untouched; only optional publicationReview footer/page visited tracking added.',
-'G5-01':'43548636228: CLIENT25→27 twelve cases PASS; legacy Google draft NOT_RUN. MASTER25 launcher ANR, MASTER26 baseline watch/host stopped before candidate; NATIVE_FINAL_ANALYSIS_17.json. Three-lane gate BLOCKED.',
-'G5-02':'Both exact-source fbd signed27 builds PASS, cert/pkg/config guard verified by CI; MASTER native safety BLOCKED so no release/delivery/raw download links, APK_PAIR intentionally absent.',
-'G5-03':'SERVER_DIARY_PATCH_17.diff + source inventory; NO DEPLOY; existing GAS6/main/OAuth/ACL/signing unchanged.',
+'G5-01':'Native exact fbd bytes: MASTER25→27 run43583577375 PASS13, MASTER26→27 run43614090740 SUCCESS/PASS13, CLIENT25→27 run43548636228 PASS12. Legacy Google drafts NOT_RUN; physical phone NOT_RUN.',
+'G5-02':'Delivery43615276560 SUCCESS; both exact fbd signed27 assets independently raw-downloaded, actual apksigner/aapt/SHA/config/DEX PASS. APK_PAIR_17.json allVerified. Private draft only, phone browser/installer/Google NOT_RUN.',
+'G5-03':'SERVER_DIARY_PATCH_17.diff, exact admin readback and head_rollback/SAFE_HEAD_ROLLBACK_17.md; NO DEPLOY/rollback. Main b886 only prior owner-approved3inspectfiles; no wholePR48/OAuth/ACL/signing changes.',
 'G5-04':'Every67 source row retained; CODE/CONTROLLED/LIVE/OWNER separate; no fake physical PASS.',
 'G5-05':'New17 folder only; Drive raw readback before delivery PASS; old16 unmodified.',
 'G5-06':'CODEX_EFFICIENCY_17 exact test/CI runs, bounded retries and reasons; no owner quota percentages supplied.',
@@ -100,8 +100,8 @@ assert set(notes)=={x['ID'].removeprefix('17-') for x in rows}
 for row in rows:
     key=row['ID'].removeprefix('17-')
     row.update(Code='PASS',Controlled='PASS',Live='NOT_RUN',Owner='NOT_RUN',Status='PARTIAL',Evidence_URL_or_note=notes[key])
-    if key in ['G0-02','G0-04','G0-05','G0-06']:row['Status']='PASS'
-    if key in ['G0-01','G0-03']:row['Controlled']='PARTIAL'
+    if key in ['G0-01','G0-02','G0-04','G0-05','G0-06']:row['Status']='PASS'
+    if key in ['G0-03']:row['Controlled']='PARTIAL'
     if key in ['G1-04','G1-10','G1-15','G3-10','G4-03','G4-05','G4-06','G4-07','G4-08','G4-09','G4-13']:row['Controlled']='PARTIAL'
     if key in ['G3-01']:row['Live']='BLOCKED';row['Status']='BLOCKED'
     if key=='G3-10':row['Owner']='BLOCKED';row['Status']='BLOCKED'

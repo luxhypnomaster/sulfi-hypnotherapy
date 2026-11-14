@@ -27,7 +27,7 @@
 
 Нет trace с телефона владельца для каждого старого эпизода. Поэтому нельзя объявить одну причину объяснением всех симптомов. Из актуального паспорта сохранён исторический факт одной доставки текста+изображения MASTER26→CLIENT25; это не приёмка каталога, обновлённого SDK или №17.
 
-Read-only live serverVersion вернул HTTP200/source1a0cf8e5a60144075eec793767953586bfa319a2/policy2/fullSourceReady. Историческое развёртывание этого source — version6. Числовую текущую admin deployment version endpoint не раскрывает: отдельный административный readback NOT_RUN. Новое развёртывание, bootstrap, ACL и OAuth не выполнялись.
+Read-only live serverVersion вернул HTTP200/source1a0cf8e5a60144075eec793767953586bfa319a2/policy2/fullSourceReady. Историческое развёртывание этого source — version6. Endpoint не раскрывает числовую admin version; последующий отдельно разрешённый inspect43584729310 подтвердил deployment version6, HEAD и23файла (SERVER_ADMIN_RESULT_17.md). Новое развёртывание, bootstrap, ACL и OAuth не выполнялись.
 
 Диагностика QA выключена по умолчанию, opt-in только debug, RAM200 событий/TTL20мин, экспорт явной кнопкой. В нём нет token/sub/email/URL/личного текста/файлов или media payload; owner сравнивается boolean. Старые owner-трассы не выдумываются.
 
@@ -38,3 +38,9 @@ Read-only live serverVersion вернул HTTP200/source1a0cf8e5a60144075eec7937
 ## Дополнительный авторский статус при устаревшем feed cache
 
 `DiaryScreen.row` уже выводил заголовок/иконку published по авторскому подтверждённому объекту, но нижнюю подпись выбирал только по наличию reader-feed snapshot. После завершения queue→authorRepository.load без feed.refresh получалось противоречие «Опубликовано / Черновик». Новый widget regression создаёт сохранённый авторский published объект и пустой reader cache: настоящий RED до изменения, GREEN после. Нижняя подпись теперь использует уже вычисленный confirmed; изменения автора по-прежнему определяются отдельным semantic fingerprint. Всего6 новых UI/unit PASS. Пара изsource85ff остаётся в карантине, не выдавалась; перед окончательной выдачей нужен проверенный build с этим исправлением. Старые APK25/26/подпись и данные не затрагиваются.
+
+## Продолжение: подтверждённый crash эмулятора MASTER26
+
+Run43610436406: настоящий QEMU PID3080 завершился SIGSEGV (-11) до установки27 и до cleanup; обёртка не получала stop, cgroup oom_kill до/после0. CONFIRMED_SIGNAL_17.json содержит фактический receipt. Это host crash37.2.13, а не доказанный дефект миграции27. Точная faulting function без stack UNKNOWN.
+
+Официальный pinned Emulator37.2.12 + проверка SHA/ready barrier и адресные исправления route/exact input readback позволили завершить43614090740 SUCCESS:13native PASS. Детали/неуспешные предшественники сохранены в TESTS_17.md и CODEX_EFFICIENCY_17.md. Критерии и байты APK не изменены. Legacy Google drafts и физическая приёмка NOT_RUN.

@@ -1,23 +1,23 @@
-# №17 — открытые препятствия и следующий шаг
+# №17 — оставшиеся ограничения
 
-## BLOCKED: MASTER native safety, пара27 не выдана
+## Устранён инфраструктурный блокер native
 
-CI43548636228/sourcefbdaa7b: полный verify и обе signed APK SUCCESS, но pipeline FAILURE. CLIENT25→27 прошёл12native cases; legacy Google draft1NOT_RUN. MASTER25 остановился install_baseline: Pixel Launcher ANR перед созданием baseline (скриншот/XML сохранены). MASTER26 создал3трека и первый модуль, затем timeout UIAutomation55sec в старом editor/watch; candidate27 НЕ устанавливался. В момент host diagnostics qemu отсутствовал, ADB offline/refused. Это не подтверждённый дефект обновления приложения и не доказательство потери данных, но необходимого MASTER доказательства нет.
+MASTER26→27 run43614090740 SUCCESS: 13 PASS, старый Google-черновик NOT_RUN. MASTER25→27 и CLIENT25→27 также имеют отдельные native PASS. Обе APK27 выданы в private draft и независимо скачаны/проверены. Прежние неуспешные запуски сохранены в истории, а не переименованы в успешные.
 
-OOM/причина завершения qemu НЕ доказаны: host после сбоя имел RAM available6984MB и disk23GB, это не доказывает предыдущее состояние. dmesg filter не выполнился из-за отсутствия rg; добавлен grep fallback. Это только исправление будущей диагностики, не основание ещё раз запускать тот же fail. Новый blind emulator retry НЕ выполнялся. Raw receipt SHA проверены, предыдущие934/85 результаты не подмешаны к fbd. NATIVE_FINAL_ANALYSIS_17.json и native_attempt_fbdaa7b содержат факты.
+Монитор доказал SIGSEGV настоящего QEMU на37.2.13 до установки кандидата; точная faulting function неизвестна. Закрепление официальной37.2.12 и исправления UI-драйвера дали полный успешный запуск. Это проверенный профиль стенда, не гарантия исправления всех upstream-сбоев.
 
-Следующему исполнителю: нужен новый обоснованный способ получить стабильный native host/доказательство причины qemu/launcher сбоя. Не повторять идентичную матрицу и не перестраивать приложения ради отчётов. Если выбран другой образ/эмулятор, обосновать совместимость и сохранить новый driverSource/run. Для cached reuse обновить старый helper (он намеренно pinned85), требовать тождественные fbd APK bytes/core trees, успешные actual verify/build43548636228 и отдельные новые native receipts; не ослаблять release gate. Delivery сейчас навсегда отклоняет failed43548636228, до нового доказательства его не обходить.
+## BLOCKED_OWNER_APPROVAL — короткая дневниковая запись
 
-Нет private draft27, APK release/download links и APK_PAIR_17.json. Обе собранные пары (старый85 и финальныйfbd) остаются отдельными private Actions cache, старые APK25/26 сохранены. Пользователю не предлагается устанавливать неподтверждённый MASTER, удалять/очищать/откатывать приложение.
+Точный GAS6 Diary.js отклоняет непустой message без blocks. One-condition patch проходит controlled regression, но не применён. Разрешённые ранее три файла инструмента и inspect находятся в main; административный readback43584729310 подтвердил version6, HEAD и23файла. Это НЕ разрешение production apply/rollback и не перенос всего PR48.
 
-## BLOCKED_OWNER_APPROVAL: короткий дневниковый текст
+План полного отката — `head_rollback/SAFE_HEAD_ROLLBACK_17.md`: deployment6 и исходный HEAD проверяются отдельно. Чужой HEAD никогда не перезаписывается. Content API не предоставляет атомарный CAS; возврат собственного patch HEAD требует отдельно разрешённого окна единственного writer, немедленного precheck и post-readback. Планировщик не исполняет запись.
 
-Точный GAS6 Diary.js воспроизводимо отклоняет непустое message без blocks. One-condition patch GREEN в controlled тесте. Подготовлены diff,23-file readback guards,8unit tests,3main-only/defaultOFF tool files и ограниченный rollback6. SERVER_CHANGE_REQUEST_17.md содержит исполняемый план. Запрошено отдельное согласие только на эти3файла в main и этот patch/rollback существующего deployment. До явного ответа никаких production write. Полный feature server (с прежними GoogleJwt/Router diffs) не развёртывать.
+## OWNER NOT_RUN — настоящие Google и два телефона
 
-## NOT_RUN: настоящие Google и два телефона
+Не выполнены реальные MASTER/CLIENT входы, provider refresh через15/30/60мин, два Android, облачная публикация трёх авторских треков/программы/ContentLink, выборочная установка и слышимое офлайн-воспроизведение. Legacy Google-черновик до обновления не создавался без настоящего Google. Локальный новый MASTER-черновик после обновления проверен отдельно.
 
-MASTER owner и отдельный CLIENT account, provider15/30/60min refresh/cold/network/logout, публикация3реальных авторских треков/программы, exact ContentLink, selective CLIENT install и слышимое offline — не автоматические PASS. PHONE_QA_17.md подготовлен, но начинать установку можно только после безопасной выдачи пары. Google OAuth Testing не обходить. Старый успешный diary26→client25 не заменяет приёмку17.
+## Доступ к APK
 
-## Границы сохранены
+Private GitHub draft требует GitHub-входа владельца. Файлы реально скачаны через owner API и проверены, но физический Chrome/download/installer NOT_RUN. Для второго телефона — передача CLIENT через Quick Share без раскрытия исходников и токенов. Нет публичного релиза, APK на Drive, новых прав доступа или обхода OAuth Testing.
 
-main, production GAS6, OAuth/ACL/signing, старый дневник, APK25/26 и пользовательские данные не менялись. Старые отчёты16 сохранены. Приватные GitHub draft не доступны посторонним по одной ссылке: для будущей доставки owner скачивает в Chrome под GitHub, затем может передать APK на второй телефон через QuickShare без открытия исходников/выдачи repo rights. Публичный выпуск и APK на Drive не выполнялись.
+Main, production GAS6, OAuth/ACL/signing, старые APK и данные владельца в этом цикле не изменялись. Следующий шаг — PHONE_QA_17.md; при конфликте установки или неожиданных пустых данных STOP без uninstall/clear/downgrade.

@@ -1,6 +1,6 @@
 # №17 — текущая корректировка
 
-G0:доказаныклиентскиеостановкидоHTTP;G1/G2контролируемыепроверкипройдены. [Точкапродолжения](reports/task17/PROGRESS.md) · [ROOTCAUSE](reports/task17/ROOT_CAUSE_17.md). DraftPR48, main/GAS6/подпись/ACL/старые№16сохранены. APK17ещёнет;настоящиеGoogle/дваAndroidNOT_RUN.
+MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независимо скачана и проверена, готова к приёмке. [Точка продолжения](reports/task17/PROGRESS.md) · [Результат](reports/task17/RESULT_17.md). Draft PR48; main/GAS6/подпись/ACL/старые №16 сохранены. Настоящие Google и два Android NOT_RUN, №17 не закрыто.
 
 # №16-Г — текущий приоритет
 

@@ -8,3 +8,9 @@ App source fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568; draft PR48 от необъ�
 - G4: mandatory all-page preview→exact task, failed enqueue keeps draft/editor; yellow indicator/shield, accurate known-byte progress, shared Google account panel/real version; autosave focus, author profile and new-category dedupe без удаления прежних IDs.
 - G5: candidate0.4.19+27, прежние packages/cert; full verify469Flutter/47Node/24legacy/3CLIENT PASS; native CLIENT25→27 PASS, MASTER lanes BLOCKED до candidate install. Пара НЕ выдана.
 - Server: только candidate Diary.js one-condition diff. Он НЕ deployed. Отдельный reviewed main-only tool не перенесён в main и не запускался. SQLite bootstrap/media/IDs/signing/Android Back и production boundaries сохранены.
+
+## Native-разблокирование и доставка APK27
+
+Добавлен монитор настоящего QEMU с кодом/сигналом завершения и cgroup-счётчиками. Проверенный стенд закреплён на официальном Emulator37.2.12 с SHA-валидацией архива и fail-closed SDK-ready маркером. Исправлен UI-драйвер: editor route отдельно от journal search; bounded exact readback при transient-пустом accessibility tree. Приложение послеfbd не менялось.
+
+MASTER26→27 CI43614090740:13 PASS. Delivery gate проверяет exactMASTER25/MASTER26/CLIENT25 success и тождество runtime, не замалчивает failed run. Пара27 передана в private draft и реально скачана обратно; независимый verifier проверяет SHA/размер/package/version/cert/compiledconfig/DEXguard. Публичного релиза и production GAS изменений нет.

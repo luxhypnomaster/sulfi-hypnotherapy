@@ -1,0 +1,16 @@
+{
+  "source": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "releaseId": 445425835,
+  "draft": true,
+  "publicPublished": false,
+  "tag": "task17-qa-pair-27",
+  "page": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-c7073f0a5871b5fb707c",
+  "native26": {
+    "run": 43614090740,
+    "job": 132505244736,
+    "casesPass": 13,
+    "legacyGoogle": "NOT_RUN"
+  },
+  "ownerQA": "NOT_RUN",
+  "rawReadback": "PASS_BOTH_ACTUAL_ASSETS_CERT_HASH_PACKAGE_CONFIG"
+}

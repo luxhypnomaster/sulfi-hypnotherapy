@@ -1,6 +1,6 @@
-# №17 — авторизация, очередь и каталог в работе
+# №17 — native PASS, APK27 для приёмки
 
-G0:доказаныклиентскиеостановкидоHTTP;G1/G2контролируемыепроверкипройдены. [Точкапродолжения](reports/task17/PROGRESS.md) · [ROOTCAUSE](reports/task17/ROOT_CAUSE_17.md). DraftPR48, main/GAS6/подпись/ACL/старые№16сохранены. APK17ещёнет;настоящиеGoogle/дваAndroidNOT_RUN.
+MASTER25/26→27 и CLIENT25→27 прошли native-проверки сохранности; пара27 независимо скачана и проверена по SHA, подписи и конфигурации. [Результат](reports/task17/RESULT_17.md) · [APK и Android-протокол](reports/task17/PHONE_QA_17.md) · [Контрольная точка](reports/task17/PROGRESS.md). Исходник fbdaa7b, draft PR48; production GAS6 и main в этом цикле сохранены. Реальные Google и два телефона **NOT_RUN**, №17 не закрыто.
 
 # №16-Г — кандидаты 0.4.18+26, физическая приёмка впереди
 

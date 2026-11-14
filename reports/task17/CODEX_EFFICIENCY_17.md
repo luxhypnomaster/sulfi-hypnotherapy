@@ -46,3 +46,18 @@ GitHub artifact storage quota получена; старые artifacts НЕ уд
 Пять job logs получены после run; master26 первый ответ оказался invalidZIP, один повтор ЧТЕНИЯ получил полный файл и SHA verified receipts. Дополнительный urllib read во время active run получил302, blob transport failure; никаких URL/token в итоговых отчётах. Это не emulator rerun. Raw receipts/screens всех трёх lanes проверены и сохранены. Quarantined fbd pair metadata сохранена отдельно от85, ни release27, ни delivery workflow не запускались.
 
 При возобновлении этого цикла9Python delivery и8Node tool tests повторены один раз как небольшие final guards; большой verify не повторялся. Owner approval на узкий серверный patch запрошен, не получен. Отсутствие ответа не трактуется как разрешение. Отчёты дополняются в папке17 с raw SHA/parent readback; APK на Drive не копируются.
+
+## Финальное продолжение — подтверждённый SIGSEGV и полный native PASS
+
+| Run | Гипотеза / исход |
+|---|---|
+|43608962837|Монитор процесса: нормальный exit0 после UI failure; дневниковый поиск принят за редактор. Native12 PASS.|
+|43610436406|Строгий editor route. Настоящий QEMU SIGSEGV-11 до установки27; cgroup oom_kill0. Подтверждён host crash, faulting function UNKNOWN.|
+|43611509589|Предыдущая официальная Stable37.2.12 с проверкой архива. Native13 PASS, но GUI version CLI127 → весь job FAIL; не выпущен.|
+|43612932602|Headless version+fail-closed ready barrier. Fail на transient-пустом UI tree при чтении названия; правильное значение видно screenshot/XML. QEMU normal exit0.|
+|43614090740|Bounded read-only exact input wait, только observed IME dismissal. SUCCESS,13native PASS, legacy Google draft NOT_RUN.|
+|43615276560|Delivery-only exact three successful native proofs and runtime/source identity. SUCCESS, без rebuild/sign/full suite/native. Private draft445425835.|
+
+Три subprocess monitor tests, три navigation/readback tests и11negative delivery tests PASS. Download verifier реально проверил оба скачанных release asset:387644474B, SHA/size/cert/package/version/compiled config/storageguard PASS. Недоступные raw job logs читались штатным gh run view; ограниченные повторы чтения не являются повтором эмулятора. Полный verifyfbd и большие live E2E не повторялись. Подписывающие ключи/production Google secrets не использовались для доставки. APK на Drive нет.
+
+Текущий итог заменяет прежний stop-ship по MASTER native: проверенная пара27 готова к OWNER QA. Реальные Google/два телефона NOT_RUN. Проценты квоты не выдумываются.

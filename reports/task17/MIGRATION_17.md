@@ -1,27 +1,19 @@
-# №17 — сохранность и обновление
+# №17 — доказательства сохранности при обновлении
 
-Приложения `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, `0.4.19+27`. SQLite schema9, audio/media paths, template IDs, bootstrap/library/capsule, signing и native storage guard неизменны относительно фактического source APK26 и PR47: STORAGE_SOURCE_BOUNDARIES_17.json. Android Back handler не переписывался.
+Исходник приложений: `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, версия **0.4.19+27**. Ветка `fix/task17-stable-auth-queue`, draft PR48; PR47 и PR48 не объединены в main. Последующие изменения касаются диагностики, тестового стенда и отчётов: исходники `lib`, `android`, `third_party`, `test`, `server`, `pubspec.yaml` и `pubspec.lock` сохранены относительно проверенного приложения.
 
-Новые intent/profile/logout/identity hints используют существующий app_settings. DDL/GC/reset/orphan cleanup/import поверх живой БД не добавлены. Owner hint не credential и не разрешение публиковать. Старые задачи не перепривязываются к чужому owner. Имеющиеся файлы/IDs сохраняются.
+| Путь | API | Run / job | Результат |
+|---|---:|---|---|
+| MASTER25→27 |34|43583577375 /132413251139|13 PASS; legacy Google draft NOT_RUN|
+| MASTER26→27 |34|43614090740 /132505244736|13 PASS; legacy Google draft NOT_RUN; весь CI SUCCESS|
+| CLIENT25→27 |35|43548636228 /132310281448|12 PASS; legacy Google draft NOT_RUN|
 
-## Native доказательства
+APK26 baseline source `9b94f24f3e5302c20a96dce5a2e7bdc074c21a1c`, asset743160429, SHA256 `0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5fd3e05a`. Кандидат27 во всех трёх сценариях — точные байты sourcefbd.
 
-| Lane | CI outcome | Фактические cases |
-|---|---|---|
-| MASTER25→27 | failure | install_baseline=BLOCKED; driver=BLOCKED |
-| MASTER26→27 | failure | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=BLOCKED; driver=BLOCKED |
-| CLIENT25→27 | success | install_baseline=PASS; ui_import_1=PASS; ui_import_2=PASS; ui_import_3=PASS; ui_module_elman=PASS; ui_module_pause=PASS; ui_template=PASS; ui_history=PASS; ui_diary_auth_boundary=NOT_RUN; beforeBaseline_inventory=PASS; native_update_to27=PASS; ui_afterCandidate=PASS; cold_restart27=PASS |
+Материалы создавались в неизменном baseline APK через Android UI и системный picker, не SQL-injection. Три WAV, два модуля с зависимостями и положительной паузой, программа, текущая конфигурация, история с interrupted-сессией. До обновления read-only SQLite inventory/integrity и хеши медиа. Обычный install-r без uninstall/clear/downgrade. После обновления и после cold restart сравниваются точные строки/ID, медиа SHA, integrity, UI-видимость и native AudioTrack. Новый локальный MASTER-черновик после27 проверен по точным полям и cold persistence.
 
-Только UI-created disposable fixture data; копии SQLite/WAL/SHM читаются для полного сравнения строк, integrity и SHA медиа. Ни uninstall, ни clear, ни downgrade не применяются. Отсутствующие legacy Google drafts честно NOT_RUN: их нельзя создать без реального аккаунта или заменить SQL fixture. Новый offline draft после upgrade проверяется отдельно.
+Google-черновики baseline без реального входа не создавались; их upgrade NOT_RUN. Данные и слышимость на телефоне владельца не проверены. Успех стенда не является резервной копией пользовательских данных.
 
-## APK и подпись
+Сбой37.2.13 был SIGSEGV QEMU до установки кандидата. Последний успешный run использует официальный SDK37.2.12 с проверкой SHA архива и fail-closed ready-маркером. Версии приложения, БД, подпись и критерии не понижались; изменялся только одноразовый стенд и его UI-драйвер.
 
-APK27 НЕ выданы. Собранные бинарники остаются в приватном карантине до полного native gate и независимой проверки скачанных файлов.
-
-Ожидаемые package: MASTER `ru.sulfi.sulfi_hypnotherapy`, CLIENT `ru.sulfi.sulfi_hypnotherapy.clienttest`. VersionCode27 больше25/26. Прежний cert SHA256 `0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6`. CI проверяет aapt/apksigner, compiled endpoint/WebClientID и DEX storage guard. Raw release readback требуется дополнительно; наличие cache не считается доставкой.
-
-## Откат и ограничения
-
-Android rollback — отдельная исправленная сборка с БОЛЬШИМ versionCode, прежней подписью/схемой. Не устанавливать старый APK поверх нового, не удалять приложение/данные. При installer conflict STOP с сообщением ошибки. Git/APK не являются резервной копией персонального аудио. Физическое обновление владельца до27 — NOT_RUN.
-
-Существующий GAS не менялся. Предложенный отдельно согласуемый серверный rollback ограничен возвратом того же deployment к immutable version6; ни Drive данные, ни OAuth/ACL не откатываются/удаляются. SERVER_CHANGE_REQUEST_17.md содержит конкретный diff/readback/STOP conditions.
+Пара27 независимо скачана и проверена (`APK_PAIR_17.json`), готова к обычному обновлению для реальной приёмки. При конфликте или неожиданных пустых списках остановиться, не удалять приложение и данные. Новых миграций настоящей базы владельца не выполнялось.

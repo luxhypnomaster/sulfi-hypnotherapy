@@ -1,0 +1,30 @@
+{
+  "assets": [
+    {
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/APK_PAIR_17.json",
+      "digest": "sha256:51636ab3170a66e4d00fa888359873ac597dc71193b42e9dbe6551bffa78cafd",
+      "id": 748058143,
+      "name": "APK_PAIR_17.json",
+      "size": 780
+    },
+    {
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/client27.apk",
+      "digest": "sha256:8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46",
+      "id": 748058137,
+      "name": "client27.apk",
+      "size": 193822253
+    },
+    {
+      "browser_download_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/master27.apk",
+      "digest": "sha256:2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb",
+      "id": 748058133,
+      "name": "master27.apk",
+      "size": 193822221
+    }
+  ],
+  "draft": true,
+  "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-c7073f0a5871b5fb707c",
+  "id": 445425835,
+  "tag_name": "task17-qa-pair-27",
+  "target_commitish": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568"
+}
