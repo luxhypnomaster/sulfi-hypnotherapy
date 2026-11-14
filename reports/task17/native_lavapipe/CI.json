@@ -1,0 +1,207 @@
+{
+  "conclusion": "failure",
+  "headSha": "f08d074bf291defbbec530dfcdeb980dc44842d0",
+  "jobs": [
+    {
+      "completedAt": "2026-11-14T10:53:05Z",
+      "conclusion": "failure",
+      "databaseId": 132423354043,
+      "name": "native17_cached (master, 26, 743160429, 0686e546e2d077768557b5c9f48c014d39e21567d798e403cb3040dd5...",
+      "startedAt": "2026-11-14T10:47:33Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/cache/restore@v4",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Read-only exact source and cached pair preflight before Android setup",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Reclaim only disposable host toolchains before SDK install",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run android-actions/setup-android@v3",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Verify candidate and baseline bytes; build disposable UI probe",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "failure",
+          "name": "UI-created native baseline to27 and cold data verification",
+          "number": 9,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Preserve native evidence (fixture data only)",
+          "number": 10,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 19,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 20,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 21,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423354043"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423354870,
+      "name": "native_upgrade",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423354870"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423354944,
+      "name": "delivery16g",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423354944"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423354987,
+      "name": "storage16g",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423354987"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355042,
+      "name": "appfault16g",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355042"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355115,
+      "name": "emulator_qa",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355115"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355130,
+      "name": "delivery17",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355130"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355181,
+      "name": "verify",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355181"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355218,
+      "name": "regressions",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355218"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355317,
+      "name": "native17",
+      "startedAt": "2026-11-14T10:47:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355317"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355482,
+      "name": "candidate16g",
+      "startedAt": "2026-11-14T10:47:32Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355482"
+    },
+    {
+      "completedAt": "2026-11-14T10:47:31Z",
+      "conclusion": "skipped",
+      "databaseId": 132423355546,
+      "name": "candidate17",
+      "startedAt": "2026-11-14T10:47:32Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519/job/132423355546"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43586934519"
+}
