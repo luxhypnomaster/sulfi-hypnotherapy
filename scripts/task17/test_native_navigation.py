@@ -15,4 +15,13 @@ class Navigation(unittest.TestCase):
   self.assertFalse(ns['diary_editor_ready'](journal))
   editor=[ET.Element('node',{'text':'РЕДАКТОР ЗАПИСИ'}),ET.Element('node',{'text':'Сохранить черновик'}),ET.Element('node',{'class':'android.widget.EditText'}),ET.Element('node',{'class':'android.widget.EditText'})]
   self.assertTrue(ns['diary_editor_ready'](editor))
+ def test_transient_empty_tree_then_actual_named_program(self):
+  import types
+  source=ast.parse((ROOT/'scripts/task17/native_upgrade.py').read_text());f=next(n for n in source.body if isinstance(n,ast.FunctionDef) and n.name=='wait_input_readback')
+  real=list(ET.parse(ROOT/'reports/task17/pin12_ready/screens/failure-ui_template.xml').iter('node'))
+  states=iter([[],real]);ns={'tree':lambda:next(states),'time':types.SimpleNamespace(sleep=lambda _:None)}
+  exec(compile(ast.Module(body=[f],type_ignores=[]),'readback','exec'),ns)
+  self.assertEqual(ns['wait_input_readback']('UI Elman program',0,True)[0],'UI Elman program')
+  ns['tree']=lambda:real
+  with self.assertRaises(AssertionError):ns['wait_input_readback']('WRONG_VALUE',0,True)
 if __name__=='__main__':unittest.main()

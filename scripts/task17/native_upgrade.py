@@ -56,6 +56,14 @@ def click(text,exact=False,attempts=3):
     ACTIONS.append({'action':'tap','label':text,'enabled':n.get('enabled')});tap(n);return
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
+def wait_input_readback(value,index,exact_index):
+ actual=[]
+ for _ in range(8):
+  actual=[n.get('text') for n in tree() if n.get('class')=='android.widget.EditText']
+  matched=(len(actual)>index and actual[index]==value) if exact_index else value in actual
+  if matched:return actual
+  time.sleep(.5) # Read only: never duplicate typing while semantics settle.
+ raise AssertionError('UI_INPUT_EXACT_READBACK_MISMATCH:'+repr(actual))
 def text(value,index=0,exact_index=True):
  ns=[]
  for _ in range(12):
@@ -77,9 +85,8 @@ def text(value,index=0,exact_index=True):
   assert value.isascii(),'UNICODE_INPUT_NOT_AVAILABLE'
   adb('shell','input','keyevent','KEYCODE_MOVE_END',*(['KEYCODE_DEL']*160))
   adb('shell','input','text',value.replace(' ','%s'));method='native_keyboard_clear_and_key_events'
- time.sleep(.4);adb('shell','input','keyevent','4');time.sleep(.4)
- actual=[n.get('text') for n in tree() if n.get('class')=='android.widget.EditText']
- assert (len(actual)>index and actual[index]==value) if exact_index else value in actual,'UI_INPUT_EXACT_READBACK_MISMATCH:'+repr(actual)
+ time.sleep(.4);dismiss_ime()
+ wait_input_readback(value,index,exact_index)
  ACTIONS.append({'action':method+'_with_UI_readback','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
