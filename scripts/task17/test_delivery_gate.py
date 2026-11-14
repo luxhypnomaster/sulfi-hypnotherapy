@@ -25,6 +25,11 @@ class DeliveryGate(unittest.TestCase):
           'git/trees/original':{'tree':tree},'git/trees/current':{'tree':[dict(x) for x in tree]},
           'releases/123':{'draft':True,'tag_name':'task17-qa-pair-27','target_commitish':SOURCE,'assets':[]},
         }
+        for rid,driver,jid,prefix,e,b in [(43583577375,'56a9b362718f48bef83eca8daf24d3e58a0431ca',132413251139,'native17_cached','master',25),(43586282741,'fb108fb8e775dda4aa266840e8d6f67145cfb1b5',132421357694,'native17_cached','master',26)]:
+            data['actions/runs/'+str(rid)]={'head_sha':driver,'status':'completed','event':'workflow_dispatch','head_branch':'fix/task17-stable-auth-queue'}
+            data['actions/runs/'+str(rid)+'/jobs?per_page=100']={'jobs':[{'id':jid,'name':f'{prefix} ({e}, {b}, asset, sha)','conclusion':'success','steps':[{'name':'UI-created native baseline to27 and cold data verification','conclusion':'success'}]}]}
+            data['git/commits/'+driver]={'tree':{'sha':'original'}}
+        jobs[-1]['id']=132310281448
         if mutation:mutation(data)
         calls=[]
         def response(args):
@@ -49,6 +54,10 @@ class DeliveryGate(unittest.TestCase):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228/jobs?per_page=100']['jobs'][0].update(conclusion='failure'))
     def test_failed_build_denied(self):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43548636228/jobs?per_page=100']['jobs'][1].update(conclusion='failure'))
+    def test_master26_failure_denied(self):
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43586282741/jobs?per_page=100']['jobs'][0].update(conclusion='failure'))
+    def test_wrong_native_driver_denied(self):
+        with self.assertRaises(AssertionError):self.check_gate(lambda d:d['actions/runs/43586282741'].update(head_sha='wrong'))
     def test_public_release_denied(self):
         with self.assertRaises(AssertionError):self.check_gate(lambda d:d['releases/123'].update(draft=False))
     def test_existing_assets_not_overwritten(self):

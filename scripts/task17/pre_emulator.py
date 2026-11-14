@@ -7,7 +7,7 @@ free=shutil.disk_usage(folder).free
 assert free>=10*1024**3,'AVD_CAPACITY_BLOCKED_NO_BLIND_BOOT'
 config.update({'hw.lcd.width':'720','hw.lcd.height':'1280','hw.lcd.density':'280'})
 p.write_text('\n'.join(k+'='+v for k,v in config.items())+'\n')
-print('TASK17_AVD_PHYSICAL=720x1280;GPU=swiftshader;FREE_BYTES='+str(free))
+print('TASK17_AVD_PHYSICAL=720x1280;GPU='+os.environ.get('TASK17_GLES_EXPERIMENT','swiftshader')+';FREE_BYTES='+str(free))
 
 if os.environ.get('TASK17_GLES_EXPERIMENT')=='swangle':
  tool=pathlib.Path(os.environ['ANDROID_HOME'])/'emulator/emulator'
