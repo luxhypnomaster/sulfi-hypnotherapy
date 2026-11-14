@@ -1,3 +1,7 @@
+# Latest renderer/HEAD stage
+
+RENDERER_HEAD_RESULT_17.md: swangle43586282741 и lavapipe43586934519 baseline26 BLOCKED до candidate. Не повторять без forensic exit/signal evidence. APK27 НЕ выданы. SAFE_HEAD_ROLLBACK_17.md: полный rollback требует иdeployment6, иHEADbase6; foreignHEADpreserve, noCAS требует exclusivewriterокно.11Node/11PythonPASS; actualdeliverygateSTOP. Production/main изменений в этом цикле НЕТ. Старые checkpoints ниже.
+
 # Latest: admin inspect PASS, production STOP
 
 SERVER_ADMIN_RESULT_17.md: owner allowed exact3files+inspect; main b88637a, CI43584729310PASS, actualversion6/HEADsame/23files+types verified. Apply/rollback NOT_APPROVED. MASTER25→27 API34PASS13; MASTER26 baselinehostBLOCKED; APK NOT_ISSUED. Earlier checkpoint history follows.
