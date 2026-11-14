@@ -1,3 +1,9 @@
+# Current continuation: emulator termination monitor
+
+User resumed №17 to establish actual emulator termination cause; no GAS/main/wholePR/data writes. Current native diagnostics: https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43608962837 , driver50912bfd16215c4ffe67be0e0d79cca4739d6c19, job132489553892, single MASTER26/API34/directswiftshader/exactcachedfbd. New observation, not new renderer: SDK executable wrapped to capture actual child wait returncode/signal, wrapper received cleanup signals, /proc RSS/HWM and cgroup memory counters.3local real subprocess tests PASS (exit7,actualSIGTERM,success). No guest memory collected. Full existing native criteria unchanged. Monitor summary EMULATOR_TERMINATION and full EMULATOR_FINAL_PROOF printed from alwaysstep to survive artifact quota. Await run completion, get rawjoblog, SHA-parse native receipt, inspect chronology/actual childName before making cause claim. No additional run until evidence read. This supersedes old stop checkpoint below only for the new user-authorized diagnostic step.
+
+If nativePASS: need bind exact current run/job/driver in deliverygate+tests; sourcefbd coretree and bytes unchanged. Other proven lanes: MASTER25API34 run43583577375/job132413251139; CLIENT25API35 run43548636228/job132310281448. Currentdeliverygate stillpinsfailedoldMASTER26 so intentionallySTOP. No private draft27/delivery/APK issuance yet. Main remainsb88637a, productionapply/rollbackNOT_APPROVED. All earlier reports remain history.
+
 # Latest renderer/HEAD stage
 
 RENDERER_HEAD_RESULT_17.md: swangle43586282741 и lavapipe43586934519 baseline26 BLOCKED до candidate. Не повторять без forensic exit/signal evidence. APK27 НЕ выданы. SAFE_HEAD_ROLLBACK_17.md: полный rollback требует иdeployment6, иHEADbase6; foreignHEADpreserve, noCAS требует exclusivewriterокно.11Node/11PythonPASS; actualdeliverygateSTOP. Production/main изменений в этом цикле НЕТ. Старые checkpoints ниже.
