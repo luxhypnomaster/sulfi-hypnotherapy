@@ -753,10 +753,10 @@ jobs:
           ram-size: 1536M
           disk-size: 3G
           emulator-boot-timeout: 180
-          pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
-          script: python3 scripts/task17/native_upgrade.py
+          emulator-options: -no-window -gpu swiftshader -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: bash scripts/task17/run_native.sh
       - name: Preserve native evidence (fixture data only)
         if: always()
         continue-on-error: true
@@ -882,10 +882,10 @@ jobs:
           ram-size: 1536M
           disk-size: 3G
           emulator-boot-timeout: 180
-          pre-emulator-launch-script: python3 scripts/task16g/pre_emulator.py
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
-          script: python3 scripts/task17/native_upgrade.py
+          emulator-options: -no-window -gpu swiftshader -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: bash scripts/task17/run_native.sh
       - name: Preserve native evidence (fixture data only)
         if: always()
         continue-on-error: true

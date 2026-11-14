@@ -25,12 +25,13 @@ def tree():
  return list(ET.fromstring(xml).iter('node'))
 def label(n):return (n.get('text','')+' '+n.get('content-desc','')).strip()
 def shot(name):
+ # A UIAutomation timeout must not prevent a separate native screen capture.
+ try:(OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
+ except Exception as error:(OUT/(name+'-capture-error.txt')).write_text(type(error).__name__)
  try:
-  tree() # Keep XML contemporaneous with the screenshot, including dialogs.
-  (OUT/(name+'.png')).write_bytes(adb('exec-out','screencap','-p',binary=True))
+  tree()
   (OUT/(name+'.xml')).write_text((OUT/'latest-window.xml').read_text() if (OUT/'latest-window.xml').exists() else '')
- except Exception as error:
-  (OUT/(name+'-capture-error.txt')).write_text(type(error).__name__)
+ except Exception as error:(OUT/(name+'-ui-error.txt')).write_text(type(error).__name__)
 def tap(n):
  p=[int(i) for i in re.findall(r'\d+',n.get('bounds',''))]
  adb('shell','input','tap',str((p[0]+p[2])//2),str((p[1]+p[3])//2));time.sleep(.5)
@@ -55,7 +56,7 @@ def click(text,exact=False,attempts=3):
     ACTIONS.append({'action':'tap','label':text,'enabled':n.get('enabled')});tap(n);return
   time.sleep(.5)
  raise AssertionError('UI_NOT_FOUND:'+text+';labels='+repr([label(n) for n in ns if label(n)][:32]))
-def text(value,index=0):
+def text(value,index=0,exact_index=True):
  ns=[]
  for _ in range(12):
   ns=[n for n in tree() if n.get('class')=='android.widget.EditText']
@@ -78,7 +79,7 @@ def text(value,index=0):
   adb('shell','input','text',value.replace(' ','%s'));method='native_keyboard_clear_and_key_events'
  time.sleep(.4);adb('shell','input','keyevent','4');time.sleep(.4)
  actual=[n.get('text') for n in tree() if n.get('class')=='android.widget.EditText']
- assert len(actual)>index and actual[index]==value,'UI_INPUT_EXACT_READBACK_MISMATCH:'+repr(actual)
+ assert (len(actual)>index and actual[index]==value) if exact_index else value in actual,'UI_INPUT_EXACT_READBACK_MISMATCH:'+repr(actual)
  ACTIONS.append({'action':method+'_with_UI_readback','value':value,'index':index})
 def launch():
  adb('shell','am','start','-W','-n',PKG+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
@@ -300,11 +301,20 @@ def ui_after():
  assert all(any(t in label(n) for n in ns) for t in mt),'MODULES_MISSING_FROM_UI'
  return {'allUIAudioAndModulesVisible':True,'nativeLibraryAudioObserved':playing,'physicalHeardSound':'NOT_RUN','defaultLibraryLabels':default[:35]}
 def local_draft_after():
- home();click('Дневник');click('Новая запись');text('UI offline Task17 draft',0);text('Offline local message',1)
+ home();click('Дневник');click('Новая запись')
+ # Keyboard auto-scroll changes which EditText nodes remain visible. Reset the
+ # actual list before selecting the two header fields; exact SQL values below
+ # prove these are title/message, never an injected or accidentally edited block.
+ for value,index in [('UI offline Task17 draft',0),('Offline local message',1)]:
+  dismiss_ime()
+  adb('shell','input','swipe','360','380','360','780','500');time.sleep(.5)
+  text(value,index,exact_index=False)
  click('Сохранить черновик');time.sleep(1)
  adb('shell','input','keyevent','4');time.sleep(1)
  v=inventory('new27_offline_draft');rows=v['rows']['diary_author']
- assert any('UI offline Task17 draft' in r.get('payload','') for r in rows),'LOCAL_OFFLINE_DRAFT_NOT_SAVED'
+ saved=[json.loads(r['payload']) for r in rows if json.loads(r['payload']).get('title')=='UI offline Task17 draft']
+ assert len(saved)==1 and saved[0].get('message')=='Offline local message','LOCAL_OFFLINE_DRAFT_FIELDS_NOT_SAVED_EXACTLY'
+ assert saved[0].get('status')=='draft' and saved[0].get('_alchemistScope')=='local-device','LOCAL_OFFLINE_DRAFT_SCOPE_OR_STATUS_WRONG'
  restart();again=inventory('new27_offline_draft_cold')
  assert all(r in again['rows']['diary_author'] for r in rows),'LOCAL_OFFLINE_DRAFT_LOST'
  shot('27-local-offline-draft')
