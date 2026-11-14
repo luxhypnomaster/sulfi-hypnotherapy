@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
+if [ "${TASK17_EMULATOR_PIN:-}" = "37.2.12" ]; then
+  python3 - <<'PYREADY'
+import pathlib,os,json
+p=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-sdk-ready.json'
+assert p.exists(),'SDK_PREFLIGHT_FAILED_NO_BASELINE_INSTALL'
+v=json.loads(p.read_text());assert v['version']=='37.2.12' and v['validatedHeadlessVersion'] is True
+print('SDK_PREFLIGHT_BARRIER_PASS')
+PYREADY
+fi
 native_status=0
 python3 scripts/task17/native_upgrade.py || native_status=$?
 if [ "$native_status" -ne 0 ]; then

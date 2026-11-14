@@ -17,7 +17,7 @@ if os.environ.get('TASK17_EMULATOR_PIN')=='37.2.12':
    if not item.is_dir():(stage/item.filename).chmod(stat.S_IMODE(item.external_attr>>16) or 0o644)
  target=pathlib.Path(os.environ['ANDROID_HOME'])/'emulator'
  shutil.rmtree(target);(stage/'emulator').rename(target)
- version=subprocess.check_output([str(target/'emulator'),'-version'],stderr=subprocess.STDOUT,text=True)
+ version=subprocess.check_output([str(target/'emulator'),'-no-window','-version'],stderr=subprocess.STDOUT,text=True)
  assert '37.2.12' in version,'PINNED_VERSION_MISMATCH_STOP'
  print('TASK17_VERIFIED_OFFICIAL_EMULATOR=37.2.12; build16428233; archiveSHA256=b08fc43d8608d2955f607f1b287beb525041e730086bdca3af152accac3af9c1')
  archive.unlink()
@@ -26,9 +26,10 @@ p=folder/'config.ini';config=dict(line.split('=',1) for line in p.read_text().sp
 assert config.get('disk.dataPartition.size','').strip() in {'3G','3072M','3221225472'},'AVD_PARTITION_NOT_PINNED'
 free=shutil.disk_usage(folder).free
 assert free>=10*1024**3,'AVD_CAPACITY_BLOCKED_NO_BLIND_BOOT'
-config.update({'hw.lcd.width':'720','hw.lcd.height':'1280','hw.lcd.density':'280'})
+if os.environ.get('TASK17_EMULATOR_PIN')!='37.2.12':
+ config.update({'hw.lcd.width':'720','hw.lcd.height':'1280','hw.lcd.density':'280'})
 p.write_text('\n'.join(k+'='+v for k,v in config.items())+'\n')
-print('TASK17_AVD_PHYSICAL=720x1280;GPU='+os.environ.get('TASK17_GLES_EXPERIMENT','swiftshader')+';FREE_BYTES='+str(free))
+print('TASK17_AVD_PHYSICAL='+str(config.get('hw.lcd.width'))+'x'+str(config.get('hw.lcd.height'))+';GPU='+os.environ.get('TASK17_GLES_EXPERIMENT','swiftshader')+';FREE_BYTES='+str(free))
 
 if os.environ.get('TASK17_GLES_EXPERIMENT') in {'swangle','lavapipe'}:
  tool=pathlib.Path(os.environ['ANDROID_HOME'])/'emulator/emulator'
@@ -47,3 +48,10 @@ if os.environ.get('TASK17_PROCESS_FORENSIC')=='true':
  original.write_text('#!/bin/sh\n# TASK17_MONITOR_WRAPPER\nexport TASK17_FORENSIC_DIR='+shlex.quote(str(pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-forensics'))+'\nexec /usr/bin/python3 '+shlex.quote(str(monitor))+' '+shlex.quote(str(real))+' "$@"\n')
  original.chmod(0o755)
  print('TASK17_CHILD_EXIT_MONITOR_INSTALLED; no renderer/app modification')
+
+# The upstream action continues after a failed pre-hook: gate the test itself.
+if os.environ.get('TASK17_EMULATOR_PIN')=='37.2.12':
+ import json
+ ready=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-sdk-ready.json'
+ ready.write_text(json.dumps({'version':'37.2.12','validatedHeadlessVersion':True,'archiveSha256':'b08fc43d8608d2955f607f1b287beb525041e730086bdca3af152accac3af9c1'}))
+ print('TASK17_SDK_READY_WRITTEN')
