@@ -90,13 +90,16 @@ def launch():
   if allow is not None:tap(allow)
   time.sleep(2)
  raise AssertionError('HOME_NOT_READY:'+repr([label(n) for n in ns if label(n)][:20]))
+def is_android_launcher(nodes):
+ if any("isn't responding" in n.get('text','') for n in nodes):return False
+ return any(n.get('resource-id','').startswith('com.google.android.apps.nexuslauncher:id/') for n in nodes)
 def home():
  # New hypothesis from16V failure XML: Back exited to Android launcher.
  # Relaunch only when actually at Android launcher, not over an open editor.
  for _ in range(8):
   ns=tree()
   if any('НАЧАТЬ ТРАНСФОРМАЦИЮ' in label(n) for n in ns):return
-  if any(label(n) in ['At a glance','Google search'] for n in ns):
+  if is_android_launcher(ns):
    launch();continue
   go=next((n for n in ns if 'На главную страницу' in label(n)),None)
   if go is not None:tap(go)

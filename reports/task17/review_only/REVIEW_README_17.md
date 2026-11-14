@@ -2,7 +2,7 @@
 
 Владелец разрешил подготовку и независимую проверку трёх файлов. Не разрешены перенос в main, push/deploy/rollback production или перенос других server diffs. Это разрешение не трактуется как разрешение применения.
 
-Полный diff относительно фактической origin/main0800f34: THREE_FILES_FULL_17.diff (176+ строк; точная версия ef84719). Только workflow, approved_diary_patch.mjs, test_approved_diary_patch.mjs. INSPECT_DELTA показывает изменения к предыдущему кандидату.9Node controlled tests PASS; это не независимый человеческий review и не live admin proof.
+Полный diff относительно фактической origin/main0800f34: THREE_FILES_FULL_17.diff (176+ строк; точная версия 03a0ea8). Только workflow, approved_diary_patch.mjs, test_approved_diary_patch.mjs. INSPECT_DELTA показывает изменения к предыдущему кандидату.10Node controlled tests PASS; это не независимый человеческий review и не live admin proof.
 
 Добавлен inspect: только GET Script, deployment, content(version6), HEAD; подтверждение owner; exact23files,20JS+vendor pinnedSHA; version6/HEAD equality/InitialConfig owner/source; execution/access/endpoint. Выводятся только sanitized administrative identity/config, oauthScopes и name/type/bytes/SHA, не содержимое InitialConfig или credentials. Выход до clasp push/create-version/create-deployment. Read-only grant не позволяет выбрать apply/rollback; прежний main-only guard сохранён. Любое расхождение STOP.
 
@@ -11,3 +11,7 @@
 План отката сохранён в SERVER_CHANGE_REQUEST_17.md: immutable6, тот же deployment/executeAs/access, проверка active file manifest принадлежит только Diary patch, readback после переключения; никаких Drive data/ACL/OAuth изменений. Сам rollback запрещён до отдельного будущего разрешения.
 
 Native: ef84719 меняет только cached QA runner, не приложения. Один сравнительный API34 цикл, MASTER25 и MASTER26, fbd immutable pair, exact prior469 verify/build плюс SHA/bytes/core trees. Прежние API35 fail сохранены. Новые результаты PENDING, ничего не выдано. API34 не доказывает устранение API35 launcher/qemu сбоя. При повторном отказе не запускать тот же прогон автоматически.
+
+Независимый дополнительный разбор: идентичные байты GoogleJwt с типом JSON прежде проходили pin check. TYPE_CHECK_RED_17.log воспроизводит; теперь любой не-manifest файл обязан SERVER_JS, manifest JSON.10testsGREEN. Live source types ещё NOT_RUN.
+
+Сравнительный cached native API34 run: https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43582943729 (driver ef84719, APK fbd). Состояние на10:00UTC in_progress; пока не PASS.
