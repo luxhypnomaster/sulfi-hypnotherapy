@@ -31,6 +31,15 @@ export function deploymentVersion(d){
  if(d.deploymentId!==TARGET.deployment||web?.url!=='https://script.google.com/macros/s/'+TARGET.deployment+'/exec'||web.entryPointConfig?.executeAs!=='USER_DEPLOYING'||web.entryPointConfig?.access!=='ANYONE_ANONYMOUS')fail('DEPLOYMENT_IDENTITY_OR_CONFIG_MISMATCH');
  return d.deploymentConfig.versionNumber;
 }
+// Planning only: never writes HEAD. Apps Script has no atomic content CAS.
+export function rollbackHeadPlan(base,active,head,exclusiveWriter=false,pins=PINNED_FILES,target=TARGET){
+ const patched=planPatch(base,base,pins,target);
+ const same=(a,b)=>{try{compareFiles(a,b);return true;}catch{return false;}};
+ if(!same(active,base)&&!same(active,patched))fail('ACTIVE_FOREIGN_VERSION_STOP');
+ if(same(head,base))return {head:'BASE6',writeHead:false,restore:'NOT_NEEDED'};
+ if(!same(head,patched))return {head:'FOREIGN',writeHead:false,restore:'BLOCKED_PRESERVE_FOREIGN_HEAD'};
+ return {head:'OUR_PATCH',writeHead:false,restore:exclusiveWriter?'ELIGIBLE_SEPARATELY_APPROVED_RECHECK_AND_READBACK':'BLOCKED_NEEDS_EXCLUSIVE_WRITER'};
+}
 async function main(){
  if(process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_EVENT_NAME!=='workflow_dispatch'||process.env.GITHUB_REPOSITORY!=='luxhypnomaster/sulfi-hypnotherapy'||!['READ_ONLY_INSPECTION','DIARY_ONLY_WITH_ROLLBACK6'].includes(process.env.TASK17_APPROVED))fail('SEPARATE_APPROVAL_AND_TRUSTED_MAIN_REQUIRED');
  const mode=process.env.TASK17_PATCH_MODE;if(!['inspect','apply','rollback'].includes(mode))fail('MODE_REQUIRED');

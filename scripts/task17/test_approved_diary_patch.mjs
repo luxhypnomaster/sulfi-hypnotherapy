@@ -2,7 +2,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {OLD,NEW,TARGET,PINNED_FILES,sha,planPatch,compareFiles,deploymentVersion} from './approved_diary_patch.mjs';
+import {OLD,NEW,TARGET,PINNED_FILES,sha,planPatch,compareFiles,deploymentVersion,rollbackHeadPlan} from './approved_diary_patch.mjs';
 function fixture(){
  const pins={},files=Object.keys(PINNED_FILES).map(name=>{
   const source=name==='Diary'?'// controlled fixture\n'+OLD+'\n':'// '+name+' controlled';pins[name]=sha(source);return {name,type:'SERVER_JS',source};
@@ -32,4 +32,15 @@ test('inspection returns before any production writer and readonly grant cannot 
 test('pinned JS source cannot be retyped as JSON even with identical bytes',()=>{
  const {files,pins,target}=fixture();files.find(f=>f.name==='GoogleJwt').type='JSON';
  assert.throws(()=>planPatch(files,files,pins,target),/SOURCE_TYPE_MISMATCH/);
+});
+
+test('rollback planner never silently overwrites foreign HEAD or active source',()=>{
+ const {files,pins,target}=fixture(),patched=planPatch(files,files,pins,target);
+ const plan=(active,head,exclusive=false)=>rollbackHeadPlan(files,active,head,exclusive,pins,target);
+ assert.equal(plan(patched,files).restore,'NOT_NEEDED');
+ assert.equal(plan(patched,patched).restore,'BLOCKED_NEEDS_EXCLUSIVE_WRITER');
+ assert.equal(plan(patched,patched,true).writeHead,false);
+ const foreign=structuredClone(patched);foreign.find(f=>f.name==='GoogleJwt').source+='foreign edit';
+ assert.equal(plan(patched,foreign,true).restore,'BLOCKED_PRESERVE_FOREIGN_HEAD');
+ assert.throws(()=>plan(foreign,patched,true),/ACTIVE_FOREIGN_VERSION_STOP/);
 });
