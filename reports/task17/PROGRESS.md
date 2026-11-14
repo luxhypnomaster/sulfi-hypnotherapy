@@ -1,3 +1,7 @@
+# Актуальное продолжение ограниченного review
+
+Сначала CONTINUATION_REVIEW_17.md и NATIVE_REVIEW_RESULTS_17.json. Appfbd не менялся. Read-only inspector tool03a0ea8 подготовлен/10testsPASS; production/main write запрещены, запрос разрешения только main3files+inspect pending. MASTER25→27 API34 PASS13, MASTER26 API34 host crash BEFOREcandidate BLOCKED, CLIENT25 API35 прежнийPASS12. Последний native43583577375 FAILURE в целом; не blind retry. Пара не выдана. Ниже сохранён прежний checkpoint как история.
+
 # №17 — продолжить с BLOCKED native, не начинать заново
 
 14.11.2026. Workspace /dev/shm/sulfi17, branch fix/task17-stable-auth-queue, draft PR48 base PR47 НЕ merged. Приложения frozen source **fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568**, 0.4.19+27. Последующие коммиты только harness/docs/tools; app/runtime trees прежние. main0800f34... не менялся.
