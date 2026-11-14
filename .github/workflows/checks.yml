@@ -830,6 +830,7 @@ jobs:
       TASK17_BASELINE: ${{ matrix.baseline }}
       TASK17_GLES_EXPERIMENT: swiftshader
       TASK17_PROCESS_FORENSIC: true
+      TASK17_EMULATOR_PIN: 37.2.12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -885,7 +886,7 @@ jobs:
         run: |
           python3 - <<'PYREAD'
           import pathlib,json,os
-          for p in set(pathlib.Path(os.environ['RUNNER_TEMP']).rglob('EMULATOR_FORENSIC_*.json'))|set(pathlib.Path('/tmp/android-runner').rglob('EMULATOR_FORENSIC_*.json')):
+          for p in set(pathlib.Path(os.environ['RUNNER_TEMP']).rglob('EMULATOR_FORENSIC_*.json'))|set(pathlib.Path('/tmp/android-runner').rglob('EMULATOR_FORENSIC_*.json'))|set(pathlib.Path(os.environ['GITHUB_WORKSPACE'],'.task17-forensics').glob('EMULATOR_FORENSIC_*.json')):
             v=json.loads(p.read_text()); print('EMULATOR_FINAL_PROOF='+json.dumps(v,separators=(',',':')))
           PYREAD
       - name: Preserve native evidence (fixture data only)

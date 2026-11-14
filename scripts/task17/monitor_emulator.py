@@ -38,4 +38,4 @@ def monitor(command,folder):
  print('EMULATOR_TERMINATION='+json.dumps({k:v for k,v in result.items() if k!='samples'}),flush=True)
  return code if code>=0 else 128-code
 if __name__=='__main__':
- sys.exit(monitor(sys.argv[1:],pathlib.Path(os.environ['RUNNER_TEMP'])/'task17-evidence'))
+ sys.exit(monitor(sys.argv[1:],os.environ.get('TASK17_FORENSIC_DIR',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task17-evidence'))))
