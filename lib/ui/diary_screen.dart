@@ -285,7 +285,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         ),
                         if (author)
                           Text(
-                            snapshot != null
+                            confirmed
                                 ? (hasDraft
                                       ? 'Опубликовано · есть черновик'
                                       : 'Опубликовано')

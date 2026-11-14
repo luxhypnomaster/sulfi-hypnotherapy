@@ -5,6 +5,7 @@ import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
 import 'package:sulfi_hypnotherapy/services/diary_api.dart';
 import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_editor.dart';
+import 'package:sulfi_hypnotherapy/ui/diary_screen.dart' show DiaryScreen;
 import 'package:sulfi_hypnotherapy/services/alchemist_catalog.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_work_queue.dart';
 import 'package:sulfi_hypnotherapy/services/catalog_categories.dart';
@@ -246,6 +247,47 @@ void main() {
         expect(saved.blocks, isEmpty);
         expect(t.takeException(), isNull);
         await capture15(t, 'task17-enqueue-failure-editor');
+        await t.pumpWidget(const SizedBox());
+      } finally {
+        d.dispose();
+        await t.runAsync(f.close);
+      }
+    },
+  );
+  testWidgets(
+    '17 authoritative published author row is not Draft while reader feed cache has not refreshed',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!;
+      final d = DiaryController(
+        DiaryRepository(f.db),
+        authorRepository: DiaryAuthorRepository(f.db),
+        policy: f.c.policy,
+      );
+      final entry = DiaryEntry(
+        id: 'committed17',
+        title: 'Подтверждённая запись',
+        message: 'Сервер уже подтвердил публикацию',
+        status: DiaryStatus.published,
+        blocks: const [],
+        createdAt: DateTime.utc(2026, 11, 13),
+        updatedAt: DateTime.utc(2026, 11, 13),
+      );
+      try {
+        await t.runAsync(() async {
+          await d.authorRepository!.save(entry);
+          await d.load();
+        });
+        expect(
+          d.published,
+          isEmpty,
+          reason: 'Reader feed is deliberately stale, authoritative author receipt remains local',
+        );
+        await show15(t, f, DiaryScreen(diary: d), size: const Size(360, 640));
+        expect(find.text('Черновик'), findsNothing);
+        expect(find.text('Опубликовано'), findsOneWidget);
+        expect(find.text('Опубликовано · есть черновик'), findsNothing);
+        expect(t.takeException(), isNull);
+        await capture15(t, 'task17-published-author-before-feed-refresh');
         await t.pumpWidget(const SizedBox());
       } finally {
         d.dispose();

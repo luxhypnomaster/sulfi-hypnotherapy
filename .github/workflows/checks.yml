@@ -706,7 +706,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     permissions:
-      contents: read
+      contents: write
       actions: read
     env:
       TASK17_EDITION: ${{ matrix.edition }}

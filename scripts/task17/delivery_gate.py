@@ -8,8 +8,8 @@ import subprocess
 REPO='luxhypnomaster/sulfi-hypnotherapy'
 SOURCE='85ff50736c6be28bda55cf759f232d8347f3ad3e'
 RUN=43515852713
-NATIVE_RUN=43546562439
-NATIVE_DRIVER='4a84759966068183cbfc5908c55e3c5a0b8b3162'
+NATIVE_RUN=43546879054
+NATIVE_DRIVER='9340241cbd7f88bd4b093fca6645d9ea5aa88889'
 assert os.environ['GITHUB_REF']=='refs/heads/fix/task17-stable-auth-queue'
 assert os.environ['GITHUB_EVENT_NAME']=='workflow_dispatch' and os.environ['GITHUB_REPOSITORY']==REPO
 

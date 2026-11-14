@@ -5,7 +5,7 @@
     "PASS": 7,
     "BLOCKED": 4
   },
-  "fullCI": false,
+  "fullCI": true,
   "nativeUpgradeThreeLanes": false,
   "pairReadbackVerified": false,
   "driveReadback": false,

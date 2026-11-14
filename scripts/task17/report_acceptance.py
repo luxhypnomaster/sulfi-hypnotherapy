@@ -12,7 +12,15 @@ native={}
 for p in r.glob('NATIVE_*_17.json'):
     v=json.loads(p.read_text())
     if 'cases' in v:native[(v.get('edition'),v.get('baseline'))]=v
-upgrade=all((edition,base) in native and all(c['status']=='PASS' for c in native[edition,base]['cases'] if c['case']!='ui_diary_auth_boundary') for edition,base in [('master',25),('master',26),('client',25)])
+def accepted_native(edition,base):
+    v=native.get((edition,base),{})
+    cases={c['case']:c for c in v.get('cases',[])}
+    required={'install_baseline','ui_import_1','ui_import_2','ui_import_3','ui_module_elman','ui_module_pause','ui_template','ui_history','beforeBaseline_inventory','native_update_to27','ui_afterCandidate','cold_restart27'}
+    if edition=='master':required.add('local_draft_after27')
+    return (v.get('source')=='85ff50736c6be28bda55cf759f232d8347f3ad3e' and
+            required.issubset(cases) and
+            all(c['status']=='PASS' for c in cases.values() if c['case']!='ui_diary_auth_boundary'))
+upgrade=all(accepted_native(edition,base) for edition,base in [('master',25),('master',26),('client',25)])
 pair=json.loads((r/'APK_PAIR_17.json').read_text()) if (r/'APK_PAIR_17.json').exists() else {}
 pairpass=pair.get('allVerified') is True and pair.get('ownerQA')=='NOT_RUN'
 drive=json.loads((r/'DRIVE_READBACK_17.json').read_text()) if (r/'DRIVE_READBACK_17.json').exists() else {}
