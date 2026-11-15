@@ -28,3 +28,6 @@ Per-stage safe trace: logical RPC latency/count, localHash, confirmed bytes/wall
 |50|5580.2|5738.2|6416.9|6794.7|
 
 Результаты меняются между проходами; это не стабильная оценка пользовательского Wi-Fi и не обещание ускорения. Уже имеющийся keep-alive не является новой серверной оптимизацией. Подтверждённая по коду цена: 15MiB upload=121RPC, download=62RPC, плюс ACL/registry/manifest у настоящего GAS. Серверные оптимизации/пакетирование без нового измерения и отдельного разрешения НЕ применялись; SHA/ACL не ослаблены.
+
+
+Детерминированный regression gate: scripts/task18/check_perf_budget.py проверил оба актуальных JSON (PASS) и отверг negative с1лишним download RPC. Это бюджет envelope calls, не нестабильный миллисекундный порог и не количество внутренних Drive ACL/metadata calls. Безопасность нельзя ослаблять ради попадания в бюджет; изменение протокола требует пересмотра evidence/бюджета. Серверные ACL/metadata проверки в GasFiles/GasTransfer повторяются по коду; их live стоимость ещё не измерена.
