@@ -51,6 +51,7 @@ class DiaryController extends ChangeNotifier {
   VoidCallback? onAccountLogout;
   Future<void> Function()? beforeAccountLogout;
   Future<void> Function(DiaryEntry, bool?)? enqueueCloudOperation;
+  Future<void> Function(DiaryEntry, String)? enqueueCloudMutation;
   bool get backgroundCloudTransfers => enqueueCloudOperation != null;
   int _rotation = 0;
   final _readerAudio = <String, DiaryAudio>{};
@@ -195,6 +196,11 @@ class DiaryController extends ChangeNotifier {
     }
     if (published.any((e) => e.id == entry.id) ||
         entry.status == DiaryStatus.published) {
+      if (enqueueCloudMutation != null) {
+        await enqueueCloudMutation!(entry, 'deleteSoft');
+        // Keep the local copy until a server receipt; never optimistic delete.
+        return;
+      }
       final session = await _cloudSession();
       await api!.deleteEntry(entry, session);
       await sync();
@@ -211,6 +217,19 @@ class DiaryController extends ChangeNotifier {
   Future<void> reorderEntries(List<DiaryEntry> entries) async {
     if (!authorWorkspace) {
       throw const DiaryApiException('Авторский режим недоступен');
+    }
+    if (enqueueCloudOperation != null) {
+      // Persist explicit local ordering before creating per-entry transfer intents.
+      // No UI-owned upload remains after this bounded database operation.
+      await authorRepository!.reorder(entries);
+      await load();
+      for (final original in entries) {
+        final e = drafts.where((e) => e.id == original.id).firstOrNull;
+        if (e != null && published.any((p) => p.id == original.id)) {
+          await enqueueCloudOperation!(e, null);
+        }
+      }
+      return;
     }
     if (entries.any((e) => published.any((p) => p.id == e.id))) {
       final session = await _cloudSession();

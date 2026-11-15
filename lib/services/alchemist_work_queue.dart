@@ -25,6 +25,7 @@ String alchemistStageLabel(Object? phase) =>
       'server_verifying': 'Сервер проверяет файл',
       'verified': 'Файл проверен',
       'installed': 'Установлено и проверено',
+      'reader_synced': 'Состояние чтения подтверждено сервером',
       'manifest_registering': 'Проверка состава',
       'publishing': 'Подтверждение каталога',
       'catalog_committed': 'Подтверждено сервером',
@@ -73,6 +74,46 @@ double? alchemistFileProgress(Map work) {
   return total is num && bytes is num && total > 0
       ? (bytes / total).clamp(0.0, 1.0).toDouble()
       : null;
+}
+
+/// Stable public state vocabulary; legacy phase keys remain readable by APK27.
+/// This additive field needs no SQLite migration or owner-row rewrite.
+String alchemistCanonicalState(Map work) {
+  final phase = work['phase'], stage = work['stage'];
+  if (phase == 'running') {
+    if (const [
+      'server_verifying',
+      'diary_verifying',
+      'verified',
+    ].contains(stage)) {
+      return 'VERIFYING';
+    }
+    if (const ['manifest_registering', 'publishing'].contains(stage)) {
+      return 'COMMITTING';
+    }
+    return 'RUNNING';
+  }
+  if (phase == 'paused') {
+    return switch (work['pauseReason'] ?? work['code']) {
+      'USER_PAUSED' => 'PAUSED_BY_USER',
+      'WAITING_NETWORK' => 'WAITING_NETWORK',
+      'OWNER_CHANGED' || 'WAITING_AUTH' => 'WAITING_AUTH',
+      _ => 'WAITING_POLICY',
+    };
+  }
+  return switch (phase) {
+    'complete' => 'COMPLETED',
+    'cancelled' => 'CANCELED',
+    'pausing' => 'PAUSE_REQUESTED',
+    'waiting_auth' || 'waiting_permission' => 'WAITING_AUTH',
+    'waiting_network' => 'WAITING_NETWORK',
+    'waiting_policy' => 'WAITING_POLICY',
+    'retry_scheduled' => 'RETRY_SCHEDULED',
+    'failed_permanent' => 'FAILED_PERMANENT',
+    'failed' => 'FAILED_RETRYABLE',
+    'preparing' => 'RUNNING',
+    _ => 'QUEUED',
+  };
 }
 
 class QueueEnqueueResult {
@@ -169,6 +210,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
           ].contains(w['phase']) ||
           (w['phase'] == 'paused' &&
               w['pauseReason'] != 'WAITING_POLICY' &&
+              w['pauseReason'] != 'WAITING_NETWORK' &&
+              w['pauseReason'] != 'WAITING_AUTH' &&
               w['pauseReason'] != 'LIFECYCLE_PAUSED') ||
           w['pauseReason'] == 'USER_PAUSED' ||
           (w['retryAtMs'] as int? ?? 0) >
@@ -282,6 +325,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
       if (values.containsKey('bytes')) {
         work['lastProgressAtMs'] = DateTime.now().millisecondsSinceEpoch;
       }
+      work['state'] = alchemistCanonicalState(work);
       v['_work'] = work;
       await tx.update(
         'app_settings',
@@ -476,8 +520,18 @@ class AlchemistWorkQueue extends ChangeNotifier {
     });
     await refresh();
     if (result.phase != 'complete') {
-      await nativeControl?.call(name, 'resume');
-      await _schedule();
+      try {
+        await nativeControl?.call(name, 'resume');
+        await _schedule();
+      } catch (e) {
+        final failure = AlchemistFailure.from(e);
+        await _patch(name, {
+          'phase': failure.status == 401 ? 'waiting_auth' : 'waiting_policy',
+          'code': failure.status == 401 ? 'WAITING_AUTH' : 'WAITING_POLICY',
+          'message': failure.message,
+        });
+        rethrow;
+      }
     }
     AlchemistDiagnostics.instance.stage('RESUME_ALLOWED');
     return result;
@@ -745,6 +799,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? 'diary_committed'
                 : name.startsWith('alchemist_download:')
                 ? 'installed'
+                : name.startsWith('alchemist_read_sync_queue:')
+                ? 'reader_synced'
                 : 'catalog_committed',
             if (!stop() && !_cancelled.contains(name))
               'revision': queueRevision((await _read(name)) ?? value),

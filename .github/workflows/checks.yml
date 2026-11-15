@@ -958,7 +958,7 @@ jobs:
           for EDITION in master client; do
             EXTRA=()
             if [ "$EDITION" = client ]; then EXTRA+=(--dart-define=SULFI_EDITION=client); fi
-            flutter build apk --debug --target=test_driver/transfer_probe.dart --dart-define=SULFI_TRANSFER_PROBE=true "${EXTRA[@]}"
+            flutter build apk --debug --target-platform=android-x64 --target=test_driver/transfer_probe.dart --dart-define=SULFI_TRANSFER_PROBE=true "${EXTRA[@]}"
             cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-probe-apks/$EDITION.apk"
           done
           cd android

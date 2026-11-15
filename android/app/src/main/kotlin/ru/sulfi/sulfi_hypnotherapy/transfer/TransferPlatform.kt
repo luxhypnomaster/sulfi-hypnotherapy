@@ -158,6 +158,7 @@ object TransferPlatform {
                     "start" -> { require(!worker); result.success(startUser(activity.get() ?: c)) }
                     "control" -> { command(c, m["name"] as String, m["action"] as String, m["ownerBinding"] as String); result.success(null) }
                     "controls" -> result.success(controls(c, m["ownerBinding"] as String))
+                    "authorityHint" -> { require(worker); result.success(mapOf("ownerBinding" to lease(c)?.optString("ownerBinding"))) }
                     "lease" -> {
                         require(worker)
                         val v = lease(c)
@@ -239,9 +240,9 @@ object TransferRuntime {
         preferences.edit().putInt("initFailures", failures).commit()
         val newlyEnqueued = observedDispatch >= 0 && preferences.getLong("dispatchSeq", 0) > observedDispatch
         if ((retryAfter != null || newlyEnqueued) && failures < 5 && !preferences.getBoolean("needsUserStart", false)) TransferPlatform.recoverLater(c, if (newlyEnqueued) 30000L else retryAfter!!)
-        if (state == "WAITING_AUTH" || state == "WAITING_POLICY") {
+        if (state in listOf("WAITING_AUTH", "WAITING_POLICY", "WAITING_NETWORK")) {
             val manager = c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val pending = TransferPlatform.notify(c, mapOf("title" to "Передача сохранена", "label" to if (state == "WAITING_AUTH") "Откройте Сульфи и подтвердите Google-вход" else "Android отложил работу — откройте очередь"), false)
+            val pending = TransferPlatform.notify(c, mapOf("title" to "Передача сохранена", "label" to when (state) { "WAITING_AUTH" -> "Откройте Сульфи и подтвердите Google-вход"; "WAITING_NETWORK" -> "Ожидает сеть; задача и подтверждённые байты сохранены"; else -> "Android отложил работу — откройте очередь" }), false)
             manager.notify(TransferPlatform.NOTIFICATION + 1, pending)
         }
         (c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(TransferPlatform.NOTIFICATION)
@@ -263,7 +264,8 @@ class TransferJobService : JobService() {
         handler.removeCallbacks(budget)
         val userStop = Build.VERSION.SDK_INT >= 31 && p.stopReason == JobParameters.STOP_REASON_USER
         if (userStop) TransferPlatform.prefs(this).edit().putBoolean("needsUserStart", true).commit()
-        TransferRuntime.stop("WAITING_POLICY")
+        val networkStop = Build.VERSION.SDK_INT >= 31 && p.stopReason == JobParameters.STOP_REASON_CONSTRAINT_CONNECTIVITY
+        TransferRuntime.stop(if (networkStop) "WAITING_NETWORK" else "WAITING_POLICY")
         val interruptedRun = TransferRuntime.runId
         handler.postDelayed({ if (TransferRuntime.running && TransferRuntime.runId == interruptedRun) TransferRuntime.finish(if (userStop) null else 30000L) }, 3000L)
         // UIDT user stop is not circumvented. Force Stop is governed by Android.

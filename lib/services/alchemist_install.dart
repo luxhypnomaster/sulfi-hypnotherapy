@@ -404,6 +404,9 @@ class AlchemistInstall {
       (r) => r.key.content.type == ContentType.track,
     )) {
       check();
+      // Two logical revisions can share identical immutable bytes. Count and
+      // transfer each content hash once, matching the unique-size total.
+      if (files.containsKey(r.payload['contentHash'])) continue;
       files[r.payload['contentHash']] = await downloadAsset(
         descriptors[r.key.token]!,
         interrupted: cancelled,

@@ -9,8 +9,9 @@ def adb(*args,check=True):
  return r.stdout
 def tree():
  raw=adb('shell','am','instrument','-w','-e','op','dump','org.alchemist.p0probe/.Probe')
- m=re.search(r'INSTRUMENTATION_RESULT: payload=([^\s]+)',raw);assert m,'NO_UI_XML'
- return list(ET.fromstring(base64.b64decode(m[1])).iter('node'))
+ (OUT/'latest-instrumentation.txt').write_text(raw[-5000:])
+ m=re.search(r'INSTRUMENTATION_RESULT: payload=([^\s]+)',raw)
+ return list(ET.fromstring(base64.b64decode(m[1])).iter('node')) if m else []
 def click(text,wait=20):
  until=time.monotonic()+wait
  while time.monotonic()<until:
@@ -38,7 +39,12 @@ def wait_bytes(field,minimum,timeout):
   time.sleep(2)
  raise AssertionError('NO_REMOTE_PROGRESS:'+field+':'+json.dumps(stats()))
 def launch(pkg):
- adb('shell','am','start','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity');time.sleep(3)
+ (OUT/'latest-launch.txt').write_text(adb('shell','am','start','-W','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity'))
+ until=time.monotonic()+60
+ while time.monotonic()<until:
+  if any('CONTROLLED18' in (n.get('text','')+' '+n.get('content-desc','')) for n in tree()):return
+  time.sleep(1)
+ raise AssertionError('FIXTURE_FIRST_FRAME_NOT_READY_WITHIN_60S')
 try:
  ready=json.loads(pathlib.Path('.task17-sdk-ready.json').read_text());assert ready['version']=='37.2.12' and ready['validatedHeadlessVersion']
  adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
@@ -57,8 +63,9 @@ try:
  final=wait_bytes('verifiedBytes',15*1024*1024,210)
  # Wait for actual catalog commit, not just acknowledged media bytes.
  until=time.monotonic()+40
- while time.monotonic()<until and stats()['calls'].get('catalog.publish',0)<1:time.sleep(1)
- assert stats()['calls'].get('catalog.publish',0)>=1,'NO_CATALOG_COMMIT_REQUEST'
+ while time.monotonic()<until and stats().get('publishedPrograms',0)<1:time.sleep(1)
+ assert stats().get('publishedPrograms',0)==1,'NO_UNIQUE_CONFIRMED_CATALOG_COMMIT'
+ CASES.append({'case':'master_confirmed_unique_program_publication','status':'PASS','proof':stats()['publishedPrograms'],'Google':'NOT_RUN'})
  adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');launch(pkg)
  click('READ INVENTORY');time.sleep(3);shot('master-after-background')
  pkg=packages['client'];launch(pkg);click('DOWNLOAD AND DESTROY UI');before=wait_bytes('downloaded',262144,60)
@@ -71,7 +78,10 @@ try:
  CASES.append({'case':'client_background_atomic_program_install_3_real_wav_files_hashes_module_template','status':'PASS','Google':'NOT_RUN','heardByHuman':'NOT_RUN'})
 except Exception as e:
  CASES.append({'case':'native_probe_failure','status':'FAIL','type':type(e).__name__,'reason':str(e)[-1200:]});shot('failure')
- try:(OUT/'crash.txt').write_text(adb('logcat','-d','-b','crash','-t','50',check=False))
+ try:
+  (OUT/'crash.txt').write_text(adb('logcat','-d','-b','crash','-t','50',check=False))
+  (OUT/'fixture-runtime.txt').write_text(adb('logcat','-d','-s','flutter','AndroidRuntime','ActivityManager','Flutter','FlutterJNI',check=False)[-28000:])
+  (OUT/'fixture-activities.txt').write_text(adb('shell','dumpsys','activity','activities',check=False)[-12000:])
  except Exception:pass
 finally:
  result={'source':os.environ['GITHUB_SHA'],'scope':'CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY','Google':'NOT_RUN','GAS':'NOT_TOUCHED','ownerPhones':'NOT_RUN','actualCandidateUpgrade':'NOT_RUN','cases':CASES}

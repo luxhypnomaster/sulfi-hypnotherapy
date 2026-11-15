@@ -76,6 +76,7 @@ class AlchemistApi {
             'entry.publish',
             'entry.unpublish',
             'entry.archive',
+            'entry.deleteSoft',
             'entry.restore',
             'reads.merge',
             'sync.push',
@@ -243,7 +244,11 @@ class AlchemistApi {
         }
         _checkInterrupted();
         if (beforeRetry != null) {
-          await beforeRetry().timeout(callTimeout - watch.elapsed);
+          final remaining = callTimeout - watch.elapsed;
+          if (remaining <= Duration.zero) {
+            throw AlchemistFailure.from(TimeoutException('deadline'));
+          }
+          await beforeRetry().timeout(remaining);
           checkScope(false);
         } else if (parameters['requestId'] is String) {
           final remaining = callTimeout - watch.elapsed;

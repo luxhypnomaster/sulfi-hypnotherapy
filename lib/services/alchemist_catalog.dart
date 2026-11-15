@@ -455,6 +455,13 @@ class AlchemistCatalog {
     if (result['immutableRevisionId'] != null) {
       draft['remoteRevision'] = result['immutableRevisionId'];
     }
+    draft['lastReceipt'] = {
+      'operation': pending['operation'],
+      'requestId': pending['parameters']['requestId'],
+      'etag': result['etag'],
+      'publicationState': result['publicationState'],
+      'confirmedAtMs': DateTime.now().millisecondsSinceEpoch,
+    };
     draft.remove('pending');
     await _store(draft);
     return result;
@@ -472,12 +479,22 @@ class AlchemistCatalog {
       );
       return;
     }
+    final operation = 'catalog.$action';
+    final recoveredSame = draft['pending']?['operation'] == operation;
     if (draft['pending'] != null) await _recover(draft);
-    final result = await _mutation(draft, 'catalog.$action', {
-      'catalogItemId': draft['catalogItemId'],
-      'ifMatch': draft['etag'],
-    });
-    draft['status'] = result['publicationState'];
+    // Resume the persisted intent after an uncertain reply / process death.
+    // Do not manufacture a fresh requestId for an already receipted transition.
+    final last = draft['lastReceipt'];
+    if (!recoveredSame &&
+        !(last is Map &&
+            last['operation'] == operation &&
+            last['etag'] == draft['etag'])) {
+      await _mutation(draft, operation, {
+        'catalogItemId': draft['catalogItemId'],
+        'ifMatch': draft['etag'],
+      });
+    }
+    draft['status'] = draft['remoteStatus'];
     draft.remove('requestedAction');
     await _store(draft);
   }

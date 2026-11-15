@@ -56,7 +56,11 @@ void transferMain() {
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint('PROBE18_MAIN_STARTED_NO_GOOGLE');
   runApp(const MaterialApp(home: Controlled18()));
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) => debugPrint('PROBE18_FIRST_FRAME'),
+  );
 }
 
 class Controlled18 extends StatefulWidget {

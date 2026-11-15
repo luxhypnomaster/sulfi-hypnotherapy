@@ -61,6 +61,11 @@ class SessionController extends ChangeNotifier {
           await api.enqueueDurablePublication(entry, published: published);
           await cloudQueue.enqueue('alchemist_diary_queue:${entry.id}');
         };
+        diary?.enqueueCloudMutation = (entry, action) async {
+          await ensurePublicationIdentity();
+          await api.enqueueDurableMutation(entry, action);
+          await cloudQueue.enqueue('alchemist_diary_queue:${entry.id}');
+        };
         api.downloadInBackground = (descriptor, target) =>
             downloadAsset(descriptor, target: target);
       }

@@ -185,7 +185,7 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                     ),
                                   if (work['performance'] is Map)
                                     Text(
-                                      'Измеренные RPC: ${(work['performance']['byStage'] as Map).values.fold<int>(0, (n, v) => n + (v['count'] as int))} · ${work['performance']['confirmedBytesThisRun']} подтверждённых байт за этот запуск',
+                                      'Измеренные RPC: ${(work['performance']['byStage'] as Map).entries.where((e) => e.key.toString().endsWith(':complete') && !e.key.toString().startsWith('media.localHash:')).fold<int>(0, (n, e) => n + (e.value['count'] as int))} · ${work['performance']['confirmedBytesThisRun']} подтверждённых байт за этот запуск',
                                     ),
                                   if (alchemistFileProgress(work)
                                       case final progress?) ...[

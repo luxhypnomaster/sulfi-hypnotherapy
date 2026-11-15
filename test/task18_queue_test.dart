@@ -162,4 +162,62 @@ void main() {
       await f.close();
     }
   });
+  test(
+    '18 denied OS start is durable WAITING_AUTH/POLICY, never ghost RUNNING',
+    () async {
+      final f = await Fixture15.open();
+      final q = AlchemistWorkQueue(
+        db: f.db,
+        owner: () => 'same',
+        dispatch: () async =>
+            throw const AlchemistFailure('Нужен вход', 401, 'WAITING_AUTH'),
+        send: (_, _, _, _, _) async => fail('UI must not send'),
+      );
+      try {
+        await expectLater(
+          q.enqueueDownload('alchemist_download:auth', {'kind': 'media'}),
+          throwsA(isA<AlchemistFailure>()),
+        );
+        await q.refresh();
+        expect(q.rows.single['_work']['phase'], 'waiting_auth');
+        expect(q.rows.single['_work']['state'], 'WAITING_AUTH');
+        expect(q.rows.single['_work']['attempts'], 0);
+        expect(q.rows.single['download']['kind'], 'media');
+      } finally {
+        q.dispose();
+        await f.close();
+      }
+    },
+  );
+
+  test('18 additive canonical states distinguish system restrictions from user pause', () {
+    expect(
+      alchemistCanonicalState({
+        'phase': 'running',
+        'stage': 'server_verifying',
+      }),
+      'VERIFYING',
+    );
+    expect(
+      alchemistCanonicalState({'phase': 'running', 'stage': 'publishing'}),
+      'COMMITTING',
+    );
+    expect(
+      alchemistCanonicalState({'phase': 'paused', 'code': 'WAITING_POLICY'}),
+      'WAITING_POLICY',
+    );
+    expect(
+      alchemistCanonicalState({'phase': 'paused', 'code': 'USER_PAUSED'}),
+      'PAUSED_BY_USER',
+    );
+    expect(alchemistCanonicalState({'phase': 'cancelled'}), 'CANCELED');
+    expect(
+      alchemistCanonicalState({'phase': 'retry_scheduled'}),
+      'RETRY_SCHEDULED',
+    );
+    expect(
+      alchemistCanonicalState({'phase': 'failed_permanent'}),
+      'FAILED_PERMANENT',
+    );
+  });
 }

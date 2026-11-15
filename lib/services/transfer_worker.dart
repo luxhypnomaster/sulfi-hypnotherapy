@@ -34,6 +34,10 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
   String? epoch, owner;
   bool stopped = false, draining = false, wake = false;
   String? stopReason;
+  String pauseReason() =>
+      const ['OWNER_CHANGED', 'WAITING_NETWORK'].contains(stopReason)
+      ? stopReason!
+      : 'WAITING_POLICY';
   var observedDispatch = -1;
   Future<Map<String, dynamic>> lease() async {
     try {
@@ -109,11 +113,7 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       stopped = true;
       stopReason =
           (call.arguments as Map?)?['reason'] as String? ?? 'WAITING_POLICY';
-      await queue?.pauseAll(
-        reason: stopReason == 'OWNER_CHANGED'
-            ? 'OWNER_CHANGED'
-            : 'WAITING_POLICY',
-      );
+      await queue?.pauseAll(reason: pauseReason());
     } else if (call.method == 'control') {
       final m = Map<String, dynamic>.from(call.arguments as Map);
       if (m['action'] == 'pause' || m['action'] == 'cancel') {
@@ -130,9 +130,13 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
   int? retryAfter;
   String completion = 'COMPLETED';
   try {
-    final authority = await lease();
-    epoch = authority['epoch'];
-    owner = authority['ownerBinding'];
+    // This hint grants no network authority; it only scopes a durable waiting
+    // status when an expired/inaccessible lease fails before whoami.
+    owner =
+        (await channel.invokeMapMethod<String, dynamic>(
+              'authorityHint',
+            ))?['ownerBinding']
+            as String?;
     final paths = await channel.invokeMapMethod<String, dynamic>('paths');
     final root = Directory(paths!['support'] as String);
     final path = p.join(root.path, 'library.sqlite');
@@ -151,6 +155,9 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
     if (version != 9) {
       throw const FormatException('Требуется обычное обновление приложения');
     }
+    final authority = await lease();
+    epoch = authority['epoch'];
+    owner = authority['ownerBinding'];
     final policy = AccessPolicy(database: database);
     await policy.load();
     final repository = SqliteLibraryRepository(database);
@@ -291,11 +298,7 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       unawaited(notice().catchError((Object _) {}));
     });
     if (stopped) {
-      await queue.pauseAll(
-        reason: stopReason == 'OWNER_CHANGED'
-            ? 'OWNER_CHANGED'
-            : 'WAITING_POLICY',
-      );
+      await queue.pauseAll(reason: pauseReason());
     }
     await drain();
     await queue.refresh();
@@ -311,7 +314,10 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
                 'waiting_policy',
               ].contains(r['_work']?['phase']) ||
               r['_work']?['phase'] == 'paused' &&
-                  r['_work']?['pauseReason'] == 'WAITING_POLICY'),
+                  const [
+                    'WAITING_POLICY',
+                    'WAITING_NETWORK',
+                  ].contains(r['_work']?['pauseReason'])),
     );
     if (waiting.isNotEmpty && stopReason != 'OWNER_CHANGED') {
       retryAfter = waiting
@@ -325,12 +331,43 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
     }
     if (queue.rows.any((r) => r['_work']?['phase'] == 'waiting_auth')) {
       completion = 'WAITING_AUTH';
+    } else if (queue.rows.any(
+      (r) => alchemistCanonicalState(r['_work']) == 'WAITING_NETWORK',
+    )) {
+      completion = 'WAITING_NETWORK';
+    } else if (queue.rows.any(
+      (r) => alchemistCanonicalState(r['_work']) == 'WAITING_POLICY',
+    )) {
+      completion = 'WAITING_POLICY';
     }
   } catch (e) {
     completion = e is AlchemistFailure && e.status == 401
         ? 'WAITING_AUTH'
         : 'WAITING_POLICY';
-    if (AlchemistFailure.from(e).retryable) retryAfter = 60000;
+    final failure = AlchemistFailure.from(e);
+    if (failure.retryable) retryAfter = 60000;
+    if (queue == null && database != null && owner != null) {
+      final waitingQueue = AlchemistWorkQueue(
+        db: database,
+        owner: () => owner,
+        worker: true,
+        send: (_, _, _, _, _) async {},
+      );
+      try {
+        await waitingQueue.refresh();
+        // Failed startup must never rewrite old USER_PAUSED or another owner.
+        for (final row in waitingQueue.rows) {
+          final w = row['_work'] as Map;
+          if (w['executor'] == 'android18' &&
+              w['autoResume'] == true &&
+              const ['queued', 'preparing', 'running'].contains(w['phase'])) {
+            await waitingQueue.pause(row['_name'], reason: completion);
+          }
+        }
+      } finally {
+        waitingQueue.dispose();
+      }
+    }
     // No personal payload/error text/credential is logged. Existing files stay.
   } finally {
     heartbeat?.cancel();

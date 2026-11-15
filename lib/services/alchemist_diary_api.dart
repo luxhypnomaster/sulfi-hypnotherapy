@@ -460,6 +460,13 @@ class AlchemistDiaryApi extends DiaryApi {
       state['contentDirty'] = true;
     }
     if (p['operation'] == 'entry.publish') state['contentDirty'] = false;
+    state['lastReceipt'] = {
+      'operation': p['operation'],
+      'requestId': p['parameters']['requestId'],
+      'etag': result['etag'],
+      'status': result['status'],
+      'confirmedAtMs': DateTime.now().millisecondsSinceEpoch,
+    };
     state.remove('pending');
     await _save(id, state);
     return result;
@@ -698,8 +705,15 @@ class AlchemistDiaryApi extends DiaryApi {
     final e = entry;
     if (!session.valid) throw const DiaryApiException('Вход истёк');
     final state = await _state(e.id);
+    final samePending = state['pending']?['operation'] == 'entry.deleteSoft';
     if (state['pending'] != null) await _recover(e.id, state);
-    await _mutate(e.id, state, 'entry.deleteSoft', {});
+    final receipt = state['lastReceipt'];
+    if (!samePending &&
+        !(receipt is Map &&
+            receipt['operation'] == 'entry.deleteSoft' &&
+            receipt['etag'] == state['etag'])) {
+      await _mutate(e.id, state, 'entry.deleteSoft', {});
+    }
   }
 
   @override
@@ -736,6 +750,7 @@ class AlchemistDiaryApi extends DiaryApi {
     DiaryEntry entry, {
     bool? published,
     bool durable = false,
+    String? action,
   }) async {
     final owner = author.ownerBinding;
     if (owner == null) {
@@ -746,7 +761,9 @@ class AlchemistDiaryApi extends DiaryApi {
         DiaryFailure.authorization,
       );
     }
-    final revision = _publicationRevision(entry, published);
+    final revision = action == null
+        ? _publicationRevision(entry, published)
+        : contentDigest({'entry': entry.toMap(), 'action': action});
     await db.transaction((tx) async {
       final name = 'alchemist_diary_queue:${entry.id}';
       final rows = await tx.query(
@@ -803,6 +820,7 @@ class AlchemistDiaryApi extends DiaryApi {
         'ownerBinding': owner,
         'entry': entry.toMap(),
         'published': published,
+        'requestedAction': ?action,
         'publicationRevision': revision,
         'status': 'pending',
         if (old?['_work'] != null) '_work': old!['_work'],
@@ -813,6 +831,13 @@ class AlchemistDiaryApi extends DiaryApi {
         'value': jsonEncode(value),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     });
+  }
+
+  Future<void> enqueueDurableMutation(DiaryEntry entry, String action) {
+    if (action != 'deleteSoft') {
+      throw const FormatException('Неизвестное действие');
+    }
+    return _enqueue(entry, durable: true, action: action);
   }
 
   Future<void> sendQueued(
@@ -869,7 +894,20 @@ class AlchemistDiaryApi extends DiaryApi {
         identity!,
         identityExpiresAt!,
       );
-      if (q['published'] == null) {
+      if (q['requestedAction'] == 'deleteSoft') {
+        await deleteEntry(e, session);
+        final state = await _state(e.id);
+        final checked = await author.call('entry.get', {'entryId': e.id});
+        if (checked['etag'] != state['etag'] ||
+            checked['status'] != 'archived') {
+          throw const FormatException('Удаление не подтверждено сервером');
+        }
+        // A confirmed remote archive does not erase the author's local text or media.
+        await _commitLocal(
+          e.copyWith(status: DiaryStatus.unpublished),
+          await _queued(e.id),
+        );
+      } else if (q['published'] == null) {
         await saveAuthorDraft(e, session);
       } else {
         await publish(e, session, published: q['published']);

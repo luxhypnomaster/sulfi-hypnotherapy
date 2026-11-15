@@ -19,7 +19,7 @@ const catalog=ctx.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0)
 const diary=ctx.AlchemistDiary.create(catalog,store,{uuid:services.uuid,now:()=>new Date(0).toISOString()});
 const operations=ctx.AlchemistOperations.create(store,catalog,services,{getProperty:k=>k==='ALCHEMIST_OWNER_SUB'?'owner':null,setProperty:()=>{throw Error('READONLY_HARNESS')}});
 const server=createServer(async(req,res)=>{try{
- if(req.method==='GET'&&req.url==='/stats'){res.end(JSON.stringify({uploaded,downloaded,verifiedBytes,calls,blobs:blobs.size,classification:'CONTROLLED_NATIVE_NO_GOOGLE_NO_GAS'}));return;}
+ if(req.method==='GET'&&req.url==='/stats'){res.end(JSON.stringify({uploaded,downloaded,verifiedBytes,calls,publishedPrograms:store.items().filter(x=>x.state==='published'&&x.type==='template').length,blobs:blobs.size,classification:'CONTROLLED_NATIVE_NO_GOOGLE_NO_GAS'}));return;}
  if(req.headers['x-controlled-transfer18']!=='fixture-only')throw Object.assign(Error('CONTROLLED_HEADER_REQUIRED'),{status:403});
  let raw='';for await(const part of req)raw+=part;const q=JSON.parse(raw),actor=q.credential?.startsWith('CONTROLLED_OWNER_18_')?{sub:'owner',roles:['owner'],exp:Math.floor(Date.now()/1000)+3600}:q.credential?.startsWith('CONTROLLED_CLIENT_18_')?{sub:'controlled-client',roles:['client'],exp:Math.floor(Date.now()/1000)+3600}:null;
  calls[q.operation]=(calls[q.operation]||0)+1; if(['media.uploadChunk','media.downloadChunk'].includes(q.operation)&&latency)await sleep(latency);
