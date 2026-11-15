@@ -1,0 +1,26 @@
+ID,Criterion,CODE,EMULATOR,OWNER_LIVE,Status,Evidence
+QA-01,"MASTER: upload 15MB content продолжается Home/другое приложение ≥несколько минут без ручного Resume, actual server bytes увеличиваются при выключенном экране; подтверждён commit.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-02,"CLIENT: download multi-file program продолжается Home/lock, после завершения доступен offline и manifest/hash проверены.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-03,"MASTER DOWNLOAD: существующий реальный MASTER download path работает в фоне; если такого ещё нет — not_applicable с доказанным code path review, generic adapter покрыт тестами.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-04,"CLIENT UPLOAD: существующий реальный разрешённый CLIENT upload path работает в фоне; если отсутствует — not_applicable с доказанным inventory, generic adapter покрыт тестами.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-05,Одновременные upload/download в двух разных приложениях на двух устройствах не блокируют друг друга и не смешивают owner/role.,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-06,"Отключение Wi‑Fi, затем восстановление: exact remote acknowledged bytes сохраняются, нет дубликатов, допустимые ретраи.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-07,"Переход мобильная сеть↔Wi‑Fi с выбранными metered правилами, без бесконечного busy retry и с корректным уведомлением.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-08,"Закрытие Flutter Activity / cold restart: job остаётся OS/DB-backed, больше не USER_PAUSED по lifecycle.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-09,"Блокировка экрана на нескольких типах Android OEM: продолжение там, где разрешает ОС; при system restriction честная WAITING_POLICY и автоматический допустимый resume.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-10,"Настоящая ручная «Пауза» → не передавать байты, статус PAUSED_BY_USER; приложение Home без ручной паузы → статус не PAUSED_BY_USER.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-11,Ручная отмена upload/download — stop job; cancellation не удаляет уже confirmed server publication/личные исходники; unpublish отдельно.,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-12,"Убить процесс/перезапустить телефон/обновить APK поверх: state recovery без дублей, data integrity старых программ, историй и очередей.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-13,"Первоначальный Google sign-in, истечение токена, отказ auth: WAITING_AUTH, не перекладывать owner, не требовать повторных интерактивных запросов без причины.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-14,"Logout и вход другим аккаунтом: чужие очередь и данные не видны/не исполняются, вернувшийся старый owner восстанавливает разрешённое.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-15,Повторный HTTP/прерванный commit: серверный receipt и client final state согласованы exactly once по idempotency keys.,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-16,"Отсутствует range/chunk support у сервера: honest capability report and clear restricted fallback, никакого ложного «resume 95%» или тихого повторного полного скачивания.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-17,"Локально недостаточно места/повреждён хеш: нет install success, транзакция откатывается, корректная ошибка.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-18,"Длительная задача на API34/35/36: проверены разрешения/foreground notification/types, system quotas/timeouts и отсутствие ANR, OS ограничения документированы.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-19,"Логи и UI: bytes X/Y, скорость, время последнего прогресса, stage/HTTP status/receipt; никаких токенов и пользовательских аудио/текстов.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-20,"Никакого бесконечного опроса и сетевого retry-loop при ошибке, no needless background wakeups.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-21,"Прогон тех же сценариев на крупном bundle 3+ файла, не только single upload 1KB; подтверждённые bytes match.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-22,"Проверить separate APP update и старые личные данные: MASTER27→candidate сохраняет owner очередь, CLIENT27→candidate сохраняет установленные треки/модули.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-23,При background системном запрете/Force Stop нельзя обещать невозможное; после восстановления разрешённых условий user-visible safe resume без data loss.,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-24,Performance tracing: результаты по реальной синтетической сети фиксируют upload vs server verification durations; ускорение не заявлять без измерений.,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
+QA-25,"Реальные испытания на двух телефонах и оба направления: file transfer и offline/audio доказаны людьми, не только успешной Flutter unit test.",NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,No result inferred from Task17
