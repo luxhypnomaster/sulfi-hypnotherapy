@@ -1,0 +1,49 @@
+{
+  "classification": "DISPOSABLE_CONTROLLED_NATIVE_READONLY_COPY",
+  "schema": 9,
+  "integrity": "ok",
+  "queues": {
+    "alchemist_download:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:install:3fa8ba453a89615d692ccbdc9d269bc4:9bd5c9a91f68743a73e14cbe25824c8e11daf6cecf4ff6574091de0aef8b4cf0": {
+      "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+      "work": {
+        "phase": "cancelled",
+        "state": "CANCELED",
+        "stage": "transferring",
+        "code": "CANCELLED",
+        "pauseReason": "USER_PAUSED",
+        "taskId": "4cdd2375d6f4c7d68d425cfbe59eec95",
+        "revision": "8f23fbd15ab9ed57f257316c869fedd86f6de55b5648c5cd234de5daf0198f2a",
+        "bytes": 1835008,
+        "totalBytes": 15728646,
+        "attempts": 2,
+        "runnerEpoch": "67b95f2c0161a85eef016b465d76fafa",
+        "executor": "android18",
+        "autoResume": true,
+        "networkRetries": 0,
+        "jobRetries": 2,
+        "retryAtMs": 1794764892141
+      },
+      "pending": {
+        "operation": null,
+        "requestId": null,
+        "ifMatch": null
+      },
+      "lastReceipt": null
+    }
+  },
+  "uploads": {},
+  "downloadCheckpoints": {
+    "alchemist_download_checkpoint:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:asset-1:aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8": {
+      "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+      "assetRevisionId": "asset-1",
+      "sha256": "aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8",
+      "byteLength": 5242880,
+      "offset": 2097152,
+      "verified": null,
+      "receipt": null,
+      "recordedChunks": 8
+    }
+  },
+  "assets": [],
+  "sourceFiles": {}
+}

@@ -114,11 +114,17 @@ object TransferPlatform {
     }
     private fun scheduleExtras() = PersistableBundle().apply { putString("transferScheduleNonce", java.util.UUID.randomUUID().toString()) }
     fun recoverLater(c: Context, delay: Long) {
-        if (lease(c) == null) return
-        val job = JobInfo.Builder(RECOVERY, ComponentName(c, TransferJobService::class.java)).setExtras(scheduleExtras())
-            .setRequiredNetworkType(if (lease(c)?.optString("networkPolicy") == "unmetered") JobInfo.NETWORK_TYPE_UNMETERED else JobInfo.NETWORK_TYPE_ANY).setPersisted(true)
-            .setMinimumLatency(delay.coerceIn(30000L, 900000L)).setBackoffCriteria(30000L, JobInfo.BACKOFF_POLICY_EXPONENTIAL).build()
-        (c.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler).schedule(job)
+        val authority = lease(c) ?: return
+        val network = c.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val unmetered = authority.optString("networkPolicy") == "unmetered"
+        val policy = recoverySchedule(delay, network.activeNetwork != null, network.isActiveNetworkMetered, unmetered)
+        val builder = JobInfo.Builder(RECOVERY, ComponentName(c, TransferJobService::class.java)).setExtras(scheduleExtras())
+            .setRequiredNetworkType(if (unmetered) JobInfo.NETWORK_TYPE_UNMETERED else JobInfo.NETWORK_TYPE_ANY).setPersisted(true)
+            .setMinimumLatency(policy.minimumMs).setBackoffCriteria(30000L, JobInfo.BACKOFF_POLICY_EXPONENTIAL)
+        // A ready regular recovery may otherwise remain batched indefinitely
+        // after process death. Deadline is a standard OS hint, not an exemption.
+        policy.deadlineMs?.let { builder.setOverrideDeadline(it) }
+        (c.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler).schedule(builder.build())
     }
     fun startUser(c: Context): String {
         require(lease(c) != null)
@@ -130,7 +136,7 @@ object TransferPlatform {
         }
         prefs(c).edit().putLong("dispatchSeq", prefs(c).getLong("dispatchSeq", 0) + 1).putInt("initFailures", 0).commit()
         if (TransferRuntime.running) { TransferRuntime.channel?.invokeMethod("wake", null); return "RUNNING" }
-        recoverLater(c, 600000L) // Persistent crash watchdog; canceled when no runnable work remains.
+        recoverLater(c, 120000L) // Persistent crash watchdog; canceled when no runnable work remains.
         if (Build.VERSION.SDK_INT >= 34) {
             val scheduler = c.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             if (!scheduler.canRunUserInitiatedJobs()) return "WAITING_POLICY"
@@ -279,13 +285,13 @@ class TransferJobService : JobService() {
                     if (ownership.owns(key, run) && TransferRuntime.runId == run) TransferRuntime.stop("WAITING_POLICY")
                 }
                 budgets[key] = budget
-                handler.postDelayed(budget, 90000L)
+                handler.postDelayed(budget, 480000L)
             }
         } else if (p.jobId == TransferPlatform.RECOVERY && TransferRuntime.running) {
             // A long UIDT run consumed the crash watchdog, not its work. Re-arm
             // after this non-owning invocation returns; never stop the owner.
             handler.post {
-                if (TransferRuntime.running && !TransferPlatform.prefs(this).getBoolean("needsUserStart", false)) TransferPlatform.recoverLater(this, 600000L)
+                if (TransferRuntime.running && !TransferPlatform.prefs(this).getBoolean("needsUserStart", false)) TransferPlatform.recoverLater(this, 120000L)
             }
         }
         return started

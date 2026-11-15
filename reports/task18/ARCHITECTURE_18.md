@@ -31,3 +31,6 @@ G0 завершён до implementation. Контролируемый review: na
 ## Откат
 
 Не Android downgrade. Сохранять APK27 и оригинальные checkpoints, не менять их формат разрушительно. При regression остановить executor, сохранять файлы/ledger/DB и сделать исправленный versionCode>28. Новые поля позволяют старому коду игнорировать extras, но APK27 не обещается как безопасная установка поверх28. Никакой миграции настоящей базы владельца при разработке.
+
+## Conditional recovery deadline after native a894 cold-failure
+An OS-owned persistent2minute watchdog exists onlywhile actual transfers are active. A normalreadyjob may otherwise remain batched afterprocessdeath. If networkpolicy currentlyallows, standardoverrideDeadline=minimumLatency+10sec bounds normalbatch eligibility; Androidmaystilldefer underquotas/restriction/stoppedstate. Network/unmetered policy is rechecked by the worker beforeHTTP because deadlinecanoverride jobconstraints. Offline/metered policywait has nodeadline, hence no endlessdeadlinetimerpoll. Recoveryrun has8mincooperativebudget belowordinary10minwindow; OSstopcancomeearlier and preserves checkpoints. Nonowningwatchdog cannotstop/pause duplicateanexecutor. This is not expedited/FGS-start-from-background, force-run, exactalarm or force-stopbypass. Native/source tests mustverify currentbytes beforeissuance.

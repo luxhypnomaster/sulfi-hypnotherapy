@@ -34,13 +34,11 @@
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Read actual fresh verify/candidate/native jobs43740142417 and full35 probe43740145687; retain SHA evidence",
-    "No reuse19 after production Dart changes",
-    "On full35 success advance cached-probe KNOWN to actually compiled a894 source, then test33/34/36 and legacy-only from same cache without rebuild",
-    "Separate probe concurrency scopes before overlapping full34 and legacy34 (currently sameAPI cancels)",
-    "Actual normal MASTER andCLIENT27\u219228 gates needPASS current source, no old59 reuse",
-    "Update delivery tool source+digests only from actual new manifest and six real native gates; no upload before gates",
-    "Same private Drive report IDs/readback; no GAS/main/OAuth/ACL/signing/userdata changes"
+    "Commit new scheduling/network gate and run fresh full/candidate + API34 process gate first",
+    "Do not issue a894 despite other passes; no newPID means no DB/bootstrap was attempted in failed case",
+    "After new API34 passes reuse exact new fixture for33/35/36/legacy; all signed-pair native upgrades required current source",
+    "Never combine receipts from different source to bypass six delivery gates",
+    "Keep GAS6/main/OAuth/ACL/signing/userdata preserved; update same private Drive report IDs"
   ],
   "historicalCeaPair": "SUPERSEDED_DO_NOT_ISSUE",
   "currentNativeSafety": {
@@ -60,10 +58,7 @@
     "candidateJob": "SUCCESS",
     "upgradeJobs": "BLOCKED_BEFORE_BASELINE_SYSTEM_UI_ANR"
   },
-  "activeRuns": {
-    "fresh_full_and_candidates_upgrades": 43740142417,
-    "fresh_api35_full": 43740145687
-  },
+  "activeRuns": {},
   "api36": {
     "run": 43732895132,
     "status": "PASS10_CONTROLLED"
@@ -82,5 +77,35 @@
   "sqliteDiagnosis": "NATIVE_SOURCE_OVERLAY_TWO_COMMITS_ROWS2_INTEGRITY_OK; default-timeout assertion made run43739426806 overallFAIL; source promoted, real-app regression pending",
   "candidateSourcePending": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
   "schedulerJVMInvariants": 5,
-  "vendorStorageGuard": "ORIGINAL16G_SHA_UNCHANGED"
+  "vendorStorageGuard": "ORIGINAL16G_SHA_UNCHANGED",
+  "existingPairA894": "QUARANTINED_COLD_RECOVERY34_FAILED_NO_ISSUE",
+  "currentSourceState": "NEW_CONDITIONAL_DEADLINE_2MIN_WATCHDOG_8MIN_BUDGET_AND_NETWORK_GATE_NOT_YET_BUILT",
+  "a894Results": {
+    "fullAndNormalUpgrades": {
+      "run": 43740142417,
+      "status": "SUCCESS",
+      "masterCases": 15,
+      "clientCases": 13
+    },
+    "api33": {
+      "run": 43742072087,
+      "status": "SUCCESS10"
+    },
+    "api35": {
+      "run": 43740145687,
+      "status": "SUCCESS10"
+    },
+    "api36": {
+      "run": 43742077665,
+      "status": "SUCCESS10"
+    },
+    "legacy": {
+      "run": 43742080443,
+      "status": "SUCCESS_BOTH"
+    },
+    "api34": {
+      "run": 43742074940,
+      "status": "FAIL_NO_NEW_PID660SEC_OS_JOBS_READY_NOT_STARTED"
+    }
+  }
 }

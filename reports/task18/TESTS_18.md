@@ -65,3 +65,9 @@ All current evidence collector verifies byte count+SHA before writing. Controlle
 -43736599516 pool1 and43737027095 pool4 actual native controls both fail write with SQLiteDatabaseLockedException; no productionDB. Pool-only strategy rejected; implementation not applied.
 -43737664851 native busy-control inconclusive: childexit137/Killed, no receipt. Next43738174779 adds phase+guest kill diagnostics, no Flutter rebuild/signing/ownerdata. NativeJava/D8 compilation locally PASS.
 -Source59 APKs остаются карантинными историческими байтами. Новый foregroundfix в них отсутствует; выдача запрещена. CurrentCODE requires new build and all native gates.
+
+## Exact a894 results (historical after new scheduling change)
+-43740142417 overallSUCCESS:489Flutter/0fail,3CLIENT,47+24Node, contracts/analyze/format, bothnormalAPKs/signature/config, app+sqfliteJVMtasksPASS, actualMASTER27→28 15cases andCLIENT13casesPASS. Rawlogs confirmtest-artifactuploadFAILEDquota despite continue-on-error stepconclusion; no artifactURLs claimed.
+-Currenta894 fullNativeAPI33/35/36 SUCCESS10each:43742072087/43740145687/43742077665. Currentnativelegacy2PASS43742080443.
+-API34/43742074940 FAILcoldSIGKILL recovery: no newPID within660sec, jobsreadybutnotstarted. Beforefailure UI destroy/background/watchdog/notificationPause/coldexplicitResume PASS. No claim of current34 processlossPASS or owner-safepair.
+-New conditionaldeadline/watchdog2min/recovery8min/networkpreflight changes:4newKotlin tests added (NOT_RUN untilfreshCI), localFlutteranalyzePASS andforeground4testsPASS. Freshfull/native/build next; no mixing source receipts.

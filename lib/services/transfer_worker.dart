@@ -55,6 +55,15 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
         throw const FormatException('Authority changed');
       }
       final network = await channel.invokeMapMethod<String, dynamic>('network');
+      if (network?['available'] != true) {
+        throw const AlchemistFailure(
+          'Ожидает подключение к сети.',
+          0,
+          'WAITING_NETWORK',
+          DiaryFailure.network,
+          true,
+        );
+      }
       if (m['networkPolicy'] == 'unmetered' && network?['metered'] == true) {
         throw const AlchemistFailure(
           'Ожидает безлимитную сеть.',
@@ -401,10 +410,12 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
           : 'CANCELED';
     }
   } catch (e) {
-    completion = e is AlchemistFailure && e.status == 401
-        ? 'WAITING_AUTH'
-        : 'WAITING_POLICY';
     final failure = AlchemistFailure.from(e);
+    completion = failure.status == 401
+        ? 'WAITING_AUTH'
+        : failure.kind == DiaryFailure.network
+        ? 'WAITING_NETWORK'
+        : 'WAITING_POLICY';
     if (failure.retryable) retryAfter = 60000;
     if (queue == null && database != null && owner != null) {
       final waitingQueue = AlchemistWorkQueue(
