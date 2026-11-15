@@ -367,3 +367,5 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [ ] G3 actual background/pause/network/process/notification API34/35/36 и native MASTER27/CLIENT27→28 integrity gates.
 - [ ] Final exact-source verification, signed stable-key pair28, independent binary/SHA/config checks и ограниченная выдача.
 - [ ] OWNER: реальные Google/два телефона/OEM/слышимость; без fake PASS. Production GAS6/main/ACL/OAuth/signing не менять.
+
+- №18 continuation/source59: actual controlled API34 11PASS/API36 10PASS, exact CLIENT27→28 13PASS incl5supplemental legacy rows. MASTER pre-update semantics observer, API33 scheduler recovery and API35 SQLite contention unresolved; APK issuance remains BLOCKED. Isolated native two-handle causal experiment queued; no production migration/deploy/ACL/signing change. Reports updated in same private Task18 Drive folder and raw SHA readback verified.

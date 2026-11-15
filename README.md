@@ -1,6 +1,6 @@
 # №18 — P0: полноценная фоновая передача MASTER и CLIENT
 
-[ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor в разработке; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.
+[ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor реализованы: controlled API34 (11) и API36 (10) PASS, CLIENT27→28 (13) PASS. MASTER upgrade/API33 recovery/API35 SQLite остаются открытыми native gates; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.
 
 # №17 — native PASS, APK27 для приёмки
 

@@ -1,4 +1,4 @@
-"""Disposable Task18 native upgrade; UI-created materials, never owner data or SQL seeds."""
+"""Disposable Task18 upgrade: UI-created personal materials plus supplemental controlled queue rows; never owner data."""
 import base64, hashlib, io, json, os, pathlib, re, sqlite3, subprocess, tarfile, tempfile, time, xml.etree.ElementTree as ET
 OUT=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-evidence';OUT.mkdir(exist_ok=True)
 APK=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-apks'
@@ -114,7 +114,7 @@ def home():
  raise AssertionError('CANNOT_RETURN_HOME')
 def restart():adb('shell','am','force-stop',PKG);launch()
 def report():
- v={'fixture':'created through immutable baseline APK Android UI; no SQL/DB injection','baseline':BASE,'target':28,'edition':EDITION,'source':os.environ.get('TASK18_APK_SOURCE',os.environ.get('GITHUB_SHA')),'driverSource':os.environ.get('GITHUB_SHA'),'googleIdentities':'NOT_RUN_NO_REAL_ACCOUNT','ownerPhone':'NOT_TOUCHED','cases':CASES,'actions':ACTIONS,'inventories':inventories}
+ v={'fixture':'personal materials created through immutable27 Android UI; supplemental queue rows only via native SQLite fixture, no DB replacement','baseline':BASE,'target':28,'edition':EDITION,'source':os.environ.get('TASK18_APK_SOURCE',os.environ.get('GITHUB_SHA')),'driverSource':os.environ.get('GITHUB_SHA'),'googleIdentities':'NOT_RUN_NO_REAL_ACCOUNT','ownerPhone':'NOT_TOUCHED','cases':CASES,'actions':ACTIONS,'inventories':inventories}
  (OUT/'NATIVE_UI_UPGRADE_18.json').write_text(json.dumps(v,ensure_ascii=False,indent=2))
 def case(name,fn):
  print('NATIVE18_START='+name,flush=True)

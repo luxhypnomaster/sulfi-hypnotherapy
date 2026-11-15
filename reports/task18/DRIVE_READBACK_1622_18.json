@@ -1,0 +1,141 @@
+{
+  "checkpoint": "2379d7d",
+  "files": [
+    {
+      "name": "RESULT_18.md",
+      "metadata": {
+        "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "bytes": 6239,
+      "sha256": "a5a04e36e9f4080f3ea66fab4ad69410419a5a7d82c576e7eb34dda4f091f873",
+      "status": "RAW_BYTES_SHA_PARENT_OWNER_ONLY_PASS"
+    },
+    {
+      "name": "TESTS_18.md",
+      "metadata": {
+        "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "bytes": 10742,
+      "sha256": "43db808c9ff3b8b50984e6a28e06c637c6b688bde67ea83b551cfb6161e15ea7",
+      "status": "RAW_BYTES_SHA_PARENT_OWNER_ONLY_PASS"
+    },
+    {
+      "name": "PROGRESS.md",
+      "metadata": {
+        "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "bytes": 34239,
+      "sha256": "ce6406e1dafb4aabe01014bbea864593b03f48c1522f9af2a2de73b8c42ff5f0",
+      "status": "RAW_BYTES_SHA_PARENT_OWNER_ONLY_PASS"
+    },
+    {
+      "name": "ACCEPTANCE_18.csv",
+      "metadata": {
+        "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "bytes": 11172,
+      "sha256": "cf9967af30eb9169e12ac25e247d9839c0417a860cfc1dd854338228b04f59b5",
+      "status": "RAW_BYTES_SHA_PARENT_OWNER_ONLY_PASS"
+    }
+  ]
+}
