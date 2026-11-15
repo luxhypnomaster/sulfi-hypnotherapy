@@ -964,9 +964,10 @@ jobs:
         id: probe_cache18
         with:
           path: ${{ runner.temp }}/task18-probe-apks
-          key: task18-probe-v2-${{ hashFiles('lib/**', 'test_driver/**', 'third_party/**/*.java', 'third_party/**/pubspec.yaml', 'android/app/src/**', 'android/*.kts', 'android/app/*.kts', 'android/gradle/**', 'android/gradle.properties', 'pubspec.*', '.github/actions/setup-flutter/**', '.github/workflows/checks.yml') }}
+          key: task18-probe-v3-${{ hashFiles('lib/**', 'test_driver/**', 'third_party/**', 'assets/**', 'android/**', 'pubspec.*', '.github/actions/setup-flutter/**') }}
+          restore-keys: task18-probe-v2-65cdf64179b76048f259d36c39a8c51987f219b1d1f4a31790f141faf4325039
       - name: Build disposable testOnly packages, NEVER user candidates or existing signing
-        if: steps.probe_cache18.outputs.cache-hit != 'true'
+        if: steps.probe_cache18.outputs.cache-matched-key == ''
         run: |
           mkdir -p "$RUNNER_TEMP/task18-probe-apks"
           for EDITION in master client; do
@@ -979,13 +980,17 @@ jobs:
           ./gradlew --stop
           cd ..
           python3 scripts/task18/probe_apk_manifest.py create
+      - name: Verify exact cached app source and unchanged build recipe before execution
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/task18/verify_cached_probe_source.py
+      - name: Verify every fixture byte and exact testOnly package before any ADB install
+        run: python3 scripts/task18/probe_apk_manifest.py verify
       - uses: actions/cache/save@v4
         if: steps.probe_cache18.outputs.cache-hit != 'true'
         with:
           path: ${{ runner.temp }}/task18-probe-apks
           key: ${{ steps.probe_cache18.outputs.cache-primary-key }}
-      - name: Verify every fixture byte and exact testOnly package before any ADB install
-        run: python3 scripts/task18/probe_apk_manifest.py verify
       - name: Disposable host space and UI helper, no owner data or credentials
         run: |
           bash scripts/task16g/prepare_native_runner.sh
@@ -999,7 +1004,7 @@ jobs:
         with:
           api-level: ${{ inputs.task18_api }}
           arch: x86_64
-          target: google_apis
+          target: default
           profile: pixel_2
           cores: 2
           ram-size: 1536M

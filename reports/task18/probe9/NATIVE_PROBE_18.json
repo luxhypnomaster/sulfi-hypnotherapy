@@ -1,0 +1,17 @@
+{
+  "source": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+  "driverSource": "43999af5d77d3229b9bb3452c69a00591692769a",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "native_probe_failure",
+      "status": "FAIL",
+      "type": "AssertionError",
+      "reason": "NON_INFRASTRUCTURE_ANR_STOP:Process system isn't responding"
+    }
+  ]
+}

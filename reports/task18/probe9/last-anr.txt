@@ -1,0 +1,497 @@
+ACTIVITY MANAGER LAST ANR (dumpsys activity lastanr)
+  ANR time: Nov 15, 2026 11:57:43 AM
+  Reason: Input dispatching timed out (8d3dd2b Application Not Responding: com.android.systemui (server) is not responding. Waited 5000ms for FocusEvent(hasFocus=true))
+
+  mLastHomeActivityStartResult=3
+  mLastHomeActivityStartRecord:
+    packageName=com.google.android.apps.nexuslauncher processName=com.google.android.apps.nexuslauncher
+    launchedFromUid=0 launchedFromPackage=null launchedFromFeature=null userId=0
+    app=ProcessRecord{407a81e 1129:com.google.android.apps.nexuslauncher/u0a169}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.google.android.apps.nexuslauncher/.NexusLauncherActivity (has extras) }
+    rootOfTask=true task=Task{46dd02d #7 type=home I=com.google.android.apps.nexuslauncher/.NexusLauncherActivity}
+    taskAffinity=null
+    mActivityComponent=com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+    baseDir=/system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk
+    dataDir=/data/user/0/com.google.android.apps.nexuslauncher
+    stateNotNeeded=true componentSpecified=false mActivityType=home
+    compat={280dpi} labelRes=0x7f130067 icon=0x7f080291 theme=0x7f140014
+    mLastReportedConfigurations:
+      mGlobalConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.246 fontWeightAdjustment=0}
+      mOverrideConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=home mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.6 fontWeightAdjustment=0}
+    CurrentConfiguration={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=home mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.6 fontWeightAdjustment=0}
+    RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+    taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=fff1f0f7
+      backgroundColor=fff1f0f7 statusBarColor=0 navigationBarColor=0
+     backgroundColorFloating=fff1f0f7
+    launchFailed=false launchCount=1 lastLaunchTime=-30s618ms
+    mHaveState=false mIcicle=null
+    state=RESUMED delayedResume=false finishing=false
+    keysPaused=false inHistory=true idle=true
+    occludesParent=true noDisplay=false immersive=false launchMode=2
+    frozenBeforeDestroy=false forceNewConfig=false
+    mActivityType=home
+    mImeInsetsFrozenUntilStartInput=false
+    windows=[Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}, Window{c53915c u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}]
+    windowType=2 waitingToShow=true
+    mOccludesParent=true
+    overrideOrientation=SCREEN_ORIENTATION_NOSENSOR
+    requestedOrientation=SCREEN_ORIENTATION_NOSENSOR
+    mVisibleRequested=true mVisible=true mClientVisible=true reportedDrawn=true reportedVisible=true
+    mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=true lastAllDrawn=true)
+    startingData=null firstWindowDrawn=true mIsExiting=false
+    nowVisible=true lastVisibleTime=-16s812ms
+    connections={ConnectionRecord{df0a40b u0 CR IMP com.google.android.googlequicksearchbox/com.google.android.apps.gsa.nowoverlayservice.DrawerOverlayService:@8f177da flags=0x41}, ConnectionRecord{f027da3 u0 com.google.android.apps.nexuslauncher/com.android.quickstep.TouchInteractionService:@692d8d2 flags=0x0}}
+    resizeMode=RESIZE_MODE_RESIZEABLE
+    mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+    supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+    configChanges=0xdf3
+    neverSandboxDisplayApis=false
+    alwaysSandboxDisplayApis=false
+    areBoundsLetterboxed=false
+    mCameraCompatControlState=hidden
+    mCameraCompatControlEnabled=true
+  mLastStarter:
+    mCurrentUser=0
+    mLastStartReason=startHomeActivity: startDockOrHome:0:0:0
+    mLastStartActivityTimeMs=Nov 15, 2026 11:57:32 AM
+    mLastStartActivityResult=3
+    mStartActivity:
+      packageName=com.google.android.apps.nexuslauncher processName=com.google.android.apps.nexuslauncher
+      launchedFromUid=0 launchedFromPackage=null launchedFromFeature=null userId=0
+      app=null
+      Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.google.android.apps.nexuslauncher/.NexusLauncherActivity (has extras) }
+      rootOfTask=false task=null
+      taskAffinity=null
+      mActivityComponent=com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+      baseDir=/system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk
+      dataDir=/data/user/0/com.google.android.apps.nexuslauncher
+      stateNotNeeded=true componentSpecified=false mActivityType=home
+      compat={280dpi} labelRes=0x7f130067 icon=0x7f080291 theme=0x7f140014
+      mLastReportedConfigurations:
+        mGlobalConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h671dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.154 fontWeightAdjustment=0}
+        mOverrideConfig={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=undefined mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+      CurrentConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} s.1 ?fontWeightAdjustment}
+      RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+      pendingOptions=ActivityOptions(236392388), mPackageName=null, mAnimationType=-1, mStartX=0, mStartY=0, mWidth=0, mHeight=0, mLaunchDisplayId=0
+      launchFailed=false launchCount=0 lastLaunchTime=0
+      mHaveState=true mIcicle=null
+      state=INITIALIZING delayedResume=false finishing=false
+      keysPaused=false inHistory=false idle=false
+      occludesParent=true noDisplay=false immersive=false launchMode=2
+      frozenBeforeDestroy=false forceNewConfig=false
+      mActivityType=home
+      mImeInsetsFrozenUntilStartInput=false
+      windows=[]
+      windowType=2
+      mOccludesParent=true
+      overrideOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+      requestedOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+      mVisibleRequested=false mVisible=false mClientVisible=true reportedDrawn=false reportedVisible=false
+      resizeMode=RESIZE_MODE_RESIZEABLE
+      mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+      supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+      configChanges=0xdf3
+      neverSandboxDisplayApis=false
+      alwaysSandboxDisplayApis=false
+      mCameraCompatControlState=hidden
+      mCameraCompatControlEnabled=true
+    mIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.google.android.apps.nexuslauncher/.NexusLauncherActivity (has extras) }
+    mOptions=ActivityOptions(236392388), mPackageName=null, mAnimationType=-1, mStartX=0, mStartY=0, mWidth=0, mHeight=0, mLaunchDisplayId=0
+    mLaunchMode=LAUNCH_SINGLE_TASK    mLaunchFlags=0x10000100 mDoResume=true mAddingToTask=false mInTaskFragment=null
+
+-------------------------------------------------------------------------------
+
+Display #0 (activities from top to bottom):
+  * Task{ccf7753 #1 type=home U=0 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+    * Task{46dd02d #7 type=home I=com.google.android.apps.nexuslauncher/.NexusLauncherActivity U=0 rootTaskId=1 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+      mLastNonFullscreenBounds=Rect(158, 280 - 563, 1000)
+      isSleeping=false
+      topResumedActivity=ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+      * Hist  #0: ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+        packageName=com.google.android.apps.nexuslauncher processName=com.google.android.apps.nexuslauncher
+        launchedFromUid=0 launchedFromPackage=null launchedFromFeature=null userId=0
+        app=ProcessRecord{407a81e 1129:com.google.android.apps.nexuslauncher/u0a169}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.google.android.apps.nexuslauncher/.NexusLauncherActivity (has extras) }
+        rootOfTask=true task=Task{46dd02d #7 type=home I=com.google.android.apps.nexuslauncher/.NexusLauncherActivity}
+        taskAffinity=null
+        mActivityComponent=com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+        baseDir=/system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk
+        dataDir=/data/user/0/com.google.android.apps.nexuslauncher
+        stateNotNeeded=true componentSpecified=false mActivityType=home
+        compat={280dpi} labelRes=0x7f130067 icon=0x7f080291 theme=0x7f140014
+        mLastReportedConfigurations:
+          mGlobalConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.246 fontWeightAdjustment=0}
+          mOverrideConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=home mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.6 fontWeightAdjustment=0}
+        CurrentConfiguration={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=home mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.6 fontWeightAdjustment=0}
+        RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mDisplayWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+        taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=fff1f0f7
+          backgroundColor=fff1f0f7 statusBarColor=0 navigationBarColor=0
+         backgroundColorFloating=fff1f0f7
+        launchFailed=false launchCount=1 lastLaunchTime=-30s654ms
+        mHaveState=false mIcicle=null
+        state=RESUMED delayedResume=false finishing=false
+        keysPaused=false inHistory=true idle=true
+        occludesParent=true noDisplay=false immersive=false launchMode=2
+        frozenBeforeDestroy=false forceNewConfig=false
+        mActivityType=home
+        mImeInsetsFrozenUntilStartInput=false
+        windows=[Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}, Window{c53915c u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}]
+        windowType=2 waitingToShow=true
+        mOccludesParent=true
+        overrideOrientation=SCREEN_ORIENTATION_NOSENSOR
+        requestedOrientation=SCREEN_ORIENTATION_NOSENSOR
+        mVisibleRequested=true mVisible=true mClientVisible=true reportedDrawn=true reportedVisible=true
+        mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=true lastAllDrawn=true)
+        startingData=null firstWindowDrawn=true mIsExiting=false
+        nowVisible=true lastVisibleTime=-16s848ms
+        connections={ConnectionRecord{df0a40b u0 CR IMP com.google.android.googlequicksearchbox/com.google.android.apps.gsa.nowoverlayservice.DrawerOverlayService:@8f177da flags=0x41}, ConnectionRecord{f027da3 u0 com.google.android.apps.nexuslauncher/com.android.quickstep.TouchInteractionService:@692d8d2 flags=0x0}}
+        resizeMode=RESIZE_MODE_RESIZEABLE
+        mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+        supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+        configChanges=0xdf3
+        neverSandboxDisplayApis=false
+        alwaysSandboxDisplayApis=false
+        areBoundsLetterboxed=false
+        mCameraCompatControlState=hidden
+        mCameraCompatControlEnabled=true
+
+  * Task{3e9b87f #2 type=undefined U=0 visible=false visibleRequested=false mode=fullscreen translucent=true sz=2}
+    mCreatedByOrganizer=true
+    * Task{51e4538 #4 type=undefined U=0 rootTaskId=2 visible=false visibleRequested=false mode=multi-window translucent=true sz=0}
+      mBounds=Rect(0, 1920 - 1080, 2880)
+      mCreatedByOrganizer=true
+      isSleeping=false
+    * Task{6b5d9b #3 type=undefined U=0 rootTaskId=2 visible=false visibleRequested=false mode=multi-window translucent=true sz=0}
+      mCreatedByOrganizer=true
+      isSleeping=false
+
+  Resumed activities in task display areas (from top to bottom):
+    Resumed: ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+
+  ResumedActivity: ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+
+ActivityTaskSupervisor state:
+  topDisplayFocusedRootTask=Task{ccf7753 #1 type=home}
+  Display: mDisplayId=0 (organized)
+    init=1080x1920 420dpi mMinSizeOfResizeableTaskDp=220 base=720x1280 280dpi cur=720x1280 app=720x1238 rng=720x636-1280x1196
+    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,720,1280))
+
+  mLastOrientationSource=WindowedMagnification:0:31@59051405
+  deepestLastOrientationSource=ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+  overrideConfig={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h683dp 280dpi nrml port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 720, 1280) mAppBounds=Rect(0, 0 - 720, 1238) mMaxBounds=Rect(0, 0 - 720, 1280) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.198 fontWeightAdjustment=0}
+  mLayoutSeq=120
+  mCurrentFocus=Window{8d3dd2b u0 Application Not Responding: com.android.systemui}
+  mFocusedApp=ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+
+  mHoldScreenWindow=null
+  mObscuringWindow=Window{b77157d u0 com.android.systemui.wallpapers.ImageWallpaper}
+  mLastWakeLockHoldingWindow=null
+  mLastWakeLockObscuringWindow=null
+
+  displayId=0
+  mWallpaperTarget=Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+  mLastWallpaperX=0.0 mLastWallpaperY=0.5
+
+  mSystemGestureExclusion=SkRegion()
+
+  Display areas in top down Z order:
+    * Leaf:36:36
+    * HideDisplayCutout:32:35
+      * OneHanded:34:35
+        * FullscreenMagnification:34:35
+          * Leaf:34:35
+      * FullscreenMagnification:33:33
+        * Leaf:33:33
+      * OneHanded:32:32
+        * Leaf:32:32
+    * WindowedMagnification:0:31
+      * HideDisplayCutout:26:31
+        * OneHanded:26:31
+          * FullscreenMagnification:29:31
+            * Leaf:29:31
+          * Leaf:28:28
+          * FullscreenMagnification:26:27
+            * Leaf:26:27
+      * Leaf:24:25
+      * HideDisplayCutout:18:23
+        * OneHanded:18:23
+          * FullscreenMagnification:18:23
+            * Leaf:18:23
+      * OneHanded:17:17
+        * FullscreenMagnification:17:17
+          * Leaf:17:17
+      * HideDisplayCutout:16:16
+        * OneHanded:16:16
+          * FullscreenMagnification:16:16
+            * Leaf:16:16
+      * OneHanded:15:15
+        * FullscreenMagnification:15:15
+          * Leaf:15:15
+      * HideDisplayCutout:0:14
+        * OneHanded:0:14
+          * ImePlaceholder:13:14
+            * ImeContainer
+          * FullscreenMagnification:0:12
+            * Leaf:3:12
+            * DefaultTaskDisplayArea (organized)
+            * Leaf:0:1
+
+  Task display areas in top down Z order:
+    TaskDisplayArea DefaultTaskDisplayArea
+      overrideConfig={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+      mPreferredTopFocusableRootTask=Task{ccf7753 #1 type=home}
+      mLastFocusedRootTask=Task{ccf7753 #1 type=home}
+      Application tokens in top down Z order:
+      * Task{ccf7753 #1 type=home U=0 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+        bounds=[0,0][720,1280]
+        * Task{46dd02d #7 type=home I=com.google.android.apps.nexuslauncher/.NexusLauncherActivity U=0 rootTaskId=1 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+          bounds=[0,0][720,1280]
+          * ActivityRecord{691744 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t7}
+      * Task{3e9b87f #2 type=undefined U=0 visible=false visibleRequested=false mode=fullscreen translucent=true sz=2}
+        bounds=[0,0][720,1280]
+        * Task{51e4538 #4 type=undefined U=0 rootTaskId=2 visible=false visibleRequested=false mode=multi-window translucent=true sz=0}
+          bounds=[0,1920][1080,2880]
+        * Task{6b5d9b #3 type=undefined U=0 rootTaskId=2 visible=false visibleRequested=false mode=multi-window translucent=true sz=0}
+          bounds=[0,0][720,1280]
+
+  no ScreenRotationAnimation 
+
+  rootHomeTask=Task=1
+
+  PinnedTaskController
+    mIsImeShowing=false
+    mImeHeight=0
+    mMinAspectRatio=0.41841003
+    mMaxAspectRatio=2.39
+
+  DisplayFrames w=720 h=1280 r=0
+
+  DisplayPolicy
+    mCarDockEnablesAccelerometer=true mDeskDockEnablesAccelerometer=true
+    mDockMode=EXTRA_DOCK_STATE_UNDOCKED mLidState=LID_OPEN
+    mAwake=true mScreenOnEarly=true mScreenOnFully=true
+    mKeyguardDrawComplete=true mWindowManagerDrawComplete=true
+    mHdmiPlugged=false
+    mLastBehavior=DEFAULT
+    mShowingDream=false mDreamingLockscreen=false
+    mStatusBar=Window{c4a6efc u0 StatusBar}
+    mExpandedPanel=Window{cc15682 u0 NotificationShade}
+    isKeyguardShowing=false
+    mNavigationBar=Window{5ef24c2 u0 NavigationBar0}
+    mNavBarOpacityMode=2
+    mNavigationBarCanMove=false
+    mNavigationBarPosition=4
+    mLeftGestureHost=Window{5ef24c2 u0 NavigationBar0}
+    mTopGestureHost=Window{c4a6efc u0 StatusBar}
+    mRightGestureHost=Window{5ef24c2 u0 NavigationBar0}
+    mBottomGestureHost=Window{5ef24c2 u0 NavigationBar0}
+    mFocusedWindow=Window{8d3dd2b u0 Application Not Responding: com.android.systemui}
+    mTopFullscreenOpaqueWindowState=Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+    mNavBarColorWindowCandidate=Window{8d3dd2b u0 Application Not Responding: com.android.systemui}
+    mNavBarBackgroundWindow=Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+    mLastStatusBarAppearanceRegions=
+      AppearanceRegion{ bounds=[0,0][720,1280]}
+    mLastLetterboxDetails=
+    mStatusBarBackgroundWindows=
+      Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+    mTopIsFullscreen=false
+    mForceShowNavigationBarEnabled=false mAllowLockscreenWhenOn=false
+    mRemoteInsetsControllerControlsSystemBars=false
+    mDecorInsetsInfo:
+      ROTATION_0={nonDecorInsets=[0,0][0,42], configInsets=[0,42][0,42], nonDecorFrame=[0,0][720,1238], configFrame=[0,42][720,1238]}
+      ROTATION_90={nonDecorInsets=[0,0][0,42], configInsets=[0,42][0,42], nonDecorFrame=[0,0][1280,678], configFrame=[0,42][1280,678]}
+      ROTATION_180={nonDecorInsets=[0,0][0,42], configInsets=[0,42][0,42], nonDecorFrame=[0,0][720,1238], configFrame=[0,42][720,1238]}
+      ROTATION_270={nonDecorInsets=[0,0][0,42], configInsets=[0,42][0,42], nonDecorFrame=[0,0][1280,678], configFrame=[0,42][1280,678]}
+    SystemGestures:
+      mDisplayCutoutTouchableRegionSize=0
+      mSwipeStartThreshold=Rect(42, 42 - 42, 42)
+      mSwipeDistanceThreshold=42
+    Looper state:
+      Looper (android.ui, tid 22) {6516a1c}
+        Message 0: { when=-7s113ms callback=com.android.server.wm.DisplayPolicy$$ExternalSyntheticLambda8 target=com.android.server.wm.DisplayPolicy$PolicyHandler }
+        Message 1: { when=-7s111ms what=29 obj=com.android.internal.os.SomeArgs@f93a5f5 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 2: { when=-7s110ms what=17 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 3: { when=-6s969ms what=1 arg1=7 arg2=2 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 4: { when=-6s908ms callback=com.android.server.am.UidObserverController$$ExternalSyntheticLambda0 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 5: { when=-6s907ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 6: { when=-6s762ms barrier=1 }
+        Message 7: { when=-6s233ms what=0 target=com.android.server.am.BaseErrorDialog$2 }
+        Message 8: { when=-5s882ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 9: { when=-5s758ms what=32 arg1=1408 arg2=10125 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 10: { when=-5s737ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 11: { when=-5s703ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 12: { when=-5s651ms what=25 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 13: { when=-5s311ms callback=android.view.View$ScrollabilityCache target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 14: { when=-5s311ms callback=android.view.View$ScrollabilityCache target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 15: { when=-4s722ms what=1 arg1=7 arg2=3 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 16: { when=-4s356ms what=23 arg1=18 arg2=489 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 17: { when=-4s355ms what=29 obj=com.android.internal.os.SomeArgs@eec7f8a target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 18: { when=-4s353ms what=4 obj=com.android.internal.os.SomeArgs@84a89fb target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 19: { when=-4s322ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 20: { when=-4s173ms callback=com.android.server.wm.DisplayPolicy$2$$ExternalSyntheticLambda0 target=com.android.server.wm.DisplayPolicy$PolicyHandler }
+        Message 21: { when=-3s564ms what=5 obj=com.android.internal.os.SomeArgs@e96a18 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 22: { when=-3s536ms callback=android.hardware.display.DisplayManagerGlobal$DisplayListenerDelegate$$ExternalSyntheticLambda0 target=android.os.Handler }
+        Message 23: { when=-3s534ms callback=android.hardware.display.DisplayManagerGlobal$DisplayListenerDelegate$$ExternalSyntheticLambda0 target=android.os.Handler }
+        Message 24: { when=-3s275ms what=1 arg1=7 arg2=4 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 25: { when=-2s750ms what=29 obj=com.android.internal.os.SomeArgs@845ac71 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 26: { when=-2s750ms what=5 obj=com.android.internal.os.SomeArgs@9b0a56 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 27: { when=-2s671ms what=5 obj=com.android.internal.os.SomeArgs@3adcad7 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 28: { when=-2s372ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 29: { when=-2s167ms callback=com.android.server.wm.DisplayPolicy$2$$ExternalSyntheticLambda3 target=com.android.server.wm.DisplayPolicy$PolicyHandler }
+        Message 30: { when=-2s160ms what=1 arg1=7 arg2=5 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 31: { when=-2s143ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 32: { when=-1s803ms what=1 arg1=7 arg2=6 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 33: { when=-1s794ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 34: { when=-1s789ms what=2 target=com.android.server.am.PreBootBroadcaster$1 }
+        Message 35: { when=-1s637ms callback=android.view.accessibility.AccessibilityManager$$ExternalSyntheticLambda1 target=android.view.ViewRootImpl$ViewRootHandler }
+        Message 36: { when=-1s479ms what=31 target=com.android.server.am.ActivityManagerService$UiHandler }
+        Message 37: { when=-491ms what=68 target=com.android.server.am.ActivityManagerService$UiHandler }
+        (Total messages: 38, polling=false, quitting=false)
+
+  DisplayRotation
+    mCurrentAppOrientation=SCREEN_ORIENTATION_NOSENSOR
+    mLastOrientation=5
+    mRotation=0 mDeferredRotationPauseCount=0
+    mLandscapeRotation=ROTATION_90 mSeascapeRotation=ROTATION_270
+    mPortraitRotation=ROTATION_0 mUpsideDownRotation=ROTATION_180
+    mSupportAutoRotation=true
+    WindowOrientationListener
+      mEnabled=true
+      mCurrentRotation=ROTATION_0
+      mSensorType=null
+      mSensor={Sensor name="Goldfish 3-axis Accelerometer", vendor="The Android Open Source Project", version=1, type=1, maxRange=39.300102, resolution=2.480159E-4, power=3.0, minDelay=10000}
+      mRate=2
+      AccelSensorJudge
+        mProposedRotation=0
+        mPredictedRotation=0
+        mLastFilteredX=0.0
+        mLastFilteredY=9.776321
+        mLastFilteredZ=0.812345
+        mLastFilteredTimestampNanos=90745638766 (6918.3916ms ago)
+        mTiltHistory={last: 5.0}
+        mFlat=false
+        mSwinging=false
+        mAccelerating=false
+        mOverhead=false
+        mTouched=false
+        mTiltToleranceConfig=[[-25, 70], [-25, 65], [-25, 60], [-25, 65]]
+
+    mCarDockRotation=-1 mDeskDockRotation=-1
+    mUserRotationMode=USER_ROTATION_FREE mUserRotation=ROTATION_0 mCameraRotationMode=0 mAllowAllRotations=false
+    mDemoHdmiRotation=ROTATION_90 mDemoHdmiRotationLock=false mUndockedHdmiRotation=-1
+    mLidOpenRotation=-1
+    mFixedToUserRotation=false
+
+  InputConsumers:
+    name=recents_animation_input_consumer pid=1129 user=UserHandle{0}
+
+  WindowInsetsStateController
+    InsetsState
+      mDisplayFrame=Rect(0, 0 - 720, 1280)
+      mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}}}
+      mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=0, center=Point(0, 0)}, RoundedCorner{position=TopRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomLeft, radius=0, center=Point(0, 0)}]}
+      mRoundedCornerFrame=Rect(0, 0 - 0, 0)
+      mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(552, 0 - 696, 42) rotation=0}
+      mDisplayShape=DisplayShape{ spec=1673867177 displayWidth=1080 displayHeight=1920 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}
+        InsetsSource id=ae510001 type=navigationBars frame=[0,1238][720,1280] visible=true flags=SUPPRESS_SCRIM insetsRoundedCornerFrame=false
+        InsetsSource id=ae510004 type=systemGestures frame=[0,0][52,1280] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=ae510005 type=mandatorySystemGestures frame=[0,1224][720,1280] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=ae510006 type=tappableElement frame=[0,0][0,0] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=ae510024 type=systemGestures frame=[668,0][720,1280] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=c85e0000 type=statusBars frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=c85e0005 type=mandatorySystemGestures frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=c85e0006 type=tappableElement frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=3 type=ime frame=[0,0][0,0] visible=false flags= insetsRoundedCornerFrame=false
+    Control map:
+      Window{8d3dd2b u0 Application Not Responding: com.android.systemui}:
+        InsetsSourceControl: {ae510001 mType=navigationBars initiallyVisible mSurfacePosition=Point(0, 1196) mInsetsHint=Insets{left=0, top=0, right=0, bottom=42}}
+        InsetsSourceControl: {c85e0000 mType=statusBars initiallyVisible mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=42, right=0, bottom=0}}
+      Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}:
+        InsetsSourceControl: {3 mType=ime mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0}}
+    InsetsSourceProviders:
+      ImeInsetsSourceProvider
+        mSource=InsetsSource id=3 type=ime frame=[0,0][0,0] visible=false flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1280 - 720, 1280)
+        mControl=InsetsSourceControl mId=3 mType=ime mLeash=Surface(name=Surface(name=9dde3ed InputMethod)/@0xf524b3 - animation-leash of insets_animation)/@0x67e2c3d mInitiallyVisible=false mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{9dde3ed u0 InputMethod}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=9dde3ed InputMethod)/@0xf524b3 - animation-leash of insets_animation)/@0x67e2c3d
+        mControlTarget=Window{7ca77ef u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+        mImeShowing=false
+      InsetsSourceProvider
+        mSource=InsetsSource id=c85e0006 type=tappableElement frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 720, 42)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{c4a6efc u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource id=c85e0005 type=mandatorySystemGestures frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 720, 42)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{c4a6efc u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource id=c85e0000 type=statusBars frame=[0,0][720,42] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 720, 42)
+        mControl=InsetsSourceControl mId=c85e0000 mType=statusBars mLeash=Surface(name=Surface(name=c4a6efc StatusBar)/@0x231b00b - animation-leash of insets_animation)/@0xb93e6fc mInitiallyVisible=true mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=42, right=0, bottom=0} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{c4a6efc u0 StatusBar}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=c4a6efc StatusBar)/@0x231b00b - animation-leash of insets_animation)/@0xb93e6fc
+        mControlTarget=Window{8d3dd2b u0 Application Not Responding: com.android.systemui}
+      InsetsSourceProvider
+        mSource=InsetsSource id=ae510024 type=systemGestures frame=[668,0][720,1280] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(668, 0 - 720, 1280)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5ef24c2 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=ae510006 type=tappableElement frame=[0,0][0,0] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 0, 0)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5ef24c2 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=ae510005 type=mandatorySystemGestures frame=[0,1224][720,1280] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1224 - 720, 1280)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5ef24c2 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=ae510004 type=systemGestures frame=[0,0][52,1280] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 52, 1280)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5ef24c2 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=ae510001 type=navigationBars frame=[0,1238][720,1280] visible=true flags=SUPPRESS_SCRIM insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1238 - 720, 1280)
+        mOverrideFrames={2011=Rect(0, 1196 - 720, 1280)}
+        mControl=InsetsSourceControl mId=ae510001 mType=navigationBars mLeash=Surface(name=Surface(name=5ef24c2 NavigationBar0)/@0x729e258 - animation-leash of insets_animation)/@0xefc8c07 mInitiallyVisible=true mSurfacePosition=Point(0, 1196) mInsetsHint=Insets{left=0, top=0, right=0, bottom=42} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5ef24c2 u0 NavigationBar0}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=5ef24c2 NavigationBar0)/@0x729e258 - animation-leash of insets_animation)/@0xefc8c07
+        mControlTarget=Window{8d3dd2b u0 Application Not Responding: com.android.systemui}
+
+  KeyguardController:
+    mKeyguardShowing=false
+    mAodShowing=false
+    mKeyguardGoingAway=false
+   KeyguardShowing=false AodShowing=false KeyguardGoingAway=false DismissalRequested=false  Occluded=false DismissingKeyguardActivity=null TurnScreenOnActivity=null at display=0
+    mDismissalRequested=false
+
+  LockTaskController:
+    mLockTaskModeState=NONE
+    mLockTaskModeTasks=
+    mLockTaskPackages (userId:packages)=
+
+  mCurTaskIdForUser={0=7}
+  mUserRootTaskInFront={}
+  mVisibilityTransactionDepth=0
+  isHomeRecentsComponent=true
+  mNoHistoryActivities=[]
+
+  TaskOrganizerController:
+      android.window.ITaskOrganizer$Stub$Proxy@c379ead uid=10168:
+        (fullscreen) Task{ccf7753 #1 type=home}
+        (fullscreen) Task{3e9b87f #2 type=undefined}
+        (multi-window) Task{6b5d9b #3 type=undefined}
+        (multi-window) Task{51e4538 #4 type=undefined}
+
+  VisibleActivityProcess:[ ProcessRecord{407a81e 1129:com.google.android.apps.nexuslauncher/u0a169}]
+  NumNonAppVisibleWindowUidMap:[ 10168:4 1000:1]
+
+
