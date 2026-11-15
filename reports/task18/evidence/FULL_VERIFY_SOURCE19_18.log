@@ -1,0 +1,10 @@
+2026-11-15T10:38:06.3493139Z PASS: 13 JSON schemas; 4 Dart-checked fixtures; 10 negative + unknown-category/OpenAPI checks; no network
+2026-11-15T10:38:08.8788885Z # pass 24
+2026-11-15T10:38:08.8789339Z # fail 0
+2026-11-15T10:38:11.0902294Z # pass 47
+2026-11-15T10:38:11.0902626Z # fail 0
+2026-11-15T10:38:12.9123556Z Formatted 192 files (0 changed) in 1.28 seconds.
+2026-11-15T10:38:23.6002634Z No issues found! (ran in 9.9s)
+2026-11-15T10:42:56.7427616Z Flutter tests: passed=485, failures=0, success=True
+2026-11-15T10:42:56.9269235Z ##[error]Failed to CreateArtifact: Artifact storage quota has been hit. Unable to upload any new artifacts. Usage is recalculated every 6-12 hours.
+2026-11-15T10:43:09.4502322Z 🎉 3 tests passed.
