@@ -1,6 +1,6 @@
 # №18 — P0: фоновая передача MASTER и CLIENT
 
-[ТЗ](docs/task18/TASK_RU.md) · [Результат](reports/task18/RESULT_18.md) · [Контрольная точка](reports/task18/CHECKPOINT_18.json). Отдельная ветка `feat/task18-native-background-transfer`, draft PR49 поверх **необъединённого PR48**. Текущий исходник APK28 `de408f1`:489Flutter/3CLIENT/47+24Node PASS; full controlled API34 11PASS, реальное OS cold-process recovery6,98sec; CLIENT normal27→28 13PASS. MASTER normal27→28 15PASS; full33/35/36 по10PASS; все6native gates текущего источника пройдены, выдача пары28 проверяется. Проверки с настоящими Google-аккаунтами и физическими телефонами NOT_RUN. Main/GAS6/OAuth/ACL/signing/данные27 не менялись.
+[ТЗ](docs/task18/TASK_RU.md) · [Результат](reports/task18/RESULT_18.md) · [Контрольная точка](reports/task18/CHECKPOINT_18.json). Отдельная ветка `feat/task18-native-background-transfer`, draft PR49 поверх **необъединённого PR48**. Текущий исходник APK28 `de408f1`:489Flutter/3CLIENT/47+24Node PASS; full controlled API34 11PASS, реальное OS cold-process recovery6,98sec; CLIENT normal27→28 13PASS. MASTER normal27→28 15PASS; full33/35/36 по10PASS; все6native gates текущего источника пройдены, пара28 проверена и добавлена в существующий private draft. [APK и протокол](reports/task18/PHONE_QA_18.md). Проверки с настоящими Google-аккаунтами и физическими телефонами NOT_RUN. Main/GAS6/OAuth/ACL/signing/данные27 не менялись.
 
 # №17 — native PASS, APK27 для приёмки
 

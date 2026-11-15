@@ -30,15 +30,22 @@
     "status": "PASS_BOTH_CONTROLLED"
   },
   "activeRuns": {},
-  "delivery": "IN_PROGRESS_PRIVATE_APPEND_ONLY",
+  "delivery": {
+    "run": 43765843573,
+    "status": "SUCCESS_PRIVATE_CANDIDATES_FOR_OWNER_QA",
+    "manifest": "reports/task18/APK_PAIR_18.json",
+    "old27": "UNCHANGED",
+    "newReleaseOrPublicACL": "NOT_PERFORMED",
+    "DriveAPKUpload": "NOT_PERFORMED"
+  },
   "GAS": "EXISTING6_UNCHANGED",
   "OAuthACLSigning": "UNCHANGED",
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Check delivery actual run; independent asset SHA/cert and original27 preservation before any link",
-    "Update same owner-only Drive reports plus APK manifest, never APK Drive upload",
-    "OWNER LIVE Google/two phones/OEM/hearing/GAS throughput still NOT_RUN"
+    "Owner downloads private GitHub candidate28, updates over27, first checks existing data",
+    "Two actual Google users/phones: publish module/program of3tracks, real ContentLink, background install and audible offline playback; seePHONE_QA_18.md",
+    "Record liveGAS throughput/AndroidOEM/longquota/reboot/activeForceStop separately; no productionGAS patch/main merge without approval"
   ],
   "nativeGates": {
     "master_upgrade": {

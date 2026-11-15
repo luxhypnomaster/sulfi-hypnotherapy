@@ -12,3 +12,5 @@ Production GAS/OAuth/ACL/main не менялись; платные сервис
 
 ## Актуальный native итог
 Все5cached продолжений завершились SUCCESS: MASTER15; full33/35/36 по10; legacyboth. Дополнительных сборок/подписаний/полных suites не выполнялось. Delivery запущен после шести green gates, не заранее.
+
+Delivery: firstattemptfailedobsoleteSDKtools, secondfailedrepositoryroottrailingSlash404; bothbeforeappend and documented. Narrowfixeswith9tests. Third43765843573SUCCESS restoredsameAPKcache,noapprebuild/signing/native/full-suite repeats. Onlynew28assets appendedtoprivateexistingdraft, original27kept.

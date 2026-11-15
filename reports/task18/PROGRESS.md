@@ -176,3 +176,8 @@ MASTER-only35/43764129343 SUCCESS15 (normal27→28); full33/43764132106,35/43764
 Private delivery43765533682 stoppedBEFOREappend: setup-android defaultrequestedobsoleteSDKpackage'tools', sdkmanagerexit1. Source-equality/cachechecksPASS; noAPKuploadreached. Narrowworkflowfix requestsbuild-tools;36.0.0 only; sameactualAPK/gates, no rebuild/re-sign/native repeats. FailurepreservedDELIVERY_ATTEMPTS_18.json.
 
 Delivery43765701087 secondattempt: SDK/bytecertconfig/8guardtestsPASS; STOPbeforeappend dueapi repositoryroottrailingSlash404. Independentlyread-onlyconfirmed slash→exit1/privateabsent, canonical→exit0/privateTrue. Canonical endpointfix+regressiontest, noacldraftcheckremoved/noAPKinputchanged. Now9deliveryguardtests.
+
+## Actual delivery43765843573 SUCCESS /candidate DE408 unchanged
+NineguardtestsPASS; samecachednormalAPK28 checked/cert/config, sixnativegatesboundactualjobs. AppendedMASTERasset752461821 andCLIENT752462315 toEXISTINGPRIVATEdraft445425835 only, downloadedbothagaininsideCI and verifiedSHA/cert. Post-run independentadminmetadataread preserved3original27assetIDs/digests/drafttarget. No newrelease/publication/tag/ACL/signing/main/GAS/DriveAPKupload. ManifestAPK_PAIR_18.jsonnowexistsONLYafteractualsuccess. OWNERphysicalGoogle/OEM/hearing/GASthroughputNOTRUN. Native data-gatePASS permitsownerQA, not finalacceptance.
+
+IndependentworkspaceassetdownloadbothafterCISUCCESS: sameSHA/bytes/cert/package/version/config/permissions/noProbe PASS viaexistingverify_pair.sh, no source/sign/buildchange. DELIVERY_READBACK_18.jsonrecorded. NoGoogle/ownerphysicalclaim.

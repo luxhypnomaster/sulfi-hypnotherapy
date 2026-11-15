@@ -1,0 +1,42 @@
+{
+  "source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "run": 43765843573,
+  "conclusion": "success",
+  "independentPostRunMetadata": "PASS",
+  "draft": true,
+  "repositoryPrivate": true,
+  "old27": "THREE_ORIGINAL_ASSET_IDS_AND_DIGESTS_PRESERVED",
+  "new28": "TWO_ASSETS_ACTUAL_REMOTE_DIGEST_MATCH",
+  "releasePublished": false,
+  "newReleaseCreated": false,
+  "tagChanged": false,
+  "DriveAPKUpload": false,
+  "logSHA256": "7a723e000285a9d35a04972f9f56ad27e114e9964cbaba16a28de7feb147e4c3",
+  "secondIndependentReadback": {
+    "environment": "CODING_WORKSPACE_SEPARATE_FROM_CI_UPLOAD",
+    "checkedAtUtc": "2026-11-15T21:53:38.254762+00:00",
+    "authenticatedAssetAPIDownload": "PASS_BOTH",
+    "sha256AndBytes": "PASS_BOTH",
+    "certificate": "PASS_PREVIOUS27_CERT_BOTH",
+    "packageVersionConfigPermissionsNoProbe": "PASS_BOTH",
+    "files": [
+      {
+        "edition": "master",
+        "package": "ru.sulfi.sulfi_hypnotherapy",
+        "versionCode": 28,
+        "bytes": 193900724,
+        "sha256": "2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e",
+        "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+      },
+      {
+        "edition": "client",
+        "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+        "versionCode": 28,
+        "bytes": 193900756,
+        "sha256": "637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051",
+        "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+      }
+    ],
+    "scope": "APK_BYTES_NOT_PHONE_OR_GOOGLE_QA"
+  }
+}

@@ -1,6 +1,11 @@
 # №18 — протокол владельца, OWNER LIVE пока NOT_RUN
 
-Сначала нужны обе нормальные кандидатные APK28 **после всех native gates** и фактический APK_PAIR_18.json. До этого не ставить старые59/a894 или testOnly .transferprobe. Не удалять приложение, не очищать данные, не делать downgrade/импорт для «починки». При конфликте подписи или отказе обновления — STOP и сохранить текст ошибки.
+Пара `0.4.20+28`, исходник `de408f1cae08fce16069a701d147a0b1064053ba`, прошла6native gates. Фактические байты и прежняя подпись проверены после повторного скачивания из GitHub. Это кандидат для физической приёмки, не OWNER LIVE PASS.
+
+- [MASTER28 — обычная APK, 193,900,724байт](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/alchemist-master28-task18-de408f1.apk), SHA256 `2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e`.
+- [CLIENT28 — обычная APK, 193,900,756байт](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/alchemist-client28-task18-de408f1.apk), SHA256 `637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051`.
+
+Нужен вход владельца GitHub. При404 открыть существующий [закрытый draft](https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/tag/untagged-c7073f0a5871b5fb707c) после входа и выбрать файл; без доступа к приватному репозиторию эти URL не работают. На другое устройство удобнее переслать сам скачанный APK. Google Drive APK28 не используется. Не устанавливать старые59/a894 или testOnly .transferprobe, не удалять приложение/данные и не делать downgrade/импорт для «починки». При конфликте подписи или отказе обновления — STOP, сохранить сообщение.
 
 1. Скачать MASTER28 на телефон с MASTER27, CLIENT28 на телефон с CLIENT27. Private GitHub draft требует GitHub-входа владельца; можно скачать файл на свой телефон и передать сам APK через мессенджер. Это не открытый доступ к исходникам. Google Drive APK28 пока не разрешён и не используется.
 2. Штатно обновить поверх. До входа/публикации проверить прежние треки, модули, программы, историю, черновики и очередь; записать версию, модель и Android. Если список исчез или есть ошибка storage — остановить приёмку, не очищать данные.

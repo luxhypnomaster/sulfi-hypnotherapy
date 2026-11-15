@@ -19,6 +19,12 @@
       "guardTests": "8PASS",
       "upload": "NOT_REACHED",
       "fix": "Canonical repo endpoint without trailing slash; new regression check; no safety condition removed"
+    },
+    {
+      "run": 43765843573,
+      "status": "SUCCESS",
+      "verification": "Independent redownload of each uploaded asset + exact SHA/certificate/config/current six gate receipts; old27 preserved",
+      "rebuildOrSigning": "NOT_PERFORMED"
     }
   ]
 }

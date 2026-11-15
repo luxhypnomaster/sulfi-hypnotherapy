@@ -371,3 +371,5 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - №18 continuation/source59: actual controlled API34 11PASS/API36 10PASS, exact CLIENT27→28 13PASS incl5supplemental legacy rows. MASTER pre-update semantics observer, API33 scheduler recovery and API35 SQLite contention unresolved; APK issuance remains BLOCKED. Isolated native two-handle causal experiment queued; no production migration/deploy/ACL/signing change. Reports updated in same private Task18 Drive folder and raw SHA readback verified.
 
 - №18/current DE408: fullverify489Flutter/3CLIENT/47+24Node PASS; fullAPI34 11PASS incl actual OS cold recovery6,98sec; CLIENT normal27→28 13PASS. Native MASTERAPI35 15PASS + full33/35/36 по10PASS; old59/a894 do not issue. Device Google/OEM/hearing/live throughput NOT_RUN.
+
+- №18/de408: six native gates PASS; actual private delivery43765843573 SUCCESS, independent uploaded-asset SHA/cert verified, old27 preserved. Two owner phones/Google/live GAS throughput still NOT_RUN; Task18 PARTIAL. No main/GAS/OAuth/ACL/signing change, no APK Drive upload.
