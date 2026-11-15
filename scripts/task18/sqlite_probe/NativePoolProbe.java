@@ -35,8 +35,12 @@ public final class NativePoolProbe {
     a.execSQL("CREATE TABLE fixture(id INTEGER PRIMARY KEY, value TEXT)");
     SQLiteDatabase b = SQLiteDatabase.openOrCreateDatabase(fixture, null);
     stage("B_OPEN");
-    a.execSQL("PRAGMA busy_timeout=" + busyMs);
-    b.execSQL("PRAGMA busy_timeout=" + busyMs);
+    // This PRAGMA returns a row; Android execSQL rejects it even on assignment.
+    for (SQLiteDatabase database : new SQLiteDatabase[]{a,b}) {
+      try (android.database.Cursor c = database.rawQuery("PRAGMA busy_timeout=" + busyMs, null)) {
+        if (!c.moveToFirst() || c.getInt(0) != busyMs) throw new AssertionError("BUSY_TIMEOUT_NOT_APPLIED");
+      }
+    }
     int actualBusy;
     try (android.database.Cursor c = b.rawQuery("PRAGMA busy_timeout", null)) { c.moveToFirst(); actualBusy = c.getInt(0); }
     stage("BUSY_TIMEOUT_READBACK_" + actualBusy);
