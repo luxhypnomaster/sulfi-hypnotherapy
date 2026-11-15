@@ -38,3 +38,9 @@ Native probe43704911357 SUCCESS7: actual API34 Activity+engine destroyed/samePID
 Full run SUCCESS atcea4897. Strict reuse18 actual-tree gate PASS (unchanged verified Dart/server); fresh native compile/build and :app:testDebugUnitTest executed SUCCESS. Normal signed MASTER27→28 UI data14PASS; CLIENT27→28 UI data12PASS. Proofs native27_to28/ and NATIVE_UPGRADE_GATE_18.json.3 independent full APK manifests/byte SHA/certificate readbacks identical. No physical Google/owner phone claimed.
 
 Extendedprobe6 failed before first transfer because external SystemUI ANR hid the actually drawn fixture UI; screenshot/crash0 preserved probe6/. New preflight observer run7 uses exact cached sourcecea4897 APKs, still in progress. Historical native5 app4ab remains valid only for that source.
+
+
+## Текущий исходник59, не путать с исторической paircea
+Normal candidate43715408673 SUCCESS, full analyzer/JVM task/cert/config guards выполнены. Новые upgrade jobs этого run BLOCKED до данных из-за SystemUI/Launcher ANR, не из-за product migration; native59_first/. Native Android SQLite controlled conversion MASTER+CLIENT43715411268 SUCCESS; receipts/screens legacy_native59/. Native normal retention of5 supplemental legacy rows и личного UI baseline ещё требует PASS текущего cached AOSP run43730982434. Full background/SIGKILL source59 probe43730572606 ещё выполняется.
+
+Здесь dispatch в legacy-conversion проверке намеренно simulated/no-network; реальные OS transfers доказываются отдельно. Никакие controlled actors не названы Google-users. Исходники4ab/cea/59, unit/native/OWNER и общий результат каждого run разделяются.

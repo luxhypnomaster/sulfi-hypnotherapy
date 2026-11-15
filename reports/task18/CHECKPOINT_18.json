@@ -3,7 +3,7 @@
   "branch": "feat/task18-native-background-transfer",
   "draftPR": 49,
   "basePR48": "UNMERGED",
-  "sourceAPK28": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+  "sourceAPK28": "59c3667a28357767533b25e92661b87d081d7227",
   "mainPreserved": "b88637a105b2182c7b836311ebb3de7ad037b08f",
   "fullDartVerify": {
     "run": 43704911303,
@@ -22,20 +22,10 @@
     "scope": "LOCAL_UI_DATA_NOT_GOOGLE"
   },
   "currentControlledProbe": {
-    "run": 43710239769,
-    "driver": "a645655c5a4581cb99e642b26235b2a36655d5d4",
-    "appSource": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
-    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API_BEFORE_RESUME",
-    "previousFailures": [
-      {
-        "run": 43708105791,
-        "cause": "external SystemUI modal ANR; no transfer"
-      },
-      {
-        "run": 43709505162,
-        "cause": "cmd statusbar collapse did not actually close shade; observer readiness false-positive; no transfer"
-      }
-    ]
+    "run": 43730572606,
+    "driver": "102add21f8825d1d377daaeed21adfb20bb671b1",
+    "appSource": "59c3667a28357767533b25e92661b87d081d7227",
+    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API"
   },
   "delivery": "NOT_DONE_QUARANTINE_ONLY_ARTIFACT_QUOTA_BLOCKED",
   "GAS": "EXISTING6_UNCHANGED",
@@ -49,5 +39,23 @@
     "Do not issue probes or old source19 quarantine",
     "Prepare concrete safe APK28 delivery only after background/safety gates; never upload APK to Drive without specific authorization",
     "Update existing owner-only report IDs and raw-byte readback; preserve17/history"
-  ]
+  ],
+  "historicalCeaPair": "SUPERSEDED_DO_NOT_ISSUE",
+  "currentNativeSafety": {
+    "run": 43730982434,
+    "source": "59c3667a28357767533b25e92661b87d081d7227",
+    "driver": "4268cbf9dbf63ce9a54237440f0b671a3cca5d59",
+    "mode": "CACHED_NO_REBUILD",
+    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API"
+  },
+  "nativeLegacyConversion": {
+    "run": 43715411268,
+    "status": "PASS_BOTH_CONTROLLED_NATIVE_SQLITE",
+    "Google": "NOT_RUN"
+  },
+  "candidate59": {
+    "run": 43715408673,
+    "candidateJob": "SUCCESS",
+    "upgradeJobs": "BLOCKED_BEFORE_BASELINE_SYSTEM_UI_ANR"
+  }
 }
