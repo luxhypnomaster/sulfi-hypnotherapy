@@ -24,7 +24,7 @@ on:
       task18_scope:
         description: 'full OS/TCP transfer probe, or isolated native Android SQLite legacy conversion only'
         type: choice
-        options: ['full', 'legacy-only']
+        options: ['full', 'legacy-only', 'sqlite-only']
         default: 'full'
       task18_reuse_dart_verify:
         description: 'Reuse real43704911303 only if Dart/test/server/pubspec inputs unchanged; NEW native unit/build/upgrade still mandatory'
@@ -1030,7 +1030,7 @@ jobs:
           disable-animations: true
           pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
           emulator-options: -no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: if [ "$TASK18_PROBE_SCOPE" = legacy-only ]; then python3 scripts/task18/legacy_probe_native.py; else python3 scripts/task18/probe_native.py; fi
+          script: if [ "$TASK18_PROBE_SCOPE" = sqlite-only ]; then python3 scripts/task18/sqlite_probe_native.py; elif [ "$TASK18_PROBE_SCOPE" = legacy-only ]; then python3 scripts/task18/legacy_probe_native.py; else python3 scripts/task18/probe_native.py; fi
       - name: Retain only bounded synthetic receipts/screens with exact byte SHA (no artifact quota retry)
         if: always()
         run: |

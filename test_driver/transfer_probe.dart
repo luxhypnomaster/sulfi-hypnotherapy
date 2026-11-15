@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'legacy_queue_native.dart';
+import 'sqlite_concurrency_native.dart';
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -375,6 +376,20 @@ class _Controlled18State extends State<Controlled18> {
       child: Column(
         children: [
           Text(message),
+          TextButton(
+            onPressed: busy || c != null
+                ? null
+                : () async {
+                    setState(() => busy = true);
+                    final receipt = await sqliteConcurrencyNative18();
+                    if (mounted) {
+                      setState(() {
+                        message = 'SQLITE LOCK EXPERIMENT ${receipt['status']}';
+                        busy = false;
+                      });
+                  },
+            child: const Text('RUN SQLITE LOCK CHECK'),
+          ),
           FilledButton(
             onPressed: busy ? null : () => action(true, destroy: true),
             child: const Text('UPLOAD AND DESTROY UI'),
