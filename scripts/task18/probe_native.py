@@ -1,5 +1,6 @@
 """Real Android OS/headless + loopback TCP fixture. NOT Google/GAS/owner QA."""
 import base64,hashlib,json,os,pathlib,re,subprocess,time,urllib.request,xml.etree.ElementTree as ET
+from probe_controls import NativeControls
 OUT=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-evidence';OUT.mkdir(exist_ok=True)
 ROOT=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-apks'
 CASES=[]
@@ -95,7 +96,17 @@ try:
  after=wait_bytes('uploaded',before['uploaded']+524288,30)
  assert after['uploaded']>before['uploaded'];snapshot(pkg,'master-background')
  CASES.append({'case':'master_real_tcp_bytes_after_UI_engine_destroy_and_screen_off','status':'PASS','before':before['uploaded'],'after':after['uploaded'],'Google':'NOT_RUN','transport':'REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN'})
- final=wait_bytes('verifiedBytes',15*1024*1024,210)
+ controls=NativeControls(adb,tree,click,launch,confirm_ui_destroyed,stats,OUT)
+ # Execute the real, already scheduled recovery watchdog while UIDT owns work.
+ # A non-owner invocation must not stop that live engine or consume its safety net.
+ watchdog=adb('shell','cmd','jobscheduler','run','-f',pkg,'1802')
+ assert 'Running job' in watchdog,'RECOVERY_WATCHDOG_WAS_NOT_ACTUALLY_RUN'
+ progress=wait_bytes('uploaded',after['uploaded']+262144,30)
+ CASES.append({'case':'non_owning_recovery_watchdog_does_not_stop_primary','status':'PASS','before':after['uploaded'],'after':progress['uploaded'],'scope':'CONTROLLED_NATIVE_OS'})
+ controls.save('master-watchdog-readback',{'command':watchdog,'jobs':adb('shell','dumpsys','jobscheduler',pkg)})
+ proof=controls.master_pause_resume(pkg)
+ CASES.append({'case':'master_notification_pause_cold_restart_explicit_same_owner_resume','status':'PASS','proof':proof,'Google':'NOT_RUN'})
+ final=wait_bytes('verifiedBytes',15*1024*1024,270)
  # Wait for actual catalog commit, not just acknowledged media bytes.
  until=time.monotonic()+40
  while time.monotonic()<until and stats().get('publishedPrograms',0)<1:time.sleep(1)
@@ -106,7 +117,9 @@ try:
  pkg=packages['client'];launch(pkg);initial_pid=adb('shell','pidof',pkg).strip();click('DOWNLOAD AND DESTROY UI');confirm_ui_destroyed(pkg,initial_pid);before=wait_bytes('downloaded',262144,60)
  adb('shell','input','keyevent','KEYCODE_SLEEP');time.sleep(3);after=wait_bytes('downloaded',before['downloaded']+524288,30)
  CASES.append({'case':'client_real_tcp_bytes_after_UI_engine_destroy_and_screen_off','status':'PASS','before':before['downloaded'],'after':after['downloaded'],'Google':'NOT_RUN'})
- final=wait_bytes('downloaded',15*1024*1024,210)
+ proof=controls.client_network_cancel_resume(pkg)
+ CASES.append({'case':'client_network_OS_recovery_notification_cancel_exact_range_resume','status':'PASS','proof':proof,'Google':'NOT_RUN'})
+ final=wait_bytes('downloaded',15*1024*1024,270)
  time.sleep(2);adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');launch(pkg);expect_inventory(pkg)
  shot('client-verified-install');snapshot(pkg,'client-after-install')
  CASES.append({'case':'client_background_atomic_program_install_3_real_wav_files_hashes_module_template','status':'PASS','Google':'NOT_RUN','heardByHuman':'NOT_RUN'})

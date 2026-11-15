@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_reuse_dart_verify:
+        description: 'Reuse real43704911303 only if Dart/test/server/pubspec inputs unchanged; NEW native unit/build/upgrade still mandatory'
+        type: boolean
+        default: false
       task18_finalize:
         description: 'Task18 exact-source verify + QUARANTINED signed28 pair + real27→28 safety; no APK delivery/deploy'
         type: boolean
@@ -19,7 +23,7 @@ on:
       task18_api:
         description: 'Android probe API; start34, then policy coverage35/36 only after evidence'
         type: choice
-        options: ['34', '35', '36']
+        options: ['33', '34', '35', '36']
         default: '34'
       task18_compile:
         description: 'Task18 targeted Android compile only, no signing/APK/deploy, isolated feature branch'
@@ -93,7 +97,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task18_probe != true && inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task18_reuse_dart_verify != true && inputs.task18_probe != true && inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -937,7 +941,7 @@ jobs:
         run: |
           flutter build apk --debug --config-only
           cd android
-          ./gradlew :app:compileDebugKotlin --no-daemon --console=plain
+          ./gradlew :app:compileDebugKotlin :app:testDebugUnitTest --no-daemon --console=plain
 
   probe18:
     if: github.event_name == 'workflow_dispatch' && inputs.task18_probe == true && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
@@ -1019,8 +1023,8 @@ jobs:
           PROBEPY
 
   candidate18:
-    needs: verify
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true && inputs.build_mode == 'checks'
+    needs: [verify, reuse18]
+    if: always() && (needs.verify.result == 'success' || needs.reuse18.result == 'success') && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true && inputs.build_mode == 'checks'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -1069,6 +1073,8 @@ jobs:
           flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
           cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-apks/client28.apk"
           bash scripts/task18/verify_pair.sh
+          cd android
+          ./gradlew :app:testDebugUnitTest --no-daemon --console=plain
       - name: Quarantine only, no APK delivery before native safety gates
         uses: actions/cache/save@v4
         with:
@@ -1080,8 +1086,8 @@ jobs:
 
 
   native18:
-    needs: candidate18
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true
+    needs: [candidate18, baseline18]
+    if: always() && needs.candidate18.result == 'success' && needs.baseline18.result == 'success' && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true
     strategy:
       fail-fast: false
       matrix:
@@ -1113,6 +1119,11 @@ jobs:
           path: ${{ runner.temp }}/task18-apks
           key: task18-quarantine-pair-${{ github.sha }}
           fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task18-baseline27
+          key: task18-immutable-pair27-fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
+          fail-on-cache-miss: true
       - name: Reclaim only disposable host toolchains before SDK install
         run: bash scripts/task16g/prepare_native_runner.sh
       - uses: actions/setup-java@v4
@@ -1129,7 +1140,7 @@ jobs:
           BASE_SHA: ${{ matrix.sha }}
         run: |
           bash scripts/task18/verify_pair.sh
-          gh api -H 'Accept: application/octet-stream' "repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/$BASE_ASSET" > "$RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk"
+          cp "$RUNNER_TEMP/task18-baseline27/$TASK18_EDITION$TASK18_BASELINE.apk" "$RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk"
           echo "$BASE_SHA  $RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk" | sha256sum -c -
           bash scripts/task16v/build_ui_probe.sh
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -1163,3 +1174,51 @@ jobs:
           else:print('TASK18_SAFETY=BLOCKED_NO_NATIVE_RECEIPT')
           GATEPY
 
+
+  baseline18:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      # GitHub private DRAFT asset GET requires writer visibility. This job
+      # performs ONLY two allowlisted GETs + SHA + cache, NEVER executes APK/code.
+      # No checkout persistence, Git push, release mutation, OAuth or GAS secret.
+      contents: write
+    steps:
+      - uses: actions/cache/restore@v4
+        id: baseline_cache18
+        with:
+          path: ${{ runner.temp }}/task18-baseline27
+          key: task18-immutable-pair27-fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568
+      - name: Read immutable existing27 bytes, no release or repository writes
+        if: steps.baseline_cache18.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/task18-baseline27"
+          gh api -H 'Accept: application/octet-stream' repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/748058133 > "$RUNNER_TEMP/task18-baseline27/master27.apk"
+          gh api -H 'Accept: application/octet-stream' repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/748058137 > "$RUNNER_TEMP/task18-baseline27/client27.apk"
+      - name: Verify both immutable27 SHA before cache or execution
+        run: |
+          echo "2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb  $RUNNER_TEMP/task18-baseline27/master27.apk" | sha256sum -c -
+          echo "8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46  $RUNNER_TEMP/task18-baseline27/client27.apk" | sha256sum -c -
+      - uses: actions/cache/save@v4
+        if: steps.baseline_cache18.outputs.cache-hit != 'true'
+        with:
+          path: ${{ runner.temp }}/task18-baseline27
+          key: ${{ steps.baseline_cache18.outputs.cache-primary-key }}
+
+  reuse18:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true && inputs.task18_reuse_dart_verify == true
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify real passed run and exact unchanged test inputs (STOP on any mismatch)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/task18/reuse_dart_verify.py
