@@ -359,3 +359,11 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [ ] G5: все три actual native upgrade gates, независимый download/cert readback и выдача пары27; текущее состояние в reports/task17/PROGRESS.md.
 - [ ] Отдельное разрешение на узкий short-message Diary patch в существующем GAS. main/OAuth/ACL/signing не меняются.
 - [ ] OWNER: Google MASTER+CLIENT,15/30/60мин, реальный модуль3треков/программа→дневник→CLIENT→слышимое offline. CI не заменяет физическую приёмку.
+
+## Задание18 — P0 background transfers (in progress, STOP-SHIP до native safety)
+
+- [x] G0/G1 inventory/root cause/OS-owned architecture; docs/task18/TASK_RU.md и reports/task18.
+- [x] G2 native UIDT/FGS worker, durable bidirectional intents, owner/role/epoch, chunk/whole hash +receipt; targeted controlled regressions.
+- [ ] G3 actual background/pause/network/process/notification API34/35/36 и native MASTER27/CLIENT27→28 integrity gates.
+- [ ] Final exact-source verification, signed stable-key pair28, independent binary/SHA/config checks и ограниченная выдача.
+- [ ] OWNER: реальные Google/два телефона/OEM/слышимость; без fake PASS. Production GAS6/main/ACL/OAuth/signing не менять.
