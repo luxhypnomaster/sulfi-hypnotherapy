@@ -1,0 +1,140 @@
+{
+  "checkedAtUtc": "2026-11-15T21:56:41.336923+00:00",
+  "sourceAPK28": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "reportsCommit": "895bf190d77d0799c4c61052ff22e217fb0bb5fe",
+  "folder": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+  "status": "PASS_RAW_BYTE_SHA_PARENT_OWNER_ONLY",
+  "files": [
+    {
+      "name": "RESULT_18.md",
+      "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+      "bytes": 9900,
+      "sha256": "7ca2efa78812c4d573aa9e0163e209d0aa545cad0579f2f3ff33622dd59b21a2",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "ROOT_CAUSE_BACKGROUND_18.md",
+      "id": "1iaH0c_R4Z686C53ZVpyO1H-RUd9M5Jnc",
+      "bytes": 9906,
+      "sha256": "34a76797847a1266d533d5369ab29b6e7263c252e57d538fb3ef681942cee376",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "ARCHITECTURE_18.md",
+      "id": "1W8S0GjQ9ufDqkTheopDJRYwopbggXWiv",
+      "bytes": 8774,
+      "sha256": "d007e3f920ef6bd5de899a609b2d636d0d6183f541b9ed2323b35170c61623ee",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "CHANGES_18.md",
+      "id": "1xtvrS5opmZpmrAZFPdIwf4qY1Y6wFc5r",
+      "bytes": 6248,
+      "sha256": "d2487e5234a1aee82572ed3633ffb205292e9af813e028af07c5ced87d50b659",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "MIGRATION_18.md",
+      "id": "13DMcEVynh4DlwoJePRtMhKfthj8H5mwt",
+      "bytes": 4862,
+      "sha256": "a03852b3443b8704aaba29c81143edabaf53f191f696fe641aa6153e92001d53",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "SECURITY_18.md",
+      "id": "1-jRfpnX_kJA7DPrCb0v_HBTyT4gGmeoj",
+      "bytes": 4912,
+      "sha256": "be0837af76689e0f72cac10d8acd35761211af314e83ef2b1d144752323a10f2",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "PHONE_QA_18.md",
+      "id": "1zgOmZ-pLuQZiARuhu1rEfzgnV6PAGetG",
+      "bytes": 7887,
+      "sha256": "3ce2031b0d29aa833c62749481127531b303b5739f4d95a5a13e37a9ad95bdd3",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "TESTS_18.md",
+      "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+      "bytes": 6366,
+      "sha256": "6a78cd155cb93ad5ab92916e585ce6dd4f35fb15a884cc2567caa7da691f36c1",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+      "bytes": 43697,
+      "sha256": "59230f7ac806bd63a03f81682bc4a7db58b1680ea63b3fcd5db43aad87e25676",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "ACCEPTANCE_18.csv",
+      "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+      "bytes": 14579,
+      "sha256": "1459b59be3c889535fd93e3af4c1f4286d7ad891cc2755e5538031e29ec1d5a6",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "APK_PAIR_18.json",
+      "id": "1MoT_OFAv0P7uqdJWGS6sNN6AbdxRMww1",
+      "bytes": 1321,
+      "sha256": "945f5ce69a4f2801a95e8aa7a1c85be2bc0539e92c2fa4e285cb5323119f42df",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "DELIVERY_GATE_18.json",
+      "id": "15wVgznpmsuu2rNUDEJeQsSloYvzTrjw6",
+      "bytes": 3826,
+      "sha256": "3baa1e846ae02f6a16473ed4b4b8e5b1c52810f852da464805359f6e8c6b0c2f",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "DELIVERY_READBACK_18.json",
+      "id": "19Qsl3A3kRFXXGzEheEAG7nR6DqcXP_To",
+      "bytes": 1594,
+      "sha256": "ff65a2fad1f65cb2c1baf8b307dd9670386669c6782ed9cf99cea231bb4583db",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "CODEX_EFFICIENCY_18.md",
+      "id": "1dyCKnbRdB_NxWlueuikXWiqDBSmg_oa6",
+      "bytes": 2823,
+      "sha256": "d24dcc2752b75d76fa69df39a980cb6fbe20ebfda01e59945d11bec3f9a86670",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "NATIVE_EVIDENCE_INDEX_18.json",
+      "id": "13yJ3VmgmOb6_vVFoA5unLiF5hDjctTc3",
+      "bytes": 26530,
+      "sha256": "117887049b1923b3a004cf84195eb6d298460acffa8501c1260066afc9d0ac45",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    },
+    {
+      "name": "REPORTS_AND_NATIVE_EVIDENCE_18.zip",
+      "id": "1h2l2gx5rNwJS6EJF8RQ2kmUrY2H1LYUu",
+      "bytes": 4733420,
+      "sha256": "138eae1fdef10ba20ca7211150538a9c6e8a54c00c7ab048e4f411b9c5654ce3",
+      "parent": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+      "permissions": "OWNER_ONLY"
+    }
+  ],
+  "evidenceZipFiles": 149,
+  "DriveAPKUpload": "NOT_PERFORMED",
+  "permissionsChanged": false
+}
