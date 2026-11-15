@@ -1,0 +1,78 @@
+{
+  "classification": "DISPOSABLE_CONTROLLED_NATIVE_READONLY_COPY",
+  "schema": 9,
+  "integrity": "ok",
+  "queues": {
+    "alchemist_card:7f7e5b03d1f6272307643d5c05796925": {
+      "ownerBinding": "6a6a6ee77683dfb4b41b30c373f88051f6011c619c6a25a50dfb00929045b52d",
+      "work": {
+        "phase": "running",
+        "state": "RUNNING",
+        "stage": "transferring",
+        "code": null,
+        "pauseReason": null,
+        "taskId": "44c767441d446452522be6091b9f2149",
+        "revision": "96eb8b842f55cb3f3de54a928a7434581be652b7ca2e044d6e3b184cd40bb152",
+        "bytes": 2359296,
+        "totalBytes": 15728646,
+        "attempts": 2,
+        "runnerEpoch": "c2ec7ef55d55db97c46829420314f279",
+        "executor": "android18",
+        "autoResume": true,
+        "networkRetries": 0,
+        "jobRetries": 0,
+        "retryAtMs": null
+      },
+      "pending": {
+        "operation": null,
+        "requestId": null,
+        "ifMatch": null
+      },
+      "lastReceipt": null
+    }
+  },
+  "uploads": {
+    "alchemist_upload:6a6a6ee77683dfb4b41b30c373f88051f6011c619c6a25a50dfb00929045b52d:3e001c5077e8cfa8891791f94eaca0bf:560d7d44ccfe4125f54d5d890589c04cd354ef4113384441c743d3d0e584cc37:aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8": {
+      "ownerBinding": "6a6a6ee77683dfb4b41b30c373f88051f6011c619c6a25a50dfb00929045b52d",
+      "sessionId": "asset-1",
+      "requestId": "ea29451d9579a1597f6f2cfef8dc05bc",
+      "offset": 2359296,
+      "receipt": null
+    }
+  },
+  "downloadCheckpoints": {},
+  "assets": [
+    {
+      "id": "3e001c5077e8cfa8891791f94eaca0bf",
+      "filePath": "asset_3e001c5077e8cfa8891791f94eaca0bf.wav",
+      "sha256": "aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8",
+      "bytes": 5242880
+    },
+    {
+      "id": "9749c4760ae9d8f62c0e86cd2958988f",
+      "filePath": "asset_9749c4760ae9d8f62c0e86cd2958988f.wav",
+      "sha256": "6acae56d3c9237097635a46233fca05987070a363dfdf84b77d7575fb760251d",
+      "bytes": 5242882
+    },
+    {
+      "id": "cc785377c03ac451867f2e8b0c7b9c8c",
+      "filePath": "asset_cc785377c03ac451867f2e8b0c7b9c8c.wav",
+      "sha256": "d8f41bbe173e5a41dbdc8c3b01c289ce2e30c98d8ffa729b7221471b7b9a7545",
+      "bytes": 5242884
+    }
+  ],
+  "sourceFiles": {
+    "files/audio/asset_3e001c5077e8cfa8891791f94eaca0bf.wav": {
+      "bytes": 5242880,
+      "sha256": "aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8"
+    },
+    "files/audio/asset_9749c4760ae9d8f62c0e86cd2958988f.wav": {
+      "bytes": 5242882,
+      "sha256": "6acae56d3c9237097635a46233fca05987070a363dfdf84b77d7575fb760251d"
+    },
+    "files/audio/asset_cc785377c03ac451867f2e8b0c7b9c8c.wav": {
+      "bytes": 5242884,
+      "sha256": "d8f41bbe173e5a41dbdc8c3b01c289ce2e30c98d8ffa729b7221471b7b9a7545"
+    }
+  }
+}

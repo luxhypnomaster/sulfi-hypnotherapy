@@ -1,0 +1,57 @@
+{
+  "snapshot": {
+    "classification": "DISPOSABLE_CONTROLLED_NATIVE_READONLY_COPY",
+    "schema": 9,
+    "integrity": "ok",
+    "queues": {
+      "alchemist_download:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:install:cb2aaafa5f5e7c987f64486e6c9b8c34:e91c624b27a99ed0eb4af2701b28dcaab8fe07183c5be0c9d9b55bb909998b4a": {
+        "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+        "work": {
+          "phase": "running",
+          "state": "RUNNING",
+          "stage": "transferring",
+          "code": null,
+          "pauseReason": null,
+          "taskId": "75caba8c35c4567ec42da94a7026c72d",
+          "revision": "9f9c4305377f52f2cc6d73c47c288a5be7f45f01b0a5a86e50f844ea751a8655",
+          "bytes": 1572864,
+          "totalBytes": 15728646,
+          "attempts": 3,
+          "runnerEpoch": "12593558a0bc4d76367dbe11826b82b2",
+          "executor": "android18",
+          "autoResume": true,
+          "networkRetries": 0,
+          "jobRetries": 0,
+          "retryAtMs": null
+        },
+        "pending": {
+          "operation": null,
+          "requestId": null,
+          "ifMatch": null
+        },
+        "lastReceipt": null
+      }
+    },
+    "uploads": {},
+    "downloadCheckpoints": {
+      "alchemist_download_checkpoint:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:asset-1:aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8": {
+        "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+        "assetRevisionId": "asset-1",
+        "sha256": "aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8",
+        "byteLength": 5242880,
+        "offset": 1572864,
+        "verified": null,
+        "receipt": null,
+        "recordedChunks": 6
+      }
+    },
+    "assets": [],
+    "sourceFiles": {}
+  },
+  "firstRange": {
+    "assetRevisionId": "asset-1",
+    "offset": 1572864,
+    "length": 262144
+  },
+  "expectedOffset": 1572864
+}
