@@ -148,6 +148,7 @@ Future<Map<String, dynamic>> checkLegacyQueueNative18(
     check(await raw(checkpointKey) == checkpoint, 'UPLOAD_CHECKPOINT_CHANGED');
     return {
       'status': 'PASS',
+      'checkedAtMs': DateTime.now().millisecondsSinceEpoch,
       'classification': 'CONTROLLED_NATIVE_ANDROID_SQLITE_OLD27_SHAPE',
       'sqliteUserVersion': Sqflite.firstIntValue(
         await db.rawQuery('PRAGMA user_version'),

@@ -10,12 +10,16 @@ try:
  for edition,suffix in [('master',''),('client','.clienttest')]:
   pkg='ru.sulfi.sulfi_hypnotherapy'+suffix+'.transferprobe'
   assert 'Success' in adb('install','-r','-t',str(ROOT/(edition+'.apk')))
-  launch(pkg);click('RUN LEGACY QUEUE CHECK')
+  launch(pkg)
+  try:previous=json.loads(adb('shell','run-as',pkg,'cat','files/native-legacy-queue18.json',check=False)).get('checkedAtMs',0)
+  except json.JSONDecodeError:previous=0
+  click('RUN LEGACY QUEUE CHECK')
   until=time.monotonic()+60;v=None
   while time.monotonic()<until:
    raw=adb('shell','run-as',pkg,'cat','files/native-legacy-queue18.json',check=False)
    try:v=json.loads(raw)
    except json.JSONDecodeError:time.sleep(1);continue
+   if v.get('checkedAtMs',0)<=previous:v=None;time.sleep(1);continue
    break
   assert v is not None,'NATIVE_QUEUE_CONVERSION_DID_NOT_RETURN_A_RECEIPT'
   assert v['status']=='PASS' and v['classification']=='CONTROLLED_NATIVE_ANDROID_SQLITE_OLD27_SHAPE'
