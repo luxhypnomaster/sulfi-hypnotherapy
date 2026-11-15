@@ -1,0 +1,13 @@
+{
+  "source": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
+  "run": 43740142417,
+  "candidateJob": {
+    "id": 132893385001,
+    "name": "candidate18",
+    "conclusion": "success",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43740142417/job/132893385001"
+  },
+  "safeForOwnerInstall": false,
+  "nativeUpgradeGates": "IN_PROGRESS_NOT_ASSUMED",
+  "metadataDigests": "READ_COMPLETE_RAW_LOGS_BEFORE_DELIVERY"
+}
