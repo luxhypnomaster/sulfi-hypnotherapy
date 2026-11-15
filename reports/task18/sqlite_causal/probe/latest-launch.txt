@@ -1,0 +1,7 @@
+Starting: Intent { cmp=ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity
+TotalTime: 6399
+WaitTime: 6405
+Complete

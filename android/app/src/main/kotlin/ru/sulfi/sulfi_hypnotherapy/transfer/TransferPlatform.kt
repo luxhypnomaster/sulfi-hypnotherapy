@@ -169,7 +169,7 @@ object TransferPlatform {
                     "progress" -> { require(worker); TransferRuntime.progress(m); result.success(null) }
                     "done" -> { require(worker); result.success(null); Handler(Looper.getMainLooper()).post { TransferRuntime.finish((m["retryAfterMs"] as? Number)?.toLong(), (m["observedDispatch"] as? Number)?.toLong() ?: -1, m["state"] as? String, m["startupFailure"] == true) } }
                     "status" -> result.success(mapOf("running" to TransferRuntime.running, "needsUserStart" to prefs(c).getBoolean("needsUserStart", false), "stopReason" to TransferRuntime.stopReason, "openQueue" to TransferRuntime.consumeOpen()))
-                    "paths" -> result.success(mapOf("support" to c.filesDir.absolutePath))
+                    "paths" -> result.success(mapOf("support" to c.filesDir.absolutePath, "foregroundService" to TransferRuntime.foregroundService))
                     "network" -> {
                         val manager = c.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                         result.success(mapOf("available" to (manager.activeNetwork != null), "metered" to manager.isActiveNetworkMetered))
@@ -200,6 +200,7 @@ object TransferRuntime {
     private var context: Context? = null
     private var complete: (() -> Unit)? = null
     private var wake: PowerManager.WakeLock? = null
+    var foregroundService = false; private set
     private var lastNotice = 0L
     var stopReason: String? = null; private set
     var runId = 0; private set
@@ -210,6 +211,7 @@ object TransferRuntime {
     fun start(c: Context, finished: () -> Unit): Boolean {
         if (running) { channel?.invokeMethod("wake", null); return false }
         context = c.applicationContext; complete = finished; stopReason = null; runId++
+        foregroundService = Build.VERSION.SDK_INT < 34 && c is TransferForegroundService
         // Recovery is a new executor too: remove the obsolete WAITING notice
         // before posting active progress, not just on an explicit UI start.
         (c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(TransferPlatform.NOTIFICATION + 1)
@@ -235,7 +237,7 @@ object TransferRuntime {
     fun finish(retryAfter: Long?, observedDispatch: Long = -1, state: String? = null, startupFailure: Boolean = false) {
         val c = context ?: return
         val done = complete; complete = null
-        val old = engine; engine = null; channel = null
+        val old = engine; engine = null; channel = null; foregroundService = false
         if (wake?.isHeld == true) wake?.release(); wake = null
         old?.destroy()
         (c.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler).cancel(TransferPlatform.RECOVERY)

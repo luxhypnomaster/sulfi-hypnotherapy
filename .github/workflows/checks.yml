@@ -24,7 +24,7 @@ on:
       task18_scope:
         description: 'full OS/TCP transfer probe, or isolated native Android SQLite legacy conversion only'
         type: choice
-        options: ['full', 'legacy-only', 'sqlite-only']
+        options: ['full', 'legacy-only', 'sqlite-only', 'sqlite-native']
         default: 'full'
       task18_reuse_dart_verify:
         description: 'Reuse real43704911303 only if Dart/test/server/pubspec inputs unchanged; NEW native unit/build/upgrade still mandatory'
@@ -962,7 +962,7 @@ jobs:
           ./gradlew :app:compileDebugKotlin :app:testDebugUnitTest --no-daemon --console=plain
 
   probe18:
-    if: github.event_name == 'workflow_dispatch' && inputs.task18_probe == true && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    if: github.event_name == 'workflow_dispatch' && inputs.task18_probe == true && inputs.task18_scope != 'sqlite-native' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -1277,3 +1277,69 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/task18/deliver_private_pair.py --execute
+
+
+  sqlite18:
+    if: github.event_name == 'workflow_dispatch' && inputs.task18_probe == true && inputs.task18_scope == 'sqlite-native' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      TASK17_EMULATOR_PIN: '37.2.12'
+      TASK17_PROCESS_FORENSIC: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task18-probe-apks
+          key: task18-probe-v3-a777f4e1328ba6d3e43d0b1b98f333021d44f706b0c84ef30de60d500349dfcb
+          fail-on-cache-miss: true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-35 build-tools;36.0.0
+      - name: Verify exact already-built disposable APK, no Flutter rebuild or owner signing
+        run: |
+          python3 - <<'SQLGATE'
+          import hashlib,pathlib,os,json
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-apks'
+          v=json.loads((root/'PROBE_MANIFEST_18.json').read_text())
+          assert v['appSource']=='ef50fc5dceb849257b5d99b74506c3609739e343'
+          with (root/'master.apk').open('rb') as f:assert hashlib.file_digest(f,'sha256').hexdigest()=='4a7ec8d9d44d2a26c47b65a8b58c82c058ba3a03fabe1040f16e01e514064827'
+          SQLGATE
+          python3 scripts/task18/probe_apk_manifest.py verify
+          bash scripts/task18/build_sqlite_probe.sh
+          bash scripts/task16g/prepare_native_runner.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Actual shipped native worker pool lock-order comparison, no app bootstrap
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          disable-animations: true
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
+          emulator-options: -no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: python3 scripts/task18/native_sqlite_pool.py
+      - name: Keep small native receipts with raw byte SHA, no quota-dependent artifacts
+        if: always()
+        run: |
+          python3 - <<'SQLLOG'
+          import pathlib,os,json,base64,hashlib
+          for f in sorted((pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-evidence').glob('*.json')):
+            b=f.read_bytes();assert len(b)<100000
+            print('TASK18_FILE_META='+json.dumps({'file':f.name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}))
+            for i in range(0,len(b),32000):print('TASK18_FILE_CHUNK='+f.name+':'+str(i//32000)+':'+base64.b64encode(b[i:i+32000]).decode())
+          SQLLOG

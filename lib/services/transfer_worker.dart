@@ -21,6 +21,7 @@ import 'diary_api.dart';
 import 'diary_media_store.dart';
 import 'library_service.dart';
 import 'native_transfer_bridge.dart';
+import 'foreground_transfer_retry.dart';
 import 'session_controller.dart';
 
 /// Only the Android JobService/dataSync Service starts this separate engine.
@@ -39,6 +40,12 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       ? stopReason!
       : 'WAITING_POLICY';
   var observedDispatch = -1;
+  Completer<void>? idleWake;
+  void wakeIdle() {
+    final pending = idleWake;
+    if (pending != null && !pending.isCompleted) pending.complete();
+  }
+
   Future<Map<String, dynamic>> lease() async {
     try {
       final m = await channel.invokeMapMethod<String, dynamic>('lease', {
@@ -111,6 +118,7 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
   channel.setMethodCallHandler((call) async {
     if (call.method == 'stop') {
       stopped = true;
+      wakeIdle();
       stopReason =
           (call.arguments as Map?)?['reason'] as String? ?? 'WAITING_POLICY';
       await queue?.pauseAll(reason: pauseReason());
@@ -123,8 +131,10 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
         await queue?.enqueue(m['name']);
         wake = true;
       }
+      wakeIdle();
     } else if (call.method == 'wake') {
       wake = true;
+      wakeIdle();
     }
   });
 
@@ -273,27 +283,41 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       },
       send: controller.sendCloudTask,
     );
+    bool noticing = false;
     Future<void> notice() async {
-      await queue?.refresh();
-      final row = queue?.rows
-          .where(
-            (r) =>
-                const ['preparing', 'running'].contains(r['_work']?['phase']),
-          )
-          .firstOrNull;
-      if (row == null) return;
-      final w = row['_work'] as Map;
-      await channel.invokeMethod('progress', {
-        'name': row['_name'],
-        'title':
-            row['card']?['title'] ??
-            row['entry']?['title'] ??
-            row['download']?['title'] ??
-            'Передача Сульфи',
-        'label': alchemistStageLabel(w['stage']),
-        'bytes': w['bytes'],
-        'totalBytes': w['totalBytes'],
-      });
+      if (noticing) return;
+      noticing = true;
+      try {
+        await queue?.refresh();
+        final row = queue?.rows
+            .where(
+              (r) => const [
+                'preparing',
+                'running',
+                'waiting_network',
+                'retry_scheduled',
+              ].contains(r['_work']?['phase']),
+            )
+            .firstOrNull;
+        if (row == null) return;
+        final w = row['_work'] as Map;
+        await channel.invokeMethod('progress', {
+          'name': row['_name'],
+          'title':
+              row['card']?['title'] ??
+              row['entry']?['title'] ??
+              row['download']?['title'] ??
+              'Передача Сульфи',
+          'label':
+              const ['waiting_network', 'retry_scheduled'].contains(w['phase'])
+              ? 'Ожидает сеть или время повторной попытки'
+              : alchemistStageLabel(w['stage']),
+          'bytes': w['bytes'],
+          'totalBytes': w['totalBytes'],
+        });
+      } finally {
+        noticing = false;
+      }
     }
 
     heartbeat = Timer.periodic(const Duration(seconds: 2), (_) {
@@ -303,6 +327,25 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       await queue.pauseAll(reason: pauseReason());
     }
     await drain();
+    // A regular recovery job can remain ready-but-batched on API33 even after
+    // Wi-Fi is validated. Keep only the already user-started dataSync service
+    // for a bounded transient retry; never extend a regular JobService budget.
+    if (paths['foregroundService'] == true) {
+      final window = Stopwatch()..start();
+      while (!stopped) {
+        await queue.refresh();
+        final delay = foregroundTransferRetryDelay(
+          queue.rows,
+          nowMs: DateTime.now().millisecondsSinceEpoch,
+          remaining: const Duration(seconds: 90) - window.elapsed,
+        );
+        if (delay == null) break;
+        idleWake = Completer<void>();
+        await Future.any<void>([Future<void>.delayed(delay), idleWake.future]);
+        idleWake = null;
+        if (!stopped) await drain();
+      }
+    }
     await queue.refresh();
     final waiting = queue.rows.where(
       (r) =>
