@@ -1098,7 +1098,7 @@ jobs:
           cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-apks/client28.apk"
           bash scripts/task18/verify_pair.sh
           cd android
-          ./gradlew :app:testDebugUnitTest --no-daemon --console=plain
+          ./gradlew :app:testDebugUnitTest :sqflite_android:testDebugUnitTest --no-daemon --console=plain
       - name: Quarantine only, no APK delivery before native safety gates
         uses: actions/cache/save@v4
         with:

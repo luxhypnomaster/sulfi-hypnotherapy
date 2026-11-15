@@ -31,7 +31,7 @@ for count in [1]:
   raise AssertionError('NATIVE_PROCESS_EXIT_'+str(result.returncode)+'_SEE_READONLY_DIAGNOSTICS')
  match=re.search(r'^NATIVE_POOL18=(\{.*\})$',raw,re.M);assert match,'NO_NATIVE_POOL_RECEIPT:'+raw[-1000:]
  v=json.loads(match[1]);(out/('native-pool-'+str(count)+'.json')).write_text(json.dumps(v,indent=2)+'\n')
- assert v['productionDatabaseOpened'] is False and v['pool']==count and v['busyTimeoutMs']==0
+ assert v['productionDatabaseOpened'] is False and v['pool']==count and v['configuredBusyTimeoutMs']==0
  assert not v['errors'] and v['status']=='BOTH_COMMITS_COMPLETE' and v['rows']==2 and v['integrity']=='ok','CANDIDATE_SERIAL_SCHEDULER_FAILED'
  cases.append({'pool':count,'status':'PASS_CAUSAL_NATIVE_EXPERIMENT','observed':v['status']})
 v={'driverSource':os.environ['GITHUB_SHA'],'appSource':'ef50fc5dceb849257b5d99b74506c3609739e343','classification':'CANDIDATE_VENDOR_SCHEDULER_SOURCE_NOT_SHIPPED_APK_NOT_GOOGLE_OR_PHONE','cases':cases}

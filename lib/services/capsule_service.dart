@@ -1068,6 +1068,9 @@ class CapsuleService {
         }
         for (final table in tables) {
           for (final row in records[table] as List) {
+            // An Android stop must reach rollback between rows, not wait for
+            // an entire large capsule before the only pre-commit check.
+            checkCancelled();
             if (table == 'content_revisions') {
               await ContentRevisionStore(tx)
                   .put(ContentRevision.fromMap(jsonDecode(row['payload'])));

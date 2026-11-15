@@ -37,7 +37,7 @@ public interface DatabaseWorkerPool {
 
             @Override
             public boolean isInTransaction() {
-                return database.isInTransaction();
+                return database.isInTransaction() && database.getWritableDatabase().isOpen();
             }
         };
         this.post(new DatabaseTask(delegate, runnable));
@@ -80,9 +80,20 @@ class SingleDatabaseWorkerPoolImpl implements DatabaseWorkerPool {
         }
     }
 
+    private final TransactionScheduler transactions = new TransactionScheduler();
+
     @Override
     public void post(DatabaseTask task) {
-        handler.post(task.runnable);
+        // A foreign connection must not block this only native thread while
+        // its transaction owner's COMMIT is still waiting for the same thread.
+        handler.post(() -> {
+            transactions.offer(task);
+            DatabaseTask next;
+            while ((next = transactions.next()) != null) {
+                try { next.runnable.run(); }
+                finally { transactions.completed(next); }
+            }
+        });
     }
 }
 
