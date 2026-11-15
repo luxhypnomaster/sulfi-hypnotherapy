@@ -25,20 +25,18 @@
     "run": 43730572606,
     "driver": "102add21f8825d1d377daaeed21adfb20bb671b1",
     "appSource": "59c3667a28357767533b25e92661b87d081d7227",
-    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API"
+    "statusAtCheckpoint": "PASS_API34_11"
   },
-  "delivery": "NOT_DONE_QUARANTINE_ONLY_ARTIFACT_QUOTA_BLOCKED",
+  "delivery": "BLOCKED_NOT_EXECUTED_NATIVE_GATES_INCOMPLETE",
   "GAS": "EXISTING6_UNCHANGED",
   "OAuthACLSigning": "UNCHANGED",
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Read actual current probe result, collect raw ZIP/SHA evidence; do not assume green",
-    "If observer failure, diagnose exact evidence; never blindly rerun",
-    "After API34 extended PASS use same immutable cached fixture bytes for API33/35/36 (no rebuild unless inputs changed)",
-    "Do not issue probes or old source19 quarantine",
-    "Prepare concrete safe APK28 delivery only after background/safety gates; never upload APK to Drive without specific authorization",
-    "Update existing owner-only report IDs and raw-byte readback; preserve17/history"
+    "Read active runs real results, retain SHA evidence",
+    "Confirm or reject native SQLite two-handle hypothesis before runtime fix",
+    "No APK issuance until MASTER+API33/35 safety green",
+    "No production GAS/main/OAuth/ACL/signing changes"
   ],
   "historicalCeaPair": "SUPERSEDED_DO_NOT_ISSUE",
   "currentNativeSafety": {
@@ -46,7 +44,7 @@
     "source": "59c3667a28357767533b25e92661b87d081d7227",
     "driver": "4268cbf9dbf63ce9a54237440f0b671a3cca5d59",
     "mode": "CACHED_NO_REBUILD",
-    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API"
+    "statusAtCheckpoint": "CLIENT13_PASS_MASTER_PREUPDATE_BLOCKED"
   },
   "nativeLegacyConversion": {
     "run": 43715411268,
@@ -57,5 +55,18 @@
     "run": 43715408673,
     "candidateJob": "SUCCESS",
     "upgradeJobs": "BLOCKED_BEFORE_BASELINE_SYSTEM_UI_ANR"
+  },
+  "activeRuns": {
+    "master_semantics": 43734787048,
+    "api33_scheduler": 43734790304,
+    "sqlite_causal": 43734927899
+  },
+  "api36": {
+    "run": 43732895132,
+    "status": "PASS10_CONTROLLED"
+  },
+  "api35": {
+    "run": 43732892168,
+    "status": "FAIL_SQLITE_LOCKS_HYPOTHESIS_UNCONFIRMED"
   }
 }

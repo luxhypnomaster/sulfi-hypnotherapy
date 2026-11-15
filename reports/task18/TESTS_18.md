@@ -44,3 +44,14 @@ Extendedprobe6 failed before first transfer because external SystemUI ANR hid th
 Normal candidate43715408673 SUCCESS, full analyzer/JVM task/cert/config guards выполнены. Новые upgrade jobs этого run BLOCKED до данных из-за SystemUI/Launcher ANR, не из-за product migration; native59_first/. Native Android SQLite controlled conversion MASTER+CLIENT43715411268 SUCCESS; receipts/screens legacy_native59/. Native normal retention of5 supplemental legacy rows и личного UI baseline ещё требует PASS текущего cached AOSP run43730982434. Full background/SIGKILL source59 probe43730572606 ещё выполняется.
 
 Здесь dispatch в legacy-conversion проверке намеренно simulated/no-network; реальные OS transfers доказываются отдельно. Никакие controlled actors не названы Google-users. Исходники4ab/cea/59, unit/native/OWNER и общий результат каждого run разделяются.
+
+## Source59 actual native evidence — continuation 16:24UTC
+-43730572606 API34 SUCCESS11cases, includes actualSIGKILL→OS newPID6.65sec. `full34_59/probe/NATIVE_PROBE_18.json`.
+-43732895132 API36 SUCCESS10cases. `api36_59/probe/NATIVE_PROBE_18.json`.
+-43730982434 CLIENT13PASS; MASTER QEMU SIGSEGV before update. `native59_aosp/`.
+-43733477006 MASTER BLOCKED before update; no crash this time. Failed one-shot SeekBar lookup, subsequent failure XML contains exactseconds. `master59_diag/`.
+-43732897880 API33 FAIL at network automatic recovery; no GUI/force-run fallback presented asPASS. `api33_59/`.
+-43732892168 API35 FAIL at install/inventory after network/Cancel/range PASS; sqflite lock warnings. `api35_59/`.
+-43734787048 pending MASTER-only semantics-settle observer;43734790304 pending API33 scheduler diagnostic.
+-43734927899 pending native isolated two-handle lock experiment; default1 vs4nativepool. TESTONLY, no real DB. Local full analyze ef50fc5 PASS, Python compile/diffcheckPASS.
+All current evidence collector verifies byte count+SHA before writing. Controllednative/framework is not physical Google/OEM or humanhearing.
