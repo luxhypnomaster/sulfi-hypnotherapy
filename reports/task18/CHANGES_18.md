@@ -19,3 +19,6 @@ Private draft403 fixed by isolated manual baseline GET+SHA/cache job, not by exp
 
 ## Продолжение16:25UTC
 Сохранены actualAPI34/36 full PASS иCLIENT27→28 PASS receipts source59; доставка остаётся закрытой. Observer waiting реального SeekBar исправляет подтверждённую race только в nativeUIтесте. Добавлены boundedread-only scheduler/network failure snapshots и отдельный AndroidSQLite двухhandle causality probe на временном файле. Runtime source59/normalAPKbytes пока НЕ менялись; hypothesis ещё не принят заfix. Временная синтаксическая ошибка test-only UI была замечена локальным анализатором и исправлена до актуальногоnativebuild; ошибочный ожидавшийrun отменён.
+
+## Код2ec64b4 — короткий FGS retry, без правок SQLite
+На основании actualAPI33 ready-but-not-active recovery добавлено90sec retry-window только для существующего user-started pre34 foregroundService. Сохраняются durable retryAt и filters/lease; manual pause/cancel/stop будят ожидание. Обычный JobService/UIDT не удерживается этим окном. Notification heartbeat не накапливает параллельные незавершённые запросы и показывает waiting label. Fournewtargetedtests/analyze PASS; nativevalidation pending. THREAD_COUNT/PRAGMA/WAL/schema/database originals не изменены: pool-only гипотеза отвергнута реальными negative controls.

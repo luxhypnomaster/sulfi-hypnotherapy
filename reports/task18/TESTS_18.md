@@ -55,3 +55,13 @@ Normal candidate43715408673 SUCCESS, full analyzer/JVM task/cert/config guards �
 -43734787048 pending MASTER-only semantics-settle observer;43734790304 pending API33 scheduler diagnostic.
 -43734927899 pending native isolated two-handle lock experiment; default1 vs4nativepool. TESTONLY, no real DB. Local full analyze ef50fc5 PASS, Python compile/diffcheckPASS.
 All current evidence collector verifies byte count+SHA before writing. Controllednative/framework is not physical Google/OEM or humanhearing.
+
+## Новое продолжение — текущий код2ec64b4 (старые59 gates исторические)
+
+-4foreground-retry tests PASS и full local `flutter analyze --no-pub --fatal-infos` PASS. Полные485/3/Node относятся к старой неизменявшейся базе, **их reuse теперь НЕ действителен** для нового production Dart; перед новой парой нужен свежий full verify.
+-43734790304 API33 scheduler/network readback подтверждает ready/not-active regular recovery при восстановленной validated Wi-Fi. НовыйboundedFGS-code native NOT_RUN.
+-43734787048 MASTER failed before update: AOSP launcher не распознавался observer; сохранён XML, classifier теперь проверен на нём и отрицательных Sulfi/ANR примерах.
+-43734927899 Dart SQLite experiment BLOCKED/NO_RECEIPT; не причинныйPASS.
+-43736599516 pool1 and43737027095 pool4 actual native controls both fail write with SQLiteDatabaseLockedException; no productionDB. Pool-only strategy rejected; implementation not applied.
+-43737664851 native busy-control inconclusive: childexit137/Killed, no receipt. Next43738174779 adds phase+guest kill diagnostics, no Flutter rebuild/signing/ownerdata. NativeJava/D8 compilation locally PASS.
+-Source59 APKs остаются карантинными историческими байтами. Новый foregroundfix в них отсутствует; выдача запрещена. CurrentCODE requires new build and all native gates.

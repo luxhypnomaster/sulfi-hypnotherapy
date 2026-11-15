@@ -17,3 +17,11 @@ API34/36 полные controlled background сценарии PASS; это док
 API33 network-auto recovery в43732897880 не подтверждён за120sec. Без end-snapshot JobScheduler/network нельзя приписать ошибку OAuth/серверу/производительности.43734790304 добавляет read-only scheduler/services/network evidence при прежнем критерии, без принудительного старта.
 
 MASTER43733477006 не повторил прежний QEMU SIGSEGV: host process exit0, нетOOM, ошибка произошла до обновления в одноразовом поиске seconds-wheel semantics. Последующий failure XML содержит реальный android.widget.SeekBar с `0, Секунды`; observer теперь ждёт именно этот элемент20sec и выполняет прежний физический vertical gesture. Это исправление test-observer, не доказательство исправления старого неизвестного native crash и не изменение паузы APK.
+
+## Продолжение после scheduler readback и native SQLite controls
+
+API33/43734790304: recovery1802 имеет TIMING_DELAY/CONNECTIVITY и все неявные условия, Ready=true, !pending/!active, validated Wi-Fi104. Foreground service уже отсутствует; ordinary job batching допускает длительную задержку. Исправление2ec64b4 сохраняет уже разрешённый пользовательский FGS на короткое90sec retry-window, не сокращая durable retryAt и не предоставляя того же окна regular JobService. Owner/lease/user pause/cancel не меняются. Four targeted tests+localanalyze PASS; новая native-проверка этого кода ещё NOT_RUN.
+
+SQLite: фактические pool1/43736599516 и pool4/43737027095 на native Android SQLite оба дали SQLiteDatabaseLockedException при намеренно перекрывающихся write transactions. Изолированные данные; production DB не открывалась. **Pool-only fix rejected** — THREAD_COUNT остаётся1. Эти контроли не доказали точную причину бесконечного Dart mutex wait в API35 install.
+
+Добавление busy_timeout в отдельном native эксперименте43737664851 не дало ни PASS, ни SQL failure receipt: Android child app_process завершился137/Killed. Причина неизвестна; QEMU crash/hostOOM не приписываются без доказательств.43738174779 исполняет только положительный4-thread bounded-busy control с phase/PID stdout и read-only LMK/ActivityManager/memory dump при такой ошибке. Рабочие PRAGMA/schema/vendor SQLite исходники пока НЕ менялись. Не повторять слепо старые negative runs и не выдавать эксперимент за доказанный fix.
