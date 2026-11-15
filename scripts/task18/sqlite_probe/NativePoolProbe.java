@@ -14,10 +14,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** Runs shipped sqflite pool classes from the disposable APK, never owner DBs. */
 public final class NativePoolProbe {
   public static void main(String[] args) throws Exception {
-    if (args.length != 2 || !args[0].equals("ru.sulfi.sulfi_hypnotherapy.transferprobe")
+    if (args.length != 3 || !args[0].equals("ru.sulfi.sulfi_hypnotherapy.transferprobe")
         || !(Build.HARDWARE.contains("ranchu") || Build.HARDWARE.contains("goldfish"))
         || Process.myUid() < 10000) throw new SecurityException("DISPOSABLE_APP_UID_REQUIRED");
     int count = Integer.parseInt(args[1]);
+    int busyMs = Integer.parseInt(args[2]);
+    if (busyMs != 2000) throw new SecurityException("BOUNDED_BUSY_TIMEOUT_REQUIRED");
     if (count != 1 && count != 4) throw new SecurityException("UNREVIEWED_POOL_SIZE");
     File root = new File("/data/user/0/" + args[0] + "/files");
     if (!root.isDirectory()) throw new SecurityException("EXISTING_DISPOSABLE_FILES_REQUIRED");
@@ -25,6 +27,10 @@ public final class NativePoolProbe {
     SQLiteDatabase a = SQLiteDatabase.openOrCreateDatabase(fixture, null);
     a.execSQL("CREATE TABLE fixture(id INTEGER PRIMARY KEY, value TEXT)");
     SQLiteDatabase b = SQLiteDatabase.openOrCreateDatabase(fixture, null);
+    a.execSQL("PRAGMA busy_timeout=" + busyMs);
+    b.execSQL("PRAGMA busy_timeout=" + busyMs);
+    int actualBusy;
+    try (android.database.Cursor c = b.rawQuery("PRAGMA busy_timeout", null)) { c.moveToFirst(); actualBusy = c.getInt(0); }
     List<String> events = Collections.synchronizedList(new ArrayList<>());
     List<String> errors = Collections.synchronizedList(new ArrayList<>());
     Class<?> poolType = Class.forName("com.tekartik.sqflite.DatabaseWorkerPool");
@@ -71,7 +77,7 @@ public final class NativePoolProbe {
       if (!fixture.delete()) throw new AssertionError("FIXTURE_CLEANUP_FAILED");
     }
     JSONObject result = new JSONObject().put("classification", "ACTUAL_APK_NATIVE_SQFLITE_POOL_ANDROID_SQLITE")
-        .put("pool", count).put("status", finished && errors.isEmpty() ? "BOTH_COMMITS_COMPLETE" : "BLOCKED_NATIVE_POOL_LOCK_ORDER")
+        .put("pool", count).put("busyTimeoutMs", actualBusy).put("status", finished && errors.isEmpty() ? "BOTH_COMMITS_COMPLETE" : finished ? "WRITE_FAILED_LOCK_ORDER" : "BLOCKED_NATIVE_POOL_LOCK_ORDER")
         .put("events", new JSONArray(events)).put("errors", new JSONArray(errors)).put("rows", rows).put("integrity", integrity)
         .put("productionDatabaseOpened", false).put("Google", "NOT_RUN");
     System.out.println("NATIVE_POOL18=" + result.toString());

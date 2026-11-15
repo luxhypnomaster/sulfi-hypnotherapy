@@ -12,20 +12,18 @@ adb('shell','run-as',pkg,'mkdir','-p','files')
 jar=(root/'task18-sqlite-probe/native-pool.jar').read_bytes()
 r=subprocess.run(['adb','shell','-T','run-as',pkg,'tee','files/native-pool18.jar'],input=jar,capture_output=True,timeout=30);assert r.returncode==0 and r.stdout==jar
 adb('shell','run-as',pkg,'chmod','400','files/native-pool18.jar')
-negative=json.loads(pathlib.Path('reports/task18/sqlite_native_pool/probe/native-pool-1.json').read_text())
-assert negative['pool']==1 and negative['productionDatabaseOpened'] is False
-assert negative['errors']==['SQLiteDatabaseLockedException'] and 'B_COMMITTED' not in negative['events'] and 'A_COMMIT_ENQUEUED' in negative['events']
-cases=[{'pool':1,'status':'PASS_OBSERVED_NEGATIVE_WRITE_FAILURE','observed':'SQLiteDatabaseLockedException','run':43736599516,'receipt':'sqlite_native_pool/probe/native-pool-1.json'}]
-# The negative is already real, SHA-verified evidence. Do not repeat it; only
-# finish the independent four-worker positive that the first observer skipped.
-for count in [4]:
- raw=adb('shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count)).decode(errors='replace')
+cases=[]
+# Original zero-timeout1/4 failures are retained separately. Isolate the
+# bounded busy handler interaction with the same actual shipped pool classes.
+for count in [1,4]:
+ raw=adb('shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count),'2000').decode(errors='replace')
  match=re.search(r'^NATIVE_POOL18=(\{.*\})$',raw,re.M);assert match,'NO_NATIVE_POOL_RECEIPT:'+raw[-1000:]
  v=json.loads(match[1]);(out/('native-pool-'+str(count)+'.json')).write_text(json.dumps(v,indent=2)+'\n')
- assert v['productionDatabaseOpened'] is False and v['pool']==count and not v['errors']
- expected='BOTH_COMMITS_COMPLETE'
- assert v['status']==expected,'CAUSAL_HYPOTHESIS_NOT_CONFIRMED'
- if count==4:assert v['rows']==2 and v['integrity']=='ok'
+ assert v['productionDatabaseOpened'] is False and v['pool']==count and v['busyTimeoutMs']==2000
+ if count==1:
+  assert v['errors']==['SQLiteDatabaseLockedException'] and 'B_COMMITTED' not in v['events'],'NEGATIVE_LOCK_ORDER_NOT_OBSERVED'
+ else:
+  assert not v['errors'] and v['status']=='BOTH_COMMITS_COMPLETE' and v['rows']==2 and v['integrity']=='ok','POSITIVE_LOCK_ORDER_CONTROL_FAILED'
  cases.append({'pool':count,'status':'PASS_CAUSAL_NATIVE_EXPERIMENT','observed':v['status']})
 v={'driverSource':os.environ['GITHUB_SHA'],'appSource':'ef50fc5dceb849257b5d99b74506c3609739e343','classification':'NATIVE_POOL_NOT_APP_UPGRADE_GOOGLE_OR_PHONE','cases':cases}
 (out/'NATIVE_POOL_18.json').write_text(json.dumps(v,indent=2)+'\n');print('NATIVE_POOL_18='+json.dumps(v))
