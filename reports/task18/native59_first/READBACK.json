@@ -1,0 +1,38 @@
+[
+  {
+    "job": "0_native18 (master, 27, 748058133, 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb).txt",
+    "path": "master/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 684,
+    "sha256": "e324cf1b25a4fb3d5e52978fb18acf06172ef6b387bbac8291fd3a8c5e03a34e"
+  },
+  {
+    "job": "0_native18 (master, 27, 748058133, 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb).txt",
+    "path": "master/failure-install_baseline.png",
+    "bytes": 499358,
+    "sha256": "7b7f3bb82cb3a11721611271ccae8ed7282ded1df35b8929bfafcd70e8766829"
+  },
+  {
+    "job": "0_native18 (master, 27, 748058133, 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb).txt",
+    "path": "master/failure-install_baseline.xml",
+    "bytes": 1998,
+    "sha256": "78548b9fda50a7dbd28e4ad99e672681eb3f2ccb0254df5bba1c389f358ce48f"
+  },
+  {
+    "job": "1_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 689,
+    "sha256": "ea6b2f4a9adfcd3894e3d88683defccb2fed44b49edf485725a9a1c1167d6c1f"
+  },
+  {
+    "job": "1_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/failure-install_baseline.png",
+    "bytes": 499581,
+    "sha256": "fb1423f7ed0184f61510c2921ccbbc0eeab34d77f230c48beb3fcbfc389b2ef2"
+  },
+  {
+    "job": "1_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/failure-install_baseline.xml",
+    "bytes": 2003,
+    "sha256": "898af8fff566b441ee14df3d0162471ae4b3200cca2a178896192a9f5b9fdab6"
+  }
+]
