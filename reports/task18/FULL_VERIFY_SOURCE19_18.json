@@ -1,0 +1,26 @@
+{
+  "source": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+  "run": 43704911303,
+  "runConclusion": "failure",
+  "verifyJob": "success",
+  "flutter": {
+    "passed": 485,
+    "failed": 0,
+    "success": true
+  },
+  "clientEdition": {
+    "passed": 3
+  },
+  "nodeAlchemist": 47,
+  "nodeLegacy": 24,
+  "contract": {
+    "schemas": 13,
+    "fixtures": 4,
+    "negativeCases": 10
+  },
+  "format": "192 files/0 changes",
+  "analyze": "No issues",
+  "artifactUpload": "BLOCKED_QUOTA_HIT_STEP_CONTINUE_ON_ERROR",
+  "nativeUpgrade": "BLOCKED_BEFORE_INSTALL_DRAFT_ASSET_403",
+  "GooglePhysical": "NOT_RUN"
+}

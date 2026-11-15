@@ -23,3 +23,12 @@ Targeted native compile43658921493 наc94e668: FAIL до APK:2 Kotlin Int→Lon
 CI compile43660087187 SUCCESS; два full testOnly builds/installs в43662532407 и43663729317 SUCCESS, но общий native test FAILURE до передачи. Последний подтвердил Pixel Launcher ANR/first-frame timeout, не передачу и не app data safety. Полные evidence второго прогона в probe2/ извлечены из Actions logs ZIP с проверкой SHA, потому что gh run view --log после перезапуска вернул пустой текст. Новый native43700853248/source4984a7b — changed GLES/framebuffer hypothesis, результат ещё ожидается. Такие FAIL не объявляются PASS и не считаются Google/physical QA.
 
 Native MASTER27/CLIENT27→28, API35/36 transfer, реальный Google/OEM/двухтелефонный/offline-heard результат — NOT_RUN. Никаких APK28 links до green data gate.
+
+
+## Подтверждённый CI43704911303 / source19c3345
+
+Verify job SUCCESS:485 Flutter PASS/0FAIL, CLIENT3PASS, Node47+24PASS,13schema/4fixture/10negative contractPASS,192format files/0changes,analyze clean. Общий run FAILURE: оба native upgrade jobs остановились на403 чтения private draft baseline, до установки. Quarantine candidate job SUCCESS; safeForOwnerInstall=false. Raw краткие строки в evidence/FULL_VERIFY_SOURCE19_18.log, точные SHA в QUARANTINE_SOURCE19_18.json.
+
+Уточнение по хранилищу артефактов: шаг Preserve test report имел conclusion success благодаря continue-on-error, но сырые логи содержат Artifact storage quota has been hit. Реальный upload НЕ состоялся, API artifacts пуст. Не повторять вслепую, не удалять старые артефакты, не менять тариф/права. Использованы ограниченные доказательства в CI logs и private cache; выпуск/доставка новых APK ещё не выполнены.
+
+Native probe43704911357 SUCCESS7: actual API34 Activity+engine destroyed/samePID, bytes both directions, complete unique commit,3files/3hash/module/program, CLIENT offline cold start + native UID-bound AudioTrack. App4ab0588, driver19c3345; доказательства probe5/. Новое native ownership исправлениеcea4897 требует собственного compile/JVM/native результата: старый probe PASS его не сертифицирует. Текущие43708103115 finalize и43708105791 extendedprobe запущены с одной checkpointcea4897.
