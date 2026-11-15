@@ -298,7 +298,7 @@ def seed_legacy_queues():
  adb('shell','am','force-stop',PKG) # controlled emulator only, not owner phone
  def put_private(name,data):
   assert re.fullmatch('[a-z0-9.-]+',name)
-  r=subprocess.run(['adb','exec-out','run-as',PKG,'tee','files/'+name],input=data,capture_output=True,timeout=30)
+  r=subprocess.run(['adb','shell','-T','run-as',PKG,'tee','files/'+name],input=data,capture_output=True,timeout=30)
   assert r.returncode==0 and r.stdout==data,'CONTROLLED_PRIVATE_MARKER_COPY_FAILED'
  put_private('task18-marker.jar',(pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-queue-marker/marker.jar').read_bytes())
  adb('shell','run-as',PKG,'chmod','400','files/task18-marker.jar') # Android14 read-only dynamic code requirement
