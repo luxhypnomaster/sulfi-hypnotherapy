@@ -10,7 +10,12 @@
 | format / analyze / contracts | SUCCESS | тот же verify |
 | normal signed MASTER+CLIENT28 | candidate18 SUCCESS | QUARANTINE_DE408_18.json; package/version/config/подпись/no probe guards |
 | CLIENT27→28 normal package | 13 PASS | finalize_de408/client/NATIVE_UI_UPGRADE_18.json |
-| MASTER27→28 API34 | BLOCKED before update, host QEMU SIGSEGV | finalize_de408/master; no owner data, not migration failure |
+| MASTER27→28 API34 | historical BLOCKED before update, host QEMU SIGSEGV | finalize_de408/master; no owner data, not migration failure |
+| MASTER27→28 API35 | 15 PASS | master35_de408/master/NATIVE_UI_UPGRADE_18.json; run43764129343 |
+| full background API33 | 10 PASS | full33_de408/probe/NATIVE_PROBE_18.json; run43764132106 |
+| full background API35 | 10 PASS | full35_de408/probe/NATIVE_PROBE_18.json; run43764134857 |
+| full background API36 | 10 PASS | full36_de408/probe/NATIVE_PROBE_18.json; run43764137702 |
+| app JVM /vendor scheduler | SUCCESS | candidate43744944796 :app:testDebugUnitTest and :sqflite_android:testDebugUnitTest,8app tests +wrapper5scheduler invariants; counts from sources, no XML artifact claimed |
 | full background API34 | 11 PASS | full34_de408/probe/NATIVE_PROBE_18.json; run43744948169 |
 | old27 queue conversion обеих редакций | PASS_CONTROLLED | legacy_de408/probe/NATIVE_LEGACY_QUEUE_18.json; run43764140442 |
 | защита выдачи | 8 PASS | python3 scripts/task18/test_delivery_gate.py |
@@ -23,3 +28,5 @@ SQLite causal proof: исходная1-thread и4-thread конфигураци�
 Нормальный upgrade driver создаёт в APK27 через UI3разныхWAV (включая одинаковые названия),2модуля, положительную паузу настоящим вертикальным жестом, программу/history/current config, MASTER diary draft. Дополнительно вставляет5контролируемых legacy queue rows нативной SQLite под UID только эмулятора; это не замена UI baseline и не база владельца. Далее install-r, точное сравнение IDs/rows/mediaSHA/integrity и cold restart. Подпись/applicationId/schema9 прежние.
 
 Все восстановленные CI-файлы прошли SHA/size/chunk проверку collect_ci_evidence.py. Raw log .log сохраняется принудительно только с ограниченным synthetic output; токены/аккаунты владельца/его записи не собирались. GitHub upload-artifact step может иметь conclusion success из-за continue-on-error, хотя upload реально отказал quota: наличие APK artifact не утверждается.
+
+DELIVERY_GATE_18.json: все6current-source native gates PASS. Фактические API labels дополнительно сверены по emulator root logs api-level и Found systemPath. SOURCE SHA не смешан с59/a894. Normal MASTER frameworkAPI35, CLIENT34; fullprobe33/34/35/36. No Google/OWNER LIVE claim.

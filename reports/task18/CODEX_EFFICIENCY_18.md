@@ -9,3 +9,6 @@ MASTER reroute обоснован новым evidence: прежний API34 host
 Доставочный guard усилен8локальными adversarial Python tests; только scripts/reports/workflow delivery, shipping inputs неизменны. Перед реальным append helper заново проверяет actual passed jobs, receipt SHA/source/driver/полный набор cases, каждый APK/cert/config, закрытость existing draft и неизменность27. Новая подпись/сборка/полные тесты ради скачивания не требуются.
 
 Production GAS/OAuth/ACL/main не менялись; платные сервисы, удаление Actions artifacts и публичное открытие репозитория не применялись. APK28 не загружается на Drive по умолчанию.
+
+## Актуальный native итог
+Все5cached продолжений завершились SUCCESS: MASTER15; full33/35/36 по10; legacyboth. Дополнительных сборок/подписаний/полных suites не выполнялось. Delivery запущен после шести green gates, не заранее.

@@ -29,20 +29,90 @@
     "run": 43764140442,
     "status": "PASS_BOTH_CONTROLLED"
   },
-  "activeRuns": {
-    "masterUpgrade35": 43764129343,
-    "full33": 43764132106,
-    "full35": 43764134857,
-    "full36": 43764137702
-  },
-  "delivery": "BLOCKED_UNTIL_CURRENT_SOURCE_ALL_SIX_GATES_PASS",
+  "activeRuns": {},
+  "delivery": "IN_PROGRESS_PRIVATE_APPEND_ONLY",
   "GAS": "EXISTING6_UNCHANGED",
   "OAuthACLSigning": "UNCHANGED",
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Read actual active runs; collect SHA-verified evidence, never repeat blindly",
-    "If six exact-source gates pass, append checked pair only to existing private draft; no public release or Drive APK",
-    "Update existing owner-only Drive reports and PR49, preserve original27"
-  ]
+    "Check delivery actual run; independent asset SHA/cert and original27 preservation before any link",
+    "Update same owner-only Drive reports plus APK manifest, never APK Drive upload",
+    "OWNER LIVE Google/two phones/OEM/hearing/GAS throughput still NOT_RUN"
+  ],
+  "nativeGates": {
+    "master_upgrade": {
+      "run": 43764129343,
+      "job": "native18 (master)",
+      "driverSource": "e430e561c604098388d65a2658b5cae22670c2fa",
+      "receipt": "reports/task18/master35_de408/master/NATIVE_UI_UPGRADE_18.json",
+      "receiptSHA256": "7e6f40bb24c4e9c958c7ecd5293bc222a2fdcf8b13a9d3f8109452400e12f7bb",
+      "frameworkAPI": 35,
+      "frameworkLogEvidence": [
+        "2026-11-15T21:33:10.2604120Z   api-level: 35",
+        "2026-11-15T21:33:55.0802926Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-35/default/x86_64/"
+      ]
+    },
+    "client_upgrade": {
+      "run": 43744944796,
+      "job": "native18 (client)",
+      "driverSource": "de408f1cae08fce16069a701d147a0b1064053ba",
+      "receipt": "reports/task18/finalize_de408/client/NATIVE_UI_UPGRADE_18.json",
+      "receiptSHA256": "06b6e9340f53edf13a70f5e6a7b21bb53783ba7a4ad582f45be02079e748a547",
+      "frameworkAPI": 34,
+      "frameworkLogEvidence": [
+        "2026-11-15T18:26:42.1575417Z   api-level: 34",
+        "2026-11-15T18:27:27.5498363Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-34/default/x86_64/"
+      ]
+    },
+    "api33": {
+      "run": 43764132106,
+      "job": "probe18",
+      "driverSource": "e430e561c604098388d65a2658b5cae22670c2fa",
+      "receipt": "reports/task18/full33_de408/probe/NATIVE_PROBE_18.json",
+      "receiptSHA256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37",
+      "frameworkAPI": 33,
+      "frameworkLogEvidence": [
+        "2026-11-15T21:33:57.2020604Z   api-level: 33",
+        "2026-11-15T21:35:36.6786922Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-33/default/x86_64/"
+      ]
+    },
+    "api34": {
+      "run": 43744948169,
+      "job": "probe18",
+      "driverSource": "de408f1cae08fce16069a701d147a0b1064053ba",
+      "receipt": "reports/task18/full34_de408/probe/NATIVE_PROBE_18.json",
+      "receiptSHA256": "94b9979827d926e2b8bddb25a4ee3ee84179d6c435c8f468f83d061e2c607295",
+      "frameworkAPI": 34,
+      "frameworkLogEvidence": [
+        "2026-11-15T18:18:40.9913572Z   api-level: 34",
+        "2026-11-15T18:19:36.3631912Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-34/default/x86_64/"
+      ]
+    },
+    "api35": {
+      "run": 43764134857,
+      "job": "probe18",
+      "driverSource": "e430e561c604098388d65a2658b5cae22670c2fa",
+      "receipt": "reports/task18/full35_de408/probe/NATIVE_PROBE_18.json",
+      "receiptSHA256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37",
+      "frameworkAPI": 35,
+      "frameworkLogEvidence": [
+        "2026-11-15T21:33:23.6261616Z   api-level: 35",
+        "2026-11-15T21:34:12.8859930Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-35/default/x86_64/"
+      ]
+    },
+    "api36": {
+      "run": 43764137702,
+      "job": "probe18",
+      "driverSource": "e430e561c604098388d65a2658b5cae22670c2fa",
+      "receipt": "reports/task18/full36_de408/probe/NATIVE_PROBE_18.json",
+      "receiptSHA256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37",
+      "frameworkAPI": 36,
+      "frameworkLogEvidence": [
+        "2026-11-15T21:33:28.8433867Z   api-level: 36",
+        "2026-11-15T21:34:13.6613209Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-36/default/x86_64/"
+      ]
+    }
+  },
+  "nativeSafety": "PASS_NATIVE_SAFE_FOR_OWNER_QA_NOT_PHYSICAL"
 }

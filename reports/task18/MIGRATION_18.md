@@ -19,3 +19,6 @@ Boundary: no real Google owner in emulator, so APK27 owner-bound cloud queue ret
 ## Актуальный исходник DE408 и реальные очереди
 
 Предыдущие PASS cea/a894 — исторические, не gate текущих байтов. DE408 CLIENT13PASS: real normal27→28, UI-created материалы и5supplemental old27-shaped queue rows; exact preservation после cold restart. MASTER pending отдельныйAPI35 run43764129343, до него выдача запрещена. Native legacy conversion текущего кода43764140442 PASS в обеих редакциях: same-owner active/queued→policywait, ручная пауза/foreign/unbound byte-identical; без сетевого dispatch/реального Google. Внутреннее поле normalApkUpgrade в сыром legacy receipt ссылается на исторический run43708103115; raw не переписан, текущая связь upgrade указана здесь и в DELIVERY_GATE_18 после реальных результатов.
+
+## Актуальный native итог
+Current DE408 MASTER normal27→28 SUCCESS15 onAOSP35/run43764129343, CLIENT13 onAOSP34/run43744944796. UI-created personal rows/media SHA/integrity/cold restart, oldMASTERdiarydraft and new28draft retained;5controlled legacy queue rows exact. Framework reroute changed no APK/criteria. Actual owner/Google queues NOT_RUN.

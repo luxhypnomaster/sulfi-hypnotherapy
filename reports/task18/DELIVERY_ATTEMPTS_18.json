@@ -1,0 +1,14 @@
+{
+  "source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "attempts": [
+    {
+      "run": 43765533682,
+      "status": "FAIL_BEFORE_APPEND",
+      "step": "android-actions/setup-android@v3",
+      "reason": "Failed to find package 'tools' (action obsolete default)",
+      "candidateValidationOrUpload": "NOT_REACHED",
+      "old27": "UNCHANGED",
+      "fix": "Request only build-tools;36.0.0 needed for read-only APK inspections; no rebuild/signing/native gate repetition"
+    }
+  ]
+}

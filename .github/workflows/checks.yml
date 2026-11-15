@@ -1271,6 +1271,8 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: android-actions/setup-android@v3
+        with:
+          packages: 'build-tools;36.0.0'
       - name: Verify every cached byte/certificate/config before any external append
         run: bash scripts/task18/verify_pair.sh
       - name: Reject empty, mixed-source, tampered or incomplete delivery receipts
