@@ -188,7 +188,9 @@ class AlchemistMediaTransfer {
       }
       state['sessionId'] = start['sessionId'];
       var offset = start['offset'] as int;
-      if (offset < 0 || offset > size) {
+      if (offset < 0 ||
+          offset > size ||
+          offset != size && offset % 262144 != 0) {
         throw const FormatException('Некорректная позиция передачи');
       }
       state['offset'] = offset;

@@ -21,6 +21,10 @@ class MainActivity: AudioServiceActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         ru.sulfi.sulfi_hypnotherapy.transfer.TransferPlatform.attach(this, flutterEngine.dartExecutor.binaryMessenger)
+        if (packageName.endsWith(".transferprobe")) {
+            // Test implementation is not compiled into MASTER/CLIENT candidates.
+            Class.forName("ru.sulfi.sulfi_hypnotherapy.probe.TransferProbeControl").getMethod("attach", Activity::class.java, FlutterEngine::class.java).invoke(null, this, flutterEngine)
+        }
         if (intent?.getBooleanExtra("sulfi_transfer_queue", false) == true) ru.sulfi.sulfi_hypnotherapy.transfer.TransferRuntime.requestOpen()
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "ru.sulfi/device_files").setMethodCallHandler { call, result ->
             when (call.method) {

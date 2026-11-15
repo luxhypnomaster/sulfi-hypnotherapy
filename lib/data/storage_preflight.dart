@@ -5,6 +5,11 @@ import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+class StorageChangingException extends FormatException {
+  const StorageChangingException()
+    : super('База меняется; повторите безопасное открытие');
+}
+
 /// Validate only a disposable derivative, before any RW bootstrap/migration.
 /// No original SQLite, WAL, journal or media is opened for writing or cleaned.
 Future<void> preflightStorage(String path, DatabaseFactory factory) async {
@@ -40,9 +45,7 @@ Future<void> preflightStorage(String path, DatabaseFactory factory) async {
       await File('$path$suffix').copy('$target$suffix');
     }
     if (jsonEncode(before) != jsonEncode(await _fingerprints(path))) {
-      throw const FormatException(
-        'База меняется; повторите безопасное открытие',
-      );
+      throw const StorageChangingException();
     }
     copy = await factory.openDatabase(
       target,

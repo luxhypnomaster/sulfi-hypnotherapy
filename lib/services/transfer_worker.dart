@@ -244,6 +244,14 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       externalStop: () => stopped,
       prepareTask: (name, row) async {
         await lease();
+        if (name.startsWith('alchemist_read_sync_queue:') &&
+            !const ['MASTER', 'CLIENT'].contains(api.verifiedRole)) {
+          throw const AlchemistFailure(
+            'Для синхронизации нужен исходный Google-аккаунт.',
+            401,
+            'WAITING_AUTH',
+          );
+        }
         if (!name.startsWith('alchemist_download:') &&
             !name.startsWith('alchemist_read_sync_queue:') &&
             (api.verifiedRole != 'MASTER' || policy.clientEdition)) {

@@ -8,6 +8,15 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_probe:
+        description: 'Disposable native headless/real TCP probe, NO real Google/GAS/signing or candidate delivery'
+        type: boolean
+        default: false
+      task18_api:
+        description: 'Android probe API; start34, then policy coverage35/36 only after evidence'
+        type: choice
+        options: ['34', '35', '36']
+        default: '34'
       task18_compile:
         description: 'Task18 targeted Android compile only, no signing/APK/deploy, isolated feature branch'
         type: boolean
@@ -80,7 +89,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task18_probe != true && inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -925,3 +934,67 @@ jobs:
           flutter build apk --debug --config-only
           cd android
           ./gradlew :app:compileDebugKotlin --no-daemon --console=plain
+
+  probe18:
+    if: github.event_name == 'workflow_dispatch' && inputs.task18_probe == true && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      TASK17_EMULATOR_PIN: '37.2.12'
+      TASK17_PROCESS_FORENSIC: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - run: flutter pub get --enforce-lockfile
+      - name: Build disposable testOnly packages, NEVER user candidates or existing signing
+        run: |
+          mkdir -p "$RUNNER_TEMP/task18-probe-apks"
+          for EDITION in master client; do
+            EXTRA=()
+            if [ "$EDITION" = client ]; then EXTRA+=(--dart-define=SULFI_EDITION=client); fi
+            flutter build apk --debug --target=test_driver/transfer_probe.dart --dart-define=SULFI_TRANSFER_PROBE=true "${EXTRA[@]}"
+            cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-probe-apks/$EDITION.apk"
+          done
+          cd android
+          ./gradlew --stop
+      - name: Disposable host space and UI helper, no owner data or credentials
+        run: |
+          bash scripts/task16g/prepare_native_runner.sh
+          bash scripts/task16v/build_ui_probe.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          PROBE18_LATENCY_MS=2000 node scripts/task18/fixture_server.mjs > "$RUNNER_TEMP/task18-fixture-server.log" 2>&1 &
+      - name: Actual OS-owned headless execution after UI engine destruction and display off
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ inputs.task18_api }}
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          disable-animations: true
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: python3 scripts/task18/probe_native.py
+      - name: Retain only bounded synthetic receipts/screens with exact byte SHA (no artifact quota retry)
+        if: always()
+        run: |
+          python3 - <<'PROBEPY'
+          import os,pathlib,base64,hashlib,json
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-evidence'
+          for f in sorted(p.glob('*')):
+            if f.is_file() and f.stat().st_size<=2*1024*1024:
+              b=f.read_bytes();print('TASK18_FILE_META='+json.dumps({'file':f.name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}))
+              for i in range(0,len(b),32000):print('TASK18_FILE_CHUNK='+f.name+':'+str(i//32000)+':'+base64.b64encode(b[i:i+32000]).decode())
+          for q in [pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-forensics/EMULATOR_TERMINATION.json']:
+            if q.exists():print('TASK18_EMULATOR_EXIT='+q.read_text())
+          PROBEPY
