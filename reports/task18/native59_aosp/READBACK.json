@@ -1,0 +1,32 @@
+[
+  {
+    "job": "0_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 208506,
+    "sha256": "825f0b6c0391b4c67fff3ca21729bf601550bf54d3de38ba26dc01f64e62ecbe"
+  },
+  {
+    "job": "0_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/25-before-upgrade.png",
+    "bytes": 803374,
+    "sha256": "92e7c61bde8e7157515b006f3a3415564dfe2aefc5e8a9a0dd1e19cb58580fb5"
+  },
+  {
+    "job": "0_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/26-library.png",
+    "bytes": 61197,
+    "sha256": "ad16f72393aaac03333c159d85a5b5b800ac3991ffc0fb6973ab60b836d361ad"
+  },
+  {
+    "job": "0_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "path": "client/26-modules.png",
+    "bytes": 911651,
+    "sha256": "3e7baddef1eb73fa33e60dff8f946aa3f4646a0f9a6aa2f5e88fc7d066ffa1c9"
+  },
+  {
+    "job": "1_native18 (master, 27, 748058133, 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb).txt",
+    "path": "master/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 36640,
+    "sha256": "cf9c82c251c2cbb5a1ba6d3a01d8fcf3834323607001034dc6680422e2b51be3"
+  }
+]

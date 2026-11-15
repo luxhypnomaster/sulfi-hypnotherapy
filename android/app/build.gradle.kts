@@ -12,6 +12,7 @@ val sulfiDefines = (project.findProperty("dart-defines") as String?).orEmpty()
         String(Base64.getDecoder().decode(it))
     }.toSet()
 val sulfiClientTest = sulfiDefines.contains("SULFI_EDITION=client")
+val sulfiTransferProbe = sulfiDefines.contains("SULFI_TRANSFER_PROBE=true")
 
 android {
     namespace = "ru.sulfi.sulfi_hypnotherapy"
@@ -25,7 +26,7 @@ android {
 
     defaultConfig {
         // Keep this ID stable to preserve the on-device library across upgrades.
-        applicationId = if (sulfiClientTest) "ru.sulfi.sulfi_hypnotherapy.clienttest" else "ru.sulfi.sulfi_hypnotherapy"
+        applicationId = (if (sulfiClientTest) "ru.sulfi.sulfi_hypnotherapy.clienttest" else "ru.sulfi.sulfi_hypnotherapy") + (if (sulfiTransferProbe) ".transferprobe" else "")
         manifestPlaceholders["sulfiAppLabel"] = if (sulfiClientTest) "Сульфи — клиент (тест)" else "Сульфи"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
@@ -35,6 +36,11 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    if (sulfiTransferProbe) {
+        sourceSets.getByName("main").java.srcDir("../../test_driver/android")
+        sourceSets.getByName("debug").manifest.srcFile("../../test_driver/android/AndroidManifest.xml")
     }
 
     buildTypes {
@@ -66,4 +72,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    testImplementation("junit:junit:4.13.2")
 }

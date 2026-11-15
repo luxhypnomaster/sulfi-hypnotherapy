@@ -1,0 +1,10 @@
+00:00 +0: loading /dev/shm/sulfi18/test/task18_queue_test.dart
+00:00 +0: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 UI enqueue is persistent OS dispatch, never a second UI executor
+00:00 +1: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 legacy user pause/upload offsets are untouched; other owner cannot resume
+00:00 +2: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 same-owner policy stop recovers; explicit native pause and cancel never auto-start
+00:00 +3: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 duplicate taps remain one stable revision task and preserve request/receipt
+00:00 +4: loading /dev/shm/sulfi18/test/task18_download_test.dart
+00:00 +4: /dev/shm/sulfi18/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail
+00:01 +5: /dev/shm/sulfi18/test/task18_download_test.dart: 18 corrupt saved chunk stops before network/installation and preserves diagnostic bytes
+00:01 +6: /dev/shm/sulfi18/test/task18_download_test.dart: 18 no server chunk support is explicit compatibility failure, no full-file fallback
+00:01 +7: All tests passed!

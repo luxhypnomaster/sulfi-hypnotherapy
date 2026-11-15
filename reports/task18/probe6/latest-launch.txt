@@ -1,0 +1,6 @@
+Starting: Intent { cmp=ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity }
+Status: timeout
+LaunchState: UNKNOWN (-1)
+Activity: ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity
+WaitTime: 11993
+Complete

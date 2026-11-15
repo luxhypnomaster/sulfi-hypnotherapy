@@ -1,0 +1,9 @@
+# №18 — подготовка приватной выдачи, пока НЕ выполнена
+
+Подготовлен безопасный путь при наблюдаемом отказе Actions artifact quota: добавить ровно две новые28 APK к УЖЕ СУЩЕСТВУЮЩЕМУ private draft445425835, без создания/публикации release, tag, изменения main или privacy. Исходные master27/client27/APK_PAIR_17 сохраняют IDs и digest; весь контейнер остаётся draft/private. Новые имена явно относятся к18: alchemist-master28-task18-59c3667.apk и alchemist-client28-task18-59c3667.apk. Старые17 отчёты/файлы не переписываются.
+
+Реализация scripts/task18/deliver_private_pair.py по умолчанию preview-only. Workflow delivery18 разрешён только ручным запуском точной доверенной feature ветки. Он не читает ключ/Google OAuth, не собирает APK; повторяет реальный source/build gate и SHA/cert/config для cached source59. Upload STOP пока отсутствует DELIVERY_GATE_18.json: требуются фактические successful native jobs и SHA-checked receipts MASTER update, CLIENT update и API33/34/35/36, все с appSource59.
+
+Перед каждым append проверяются repo private, existing draft/target и исходные27 digest. Нет create/publish/PATCH release, --clobber/delete или действий с Drive. Частичный повтор не заменяет asset; существующее новое имя может быть принято только с тем же digest, независимым download SHA и apksigner. После двух независимых скачиваний создаётся APK_PAIR_18.json с фактическими asset URLs/IDs и GooglePhysicalQA NOT_RUN.
+
+Ссылки будут приватными GitHub: для скачивания нужен аккаунт владельца с доступом к этому draft; затем APK можно передать файлом тестировщику. Это не публичный релиз и не доступ к исходникам. Публичная ссылка/выгрузка APK28 на Google Drive этим действием не создаётся; прежнее исключение public CLIENT27 не расширяется. До прохождения safety gates никакая выдача не запускалась.

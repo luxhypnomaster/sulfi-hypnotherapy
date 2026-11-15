@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checkedAtMs": 1794747450197,
+  "classification": "CONTROLLED_NATIVE_ANDROID_SQLITE_OLD27_SHAPE",
+  "sqliteUserVersion": 9,
+  "integrity": "ok",
+  "runningAndQueuedConvertToPolicyWait": true,
+  "noLegacyAutoDispatch": true,
+  "userPausedForeignAndUnboundExactBytes": true,
+  "foreignResumeDenied": true,
+  "sameTaskBytesAttemptsRequestETagAndUploadSession": true,
+  "dispatch": "CONTROLLED_NO_NETWORK_NOT_OS_WORKER_PROOF",
+  "realGoogle": "NOT_RUN",
+  "normalApkUpgrade": "SEPARATE_GATE_NOT_THIS_PROOF",
+  "beforeNonFixtureSettingsSHA256": "a543d91d6a76c7ad8b3eb1f37f3e2211fc5c1603ab5efcf32ad4d185418272f6"
+}

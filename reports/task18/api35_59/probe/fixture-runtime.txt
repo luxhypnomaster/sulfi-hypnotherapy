@@ -1,0 +1,224 @@
+7  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:31.961   563   945 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:31.967  4377  4377 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:31.971   563   945 E ActivityManager: Unable to freeze binder for 4388: -11
+11-15 16:11:31.974   563   945 I ActivityManager: Killing 4388:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:32.078   563  2260 V ActivityManager: Got obituary of 4388:org.alchemist.p0probe
+11-15 16:11:32.596  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:33.321  4412  4412 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:33.333  4412  4412 I AndroidRuntime: Using default boot image
+11-15 16:11:33.333  4412  4412 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:33.421  4412  4412 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:33.424   563  2260 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:33.432   563   599 I ActivityManager: Start proc 4423:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:33.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:33.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:33.918   563   945 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:33.919  4412  4412 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:33.926   563   945 E ActivityManager: Unable to freeze binder for 4423: -11
+11-15 16:11:33.932   563   945 I ActivityManager: Killing 4423:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:33.968   563  2067 V ActivityManager: Got obituary of 4423:org.alchemist.p0probe
+11-15 16:11:34.560  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:34.876  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:35.043  4440  4440 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:35.047  4440  4440 I AndroidRuntime: Using default boot image
+11-15 16:11:35.047  4440  4440 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:35.172  4440  4440 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:35.175   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:35.183   563   599 I ActivityManager: Start proc 4451:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:35.561  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:35.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:35.754   563  1473 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:35.765   563  1473 E ActivityManager: Unable to freeze binder for 4451: -11
+11-15 16:11:35.767   563  1473 I ActivityManager: Killing 4451:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:35.811  4440  4440 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:35.876   563  2067 V ActivityManager: Got obituary of 4451:org.alchemist.p0probe
+11-15 16:11:36.553  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:37.201  4475  4475 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:37.204  4475  4475 I AndroidRuntime: Using default boot image
+11-15 16:11:37.204  4475  4475 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:37.282  4475  4475 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:37.285   563  3507 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:37.295   563   599 I ActivityManager: Start proc 4486:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:37.540  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:37.690  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:37.781   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:37.782  4475  4475 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:37.802   563   937 E ActivityManager: Unable to freeze binder for 4486: -11
+11-15 16:11:37.803   563   937 I ActivityManager: Killing 4486:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:37.833   563  3507 V ActivityManager: Got obituary of 4486:org.alchemist.p0probe
+11-15 16:11:38.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:38.555  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:38.985  4504  4504 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:38.989  4504  4504 I AndroidRuntime: Using default boot image
+11-15 16:11:38.989  4504  4504 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:39.066  4504  4504 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:39.069   563   945 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:39.076   563   599 I ActivityManager: Start proc 4515:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:39.546  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:39.578   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:39.593   563  2067 E ActivityManager: Unable to freeze binder for 4515: -11
+11-15 16:11:39.594  4504  4504 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:39.600   563  2067 I ActivityManager: Killing 4515:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:39.660   563   945 V ActivityManager: Got obituary of 4515:org.alchemist.p0probe
+11-15 16:11:39.740  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:40.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:40.905  4539  4539 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:40.909  4539  4539 I AndroidRuntime: Using default boot image
+11-15 16:11:40.909  4539  4539 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:41.043  4539  4539 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:41.046   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:41.054   563   599 I ActivityManager: Start proc 4550:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:41.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:41.702   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:41.714   563  2067 E ActivityManager: Unable to freeze binder for 4550: -11
+11-15 16:11:41.717   563  2067 I ActivityManager: Killing 4550:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:41.724  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:41.809  4539  4539 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:41.840   563   580 V ActivityManager: Got obituary of 4550:org.alchemist.p0probe
+11-15 16:11:42.155  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:42.532  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:42.953  4569  4569 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:42.957  4569  4569 I AndroidRuntime: Using default boot image
+11-15 16:11:42.957  4569  4569 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:43.049  4569  4569 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:43.053   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:43.062   563   599 I ActivityManager: Start proc 4580:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:43.564   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:43.565  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:43.604   563   937 E ActivityManager: Unable to freeze binder for 4580: -11
+11-15 16:11:43.613   563   937 I ActivityManager: Killing 4580:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:43.621  4569  4569 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:43.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:43.695   563   580 V ActivityManager: Got obituary of 4580:org.alchemist.p0probe
+11-15 16:11:44.532  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:44.819  4603  4603 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:44.824  4603  4603 I AndroidRuntime: Using default boot image
+11-15 16:11:44.825  4603  4603 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:44.941  4603  4603 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:44.945   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:44.952   563   599 I ActivityManager: Start proc 4614:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:45.463   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:45.476  4603  4603 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:45.493   563   580 E ActivityManager: Unable to freeze binder for 4614: -11
+11-15 16:11:45.494   563   580 I ActivityManager: Killing 4614:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:45.534   563   580 V ActivityManager: Got obituary of 4614:org.alchemist.p0probe
+11-15 16:11:45.567  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:45.684  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.094  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.595  4632  4632 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:46.598  4632  4632 I AndroidRuntime: Using default boot image
+11-15 16:11:46.598  4632  4632 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:46.720  4632  4632 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:46.724   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:46.731   563   599 I ActivityManager: Start proc 4643:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:47.247   563  3507 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:47.256   563  3507 E ActivityManager: Unable to freeze binder for 4643: -11
+11-15 16:11:47.273   563  3507 I ActivityManager: Killing 4643:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:47.274  4632  4632 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:47.375   563  3507 V ActivityManager: Got obituary of 4643:org.alchemist.p0probe
+11-15 16:11:47.542  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:47.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:48.510  4668  4668 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:48.514  4668  4668 I AndroidRuntime: Using default boot image
+11-15 16:11:48.514  4668  4668 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:48.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:48.629  4668  4668 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:48.632   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:48.641   563   599 I ActivityManager: Start proc 4679:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:49.183   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:49.196   563   580 E ActivityManager: Unable to freeze binder for 4679: -11
+11-15 16:11:49.203  4668  4668 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:49.205   563   580 I ActivityManager: Killing 4679:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:49.260   563  2067 V ActivityManager: Got obituary of 4679:org.alchemist.p0probe
+11-15 16:11:49.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:49.741  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:49.750  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:50.314  4695  4695 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:50.318  4695  4695 I AndroidRuntime: Using default boot image
+11-15 16:11:50.318  4695  4695 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:50.408  4695  4695 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:50.411   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:50.418   563   599 I ActivityManager: Start proc 4706:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:50.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:51.017   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:51.035   563   580 E ActivityManager: Unable to freeze binder for 4706: -11
+11-15 16:11:51.039   563   580 I ActivityManager: Killing 4706:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:51.081   563   945 V ActivityManager: Got obituary of 4706:org.alchemist.p0probe
+11-15 16:11:51.124  4695  4695 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:51.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:51.725  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:52.410  4731  4731 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:52.413  4731  4731 I AndroidRuntime: Using default boot image
+11-15 16:11:52.413  4731  4731 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:52.499  4731  4731 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:52.509   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:52.520   563   599 I ActivityManager: Start proc 4742:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:52.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:53.001   563  2260 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:53.008  4731  4731 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:53.018   563  2260 E ActivityManager: Unable to freeze binder for 4742: -11
+11-15 16:11:53.020   563  2260 I ActivityManager: Killing 4742:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:53.114   563  1473 V ActivityManager: Got obituary of 4742:org.alchemist.p0probe
+11-15 16:11:53.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:53.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:53.754  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:54.126  4760  4760 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:54.129  4760  4760 I AndroidRuntime: Using default boot image
+11-15 16:11:54.129  4760  4760 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:54.253  4760  4760 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:54.256   563  1473 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:54.263   563   599 I ActivityManager: Start proc 4771:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:54.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:54.810   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:54.816  4760  4760 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:54.820   563   580 E ActivityManager: Unable to freeze binder for 4771: -11
+11-15 16:11:54.828   563   580 I ActivityManager: Killing 4771:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:54.860   563   945 V ActivityManager: Got obituary of 4771:org.alchemist.p0probe
+11-15 16:11:55.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:55.682  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:56.134  4794  4794 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:56.138  4794  4794 I AndroidRuntime: Using default boot image
+11-15 16:11:56.138  4794  4794 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:56.268  4794  4794 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:56.271   563   580 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:56.279   563   599 I ActivityManager: Start proc 4805:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:56.577  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:56.849   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:56.857  4794  4794 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:56.859   563  2067 E ActivityManager: Unable to freeze binder for 4805: -11
+11-15 16:11:56.865   563  2067 I ActivityManager: Killing 4805:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:56.920   563  2067 V ActivityManager: Got obituary of 4805:org.alchemist.p0probe
+11-15 16:11:57.420  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.682  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.972  4823  4823 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:57.975  4823  4823 I AndroidRuntime: Using default boot image
+11-15 16:11:57.975  4823  4823 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:11:58.096  4823  4823 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:11:58.099   563  2067 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:11:58.106   563   599 I ActivityManager: Start proc 4834:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:11:58.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:58.611   563  3507 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:11:58.637   563  3507 E ActivityManager: Unable to freeze binder for 4834: -11
+11-15 16:11:58.638   563  3507 I ActivityManager: Killing 4834:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:11:58.678  4823  4823 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:11:58.788   563   937 V ActivityManager: Got obituary of 4834:org.alchemist.p0probe
+11-15 16:11:59.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:59.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:59.924  4858  4858 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 16:11:59.927  4858  4858 I AndroidRuntime: Using default boot image
+11-15 16:11:59.928  4858  4858 I AndroidRuntime: Leaving lock profiling enabled
+11-15 16:12:00.069  4858  4858 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 16:12:00.081   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: start instr
+11-15 16:12:00.093   563   599 I ActivityManager: Start proc 4869:org.alchemist.p0probe/u0a148 for added application org.alchemist.p0probe
+11-15 16:12:00.537  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:00.630   563   937 I ActivityManager: Force stopping org.alchemist.p0probe appid=10148 user=0: finished inst
+11-15 16:12:00.650  4858  4858 I AndroidRuntime: VM exiting with result code 0.
+11-15 16:12:00.652   563   937 E ActivityManager: Unable to freeze binder for 4869: -11
+11-15 16:12:00.655   563   937 I ActivityManager: Killing 4869:org.alchemist.p0probe/u0a148 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 16:12:00.686   563  1026 V ActivityManager: Got obituary of 4869:org.alchemist.p0probe
+11-15 16:12:01.282  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:01.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:01.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction

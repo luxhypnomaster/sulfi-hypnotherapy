@@ -1,0 +1,31 @@
+{
+  "source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "version": "0.4.20+28",
+  "pair": [
+    {
+      "edition": "master",
+      "assetId": 752461821,
+      "name": "alchemist-master28-task18-de408f1.apk",
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/alchemist-master28-task18-de408f1.apk",
+      "sha256": "2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "bytes": 193900724
+    },
+    {
+      "edition": "client",
+      "assetId": 752462315,
+      "name": "alchemist-client28-task18-de408f1.apk",
+      "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/releases/download/untagged-c7073f0a5871b5fb707c/alchemist-client28-task18-de408f1.apk",
+      "sha256": "637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "bytes": 193900756
+    }
+  ],
+  "status": "PRIVATE_CANDIDATES_FOR_OWNER_QA",
+  "nativeSafety": "PASS_CONTROLLED_NOT_PHYSICAL",
+  "GooglePhysicalQA": "NOT_RUN",
+  "releasePublished": false,
+  "existingDraftOnly": 445425835,
+  "original27": "UNCHANGED",
+  "DriveUpload": "NOT_PERFORMED"
+}

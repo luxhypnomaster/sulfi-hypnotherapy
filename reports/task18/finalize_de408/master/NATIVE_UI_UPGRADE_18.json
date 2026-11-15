@@ -1,0 +1,810 @@
+{
+  "fixture": "personal materials created through immutable27 Android UI; supplemental queue rows only via native SQLite fixture, no DB replacement",
+  "baseline": 27,
+  "target": 28,
+  "edition": "master",
+  "source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "driverSource": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "googleIdentities": "NOT_RUN_NO_REAL_ACCOUNT",
+  "ownerPhone": "NOT_TOUCHED",
+  "cases": [
+    {
+      "case": "install_baseline",
+      "status": "PASS",
+      "details": {
+        "versionCode": 27,
+        "uninstall": false,
+        "databaseInjected": false,
+        "unicodeIME": false,
+        "actualElmanFixtureTitle": "Elman variant 2"
+      }
+    },
+    {
+      "case": "ui_import_1",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI same title"
+      }
+    },
+    {
+      "case": "ui_import_2",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI same title"
+      }
+    },
+    {
+      "case": "ui_import_3",
+      "status": "PASS",
+      "details": {
+        "createdBy": "UI_system_picker",
+        "title": "UI third track"
+      }
+    },
+    {
+      "case": "ui_module_elman",
+      "status": "PASS",
+      "details": {
+        "title": "Elman variant 2",
+        "UI_dependencies": [
+          "UI same title",
+          "UI same title",
+          "UI third track"
+        ],
+        "pauseAdded": false,
+        "committedID": "fca16e5744922f4c064845965907be9e",
+        "storedItemCount": 3,
+        "SQLReadbackOnly": true
+      }
+    },
+    {
+      "case": "ui_module_pause",
+      "status": "BLOCKED",
+      "reason": "Command '['adb', 'shell', 'am', 'instrument', '-w', '-e', 'op', 'dump', 'org.alchemist.p0probe/.Probe']' timed out after 55 seconds"
+    },
+    {
+      "case": "driver",
+      "status": "BLOCKED",
+      "reason": "UI_BASELINE_SETUP_FAILED_STOP_WITHOUT_REPEATING"
+    }
+  ],
+  "actions": [
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Show roots",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Downloads",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-1.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-2.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI same title",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Библиотека",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "+ Добавить аудио",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "task16v-3.wav",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI third track",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Программы",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модули",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Создать модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "Elman variant 2",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Добавить трек",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "tap",
+      "label": "Сохранить модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Программы",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Модули",
+      "enabled": "true"
+    },
+    {
+      "action": "tap",
+      "label": "Создать модуль",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "native_keyboard_clear_and_key_events_with_UI_readback",
+      "value": "UI timed module",
+      "index": 0
+    },
+    {
+      "action": "tap",
+      "label": "Добавить трек",
+      "enabled": "true"
+    },
+    {
+      "action": "dismiss_observed_keyboard",
+      "visibility": "mInputShown=true"
+    },
+    {
+      "action": "tap",
+      "label": "Добавить паузу",
+      "enabled": "true"
+    }
+  ],
+  "inventories": {
+    "after-ui-import-task16v-1.wav": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "5a8208b322e8c9a245b089fdb608e947"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "486dcd240d9cd916d8262e6edb734014",
+            "title": "UI same title",
+            "filePath": "asset_486dcd240d9cd916d8262e6edb734014.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:16.666722Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:486dcd240d9cd916d8262e6edb734014:c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"logicalId\":\"486dcd240d9cd916d8262e6edb734014\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-15T18:29:16.666722Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"486dcd240d9cd916d8262e6edb734014\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-15T18:28:50.929599Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "4a8443acd6e63616d3f5b28c61afc98784e23dec77b623124797f28a9a347685"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/audio/asset_486dcd240d9cd916d8262e6edb734014.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "4a2372116e9a25abdba92644e73605639f0b89e0840d10381267eec9cef09df5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "2dd3790668c3a698586a7c6b05dde0d21b8c81bc83096f41b4b4e33459e83ed3"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "2bbda77905cd6205e06afa7d2c222a24cd2b786b50aeaf51368769438776a6c1"
+    },
+    "after-ui-import-task16v-2.wav": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "5a8208b322e8c9a245b089fdb608e947"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "486dcd240d9cd916d8262e6edb734014",
+            "title": "UI same title",
+            "filePath": "asset_486dcd240d9cd916d8262e6edb734014.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:16.666722Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5ca31ac98e39495253710e7cdf28664b",
+            "title": "UI same title",
+            "filePath": "asset_5ca31ac98e39495253710e7cdf28664b.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:45.401374Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:486dcd240d9cd916d8262e6edb734014:c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"logicalId\":\"486dcd240d9cd916d8262e6edb734014\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-15T18:29:16.666722Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"486dcd240d9cd916d8262e6edb734014\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5ca31ac98e39495253710e7cdf28664b:857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"logicalId\":\"5ca31ac98e39495253710e7cdf28664b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-15T18:29:45.401374Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5ca31ac98e39495253710e7cdf28664b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-15T18:28:50.929599Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "80f63b53fb53380ef4c0daa4d20fc0bd40c7492f91014779f6e47ac382861a17"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/audio/asset_486dcd240d9cd916d8262e6edb734014.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_5ca31ac98e39495253710e7cdf28664b.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "4a2372116e9a25abdba92644e73605639f0b89e0840d10381267eec9cef09df5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "2dd3790668c3a698586a7c6b05dde0d21b8c81bc83096f41b4b4e33459e83ed3"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "f26385b02631af884c949967d2f1dbe5ebb300db5c57e4f6bbe84c738a91ff1f"
+    },
+    "after-ui-import-task16v-3.wav": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "5a8208b322e8c9a245b089fdb608e947"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "486dcd240d9cd916d8262e6edb734014",
+            "title": "UI same title",
+            "filePath": "asset_486dcd240d9cd916d8262e6edb734014.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:16.666722Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5ca31ac98e39495253710e7cdf28664b",
+            "title": "UI same title",
+            "filePath": "asset_5ca31ac98e39495253710e7cdf28664b.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:45.401374Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "39cf3eaf2eb63c9841dfc533224febb0",
+            "title": "UI third track",
+            "filePath": "asset_39cf3eaf2eb63c9841dfc533224febb0.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:30:12.345229Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:486dcd240d9cd916d8262e6edb734014:c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"logicalId\":\"486dcd240d9cd916d8262e6edb734014\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-15T18:29:16.666722Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"486dcd240d9cd916d8262e6edb734014\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5ca31ac98e39495253710e7cdf28664b:857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"logicalId\":\"5ca31ac98e39495253710e7cdf28664b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-15T18:29:45.401374Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5ca31ac98e39495253710e7cdf28664b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:39cf3eaf2eb63c9841dfc533224febb0:7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30\",\"logicalId\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-15T18:30:12.345229Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30\",\"schema\":1,\"type\":\"track\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-15T18:28:50.929599Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "3f2587ff914cb96052798b8ef6ce30c9a29a5b946876e419a581d5c8463c4563"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/audio/asset_486dcd240d9cd916d8262e6edb734014.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_5ca31ac98e39495253710e7cdf28664b.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_39cf3eaf2eb63c9841dfc533224febb0.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "4a2372116e9a25abdba92644e73605639f0b89e0840d10381267eec9cef09df5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "2dd3790668c3a698586a7c6b05dde0d21b8c81bc83096f41b4b4e33459e83ed3"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "d840955cf0fd8c4e08b137e597cb7a1fc2114562e9386d2a0463d7d85f8cc885"
+    },
+    "after-ui-module-elman": {
+      "package": {
+        "versionCode": 27,
+        "dataDirs": [
+          "/data/user/0/ru.sulfi.sulfi_hypnotherapy"
+        ]
+      },
+      "database": {
+        "integrity": "ok",
+        "version": 9
+      },
+      "rows": {
+        "app_counters": [],
+        "app_settings": [
+          {
+            "name": "diary_reader_identity",
+            "value": "5a8208b322e8c9a245b089fdb608e947"
+          }
+        ],
+        "audio_assets": [
+          {
+            "id": "486dcd240d9cd916d8262e6edb734014",
+            "title": "UI same title",
+            "filePath": "asset_486dcd240d9cd916d8262e6edb734014.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:16.666722Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "5ca31ac98e39495253710e7cdf28664b",
+            "title": "UI same title",
+            "filePath": "asset_5ca31ac98e39495253710e7cdf28664b.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:29:45.401374Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          },
+          {
+            "id": "39cf3eaf2eb63c9841dfc533224febb0",
+            "title": "UI third track",
+            "filePath": "asset_39cf3eaf2eb63c9841dfc533224febb0.wav",
+            "durationMs": 12000,
+            "format": "wav",
+            "createdAt": "2026-11-15T18:30:12.345229Z",
+            "category": "freeform",
+            "fileSizeBytes": 529244,
+            "description": "",
+            "section": "personal",
+            "tags": "[]",
+            "source": "imported",
+            "origin": "personal",
+            "contentHash": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918",
+            "baseRevision": 1,
+            "author": null,
+            "authorManaged": 0
+          }
+        ],
+        "capsule_imports": [],
+        "content_revisions": [
+          {
+            "id": "track:486dcd240d9cd916d8262e6edb734014:c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"logicalId\":\"486dcd240d9cd916d8262e6edb734014\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"createdAt\":\"2026-11-15T18:29:16.666722Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"486dcd240d9cd916d8262e6edb734014\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"c4d8550d0cb14be0684c0eb50ebbb888f8062e75dd6fe79432db6db043ce9617\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:5ca31ac98e39495253710e7cdf28664b:857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"logicalId\":\"5ca31ac98e39495253710e7cdf28664b\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"createdAt\":\"2026-11-15T18:29:45.401374Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"5ca31ac98e39495253710e7cdf28664b\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI same title\"},\"revision\":\"857fc19116d54dd866d8d1e79c004f1c6f940ae4f3234e882b86a5488c8c1a83\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "track:39cf3eaf2eb63c9841dfc533224febb0:7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30\",\"logicalId\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"parent\":null,\"payload\":{\"author\":null,\"authorManaged\":0,\"baseRevision\":1,\"category\":\"freeform\",\"contentHash\":\"2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"createdAt\":\"2026-11-15T18:30:12.345229Z\",\"description\":\"\",\"durationMs\":12000,\"filePath\":\"capsule://2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918\",\"fileSizeBytes\":529244,\"format\":\"wav\",\"id\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"origin\":\"personal\",\"section\":\"personal\",\"source\":\"imported\",\"tags\":\"[]\",\"title\":\"UI third track\"},\"revision\":\"7c5cfb3d60d830ea2b4bf95339e671906c1b83d06ac1f8353d78312216e07f30\",\"schema\":1,\"type\":\"track\"}"
+          },
+          {
+            "id": "module:fca16e5744922f4c064845965907be9e:0382fac790bfbb78669672b91c1c6f6d774a13f3c5a3776f7cd577f2130b2c31",
+            "payload": "{\"declaredVersion\":1,\"dependencies\":[],\"digest\":\"0382fac790bfbb78669672b91c1c6f6d774a13f3c5a3776f7cd577f2130b2c31\",\"logicalId\":\"fca16e5744922f4c064845965907be9e\",\"parent\":null,\"payload\":{\"archived\":false,\"author\":null,\"baseRevision\":1,\"description\":\"\",\"id\":\"fca16e5744922f4c064845965907be9e\",\"items\":[{\"audioAssetId\":\"5ca31ac98e39495253710e7cdf28664b\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"d4cb126f165cba9205c5aab25c21e65a\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"486dcd240d9cd916d8262e6edb734014\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"c5387798f23c1fc70374563a35a90288\",\"kind\":\"audio\",\"title\":\"UI same title\"},{\"audioAssetId\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"delayBeforeSeconds\":0,\"description\":\"\",\"durationMs\":12000,\"groupId\":null,\"id\":\"873b3cad85d51d1d52d59be88438c109\",\"kind\":\"audio\",\"title\":\"UI third track\"}],\"origin\":\"personal\",\"recommendedPhaseIds\":[],\"source\":\"localUser\",\"tags\":[],\"title\":\"Elman variant 2\",\"updatedAt\":\"2026-11-15T18:31:07.341270Z\",\"version\":1},\"revision\":\"0382fac790bfbb78669672b91c1c6f6d774a13f3c5a3776f7cd577f2130b2c31\",\"schema\":1,\"type\":\"module\"}"
+          }
+        ],
+        "current_draft": [
+          {
+            "id": 1,
+            "payload": "{\"plan\":{\"steps\":[],\"groups\":[],\"exitStepId\":null},\"updatedAt\":\"2026-11-15T18:28:50.929599Z\",\"baseTemplateId\":null,\"baseTemplateVersion\":null,\"baseTemplateName\":null,\"baseFingerprint\":null,\"topicText\":\"\",\"notes\":\"\"}"
+          }
+        ],
+        "diary_author": [],
+        "diary_public": [],
+        "diary_removed": [],
+        "diary_sync": [],
+        "history_attachments": [],
+        "legacy_v2_documents": [],
+        "module_definitions": [
+          {
+            "id": "fca16e5744922f4c064845965907be9e",
+            "payload": "{\"id\":\"fca16e5744922f4c064845965907be9e\",\"title\":\"Elman variant 2\",\"description\":\"\",\"tags\":[],\"recommendedPhaseIds\":[],\"version\":1,\"archived\":false,\"source\":\"localUser\",\"origin\":\"personal\",\"baseRevision\":1,\"author\":null,\"updatedAt\":\"2026-11-15T18:31:07.341270Z\",\"items\":[{\"id\":\"d4cb126f165cba9205c5aab25c21e65a\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"5ca31ac98e39495253710e7cdf28664b\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"c5387798f23c1fc70374563a35a90288\",\"kind\":\"audio\",\"title\":\"UI same title\",\"audioAssetId\":\"486dcd240d9cd916d8262e6edb734014\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000},{\"id\":\"873b3cad85d51d1d52d59be88438c109\",\"kind\":\"audio\",\"title\":\"UI third track\",\"audioAssetId\":\"39cf3eaf2eb63c9841dfc533224febb0\",\"groupId\":null,\"description\":\"\",\"delayBeforeSeconds\":0,\"durationMs\":12000}]}"
+          }
+        ],
+        "run_events": [],
+        "session_runs": [],
+        "session_templates": []
+      },
+      "files": {
+        "files/library.sqlite": {
+          "bytes": 159744,
+          "sha256": "3cb2b250bbbcf00d9d8a263416e9942afa0fadf3c52e3a2213e7ad6c362ae97e"
+        },
+        "files/library.sqlite-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/audio/asset_486dcd240d9cd916d8262e6edb734014.wav": {
+          "bytes": 529244,
+          "sha256": "7f4a19ba619a928556ddb106b633d6580e0bee64934f530c22b75afdac1e8bb1"
+        },
+        "files/audio/asset_5ca31ac98e39495253710e7cdf28664b.wav": {
+          "bytes": 529244,
+          "sha256": "134e90c08aa83d45459c7efc3d8d454e29a7e5c151d020725aaa15c81f419e79"
+        },
+        "files/audio/asset_39cf3eaf2eb63c9841dfc533224febb0.wav": {
+          "bytes": 529244,
+          "sha256": "2af27fc9c456437a115535ab31af98fb7fba20259ec8cd26e658ac9e96c5d918"
+        },
+        "files/library.sqlite.storage-ready": {
+          "bytes": 1,
+          "sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+        },
+        "files/libCachedImageData.db": {
+          "bytes": 16384,
+          "sha256": "4a2372116e9a25abdba92644e73605639f0b89e0840d10381267eec9cef09df5"
+        },
+        "files/libCachedImageData.db-journal": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "files/profileInstalled": {
+          "bytes": 24,
+          "sha256": "2dd3790668c3a698586a7c6b05dde0d21b8c81bc83096f41b4b4e33459e83ed3"
+        },
+        "shared_prefs/audio_service_preferences.xml": {
+          "bytes": 871,
+          "sha256": "57b64bd13af941b1357277594fcf9ee2c2475ef3a3a66364c081bd0ca98fc382"
+        },
+        "shared_prefs/flutter_file_picker_lost_data.xml": {
+          "bytes": 65,
+          "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+        }
+      },
+      "snapshot_sha256": "5baedd9e6ce95eb41ef6c401ea9fbc525fe5c9367ed61f031fa6eb1aa4b47327"
+    }
+  }
+}

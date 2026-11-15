@@ -1,0 +1,99 @@
+{
+  "httpConnectionReuse": false,
+  "classification": "CONTROLLED_REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN",
+  "GAS": "NOT_RUN",
+  "WiFi": "NOT_RUN",
+  "Google": "NOT_RUN",
+  "clock": "Stopwatch microseconds",
+  "fileSizes": "MiB (1024*1024), not decimal MB",
+  "results": [
+    {
+      "MiB": 1,
+      "bytes": 1048576,
+      "sha256": "f62909f210613e17ff518d761a615fa42f4cb0fbf4dab1b537903b4b46ad42c8",
+      "uploadIncludingLocalHashAndVerifyUs": 219036,
+      "downloadIncludingHashAndFinalReceiptUs": 188947,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 4,
+        "media.commitUpload": 4
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 34246,
+        "media.uploadChunk": 56716,
+        "media.commitUpload": 30106
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 4,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 6688,
+        "media.downloadChunk": 73713,
+        "media.finalizeDownload": 4626
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    },
+    {
+      "MiB": 15,
+      "bytes": 15728640,
+      "sha256": "b8272ac4db4281a73c0aecf9d5f198fa4f28cb820e330a01d2fa0e759b283e28",
+      "uploadIncludingLocalHashAndVerifyUs": 1702934,
+      "downloadIncludingHashAndFinalReceiptUs": 1916778,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 60,
+        "media.commitUpload": 60
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 6846,
+        "media.uploadChunk": 619709,
+        "media.commitUpload": 279690
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 60,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 4475,
+        "media.downloadChunk": 956594,
+        "media.finalizeDownload": 3580
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    },
+    {
+      "MiB": 50,
+      "bytes": 52428800,
+      "sha256": "433d57f9f64e9aaba99bad566d600a3b7c83af2cd2c2b0e058900787ea5f5046",
+      "uploadIncludingLocalHashAndVerifyUs": 5580167,
+      "downloadIncludingHashAndFinalReceiptUs": 6416894,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 200,
+        "media.commitUpload": 200
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 10854,
+        "media.uploadChunk": 1972298,
+        "media.commitUpload": 1026763
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 200,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 4444,
+        "media.downloadChunk": 3364026,
+        "media.finalizeDownload": 4362
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    }
+  ],
+  "speedImprovementClaim": "NONE; baseline only, no before/after live comparison",
+  "driverSource": "3ffcd0b935d95c567e5ac5830d21425143b0668e",
+  "shippingDartSource": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+  "nativeChangesAfterDartSource": "cea4897; not exercised by Linux TCP measurement"
+}

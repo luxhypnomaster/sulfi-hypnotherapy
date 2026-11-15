@@ -56,7 +56,28 @@ class AlchemistCatalog {
       );
       if (rows.isNotEmpty) {
         final previous = jsonDecode(rows.single['value'] as String);
-        if (previous['_work'] != null) card['_work'] = previous['_work'];
+        final work = previous['_work'];
+        final runner = Zone.current[#alchemistTask];
+        final executing =
+            controller.backgroundWorker ||
+            runner is String && work is Map && runner == work['taskId'];
+        if (!executing &&
+            work is Map &&
+            const [
+              'queued',
+              'preparing',
+              'running',
+              'pausing',
+            ].contains(work['phase']) &&
+            queueRevision(card) !=
+                queueRevision(Map<String, dynamic>.from(previous))) {
+          throw const AlchemistFailure(
+            'Предыдущая редакция ещё передаётся. Новые правки остаются в редакторе.',
+            409,
+            'REVISION_IN_FLIGHT',
+          );
+        }
+        if (work != null) card['_work'] = work;
       }
       if (enqueue) {
         final revision = queueRevision(card), work = card['_work'];
@@ -455,6 +476,13 @@ class AlchemistCatalog {
     if (result['immutableRevisionId'] != null) {
       draft['remoteRevision'] = result['immutableRevisionId'];
     }
+    draft['lastReceipt'] = {
+      'operation': pending['operation'],
+      'requestId': pending['parameters']['requestId'],
+      'etag': result['etag'],
+      'publicationState': result['publicationState'],
+      'confirmedAtMs': DateTime.now().millisecondsSinceEpoch,
+    };
     draft.remove('pending');
     await _store(draft);
     return result;
@@ -464,12 +492,31 @@ class AlchemistCatalog {
     if (!['withdraw', 'archive', 'restore'].contains(action)) {
       throw const FormatException('Неизвестное действие публикации');
     }
+    if (controller.nativeTransfers) {
+      draft['requestedAction'] = action;
+      await _store(draft, enqueue: true);
+      await controller.cloudQueue.enqueue(
+        'alchemist_card:${draft['catalogItemId']}',
+      );
+      return;
+    }
+    final operation = 'catalog.$action';
+    final recoveredSame = draft['pending']?['operation'] == operation;
     if (draft['pending'] != null) await _recover(draft);
-    final result = await _mutation(draft, 'catalog.$action', {
-      'catalogItemId': draft['catalogItemId'],
-      'ifMatch': draft['etag'],
-    });
-    draft['status'] = result['publicationState'];
+    // Resume the persisted intent after an uncertain reply / process death.
+    // Do not manufacture a fresh requestId for an already receipted transition.
+    final last = draft['lastReceipt'];
+    if (!recoveredSame &&
+        !(last is Map &&
+            last['operation'] == operation &&
+            last['etag'] == draft['etag'])) {
+      await _mutation(draft, operation, {
+        'catalogItemId': draft['catalogItemId'],
+        'ifMatch': draft['etag'],
+      });
+    }
+    draft['status'] = draft['remoteStatus'];
+    draft.remove('requestedAction');
     await _store(draft);
   }
 

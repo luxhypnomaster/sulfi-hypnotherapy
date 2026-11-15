@@ -1,0 +1,95 @@
+{
+  "classification": "CONTROLLED_REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN",
+  "GAS": "NOT_RUN",
+  "WiFi": "NOT_RUN",
+  "Google": "NOT_RUN",
+  "clock": "Stopwatch microseconds",
+  "fileSizes": "MiB (1024*1024), not decimal MB",
+  "results": [
+    {
+      "MiB": 1,
+      "bytes": 1048576,
+      "sha256": "f62909f210613e17ff518d761a615fa42f4cb0fbf4dab1b537903b4b46ad42c8",
+      "uploadIncludingLocalHashAndVerifyUs": 215878,
+      "downloadIncludingHashAndFinalReceiptUs": 222394,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 4,
+        "media.commitUpload": 4
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 26266,
+        "media.uploadChunk": 63771,
+        "media.commitUpload": 22414
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 4,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 6531,
+        "media.downloadChunk": 110103,
+        "media.finalizeDownload": 4212
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    },
+    {
+      "MiB": 15,
+      "bytes": 15728640,
+      "sha256": "b8272ac4db4281a73c0aecf9d5f198fa4f28cb820e330a01d2fa0e759b283e28",
+      "uploadIncludingLocalHashAndVerifyUs": 1974892,
+      "downloadIncludingHashAndFinalReceiptUs": 2874597,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 60,
+        "media.commitUpload": 60
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 5995,
+        "media.uploadChunk": 837511,
+        "media.commitUpload": 323898
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 60,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 3720,
+        "media.downloadChunk": 1915477,
+        "media.finalizeDownload": 5408
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    },
+    {
+      "MiB": 50,
+      "bytes": 52428800,
+      "sha256": "433d57f9f64e9aaba99bad566d600a3b7c83af2cd2c2b0e058900787ea5f5046",
+      "uploadIncludingLocalHashAndVerifyUs": 5205647,
+      "downloadIncludingHashAndFinalReceiptUs": 5048724,
+      "uploadRpcCount": {
+        "media.beginUpload": 1,
+        "media.uploadChunk": 200,
+        "media.commitUpload": 200
+      },
+      "uploadRpcElapsedUs": {
+        "media.beginUpload": 9430,
+        "media.uploadChunk": 1743643,
+        "media.commitUpload": 937256
+      },
+      "downloadRpcCount": {
+        "media.getDescriptor": 1,
+        "media.downloadChunk": 200,
+        "media.finalizeDownload": 1
+      },
+      "downloadRpcElapsedUs": {
+        "media.getDescriptor": 2842,
+        "media.downloadChunk": 2591457,
+        "media.finalizeDownload": 3266
+      },
+      "status": "PASS_CONTROLLED_TCP"
+    }
+  ],
+  "speedImprovementClaim": "NONE; baseline only, no before/after live comparison"
+}

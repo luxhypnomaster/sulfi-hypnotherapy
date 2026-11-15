@@ -1,0 +1,34 @@
+{
+  "id": "1V5RrFH8Xfh9wu45qDyY077685uNhwzOq",
+  "metadata": {
+    "id": "1V5RrFH8Xfh9wu45qDyY077685uNhwzOq",
+    "title": "",
+    "mime_type": null,
+    "size": null,
+    "url": null,
+    "file_or_folder": null,
+    "created_time": null,
+    "modified_time": null,
+    "parent_ids": [
+      "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+    ],
+    "drive_id": null,
+    "current_user_can_share": null,
+    "has_augmented_permissions": null,
+    "shared": null,
+    "permissions": [
+      {
+        "type": "user",
+        "role": "owner",
+        "emailAddress": null,
+        "domain": null,
+        "displayName": null,
+        "allowFileDiscovery": null
+      }
+    ],
+    "source_visibility_status": "permission_metadata_available"
+  },
+  "sha256": "8c94544cba28c77d3e4806f97777fb2c820218b3d8cbbfba242f9f7c03326a06",
+  "bytes": 2765,
+  "status": "RAW_SHA_PARENT_OWNER_ONLY_PASS"
+}

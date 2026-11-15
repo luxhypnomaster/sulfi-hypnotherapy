@@ -1,3 +1,7 @@
+# №18 — P0: полноценная фоновая передача MASTER и CLIENT
+
+[ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor в разработке; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.
+
 # №17 — текущая корректировка
 
 MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независимо скачана и проверена, готова к приёмке. [Точка продолжения](reports/task17/PROGRESS.md) · [Результат](reports/task17/RESULT_17.md). Draft PR48; main/GAS6/подпись/ACL/старые №16 сохранены. Настоящие Google и два Android NOT_RUN, №17 не закрыто.
@@ -355,3 +359,17 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [ ] G5: все три actual native upgrade gates, независимый download/cert readback и выдача пары27; текущее состояние в reports/task17/PROGRESS.md.
 - [ ] Отдельное разрешение на узкий short-message Diary patch в существующем GAS. main/OAuth/ACL/signing не меняются.
 - [ ] OWNER: Google MASTER+CLIENT,15/30/60мин, реальный модуль3треков/программа→дневник→CLIENT→слышимое offline. CI не заменяет физическую приёмку.
+
+## Задание18 — P0 background transfers (in progress, STOP-SHIP до native safety)
+
+- [x] G0/G1 inventory/root cause/OS-owned architecture; docs/task18/TASK_RU.md и reports/task18.
+- [x] G2 native UIDT/FGS worker, durable bidirectional intents, owner/role/epoch, chunk/whole hash +receipt; targeted controlled regressions.
+- [ ] G3 actual background/pause/network/process/notification API34/35/36 и native MASTER27/CLIENT27→28 integrity gates.
+- [ ] Final exact-source verification, signed stable-key pair28, independent binary/SHA/config checks и ограниченная выдача.
+- [ ] OWNER: реальные Google/два телефона/OEM/слышимость; без fake PASS. Production GAS6/main/ACL/OAuth/signing не менять.
+
+- №18 continuation/source59: actual controlled API34 11PASS/API36 10PASS, exact CLIENT27→28 13PASS incl5supplemental legacy rows. MASTER pre-update semantics observer, API33 scheduler recovery and API35 SQLite contention unresolved; APK issuance remains BLOCKED. Isolated native two-handle causal experiment queued; no production migration/deploy/ACL/signing change. Reports updated in same private Task18 Drive folder and raw SHA readback verified.
+
+- №18/current DE408: fullverify489Flutter/3CLIENT/47+24Node PASS; fullAPI34 11PASS incl actual OS cold recovery6,98sec; CLIENT normal27→28 13PASS. Native MASTERAPI35 15PASS + full33/35/36 по10PASS; old59/a894 do not issue. Device Google/OEM/hearing/live throughput NOT_RUN.
+
+- №18/de408: six native gates PASS; actual private delivery43765843573 SUCCESS, independent uploaded-asset SHA/cert verified, old27 preserved. Two owner phones/Google/live GAS throughput still NOT_RUN; Task18 PARTIAL. No main/GAS/OAuth/ACL/signing change, no APK Drive upload.

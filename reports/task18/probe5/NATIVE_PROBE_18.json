@@ -1,0 +1,59 @@
+{
+  "source": "4ab0588efc91930877409f1b249d325349b4874f",
+  "driverSource": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "master_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "client_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "master_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN",
+      "transport": "REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN"
+    },
+    {
+      "case": "master_confirmed_unique_program_publication",
+      "status": "PASS",
+      "proof": 1,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_background_atomic_program_install_3_real_wav_files_hashes_module_template",
+      "status": "PASS",
+      "Google": "NOT_RUN",
+      "heardByHuman": "NOT_RUN"
+    },
+    {
+      "case": "client_cold_offline_3_hash_program_and_native_UID_bound_audio",
+      "status": "PASS",
+      "Google": "NOT_RUN",
+      "physicalHumanHearing": "NOT_RUN",
+      "network": "WIFI_DATA_OFF_AIRPLANE"
+    }
+  ]
+}

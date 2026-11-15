@@ -1,0 +1,26 @@
+[
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 293578,
+    "sha256": "7e6f40bb24c4e9c958c7ecd5293bc222a2fdcf8b13a9d3f8109452400e12f7bb"
+  },
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/25-before-upgrade.png",
+    "bytes": 802937,
+    "sha256": "1c5038d4c6055cdf0be8f1bfa1d47e1d28dfddefa70abe02ce4c3a2fae4ae5e6"
+  },
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/26-library.png",
+    "bytes": 60098,
+    "sha256": "38c6d2825d781e97c701abe26cd658ed349788d6c413e0f2f5996ef393432702"
+  },
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/26-modules.png",
+    "bytes": 815586,
+    "sha256": "b7da00acd656e655da5caaeeebf62efaa477496f01e1f998f59463cd2638e333"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "classification": "ACTUAL_APK_NATIVE_SQFLITE_POOL_ANDROID_SQLITE",
+  "pool": 4,
+  "status": "BLOCKED_NATIVE_POOL_LOCK_ORDER",
+  "events": [
+    "A_WRITE_TRANSACTION_OPEN",
+    "B_WRITE_STARTED",
+    "A_COMMIT_ENQUEUED",
+    "A_COMMITTED"
+  ],
+  "errors": [
+    "SQLiteDatabaseLockedException"
+  ],
+  "rows": -1,
+  "integrity": "NOT_RUN_BLOCKED",
+  "productionDatabaseOpened": false,
+  "Google": "NOT_RUN"
+}

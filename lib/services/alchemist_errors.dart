@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'diary_api.dart';
+import '../data/storage_preflight.dart';
+
+import 'package:sqflite/sqflite.dart';
 
 /// Public, bounded error information. Never serialize an SDK/socket exception.
 class AlchemistFailure extends DiaryApiException {
@@ -18,6 +21,17 @@ class AlchemistFailure extends DiaryApiException {
 
   static AlchemistFailure from(Object error) {
     if (error is AlchemistFailure) return error;
+    if (error is StorageChangingException ||
+        error is DatabaseException &&
+            const [5, 6].contains((error.getResultCode() ?? -1) & 255)) {
+      return const AlchemistFailure(
+        'Хранилище занято. Данные сохранены; Android повторит позже.',
+        0,
+        'WAITING_POLICY',
+        DiaryFailure.blocked,
+        true,
+      );
+    }
     if (error is SocketException) {
       return const AlchemistFailure(
         'Сеть или DNS недоступны. Данные сохранены; повторите после подключения.',
@@ -25,6 +39,14 @@ class AlchemistFailure extends DiaryApiException {
         'NETWORK_DNS_OR_SOCKET',
         DiaryFailure.network,
         true,
+      );
+    }
+    if (error is FileSystemException && error.osError?.errorCode == 28) {
+      return const AlchemistFailure(
+        'Недостаточно места. Освободите память; исходные файлы и очередь сохранены.',
+        0,
+        'STORAGE_FULL',
+        DiaryFailure.invalidData,
       );
     }
     if (error is HttpException) {

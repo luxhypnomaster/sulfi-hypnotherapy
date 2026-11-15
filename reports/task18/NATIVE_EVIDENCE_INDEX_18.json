@@ -1,0 +1,748 @@
+{
+  "sourceAPK28": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "reportsCommit": "895bf190d77d0799c4c61052ff22e217fb0bb5fe",
+  "scope": "CURRENT_TASK18_REPORTS_AND_SYNTHETIC_NATIVE_EVIDENCE_NO_APK_NO_USER_MEDIA",
+  "physicalGoogleQA": "NOT_RUN",
+  "files": [
+    {
+      "path": "ACCEPTANCE_18.csv",
+      "bytes": 14579,
+      "sha256": "1459b59be3c889535fd93e3af4c1f4286d7ad891cc2755e5538031e29ec1d5a6"
+    },
+    {
+      "path": "APK_PAIR_18.json",
+      "bytes": 1321,
+      "sha256": "945f5ce69a4f2801a95e8aa7a1c85be2bc0539e92c2fa4e285cb5323119f42df"
+    },
+    {
+      "path": "ARCHITECTURE_18.md",
+      "bytes": 8774,
+      "sha256": "d007e3f920ef6bd5de899a609b2d636d0d6183f541b9ed2323b35170c61623ee"
+    },
+    {
+      "path": "CHANGES_18.md",
+      "bytes": 6248,
+      "sha256": "d2487e5234a1aee82572ed3633ffb205292e9af813e028af07c5ced87d50b659"
+    },
+    {
+      "path": "CHECKPOINT_18.json",
+      "bytes": 5096,
+      "sha256": "f7cfdcfc2fa708762b93d1086ba680017c646b6ddd53ca29e4f7920336650a6f"
+    },
+    {
+      "path": "CI_RUNS_CURRENT_18.json",
+      "bytes": 22893,
+      "sha256": "13a873cf125e1fb3db2ace4f19c2e6d66aa2b8172d11ba3744fc232387cbe31f"
+    },
+    {
+      "path": "CODEX_EFFICIENCY_18.md",
+      "bytes": 2823,
+      "sha256": "d24dcc2752b75d76fa69df39a980cb6fbe20ebfda01e59945d11bec3f9a86670"
+    },
+    {
+      "path": "DELIVERY_ATTEMPTS_18.json",
+      "bytes": 1197,
+      "sha256": "a9d712e9b484b562f63b5f87b5b32facbb75d346afd4b67d937c5819e430e2dd"
+    },
+    {
+      "path": "DELIVERY_GATE_18.json",
+      "bytes": 3826,
+      "sha256": "3baa1e846ae02f6a16473ed4b4b8e5b1c52810f852da464805359f6e8c6b0c2f"
+    },
+    {
+      "path": "DELIVERY_READBACK_18.json",
+      "bytes": 1594,
+      "sha256": "ff65a2fad1f65cb2c1baf8b307dd9670386669c6782ed9cf99cea231bb4583db"
+    },
+    {
+      "path": "FULL_VERIFY_DE408_18.json",
+      "bytes": 402,
+      "sha256": "f0a6b3501a6e3398846fd704ecee19b940c430eab6384e7307fc168d8f0e736c"
+    },
+    {
+      "path": "MIGRATION_18.md",
+      "bytes": 4862,
+      "sha256": "a03852b3443b8704aaba29c81143edabaf53f191f696fe641aa6153e92001d53"
+    },
+    {
+      "path": "PATH_MATRIX_18.csv",
+      "bytes": 2133,
+      "sha256": "7acc4510d59bb27729c9a30e027de98985285cabe2c9c6579f66ff5f419619f2"
+    },
+    {
+      "path": "PERFORMANCE_18.md",
+      "bytes": 4937,
+      "sha256": "1ad3b418240fe1fdfbb5b9bd2cd43f4626c71ec742c4e5f2130c35090cf28508"
+    },
+    {
+      "path": "PHONE_QA_18.md",
+      "bytes": 7887,
+      "sha256": "3ce2031b0d29aa833c62749481127531b303b5739f4d95a5a13e37a9ad95bdd3"
+    },
+    {
+      "path": "PROGRESS.md",
+      "bytes": 43697,
+      "sha256": "59230f7ac806bd63a03f81682bc4a7db58b1680ea63b3fcd5db43aad87e25676"
+    },
+    {
+      "path": "RESULT_18.md",
+      "bytes": 9900,
+      "sha256": "7ca2efa78812c4d573aa9e0163e209d0aa545cad0579f2f3ff33622dd59b21a2"
+    },
+    {
+      "path": "ROOT_CAUSE_BACKGROUND_18.md",
+      "bytes": 9906,
+      "sha256": "34a76797847a1266d533d5369ab29b6e7263c252e57d538fb3ef681942cee376"
+    },
+    {
+      "path": "SECURITY_18.md",
+      "bytes": 4912,
+      "sha256": "be0837af76689e0f72cac10d8acd35761211af314e83ef2b1d144752323a10f2"
+    },
+    {
+      "path": "SQLITE_SCHEDULER_PROOF_18.md",
+      "bytes": 2765,
+      "sha256": "8c94544cba28c77d3e4806f97777fb2c820218b3d8cbbfba242f9f7c03326a06"
+    },
+    {
+      "path": "TESTS_18.md",
+      "bytes": 6366,
+      "sha256": "6a78cd155cb93ad5ab92916e585ce6dd4f35fb15a884cc2567caa7da691f36c1"
+    },
+    {
+      "path": "evidence/DELIVERY_DE408_18.log",
+      "bytes": 186550,
+      "sha256": "7a723e000285a9d35a04972f9f56ad27e114e9964cbaba16a28de7feb147e4c3"
+    },
+    {
+      "path": "evidence/FULL_VERIFY_DE408_18.log",
+      "bytes": 261076,
+      "sha256": "ffdf03af187d51054e070d79e726feba1c5a34de2fb041bf7895b82aad726377"
+    },
+    {
+      "path": "finalize_de408/client/25-before-upgrade.png",
+      "bytes": 803351,
+      "sha256": "874cf96441e2066e87b0bd594396f6e81e4328b1ac148d25f1ef1331f9205582"
+    },
+    {
+      "path": "finalize_de408/client/26-library.png",
+      "bytes": 60960,
+      "sha256": "0a9e004919d719e8a3eac252b3f426ab57e142704c88a4f7a15bad12bf65aaf2"
+    },
+    {
+      "path": "finalize_de408/client/26-modules.png",
+      "bytes": 911640,
+      "sha256": "970d43e6fc6317be8f00819e36eae5dd7602a692d613b4ba2f2ab298cb183038"
+    },
+    {
+      "path": "finalize_de408/client/NATIVE_UI_UPGRADE_18.json",
+      "bytes": 207719,
+      "sha256": "06b6e9340f53edf13a70f5e6a7b21bb53783ba7a4ad582f45be02079e748a547"
+    },
+    {
+      "path": "full33_de408/READBACK.json",
+      "bytes": 4704,
+      "sha256": "567012117294d40b431c2456464115ad590cc7804bfafbbc01e1ef93e69e43dc"
+    },
+    {
+      "path": "full33_de408/probe/NATIVE_PROBE_18.json",
+      "bytes": 2620,
+      "sha256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37"
+    },
+    {
+      "path": "full33_de408/probe/client-after-install-files.txt",
+      "bytes": 126,
+      "sha256": "af1984634c0941c36b00ef7caa860f1bee182e0c02c6281dfb41a9a4bdba8053"
+    },
+    {
+      "path": "full33_de408/probe/client-after-install-jobs.txt",
+      "bytes": 37711,
+      "sha256": "b288a4b47472dca9cec4be1dffa10619895e89744ce3179e600c2115e6a29156"
+    },
+    {
+      "path": "full33_de408/probe/client-cancel-explicit-range-resume.json",
+      "bytes": 1989,
+      "sha256": "379e9a88b174ae0947eddf16fd74821b63b1e51f56d520a7134ad80bd0c803f6"
+    },
+    {
+      "path": "full33_de408/probe/client-native-local-audio.txt",
+      "bytes": 1043,
+      "sha256": "15c01bcd884959d78cc4391a05a5414ac1b5f196c957d6e6c9ab9028d6ccb8ab"
+    },
+    {
+      "path": "full33_de408/probe/client-network-automatic-recovery.json",
+      "bytes": 1767,
+      "sha256": "fda0936fc27f374967b8052119d077d8f9d8251adcd64be215c43a5a8b489316"
+    },
+    {
+      "path": "full33_de408/probe/client-network-wait.json",
+      "bytes": 1781,
+      "sha256": "537ab32ba28a328e5990a1e52318c7ee56fce4c79b4c0234d563e630e97d43c0"
+    },
+    {
+      "path": "full33_de408/probe/client-notification-cancelled.json",
+      "bytes": 1773,
+      "sha256": "73897d83598a923c04df406ba8d26234c87fb6a9aae370d88b1af89f5964cdb7"
+    },
+    {
+      "path": "full33_de408/probe/client-offline-cold-local-audio.png",
+      "bytes": 69447,
+      "sha256": "5456f2065ff609b89f78e8c0088bd0235aee97cd6259d9cf50631f6774bdf4eb"
+    },
+    {
+      "path": "full33_de408/probe/client-verified-install.png",
+      "bytes": 75104,
+      "sha256": "c0a5ddd20003720813e1cfe0493c172f311a81d17e3331c7ded13e894174fc98"
+    },
+    {
+      "path": "full33_de408/probe/clienttest-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "64c9457fedec80cd2f4763afb2fcb2543ffc200697b0b497a6fab14890087b34"
+    },
+    {
+      "path": "full33_de408/probe/display-preflight.txt",
+      "bytes": 93,
+      "sha256": "8c62646bd65c5406a27a467e9504e37b6f51e5f9184ff28880c3ade772a9d24f"
+    },
+    {
+      "path": "full33_de408/probe/latest-instrumentation.txt",
+      "bytes": 3938,
+      "sha256": "0c3af37784f1b630ae026438c129c314dc246e7bc7c4c3d9adc244ef4f0ea3e0"
+    },
+    {
+      "path": "full33_de408/probe/latest-launch.txt",
+      "bytes": 292,
+      "sha256": "4412847b849a80ca5aa34b14596877d8707ec797962d8ba97a230cbdfa37f10c"
+    },
+    {
+      "path": "full33_de408/probe/latest-window.xml",
+      "bytes": 2910,
+      "sha256": "c395cfd3d4f362a285b5b2fb216101fe2af75e1431df162f5d5806252b00c8c6"
+    },
+    {
+      "path": "full33_de408/probe/master-after-background.png",
+      "bytes": 74994,
+      "sha256": "a34df87380d5c9995cce7965045c84e569c79f3ef4e87f8c1a9da9595c650d87"
+    },
+    {
+      "path": "full33_de408/probe/master-background-files.txt",
+      "bytes": 99,
+      "sha256": "084eb91ff13098e2610ff603d2ad0466a4391c4e7d04b689c0efb60648dbed9c"
+    },
+    {
+      "path": "full33_de408/probe/master-background-jobs.txt",
+      "bytes": 36689,
+      "sha256": "0c095ba4cdef9499dd85255e24910cbdbdfd95c88a940681dd4dcdde7002c79f"
+    },
+    {
+      "path": "full33_de408/probe/master-explicit-resume.json",
+      "bytes": 2799,
+      "sha256": "27b5a3161f794bcda87a8eb3bfd81fbc8fd01a82a4c24620d9c14b8213465f5b"
+    },
+    {
+      "path": "full33_de408/probe/master-notification-user-paused.json",
+      "bytes": 2832,
+      "sha256": "09b319f1ceb5759c69c5b9f6c155231a8936729d45150a18e5f8bcb46dd085b0"
+    },
+    {
+      "path": "full33_de408/probe/master-ui-destroyed-screen-off.png",
+      "bytes": 6358,
+      "sha256": "2a5df6816793815669d72be08b3ada68c9805d21e9bf9e4d41d487ec61006aa7"
+    },
+    {
+      "path": "full33_de408/probe/master-user-paused-cold-restart.json",
+      "bytes": 2832,
+      "sha256": "09b319f1ceb5759c69c5b9f6c155231a8936729d45150a18e5f8bcb46dd085b0"
+    },
+    {
+      "path": "full33_de408/probe/master-watchdog-readback.json",
+      "bytes": 40030,
+      "sha256": "17133c36fd8c22d20b5090480405feb4b33d23e0eb0138630e4c35e79ed7b870"
+    },
+    {
+      "path": "full33_de408/probe/sulfi_hypnotherapy-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "f13db76fb7876998706b1f1991bbe228e0c7770a9f9b803ca8cd02e1925da7e6"
+    },
+    {
+      "path": "full33_de408/probe/system-ui-preflight.json",
+      "bytes": 108,
+      "sha256": "9fc8261bd07909dadbd772bc52db9aeeabc384623134cec94e7eb4dee31ccb99"
+    },
+    {
+      "path": "full34_de408/READBACK.json",
+      "bytes": 5094,
+      "sha256": "c8c1578bda85ee9efc7eaffe3943702b678b4a80248e0b7f6e6f4b4f5ce6da04"
+    },
+    {
+      "path": "full34_de408/probe/NATIVE_PROBE_18.json",
+      "bytes": 3075,
+      "sha256": "94b9979827d926e2b8bddb25a4ee3ee84179d6c435c8f468f83d061e2c607295"
+    },
+    {
+      "path": "full34_de408/probe/client-after-install-files.txt",
+      "bytes": 126,
+      "sha256": "af1984634c0941c36b00ef7caa860f1bee182e0c02c6281dfb41a9a4bdba8053"
+    },
+    {
+      "path": "full34_de408/probe/client-after-install-jobs.txt",
+      "bytes": 51610,
+      "sha256": "853079c9a3c5b0b5c31c7ef139162e71c482123f95741cff245ddde832b2669d"
+    },
+    {
+      "path": "full34_de408/probe/client-cancel-explicit-range-resume.json",
+      "bytes": 1989,
+      "sha256": "ee3cd4f8c7af0805b92b413cfae9556643007606292f535e7d00ea7bb553ec19"
+    },
+    {
+      "path": "full34_de408/probe/client-native-local-audio.txt",
+      "bytes": 1126,
+      "sha256": "cb3950d64b39a2f39526d237161229dddb8f861f0e378c58d85f3a22129dbd8e"
+    },
+    {
+      "path": "full34_de408/probe/client-network-automatic-recovery.json",
+      "bytes": 1780,
+      "sha256": "ece297c8d7089e3148cc8af0e602f564b5ae8e2f6e0416ebea5098292f4bcb85"
+    },
+    {
+      "path": "full34_de408/probe/client-network-wait.json",
+      "bytes": 1785,
+      "sha256": "9b9d8d131ee1cf57ff88f26e7c5eaff86abec47fae3a1e8b5ebad597a4b6fd91"
+    },
+    {
+      "path": "full34_de408/probe/client-notification-cancelled.json",
+      "bytes": 1773,
+      "sha256": "cedf9bb0aee98d9053a40de17c762d85d0ddb74bbec924b7a35561035be7d71e"
+    },
+    {
+      "path": "full34_de408/probe/client-offline-cold-local-audio.png",
+      "bytes": 69143,
+      "sha256": "b776e3505953f5cc10bc4b8288ef0b13de6dcb17bb6674390a47963ba81a99e9"
+    },
+    {
+      "path": "full34_de408/probe/client-verified-install.png",
+      "bytes": 75090,
+      "sha256": "07868438a328b99dd8d7986d5aa886301c117abb25b77eaa971a9fceda414c65"
+    },
+    {
+      "path": "full34_de408/probe/clienttest-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "c6dc58742c0e79fa6ce8690194137ee88893d2fc9039bd0bbe4bfb2a846ccba6"
+    },
+    {
+      "path": "full34_de408/probe/display-preflight.txt",
+      "bytes": 93,
+      "sha256": "8c62646bd65c5406a27a467e9504e37b6f51e5f9184ff28880c3ade772a9d24f"
+    },
+    {
+      "path": "full34_de408/probe/latest-instrumentation.txt",
+      "bytes": 3938,
+      "sha256": "0c3af37784f1b630ae026438c129c314dc246e7bc7c4c3d9adc244ef4f0ea3e0"
+    },
+    {
+      "path": "full34_de408/probe/latest-launch.txt",
+      "bytes": 292,
+      "sha256": "b25d1c07cd7d4693391aab321f8b290014b709a2ff0d48679c5d76d3c6bfaed2"
+    },
+    {
+      "path": "full34_de408/probe/latest-window.xml",
+      "bytes": 2910,
+      "sha256": "c395cfd3d4f362a285b5b2fb216101fe2af75e1431df162f5d5806252b00c8c6"
+    },
+    {
+      "path": "full34_de408/probe/master-actual-process-loss-recovered.json",
+      "bytes": 3239,
+      "sha256": "834549495f09f44569d444108034d69329b4daf3fa2a668f5dcf2a0a741ccfe3"
+    },
+    {
+      "path": "full34_de408/probe/master-after-background.png",
+      "bytes": 74898,
+      "sha256": "e0c5b9c9ed81a3ee1fdbf60677c37d1e3ee5d848a6e6fcfcfaf6db251983ca31"
+    },
+    {
+      "path": "full34_de408/probe/master-background-files.txt",
+      "bytes": 99,
+      "sha256": "084eb91ff13098e2610ff603d2ad0466a4391c4e7d04b689c0efb60648dbed9c"
+    },
+    {
+      "path": "full34_de408/probe/master-background-jobs.txt",
+      "bytes": 41414,
+      "sha256": "abe0801929340a4fd3cfc7d3d2ba32e0c2e2e8c3e9e4402b0a1155d0db67c12a"
+    },
+    {
+      "path": "full34_de408/probe/master-before-process-loss.json",
+      "bytes": 2799,
+      "sha256": "5b801799fd8d5bfb602f324b9330f0ac4cc76eb431c05b621e4043a0b8288e47"
+    },
+    {
+      "path": "full34_de408/probe/master-explicit-resume.json",
+      "bytes": 2799,
+      "sha256": "b858446b00477bd23bec373287ad73e9f482be40263d478697d9b7b35ccb7ae4"
+    },
+    {
+      "path": "full34_de408/probe/master-notification-user-paused.json",
+      "bytes": 2832,
+      "sha256": "b0a319df1c63f032cb9ba58cd357a3b06938965e3bd90af7afcb5010724044a0"
+    },
+    {
+      "path": "full34_de408/probe/master-ui-destroyed-screen-off.png",
+      "bytes": 6358,
+      "sha256": "2a5df6816793815669d72be08b3ada68c9805d21e9bf9e4d41d487ec61006aa7"
+    },
+    {
+      "path": "full34_de408/probe/master-user-paused-cold-restart.json",
+      "bytes": 2832,
+      "sha256": "b0a319df1c63f032cb9ba58cd357a3b06938965e3bd90af7afcb5010724044a0"
+    },
+    {
+      "path": "full34_de408/probe/master-watchdog-readback.json",
+      "bytes": 44973,
+      "sha256": "6e2e723390a8da74ab79300aaaeaccea4f7282cc5210cdc51849477a025e8b87"
+    },
+    {
+      "path": "full34_de408/probe/sulfi_hypnotherapy-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "14eea116e40c19f651e050bf1e521c5ae77347403802b1bbee9748babbdd8c78"
+    },
+    {
+      "path": "full34_de408/probe/system-ui-preflight.json",
+      "bytes": 108,
+      "sha256": "9fc8261bd07909dadbd772bc52db9aeeabc384623134cec94e7eb4dee31ccb99"
+    },
+    {
+      "path": "full35_de408/READBACK.json",
+      "bytes": 4704,
+      "sha256": "674ec251e4c152f6e7d4c664717ee31d5d4b4047ab4f7e08e3210696e4a1a596"
+    },
+    {
+      "path": "full35_de408/probe/NATIVE_PROBE_18.json",
+      "bytes": 2620,
+      "sha256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37"
+    },
+    {
+      "path": "full35_de408/probe/client-after-install-files.txt",
+      "bytes": 126,
+      "sha256": "af1984634c0941c36b00ef7caa860f1bee182e0c02c6281dfb41a9a4bdba8053"
+    },
+    {
+      "path": "full35_de408/probe/client-after-install-jobs.txt",
+      "bytes": 75605,
+      "sha256": "abb32e1bf8d61c9939eb066f46d2b59193597243ca338d96e6c82e0630a884dc"
+    },
+    {
+      "path": "full35_de408/probe/client-cancel-explicit-range-resume.json",
+      "bytes": 1989,
+      "sha256": "4450f8e04b5ba0aca2f192d1e551fb52003583eff16834aba3c141e6d961218a"
+    },
+    {
+      "path": "full35_de408/probe/client-native-local-audio.txt",
+      "bytes": 1179,
+      "sha256": "5d5603f7926153f177c097530a829aaf29c665de05e96f1c5c1ae4ada98c2eb9"
+    },
+    {
+      "path": "full35_de408/probe/client-network-automatic-recovery.json",
+      "bytes": 1780,
+      "sha256": "cef64be4a5c15383cc05a8e363c81b2e34a6999e400c957a71064cc77cda5091"
+    },
+    {
+      "path": "full35_de408/probe/client-network-wait.json",
+      "bytes": 1785,
+      "sha256": "a1a9622ae4f1db72acda3cd6325038175a468662eb78b9196c914cb8953b9d24"
+    },
+    {
+      "path": "full35_de408/probe/client-notification-cancelled.json",
+      "bytes": 1773,
+      "sha256": "eb719865f5c2033a478a9999593d8b97d331e6b159f96f747e4726d75df118b6"
+    },
+    {
+      "path": "full35_de408/probe/client-offline-cold-local-audio.png",
+      "bytes": 68268,
+      "sha256": "54d1b58e7be9cc116f3daca0a174901001dfb9656ade0851aab506cbbc144772"
+    },
+    {
+      "path": "full35_de408/probe/client-verified-install.png",
+      "bytes": 74694,
+      "sha256": "4290cc6308ad0891ac486b6a36d983a011c478456a3869e14c6f4f2a6ba31f30"
+    },
+    {
+      "path": "full35_de408/probe/clienttest-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "05c9b9037ec29223bd3553ebb7881c83d778870fafc5eb734995f89b68da830c"
+    },
+    {
+      "path": "full35_de408/probe/display-preflight.txt",
+      "bytes": 93,
+      "sha256": "8c62646bd65c5406a27a467e9504e37b6f51e5f9184ff28880c3ade772a9d24f"
+    },
+    {
+      "path": "full35_de408/probe/latest-instrumentation.txt",
+      "bytes": 3938,
+      "sha256": "d1c911524bad5500174728887b78a3938a24469bb2b14b89761c8bbb43e609b7"
+    },
+    {
+      "path": "full35_de408/probe/latest-launch.txt",
+      "bytes": 292,
+      "sha256": "e95ebc401c711fc41e73673d82ec7428c0b3a7ea902750d91af6b83a70a000e3"
+    },
+    {
+      "path": "full35_de408/probe/latest-window.xml",
+      "bytes": 2910,
+      "sha256": "1c85766de825eb62a0b476b8286b5ff61b7a12832120eb2e0fdff2bef9d50c9d"
+    },
+    {
+      "path": "full35_de408/probe/master-after-background.png",
+      "bytes": 74680,
+      "sha256": "3302fb8d5ed09de836677c79be067a17cbb29bf65e1042294e1f530037379cd6"
+    },
+    {
+      "path": "full35_de408/probe/master-background-files.txt",
+      "bytes": 99,
+      "sha256": "084eb91ff13098e2610ff603d2ad0466a4391c4e7d04b689c0efb60648dbed9c"
+    },
+    {
+      "path": "full35_de408/probe/master-background-jobs.txt",
+      "bytes": 65259,
+      "sha256": "c1b2d5a1c6cb66d5465b0359d7475d4a7f24d045091c41dc93472c6406c8055f"
+    },
+    {
+      "path": "full35_de408/probe/master-explicit-resume.json",
+      "bytes": 2799,
+      "sha256": "c4c5b57f67c7692f70aa1a2f89848a86f6a1fca12e6058f2618231c55f11037d"
+    },
+    {
+      "path": "full35_de408/probe/master-notification-user-paused.json",
+      "bytes": 2832,
+      "sha256": "a3858a8d12ddcdb3da388015878f397f45a56e4b0cad05694235df9e23e970c5"
+    },
+    {
+      "path": "full35_de408/probe/master-ui-destroyed-screen-off.png",
+      "bytes": 6358,
+      "sha256": "2a5df6816793815669d72be08b3ada68c9805d21e9bf9e4d41d487ec61006aa7"
+    },
+    {
+      "path": "full35_de408/probe/master-user-paused-cold-restart.json",
+      "bytes": 2832,
+      "sha256": "a3858a8d12ddcdb3da388015878f397f45a56e4b0cad05694235df9e23e970c5"
+    },
+    {
+      "path": "full35_de408/probe/master-watchdog-readback.json",
+      "bytes": 69159,
+      "sha256": "941446c289e77fd4511196f3f133bab6773fe7eb90aaec4eebfcf19871eadd4e"
+    },
+    {
+      "path": "full35_de408/probe/sulfi_hypnotherapy-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "7352d7c9a3528a123e272ff7f5288616daed7c62d1cf24ce007ebc4c26af5448"
+    },
+    {
+      "path": "full35_de408/probe/system-ui-preflight.json",
+      "bytes": 108,
+      "sha256": "9fc8261bd07909dadbd772bc52db9aeeabc384623134cec94e7eb4dee31ccb99"
+    },
+    {
+      "path": "full36_de408/READBACK.json",
+      "bytes": 4704,
+      "sha256": "db0150ae791865093eab121e28c462fc9060d89e441c303a577def5b4db9b96c"
+    },
+    {
+      "path": "full36_de408/probe/NATIVE_PROBE_18.json",
+      "bytes": 2620,
+      "sha256": "05885a795c01e764ac6edc015c4cfc5c306478f93424e293ac1a00f4dbcb8a37"
+    },
+    {
+      "path": "full36_de408/probe/client-after-install-files.txt",
+      "bytes": 126,
+      "sha256": "af1984634c0941c36b00ef7caa860f1bee182e0c02c6281dfb41a9a4bdba8053"
+    },
+    {
+      "path": "full36_de408/probe/client-after-install-jobs.txt",
+      "bytes": 71889,
+      "sha256": "9a7e3b6b01cb82ad20a196611da481cef66811065486ff324d6f7d07f5f3f028"
+    },
+    {
+      "path": "full36_de408/probe/client-cancel-explicit-range-resume.json",
+      "bytes": 1989,
+      "sha256": "84cc5070dc917494b0862c6a381f9c058fb15c349b94219352503c032ffca4ac"
+    },
+    {
+      "path": "full36_de408/probe/client-native-local-audio.txt",
+      "bytes": 1307,
+      "sha256": "09695421ece272bee6ecc7cd5a382aef78c0da9056698965d42c3e07c28e2bee"
+    },
+    {
+      "path": "full36_de408/probe/client-network-automatic-recovery.json",
+      "bytes": 1780,
+      "sha256": "199dc7046e7f28357862a01a0dcb4f9b4be50d95e6625359380e290c7178116d"
+    },
+    {
+      "path": "full36_de408/probe/client-network-wait.json",
+      "bytes": 1785,
+      "sha256": "e00fab6fb303f0cc05636c7903d404e7a913c75156fb9342bd649aacf90c8ea6"
+    },
+    {
+      "path": "full36_de408/probe/client-notification-cancelled.json",
+      "bytes": 1773,
+      "sha256": "71b60dfa72def06467006bb04ad5624a3980f2717772259646e591ce1f4fa50d"
+    },
+    {
+      "path": "full36_de408/probe/client-offline-cold-local-audio.png",
+      "bytes": 67596,
+      "sha256": "1f537388829784f6de80dced04cb4d9d2852cbaac8128f25b69d4514d7b37ea2"
+    },
+    {
+      "path": "full36_de408/probe/client-verified-install.png",
+      "bytes": 74059,
+      "sha256": "0d8fd814d44e9040fafab3f2c4e26354c43c6c3699158a3788449e8888d51c7e"
+    },
+    {
+      "path": "full36_de408/probe/clienttest-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "4e085e6656bdea3f02e1dddebcd8953f84aa210741a2d1a2bf6ae9821a5a776d"
+    },
+    {
+      "path": "full36_de408/probe/display-preflight.txt",
+      "bytes": 93,
+      "sha256": "8c62646bd65c5406a27a467e9504e37b6f51e5f9184ff28880c3ade772a9d24f"
+    },
+    {
+      "path": "full36_de408/probe/latest-instrumentation.txt",
+      "bytes": 3938,
+      "sha256": "d1c911524bad5500174728887b78a3938a24469bb2b14b89761c8bbb43e609b7"
+    },
+    {
+      "path": "full36_de408/probe/latest-launch.txt",
+      "bytes": 292,
+      "sha256": "a51d42d1049a11dd77159c7f16e1e1ca557c2b88543525f2ddd37ad42ec3f87a"
+    },
+    {
+      "path": "full36_de408/probe/latest-window.xml",
+      "bytes": 2910,
+      "sha256": "1c85766de825eb62a0b476b8286b5ff61b7a12832120eb2e0fdff2bef9d50c9d"
+    },
+    {
+      "path": "full36_de408/probe/master-after-background.png",
+      "bytes": 73966,
+      "sha256": "e7fed3177a809fc50e4747181767a53f9ee86d7bc02ee9355b5e578e0f7dedc1"
+    },
+    {
+      "path": "full36_de408/probe/master-background-files.txt",
+      "bytes": 99,
+      "sha256": "084eb91ff13098e2610ff603d2ad0466a4391c4e7d04b689c0efb60648dbed9c"
+    },
+    {
+      "path": "full36_de408/probe/master-background-jobs.txt",
+      "bytes": 61958,
+      "sha256": "9a9c6213f8240bd13610b3440561dc46cba16187ca30f6062dd5941b4547de3c"
+    },
+    {
+      "path": "full36_de408/probe/master-explicit-resume.json",
+      "bytes": 2799,
+      "sha256": "db4d9cab7ead9dbdc7710a8991146c96519466ec0400132b4973b28fc98d9d8f"
+    },
+    {
+      "path": "full36_de408/probe/master-notification-user-paused.json",
+      "bytes": 2832,
+      "sha256": "b4fd90dbc5c6bbb82a745550e87c9b5d9f81e496b27adb2493f476f73c5abd7e"
+    },
+    {
+      "path": "full36_de408/probe/master-ui-destroyed-screen-off.png",
+      "bytes": 6358,
+      "sha256": "2a5df6816793815669d72be08b3ada68c9805d21e9bf9e4d41d487ec61006aa7"
+    },
+    {
+      "path": "full36_de408/probe/master-user-paused-cold-restart.json",
+      "bytes": 2832,
+      "sha256": "b4fd90dbc5c6bbb82a745550e87c9b5d9f81e496b27adb2493f476f73c5abd7e"
+    },
+    {
+      "path": "full36_de408/probe/master-watchdog-readback.json",
+      "bytes": 65734,
+      "sha256": "a39d62d9f27045021a29b311c2785b4d1d3eb851309e41fb5a93ff131693625d"
+    },
+    {
+      "path": "full36_de408/probe/sulfi_hypnotherapy-ui-destroy-receipt.json",
+      "bytes": 210,
+      "sha256": "01014cc36fd81605e2256497a96d8c8669a370b328e76c554c64029eb4ec3f68"
+    },
+    {
+      "path": "full36_de408/probe/system-ui-preflight.json",
+      "bytes": 108,
+      "sha256": "9fc8261bd07909dadbd772bc52db9aeeabc384623134cec94e7eb4dee31ccb99"
+    },
+    {
+      "path": "legacy_de408/READBACK.json",
+      "bytes": 1680,
+      "sha256": "5e278bee452bb969ab0c2ec7e0f0302edd8e06aa12d625e6b1d9e65e9ffdcab2"
+    },
+    {
+      "path": "legacy_de408/probe/NATIVE_LEGACY_QUEUE_18.json",
+      "bytes": 561,
+      "sha256": "26f5e87dcc153d01445c06e26e9eb998f02797a08d392454e7a16c29c092892e"
+    },
+    {
+      "path": "legacy_de408/probe/client-native-queue-conversion.json",
+      "bytes": 633,
+      "sha256": "d7ae53d72db648a84034869033c9476aada9f48b744539f4219878b1700859fe"
+    },
+    {
+      "path": "legacy_de408/probe/client-native-queue-conversion.png",
+      "bytes": 63523,
+      "sha256": "098840c52cf507e0704318a290969a64448799a30f759c6b911aaa9f2b404723"
+    },
+    {
+      "path": "legacy_de408/probe/latest-instrumentation.txt",
+      "bytes": 3914,
+      "sha256": "3ba7cbbf2a61bd7aae699ecbc7ddf31b224393bb1d72bf533d483fd8293427d0"
+    },
+    {
+      "path": "legacy_de408/probe/latest-launch.txt",
+      "bytes": 292,
+      "sha256": "4b169a442279a93a9603f57253cb37c3a2bdbc65ae5e1d4d3dd74fe0615c862e"
+    },
+    {
+      "path": "legacy_de408/probe/latest-window.xml",
+      "bytes": 2891,
+      "sha256": "50056069e243f713fa414fd53ca05e300294c3f2405742e6c5c1671f4e5b175f"
+    },
+    {
+      "path": "legacy_de408/probe/master-native-queue-conversion.json",
+      "bytes": 633,
+      "sha256": "c042693434f1ba35ee847231f757304606fc751b0b2026302b2a1098a654eee7"
+    },
+    {
+      "path": "legacy_de408/probe/master-native-queue-conversion.png",
+      "bytes": 63575,
+      "sha256": "bd256410cd77144d2a9cee9e7c3b3525072ba7d5bec8fff9d228a02bb07f6d20"
+    },
+    {
+      "path": "legacy_de408/probe/system-ui-preflight.json",
+      "bytes": 108,
+      "sha256": "9fc8261bd07909dadbd772bc52db9aeeabc384623134cec94e7eb4dee31ccb99"
+    },
+    {
+      "path": "master35_de408/READBACK.json",
+      "bytes": 764,
+      "sha256": "32b7af75463391b9c5c6cd36f5763bb4f7df3f9c4fbd58baaa9569d2cc266239"
+    },
+    {
+      "path": "master35_de408/master/25-before-upgrade.png",
+      "bytes": 802937,
+      "sha256": "1c5038d4c6055cdf0be8f1bfa1d47e1d28dfddefa70abe02ce4c3a2fae4ae5e6"
+    },
+    {
+      "path": "master35_de408/master/26-library.png",
+      "bytes": 60098,
+      "sha256": "38c6d2825d781e97c701abe26cd658ed349788d6c413e0f2f5996ef393432702"
+    },
+    {
+      "path": "master35_de408/master/26-modules.png",
+      "bytes": 815586,
+      "sha256": "b7da00acd656e655da5caaeeebf62efaa477496f01e1f998f59463cd2638e333"
+    },
+    {
+      "path": "master35_de408/master/NATIVE_UI_UPGRADE_18.json",
+      "bytes": 293578,
+      "sha256": "7e6f40bb24c4e9c958c7ecd5293bc222a2fdcf8b13a9d3f8109452400e12f7bb"
+    }
+  ]
+}

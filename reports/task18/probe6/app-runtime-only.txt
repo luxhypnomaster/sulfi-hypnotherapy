@@ -1,0 +1,90 @@
+--------- beginning of main
+11-15 11:30:20.840  3806  3806 I y.transferprobe: Late-enabling -Xcheck:jni
+11-15 11:30:20.923  3806  3806 I y.transferprobe: Using CollectorTypeCC GC.
+11-15 11:30:20.924  3806  3806 W y.transferprobe: Unexpected CPU variant for x86: x86_64.
+11-15 11:30:20.924  3806  3806 W y.transferprobe: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-15 11:30:21.593  3806  3806 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10193; state: ENABLED
+11-15 11:30:21.594  3806  3806 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10193; state: ENABLED
+11-15 11:30:21.617  3806  3806 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-15 11:30:21.617  3806  3806 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+11-15 11:30:21.617  3806  3806 W ziparchive: Unable to open '/data/app/~~KPu5hDxXdOzsWFE7A2F3xA==/ru.sulfi.sulfi_hypnotherapy.transferprobe-8qUJmvJw-2J8qTZBCxKwjQ==/base.dm': No such file or directory
+11-15 11:30:21.617  3806  3806 W ziparchive: Unable to open '/data/app/~~KPu5hDxXdOzsWFE7A2F3xA==/ru.sulfi.sulfi_hypnotherapy.transferprobe-8qUJmvJw-2J8qTZBCxKwjQ==/base.dm': No such file or directory
+11-15 11:30:22.526  3806  3806 D nativeloader: Configuring clns-6 for other apk /data/app/~~KPu5hDxXdOzsWFE7A2F3xA==/ru.sulfi.sulfi_hypnotherapy.transferprobe-8qUJmvJw-2J8qTZBCxKwjQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~KPu5hDxXdOzsWFE7A2F3xA==/ru.sulfi.sulfi_hypnotherapy.transferprobe-8qUJmvJw-2J8qTZBCxKwjQ==/lib/x86_64:/data/app/~~KPu5hDxXdOzsWFE7A2F3xA==/ru.sulfi.sulfi_hypnotherapy.transferprobe-8qUJmvJw-2J8qTZBCxKwjQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/ru.sulfi.sulfi_hypnotherapy.transferprobe
+11-15 11:30:22.564  3806  3806 V GraphicsEnvironment: Currently set values for:
+11-15 11:30:22.564  3806  3806 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-15 11:30:22.564  3806  3806 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-15 11:30:22.565  3806  3806 V GraphicsEnvironment: ANGLE GameManagerService for ru.sulfi.sulfi_hypnotherapy.transferprobe: false
+11-15 11:30:22.565  3806  3806 V GraphicsEnvironment: ru.sulfi.sulfi_hypnotherapy.transferprobe is not listed in per-application setting
+11-15 11:30:22.566  3806  3806 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-15 11:30:22.687  3806  3895 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-15 11:30:22.688  3806  3895 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-15 11:30:22.693  3806  3895 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-15 11:30:23.322  3806  3951 D FlutterJNI: Beginning load of flutter...
+11-15 11:30:23.370  3806  3952 I ResourceExtractor: Resource version mismatch res_timestamp-28-1794742204080
+11-15 11:30:23.404  3806  3951 D FlutterJNI: flutter (null) was loaded normally!
+11-15 11:30:23.435  3806  3960 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+11-15 11:30:24.485  3806  3952 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/kernel_blob.bin
+11-15 11:30:24.486  3806  3952 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/vm_snapshot_data
+11-15 11:30:24.618  3806  3952 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/isolate_snapshot_data
+11-15 11:30:24.688  3806  3806 W y.transferprobe: type=1400 audit(0.0:28): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=67144 scontext=u:r:untrusted_app:s0:c193,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=ru.sulfi.sulfi_hypnotherapy.transferprobe
+11-15 11:30:24.859  3806  3806 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 11:30:25.083  3806  4016 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 11:30:25.465  3806  4036 I flutter : The Dart VM service is listening on http://127.0.0.1:46045/HChijOoZijk=/
+11-15 11:30:28.785  3806  3806 W y.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+11-15 11:30:28.787  3806  3806 W y.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+11-15 11:30:28.787  3806  3806 W y.transferprobe: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+11-15 11:30:28.787  3806  3806 W y.transferprobe: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+11-15 11:30:28.811  3806  3806 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 11:30:28.929  3806  3806 D FlutterRenderer: Width is zero. 0,0
+11-15 11:30:29.014  3806  3806 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10193; state: DISABLED
+11-15 11:30:29.018  3806  3806 W OpenGLRenderer: Unknown dataspace 0
+11-15 11:30:29.626  3806  3806 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 11:30:32.557  3806  3806 I flutter : PROBE18_FIRST_FRAME
+11-15 11:30:32.589  3806  3806 I Choreographer: Skipped 599 frames!  The application may be doing too much work on its main thread.
+11-15 11:30:32.643  3806  3806 D FlutterRenderer: Width is zero. 0,0
+11-15 11:30:32.829  3806  3880 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 11:30:32.850  3806  3806 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 11:30:33.133  3806  3880 I Gralloc4: mapper 4.x is not supported
+11-15 11:30:38.206  3806  3806 I Choreographer: Skipped 333 frames!  The application may be doing too much work on its main thread.
+11-15 11:30:38.261  3806  3806 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 11:30:38.322  3806  3806 D CompatibilityChangeReporter: Compat change id reported: 160794467; UID 10193; state: ENABLED
+11-15 11:30:38.434  3806  3806 I System.out: flutterEngine warmed up
+11-15 11:30:38.450  3806  4434 D ProfileInstaller: Installing profile for ru.sulfi.sulfi_hypnotherapy.transferprobe
+11-15 11:30:39.145  3806  3836 I OpenGLRenderer: Davey! duration=833ms; Flags=1, FrameTimelineVsyncId=5117, IntendedVsync=123299827715, Vsync=123516494373, InputEventId=0, HandleInputStart=123528819107, AnimationStart=123528822653, PerformTraversalsStart=123528827002, DrawStart=123545760489, FrameDeadline=123316494381, FrameInterval=123525949224, FrameStartTime=16666666, SyncQueued=123551893937, SyncStart=123552212632, IssueDrawCommandsStart=123563610327, SwapBuffers=123781965779, FrameCompleted=124133743850, DequeueBufferDuration=583568, QueueBufferDuration=100308547, GpuCompleted=124132776335, SwapBuffersCompleted=124133743850, DisplayPresentTime=0, CommandSubmissionCompleted=123781965779, 
+11-15 11:30:39.401  3806  3806 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 11:30:39.404  3806  3806 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+11-15 11:30:39.777  3806  4016 D EGL_emulation: app_time_stats: avg=769.08ms min=230.28ms max=1307.89ms count=2
+11-15 11:30:39.870  3806  3836 I OpenGLRenderer: Davey! duration=1255ms; Flags=0, FrameTimelineVsyncId=5139, IntendedVsync=123549827705, Vsync=124416494337, InputEventId=0, HandleInputStart=124429177733, AnimationStart=124429180960, PerformTraversalsStart=124429184366, DrawStart=124431684829, FrameDeadline=124149827681, FrameInterval=124428970848, FrameStartTime=16666666, SyncQueued=124432053787, SyncStart=124432080417, IssueDrawCommandsStart=124436052354, SwapBuffers=124652461403, FrameCompleted=124805213361, DequeueBufferDuration=967864, QueueBufferDuration=636778, GpuCompleted=124805213361, SwapBuffersCompleted=124801531816, DisplayPresentTime=0, CommandSubmissionCompleted=124652461403, 
+11-15 11:30:41.740  3806  3880 D EGL_emulation: app_time_stats: avg=1315.34ms min=664.82ms max=1965.85ms count=2
+11-15 11:30:41.930  3806  4016 D EGL_emulation: app_time_stats: avg=1076.81ms min=102.83ms max=2050.79ms count=2
+11-15 11:30:42.919  3806  3880 D EGL_emulation: app_time_stats: avg=1178.45ms min=1178.45ms max=1178.45ms count=1
+11-15 11:30:46.557  3806  3880 D EGL_emulation: app_time_stats: avg=3637.72ms min=3637.72ms max=3637.72ms count=1
+11-15 11:30:46.845  3806  4016 D EGL_emulation: app_time_stats: avg=4914.23ms min=4914.23ms max=4914.23ms count=1
+11-15 11:30:50.437  3806  3880 D EGL_emulation: app_time_stats: avg=1940.15ms min=730.65ms max=3149.65ms count=2
+11-15 11:30:50.440  3806  4016 D EGL_emulation: app_time_stats: avg=3595.51ms min=3595.51ms max=3595.51ms count=1
+11-15 11:30:53.900  3806  3880 D EGL_emulation: app_time_stats: avg=1731.41ms min=575.98ms max=2886.85ms count=2
+11-15 11:30:54.022  3806  4016 D EGL_emulation: app_time_stats: avg=3581.56ms min=3581.56ms max=3581.56ms count=1
+11-15 11:30:56.990  3806  3880 D EGL_emulation: app_time_stats: avg=1544.89ms min=521.82ms max=2567.96ms count=2
+11-15 11:30:57.021  3806  4016 D EGL_emulation: app_time_stats: avg=2998.05ms min=2998.05ms max=2998.05ms count=1
+11-15 11:30:59.856  3806  3880 D EGL_emulation: app_time_stats: avg=1433.06ms min=574.72ms max=2291.40ms count=2
+11-15 11:30:59.938  3806  4016 D EGL_emulation: app_time_stats: avg=2916.55ms min=2916.55ms max=2916.55ms count=1
+11-15 11:31:03.420  3806  3880 D EGL_emulation: app_time_stats: avg=1781.67ms min=806.88ms max=2756.47ms count=2
+11-15 11:31:03.570  3806  4016 D EGL_emulation: app_time_stats: avg=3632.10ms min=3632.10ms max=3632.10ms count=1
+11-15 11:31:07.626  3806  3880 D EGL_emulation: app_time_stats: avg=2028.09ms min=655.60ms max=3400.58ms count=2
+11-15 11:31:07.905  3806  4016 D EGL_emulation: app_time_stats: avg=4334.79ms min=4334.79ms max=4334.79ms count=1
+11-15 11:31:11.812  3806  3880 D EGL_emulation: app_time_stats: avg=2093.23ms min=353.89ms max=3832.58ms count=2
+11-15 11:31:12.183  3806  4016 D EGL_emulation: app_time_stats: avg=4277.81ms min=4277.81ms max=4277.81ms count=1
+11-15 11:31:15.403  3806  3880 D EGL_emulation: app_time_stats: avg=1793.46ms min=959.30ms max=2627.63ms count=2
+11-15 11:31:15.413  3806  4016 D EGL_emulation: app_time_stats: avg=3229.84ms min=3229.84ms max=3229.84ms count=1
+11-15 11:31:18.750  3806  4016 D EGL_emulation: app_time_stats: avg=3336.11ms min=3336.11ms max=3336.11ms count=1
+11-15 11:31:18.913  3806  3880 D EGL_emulation: app_time_stats: avg=1754.66ms min=797.05ms max=2712.27ms count=2
+11-15 11:31:21.795  3806  3880 D EGL_emulation: app_time_stats: avg=1441.11ms min=271.27ms max=2610.94ms count=2
+11-15 11:31:22.023  3806  4016 D EGL_emulation: app_time_stats: avg=3273.09ms min=3273.09ms max=3273.09ms count=1
+11-15 11:31:24.136  3806  3880 D EGL_emulation: app_time_stats: avg=1170.52ms min=473.18ms max=1867.86ms count=2
+11-15 11:31:24.335  3806  4016 D EGL_emulation: app_time_stats: avg=2308.70ms min=2308.70ms max=2308.70ms count=1
+11-15 11:31:26.738  3806  3880 D EGL_emulation: app_time_stats: avg=1300.80ms min=606.40ms max=1995.21ms count=2
+11-15 11:31:26.948  3806  4016 D EGL_emulation: app_time_stats: avg=2612.37ms min=2612.37ms max=2612.37ms count=1
+11-15 11:31:29.518  3806  3880 D EGL_emulation: app_time_stats: avg=1389.93ms min=549.53ms max=2230.34ms count=2
+11-15 11:31:29.670  3806  4016 D EGL_emulation: app_time_stats: avg=2722.11ms min=2722.11ms max=2722.11ms count=1
+11-15 11:31:31.957  3806  3880 D EGL_emulation: app_time_stats: avg=1219.36ms min=632.85ms max=1805.86ms count=2
+11-15 11:31:31.989  3806  4016 D EGL_emulation: app_time_stats: avg=2318.65ms min=2318.65ms max=2318.65ms count=1

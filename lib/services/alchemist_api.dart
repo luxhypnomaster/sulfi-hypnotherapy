@@ -76,18 +76,23 @@ class AlchemistApi {
             'entry.publish',
             'entry.unpublish',
             'entry.archive',
+            'entry.deleteSoft',
             'entry.restore',
             'reads.merge',
+            'sync.push',
           }.contains(op) &&
           p['requestId'] is String &&
           (p['requestId'] as String).isNotEmpty ||
       const {
         'auth.whoami',
         'feed.list',
+        'sync.pull',
         'entry.get',
         'catalog.list',
         'catalog.get',
         'catalog.getRevision',
+        'catalog.getInstallPlan',
+        'media.finalizeDownload',
         'catalog.resolveReference',
         'catalog.changes',
         'catalog.checkUpdates',
@@ -145,8 +150,9 @@ class AlchemistApi {
 
   Future<Map<String, dynamic>> call(
     String operation,
-    Map<String, dynamic> parameters,
-  ) async {
+    Map<String, dynamic> parameters, {
+    Future<void> Function()? beforeRetry,
+  }) async {
     var originalScope = identityScope?.call();
     final originalEpoch = identityEpoch?.call(), trace = diagnostics.begin();
     var initialBinding = originalScope == 'public';
@@ -237,7 +243,14 @@ class AlchemistApi {
           );
         }
         _checkInterrupted();
-        if (parameters['requestId'] is String) {
+        if (beforeRetry != null) {
+          final remaining = callTimeout - watch.elapsed;
+          if (remaining <= Duration.zero) {
+            throw AlchemistFailure.from(TimeoutException('deadline'));
+          }
+          await beforeRetry().timeout(remaining);
+          checkScope(false);
+        } else if (parameters['requestId'] is String) {
           final remaining = callTimeout - watch.elapsed;
           if (remaining <= Duration.zero) {
             throw AlchemistFailure.from(TimeoutException('deadline'));

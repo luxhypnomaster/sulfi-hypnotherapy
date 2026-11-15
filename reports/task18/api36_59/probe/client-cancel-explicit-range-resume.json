@@ -1,0 +1,57 @@
+{
+  "snapshot": {
+    "classification": "DISPOSABLE_CONTROLLED_NATIVE_READONLY_COPY",
+    "schema": 9,
+    "integrity": "ok",
+    "queues": {
+      "alchemist_download:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:install:908dd51847fe1f4c32c7af329a22367f:2dc6322e8fc3ef13f52e37281ab9e28866076acdad0c93ac09ecde2874273064": {
+        "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+        "work": {
+          "phase": "running",
+          "state": "RUNNING",
+          "stage": "transferring",
+          "code": null,
+          "pauseReason": null,
+          "taskId": "0a4f6f6c4b9652f591b4e0cdf2fa622d",
+          "revision": "117168125b67bc00ce2952c998d533bd974bbbcdd148568d217f4492bacabcff",
+          "bytes": 2097152,
+          "totalBytes": 15728646,
+          "attempts": 3,
+          "runnerEpoch": "f8049e4c3b82801923d1cfcefb7bbaa9",
+          "executor": "android18",
+          "autoResume": true,
+          "networkRetries": 0,
+          "jobRetries": 0,
+          "retryAtMs": null
+        },
+        "pending": {
+          "operation": null,
+          "requestId": null,
+          "ifMatch": null
+        },
+        "lastReceipt": null
+      }
+    },
+    "uploads": {},
+    "downloadCheckpoints": {
+      "alchemist_download_checkpoint:ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5:asset-1:aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8": {
+        "ownerBinding": "ea84e2d41b75b7c0e755f9b48af21124d95cfb461030c7207d3590467db318e5",
+        "assetRevisionId": "asset-1",
+        "sha256": "aa91704d1158de30cf0b9740ee06464dd3956bc6d966f39dbeb0c5c4e38599b8",
+        "byteLength": 5242880,
+        "offset": 2097152,
+        "verified": null,
+        "receipt": null,
+        "recordedChunks": 8
+      }
+    },
+    "assets": [],
+    "sourceFiles": {}
+  },
+  "firstRange": {
+    "assetRevisionId": "asset-1",
+    "offset": 2097152,
+    "length": 262144
+  },
+  "expectedOffset": 2097152
+}

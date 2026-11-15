@@ -1,0 +1,5 @@
+00:00 +0: loading /dev/shm/sulfi18/test/task18_upload_reconcile_test.dart
+00:00 +0: /dev/shm/sulfi18/test/task18_upload_reconcile_test.dart: 18 lost upload ack reconciles exact same request before replay; receipt and bytes survive
+00:00 +1: loading /dev/shm/sulfi18/test/task16_catalog_integration_test.dart
+00:03 +1: /dev/shm/sulfi18/test/task16_catalog_integration_test.dart: local cross-language author → production JS domain → client selective install, metadata-only retry and revoke
+00:06 +2: All tests passed!

@@ -1,0 +1,103 @@
+{
+  "source": "59c3667a28357767533b25e92661b87d081d7227",
+  "driverSource": "102add21f8825d1d377daaeed21adfb20bb671b1",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "master_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "client_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "master_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN",
+      "transport": "REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN"
+    },
+    {
+      "case": "non_owning_recovery_watchdog_does_not_stop_primary",
+      "status": "PASS",
+      "before": 786432,
+      "after": 1048576,
+      "scope": "CONTROLLED_NATIVE_OS"
+    },
+    {
+      "case": "master_notification_pause_cold_restart_explicit_same_owner_resume",
+      "status": "PASS",
+      "proof": {
+        "taskIdPreserved": true,
+        "sourceHashesPreserved": true,
+        "requestAndSessionPreserved": true,
+        "forceStop": "NO_AUTO_RESUME_CLAIM_EXPLICIT_USER_START_ONLY"
+      },
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "master_actual_SIGKILL_cold_OS_recovery_preserves_request_and_source",
+      "status": "PASS",
+      "proof": {
+        "oldPid": "2946",
+        "newPid": "3177",
+        "elapsedSeconds": 6.65,
+        "taskIdAndSourceHashesPreserved": true,
+        "requestSessionOffsetsPreserved": true,
+        "recovery": "ACTUAL_OS_NO_UI_NO_FORCE_RUN_NO_FORCE_STOP_BYPASS",
+        "Google": "NOT_RUN"
+      },
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "master_confirmed_unique_program_publication",
+      "status": "PASS",
+      "proof": 1,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_network_OS_recovery_notification_cancel_exact_range_resume",
+      "status": "PASS",
+      "proof": {
+        "networkAutomaticNoUI": true,
+        "cancelReceiptPreserved": true,
+        "sameTaskId": true,
+        "exactRangeResume": true,
+        "unpublish": "NOT_PERFORMED"
+      },
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_background_atomic_program_install_3_real_wav_files_hashes_module_template",
+      "status": "PASS",
+      "Google": "NOT_RUN",
+      "heardByHuman": "NOT_RUN"
+    },
+    {
+      "case": "client_cold_offline_3_hash_program_and_native_UID_bound_audio",
+      "status": "PASS",
+      "Google": "NOT_RUN",
+      "physicalHumanHearing": "NOT_RUN",
+      "network": "WIFI_DATA_OFF_AIRPLANE"
+    }
+  ]
+}

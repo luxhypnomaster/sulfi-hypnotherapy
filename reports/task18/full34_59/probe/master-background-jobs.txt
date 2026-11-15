@@ -1,0 +1,809 @@
+Settings:
+  min_ready_non_active_jobs_count=5 
+  max_non_active_job_batch_delay_ms=1860000 
+  heavy_use_factor=0.9 
+  moderate_use_factor=0.5 
+  min_linear_backoff_time_ms=10000 
+  min_exp_backoff_time_ms=10000 
+  system_stop_to_failure_ratio=3 
+  conn_congestion_delay_frac=0.5 
+  conn_prefetch_relax_frac=0.5 
+  conn_use_cell_signal_strength=true 
+  conn_update_all_jobs_min_interval_ms=60000 
+  conn_low_signal_strength_relax_frac=0.5 
+  prefetch_force_batch_relax_threshold_ms=3600000 
+  enable_api_quotas=true 
+  aq_schedule_count=250 
+  aq_schedule_window_ms=60000 
+  aq_schedule_throw_exception=true 
+  aq_schedule_return_failure=false 
+  enable_execution_safeguards_udc=true 
+  es_u_timeout_uij_count=2 
+  es_u_timeout_ej_count=5 
+  es_u_timeout_reg_count=3 
+  es_u_timeout_total_count=10 
+  es_u_timeout_window_ms=86400000 
+  es_u_anr_count=3 
+  es_u_anr_window_ms=21600000 
+  runtime_min_guarantee_ms=600000 
+  runtime_min_ej_guarantee_ms=180000 
+  runtime_free_quota_max_limit_ms=1800000 
+  runtime_min_ui_guarantee_ms=21600000 
+  runtime_ui_limit_ms=43200000 
+  runtime_min_ui_data_transfer_guarantee_buffer_factor=1.35 
+  runtime_min_ui_data_transfer_guarantee_ms=21600000 
+  runtime_cumulative_ui_limit_ms=86400000 
+  runtime_use_data_estimates_for_limits=false 
+  persist_in_split_files=true 
+  max_num_persisted_job_work_items=100000 
+  enable_tare=false 
+  
+  PrefetchController:
+    pc_launch_time_threshold_ms=25200000 
+    pc_launch_time_allowance_ms=1200000 
+  
+  FlexibilityController:
+    fc_enable_flexibility=false 
+    fc_flexibility_deadline_proximity_limit_ms=900000 
+    fc_fallback_flexibility_deadline_ms=259200000 
+    fc_min_time_between_flexibility_alarms_ms=60000 
+    fc_percents_to_drop_num_flexible_constraints=[50, 60, 70, 80] 
+    fc_rescheduled_job_deadline_ms=3600000 
+    fc_max_rescheduled_deadline_ms=432000000 
+  
+  QuotaController:
+    qc_allowed_time_per_period_exempted_ms=600000 
+    qc_allowed_time_per_period_active_ms=600000 
+    qc_allowed_time_per_period_working_ms=600000 
+    qc_allowed_time_per_period_frequent_ms=600000 
+    qc_allowed_time_per_period_rare_ms=600000 
+    qc_allowed_time_per_period_restricted_ms=600000 
+    qc_in_quota_buffer_ms=30000 
+    qc_window_size_exempted_ms=600000 
+    qc_window_size_active_ms=600000 
+    qc_window_size_working_ms=7200000 
+    qc_window_size_frequent_ms=28800000 
+    qc_window_size_rare_ms=86400000 
+    qc_window_size_restricted_ms=86400000 
+    qc_max_execution_time_ms=14400000 
+    qc_max_job_count_exempted=75 
+    qc_max_job_count_active=75 
+    qc_max_job_count_working=120 
+    qc_max_job_count_frequent=200 
+    qc_max_job_count_rare=48 
+    qc_max_job_count_restricted=10 
+    qc_rate_limiting_window_ms=60000 
+    qc_max_job_count_per_rate_limiting_window=20 
+    qc_max_session_count_exempted=75 
+    qc_max_session_count_active=75 
+    qc_max_session_count_working=10 
+    qc_max_session_count_frequent=8 
+    qc_max_session_count_rare=3 
+    qc_max_session_count_restricted=1 
+    qc_max_session_count_per_rate_limiting_window=20 
+    qc_timing_session_coalescing_duration_ms=5000 
+    qc_min_quota_check_delay_ms=60000 
+    qc_ej_limit_exempted_ms=3600000 
+    qc_ej_limit_active_ms=1800000 
+    qc_ej_limit_working_ms=1800000 
+    qc_ej_limit_frequent_ms=600000 
+    qc_ej_limit_rare_ms=600000 
+    qc_ej_limit_restricted_ms=300000 
+    qc_ej_limit_addition_installer_ms=1800000 
+    qc_ej_limit_addition_special_ms=900000 
+    qc_ej_window_size_ms=86400000 
+    qc_ej_top_app_time_chunk_size_ms=30000 
+    qc_ej_reward_top_app_ms=10000 
+    qc_ej_reward_interaction_ms=15000 
+    qc_ej_reward_notification_seen_ms=0 
+    qc_ej_grace_period_temp_allowlist_ms=180000 
+    qc_ej_grace_period_top_app_ms=60000 
+    qc_quota_bump_additional_duration_ms=60000 
+    qc_quota_bump_additional_job_count=2 
+    qc_quota_bump_additional_session_count=1 
+    qc_quota_bump_window_size_ms=28800000 
+    qc_quota_bump_limit=8 
+
+Thermal status: 0
+
+QuotaTracker:
+  Is enabled: true
+  Is global quota free: false
+  Current elapsed time: 70102
+  
+  
+  In quota alarms:
+    NOT WAITING
+  
+  Per-app free quota:
+
+Battery charging: true
+Battery not low: true
+
+Started users: [0]
+
+Media Cloud Providers: {}
+
+Registered 39 jobs:
+  JOB #u0a142/1801: 3f6f6b8 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+    u0a142 tag=*job*/ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService#1801
+    Source: uid=u0a142 user=0 pkg=ru.sulfi.sulfi_hypnotherapy.transferprobe
+    JobInfo:
+      Service: ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+      Priority: 500 [MAX]
+      Flags: 20
+      Internal flags: 1 HAS_FOREGROUND_EXEMPTION
+      Requires: charging=false batteryNotLow=false deviceIdle=false
+      Extras: mParcelledData.dataSize=136
+      Network type: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED Uid: 10142 UnderlyingNetworks: Null] ]
+      Backoff: policy=1 initial=+30s0ms
+    Required constraints: CONNECTIVITY [0x10000000]
+    Preferred constraints:
+    Dynamic constraints:
+    Satisfied constraints: CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0x1b400000]
+    Unsatisfied constraints:
+    Constraint history:
+      -9s591ms = CONNECTIVITY [0x10000000]
+      -9s591ms = CONNECTIVITY BACKGROUND_NOT_RESTRICTED [0x10400000]
+      -9s591ms = CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x12400000]
+      -9s591ms = CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13400000]
+      -9s591ms = CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0x1b400000]
+    Uid: active
+    Tracking: CONNECTIVITY QUOTA
+    Implicit constraints:
+      readyNotDozing: true
+      readyNotRestrictedInBg: true
+      readyComponentEnabled: true
+      userInitiatedApproved: true (started as UIJ: true)
+    Started with foreground flag: true
+    Network: 100
+    Standby bucket: EXEMPTED
+    Enqueue time: -9s591ms
+    Run time: earliest=none, latest=none, original latest=none
+    Restricted due to: none.
+    Ready: false (job=true user=true !restricted=true !pending=true !active=false !backingup=true comp=true)
+  JOB #u0a142/1802: bc1d32a ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+    u0a142 tag=*job*/ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService#1802
+    Source: uid=u0a142 user=0 pkg=ru.sulfi.sulfi_hypnotherapy.transferprobe
+    JobInfo:
+      Service: ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+      PERSISTED
+      Priority: 300 [DEFAULT]
+      Requires: charging=false batteryNotLow=false deviceIdle=false
+      Extras: {transferScheduleNonce=0502ee97-27a8-48d2-bcbe-61fbd6eb3ac6}
+      Network type: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED Uid: 10142 UnderlyingNetworks: Null] ]
+      Minimum latency: +10m0s0ms
+      Backoff: policy=1 initial=+30s0ms
+      Has early constraint
+    Required constraints: TIMING_DELAY CONNECTIVITY [0x90000000]
+    Preferred constraints:
+    Dynamic constraints:
+    Satisfied constraints: CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0x1b400000]
+    Unsatisfied constraints: TIMING_DELAY [0x80000000]
+    Constraint history:
+      -9s596ms = BACKGROUND_NOT_RESTRICTED [0x400000]
+      -9s596ms = DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x2400000]
+      -9s596ms = DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3400000]
+      -9s595ms = DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0xb400000]
+      -9s595ms = CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0x1b400000]
+    Uid: active
+    Tracking: CONNECTIVITY TIME QUOTA
+    Implicit constraints:
+      readyNotDozing: true
+      readyNotRestrictedInBg: true
+      readyComponentEnabled: true
+    Started with foreground flag: false
+    Network: 100
+    Standby bucket: EXEMPTED
+    Enqueue time: -9s596ms
+    Run time: earliest=+9m50s404ms, latest=none, original latest=none
+    Restricted due to: none.
+    Ready: false (job=false user=true !restricted=true !pending=true !active=true !backingup=true comp=true)
+
+PrefetchController:
+  Cached launch times:
+  
+  
+  Prefetch threshold alarms:
+    NOT WAITING
+
+FlexibilityController:
+  # Constraints Satisfied: 2
+  Satisfied Flexible Constraints:  CHARGING BATTERY_NOT_LOW [0x3]
+  
+  
+  Flexible Constraint Check alarms:
+    NOT WAITING
+
+ConnectivityController:
+  Available networks:
+    100: [ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED LinkUpBandwidth>=12000Kbps LinkDnBandwidth>=30000Kbps TransportInfo: <SSID: <unknown ssid>, BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, IP: /10.0.2.16, Security type: 0, Supplicant state: COMPLETED, Wi-Fi standard: 1, RSSI: -50, Link speed: 2Mbps, Tx Link speed: 2Mbps, Max Supported Tx Link speed: 54Mbps, Rx Link speed: 2Mbps, Max Supported Rx Link speed: 54Mbps, Frequency: 2437MHz, Net ID: -1, Metered hint: false, score: 60, isUsable: true, CarrierMerged: false, SubscriptionId: -1, IsPrimary: 1, Trusted: true, Restricted: false, Ephemeral: false, OEM paid: false, OEM private: false, OSU AP: false, FQDN: <none>, Provider friendly name: <none>, Requesting package name: <none><none>MLO Information: , Is TID-To-Link negotiation supported by the AP: false, AP MLD Address: <none>, AP MLO Link Id: <none>, AP MLO Affiliated links: <none>> SignalStrength: -50 AdminUids: [10110] SSID: "AndroidWifi" UnderlyingNetworks: Null]
+  
+  No cached signal strengths
+  
+  Current default network callbacks:
+    UID: 1000; Network: 100 (blocked=REASON_NONE)
+    UID: 10057; Network: 100 (blocked=REASON_NONE)
+    UID: 10094; Network: 100 (blocked=REASON_NONE)
+    UID: 10124; Network: 100 (blocked=REASON_NONE)
+    UID: 10139; Network: 100 (blocked=REASON_NONE)
+    UID: 10142; Network: 100 (blocked=REASON_NONE)
+  
+  UID Pecking Order:
+    0: UidStats{uid=1000 pri=0 #run=0 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+    1: UidStats{uid=10094 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+    2: UidStats{uid=10124 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+    3: UidStats{uid=10139 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+    4: UidStats{uid=10057 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+    5: UidStats{uid=10142 pri=0 #run=1 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-1m10s109ms}
+  
+  ##u0a142/1801 from u0a142: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED Uid: 10142 UnderlyingNetworks: Null] ]
+  ##u0a142/1802 from u0a142: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED Uid: 10142 UnderlyingNetworks: Null] ]
+
+TimeController:
+  Elapsed clock: 70110
+  Next delay alarm in +9m50s392ms
+  Last delay alarm fired @ +1m10s110ms
+  Next deadline alarm in +39m18s469ms
+  
+  ##u0a142/1802 from u0a142: Delay=+9m50s392ms, Deadline=N/A
+
+IdleController:
+  Currently idle: false
+  Idleness tracker:
+    mIdle: false
+    mScreenOn: false
+    mDockIdle: false
+    mProjectionActive: false
+  
+
+BatteryController:
+  Power connected: true
+  Stable power: true
+  Not low: true
+
+StorageController:
+  Not low: true
+  Sequence: -1
+  
+
+BackgroundJobsController:
+  Current AppStateTracker State:
+    Force all apps standby: false
+    Small Battery Device: false
+    Force all apps standby for small battery device: false
+    Plugged In: true
+    Active uids: [u0a57 u0a59 u0a61 u0a65 u0a66 u0a69 u0a75 u0a78 u0a92 u0a94 u0a95 u0a101 u0a102 u0a104 u0a108 u0a109 u0a110 u0a112 u0a113 u0a117 u0a121 u0a123 u0a124 u0a125 u0a139 u0a140 u0a142]
+    Except-idle + user exemption list appids: [2000, 10059, 10061, 10064, 10065, 10070, 10094, 10118, 10125]
+    User exemption list appids: []
+    Temp exemption list appids: []
+    Exempted bucket packages:
+      User 0
+        ru.sulfi.sulfi_hypnotherapy.transferprobe
+        com.android.cts.priv.ctsshim
+        com.android.uwb.resources
+        com.android.internal.display.cutout.emulation.corner
+        com.android.adservices.api
+        com.android.internal.display.cutout.emulation.double
+        com.android.providers.telephony
+        com.android.dynsystem
+        com.android.healthconnect.controller
+        com.android.providers.calendar
+        com.android.providers.media
+        com.android.health.connect.backuprestore
+        com.android.internal.systemui.navbar.gestural_wide_back
+        com.android.virtualmachine.res
+        com.android.wallpapercropper
+        com.android.carrierconfig.auto_generated_rro_vendor__
+        com.android.systemui.emulation.pixel_3_xl
+        com.android.systemui.emulation.pixel_4_xl
+        com.android.systemui.emulation.pixel_fold
+        com.android.externalstorage
+        com.android.htmlviewer
+        com.android.companiondevicemanager
+        com.android.mms.service
+        com.android.providers.downloads
+        com.android.messaging
+        com.android.federatedcompute.services
+        com.android.networkstack.tethering.emulator
+        com.android.internal.emulation.pixel_3a_xl
+        com.android.internal.emulation.pixel_6_pro
+        com.android.internal.emulation.pixel_7_pro
+        com.android.internal.emulation.pixel_8_pro
+        com.android.internal.emulation.pixel_3a
+        com.android.internal.emulation.pixel_4a
+        com.android.internal.emulation.pixel_6a
+        com.android.internal.emulation.pixel_7a
+        com.android.safetycenter.resources
+        com.android.providers.downloads.ui
+        com.android.pacprocessor
+        com.android.simappdialog
+        com.android.networkstack
+        com.android.connectivity.resources
+        com.android.internal.display.cutout.emulation.hole
+        com.android.internal.display.cutout.emulation.tall
+        com.android.modulemetadata
+        com.android.certinstaller
+        com.android.carrierconfig
+        com.android.internal.systemui.navbar.threebutton
+        com.android.wifi.dialog
+        android
+        com.android.camera2
+        com.android.egg
+        com.android.mtp
+        com.android.nfc
+        com.android.ons
+        com.android.stk
+        com.android.launcher3
+        com.android.backupconfirm
+        com.android.systemui.auto_generated_rro_vendor__
+        com.android.internal.systemui.navbar.twobutton
+        com.android.statementservice
+        com.android.settings.intelligence
+        com.android.calendar
+        com.android.internal.systemui.navbar.gestural_extra_wide_back
+        com.android.systemui.accessibility.accessibilitymenu
+        com.android.systemui.emulation.pixel_3
+        com.android.systemui.emulation.pixel_4
+        com.android.systemui.emulation.pixel_5
+        com.android.systemui.emulation.pixel_6
+        com.android.systemui.emulation.pixel_7
+        com.android.systemui.emulation.pixel_8
+        com.android.emulator.radio.config
+        com.android.providers.settings
+        com.android.sharedstoragebackup
+        com.android.printspooler
+        com.android.dreams.basic
+        com.android.webview
+        com.android.se
+        com.android.inputdevices
+        com.android.rkpdapp
+        com.android.bips
+        com.android.internal.emulation.pixel_3
+        com.android.internal.emulation.pixel_4
+        com.android.internal.emulation.pixel_5
+        com.android.internal.emulation.pixel_6
+        com.android.internal.emulation.pixel_7
+        com.android.internal.emulation.pixel_8
+        com.android.sdksetup
+        com.android.musicfx
+        com.android.internal.display.cutout.emulation.emu01
+        com.android.providers.settings.auto_generated_rro_vendor__
+        com.android.cellbroadcastreceiver
+        android.ext.shared
+        ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+        com.android.server.telecom
+        com.android.cellbroadcastservice
+        com.android.keychain
+        com.android.printservice.recommendation
+        android.ext.services
+        com.android.wifi.resources
+        com.android.calllogbackup
+        com.android.cameraextensions
+        com.android.localtransport
+        com.android.packageinstaller
+        com.android.carrierdefaultapp
+        com.android.credentialmanager
+        com.android.theme.font.notoserifsource
+        com.android.proxyhandler
+        com.android.internal.display.cutout.emulation.waterfall
+        com.android.intentresolver
+        com.android.nearby.halfsheet
+        com.android.inputmethod.latin
+        com.android.internal.systemui.navbar.transparent
+        com.android.managedprovisioning
+        com.android.networkstack.tethering
+        com.android.soundpicker
+        com.android.systemui.emulation.pixel_3a_xl
+        com.android.systemui.emulation.pixel_6_pro
+        com.android.systemui.emulation.pixel_7_pro
+        com.android.systemui.emulation.pixel_8_pro
+        com.android.dreams.phototable
+        com.android.emulator.multidisplay
+        com.android.providers.partnerbookmarks
+        com.android.role.notes.enabled
+        com.android.wallpaper.livepicker
+        com.android.cellbroadcastreceiver.module
+        com.android.phone.auto_generated_rro_vendor__
+        com.android.apps.tag
+        com.android.imsserviceentitlement
+        com.android.internal.emulation.pixel_2_xl
+        com.android.internal.emulation.pixel_3_xl
+        com.android.internal.emulation.pixel_4_xl
+        com.android.internal.emulation.pixel_fold
+        com.android.storagemanager
+        com.android.bookmarkprovider
+        com.android.settings
+        com.android.systemui.emulation.pixel_3a
+        com.android.systemui.emulation.pixel_4a
+        com.android.systemui.emulation.pixel_6a
+        com.android.systemui.emulation.pixel_7a
+        com.android.cts.ctsshim
+        com.android.vpndialogs
+        com.android.connectivity.resources.goldfish.overlay
+        com.android.music
+        com.android.phone
+        com.android.shell
+        com.android.sdksandbox
+        com.android.wallpaperbackup
+        com.android.providers.blockednumber
+        com.android.providers.userdictionary
+        com.android.providers.media.module
+        com.android.emergency
+        com.android.hotspot2.osulogin
+        com.android.internal.systemui.navbar.gestural
+        com.android.location.fused
+        com.android.systemui
+        com.android.bluetoothmidiservice
+        com.android.permissioncontroller
+        com.android.traceur
+        org.alchemist.p0probe
+        com.android.ondevicepersonalization.services
+        com.android.bluetooth
+        com.android.wallpaperpicker
+        com.android.providers.contacts
+        com.android.captiveportallogin
+        com.android.internal.systemui.navbar.gestural_narrow_back
+        com.android.devicelockcontroller
+        android.auto_generated_rro_vendor__
+    
+    Restricted packages:
+    Stats:
+      UID_FG_STATE_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      UID_ACTIVE_STATE_CHANGED: count=43, total=101.9ms, avg=2.369ms, max calls/s=22 max dur/s=84.3ms max time=83.8ms
+      RUN_ANY_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      ALL_UNEXEMPTED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      ALL_EXEMPTION_LIST_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      TEMP_EXEMPTION_LIST_CHANGED: count=43, total=2.2ms, avg=0.052ms, max calls/s=10 max dur/s=1.3ms max time=1.0ms
+      EXEMPTED_BUCKET_CHANGED: count=11, total=0.5ms, avg=0.048ms, max calls/s=5 max dur/s=0.2ms max time=0.1ms
+      FORCE_ALL_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      IS_UID_ACTIVE_CACHED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      IS_UID_ACTIVE_RAW: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+  
+  ##u0a142/1802 from u0a142 active: ru.sulfi.sulfi_hypnotherapy.transferprobe [RUN_ANY_IN_BACKGROUND allowed] RUNNABLE
+  ##u0a142/1801 from u0a142 active: ru.sulfi.sulfi_hypnotherapy.transferprobe [RUN_ANY_IN_BACKGROUND allowed] RUNNABLE
+
+ContentObserverController:
+  
+
+DeviceIdleJobsController:
+  Idle mode: false
+  
+  ##u0a142/1802 from u0a142: ru.sulfi.sulfi_hypnotherapy.transferprobe RUNNABLE
+  ##u0a142/1801 from u0a142: ru.sulfi.sulfi_hypnotherapy.transferprobe RUNNABLE
+
+QuotaController:
+  Is enabled: true
+  Current elapsed time: 70112
+  
+  Foreground UIDs: {1001=true, 1002=true, 1037=true, 1068=true, 1073=true, 10117=true, 10140=true, 10141=true}
+  
+  Cached top apps: {1001=true, 1002=true, 1037=true, 1068=true, 1073=true, 10117=true, 10140=true}
+  Cached top app grace period: {10110=97105, 10113=127380, 10142=121048}
+  Cached temp allowlist: {}
+  Cached temp allowlist grace period: {1000=241939, 1001=242763, 1002=220981, 1027=242274, 2000=242746, 10057=242815, 10059=238143, 10061=241792, 10063=241848, 10065=241718, 10066=241718, 10069=241646, 10075=235101, 10092=240255, 10094=241196, 10095=241718, 10101=241718, 10104=241718, 10108=241064, 10109=242033, 10117=233730, 10123=241718, 10124=241049, 10125=241048, 10139=242387, 10140=241848}
+  
+  Special apps:
+    System installers={0->{com.android.packageinstaller, com.android.managedprovisioning, com.android.shell, com.android.devicelockcontroller}}
+  
+  ##u0a142/1801 from u0a142 (TOP)
+    EXEMPTED, within regular quota, 600000ms remaining in quota
+  ##u0a142/1802 from u0a142
+    EXEMPTED, within regular quota, 600000ms remaining in quota
+  
+  Timer<REG>{<0>com.android.messaging} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>android} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>com.android.statementservice} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>com.android.providers.settings} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>com.android.rkpdapp} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>com.android.imsserviceentitlement} NOT active, 0 running bg jobs
+  
+  Timer<REG>{<0>com.android.permissioncontroller} NOT active, 0 running bg jobs
+  
+  
+  Timer<EJ>{<0>com.android.providers.calendar} NOT active, 0 running bg jobs (debit adj=0)
+  
+  
+  TopAppTimer{<0>com.android.settings} NOT active
+  TopAppTimer{<0>com.android.sdksetup} NOT active
+  TopAppTimer{<0>com.android.launcher3} NOT active
+  TopAppTimer{<0>ru.sulfi.sulfi_hypnotherapy.transferprobe} NOT active
+  
+  Cached execution stats:
+    <0>ru.sulfi.sulfi_hypnotherapy.transferprobe
+      EXEMPTED: expirationTime=86461048, allowedTimePerPeriodMs=600000, windowSizeMs=600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+    <0>com.android.providers.downloads
+      EXEMPTED: expirationTime=86441446, allowedTimePerPeriodMs=600000, windowSizeMs=600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+    <0>android
+      EXEMPTED: expirationTime=86430260, allowedTimePerPeriodMs=600000, windowSizeMs=600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+    <0>com.android.providers.settings
+      EXEMPTED: expirationTime=86430261, allowedTimePerPeriodMs=600000, windowSizeMs=600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+    <0>com.android.providers.media.module
+      EXEMPTED: expirationTime=86438954, allowedTimePerPeriodMs=600000, windowSizeMs=600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+  
+  EJ debits:
+    <0>ru.sulfi.sulfi_hypnotherapy.transferprobe: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.providers.downloads: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>android: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.launcher3: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.providers.settings: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.sdksetup: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.settings: ShrinkableDebits { debit tally: 0, bucket: 6 }
+    <0>com.android.providers.media.module: ShrinkableDebits { debit tally: 0, bucket: 6 }
+  
+  In quota alarms:
+    NOT WAITING
+
+ComponentController:
+  0-ComponentInfo{android/com.android.server.PruneInstantAppsJobService}: system
+  0-ComponentInfo{android/com.android.server.appsearch.contactsindexer.ContactsIndexerMaintenanceService}: system
+  0-ComponentInfo{android/com.android.server.camera.CameraStatsJobService}: system
+  0-ComponentInfo{com.android.providers.media.module/com.android.providers.media.IdleService}: com.android.providers.media.module
+  0-ComponentInfo{ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService}: ru.sulfi.sulfi_hypnotherapy.transferprobe
+  0-ComponentInfo{com.android.providers.media.module/com.android.providers.media.MediaService}: com.android.providers.media.module
+  0-ComponentInfo{com.android.providers.settings/com.android.providers.settings.WriteFallbackSettingsFilesJobService}: system
+  0-ComponentInfo{android/com.android.server.blob.BlobStoreIdleJobService}: system
+  0-ComponentInfo{com.android.providers.calendar/com.android.providers.calendar.CalendarProviderJobService}: com.android.providers.calendar
+  0-ComponentInfo{android/com.android.server.BinaryTransparencyService$UpdateMeasurementsJobService}: system
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.permission.service.LocationAccessCheck$LocationAccessCheckJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.settings/com.android.settings.fuelgauge.batterytip.AnomalyConfigJobService}: com.android.settings
+  0-ComponentInfo{android/com.android.server.art.BackgroundDexoptJobService}: system
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.safetycenter.service.SafetyCenterBackgroundRefreshJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.networkstack/com.android.networkstack.ipmemorystore.RegularMaintenanceJobService}: com.android.networkstack.process
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.devicelockcontroller/androidx.work.impl.background.systemjob.SystemJobService}: com.android.devicelockcontroller
+  0-ComponentInfo{android/com.android.server.backup.KeyValueBackupJob}: system
+  0-ComponentInfo{android/com.android.server.healthconnect.HealthConnectDailyService}: system
+  0-ComponentInfo{com.android.providers.downloads/com.android.providers.downloads.MediaScanTriggerJob}: android.process.media
+  0-ComponentInfo{android/com.android.server.storage.DiskStatsLoggingService}: system
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.hibernation.HibernationJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionEventCleanupJobService}: com.android.permissioncontroller
+  0-ComponentInfo{android/com.android.server.pm.DynamicCodeLoggingService}: system
+  0-ComponentInfo{android/com.android.server.net.watchlist.ReportWatchlistJobService}: system
+  0-ComponentInfo{android/com.android.server.people.data.DataMaintenanceService}: system
+  0-ComponentInfo{com.android.providers.downloads/com.android.providers.downloads.DownloadIdleService}: android.process.media
+  0-ComponentInfo{com.android.settings/com.android.settings.fuelgauge.batterytip.AnomalyCleanupJobService}: com.android.settings
+  0-ComponentInfo{android/com.android.server.usage.UsageStatsIdleService}: system
+  0-ComponentInfo{com.android.imsserviceentitlement/com.android.imsserviceentitlement.fcm.FcmRegistrationService}: com.android.imsserviceentitlement
+  0-ComponentInfo{com.android.statementservice/androidx.work.impl.background.systemjob.SystemJobService}: com.android.statementservice
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.privacysources.NotificationListenerCheckJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.permissioncontroller/com.android.permissioncontroller.privacysources.AccessibilityJobService}: com.android.permissioncontroller
+  0-ComponentInfo{com.android.rkpdapp/androidx.work.impl.background.systemjob.SystemJobService}: com.android.rkpdapp
+  0-ComponentInfo{com.android.providers.media.module/com.android.providers.media.stableuris.job.StableUriIdleMaintenanceService}: com.android.providers.media.module
+  0-ComponentInfo{android/com.android.server.notification.NotificationHistoryJobService}: system
+  0-ComponentInfo{android/com.android.server.companion.InactiveAssociationsRemovalService}: system
+  0-ComponentInfo{android/com.android.server.MountServiceIdler}: system
+
+TareController:
+  Is enabled: false
+  Affordability cache:
+
+Uid proc states:
+  u0a142: IMPF
+
+Uid capabilities:
+  u0a142: ---N-U
+
+Cached UID->package map:
+  10142: {ru.sulfi.sulfi_hypnotherapy.transferprobe}
+
+Current stats at 2026-11-15-15-37-28 (-43s238ms) over +43s238ms:
+  Max concurrency: 5 total, 1 foreground
+  
+  u0a142 / ru.sulfi.sulfi_hypnotherapy.transferprobe:
+    1x pending 22% 1x active-top (active-top)
+
+  Job history:
+           -9s605ms   START: #u0a142/1801 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+
+Pending queue:
+  None
+
+Active jobs:
+  Slot #0(ID=31196825): 3f6f6b8 #u0a142/1801 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService
+    Running for: +9s591ms, timeout at: +4m50s823ms
+    Remaining execution limits: [+5h59m50s409ms, +11h59m50s409ms]
+      u0a142 tag=*job*/ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService#1801
+      Source: uid=u0a142 user=0 pkg=ru.sulfi.sulfi_hypnotherapy.transferprobe
+      Required constraints: CONNECTIVITY [0x10000000]
+      Preferred constraints:
+      Dynamic constraints:
+      Tracking: CONNECTIVITY QUOTA
+      Implicit constraints:
+        readyNotDozing: true
+        readyNotRestrictedInBg: true
+        readyComponentEnabled: true
+        userInitiatedApproved: true (started as UIJ: true)
+      Started with foreground flag: true
+      Network: 100
+      Standby bucket: EXEMPTED
+      Enqueue time: -9s591ms
+      Run time: earliest=none, latest=none, original latest=none
+    Evaluated bias: 40 [TOP_APP]
+    Active at -9s589ms, pending for +2ms
+
+Idle contexts (15):
+  ID=31774015: inactive since -26s67ms, stopped because: cancel() called by app, callingUid=10139 uid=10139 jobId=0
+  ID=31900788: inactive since -26s430ms, stopped because: last work dequeued
+  ID=44934215: inactive since -26s320ms, stopped because: last work dequeued
+  ID=48067413: inactive since -26s807ms, stopped because: cancel() called by app, callingUid=10139 uid=10139 jobId=1
+  ID=68566499: inactive since -39s430ms, stopped because: onStartJob returned false
+  ID=72612406: inactive
+  ID=81079709: inactive
+  ID=82162656: inactive
+  ID=86126092: inactive
+  ID=119042578: inactive
+  ID=134716766: inactive
+  ID=170668394: inactive
+  ID=223277009: inactive
+  ID=232490587: inactive
+  ID=248127224: inactive
+
+Recently completed jobs:
+  None
+
+
+
+Concurrency:
+  Configuration:
+    concurrency_limit=16 
+    concurrency_screen_off_adjustment_delay_ms=30000 
+    concurrency_pkg_concurrency_limit_ej=3 
+    concurrency_pkg_concurrency_limit_regular=8 
+    concurrency_enable_max_wait_time_bypass=true 
+    concurrency_max_wait_ui_ms=300000 
+    concurrency_max_wait_ej_ms=300000 
+    concurrency_max_wait_regular_ms=1800000 
+    
+    concurrency_max_total_screen_on_normal=12 
+    concurrency_min_ratio_top_screen_on_normal=4 
+    concurrency_max_ratio_top_screen_on_normal=12 
+    concurrency_min_ratio_fgs_screen_on_normal=2 
+    concurrency_max_ratio_fgs_screen_on_normal=12 
+    concurrency_min_ratio_ui_screen_on_normal=1 
+    concurrency_max_ratio_ui_screen_on_normal=12 
+    concurrency_min_ratio_ej_screen_on_normal=1 
+    concurrency_max_ratio_ej_screen_on_normal=12 
+    concurrency_min_ratio_bg_screen_on_normal=0 
+    concurrency_max_ratio_bg_screen_on_normal=6 
+    concurrency_min_ratio_bguser_screen_on_normal=0 
+    concurrency_max_ratio_bguser_screen_on_normal=3 
+    concurrency_min_ratio_bguser_screen_on_normal=0 
+    concurrency_max_ratio_bguser_screen_on_normal=2 
+    
+    concurrency_max_total_screen_on_moderate=8 
+    concurrency_min_ratio_top_screen_on_moderate=3 
+    concurrency_max_ratio_top_screen_on_moderate=8 
+    concurrency_min_ratio_fgs_screen_on_moderate=0 
+    concurrency_max_ratio_fgs_screen_on_moderate=8 
+    concurrency_min_ratio_ui_screen_on_moderate=0 
+    concurrency_max_ratio_ui_screen_on_moderate=8 
+    concurrency_min_ratio_ej_screen_on_moderate=0 
+    concurrency_max_ratio_ej_screen_on_moderate=8 
+    concurrency_min_ratio_bg_screen_on_moderate=0 
+    concurrency_max_ratio_bg_screen_on_moderate=3 
+    concurrency_min_ratio_bguser_screen_on_moderate=0 
+    concurrency_max_ratio_bguser_screen_on_moderate=1 
+    concurrency_min_ratio_bguser_screen_on_moderate=0 
+    concurrency_max_ratio_bguser_screen_on_moderate=1 
+    
+    concurrency_max_total_screen_on_low=6 
+    concurrency_min_ratio_top_screen_on_low=3 
+    concurrency_max_ratio_top_screen_on_low=6 
+    concurrency_min_ratio_fgs_screen_on_low=0 
+    concurrency_max_ratio_fgs_screen_on_low=6 
+    concurrency_min_ratio_ui_screen_on_low=0 
+    concurrency_max_ratio_ui_screen_on_low=6 
+    concurrency_min_ratio_ej_screen_on_low=0 
+    concurrency_max_ratio_ej_screen_on_low=6 
+    concurrency_min_ratio_bg_screen_on_low=0 
+    concurrency_max_ratio_bg_screen_on_low=2 
+    concurrency_min_ratio_bguser_screen_on_low=0 
+    concurrency_max_ratio_bguser_screen_on_low=1 
+    concurrency_min_ratio_bguser_screen_on_low=0 
+    concurrency_max_ratio_bguser_screen_on_low=1 
+    
+    concurrency_max_total_screen_on_critical=6 
+    concurrency_min_ratio_top_screen_on_critical=4 
+    concurrency_max_ratio_top_screen_on_critical=6 
+    concurrency_min_ratio_fgs_screen_on_critical=0 
+    concurrency_max_ratio_fgs_screen_on_critical=6 
+    concurrency_min_ratio_ui_screen_on_critical=0 
+    concurrency_max_ratio_ui_screen_on_critical=6 
+    concurrency_min_ratio_ej_screen_on_critical=0 
+    concurrency_max_ratio_ej_screen_on_critical=6 
+    concurrency_min_ratio_bg_screen_on_critical=0 
+    concurrency_max_ratio_bg_screen_on_critical=1 
+    concurrency_min_ratio_bguser_screen_on_critical=0 
+    concurrency_max_ratio_bguser_screen_on_critical=1 
+    concurrency_min_ratio_bguser_screen_on_critical=0 
+    concurrency_max_ratio_bguser_screen_on_critical=1 
+    
+    concurrency_max_total_screen_off_normal=16 
+    concurrency_min_ratio_top_screen_off_normal=4 
+    concurrency_max_ratio_top_screen_off_normal=16 
+    concurrency_min_ratio_fgs_screen_off_normal=3 
+    concurrency_max_ratio_fgs_screen_off_normal=16 
+    concurrency_min_ratio_ui_screen_off_normal=3 
+    concurrency_max_ratio_ui_screen_off_normal=16 
+    concurrency_min_ratio_ej_screen_off_normal=2 
+    concurrency_max_ratio_ej_screen_off_normal=16 
+    concurrency_min_ratio_bg_screen_off_normal=1 
+    concurrency_max_ratio_bg_screen_off_normal=9 
+    concurrency_min_ratio_bguser_screen_off_normal=0 
+    concurrency_max_ratio_bguser_screen_off_normal=3 
+    concurrency_min_ratio_bguser_screen_off_normal=0 
+    concurrency_max_ratio_bguser_screen_off_normal=3 
+    
+    concurrency_max_total_screen_off_moderate=14 
+    concurrency_min_ratio_top_screen_off_moderate=4 
+    concurrency_max_ratio_top_screen_off_moderate=14 
+    concurrency_min_ratio_fgs_screen_off_moderate=2 
+    concurrency_max_ratio_fgs_screen_off_moderate=14 
+    concurrency_min_ratio_ui_screen_off_moderate=2 
+    concurrency_max_ratio_ui_screen_off_moderate=14 
+    concurrency_min_ratio_ej_screen_off_moderate=2 
+    concurrency_max_ratio_ej_screen_off_moderate=14 
+    concurrency_min_ratio_bg_screen_off_moderate=1 
+    concurrency_max_ratio_bg_screen_off_moderate=7 
+    concurrency_min_ratio_bguser_screen_off_moderate=0 
+    concurrency_max_ratio_bguser_screen_off_moderate=1 
+    concurrency_min_ratio_bguser_screen_off_moderate=0 
+    concurrency_max_ratio_bguser_screen_off_moderate=1 
+    
+    concurrency_max_total_screen_off_low=9 
+    concurrency_min_ratio_top_screen_off_low=2 
+    concurrency_max_ratio_top_screen_off_low=9 
+    concurrency_min_ratio_fgs_screen_off_low=1 
+    concurrency_max_ratio_fgs_screen_off_low=9 
+    concurrency_min_ratio_ui_screen_off_low=1 
+    concurrency_max_ratio_ui_screen_off_low=9 
+    concurrency_min_ratio_ej_screen_off_low=0 
+    concurrency_max_ratio_ej_screen_off_low=9 
+    concurrency_min_ratio_bg_screen_off_low=0 
+    concurrency_max_ratio_bg_screen_off_low=2 
+    concurrency_min_ratio_bguser_screen_off_low=0 
+    concurrency_max_ratio_bguser_screen_off_low=1 
+    concurrency_min_ratio_bguser_screen_off_low=0 
+    concurrency_max_ratio_bguser_screen_off_low=1 
+    
+    concurrency_max_total_screen_off_critical=6 
+    concurrency_min_ratio_top_screen_off_critical=1 
+    concurrency_max_ratio_top_screen_off_critical=6 
+    concurrency_min_ratio_fgs_screen_off_critical=0 
+    concurrency_max_ratio_fgs_screen_off_critical=6 
+    concurrency_min_ratio_ui_screen_off_critical=0 
+    concurrency_max_ratio_ui_screen_off_critical=6 
+    concurrency_min_ratio_ej_screen_off_critical=0 
+    concurrency_max_ratio_ej_screen_off_critical=6 
+    concurrency_min_ratio_bg_screen_off_critical=0 
+    concurrency_max_ratio_bg_screen_off_critical=1 
+    concurrency_min_ratio_bguser_screen_off_critical=0 
+    concurrency_max_ratio_bguser_screen_off_critical=1 
+    concurrency_min_ratio_bguser_screen_off_critical=0 
+    concurrency_max_ratio_bguser_screen_off_critical=1 
+    
+  Screen state: current OFF  effective ON
+  Last screen ON: 2026-11-15 15:37:28.755 (-42s969ms)
+  Last screen OFF: 2026-11-15 15:38:09.388 (-2s336ms)
+  
+  Current work counts: Config={tot=12 mins={1=4, 2=2, 4=1, 8=1, 16=0, 32=0, 64=0} maxs={1=12, 2=12, 4=12, 8=12, 16=6, 32=3, 64=2}}, act res={1=1, 2=0, 4=1, 8=0, 16=0, 32=0, 64=0}, Pending={1=0, 4=0}, Running={1=1}, Staged={}, # unspecialized remaining=10
+  
+  mLastMemoryTrimLevel: 0
+  
+  Active Package stats:
+    PackageStats{0-ru.sulfi.sulfi_hypnotherapy.transferprobe#runEJ=0 #runReg=1 #stagedEJ=0 #stagedReg=0 }
+  
+  User Grace Period: {}
+  
+  Stats:
+    assignJobsToContexts: count=331, total=297.0ms, avg=0.897ms, max calls/s=45 max dur/s=222.1ms max time=111.4ms
+    refreshSystemState: count=7, total=107.2ms, avg=15.320ms, max calls/s=1 max dur/s=0.0ms max time=107.2ms
+
+PersistStats: FirstLoad: 0/0/0 LastSave: 1/0/0
+

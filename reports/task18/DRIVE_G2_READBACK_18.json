@@ -1,0 +1,69 @@
+{
+  "allVerified": true,
+  "files": [
+    {
+      "name": "RESULT_18.md",
+      "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+      "bytes": 1865,
+      "sha256": "7bcb998066290d010734c4193d2d3a4ca32422cbd2e5c0564d2b76393f366a81",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "ROOT_CAUSE_BACKGROUND_18.md",
+      "id": "1iaH0c_R4Z686C53ZVpyO1H-RUd9M5Jnc",
+      "bytes": 2765,
+      "sha256": "ff829aea36b3b4fcdf3235bdd91333b7b765d240a1190504ee4eb50e8a7bcb60",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "ARCHITECTURE_18.md",
+      "id": "1W8S0GjQ9ufDqkTheopDJRYwopbggXWiv",
+      "bytes": 6780,
+      "sha256": "4f191c701b10799ec113d13f29cd13f8e0d73626afc7a02886a768999c5f119d",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "PATH_MATRIX_18.csv",
+      "id": "1yWJeNiGLayu8gES-AnfvXD0p9shf4VV2",
+      "bytes": 2133,
+      "sha256": "7acc4510d59bb27729c9a30e027de98985285cabe2c9c6579f66ff5f419619f2",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "BASELINE_18.json",
+      "id": "18guBt0P_Gh83hBd5A5QfNBD_Yz8VPXqd",
+      "bytes": 523,
+      "sha256": "6373261272beeedab288a0461ba435d4ff02fa0b58d1c5a6fe4b3381c5da955e",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "TESTS_18.md",
+      "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+      "bytes": 2106,
+      "sha256": "d18d776312c39fe974eb6d4262191ec237ddc3b6e93be8e8fe98c291a4a39b50",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+      "bytes": 4485,
+      "sha256": "834a8122286072e3d38dd38d6a7c08492154b8562706ec66c690c45bc9d9fed4",
+      "ownerOnly": true,
+      "verified": true
+    },
+    {
+      "name": "ACCEPTANCE_18.csv",
+      "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+      "bytes": 7175,
+      "sha256": "d7352fe11b8e82bc3cf8fa1a6f24aedba5df9bfaf62a4dc96c5e1a924d5846c9",
+      "ownerOnly": true,
+      "verified": true
+    }
+  ]
+}

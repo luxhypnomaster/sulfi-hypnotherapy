@@ -1,0 +1,13 @@
+{
+  "run": 43658921493,
+  "source": "c94e6689a6b1e71cbf19c619b0730af922346b89",
+  "conclusion": "failure",
+  "stage": "compileDebugKotlin",
+  "errors": [
+    "NETWORK_BYTES_UNKNOWN Int must be explicitly converted to Long (both arguments)"
+  ],
+  "fix": "explicit .toLong(), not a native criterion waiver",
+  "signing": "NOT_USED",
+  "APK": "NOT_BUILT",
+  "next": "one targeted compile after source correction; no whole CI rerun"
+}

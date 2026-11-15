@@ -1,0 +1,242 @@
+ng 5309:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:32.077   527  1732 V ActivityManager: Got obituary of 5309:org.alchemist.p0probe
+11-15 01:46:32.145   527  1738 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:33.130  5343  5343 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:33.134  5343  5343 I AndroidRuntime: Using default boot image
+11-15 01:46:33.134  5343  5343 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:33.215  5343  5343 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:33.219   527  1738 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:33.271   527   563 I ActivityManager: Start proc 5356:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:33.343   527  1738 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5356
+11-15 01:46:33.771   527  1835 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:33.783   527  1835 E ActivityManager: Unable to freeze binder for 5356: -11
+11-15 01:46:33.787  5343  5343 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:33.788   527  1835 I ActivityManager: Killing 5356:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:33.905   527   614 D ActivityManager: sync unfroze 3787 com.google.android.configupdater for 6
+11-15 01:46:33.909   527  2620 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:33.929   527   621 D ActivityManager: freezing 4827 com.google.android.apps.messaging:rcs
+11-15 01:46:33.971   527  1841 V ActivityManager: Got obituary of 5356:org.alchemist.p0probe
+11-15 01:46:34.568   527  1839 D ActivityManager: sync unfroze 4827 com.google.android.apps.messaging:rcs for 6
+11-15 01:46:34.586   527   621 D ActivityManager: freezing 3770 com.google.android.rkpdapp
+11-15 01:46:34.912  5413  5413 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:34.916  5413  5413 I AndroidRuntime: Using default boot image
+11-15 01:46:34.917  5413  5413 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:35.139  5413  5413 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:35.144   527  1839 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:35.158   527   563 I ActivityManager: Start proc 5428:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:35.305   527  1837 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5428
+11-15 01:46:35.718   527  1839 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:35.724   527  1839 E ActivityManager: Unable to freeze binder for 5428: -11
+11-15 01:46:35.725  5413  5413 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:35.785   527  1839 I ActivityManager: Killing 5428:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:35.947   527   905 V ActivityManager: Got obituary of 5428:org.alchemist.p0probe
+11-15 01:46:35.974   527  1839 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:36.771   527   621 D ActivityManager: freezing 1785 com.google.android.youtube
+11-15 01:46:36.950   527  1837 W ActivityManager: Unable to start service Intent { act=com.google.android.play.core.splitinstall.BIND_SPLIT_INSTALL_SERVICE pkg=com.android.vending } U=0: not found
+11-15 01:46:37.002  5474  5474 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:37.010  5474  5474 I AndroidRuntime: Using default boot image
+11-15 01:46:37.016  5474  5474 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:37.299  5474  5474 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:37.309   527  1834 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:37.325   527   563 I ActivityManager: Start proc 5506:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:37.577   527  1740 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5506
+11-15 01:46:37.772   527   527 D ActivityManager: sync unfroze 1568 com.google.android.ext.services for 6
+11-15 01:46:38.162   527   605 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:38.203   527   605 E ActivityManager: Unable to freeze binder for 5506: -11
+11-15 01:46:38.328  5474  5474 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:38.374   527   605 I ActivityManager: Killing 5506:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:38.492   527   621 D ActivityManager: freezing 3137 com.google.android.gms.unstable
+11-15 01:46:38.560   527  1116 V ActivityManager: Got obituary of 5506:org.alchemist.p0probe
+11-15 01:46:38.602   527  1385 I ActivityManager: Background started FGS: Allowed [callingPackage: com.google.android.inputmethod.latin; callingUid: 10150; uidState: IMPB; uidBFSL: n/a; intent: Intent { cmp=com.google.android.inputmethod.latin/com.google.android.apps.inputmethod.libs.dataservice.superpacks.SuperpacksForegroundTaskService }; code:CURRENT_INPUT_METHOD; tempAllowListReason:<null>; targetSdkVersion:33; callerTargetSdkVersion:33; startForegroundCount:0; bindFromPackage:null: isBindService:false]
+11-15 01:46:38.628   527  1116 W ActivityManager: Foreground service started from background can not have location/camera/microphone access: service com.google.android.inputmethod.latin/com.google.android.apps.inputmethod.libs.dataservice.superpacks.SuperpacksForegroundTaskService
+11-15 01:46:38.648   527  1385 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:38.761   527   562 D ActivityManager: sync unfroze 1693 com.google.android.apps.youtube.music for 3
+11-15 01:46:39.691  5559  5559 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:39.698  5559  5559 I AndroidRuntime: Using default boot image
+11-15 01:46:39.701  5559  5559 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:39.914  5559  5559 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:39.966   527  1732 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:40.041   527   563 I ActivityManager: Start proc 5573:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:40.159   527   621 D ActivityManager: freezing 2465 com.google.android.apps.wallpaper
+11-15 01:46:40.375   527   563 I ActivityManager: Start proc 5586:com.google.android.webview/u0a133 for broadcast {com.google.android.webview/com.google.android.libraries.phenotype.client.stable.PhenotypeUpdateBackgroundBroadcastReceiver}
+11-15 01:46:40.578   527  1735 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5573
+11-15 01:46:40.670   527  1116 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10133. pid: 5586
+11-15 01:46:41.416   527  1735 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:41.456   527  1735 E ActivityManager: Unable to freeze binder for 5573: -11
+11-15 01:46:41.457  5559  5559 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:41.459   527  1735 I ActivityManager: Killing 5573:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:41.644   527  1116 V ActivityManager: Got obituary of 5573:org.alchemist.p0probe
+11-15 01:46:42.431   527  2648 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:42.548   527  2620 W ActivityManager: Unable to start service Intent { act=android.settings.hats.START_SERVICE pkg=com.google.android.settings.intelligence (has extras) } U=0: not found
+11-15 01:46:42.612   527   588 E ActivityManager: Unable to freeze binder for 4208: -11
+11-15 01:46:42.614   527   588 I ActivityManager: Killing 4208:com.google.android.settings.intelligence/u0a117 (adj 0): change com.google.android.settings.intelligence
+11-15 01:46:42.619   527   588 W ActivityManager: Scheduling restart of crashed service com.google.android.settings.intelligence/.modules.routines.impl.ComputeNewInferencesJobService in 1000ms for connection
+11-15 01:46:42.619   527   588 W ActivityManager: Scheduling restart of crashed service com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService in 11000ms for connection
+11-15 01:46:42.619   527   588 W ActivityManager: Scheduling restart of crashed service com.google.android.settings.intelligence/.modules.routines.impl.PruneDatabaseJobService in 21000ms for connection
+11-15 01:46:42.787   527   562 D ActivityManager: sync unfroze 4398 com.google.android.marvin.talkback for 3
+11-15 01:46:42.844   527  1732 V ActivityManager: Got obituary of 4208:com.google.android.settings.intelligence
+11-15 01:46:42.854  5617  5617 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:42.858  5617  5617 I AndroidRuntime: Using default boot image
+11-15 01:46:42.858  5617  5617 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:43.028  5617  5617 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:43.098   527   931 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:43.179   527   563 I ActivityManager: Start proc 5635:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:43.528   527   562 D ActivityManager: sync unfroze 3917 com.google.android.projection.gearhead:shared for 3
+11-15 01:46:43.639   527  2648 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5635
+11-15 01:46:43.642   527   563 I ActivityManager: Start proc 5655:com.google.android.settings.intelligence/u0a117 for service {com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.routines.impl.ComputeNewInferencesJobService}
+11-15 01:46:44.394   527   764 W ActivityManager: Slow operation: 266ms so far, now at attachApplicationLocked: immediately before bindApplication
+11-15 01:46:44.395   527   764 W ActivityManager: Slow operation: 266ms so far, now at attachApplicationLocked: immediately after bindApplication
+11-15 01:46:44.395   527   764 W ActivityManager: Slow operation: 267ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+11-15 01:46:44.548   527  1732 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:44.578   527  1732 E ActivityManager: Unable to freeze binder for 5635: -11
+11-15 01:46:44.764   527  1732 I ActivityManager: Killing 5635:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:44.786  5617  5617 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:44.820   527   562 W ActivityManager: Error shutting down UiAutomationConnection
+11-15 01:46:44.822   527   621 D ActivityManager: freezing 1999 com.google.android.partnersetup
+11-15 01:46:44.837   527  1381 V ActivityManager: Got obituary of 5635:org.alchemist.p0probe
+11-15 01:46:45.039   527   562 D ActivityManager: sync unfroze 1999 com.google.android.partnersetup for 3
+11-15 01:46:45.046   527   905 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:45.067   527  1735 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10117. pid: 5655
+11-15 01:46:45.158   527   625 W ActivityManager: Unable to start service Intent { act=com.google.android.gms.drive.ApiService.RESET_AFTER_BOOT flg=0x4 cmp=com.google.android.gms/.drive.api.ApiService (has extras) } U=0: not found
+11-15 01:46:45.721   527   562 D ActivityManager: sync unfroze 2483 com.android.chrome for 3
+11-15 01:46:46.019  5738  5738 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:46.034  5738  5738 I AndroidRuntime: Using default boot image
+11-15 01:46:46.035  5738  5738 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:46.233   527   621 D ActivityManager: freezing 4396 com.google.android.gms.ui
+11-15 01:46:46.406  5738  5738 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:46.422   527  2648 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:46.495   527   563 I ActivityManager: Start proc 5753:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:46.628   527   562 D ActivityManager: sync unfroze 1785 com.google.android.youtube for 3
+11-15 01:46:46.825   527  1737 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5753
+11-15 01:46:47.282   527  1116 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:47.297   527  1116 E ActivityManager: Unable to freeze binder for 5753: -11
+11-15 01:46:47.293  5738  5738 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:47.382   527  1116 I ActivityManager: Killing 5753:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:47.451   527  1833 V ActivityManager: Got obituary of 5753:org.alchemist.p0probe
+11-15 01:46:47.714   527  1839 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:48.523  5783  5783 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:48.536  5783  5783 I AndroidRuntime: Using default boot image
+11-15 01:46:48.536  5783  5783 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:48.670  5783  5783 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:48.677   527  2620 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:48.754   527   563 I ActivityManager: Start proc 5796:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:48.983   527  1839 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5796
+11-15 01:46:49.692   527  1837 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:49.701   527  1837 E ActivityManager: Unable to freeze binder for 5796: -11
+11-15 01:46:49.702   527  1837 I ActivityManager: Killing 5796:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:49.714  5783  5783 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:49.862   527  1739 V ActivityManager: Got obituary of 5796:org.alchemist.p0probe
+11-15 01:46:49.936   527   562 W ActivityManager: Error shutting down UiAutomationConnection
+11-15 01:46:50.127   527   905 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:50.253   527   621 D ActivityManager: freezing 1693 com.google.android.apps.youtube.music
+11-15 01:46:50.686   527   621 D ActivityManager: freezing 5586 com.google.android.webview
+11-15 01:46:50.859  5843  5843 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:50.868  5843  5843 I AndroidRuntime: Using default boot image
+11-15 01:46:50.868  5843  5843 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:51.159  5843  5843 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:51.173   527   546 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:51.200   527   563 I ActivityManager: Start proc 5863:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:51.346   527  1740 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5863
+11-15 01:46:51.583   527   562 D ActivityManager: sync unfroze 1693 com.google.android.apps.youtube.music for 3
+11-15 01:46:51.851   527  2594 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:51.884   527  2594 E ActivityManager: Unable to freeze binder for 5863: -11
+11-15 01:46:52.024   527  2594 I ActivityManager: Killing 5863:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:52.111  5843  5843 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:52.265   527  1967 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:52.387   527  1737 V ActivityManager: Got obituary of 5863:org.alchemist.p0probe
+11-15 01:46:52.538   527   562 D ActivityManager: sync unfroze 2465 com.google.android.apps.wallpaper for 3
+11-15 01:46:52.828   527   621 D ActivityManager: freezing 1979 com.google.android.contacts
+11-15 01:46:53.227   527   562 D ActivityManager: sync unfroze 1979 com.google.android.contacts for 3
+11-15 01:46:53.326  5894  5894 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:53.330  5894  5894 I AndroidRuntime: Using default boot image
+11-15 01:46:53.330  5894  5894 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:53.422  5894  5894 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:53.426   527  1737 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:53.483   527   563 I ActivityManager: Start proc 5912:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:53.536   527   621 D ActivityManager: freezing 4398 com.google.android.marvin.talkback
+11-15 01:46:53.658   527  1838 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 5912
+11-15 01:46:54.105   527   562 D ActivityManager: sync unfroze 4398 com.google.android.marvin.talkback for 3
+11-15 01:46:54.118   527  1967 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:54.127   527  1967 E ActivityManager: Unable to freeze binder for 5912: -11
+11-15 01:46:54.130   527  1967 I ActivityManager: Killing 5912:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:54.168   527   931 V ActivityManager: Got obituary of 5912:org.alchemist.p0probe
+11-15 01:46:54.187  5894  5894 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:54.618   527  1841 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:54.900   527   833 D ActivityManager: sync unfroze 3137 com.google.android.gms.unstable for 6
+11-15 01:46:55.355  5993  5993 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:55.355   527  1841 D ActivityManager: sync unfroze 3770 com.google.android.rkpdapp for 6
+11-15 01:46:55.358  5993  5993 I AndroidRuntime: Using default boot image
+11-15 01:46:55.358  5993  5993 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:55.479  5993  5993 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:55.485   527   833 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:55.541   527   563 I ActivityManager: Start proc 6009:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:55.778   527   931 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 6009
+11-15 01:46:56.353   527   621 D ActivityManager: freezing 2483 com.android.chrome
+11-15 01:46:56.463   527  1385 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:56.481  5993  5993 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:56.580   527  1385 E ActivityManager: Unable to freeze binder for 6009: -11
+11-15 01:46:56.587   527  1385 I ActivityManager: Killing 6009:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:56.613   527   562 W ActivityManager: Error shutting down UiAutomationConnection
+11-15 01:46:56.715   527   621 D ActivityManager: freezing 1999 com.google.android.partnersetup
+11-15 01:46:56.780   527  1834 V ActivityManager: Got obituary of 6009:org.alchemist.p0probe
+11-15 01:46:56.783   527   547 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:46:57.668  6054  6054 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:46:57.679  6054  6054 I AndroidRuntime: Using default boot image
+11-15 01:46:57.679  6054  6054 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:46:57.868  6054  6054 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:46:57.876   527   547 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:46:57.921   527   563 I ActivityManager: Start proc 6070:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:46:58.107   527  1967 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 6070
+11-15 01:46:58.750   527  1967 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:46:58.767  6054  6054 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:46:58.796   527  1967 E ActivityManager: Unable to freeze binder for 6070: -11
+11-15 01:46:58.872   527  1967 I ActivityManager: Killing 6070:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:46:58.939   527  1834 V ActivityManager: Got obituary of 6070:org.alchemist.p0probe
+11-15 01:46:59.078   527   604 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:47:00.032  6101  6101 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:47:00.042  6101  6101 I AndroidRuntime: Using default boot image
+11-15 01:47:00.044  6101  6101 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:47:00.340  6101  6101 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:47:00.370   527  1381 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:47:00.448   527   563 I ActivityManager: Start proc 6131:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:47:00.552   527  2620 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 6131
+11-15 01:47:01.207   527   547 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:47:01.279   527   547 E ActivityManager: Unable to freeze binder for 6131: -11
+11-15 01:47:01.293   527   547 I ActivityManager: Killing 6131:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:47:01.350  6101  6101 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:47:01.492   527  1735 V ActivityManager: Got obituary of 6131:org.alchemist.p0probe
+11-15 01:47:01.574   527   547 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:47:01.601   527   621 D ActivityManager: freezing 3169 com.google.android.tts
+11-15 01:47:02.637   527   621 D ActivityManager: freezing 1693 com.google.android.apps.youtube.music
+11-15 01:47:02.644   527   621 D ActivityManager: freezing 2465 com.google.android.apps.wallpaper
+11-15 01:47:02.650  6178  6178 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:47:02.660  6178  6178 I AndroidRuntime: Using default boot image
+11-15 01:47:02.660  6178  6178 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:47:02.914  6178  6178 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:47:02.935   527  1835 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:47:02.959   527   563 I ActivityManager: Start proc 6191:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:47:03.226   527  1841 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 6191
+11-15 01:47:03.590   527  1834 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:47:03.609  6178  6178 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:47:03.696   527  1834 E ActivityManager: Unable to freeze binder for 6191: -11
+11-15 01:47:03.707   527  1834 I ActivityManager: Killing 6191:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:47:03.752   527  1835 V ActivityManager: Got obituary of 6191:org.alchemist.p0probe
+11-15 01:47:03.840   527  1834 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-15 01:47:04.039   527   621 D ActivityManager: freezing 5198 com.google.android.googlequicksearchbox
+11-15 01:47:04.696   527   621 D ActivityManager: freezing 4398 com.google.android.marvin.talkback
+11-15 01:47:04.733   527   621 D ActivityManager: freezing 3917 com.google.android.projection.gearhead:shared
+11-15 01:47:04.942  6213  6213 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 01:47:04.950  6213  6213 I AndroidRuntime: Using default boot image
+11-15 01:47:04.951  6213  6213 I AndroidRuntime: Leaving lock profiling enabled
+11-15 01:47:05.124  6213  6213 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 01:47:05.128   527   764 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: start instr
+11-15 01:47:05.137   527   563 I ActivityManager: Start proc 6226:org.alchemist.p0probe/u0a192 for added application org.alchemist.p0probe
+11-15 01:47:05.297   527  1839 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10192. pid: 6226
+11-15 01:47:05.398   527   621 D ActivityManager: freezing 3961 com.google.android.gm
+11-15 01:47:05.607   527   621 D ActivityManager: freezing 1785 com.google.android.youtube
+11-15 01:47:05.713   527  2620 I ActivityManager: Force stopping org.alchemist.p0probe appid=10192 user=0: finished inst
+11-15 01:47:05.788   527  2620 E ActivityManager: Unable to freeze binder for 6226: -11
+11-15 01:47:05.797   527  2620 I ActivityManager: Killing 6226:org.alchemist.p0probe/u0a192 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 01:47:05.806  6213  6213 I AndroidRuntime: VM exiting with result code 0.
+11-15 01:47:05.996   527  2620 V ActivityManager: Got obituary of 6226:org.alchemist.p0probe
+11-15 01:47:06.028   527   547 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found

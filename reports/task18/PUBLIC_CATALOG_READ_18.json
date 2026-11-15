@@ -1,0 +1,15 @@
+{
+  "operation": "catalog.list",
+  "scope": "LIVE_ANONYMOUS_PUBLIC_READ_ONLY",
+  "credential": "NONE",
+  "elapsedMs": 4405,
+  "ok": true,
+  "status": 200,
+  "errorCode": null,
+  "publicItemCountFirstPage": 1,
+  "types": [
+    "diaryEntry"
+  ],
+  "serverCodeOrAclChange": "NONE",
+  "physicalGoogleE2E": "NOT_RUN"
+}

@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../services/alchemist_work_queue.dart';
 
 import 'dart:async';
@@ -21,15 +23,39 @@ class AlchemistSyncScreen extends StatefulWidget {
 }
 
 class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
+  String _direction = 'all';
+  String _networkPolicy = 'any';
+  Future<void> networkPolicy(String value) async {
+    await widget.controller.capsules!.database.insert('app_settings', {
+      'name': 'transfer_network_policy18',
+      'value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await widget.controller.applyTransferNetworkPolicy();
+    if (mounted) setState(() => _networkPolicy = value);
+  }
+
   @override
   void initState() {
     super.initState();
     unawaited(widget.controller.cloudQueue.refresh());
+    unawaited(() async {
+      final rows = await widget.controller.capsules!.database.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: ['transfer_network_policy18'],
+      );
+      if (mounted && rows.isNotEmpty) {
+        setState(() => _networkPolicy = rows.single['value'] as String);
+      }
+    }());
   }
 
   Future<void> resume(String name) async {
     try {
-      await widget.controller.ensurePublicationIdentity();
+      if (!name.startsWith('alchemist_download:') &&
+          !name.startsWith('alchemist_read_sync_queue:')) {
+        await widget.controller.ensurePublicationIdentity();
+      }
       final result = await widget.controller.cloudQueue.enqueue(name);
       if (mounted && result.reason == 'RESUME_AFTER_CURRENT_REQUEST') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -50,9 +76,7 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      widget.controller.policy.clientEdition ||
-          widget.controller.catalog.api?.ownerBinding == null
+  Widget build(BuildContext context) => widget.controller.transferOwner == null
       ? const Scaffold(
           body: Center(child: Text('Авторские возможности недоступны')),
         )
@@ -67,10 +91,51 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                 child: ListView(
                   children: [
                     const Text(
-                      'При сворачивании передача ставится на паузу после текущего запроса. Для продолжения откройте приложение и нажмите «Продолжить». Исходники сохраняются. Отмена очереди не снимает уже подтверждённую публикацию: используйте «Снять публикацию» в карточке.',
+                      'Передачи продолжаются средствами Android после сворачивания и блокировки. При ограничении ОС, сети или Google-входа задача сохраняется. Пауза — только по вашей кнопке. Исходники сохраняются. Отмена не снимает уже подтверждённую публикацию.',
+                    ),
+                    DropdownButton<String>(
+                      value: _networkPolicy,
+                      isExpanded: true,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'any',
+                          child: Text('Передача: любая сеть'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'unmetered',
+                          child: Text('Передача: только безлимитная сеть'),
+                        ),
+                      ],
+                      onChanged: (v) => networkPolicy(v!),
+                    ),
+                    DropdownButton<String>(
+                      value: _direction,
+                      isExpanded: true,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'all',
+                          child: Text('Все передачи'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'upload',
+                          child: Text('Отправка'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'download',
+                          child: Text('Скачивание'),
+                        ),
+                      ],
+                      onChanged: (v) => setState(() => _direction = v!),
                     ),
                     for (final row
-                        in [...queue.rows]..sort(
+                        in [
+                          ...queue.rows.where(
+                            (r) =>
+                                _direction == 'all' ||
+                                (r['_work']?['direction'] ?? 'upload') ==
+                                    _direction,
+                          ),
+                        ]..sort(
                           (a, b) => (a['_name'] == widget.focusName ? 0 : 1)
                               .compareTo(
                                 b['_name'] == widget.focusName ? 0 : 1,
@@ -98,11 +163,50 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                   Text(
                                     row['card']?['title'] ??
                                         row['entry']?['title'] ??
+                                        row['download']?['title'] ??
                                         'Передача',
+                                  ),
+                                  Text(
+                                    work['direction'] == 'download'
+                                        ? 'Скачивание'
+                                        : 'Отправка',
                                   ),
                                   Text(
                                     '${alchemistWorkLabel(work)} · ${alchemistStageLabel(work['stage'])}',
                                   ),
+                                  if (work['bytes'] is num &&
+                                      work['totalBytes'] is num)
+                                    Text(
+                                      '${work['bytes']} / ${work['totalBytes']} байт',
+                                    ),
+                                  if (work['lastProgressAtMs'] is int)
+                                    Text(
+                                      'Последний прогресс: ${DateTime.fromMillisecondsSinceEpoch(work['lastProgressAtMs']).toLocal()}',
+                                    ),
+                                  if (work['performance'] is Map)
+                                    Text(
+                                      'Измеренные RPC: ${(work['performance']['byStage'] as Map).entries.where((e) => e.key.toString().endsWith(':complete') && !e.key.toString().startsWith('media.localHash:')).fold<int>(0, (n, e) => n + (e.value['count'] as int))} · ${work['performance']['confirmedBytesThisRun']} подтверждённых байт за этот запуск',
+                                    ),
+                                  if (work['performance'] is Map &&
+                                      (work['performance']['wallMs'] as int? ??
+                                              0) >
+                                          0 &&
+                                      (work['performance']['confirmedBytesThisRun']
+                                                  as int? ??
+                                              0) >
+                                          0)
+                                    Text(
+                                      'Средняя за запуск с проверкой: ${((work['performance']['confirmedBytesThisRun'] as num) * 1000 / (work['performance']['wallMs'] as num) / 1024).toStringAsFixed(1)} КБ/с',
+                                    ),
+                                  if (work['httpStatus'] is num &&
+                                      work['httpStatus'] > 0)
+                                    Text(
+                                      'Последний HTTP-статус: ${work['httpStatus']}',
+                                    ),
+                                  if (row['lastReceipt'] is Map)
+                                    Text(
+                                      'Подтверждение сервера: ${row['lastReceipt']['operation']} · ETag ${row['lastReceipt']['etag']}',
+                                    ),
                                   if (alchemistFileProgress(work)
                                       case final progress?) ...[
                                     LinearProgressIndicator(
@@ -138,7 +242,10 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                           'failed',
                                           'queued',
                                           'waiting_auth',
+                                          'waiting_policy',
+                                          'failed_permanent',
                                           'waiting_network',
+                                          'retry_scheduled',
                                           'waiting_permission',
                                           'pausing',
                                         ].contains(phase))
@@ -154,8 +261,10 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                         TextButton(
                                           onPressed: () =>
                                               queue.pause(name, cancel: true),
-                                          child: const Text(
-                                            'Отменить отправку',
+                                          child: Text(
+                                            work['direction'] == 'download'
+                                                ? 'Отменить скачивание'
+                                                : 'Отменить отправку',
                                           ),
                                         ),
                                       ],

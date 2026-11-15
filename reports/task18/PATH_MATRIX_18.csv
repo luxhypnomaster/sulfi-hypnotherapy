@@ -1,0 +1,12 @@
+edition,direction,data,consent,path,serverContract,owner,mechanism
+MASTER,upload,catalog track/module/template/collection/package + covers,explicit,alchemist_card:*;AlchemistCatalog.publish,AlchemistMediaTransfer / content.registerManifest / catalog.publish,existing owner binding,Android native job
+MASTER,upload,diary text/image/audio/video/ContentLink,explicit,alchemist_diary_queue:*;sendQueued,entry.* / media.*,existing owner binding,Android native job
+BOTH,download,catalog selective install/update/package,explicit,StoreScreen.install → AlchemistInstall.install,catalog.getInstallPlan;media.downloadChunk,verified owner or public read scope,NEW durable download intent
+BOTH,download,diary images/audio/video,explicit media access,AlchemistDiaryApi.resolveMedia,media.getDescriptor/downloadChunk,verified owner or public read scope,NEW durable media cache intent
+BOTH,download,catalog cover,explicit,AlchemistCover.load,media.getDescriptor/downloadChunk,verified owner or public read scope,NEW durable media cache intent
+BOTH,upload,reader state only,existing approved sync,AlchemistDiaryApi.synchronizeReads,sync.push existing outbox,server subject,durable existing read outbox adapter
+BOTH,download,feed/catalog/reader-state metadata,screen refresh + existing sync,feed.list/catalog.list/sync.pull,read-only bounded metadata,same actor,short metadata + durable sync where queued
+CLIENT,upload,personal audio/voice/photo/program publication,ABSENT,role denies; no hidden cloud upload,future generic contract only,CLIENT cannot publish catalog,mock-transport tests; no invented backend
+BOTH,local,capsule export/import/system SAF sharing,explicit local,CapsuleService;MainActivity saveZip/openZip,no server; system chooser,local private files,local operation; do not silently turn into upload
+BOTH,system,APK installation,external Android installer,outside app control,none,Android installer,not an app download/install guarantee
+LEGACY,network,old diary,not active in connected APK27,legacy API fallback if no alchemist endpoint,old endpoint,legacy only,preserve code/server; not new connected candidate config

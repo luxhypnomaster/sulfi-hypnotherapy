@@ -1,3 +1,7 @@
+# №18 — P0: фоновая передача MASTER и CLIENT
+
+[ТЗ](docs/task18/TASK_RU.md) · [Результат](reports/task18/RESULT_18.md) · [Контрольная точка](reports/task18/CHECKPOINT_18.json). Отдельная ветка `feat/task18-native-background-transfer`, draft PR49 поверх **необъединённого PR48**. Текущий исходник APK28 `de408f1`:489Flutter/3CLIENT/47+24Node PASS; full controlled API34 11PASS, реальное OS cold-process recovery6,98sec; CLIENT normal27→28 13PASS. MASTER normal27→28 15PASS; full33/35/36 по10PASS; все6native gates текущего источника пройдены, пара28 проверена и добавлена в существующий private draft. [APK и протокол](reports/task18/PHONE_QA_18.md). Проверки с настоящими Google-аккаунтами и физическими телефонами NOT_RUN. Main/GAS6/OAuth/ACL/signing/данные27 не менялись.
+
 # №17 — native PASS, APK27 для приёмки
 
 MASTER25/26→27 и CLIENT25→27 прошли native-проверки сохранности; пара27 независимо скачана и проверена по SHA, подписи и конфигурации. [Результат](reports/task17/RESULT_17.md) · [APK и Android-протокол](reports/task17/PHONE_QA_17.md) · [Контрольная точка](reports/task17/PROGRESS.md). Исходник fbdaa7b, draft PR48; production GAS6 и main в этом цикле сохранены. Реальные Google и два телефона **NOT_RUN**, №17 не закрыто.
@@ -242,3 +246,5 @@ CI выпускает author/test `ru.sulfi.sulfi_hypnotherapy` и отдель�
 ### №17 — стабилизация общей сессии и передачи
 
 Работа ведётся в `fix/task17-stable-auth-queue`, [draft PR48](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/48), от необъединённого PR47. App snapshot `fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568`, кандидат `0.4.19+27`. Состояние native gates и доступность проверенной пары: [reports/task17/PROGRESS.md](reports/task17/PROGRESS.md), [матрица67критериев](reports/task17/ACCEPTANCE_17.csv). До успешного native upgrade gate и raw APK/cert readback выдача заблокирована. Автоматические тесты не подтверждают Google-вход на двух телефонах. GAS6 не обновляется автоматически; узкий Diary diff требует отдельного разрешения по [плану](reports/task17/SERVER_CHANGE_REQUEST_17.md).
+
+Task18 P0 background work is isolated in `feat/task18-native-background-transfer` / draft PR49. It is **not an accepted APK release**: native background/upgrade gates and physical Google/device acceptance remain pending. See [current result](reports/task18/RESULT_18.md), [checkpoint](reports/task18/PROGRESS.md), and [25-criterion matrix](reports/task18/ACCEPTANCE_18.csv). The `test_driver/transfer_probe.dart` target is a disposable testOnly package, never a user APK; its controlled TCP/identity does not prove Google authentication. Production GAS6, signing and SQLite9 data are preserved.

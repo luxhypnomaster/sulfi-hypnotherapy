@@ -1,0 +1,15 @@
+{
+  "base": "506619a9aa88d47315cccf31f75f068195d3da84",
+  "appSource27": "fbdaa7b0b51f9b742a0c5db84f5ef50ba4375568",
+  "branch": "feat/task18-native-background-transfer",
+  "main": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "PR48": "DRAFT_NOT_MERGED",
+  "GAS": "EXISTING6_NO_WRITE",
+  "databaseSchema": 9,
+  "minSdk": 24,
+  "targetSdk": 36,
+  "task17": "PARTIAL_OWNER_QA_SUSPENDED_BY_TASK18",
+  "reportFolder": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+  "reportAudience": "OWNER_ONLY_VERIFIED",
+  "oldData": "NOT_TOUCHED"
+}

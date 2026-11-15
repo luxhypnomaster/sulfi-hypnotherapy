@@ -1,0 +1,226 @@
+--------- beginning of main
+11-15 16:07:00.061  3330  3330 I t.transferprobe: Late-enabling -Xcheck:jni
+11-15 16:07:00.095  3330  3330 I t.transferprobe: Using CollectorTypeCMC GC.
+11-15 16:07:00.096  3330  3330 W t.transferprobe: Unexpected CPU variant for x86: x86_64.
+11-15 16:07:00.096  3330  3330 W t.transferprobe: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-15 16:07:00.317  3330  3330 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-15 16:07:00.452  3330  3330 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-15 16:07:00.452  3330  3330 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+11-15 16:07:00.453  3330  3330 W ziparchive: Unable to open '/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.dm': No such file or directory
+11-15 16:07:00.453  3330  3330 W ziparchive: Unable to open '/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.dm': No such file or directory
+11-15 16:07:01.021  3330  3330 D nativeloader: Configuring clns-7 for other apk /data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/lib/x86_64:/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 16:07:01.030  3330  3330 V GraphicsEnvironment: Currently set values for:
+11-15 16:07:01.030  3330  3330 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-15 16:07:01.030  3330  3330 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-15 16:07:01.030  3330  3330 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-15 16:07:01.030  3330  3330 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-15 16:07:01.108  3330  3349 I ResourceExtractor: Resource version mismatch res_timestamp-28-1794758627602
+11-15 16:07:01.109  3330  3348 D FlutterJNI: Beginning load of flutter...
+11-15 16:07:01.167  3330  3348 D nativeloader: Load /data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk!/lib/x86_64/libflutter.so using ns clns-7 from class loader (caller=/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk): ok
+11-15 16:07:01.184  3330  3348 D FlutterJNI: flutter (null) was loaded normally!
+11-15 16:07:01.198  3330  3350 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+11-15 16:07:01.706  3330  3349 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/kernel_blob.bin
+11-15 16:07:01.707  3330  3349 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/vm_snapshot_data
+11-15 16:07:01.800  3330  3349 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/isolate_snapshot_data
+11-15 16:07:01.804  3330  3330 W t.transferprobe: type=1400 audit(0.0:47): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=28788 scontext=u:r:untrusted_app:s0:c150,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 16:07:01.814  3330  3351 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+11-15 16:07:01.815  3330  3351 I EGL_emulation: Opening libGLESv2_emulation.so
+11-15 16:07:01.842  3330  3330 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 16:07:01.870  3330  3330 D nativeloader: Load /data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk!/lib/x86_64/libdartjni.so using ns clns-7 from class loader (caller=/data/app/~~n4NHTgoF2u1cXs-xxtwmEg==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-88Z6Wmj9leyBTeGka62oDw==/base.apk!classes8.dex): ok
+11-15 16:07:01.978  3330  3351 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:07:02.091  3330  3358 I flutter : The Dart VM service is listening on http://127.0.0.1:33335/YlWpAScyl3Y=/
+11-15 16:07:02.345  3330  3330 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+11-15 16:07:02.345  3330  3330 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+11-15 16:07:02.345  3330  3330 W t.transferprobe: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+11-15 16:07:02.345  3330  3330 W t.transferprobe: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+11-15 16:07:02.350  3330  3330 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 16:07:02.407  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:07:02.424  3330  3330 W HWUI    : Unknown dataspace 0
+11-15 16:07:02.655  3330  3330 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 16:07:03.505  3330  3330 I flutter : PROBE18_FIRST_FRAME
+11-15 16:07:03.546  3330  3330 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+11-15 16:07:03.565  3330  3330 I WindowExtensionsImpl: Initializing Window Extensions, vendor API level=6, activity embedding enabled=true
+11-15 16:07:03.605  3330  3335 I t.transferprobe: Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+11-15 16:07:03.614  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:07:03.627  3330  3345 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 16:07:03.629  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:07:03.668  3330  3351 I Gralloc4: mapper 4.x is not supported
+11-15 16:07:04.792  3330  3330 I System.out: flutterEngine warmed up
+11-15 16:07:04.880  3330  3330 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+11-15 16:07:04.906  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:07:06.662  3330  3371 D ProfileInstaller: Installing profile for ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 16:07:07.640  3330  3351 D EGL_emulation: app_time_stats: avg=989.66ms min=36.72ms max=1942.59ms count=2
+11-15 16:07:08.880  3330  3345 D EGL_emulation: app_time_stats: avg=887.41ms min=538.79ms max=1395.93ms count=3
+11-15 16:07:08.921  3330  3351 D EGL_emulation: app_time_stats: avg=427.16ms min=285.23ms max=682.96ms count=3
+11-15 16:07:10.380  3330  3351 D EGL_emulation: app_time_stats: avg=486.28ms min=180.74ms max=948.57ms count=3
+11-15 16:07:11.657  3330  3447 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:07:13.384  3330  3351 D EGL_emulation: app_time_stats: avg=1501.57ms min=20.53ms max=2982.60ms count=2
+11-15 16:07:13.608  3330  3330 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@d03cdaa
+11-15 16:07:13.988  3330  3330 I System.out: ### destroying audio handler interface
+11-15 16:07:14.083  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:07:15.381  3330  3336 W t.transferprobe: Cleared Reference was only reachable from finalizer (only reported once)
+11-15 16:07:15.405  3330  3336 I t.transferprobe: Background concurrent mark compact GC freed 3240KB AllocSpace bytes, 39(1484KB) LOS objects, 49% free, 3110KB/6220KB, paused 513us,5.306ms total 42.100ms
+11-15 16:07:17.061  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:07:33.287  3330  3599 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+11-15 16:07:33.287  3330  3599 I EGL_emulation: Opening libGLESv2_emulation.so
+11-15 16:07:33.295  3330  3330 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 16:07:33.402  3330  3599 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:07:33.765  3330  3330 I System.out: flutterEngine warmed up
+11-15 16:07:33.868  3330  3330 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 16:07:34.699  3330  3330 I flutter : PROBE18_FIRST_FRAME
+11-15 16:07:34.771  3330  3640 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:08:38.213  3330  3668 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:08:43.016  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:08:43.563  3330  3336 I t.transferprobe: Background concurrent mark compact GC freed 1565KB AllocSpace bytes, 33(1188KB) LOS objects, 49% free, 2955KB/5911KB, paused 106us,7.136ms total 195.314ms
+11-15 16:08:46.035  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:08:59.417  3330  3330 D AutofillManager: Fill dialog is enabled:false, hints=[]
+11-15 16:08:59.525  3330  3330 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 16:08:59.549  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:08:59.667  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:08:59.696  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:08:59.740  3330  3345 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 16:09:01.545  3330  3330 I Choreographer: Skipped 111 frames!  The application may be doing too much work on its main thread.
+11-15 16:09:01.555  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:09:03.416  3330  3599 D EGL_emulation: app_time_stats: avg=625.06ms min=31.11ms max=1219.02ms count=2
+11-15 16:09:04.677  3330  3345 D EGL_emulation: app_time_stats: avg=702.39ms min=624.96ms max=796.09ms count=3
+11-15 16:09:04.677  3330  3599 D EGL_emulation: app_time_stats: avg=420.47ms min=222.15ms max=666.04ms count=3
+11-15 16:09:05.849  3330  3599 D EGL_emulation: app_time_stats: avg=390.66ms min=70.98ms max=801.92ms count=3
+11-15 16:09:06.861  3330  3345 D EGL_emulation: app_time_stats: avg=1092.08ms min=338.85ms max=1845.31ms count=2
+11-15 16:09:06.951  3330  3599 D EGL_emulation: app_time_stats: avg=550.17ms min=101.32ms max=999.01ms count=2
+11-15 16:09:07.974  3330  3977 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:09:09.304  3330  3599 D EGL_emulation: app_time_stats: avg=392.19ms min=47.02ms max=1635.94ms count=6
+11-15 16:09:09.559  3330  3330 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+11-15 16:09:09.599  3330  3330 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@5fff2c7
+11-15 16:09:09.707  3330  3330 I System.out: ### destroying audio handler interface
+11-15 16:09:10.461  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:09:11.767  3330  3336 I t.transferprobe: Background concurrent mark compact GC freed 1458KB AllocSpace bytes, 32(1248KB) LOS objects, 49% free, 3083KB/6167KB, paused 61us,6.020ms total 24.864ms
+11-15 16:09:13.296  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:06.732  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:08.479  3330  3330 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 16:11:08.802  3330  4088 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:11:09.755  3330  3330 D AutofillManager: Fill dialog is enabled:false, hints=[]
+11-15 16:11:09.761  3330  3330 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 16:11:09.766  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:11:09.925  3330  3330 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 16:11:10.664  3330  3330 I flutter : PROBE18_FIRST_FRAME
+11-15 16:11:10.682  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:10.682  3330  3330 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+11-15 16:11:10.684  3330  3330 D FlutterRenderer: Width is zero. 0,0
+11-15 16:11:10.689  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:11:10.694  3330  3345 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 16:11:11.624  3330  3330 I System.out: flutterEngine warmed up
+11-15 16:11:11.694  3330  3330 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+11-15 16:11:11.721  3330  3330 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:11:13.885  3330  4088 D EGL_emulation: app_time_stats: avg=697.22ms min=45.76ms max=1348.67ms count=2
+11-15 16:11:15.689  3330  3345 D EGL_emulation: app_time_stats: avg=907.83ms min=521.55ms max=1370.56ms count=3
+11-15 16:11:15.691  3330  4088 D EGL_emulation: app_time_stats: avg=601.90ms min=208.45ms max=1270.38ms count=3
+11-15 16:11:15.941  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:16.106  3330  3336 I t.transferprobe: NativeAlloc concurrent mark compact GC freed 1383KB AllocSpace bytes, 14(504KB) LOS objects, 49% free, 2988KB/5976KB, paused 85us,21.137ms total 178.583ms
+11-15 16:11:17.073  3330  4088 D EGL_emulation: app_time_stats: avg=460.85ms min=286.15ms max=760.72ms count=3
+11-15 16:11:17.957  3330  3345 D EGL_emulation: app_time_stats: avg=1133.72ms min=493.08ms max=1774.36ms count=2
+11-15 16:11:18.336  3330  4088 D EGL_emulation: app_time_stats: avg=418.68ms min=41.91ms max=830.18ms count=3
+11-15 16:11:18.788  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:19.586  3330  4088 D EGL_emulation: app_time_stats: avg=415.49ms min=229.15ms max=767.98ms count=3
+11-15 16:11:20.150  3330  3345 D EGL_emulation: app_time_stats: avg=1096.69ms min=539.06ms max=1654.33ms count=2
+11-15 16:11:20.780  3330  4088 D EGL_emulation: app_time_stats: avg=397.94ms min=293.34ms max=602.68ms count=3
+11-15 16:11:22.417  3330  3345 D EGL_emulation: app_time_stats: avg=1133.12ms min=585.33ms max=1680.91ms count=2
+11-15 16:11:22.430  3330  4088 D EGL_emulation: app_time_stats: avg=549.87ms min=91.32ms max=1382.84ms count=3
+11-15 16:11:24.242  3330  3345 D EGL_emulation: app_time_stats: avg=912.54ms min=455.96ms max=1369.12ms count=2
+11-15 16:11:24.300  3330  4088 D EGL_emulation: app_time_stats: avg=623.32ms min=140.35ms max=1427.51ms count=3
+11-15 16:11:24.737  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:26.223  3330  3345 D EGL_emulation: app_time_stats: avg=990.29ms min=454.01ms max=1526.58ms count=2
+11-15 16:11:26.313  3330  4088 D EGL_emulation: app_time_stats: avg=333.24ms min=80.58ms max=1091.51ms count=6
+11-15 16:11:27.738  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:11:28.006  3330  3345 D EGL_emulation: app_time_stats: avg=891.41ms min=384.01ms max=1398.80ms count=2
+11-15 16:11:28.046  3330  4088 D EGL_emulation: app_time_stats: avg=577.26ms min=38.07ms max=1392.52ms count=3
+11-15 16:11:29.897  3330  4088 D EGL_emulation: app_time_stats: avg=306.83ms min=90.18ms max=1008.80ms count=6
+11-15 16:11:29.912  3330  3345 D EGL_emulation: app_time_stats: avg=952.95ms min=374.11ms max=1531.79ms count=2
+11-15 16:11:31.538  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:31.614  3330  3345 D EGL_emulation: app_time_stats: avg=850.19ms min=429.59ms max=1270.80ms count=2
+11-15 16:11:31.645  3330  4088 D EGL_emulation: app_time_stats: avg=582.91ms min=159.56ms max=1285.08ms count=3
+11-15 16:11:31.687  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:32.596  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:33.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:33.611  3330  3345 D EGL_emulation: app_time_stats: avg=998.64ms min=419.96ms max=1577.32ms count=2
+11-15 16:11:33.656  3330  4088 D EGL_emulation: app_time_stats: avg=391.47ms min=114.80ms max=1228.25ms count=5
+11-15 16:11:33.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:34.560  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:34.876  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:35.436  3330  3345 D EGL_emulation: app_time_stats: avg=907.65ms min=365.94ms max=1449.35ms count=2
+11-15 16:11:35.471  3330  4088 D EGL_emulation: app_time_stats: avg=604.92ms min=79.02ms max=1466.99ms count=3
+11-15 16:11:35.561  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:35.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:36.553  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:37.449  3330  3345 D EGL_emulation: app_time_stats: avg=1006.72ms min=404.52ms max=1608.92ms count=2
+11-15 16:11:37.507  3330  4088 D EGL_emulation: app_time_stats: avg=330.87ms min=38.81ms max=1159.23ms count=6
+11-15 16:11:37.540  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:37.690  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:38.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:38.555  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:39.261  3330  3345 D EGL_emulation: app_time_stats: avg=905.73ms min=379.71ms max=1431.75ms count=2
+11-15 16:11:39.318  3330  4088 D EGL_emulation: app_time_stats: avg=603.74ms min=58.60ms max=1463.36ms count=3
+11-15 16:11:39.546  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:39.740  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:40.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:41.269  3330  3345 D EGL_emulation: app_time_stats: avg=1001.31ms min=361.73ms max=1640.88ms count=2
+11-15 16:11:41.300  3330  4088 D EGL_emulation: app_time_stats: avg=323.38ms min=54.22ms max=1232.34ms count=6
+11-15 16:11:41.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:41.724  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:42.155  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:42.532  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:43.229  3330  3345 D EGL_emulation: app_time_stats: avg=980.32ms min=503.34ms max=1457.29ms count=2
+11-15 16:11:43.281  3330  4088 D EGL_emulation: app_time_stats: avg=660.39ms min=257.18ms max=1448.54ms count=3
+11-15 16:11:43.565  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:43.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:44.532  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:45.116  3330  3345 D EGL_emulation: app_time_stats: avg=943.41ms min=416.93ms max=1469.89ms count=2
+11-15 16:11:45.156  3330  4088 D EGL_emulation: app_time_stats: avg=366.49ms min=41.95ms max=1280.05ms count=5
+11-15 16:11:45.567  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:45.684  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.094  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:46.910  3330  3345 D EGL_emulation: app_time_stats: avg=896.63ms min=365.89ms max=1427.38ms count=2
+11-15 16:11:46.974  3330  4088 D EGL_emulation: app_time_stats: avg=606.05ms min=49.52ms max=1463.72ms count=3
+11-15 16:11:47.542  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:47.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:48.534  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:48.839  3330  3345 D EGL_emulation: app_time_stats: avg=962.34ms min=364.91ms max=1559.76ms count=2
+11-15 16:11:48.924  3330  4088 D EGL_emulation: app_time_stats: avg=387.74ms min=61.33ms max=1363.18ms count=5
+11-15 16:11:49.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:49.741  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:49.750  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:50.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:50.649  3330  3345 D EGL_emulation: app_time_stats: avg=905.08ms min=383.68ms max=1426.48ms count=2
+11-15 16:11:50.676  3330  4088 D EGL_emulation: app_time_stats: avg=583.83ms min=107.21ms max=1434.61ms count=3
+11-15 16:11:51.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:51.725  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:52.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:52.682  3330  3345 D EGL_emulation: app_time_stats: avg=1016.12ms min=514.13ms max=1518.11ms count=2
+11-15 16:11:52.726  3330  4088 D EGL_emulation: app_time_stats: avg=403.66ms min=98.74ms max=1252.00ms count=5
+11-15 16:11:53.049  3330  3336 I t.transferprobe: Background concurrent mark compact GC freed 2568KB AllocSpace bytes, 6(216KB) LOS objects, 49% free, 3100KB/6200KB, paused 12.649ms,36.483ms total 101.819ms
+11-15 16:11:53.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:53.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:53.754  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:54.488  3330  3345 D EGL_emulation: app_time_stats: avg=903.27ms min=430.11ms max=1376.43ms count=2
+11-15 16:11:54.530  3330  4088 D EGL_emulation: app_time_stats: avg=601.04ms min=214.84ms max=1338.64ms count=3
+11-15 16:11:54.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:55.535  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:55.682  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:56.457  3330  3345 D EGL_emulation: app_time_stats: avg=980.76ms min=346.51ms max=1615.01ms count=2
+11-15 16:11:56.503  3330  4088 D EGL_emulation: app_time_stats: avg=328.38ms min=91.26ms max=1215.98ms count=6
+11-15 16:11:56.577  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.420  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:57.682  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:58.292  3330  3345 D EGL_emulation: app_time_stats: avg=917.42ms min=435.78ms max=1399.06ms count=2
+11-15 16:11:58.314  3330  4088 D EGL_emulation: app_time_stats: avg=603.61ms min=170.24ms max=1342.82ms count=3
+11-15 16:11:58.533  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:59.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:11:59.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:00.290  3330  3345 D EGL_emulation: app_time_stats: avg=998.27ms min=332.45ms max=1664.09ms count=2
+11-15 16:12:00.321  3330  4088 D EGL_emulation: app_time_stats: avg=401.36ms min=116.90ms max=1324.69ms count=5
+11-15 16:12:00.537  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:00.842  3330  3330 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 16:12:01.282  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:01.536  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction
+11-15 16:12:01.681  3330  3330 I flutter : Warning database has been locked for 0:00:10.000000. Make sure you always use the transaction object for database operations during a transaction

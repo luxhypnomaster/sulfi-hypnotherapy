@@ -1,0 +1,12 @@
+{
+  "appSource": "ef50fc5dceb849257b5d99b74506c3609739e343",
+  "driverSource": "ef50fc5dceb849257b5d99b74506c3609739e343",
+  "classification": "CONTROLLED_NATIVE_SQFLITE_LOCK_ORDER_NOT_PHONE",
+  "cases": [
+    {
+      "status": "BLOCKED",
+      "reason": "NO_NATIVE_LOCK_EXPERIMENT_RECEIPT",
+      "type": "AssertionError"
+    }
+  ]
+}

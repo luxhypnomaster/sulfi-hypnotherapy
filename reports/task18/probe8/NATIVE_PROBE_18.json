@@ -1,0 +1,17 @@
+{
+  "source": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+  "driverSource": "a645655c5a4581cb99e642b26235b2a36655d5d4",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "native_probe_failure",
+      "status": "FAIL",
+      "type": "AssertionError",
+      "reason": "SYSTEM_UI_NOT_INTERACTIVE_BEFORE_FIXTURE_START"
+    }
+  ]
+}

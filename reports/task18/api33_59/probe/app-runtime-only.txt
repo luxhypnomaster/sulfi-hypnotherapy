@@ -1,0 +1,90 @@
+--------- beginning of main
+11-15 16:07:38.718  3383  3383 I t.transferprobe: Late-enabling -Xcheck:jni
+11-15 16:07:38.811  3383  3383 W t.transferprobe: Unexpected CPU variant for x86: x86_64.
+11-15 16:07:38.811  3383  3383 W t.transferprobe: Known variants: atom, sandybridge, silvermont, kabylake, default
+11-15 16:07:39.007  3383  3383 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10128; state: ENABLED
+11-15 16:07:39.036  3383  3383 W ziparchive: Unable to open '/data/app/~~_U-XgAhQM56_mf3WbSB05A==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-8crAxLQRGRAVFaai0cZizg==/base.dm': No such file or directory
+11-15 16:07:39.037  3383  3383 W ziparchive: Unable to open '/data/app/~~_U-XgAhQM56_mf3WbSB05A==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-8crAxLQRGRAVFaai0cZizg==/base.dm': No such file or directory
+11-15 16:07:39.782  3383  3383 V GraphicsEnvironment: ANGLE Developer option for 'ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe' set to: 'default'
+11-15 16:07:39.783  3383  3383 V GraphicsEnvironment: ANGLE GameManagerService for ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe: false
+11-15 16:07:39.783  3383  3383 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-15 16:07:39.786  3383  3383 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+11-15 16:07:39.786  3383  3383 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+11-15 16:07:39.820  3383  3401 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-15 16:07:39.822  3383  3401 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-15 16:07:39.823  3383  3401 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-15 16:07:39.841  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getTouchX()F (blocked, linking, denied)
+11-15 16:07:39.841  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getTouchY()F (blocked, linking, denied)
+11-15 16:07:39.841  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getProgress()F (blocked, linking, denied)
+11-15 16:07:39.841  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getSwipeEdge()I (blocked, linking, denied)
+11-15 16:07:39.841  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getProgress()F (blocked, linking, denied)
+11-15 16:07:39.842  3383  3383 W t.transferprobe: Accessing hidden method Landroid/window/BackEvent;->getSwipeEdge()I (blocked, linking, denied)
+11-15 16:07:39.846  3383  3403 I ResourceExtractor: Resource version mismatch res_timestamp-28-1794758681429
+11-15 16:07:39.846  3383  3402 D FlutterJNI: Beginning load of flutter...
+11-15 16:07:39.886  3383  3402 D FlutterJNI: flutter (null) was loaded normally!
+11-15 16:07:39.893  3383  3404 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+11-15 16:07:40.226  3383  3403 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/kernel_blob.bin
+11-15 16:07:40.226  3383  3403 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/vm_snapshot_data
+11-15 16:07:40.308  3383  3403 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/isolate_snapshot_data
+11-15 16:07:40.312  3383  3383 W t.transferprobe: type=1400 audit(0.0:30): avc: denied { read } for name="max_map_count" dev="proc" ino=55833 scontext=u:r:untrusted_app:s0:c128,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 16:07:40.333  3383  3383 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 16:07:40.348  3383  3405 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:40.358  3383  3405 D EGL_emulation: eglCreateContext: 0x7902ffe7c390: maj 3 min 0 rcv 3
+11-15 16:07:40.365  3383  3405 D EGL_emulation: eglCreateContext: 0x7902ffe7b9d0: maj 3 min 0 rcv 3
+11-15 16:07:40.368  3383  3405 D EGL_emulation: eglMakeCurrent: 0x7902ffe7b9d0: ver 3 0 (tinfo 0x79051963d080) (first time)
+11-15 16:07:40.400  3383  3405 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:07:40.406  3383  3406 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:40.407  3383  3406 D EGL_emulation: eglMakeCurrent: 0x7902ffe7b9d0: ver 3 0 (tinfo 0x79051963d100) (first time)
+11-15 16:07:40.477  3383  3412 I flutter : The Dart VM service is listening on http://127.0.0.1:39207/uR-GQvcHGA0=/
+11-15 16:07:40.729  3383  3383 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+11-15 16:07:40.729  3383  3383 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+11-15 16:07:40.729  3383  3383 W t.transferprobe: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+11-15 16:07:40.729  3383  3383 W t.transferprobe: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+11-15 16:07:40.731  3383  3383 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 16:07:40.736  3383  3383 D FlutterRenderer: Width is zero. 0,0
+11-15 16:07:40.826  3383  3383 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 16:07:41.372  3383  3383 I flutter : PROBE18_FIRST_FRAME
+11-15 16:07:41.386  3383  3383 I Choreographer: Skipped 93 frames!  The application may be doing too much work on its main thread.
+11-15 16:07:41.403  3383  3383 D FlutterRenderer: Width is zero. 0,0
+11-15 16:07:41.412  3383  3399 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:41.413  3383  3399 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 16:07:41.418  3383  3399 D EGL_emulation: eglCreateContext: 0x7902ffe7be50: maj 3 min 0 rcv 3
+11-15 16:07:41.428  3383  3399 D EGL_emulation: eglMakeCurrent: 0x7902ffe7be50: ver 3 0 (tinfo 0x79051963d180) (first time)
+11-15 16:07:41.456  3383  3383 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:07:41.479  3383  3405 I Gralloc4: mapper 4.x is not supported
+11-15 16:07:41.507  3383  3405 W Gralloc4: allocator 4.x is not supported
+11-15 16:07:41.516  3383  3405 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:42.245  3383  3383 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+11-15 16:07:42.254  3383  3383 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:07:42.261  3383  3383 D CompatibilityChangeReporter: Compat change id reported: 160794467; UID 10128; state: ENABLED
+11-15 16:07:42.426  3383  3383 I System.out: flutterEngine warmed up
+11-15 16:07:42.519  3383  3383 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 16:07:43.230  3383  3399 W Parcel  : Expecting binder but got null!
+11-15 16:07:44.379  3383  3405 D EGL_emulation: app_time_stats: avg=462.29ms min=58.76ms max=1095.07ms count=3
+11-15 16:07:44.754  3383  3399 D EGL_emulation: app_time_stats: avg=477.71ms min=270.64ms max=751.35ms count=3
+11-15 16:07:45.590  3383  3405 D EGL_emulation: app_time_stats: avg=302.54ms min=245.40ms max=345.42ms count=4
+11-15 16:07:47.051  3383  3502 D ProfileInstaller: Installing profile for ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 16:07:47.196  3383  3383 D CompatibilityChangeReporter: Compat change id reported: 194532703; UID 10128; state: ENABLED
+11-15 16:07:47.213  3383  3505 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:47.215  3383  3505 D EGL_emulation: eglCreateContext: 0x7902ffe906d0: maj 3 min 0 rcv 3
+11-15 16:07:47.220  3383  3505 D EGL_emulation: eglCreateContext: 0x7902ffe91c90: maj 3 min 0 rcv 3
+11-15 16:07:47.222  3383  3505 D EGL_emulation: eglMakeCurrent: 0x7902ffe91c90: ver 3 0 (tinfo 0x79051963d200) (first time)
+11-15 16:07:47.236  3383  3505 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:07:47.243  3383  3506 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:47.243  3383  3506 D EGL_emulation: eglMakeCurrent: 0x7902ffe91c90: ver 3 0 (tinfo 0x79051963d280) (first time)
+11-15 16:07:47.678  3383  3405 D EGL_emulation: app_time_stats: avg=518.62ms min=8.08ms max=1290.61ms count=4
+11-15 16:07:48.900  3383  3405 D EGL_emulation: app_time_stats: avg=407.17ms min=85.08ms max=641.38ms count=3
+11-15 16:07:49.180  3383  3383 I System.out: ### destroying audio handler interface
+11-15 16:07:49.333  3383  3383 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:07:49.460  3383  3391 W t.transferprobe: Cleared Reference was only reachable from finalizer (only reported once)
+11-15 16:08:08.784  3383  3383 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 16:08:08.810  3383  3666 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:08:08.812  3383  3666 D EGL_emulation: eglCreateContext: 0x7902ffe8ef90: maj 3 min 0 rcv 3
+11-15 16:08:08.812  3383  3666 D EGL_emulation: eglCreateContext: 0x7902ffe8dc10: maj 3 min 0 rcv 3
+11-15 16:08:08.814  3383  3666 D EGL_emulation: eglMakeCurrent: 0x7902ffe8dc10: ver 3 0 (tinfo 0x79051963d200) (first time)
+11-15 16:08:08.841  3383  3666 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 16:08:08.853  3383  3667 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_YUV_Cache ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_sync_buffer_data ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs ANDROID_EMU_hwc_color_transform GL_OES_EGL_image_external_essl3 GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_3_0 
+11-15 16:08:08.855  3383  3667 D EGL_emulation: eglMakeCurrent: 0x7902ffe8dc10: ver 3 0 (tinfo 0x79051963d280) (first time)
+11-15 16:08:09.059  3383  3383 I System.out: flutterEngine warmed up
+11-15 16:08:09.118  3383  3383 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 16:08:09.604  3383  3383 I flutter : PROBE18_FIRST_FRAME

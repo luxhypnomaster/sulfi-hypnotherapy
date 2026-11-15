@@ -1,0 +1,11 @@
+{
+  "run": 43660087187,
+  "source": "e3e3f7732210ee26a06bf44311bb81da9e81257e",
+  "conclusion": "success",
+  "job": 132647232945,
+  "scope": "Android Gradle compileDebugKotlin, actual SDK signatures",
+  "signingSecrets": "NOT_USED",
+  "APK": "NOT_BUILT",
+  "Google": "NOT_RUN",
+  "runtime": "NOT_RUN"
+}

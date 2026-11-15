@@ -1,0 +1,261 @@
+514  1078 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:21:45.844   514   550 I ActivityManager: Start proc 2838:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:21:45.931   514  1084 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 2838
+11-15 12:21:46.213   514   603 D ActivityManager: freezing 825 com.android.permissioncontroller
+11-15 12:21:46.314   514  1078 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:21:46.326  2825  2825 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:21:46.327   514  1078 E ActivityManager: Unable to freeze binder for 2838: -11
+11-15 12:21:46.337   514  1078 I ActivityManager: Killing 2838:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:21:46.366   514  1078 V ActivityManager: Got obituary of 2838:org.alchemist.p0probe
+11-15 12:21:46.449  2860  2860 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:21:46.451  2860  2860 I AndroidRuntime: Using default boot image
+11-15 12:21:46.452  2860  2860 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:21:46.553  2860  2860 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:21:46.560   514  1078 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:21:46.567   514   550 I ActivityManager: Start proc 2873:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:21:46.753   514  1078 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 2873
+11-15 12:21:47.143   514   587 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:21:47.146   514   587 E ActivityManager: Unable to freeze binder for 2873: -11
+11-15 12:21:47.146  2860  2860 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:21:47.153   514   587 I ActivityManager: Killing 2873:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:21:47.166   514   867 V ActivityManager: Got obituary of 2873:org.alchemist.p0probe
+11-15 12:21:48.932   514   792 D ActivityManager: sync unfroze 825 com.android.permissioncontroller for 6
+11-15 12:21:52.982   514   603 D ActivityManager: freezing 1400 android.process.acore
+11-15 12:21:58.767   514  1078 I ActivityManager: Force stopping ru.sulfi.sulfi_hypnotherapy.transferprobe appid=10142 user=0: from pid 2919
+11-15 12:21:58.769   514  1078 I ActivityManager: Killing 2589:ru.sulfi.sulfi_hypnotherapy.transferprobe/u0a142 (adj 900): stop ru.sulfi.sulfi_hypnotherapy.transferprobe due to from pid 2919
+11-15 12:21:58.785   514   587 V ActivityManager: Got obituary of 2589:ru.sulfi.sulfi_hypnotherapy.transferprobe
+11-15 12:21:58.785   514   541 W ActivityManager: setHasOverlayUi called on unknown pid: 2589
+11-15 12:21:58.906  2933  2933 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:21:58.909  2933  2933 I AndroidRuntime: Using default boot image
+11-15 12:21:58.909  2933  2933 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:21:58.995  2933  2933 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:21:59.012   514  2922 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:21:59.019   514   550 I ActivityManager: Start proc 2946:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:21:59.088   514  1078 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 2946
+11-15 12:21:59.411   514   925 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:21:59.415   514   925 E ActivityManager: Unable to freeze binder for 2946: -11
+11-15 12:21:59.415  2933  2933 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:21:59.415   514   925 I ActivityManager: Killing 2946:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:21:59.436   514  1078 V ActivityManager: Got obituary of 2946:org.alchemist.p0probe
+11-15 12:21:59.524   514   550 I ActivityManager: Start proc 2971:ru.sulfi.sulfi_hypnotherapy.transferprobe/u0a142 for next-top-activity {ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+11-15 12:22:00.315   514  1740 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10142. pid: 2971
+11-15 12:22:00.432  2971  2992 D FlutterJNI: Beginning load of flutter...
+11-15 12:22:00.454  2971  2992 D FlutterJNI: flutter (null) was loaded normally!
+11-15 12:22:00.601  2971  2995 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:22:00.639  2971  3002 I flutter : The Dart VM service is listening on http://127.0.0.1:43275/fggaXK9iHKs=/
+11-15 12:22:00.908  2971  2971 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:22:01.363  2971  2971 I flutter : PROBE18_FIRST_FRAME
+11-15 12:22:01.398  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:22:02.085  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:22:02.174  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:22:03.127  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:22:03.550  3011  3011 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:22:03.566  3011  3011 I AndroidRuntime: Using default boot image
+11-15 12:22:03.568  3011  3011 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:22:03.737  3011  3011 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:22:03.750   514  2224 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:22:03.763   514   550 I ActivityManager: Start proc 3026:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:22:03.867   514  2224 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3026
+11-15 12:22:04.221   514  2224 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:22:04.229  3011  3011 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:22:04.239   514  2224 E ActivityManager: Unable to freeze binder for 3026: -11
+11-15 12:22:04.240   514  2224 I ActivityManager: Killing 3026:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:22:04.281   514   925 V ActivityManager: Got obituary of 3026:org.alchemist.p0probe
+11-15 12:22:04.473  3047  3047 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:22:04.477  3047  3047 I AndroidRuntime: Using default boot image
+11-15 12:22:04.477  3047  3047 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:22:04.565  3047  3047 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:22:04.568   514  2224 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:22:04.577   514   550 I ActivityManager: Start proc 3060:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:22:04.640   514  2224 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3060
+11-15 12:22:04.964   514  2922 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:22:04.976   514  2922 E ActivityManager: Unable to freeze binder for 3060: -11
+11-15 12:22:04.981   514  2922 I ActivityManager: Killing 3060:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:22:04.983  3047  3047 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:22:05.008   514  2155 V ActivityManager: Got obituary of 3060:org.alchemist.p0probe
+11-15 12:22:06.998  3096  3096 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:22:07.002  3096  3096 I AndroidRuntime: Using default boot image
+11-15 12:22:07.002  3096  3096 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:22:07.080  3096  3096 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:22:07.083   514  2224 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:22:07.091   514   550 I ActivityManager: Start proc 3109:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:22:07.153   514  2224 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3109
+11-15 12:22:07.481   514  1078 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:22:07.490  3096  3096 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:22:07.496   514  1078 E ActivityManager: Unable to freeze binder for 3109: -11
+11-15 12:22:07.496   514  1078 I ActivityManager: Killing 3109:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:22:07.533   514  1078 V ActivityManager: Got obituary of 3109:org.alchemist.p0probe
+11-15 12:22:07.896  2971  3138 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:22:09.117   514   603 D ActivityManager: freezing 825 com.android.permissioncontroller
+11-15 12:24:18.653   514   514 E ActivityManager: Cancel pending or running compactions as system is awake
+11-15 12:24:18.659   514   514 I ActivityManager: updateOomAdj start time is before than pendingPid added, don't delete it
+11-15 12:24:19.276  3220  3220 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:19.283  3220  3220 I AndroidRuntime: Using default boot image
+11-15 12:24:19.283  3220  3220 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:19.400  3220  3220 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:19.403   514   891 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:19.416   514   550 I ActivityManager: Start proc 3233:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:19.506   514   891 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3233
+11-15 12:24:19.876   514   531 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:19.879  3220  3220 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:19.880   514   531 E ActivityManager: Unable to freeze binder for 3233: -11
+11-15 12:24:19.882   514   531 I ActivityManager: Killing 3233:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:19.912   514  1794 V ActivityManager: Got obituary of 3233:org.alchemist.p0probe
+11-15 12:24:20.619  2971  3259 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:24:21.105  2971  2971 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:24:21.609  2971  2971 I flutter : PROBE18_FIRST_FRAME
+11-15 12:24:21.628  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:22.380  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:22.403  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:23.285  2971  2971 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:23.464  3264  3264 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:23.470  3264  3264 I AndroidRuntime: Using default boot image
+11-15 12:24:23.470  3264  3264 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:23.764  3264  3264 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:23.770   514   891 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:23.781   514   550 I ActivityManager: Start proc 3278:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:23.881   514   891 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3278
+11-15 12:24:24.284   514   531 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:24.293   514   531 E ActivityManager: Unable to freeze binder for 3278: -11
+11-15 12:24:24.294  3264  3264 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:24.321   514   531 I ActivityManager: Killing 3278:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:24.523   514   531 V ActivityManager: Got obituary of 3278:org.alchemist.p0probe
+11-15 12:24:24.692  3298  3298 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:24.700  3298  3298 I AndroidRuntime: Using default boot image
+11-15 12:24:24.700  3298  3298 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:24.825  3298  3298 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:24.829   514   531 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:24.846   514   550 I ActivityManager: Start proc 3312:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:24.957   514   867 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3312
+11-15 12:24:25.298   514   867 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:25.305   514   867 E ActivityManager: Unable to freeze binder for 3312: -11
+11-15 12:24:25.306   514   867 I ActivityManager: Killing 3312:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:25.317  3298  3298 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:25.350   514  2218 V ActivityManager: Got obituary of 3312:org.alchemist.p0probe
+11-15 12:24:28.925  3354  3354 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:28.927  3354  3354 I AndroidRuntime: Using default boot image
+11-15 12:24:28.927  3354  3354 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:29.043  3354  3354 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:29.053   514   867 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:29.083   514   550 I ActivityManager: Start proc 3367:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:29.177   514  1815 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3367
+11-15 12:24:29.544  3354  3354 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:29.545   514   867 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:29.550   514   867 E ActivityManager: Unable to freeze binder for 3367: -11
+11-15 12:24:29.565   514   867 I ActivityManager: Killing 3367:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:29.598   514   867 V ActivityManager: Got obituary of 3367:org.alchemist.p0probe
+11-15 12:24:29.739   514   550 I ActivityManager: Start proc 3392:ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe/u0a143 for next-top-activity {ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+11-15 12:24:29.763   514   550 W ActivityManager: Slow operation: 61ms so far, now at startProcess: done updating pids map
+11-15 12:24:30.549   514   867 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10143. pid: 3392
+11-15 12:24:30.731  3392  3413 D FlutterJNI: Beginning load of flutter...
+11-15 12:24:30.778  3392  3413 D FlutterJNI: flutter (null) was loaded normally!
+11-15 12:24:31.136  3392  3416 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:24:31.249  3392  3423 I flutter : The Dart VM service is listening on http://127.0.0.1:37379/zJTnA0mbTVo=/
+11-15 12:24:31.954  3392  3392 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:24:32.474  3392  3392 I flutter : PROBE18_FIRST_FRAME
+11-15 12:24:32.508  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:33.362  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:33.443  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:34.478  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:24:34.936  3432  3432 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:34.951  3432  3432 I AndroidRuntime: Using default boot image
+11-15 12:24:34.951  3432  3432 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:35.140  3432  3432 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:35.152   514   891 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:35.175   514   550 I ActivityManager: Start proc 3447:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:35.300   514   891 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3447
+11-15 12:24:35.644   514   867 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:35.649  3432  3432 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:35.659   514   867 E ActivityManager: Unable to freeze binder for 3447: -11
+11-15 12:24:35.665   514   867 I ActivityManager: Killing 3447:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:35.679   514  1815 V ActivityManager: Got obituary of 3447:org.alchemist.p0probe
+11-15 12:24:35.903  3469  3469 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:24:35.916  3469  3469 I AndroidRuntime: Using default boot image
+11-15 12:24:35.916  3469  3469 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:24:36.097  3469  3469 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:24:36.100   514  2218 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:24:36.109   514   550 I ActivityManager: Start proc 3481:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:24:36.200   514  2218 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3481
+11-15 12:24:36.536   514   531 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:24:36.554   514   531 E ActivityManager: Unable to freeze binder for 3481: -11
+11-15 12:24:36.557   514   531 I ActivityManager: Killing 3481:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:24:36.581  3469  3469 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:24:36.587   514  1815 V ActivityManager: Got obituary of 3481:org.alchemist.p0probe
+11-15 12:24:38.151  3392  3519 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:24:40.151  3392  3511 W FlutterJNI: Tried to send a platform message response, but FlutterJNI was detached from native C++. Could not send. Response ID: 79
+11-15 12:24:49.532   514   549 D ActivityManager: sync unfroze 1650 com.android.carrierdefaultapp for 3
+11-15 12:24:49.721   514   549 D ActivityManager: sync unfroze 1261 com.android.cellbroadcastreceiver.module for 3
+11-15 12:24:49.865   514   549 D ActivityManager: sync unfroze 1023 com.android.settings for 10
+11-15 12:24:49.865   514   549 D ActivityManager: sync unfroze 2090 com.android.dynsystem:dynsystem for 10
+11-15 12:24:49.865   514   549 D ActivityManager: sync unfroze 2049 com.android.dynsystem for 10
+11-15 12:24:49.866   514   549 D ActivityManager: sync unfroze 1819 com.android.localtransport for 10
+11-15 12:24:49.866   514   549 D ActivityManager: sync unfroze 1613 com.android.keychain for 10
+11-15 12:24:50.392   996   996 I AndroidRuntime: VM exiting with result code 0, cleanup skipped.
+11-15 12:24:50.398   514  1794 I ActivityManager: Process com.android.bluetooth (pid 996) has died: fg  SVC 
+11-15 12:24:51.121   514   792 D ActivityManager: sync unfroze 825 com.android.permissioncontroller for 6
+11-15 12:24:58.775   514   550 I ActivityManager: Start proc 3594:com.android.bluetooth/1002 for service {com.android.bluetooth/com.android.bluetooth.btservice.AdapterService}
+11-15 12:24:58.972   514   867 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 1002. pid: 3594
+11-15 12:24:59.269   514   867 D ActivityManager: sync unfroze 1554 com.android.music for 6
+11-15 12:24:59.283   514  1815 D ActivityManager: sync unfroze 1400 android.process.acore for 7
+11-15 12:24:59.314   514   532 W ActivityManager: Receiver with filter android.content.IntentFilter@8237f49 already registered for pid 810, callerPackage is com.android.systemui
+11-15 12:24:59.337  3392  3679 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:24:59.438   514   549 D ActivityManager: sync unfroze 2134 com.android.messaging for 3
+11-15 12:24:59.444   514   549 D ActivityManager: sync unfroze 2021 com.android.imsserviceentitlement for 3
+11-15 12:24:59.768  3392  3392 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:25:00.361  3392  3392 I flutter : PROBE18_FIRST_FRAME
+11-15 12:25:00.406  3392  3715 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:25:09.398   514   603 D ActivityManager: freezing 1554 com.android.music
+11-15 12:25:09.405   514   603 D ActivityManager: freezing 1650 com.android.carrierdefaultapp
+11-15 12:25:09.439   514   603 D ActivityManager: freezing 2134 com.android.messaging
+11-15 12:25:09.467   514   603 D ActivityManager: freezing 2021 com.android.imsserviceentitlement
+11-15 12:25:09.796   514   603 D ActivityManager: freezing 1261 com.android.cellbroadcastreceiver.module
+11-15 12:25:13.648   514   603 D ActivityManager: freezing 3392 ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 12:25:19.340   514   603 D ActivityManager: freezing 1023 com.android.settings
+11-15 12:25:19.340   514   603 D ActivityManager: freezing 2090 com.android.dynsystem:dynsystem
+11-15 12:25:19.340   514   603 D ActivityManager: freezing 2049 com.android.dynsystem
+11-15 12:25:19.340   514   603 D ActivityManager: freezing 1819 com.android.localtransport
+11-15 12:25:19.340   514   603 D ActivityManager: freezing 1613 com.android.keychain
+11-15 12:25:25.278   514   603 D ActivityManager: freezing 825 com.android.permissioncontroller
+11-15 12:26:03.644   514   596 D ActivityManager: sync unfroze 3392 ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe for 6
+11-15 12:26:03.677  3392  3743 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:26:07.069   514   514 E ActivityManager: Cancel pending or running compactions as system is awake
+11-15 12:26:08.761  3769  3769 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:26:08.771  3769  3769 I AndroidRuntime: Using default boot image
+11-15 12:26:08.771  3769  3769 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:26:08.946  3769  3769 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:26:08.960   514  1794 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:26:08.971   514   550 I ActivityManager: Start proc 3792:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:26:09.078   514  1794 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3792
+11-15 12:26:09.559   514  1815 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:26:09.562   514  1815 E ActivityManager: Unable to freeze binder for 3792: -11
+11-15 12:26:09.565   514  1815 I ActivityManager: Killing 3792:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:26:09.585  3769  3769 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:26:09.609   514  1815 V ActivityManager: Got obituary of 3792:org.alchemist.p0probe
+11-15 12:26:09.731  3816  3816 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:26:09.735  3816  3816 I AndroidRuntime: Using default boot image
+11-15 12:26:09.735  3816  3816 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:26:09.827  3816  3816 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:26:09.830   514  2223 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:26:09.848   514   550 I ActivityManager: Start proc 3829:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:26:09.935   514  2223 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3829
+11-15 12:26:10.367   514  1740 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:26:10.369  3816  3816 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:26:10.371   514  1740 E ActivityManager: Unable to freeze binder for 3829: -11
+11-15 12:26:10.374   514  1740 I ActivityManager: Killing 3829:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:26:10.379   514  1740 V ActivityManager: Got obituary of 3829:org.alchemist.p0probe
+11-15 12:26:11.384  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:26:11.865  3858  3858 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-15 12:26:11.886  3858  3858 I AndroidRuntime: Using default boot image
+11-15 12:26:11.886  3858  3858 I AndroidRuntime: Leaving lock profiling enabled
+11-15 12:26:12.075  3858  3858 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+11-15 12:26:12.085   514  1078 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: start instr
+11-15 12:26:12.098   514   550 I ActivityManager: Start proc 3872:org.alchemist.p0probe/u0a141 for added application org.alchemist.p0probe
+11-15 12:26:12.225   514  1078 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10141. pid: 3872
+11-15 12:26:12.858  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:26:12.881  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:26:13.432   514  1740 I ActivityManager: Force stopping org.alchemist.p0probe appid=10141 user=0: finished inst
+11-15 12:26:13.443   514  1740 E ActivityManager: Unable to freeze binder for 3872: -11
+11-15 12:26:13.445   514  1740 I ActivityManager: Killing 3872:org.alchemist.p0probe/u0a141 (adj 0): stop org.alchemist.p0probe due to finished inst
+11-15 12:26:13.450  3858  3858 I AndroidRuntime: VM exiting with result code 0.
+11-15 12:26:13.498   514  1740 V ActivityManager: Got obituary of 3872:org.alchemist.p0probe
+11-15 12:26:14.502  3392  3392 D FlutterJNI: Sending viewport metrics to the engine.

@@ -1,0 +1,82 @@
+--------- beginning of main
+11-15 12:10:00.653  3372  3372 I t.transferprobe: Late-enabling -Xcheck:jni
+11-15 12:10:00.781  3372  3372 I t.transferprobe: Using CollectorTypeCC GC.
+11-15 12:10:00.781  3372  3372 W t.transferprobe: Unexpected CPU variant for x86: x86_64.
+11-15 12:10:00.781  3372  3372 W t.transferprobe: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-15 12:10:00.863  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10143; state: ENABLED
+11-15 12:10:00.864  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10143; state: ENABLED
+11-15 12:10:00.875  3372  3372 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-15 12:10:00.875  3372  3372 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+11-15 12:10:00.875  3372  3372 W ziparchive: Unable to open '/data/app/~~uEFIzK7S1z7duGcQ-asJ3Q==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-red5h_tOXSYXRpeec43-5Q==/base.dm': No such file or directory
+11-15 12:10:00.876  3372  3372 W ziparchive: Unable to open '/data/app/~~uEFIzK7S1z7duGcQ-asJ3Q==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-red5h_tOXSYXRpeec43-5Q==/base.dm': No such file or directory
+11-15 12:10:01.300  3372  3372 D nativeloader: Configuring clns-6 for other apk /data/app/~~uEFIzK7S1z7duGcQ-asJ3Q==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-red5h_tOXSYXRpeec43-5Q==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~uEFIzK7S1z7duGcQ-asJ3Q==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-red5h_tOXSYXRpeec43-5Q==/lib/x86_64:/data/app/~~uEFIzK7S1z7duGcQ-asJ3Q==/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe-red5h_tOXSYXRpeec43-5Q==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 12:10:01.308  3372  3372 V GraphicsEnvironment: Currently set values for:
+11-15 12:10:01.308  3372  3372 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-15 12:10:01.309  3372  3372 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-15 12:10:01.309  3372  3372 V GraphicsEnvironment: ANGLE GameManagerService for ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe: false
+11-15 12:10:01.309  3372  3372 V GraphicsEnvironment: ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe is not listed in per-application setting
+11-15 12:10:01.309  3372  3372 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-15 12:10:01.329  3372  3391 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-15 12:10:01.330  3372  3391 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-15 12:10:01.333  3372  3391 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-15 12:10:01.346  3372  3393 I ResourceExtractor: Resource version mismatch res_timestamp-28-1794744410200
+11-15 12:10:01.346  3372  3392 D FlutterJNI: Beginning load of flutter...
+11-15 12:10:01.359  3372  3392 D FlutterJNI: flutter (null) was loaded normally!
+11-15 12:10:01.362  3372  3394 D skia    : [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+11-15 12:10:01.633  3372  3393 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/kernel_blob.bin
+11-15 12:10:01.633  3372  3393 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/vm_snapshot_data
+11-15 12:10:01.670  3372  3393 I ResourceExtractor: Extracted baseline resource assets/flutter_assets/isolate_snapshot_data
+11-15 12:10:01.670  3372  3372 W t.transferprobe: type=1400 audit(0.0:81): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=54830 scontext=u:r:untrusted_app:s0:c143,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 12:10:01.688  3372  3372 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 12:10:01.758  3372  3402 I flutter : The Dart VM service is listening on http://127.0.0.1:46173/PjIl3QEkCGo=/
+11-15 12:10:01.770  3372  3395 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:10:02.050  3372  3372 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+11-15 12:10:02.050  3372  3372 W t.transferprobe: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+11-15 12:10:02.050  3372  3372 W t.transferprobe: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+11-15 12:10:02.050  3372  3372 W t.transferprobe: Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+11-15 12:10:02.053  3372  3372 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 12:10:02.058  3372  3372 D FlutterRenderer: Width is zero. 0,0
+11-15 12:10:02.066  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10143; state: DISABLED
+11-15 12:10:02.067  3372  3372 W OpenGLRenderer: Unknown dataspace 0
+11-15 12:10:02.146  3372  3372 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:10:02.588  3372  3372 I flutter : PROBE18_FIRST_FRAME
+11-15 12:10:02.602  3372  3372 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+11-15 12:10:02.625  3372  3372 D FlutterRenderer: Width is zero. 0,0
+11-15 12:10:02.630  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:10:02.643  3372  3389 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 12:10:02.662  3372  3395 I Gralloc4: mapper 4.x is not supported
+11-15 12:10:03.375  3372  3372 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+11-15 12:10:03.395  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:10:03.411  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 160794467; UID 10143; state: ENABLED
+11-15 12:10:03.430  3372  3372 I System.out: flutterEngine warmed up
+11-15 12:10:03.440  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:10:05.575  3372  3395 D EGL_emulation: app_time_stats: avg=467.00ms min=54.03ms max=1021.76ms count=3
+11-15 12:10:06.648  3372  3395 D EGL_emulation: app_time_stats: avg=268.16ms min=74.04ms max=467.13ms count=4
+11-15 12:10:06.699  3372  3389 D EGL_emulation: app_time_stats: avg=540.27ms min=349.73ms max=1044.34ms count=4
+11-15 12:10:07.741  3372  3495 D ProfileInstaller: Installing profile for ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe
+11-15 12:10:08.186  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 194532703; UID 10143; state: ENABLED
+11-15 12:10:08.186  3372  3372 D CompatibilityChangeReporter: Compat change id reported: 253665015; UID 10143; state: ENABLED
+11-15 12:10:08.346  3372  3500 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:10:08.688  3372  3395 D EGL_emulation: app_time_stats: avg=509.14ms min=15.03ms max=1296.38ms count=4
+11-15 12:10:10.196  3372  3372 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@774e569
+11-15 12:10:10.283  3372  3372 I System.out: ### destroying audio handler interface
+11-15 12:10:11.645  3372  3379 W t.transferprobe: Cleared Reference was only reachable from finalizer (only reported once)
+11-15 12:10:29.595  3372  3372 D MediaBrowserCompat: Connecting to a MediaBrowserService.
+11-15 12:10:29.624  3372  3651 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:10:29.905  3372  3372 I System.out: flutterEngine warmed up
+11-15 12:10:29.959  3372  3372 I flutter : PROBE18_MAIN_STARTED_NO_GOOGLE
+11-15 12:10:30.435  3372  3372 I flutter : PROBE18_FIRST_FRAME
+11-15 12:10:30.508  3372  3687 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:11:33.847  3372  3721 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-15 12:11:37.346  3372  3372 W JobService: onNetworkChanged() not implemented in ru.sulfi.sulfi_hypnotherapy.transfer.TransferJobService. Must override in a subclass.
+11-15 12:11:39.622  3372  3372 D AutofillManager: Fill dialog is enabled:false, hints=[]
+11-15 12:11:39.680  3372  3372 D AccessibilityBridge: Setting not found: accessibility_display_inversion_enabled, using default: 0
+11-15 12:11:39.724  3372  3372 D FlutterRenderer: Width is zero. 0,0
+11-15 12:11:40.169  3372  3372 D FlutterRenderer: Width is zero. 0,0
+11-15 12:11:40.222  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:11:40.233  3372  3389 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-15 12:11:41.306  3372  3372 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+11-15 12:11:41.867  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:11:41.875  3372  3372 D FlutterJNI: Sending viewport metrics to the engine.
+11-15 12:11:42.213  3372  3718 I OpenGLRenderer: Davey! duration=818ms; Flags=1, FrameTimelineVsyncId=26553, IntendedVsync=347845967260, Vsync=348312633908, InputEventId=0, HandleInputStart=348329134421, AnimationStart=348329138097, PerformTraversalsStart=348329139449, DrawStart=348335971995, FrameDeadline=347862633926, FrameInterval=348327848072, FrameStartTime=16666666, SyncQueued=348336503658, SyncStart=348336745690, IssueDrawCommandsStart=348336839109, SwapBuffers=348460329450, FrameCompleted=348664270307, DequeueBufferDuration=458164, QueueBufferDuration=457433, GpuCompleted=348664270307, SwapBuffersCompleted=348647872967, DisplayPresentTime=0, CommandSubmissionCompleted=348460329450, 
+11-15 12:11:42.516  3372  3372 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.

@@ -1,4 +1,5 @@
 import '../services/alchemist_work_queue.dart';
+import '../services/native_transfer_bridge.dart';
 
 import 'dart:async';
 
@@ -30,6 +31,36 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
     _lastOwner = widget.controller.catalog.api?.ownerBinding;
     widget.controller.policy.addListener(identityChanged);
     unawaited(widget.controller.cloudQueue.recover());
+    _poll = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) => unawaited(readNativeState()),
+    );
+  }
+
+  Timer? _poll;
+  bool _reading = false;
+  Future<void> readNativeState() async {
+    if (_reading || !mounted) return;
+    _reading = true;
+    try {
+      await widget.controller.cloudQueue.refresh();
+      if (NativeTransferBridge.available) {
+        final status = await NativeTransferBridge.channel
+            .invokeMapMethod<String, dynamic>('status');
+        if (mounted && status?['openQueue'] == true) {
+          widget.navigatorKey.currentState?.push<void>(
+            MaterialPageRoute(
+              builder: (_) =>
+                  AlchemistSyncScreen(controller: widget.controller),
+            ),
+          );
+        }
+      }
+    } catch (_) {
+      /* no fabricated completion; saved queue remains */
+    } finally {
+      _reading = false;
+    }
   }
 
   String? _lastOwner;
@@ -42,12 +73,19 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Execution belongs to Android, never convert Home/lock into user pause.
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      unawaited(widget.controller.cloudQueue.pauseAll());
+      _poll?.cancel();
     }
     if (state == AppLifecycleState.resumed) {
       widget.controller.cloudQueue.foreground();
+      _poll?.cancel();
+      _poll = Timer.periodic(
+        const Duration(seconds: 2),
+        (_) => unawaited(readNativeState()),
+      );
+      unawaited(readNativeState());
       unawaited(
         widget.controller.diary?.restoreSignIn() ?? Future<void>.value(),
       );
@@ -56,6 +94,7 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
 
   @override
   void dispose() {
+    _poll?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     widget.controller.policy.removeListener(identityChanged);
     super.dispose();
@@ -66,9 +105,7 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
     listenable: widget.controller.cloudQueue,
     builder: (context, _) {
       final queue = widget.controller.cloudQueue;
-      if (widget.controller.policy.clientEdition ||
-          widget.controller.catalog.api?.ownerBinding == null ||
-          queue.pendingCount == 0) {
+      if (queue.pendingCount == 0) {
         return const SizedBox.shrink();
       }
       return Material(

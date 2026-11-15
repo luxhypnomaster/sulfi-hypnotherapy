@@ -1,0 +1,18 @@
+{
+  "classification": "ACTUAL_APK_NATIVE_SQFLITE_POOL_ANDROID_SQLITE",
+  "pool": 1,
+  "busyTimeoutMs": 2500,
+  "status": "BOTH_COMMITS_COMPLETE",
+  "events": [
+    "A_WRITE_TRANSACTION_OPEN",
+    "A_COMMIT_ENQUEUED",
+    "A_COMMITTED",
+    "B_WRITE_STARTED",
+    "B_COMMITTED"
+  ],
+  "errors": [],
+  "rows": 2,
+  "integrity": "ok",
+  "productionDatabaseOpened": false,
+  "Google": "NOT_RUN"
+}

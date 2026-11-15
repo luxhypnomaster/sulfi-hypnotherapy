@@ -1,3 +1,4 @@
+import 'services/transfer_worker.dart';
 import 'data/storage_preflight.dart';
 
 import 'data/alchemist_diary_repository.dart';
@@ -41,6 +42,11 @@ import 'services/device_files.dart';
 import 'services/access_policy.dart';
 import 'services/history_attachments.dart';
 import 'services/preview_diary_transport.dart';
+
+@pragma('vm:entry-point')
+void transferMain() {
+  unawaited(runTransferWorker());
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

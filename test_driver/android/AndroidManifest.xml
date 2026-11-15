@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Disposable .transferprobe only. NEVER used by the MASTER/CLIENT candidates. -->
+  <application android:usesCleartextTraffic="true" android:testOnly="true"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+</manifest>

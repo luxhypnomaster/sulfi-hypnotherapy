@@ -49,6 +49,10 @@ class DiaryController extends ChangeNotifier {
   Timer? _expiry;
   String _readScope = 'public';
   VoidCallback? onAccountLogout;
+  Future<void> Function()? beforeAccountLogout;
+  Future<void> Function(DiaryEntry, bool?)? enqueueCloudOperation;
+  Future<void> Function(DiaryEntry, String)? enqueueCloudMutation;
+  bool get backgroundCloudTransfers => enqueueCloudOperation != null;
   int _rotation = 0;
   final _readerAudio = <String, DiaryAudio>{};
   final _heard = <String, HeardAudio>{};
@@ -192,6 +196,11 @@ class DiaryController extends ChangeNotifier {
     }
     if (published.any((e) => e.id == entry.id) ||
         entry.status == DiaryStatus.published) {
+      if (enqueueCloudMutation != null) {
+        await enqueueCloudMutation!(entry, 'deleteSoft');
+        // Keep the local copy until a server receipt; never optimistic delete.
+        return;
+      }
       final session = await _cloudSession();
       await api!.deleteEntry(entry, session);
       await sync();
@@ -208,6 +217,19 @@ class DiaryController extends ChangeNotifier {
   Future<void> reorderEntries(List<DiaryEntry> entries) async {
     if (!authorWorkspace) {
       throw const DiaryApiException('Авторский режим недоступен');
+    }
+    if (enqueueCloudOperation != null) {
+      // Persist explicit local ordering before creating per-entry transfer intents.
+      // No UI-owned upload remains after this bounded database operation.
+      await authorRepository!.reorder(entries);
+      await load();
+      for (final original in entries) {
+        final e = drafts.where((e) => e.id == original.id).firstOrNull;
+        if (e != null && published.any((p) => p.id == original.id)) {
+          await enqueueCloudOperation!(e, null);
+        }
+      }
+      return;
     }
     if (entries.any((e) => published.any((p) => p.id == e.id))) {
       final session = await _cloudSession();
@@ -471,6 +493,7 @@ class DiaryController extends ChangeNotifier {
       policy?.applyVerifiedServerRole(null);
       drafts = [];
     }
+    await beforeAccountLogout?.call();
     onAccountLogout?.call();
     published = published
         .where(
@@ -572,6 +595,7 @@ class DiaryController extends ChangeNotifier {
   Future<void> logout() async {
     ++_authGeneration;
     ++_loadGeneration;
+    await beforeAccountLogout?.call();
     authorBusy = false;
     _restoring = null;
     if (api?.supportsServerIdentity ?? false) {
@@ -656,6 +680,10 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {
+    if (enqueueCloudOperation != null) {
+      await enqueueCloudOperation!(entry, null);
+      return;
+    }
     if (!(api?.supportsAdvancedPublication ?? false) &&
         (entry.extra.containsKey('contentLinks') ||
             entry.extra.containsKey('publication'))) {
@@ -682,6 +710,10 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
+    if (enqueueCloudOperation != null) {
+      await enqueueCloudOperation!(entry, published);
+      return;
+    }
     if (!(api?.supportsAdvancedPublication ?? false) &&
         (entry.extra.containsKey('contentLinks') ||
             entry.extra.containsKey('publication'))) {

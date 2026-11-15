@@ -1,0 +1,25 @@
+{
+  "source": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
+  "pair": [
+    {
+      "edition": "master",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 28,
+      "bytes": 193900524,
+      "sha256": "04c7fa67c6cfd251f883f32d226728f852dd6709300c68fd76676098cad897f7",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    },
+    {
+      "edition": "client",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 28,
+      "bytes": 193900560,
+      "sha256": "aea88743bd716fe20e8cbfbb44880e75c39f429fdc871935e38afca6cef696a5",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6"
+    }
+  ],
+  "ownerQA": "NOT_RUN",
+  "safeForOwnerInstall": false,
+  "nativeSafety": "PENDING",
+  "liveGAS": "EXISTING6_NO_DEPLOY"
+}

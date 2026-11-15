@@ -1,0 +1,62 @@
+{
+  "source": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+  "run": 43708103115,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43708103115",
+  "status": "PASS_NATIVE_LOCAL_UPGRADE_BOTH",
+  "proofs": {
+    "master": {
+      "cases": 14,
+      "caseNames": [
+        "install_baseline",
+        "ui_import_1",
+        "ui_import_2",
+        "ui_import_3",
+        "ui_module_elman",
+        "ui_module_pause",
+        "ui_template",
+        "ui_history",
+        "ui_baseline_local_draft27",
+        "beforeBaseline_inventory",
+        "native_update_to28",
+        "ui_afterCandidate",
+        "cold_restart28",
+        "local_draft_after28"
+      ],
+      "status": "PASS_UI_LOCAL_DATA_UPGRADE_ONLY",
+      "ownerQueues": "CONTROLLED_UNIT_ONLY_NO_REAL_GOOGLE_NATIVE_QUEUE",
+      "Google": "NOT_RUN",
+      "physicalPhone": "NOT_RUN"
+    },
+    "client": {
+      "cases": 12,
+      "caseNames": [
+        "install_baseline",
+        "ui_import_1",
+        "ui_import_2",
+        "ui_import_3",
+        "ui_module_elman",
+        "ui_module_pause",
+        "ui_template",
+        "ui_history",
+        "beforeBaseline_inventory",
+        "native_update_to28",
+        "ui_afterCandidate",
+        "cold_restart28"
+      ],
+      "status": "PASS_UI_LOCAL_DATA_UPGRADE_ONLY",
+      "ownerQueues": "CONTROLLED_UNIT_ONLY_NO_REAL_GOOGLE_NATIVE_QUEUE",
+      "Google": "NOT_RUN",
+      "physicalPhone": "NOT_RUN"
+    }
+  },
+  "independentManifestByteCertReadbacks": [
+    "0_native18 (client, 27, 748058137, 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46).txt",
+    "1_native18 (master, 27, 748058133, 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb).txt",
+    "2_candidate18.txt"
+  ],
+  "expectedCertificate": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "scope": "OLD_APK27_UI_CREATED_NOT_SQL_SEEDED",
+  "backgroundCoreNewSource": "PENDING_EXTENDED_PROBE",
+  "ownerDelivery": "NOT_DONE",
+  "GooglePhysical": "NOT_RUN"
+}
