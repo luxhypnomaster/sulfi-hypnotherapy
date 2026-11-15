@@ -154,6 +154,7 @@ Map<String, dynamic> initialQueuedWork(
   bool complete = false,
 }) => {
   'phase': complete ? 'complete' : 'queued',
+  'state': complete ? 'COMPLETED' : 'QUEUED',
   'stage': complete ? 'diary_committed' : 'queued',
   'code': null,
   'message': null,
@@ -491,6 +492,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
       value['_work'] = {
         if (same) ...work,
         'phase': 'queued',
+        'state': 'QUEUED',
         'stage': 'queued',
         'code': null,
         'message': null,
@@ -714,6 +716,15 @@ class AlchemistWorkQueue extends ChangeNotifier {
           retries[trace] = attempt > (retries[trace] ?? 0)
               ? attempt
               : (retries[trace] ?? 0);
+          if (event['phase'] == 'error') {
+            _recordProgress(name, {
+              'traceId': trace,
+              'httpStatus': event['status'],
+              'networkRetries':
+                  (row['_work']?['networkRetries'] as int? ?? 0) +
+                  retries.values.fold<int>(0, (n, v) => n + v),
+            });
+          }
           if (event['phase'] == 'complete' || event['phase'] == 'acked') {
             final op = event['operation'] as String;
             final stat = measurements.putIfAbsent(
@@ -855,6 +866,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? _pauseCodes[name] ?? 'OWNER_CHANGED'
                 : failure.code,
             'message': failure.message,
+            'httpStatus': failure.status,
           });
         } finally {
           AlchemistDiagnostics.instance.removeListener(diagnostic);

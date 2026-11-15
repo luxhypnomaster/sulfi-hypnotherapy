@@ -991,6 +991,16 @@ class AlchemistDiaryApi extends DiaryApi {
               current['publicationRevision'] == sent['publicationRevision'] &&
               canonicalContent(current['entry']) ==
                   canonicalContent(sent['entry'])) {
+            final serverState = await tx.query(
+              'app_settings',
+              where: 'name=?',
+              whereArgs: ['alchemist_entry:${result.id}'],
+            );
+            if (serverState.isNotEmpty) {
+              current['lastReceipt'] = jsonDecode(
+                serverState.single['value'] as String,
+              )['lastReceipt'];
+            }
             current['status'] = conflict ? 'conflict_committed' : 'complete';
             current['confirmedRevision'] = _publicationRevision(
               result,
@@ -1088,7 +1098,9 @@ class AlchemistDiaryApi extends DiaryApi {
     if (pending != null &&
         enqueueReaderSync != null &&
         previousSync['_work']?['phase'] != 'complete') {
-      await enqueueReaderSync!(name);
+      // A durable executor already owns this snapshot. Periodic feed/read sync
+      // must not turn USER_PAUSED/CANCELED into an implicit Resume.
+      if (previousSync['_work'] == null) await enqueueReaderSync!(name);
       return;
     }
     if (pending != null && enqueueReaderSync == null) {

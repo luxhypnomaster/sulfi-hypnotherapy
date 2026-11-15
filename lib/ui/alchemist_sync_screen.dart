@@ -187,6 +187,26 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                     Text(
                                       'Измеренные RPC: ${(work['performance']['byStage'] as Map).entries.where((e) => e.key.toString().endsWith(':complete') && !e.key.toString().startsWith('media.localHash:')).fold<int>(0, (n, e) => n + (e.value['count'] as int))} · ${work['performance']['confirmedBytesThisRun']} подтверждённых байт за этот запуск',
                                     ),
+                                  if (work['performance'] is Map &&
+                                      (work['performance']['wallMs'] as int? ??
+                                              0) >
+                                          0 &&
+                                      (work['performance']['confirmedBytesThisRun']
+                                                  as int? ??
+                                              0) >
+                                          0)
+                                    Text(
+                                      'Средняя за запуск с проверкой: ${((work['performance']['confirmedBytesThisRun'] as num) * 1000 / (work['performance']['wallMs'] as num) / 1024).toStringAsFixed(1)} КБ/с',
+                                    ),
+                                  if (work['httpStatus'] is num &&
+                                      work['httpStatus'] > 0)
+                                    Text(
+                                      'Последний HTTP-статус: ${work['httpStatus']}',
+                                    ),
+                                  if (row['lastReceipt'] is Map)
+                                    Text(
+                                      'Подтверждение сервера: ${row['lastReceipt']['operation']} · ETag ${row['lastReceipt']['etag']}',
+                                    ),
                                   if (alchemistFileProgress(work)
                                       case final progress?) ...[
                                     LinearProgressIndicator(
@@ -222,6 +242,8 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                           'failed',
                                           'queued',
                                           'waiting_auth',
+                                          'waiting_policy',
+                                          'failed_permanent',
                                           'waiting_network',
                                           'retry_scheduled',
                                           'waiting_permission',
@@ -239,8 +261,10 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                         TextButton(
                                           onPressed: () =>
                                               queue.pause(name, cancel: true),
-                                          child: const Text(
-                                            'Отменить отправку',
+                                          child: Text(
+                                            work['direction'] == 'download'
+                                                ? 'Отменить скачивание'
+                                                : 'Отменить отправку',
                                           ),
                                         ),
                                       ],

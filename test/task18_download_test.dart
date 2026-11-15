@@ -204,4 +204,84 @@ void main() {
       await f.close();
     }
   });
+  test('18 wrong final receipt cannot mark download successful; retry reuses checked bytes', () async {
+    final f = await Fixture15.open();
+    var valid = false, chunks = 0, finals = 0;
+    final api = AlchemistApi(
+      Uri.parse(endpoint),
+      maxAttempts: 1,
+      connection: (_, _, _, body) async {
+        final q = jsonDecode(body!), p = q['parameters'];
+        if (q['operation'] == 'media.finalizeDownload') {
+          finals++;
+          return DiaryResponse(
+            200,
+            jsonEncode({
+              'ok': true,
+              'status': 200,
+              'result': {'verified': valid, 'assetRevisionId': 'fixture18'},
+            }),
+          );
+        }
+        chunks++;
+        final offset = p['offset'] as int;
+        final data = bytes.sublist(
+          offset,
+          (offset + chunkSize).clamp(0, bytes.length),
+        );
+        return DiaryResponse(
+          200,
+          jsonEncode({
+            'ok': true,
+            'status': 200,
+            'result': {
+              'offset': offset,
+              'byteLength': bytes.length,
+              'sha256': hash,
+              'base64': base64Encode(data),
+              'chunkSha256': sha256.convert(data).toString(),
+            },
+          }),
+        );
+      },
+    );
+    try {
+      final install = AlchemistInstall(f.c.capsules!, api);
+      await expectLater(
+        install.downloadAsset(descriptor),
+        throwsA(
+          isA<AlchemistFailure>().having(
+            (e) => e.code,
+            'code',
+            'DOWNLOAD_RECEIPT_INVALID',
+          ),
+        ),
+      );
+      expect(await f.c.library.repository.list(), isEmpty);
+      expect(
+        await f.db.query(
+          'app_settings',
+          where: 'name LIKE ?',
+          whereArgs: ['alchemist_download_receipt:%'],
+        ),
+        isEmpty,
+      );
+      final sent = chunks;
+      valid = true;
+      final restored = await install.downloadAsset(descriptor);
+      expect(chunks, sent);
+      expect(finals, 2);
+      expect((await sha256.bind(restored.openRead()).first).toString(), hash);
+      expect(
+        (await f.db.query(
+          'app_settings',
+          where: 'name LIKE ?',
+          whereArgs: ['alchemist_download_receipt:%'],
+        )).length,
+        1,
+      );
+    } finally {
+      await f.close();
+    }
+  });
 }

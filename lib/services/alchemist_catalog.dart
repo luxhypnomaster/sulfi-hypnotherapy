@@ -56,7 +56,28 @@ class AlchemistCatalog {
       );
       if (rows.isNotEmpty) {
         final previous = jsonDecode(rows.single['value'] as String);
-        if (previous['_work'] != null) card['_work'] = previous['_work'];
+        final work = previous['_work'];
+        final runner = Zone.current[#alchemistTask];
+        final executing =
+            controller.backgroundWorker ||
+            runner is String && work is Map && runner == work['taskId'];
+        if (!executing &&
+            work is Map &&
+            const [
+              'queued',
+              'preparing',
+              'running',
+              'pausing',
+            ].contains(work['phase']) &&
+            queueRevision(card) !=
+                queueRevision(Map<String, dynamic>.from(previous))) {
+          throw const AlchemistFailure(
+            'Предыдущая редакция ещё передаётся. Новые правки остаются в редакторе.',
+            409,
+            'REVISION_IN_FLIGHT',
+          );
+        }
+        if (work != null) card['_work'] = work;
       }
       if (enqueue) {
         final revision = queueRevision(card), work = card['_work'];
