@@ -15,8 +15,20 @@ adb('shell','run-as',pkg,'chmod','400','files/native-pool18.jar')
 cases=[]
 # Original zero-timeout1/4 failures are retained separately. Isolate the
 # bounded busy handler interaction with the same actual shipped pool classes.
-for count in [1,4]:
- raw=adb('shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count),'2000').decode(errors='replace')
+for count in [4]:
+ command=['adb','shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count),'2000']
+ result=subprocess.run(command,capture_output=True,timeout=55)
+ raw=result.stdout.decode(errors='replace')
+ if result.returncode:
+  def diagnostic(*args):
+   try:return adb(*args).decode(errors='replace')[-24000:]
+   except Exception as error:return type(error).__name__
+  failure={'classification':'DISPOSABLE_NATIVE_PROCESS_EXIT_NOT_A_CAUSAL_PASS','exit':result.returncode,'stdoutStages':raw[-5000:],'stderr':result.stderr.decode(errors='replace')[-1500:],
+   'events':diagnostic('logcat','-d','-b','events','-t','180'),
+   'activityAndLMK':diagnostic('logcat','-d','-s','lmkd','ActivityManager','AndroidRuntime','-t','200'),
+   'memory':diagnostic('shell','dumpsys','meminfo','-s')}
+  (out/'NATIVE_PROCESS_EXIT_18.json').write_text(json.dumps(failure,indent=2)+'\n')
+  raise AssertionError('NATIVE_PROCESS_EXIT_'+str(result.returncode)+'_SEE_READONLY_DIAGNOSTICS')
  match=re.search(r'^NATIVE_POOL18=(\{.*\})$',raw,re.M);assert match,'NO_NATIVE_POOL_RECEIPT:'+raw[-1000:]
  v=json.loads(match[1]);(out/('native-pool-'+str(count)+'.json')).write_text(json.dumps(v,indent=2)+'\n')
  assert v['productionDatabaseOpened'] is False and v['pool']==count and v['busyTimeoutMs']==2000

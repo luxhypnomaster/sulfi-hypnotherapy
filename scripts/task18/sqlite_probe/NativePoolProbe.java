@@ -13,7 +13,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Runs shipped sqflite pool classes from the disposable APK, never owner DBs. */
 public final class NativePoolProbe {
+  static void stage(String name) {
+    System.out.println("NATIVE_POOL18_STAGE=" + name + ":pid=" + Process.myPid());
+    System.out.flush();
+  }
   public static void main(String[] args) throws Exception {
+    stage("MAIN");
     if (args.length != 3 || !args[0].equals("ru.sulfi.sulfi_hypnotherapy.transferprobe")
         || !(Build.HARDWARE.contains("ranchu") || Build.HARDWARE.contains("goldfish"))
         || Process.myUid() < 10000) throw new SecurityException("DISPOSABLE_APP_UID_REQUIRED");
@@ -24,18 +29,23 @@ public final class NativePoolProbe {
     File root = new File("/data/user/0/" + args[0] + "/files");
     if (!root.isDirectory()) throw new SecurityException("EXISTING_DISPOSABLE_FILES_REQUIRED");
     File fixture = File.createTempFile("native-sqlite-lock18-", ".sqlite", root);
+    stage("ISOLATED_FILE_CREATED");
     SQLiteDatabase a = SQLiteDatabase.openOrCreateDatabase(fixture, null);
+    stage("A_OPEN");
     a.execSQL("CREATE TABLE fixture(id INTEGER PRIMARY KEY, value TEXT)");
     SQLiteDatabase b = SQLiteDatabase.openOrCreateDatabase(fixture, null);
+    stage("B_OPEN");
     a.execSQL("PRAGMA busy_timeout=" + busyMs);
     b.execSQL("PRAGMA busy_timeout=" + busyMs);
     int actualBusy;
     try (android.database.Cursor c = b.rawQuery("PRAGMA busy_timeout", null)) { c.moveToFirst(); actualBusy = c.getInt(0); }
+    stage("BUSY_TIMEOUT_READBACK_" + actualBusy);
     List<String> events = Collections.synchronizedList(new ArrayList<>());
     List<String> errors = Collections.synchronizedList(new ArrayList<>());
     Class<?> poolType = Class.forName("com.tekartik.sqflite.DatabaseWorkerPool");
     Class<?> delegate = Class.forName("com.tekartik.sqflite.DatabaseDelegate");
     Class<?> task = Class.forName("com.tekartik.sqflite.DatabaseTask");
+    stage("CLASSES_LOADED");
     Object pool = poolType.getMethod("create", String.class, int.class, int.class)
         .invoke(null, "NativePoolProbe18", count, 0);
     poolType.getMethod("start").invoke(pool);
@@ -54,6 +64,7 @@ public final class NativePoolProbe {
       } catch (Throwable e) { errors.add(e.getClass().getSimpleName()); }
       finally { entered.countDown(); }
     }));
+    stage("A_POSTED");
     if (!entered.await(10, TimeUnit.SECONDS) || !errors.isEmpty()) throw new AssertionError("NO_FIRST_TRANSACTION");
     post.invoke(pool, constructor.newInstance(db, (Runnable)() -> {
       try { events.add("B_WRITE_STARTED"); b.execSQL("INSERT INTO fixture VALUES(2,'writer-b')"); events.add("B_COMMITTED"); }
@@ -67,7 +78,9 @@ public final class NativePoolProbe {
       catch (Throwable e) { errors.add(e.getClass().getSimpleName()); }
       finally { completed.countDown(); }
     }));
+    stage("COMMIT_POSTED");
     boolean finished = completed.await(15, TimeUnit.SECONDS);
+    stage("LATCH_RETURNED_" + finished);
     String integrity = "NOT_RUN_BLOCKED";
     int rows = -1;
     if (finished && errors.isEmpty()) {
