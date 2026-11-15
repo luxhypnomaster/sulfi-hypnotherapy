@@ -354,4 +354,77 @@ void main() {
       await f.close();
     }
   });
+  test('18 APK27 active work converts only to policy wait; explicit same-owner resume preserves IDs/checkpoints', () async {
+    final f = await Fixture15.open();
+    var dispatched = 0;
+    final value = <String, dynamic>{
+      'ownerBinding': 'same',
+      'card': {'title': 'controlled legacy27'},
+      'pending': {
+        'operation': 'catalog.publish',
+        'parameters': {'requestId': 'original27', 'ifMatch': '1'},
+      },
+    };
+    value['_work'] = {
+      'phase': 'running',
+      'stage': 'server_verifying',
+      'ownerBinding': 'same',
+      'taskId': 'a' * 32,
+      'revision': queueRevision(value),
+      'runnerEpoch': 'old27',
+      'bytes': 262144,
+      'totalBytes': 15728640,
+      'attempts': 2,
+      'networkRetries': 1,
+    };
+    final checkpoint = jsonEncode({
+      'ownerBinding': 'same',
+      'sessionId': 'original-session27',
+      'requestId': 'original-upload27',
+      'offset': 262144,
+      'receipt': null,
+    });
+    await f.db.insert('app_settings', {
+      'name': 'alchemist_card:legacy27',
+      'value': jsonEncode(value),
+    });
+    await f.db.insert('app_settings', {
+      'name': 'alchemist_upload:legacy27',
+      'value': checkpoint,
+    });
+    final queue = AlchemistWorkQueue(
+      db: f.db,
+      owner: () => 'same',
+      dispatch: () async {
+        dispatched++;
+      },
+      send: (_, _, _, _, _) async => fail('No UI pump'),
+    );
+    try {
+      await queue.recover();
+      expect(dispatched, 0);
+      expect(queue.rows.single['_work']['phase'], 'waiting_policy');
+      expect(queue.rows.single['_work']['legacyPhase'], 'running');
+      expect(queue.rows.single['_work']['taskId'], 'a' * 32);
+      expect(queue.rows.single['_work']['bytes'], 262144);
+      await queue.enqueue('alchemist_card:legacy27');
+      expect(dispatched, 1);
+      expect(queue.rows.single['_work']['executor'], 'android18');
+      expect(queue.rows.single['_work']['taskId'], 'a' * 32);
+      expect(queue.rows.single['_work']['bytes'], 262144);
+      expect(queue.rows.single['_work']['attempts'], 2);
+      expect(queue.rows.single['pending'], value['pending']);
+      expect(
+        (await f.db.query(
+          'app_settings',
+          where: 'name=?',
+          whereArgs: ['alchemist_upload:legacy27'],
+        )).single['value'],
+        checkpoint,
+      );
+    } finally {
+      queue.dispose();
+      await f.close();
+    }
+  });
 }

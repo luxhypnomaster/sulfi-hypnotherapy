@@ -54,7 +54,7 @@ def expect_inventory(pkg,offline=False,timeout=45):
  until=time.monotonic()+timeout
  while time.monotonic()<until:
   click('READ OFFLINE INVENTORY' if offline else 'READ INVENTORY');time.sleep(1)
-  labels=[n.get('text','') for n in tree()]
+  labels=[(n.get('text') or n.get('content-desc') or '') for n in tree()]
   if any('NATIVE INVENTORY 3 AUDIO / 3 HASH / 1 MODULE / 1 PROGRAM' in x for x in labels):
    if offline or any(x.startswith('complete ') for x in labels):return
   time.sleep(1)
