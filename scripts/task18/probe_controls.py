@@ -1,5 +1,5 @@
 """Actual notification/OS controls over synthetic native tasks; no Google/user data."""
-import json,re,time,sqlite3,tarfile
+import json,re,time,sqlite3,tarfile,subprocess,xml.etree.ElementTree as ET
 from probe_snapshot import snapshot
 
 class NativeControls:
@@ -28,7 +28,13 @@ class NativeControls:
   self.adb('shell','input','keyevent','KEYCODE_WAKEUP');self.adb('shell','wm','dismiss-keyguard')
   self.adb('shell','cmd','statusbar','expand-notifications');time.sleep(1)
   try:
-   for _ in range(4):
+   # Shell command success did not prove an open shade on this OS image.
+   for _ in range(3):
+    ns=self.tree()
+    if any(n.get('resource-id')=='com.android.systemui:id/notification_panel' for n in ns):break
+    self.adb('shell','input','swipe','360','5','360','980','500');time.sleep(2)
+   else:raise AssertionError('NATIVE_NOTIFICATION_SHADE_NOT_ACTUALLY_EXPOSED')
+   for _ in range(6):
     nodes=self.tree()
     if any((n.get('text') or n.get('content-desc') or '').casefold()==label.casefold() for n in nodes):
      self.click(label);return
@@ -41,6 +47,13 @@ class NativeControls:
     if not expand:break
     b=[int(v) for v in re.findall(r'\d+',expand[0]['bounds'] if isinstance(expand[0],dict) else expand[0].get('bounds',''))]
     self.adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2));time.sleep(1)
+   # Keep the actual missing-action window BEFORE finally collapses it.
+   root=ET.Element('hierarchy')
+   for node in nodes:ET.SubElement(root,'observed',dict(node.attrib))
+   (self.out/'notification-action-missing.xml').write_bytes(ET.tostring(root))
+   shot=subprocess.run(['adb','exec-out','screencap','-p'],capture_output=True,timeout=20)
+   if shot.returncode==0:(self.out/'notification-action-missing.png').write_bytes(shot.stdout)
+   (self.out/'notification-native-readback.txt').write_text(self.adb('shell','dumpsys','notification',check=False)[-60000:])
    raise AssertionError('NATIVE_NOTIFICATION_ACTION_NOT_EXPOSED:'+label)
   finally:self.adb('shell','cmd','statusbar','collapse')
  def master_pause_resume(self,pkg):
@@ -84,7 +97,11 @@ class NativeControls:
   resumed=snapshot(pkg);assert resumed['queues'][name]['work']['taskId']==row['work']['taskId']
   self.save('client-network-automatic-recovery',resumed)
   self.notification('Отменить');cancelled,_,cancelrow=self.wait_state(pkg,['cancelled'])
-  self.stable_counter('downloaded');self.save('client-notification-cancelled',cancelled)
+  self.stable_counter('downloaded')
+  # Cancel marks intent immediately; the one in-flight request may still flush.
+  # Observe the durable boundary after quiescence, not an earlier transient copy.
+  cancelled=snapshot(pkg);assert cancelled['queues'][name]['work']['phase']=='cancelled'
+  self.save('client-notification-cancelled',cancelled)
   assert self.stats()['publishedPrograms']==1,'CANCEL_UNPUBLISHED_SERVER_CONTENT'
   generation=self.receipt_generation(pkg);ranges=len(self.stats().get('downloadRanges',[]))
   self.launch(pkg);self.click('READ INVENTORY');time.sleep(1)

@@ -1,0 +1,95 @@
+{
+  "checkedAtUtc": "2026-11-15T12:07:21.766771+00:00",
+  "runs": [
+    {
+      "id": 43704911303,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43704911303",
+      "head_sha": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-15T10:36:35Z",
+      "run_started_at": "2026-11-15T10:36:35Z",
+      "updated_at": "2026-11-15T10:53:04Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43704911357,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43704911357",
+      "head_sha": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-15T10:36:35Z",
+      "run_started_at": "2026-11-15T10:36:35Z",
+      "updated_at": "2026-11-15T10:49:14Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43708103115,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43708103115",
+      "head_sha": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-15T11:16:14Z",
+      "run_started_at": "2026-11-15T11:16:14Z",
+      "updated_at": "2026-11-15T11:38:27Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43708105791,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43708105791",
+      "head_sha": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-15T11:16:16Z",
+      "run_started_at": "2026-11-15T11:16:16Z",
+      "updated_at": "2026-11-15T11:31:45Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43709505162,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43709505162",
+      "head_sha": "a17d2e3d837d3edf0c33322b754327cee4360b50",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-15T11:33:32Z",
+      "run_started_at": "2026-11-15T11:33:32Z",
+      "updated_at": "2026-11-15T11:41:00Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43710239769,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43710239769",
+      "head_sha": "a645655c5a4581cb99e642b26235b2a36655d5d4",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-15T11:42:47Z",
+      "run_started_at": "2026-11-15T11:42:47Z",
+      "updated_at": "2026-11-15T11:48:55Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43710968236,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43710968236",
+      "head_sha": "43999af5d77d3229b9bb3452c69a00591692769a",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-15T11:51:53Z",
+      "run_started_at": "2026-11-15T11:51:53Z",
+      "updated_at": "2026-11-15T11:58:19Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    },
+    {
+      "id": 43711821398,
+      "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43711821398",
+      "head_sha": "67f1deefb943a0c20e140ef6c8cc577bb48bb64e",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-15T12:02:33Z",
+      "run_started_at": "2026-11-15T12:02:33Z",
+      "updated_at": "2026-11-15T12:02:37Z",
+      "resourceMetric": "WALL_CLOCK_ONLY_NOT_BILLING_OR_USER_QUOTA"
+    }
+  ],
+  "quotaPercent": "NOT_ESTIMATED",
+  "limits": "Artifact quota upload failure is observed; billing/user token quota not inferred"
+}
