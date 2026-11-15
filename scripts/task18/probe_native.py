@@ -17,7 +17,7 @@ def click(text,wait=20):
  while time.monotonic()<until:
   nodes=tree()
   for n in nodes:
-   if text in [n.get('text'),n.get('content-desc')] and n.get('enabled')!='false':
+   if text.casefold() in [(n.get('text') or '').casefold(),(n.get('content-desc') or '').casefold()] and n.get('enabled')!='false':
     b=[int(x) for x in re.findall(r'\d+',n.get('bounds',''))];adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2));return
   time.sleep(1)
  raise AssertionError('FIXTURE_UI_BUTTON_NOT_FOUND:'+text)
@@ -38,12 +38,13 @@ def wait_bytes(field,minimum,timeout):
   if v[field]>=minimum:return v
   time.sleep(2)
  raise AssertionError('NO_REMOTE_PROGRESS:'+field+':'+json.dumps(stats()))
-def confirm_ui_destroyed(pkg,expected_pid):
+def confirm_ui_destroyed(pkg,expected_pid,previous_at=0):
  until=time.monotonic()+20
  while time.monotonic()<until:
   raw=adb('shell','run-as',pkg,'cat','files/probe18-ui-destroy.json',check=False)
   try:
    v=json.loads(raw)
+   if v.get('atMs',0)<=previous_at:time.sleep(.5);continue
    assert v['activityDestroyed'] and v['engineDestroyed'] and v['cachedUiEngineAbsent'],'UI_DESTRUCTION_NOT_CONFIRMED'
    assert str(v['pid'])==expected_pid==adb('shell','pidof',pkg).strip(),'PROCESS_CRASH_IS_NOT_PURE_UI_DESTRUCTION'
    (OUT/(pkg.split('.')[-2]+'-ui-destroy-receipt.json')).write_text(json.dumps(v,indent=2))

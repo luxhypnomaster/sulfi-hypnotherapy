@@ -9,7 +9,7 @@ for(const name of ['AtomicStore','Catalog','Access','Transfer','MediaRuntime','M
  vm.runInContext(readFileSync(new URL('../../server/alchemist/src/'+name+'.js',import.meta.url),'utf8'),ctx);
 const sha=x=>createHash('sha256').update(x).digest('hex');
 function canonical(v){if(Array.isArray(v))return '['+v.map(canonical).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}';return JSON.stringify(v);}
-let head=null,n=0,uploaded=0,downloaded=0,verifiedBytes=0; const calls={}; const latency=Number(process.env.PROBE18_LATENCY_MS||0); const sleep=ms=>new Promise(r=>setTimeout(r,ms));const files=new Map(),blobs=new Map();
+let head=null,n=0,uploaded=0,downloaded=0,verifiedBytes=0; const calls={},downloadRanges=[]; const latency=Number(process.env.PROBE18_LATENCY_MS||0); const sleep=ms=>new Promise(r=>setTimeout(r,ms));const files=new Map(),blobs=new Map();
 const io={head:()=>head,read:k=>structuredClone(files.get(k)),writeVerified:v=>{const k='snapshot-'+(++n);files.set(k,structuredClone(v));return k;},setHead:k=>head=k,digest:sha};
 const store=ctx.AlchemistAtomicStore.create(io),services={lock:f=>f(),uuid:()=> 'asset-'+(++n),now:()=>0,encode:b=>Buffer.from(b).toString('base64'),decode:s=>Buffer.from(s,'base64'),digest:sha,canonical};
 const access=ctx.AlchemistAccess.create(store,()=>0);
@@ -19,10 +19,10 @@ const catalog=ctx.AlchemistCatalog.create({store,lock:f=>f(),now:()=>new Date(0)
 const diary=ctx.AlchemistDiary.create(catalog,store,{uuid:services.uuid,now:()=>new Date(0).toISOString()});
 const operations=ctx.AlchemistOperations.create(store,catalog,services,{getProperty:k=>k==='ALCHEMIST_OWNER_SUB'?'owner':null,setProperty:()=>{throw Error('READONLY_HARNESS')}});
 const server=createServer(async(req,res)=>{try{
- if(req.method==='GET'&&req.url==='/stats'){res.end(JSON.stringify({uploaded,downloaded,verifiedBytes,calls,publishedPrograms:store.items().filter(x=>x.state==='published'&&x.type==='template').length,blobs:blobs.size,classification:'CONTROLLED_NATIVE_NO_GOOGLE_NO_GAS'}));return;}
+ if(req.method==='GET'&&req.url==='/stats'){res.end(JSON.stringify({uploaded,downloaded,verifiedBytes,calls,downloadRanges,publishedPrograms:store.items().filter(x=>x.state==='published'&&x.type==='template').length,blobs:blobs.size,classification:'CONTROLLED_NATIVE_NO_GOOGLE_NO_GAS'}));return;}
  if(req.headers['x-controlled-transfer18']!=='fixture-only')throw Object.assign(Error('CONTROLLED_HEADER_REQUIRED'),{status:403});
  let raw='';for await(const part of req)raw+=part;const q=JSON.parse(raw),actor=q.credential?.startsWith('CONTROLLED_OWNER_18_')?{sub:'owner',roles:['owner'],exp:Math.floor(Date.now()/1000)+3600}:q.credential?.startsWith('CONTROLLED_CLIENT_18_')?{sub:'controlled-client',roles:['client'],exp:Math.floor(Date.now()/1000)+3600}:null;
- calls[q.operation]=(calls[q.operation]||0)+1; if(['media.uploadChunk','media.downloadChunk'].includes(q.operation)&&latency)await sleep(latency);
+ calls[q.operation]=(calls[q.operation]||0)+1; if(q.operation==='media.downloadChunk'){downloadRanges.push({assetRevisionId:q.parameters.assetRevisionId,offset:q.parameters.offset,length:q.parameters.length});if(downloadRanges.length>512)downloadRanges.shift();} if(['media.uploadChunk','media.downloadChunk'].includes(q.operation)&&latency)await sleep(latency);
  let result;
  if(q.operation==='test.stats')result={uploaded,downloaded,blobs:blobs.size};
  else if(q.operation==='content.registerManifest')result=manifest.execute(q.operation,actor,q.parameters);
