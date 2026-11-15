@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_delivery:
+        description: 'Append only gated28 files to EXISTING PRIVATE draft; no publish/create/tag/main/Drive/signing'
+        type: boolean
+        default: false
       task18_edition:
         description: 'Native normal27 update gate: both, or only the independently unresolved edition'
         type: choice
@@ -111,7 +115,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task18_reuse_dart_verify != true && inputs.task18_probe != true && inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task18_delivery != true && inputs.task18_reuse_dart_verify != true && inputs.task18_probe != true && inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -1238,3 +1242,38 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TASK18_PAIR_SOURCE: ${{ inputs.task18_pair_source }}
         run: python3 scripts/task18/reuse_dart_verify.py
+
+  delivery18:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_delivery == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: read
+    env:
+      PAIR_SOURCE_SHA: 59c3667a28357767533b25e92661b87d081d7227
+      TASK18_PAIR_SOURCE: 59c3667a28357767533b25e92661b87d081d7227
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Actual passed verify/build and exact unchanged source recipe (no rebuild)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/task18/reuse_dart_verify.py
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task18-apks
+          key: task18-quarantine-pair-59c3667a28357767533b25e92661b87d081d7227
+          fail-on-cache-miss: true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Verify every cached byte/certificate/config before any external append
+        run: bash scripts/task18/verify_pair.sh
+      - name: Append exactly new28 APKs only after six actual native gates; preserve original27 draft assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/task18/deliver_private_pair.py --execute
