@@ -1,0 +1,173 @@
+de8 u0 NavigationBar0}
+    mBottomGestureHost=Window{5635de8 u0 NavigationBar0}
+    mFocusedWindow=Window{1d743f u0 Application Not Responding: com.google.android.apps.nexuslauncher}
+    mTopFullscreenOpaqueWindowState=Window{8fe5c4 u0 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+    mNavBarColorWindowCandidate=Window{1d743f u0 Application Not Responding: com.google.android.apps.nexuslauncher}
+    mNavBarBackgroundWindow=Window{8fe5c4 u0 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+    mLastStatusBarAppearanceRegions=
+      AppearanceRegion{ bounds=[0,0][1080,1920]}
+    mLastLetterboxDetails=
+    mStatusBarBackgroundWindows=
+      Window{8fe5c4 u0 ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+    mTopIsFullscreen=false
+    mForceShowNavigationBarEnabled=false mAllowLockscreenWhenOn=false
+    mRemoteInsetsControllerControlsSystemBars=false
+    mDecorInsetsInfo:
+      ROTATION_0={nonDecorInsets=[0,0][0,63], configInsets=[0,63][0,63], nonDecorFrame=[0,0][1080,1857], configFrame=[0,63][1080,1857]}
+      ROTATION_90={nonDecorInsets=[0,0][0,63], configInsets=[0,63][0,63], nonDecorFrame=[0,0][1920,1017], configFrame=[0,63][1920,1017]}
+      ROTATION_180={nonDecorInsets=[0,0][0,63], configInsets=[0,63][0,63], nonDecorFrame=[0,0][1080,1857], configFrame=[0,63][1080,1857]}
+      ROTATION_270={nonDecorInsets=[0,0][0,63], configInsets=[0,63][0,63], nonDecorFrame=[0,0][1920,1017], configFrame=[0,63][1920,1017]}
+    SystemGestures:
+      mDisplayCutoutTouchableRegionSize=0
+      mSwipeStartThreshold=Rect(63, 63 - 63, 63)
+      mSwipeDistanceThreshold=63
+    Looper state:
+      Looper (android.ui, tid 22) {9a41ab7}
+        (Total messages: 0, polling=true, quitting=false)
+
+  DisplayRotation
+    mCurrentAppOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+    mLastOrientation=-1
+    mRotation=0 mDeferredRotationPauseCount=0
+    mLandscapeRotation=ROTATION_90 mSeascapeRotation=ROTATION_270
+    mPortraitRotation=ROTATION_0 mUpsideDownRotation=ROTATION_180
+    mSupportAutoRotation=true
+    WindowOrientationListener
+      mEnabled=true
+      mCurrentRotation=ROTATION_0
+      mSensorType=null
+      mSensor={Sensor name="Goldfish 3-axis Accelerometer", vendor="The Android Open Source Project", version=1, type=1, maxRange=39.300102, resolution=2.480159E-4, power=3.0, minDelay=10000}
+      mRate=2
+      AccelSensorJudge
+        mProposedRotation=0
+        mPredictedRotation=0
+        mLastFilteredX=0.0
+        mLastFilteredY=9.776321
+        mLastFilteredZ=0.812345
+        mLastFilteredTimestampNanos=156128842612 (22.260626ms ago)
+        mTiltHistory={last: 5.0}
+        mFlat=false
+        mSwinging=false
+        mAccelerating=false
+        mOverhead=false
+        mTouched=false
+        mTiltToleranceConfig=[[-25, 70], [-25, 65], [-25, 60], [-25, 65]]
+
+    mCarDockRotation=-1 mDeskDockRotation=-1
+    mUserRotationMode=USER_ROTATION_FREE mUserRotation=ROTATION_0 mCameraRotationMode=0 mAllowAllRotations=false
+    mDemoHdmiRotation=ROTATION_90 mDemoHdmiRotationLock=false mUndockedHdmiRotation=-1
+    mLidOpenRotation=-1
+    mFixedToUserRotation=false
+
+  InputConsumers:
+    name=recents_animation_input_consumer pid=1109 user=UserHandle{0}
+
+  WindowInsetsStateController
+    InsetsState
+      mDisplayFrame=Rect(0, 0 - 1080, 1920)
+      mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}}}
+      mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=0, center=Point(0, 0)}, RoundedCorner{position=TopRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomLeft, radius=0, center=Point(0, 0)}]}
+      mRoundedCornerFrame=Rect(0, 0 - 0, 0)
+      mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(827, 0 - 1043, 63) rotation=0}
+      mDisplayShape=DisplayShape{ spec=1673867177 displayWidth=1080 displayHeight=1920 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}
+        InsetsSource id=3 type=ime frame=[0,0][0,0] visible=false flags= insetsRoundedCornerFrame=false
+        InsetsSource id=31b20000 type=statusBars frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=31b20005 type=mandatorySystemGestures frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=31b20006 type=tappableElement frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=42f20001 type=navigationBars frame=[0,1857][1080,1920] visible=true flags=SUPPRESS_SCRIM insetsRoundedCornerFrame=false
+        InsetsSource id=42f20004 type=systemGestures frame=[0,0][78,1920] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=42f20005 type=mandatorySystemGestures frame=[0,1836][1080,1920] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=42f20006 type=tappableElement frame=[0,0][0,0] visible=true flags= insetsRoundedCornerFrame=false
+        InsetsSource id=42f20024 type=systemGestures frame=[1002,0][1080,1920] visible=true flags= insetsRoundedCornerFrame=false
+    Control map:
+      Window{eab11d3 u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}:
+        InsetsSourceControl: {3 mType=ime mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0}}
+      Window{1d743f u0 Application Not Responding: com.google.android.apps.nexuslauncher}:
+        InsetsSourceControl: {31b20000 mType=statusBars initiallyVisible mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=63, right=0, bottom=0}}
+        InsetsSourceControl: {42f20001 mType=navigationBars initiallyVisible mSurfacePosition=Point(0, 1794) mInsetsHint=Insets{left=0, top=0, right=0, bottom=63}}
+    InsetsSourceProviders:
+      InsetsSourceProvider
+        mSource=InsetsSource id=42f20024 type=systemGestures frame=[1002,0][1080,1920] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(1002, 0 - 1080, 1920)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5635de8 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=42f20006 type=tappableElement frame=[0,0][0,0] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 0, 0)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5635de8 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=42f20005 type=mandatorySystemGestures frame=[0,1836][1080,1920] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1836 - 1080, 1920)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5635de8 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=42f20004 type=systemGestures frame=[0,0][78,1920] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 78, 1920)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5635de8 u0 NavigationBar0}
+      InsetsSourceProvider
+        mSource=InsetsSource id=42f20001 type=navigationBars frame=[0,1857][1080,1920] visible=true flags=SUPPRESS_SCRIM insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1857 - 1080, 1920)
+        mOverrideFrames={2011=Rect(0, 1794 - 1080, 1920)}
+        mControl=InsetsSourceControl mId=42f20001 mType=navigationBars mLeash=Surface(name=Surface(name=5635de8 NavigationBar0)/@0xfa9373d - animation-leash of insets_animation)/@0x6267b64 mInitiallyVisible=true mSurfacePosition=Point(0, 1794) mInsetsHint=Insets{left=0, top=0, right=0, bottom=63} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{5635de8 u0 NavigationBar0}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=5635de8 NavigationBar0)/@0xfa9373d - animation-leash of insets_animation)/@0x6267b64
+        mControlTarget=Window{1d743f u0 Application Not Responding: com.google.android.apps.nexuslauncher}
+      InsetsSourceProvider
+        mSource=InsetsSource id=31b20006 type=tappableElement frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 1080, 63)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{cd883a3 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource id=31b20005 type=mandatorySystemGestures frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 1080, 63)
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{cd883a3 u0 StatusBar}
+      InsetsSourceProvider
+        mSource=InsetsSource id=31b20000 type=statusBars frame=[0,0][1080,63] visible=true flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 0 - 1080, 63)
+        mControl=InsetsSourceControl mId=31b20000 mType=statusBars mLeash=Surface(name=Surface(name=cd883a3 StatusBar)/@0x9e5b6ff - animation-leash of insets_animation)/@0xb5331cd mInitiallyVisible=true mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=63, right=0, bottom=0} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{cd883a3 u0 StatusBar}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=cd883a3 StatusBar)/@0x9e5b6ff - animation-leash of insets_animation)/@0xb5331cd
+        mControlTarget=Window{1d743f u0 Application Not Responding: com.google.android.apps.nexuslauncher}
+      ImeInsetsSourceProvider
+        mSource=InsetsSource id=3 type=ime frame=[0,0][0,0] visible=false flags= insetsRoundedCornerFrame=false
+        mSourceFrame=Rect(0, 1794 - 1080, 1920)
+        mControl=InsetsSourceControl mId=3 mType=ime mLeash=Surface(name=Surface(name=2d1f190 InputMethod)/@0x468ca8e - animation-leash of insets_animation)/@0xd26da82 mInitiallyVisible=false mSurfacePosition=Point(0, 0) mInsetsHint=Insets{left=0, top=0, right=0, bottom=0} mSkipAnimationOnce=false
+        mIsLeashReadyForDispatching=true
+        mWindowContainer=Window{2d1f190 u0 InputMethod}
+        mAdapter=ControlAdapter mCapturedLeash=Surface(name=Surface(name=2d1f190 InputMethod)/@0x468ca8e - animation-leash of insets_animation)/@0xd26da82
+        mControlTarget=Window{eab11d3 u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+        mImeShowing=false
+
+  KeyguardController:
+    mKeyguardShowing=false
+    mAodShowing=false
+    mKeyguardGoingAway=false
+   KeyguardShowing=false AodShowing=false KeyguardGoingAway=false DismissalRequested=false  Occluded=false DismissingKeyguardActivity=null TurnScreenOnActivity=null at display=0
+    mDismissalRequested=false
+
+  LockTaskController:
+    mLockTaskModeState=NONE
+    mLockTaskModeTasks=
+    mLockTaskPackages (userId:packages)=
+
+  mCurTaskIdForUser={0=8}
+  mUserRootTaskInFront={}
+  mVisibilityTransactionDepth=0
+  isHomeRecentsComponent=true
+  mNoHistoryActivities=[]
+
+  TaskOrganizerController:
+      android.window.ITaskOrganizer$Stub$Proxy@d944314 uid=10168:
+        (fullscreen) Task{238218a #1 type=home}
+        (fullscreen) Task{75aea80 #2 type=undefined}
+        (multi-window) Task{42908b9 #3 type=undefined}
+        (multi-window) Task{e3744fe #4 type=undefined}
+        (fullscreen) Task{474524a #8 type=standard I=ru.sulfi.sulfi_hypnotherapy.transferprobe/ru.sulfi.sulfi_hypnotherapy.MainActivity}
+
+  VisibleActivityProcess:[ ProcessRecord{9a1c9f8 4176:ru.sulfi.sulfi_hypnotherapy.transferprobe/u0a193}]
+  NumNonAppVisibleWindowUidMap:[ 10168:2 1000:1]
