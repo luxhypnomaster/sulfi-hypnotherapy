@@ -1,6 +1,10 @@
 // Disposable Android/real TCP test target. NO real Google account/token/GAS.
 // Not imported by lib/main.dart; not included in either shipping candidate.
 import 'dart:async';
+import 'dart:convert';
+
+import 'legacy_queue_native.dart';
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -159,6 +163,27 @@ class _Controlled18State extends State<Controlled18> {
       await c!.cloudQueue.refresh();
       if (mounted) setState(() {});
     });
+  }
+
+  Future<void> legacyQueueCheck() async {
+    if (busy) return;
+    setState(() => busy = true);
+    try {
+      await initialize();
+      final root = c!.library.directory.parent;
+      final result = await checkLegacyQueueNative18(
+        c!.capsules!.database,
+        root,
+        c!.transferOwner!,
+      );
+      await File(p.join(root.path, 'native-legacy-queue18.json'))
+          .writeAsString('${jsonEncode(result)}\n', flush: true);
+      if (mounted) setState(() => message = 'NATIVE LEGACY QUEUE CHECK PASS');
+    } catch (e) {
+      if (mounted) setState(() => message = 'LEGACY CHECK FAILED: $e');
+    } finally {
+      if (mounted) setState(() => busy = false);
+    }
   }
 
   Future<void> seed() async {
@@ -357,6 +382,10 @@ class _Controlled18State extends State<Controlled18> {
           FilledButton(
             onPressed: busy ? null : () => action(false, destroy: true),
             child: const Text('DOWNLOAD AND DESTROY UI'),
+          ),
+          TextButton(
+            onPressed: busy ? null : legacyQueueCheck,
+            child: const Text('RUN LEGACY QUEUE CHECK'),
           ),
           TextButton(onPressed: inventory, child: const Text('READ INVENTORY')),
           TextButton(
