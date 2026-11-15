@@ -8,6 +8,11 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_edition:
+        description: 'Native normal27 update gate: both, or only the independently unresolved edition'
+        type: choice
+        options: ['both', 'master', 'client']
+        default: 'both'
       task18_pair_source:
         description: 'Optional exact already-built Task18 candidate SHA; guarded actual CI/source equality, native-only rerun, no rebuild'
         type: string
@@ -1106,15 +1111,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - edition: master
-            baseline: 27
-            asset: '748058133'
-            sha: 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb
-          - edition: client
-            baseline: 27
-            asset: '748058137'
-            sha: 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46
+        edition: ${{ fromJSON(inputs.task18_edition == 'both' && '["master","client"]' || format('["{0}"]', inputs.task18_edition)) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     permissions:
@@ -1124,7 +1121,7 @@ jobs:
       PAIR_SOURCE_SHA: ${{ inputs.task18_pair_source || github.sha }}
       TASK18_APK_SOURCE: ${{ inputs.task18_pair_source || github.sha }}
       TASK18_EDITION: ${{ matrix.edition }}
-      TASK18_BASELINE: ${{ matrix.baseline }}
+      TASK18_BASELINE: '27'
       TASK17_EMULATOR_PIN: 37.2.12
       TASK17_PROCESS_FORENSIC: true
     steps:
@@ -1153,8 +1150,8 @@ jobs:
       - name: Verify candidate and baseline bytes; build disposable UI probe
         env:
           GH_TOKEN: ${{ github.token }}
-          BASE_ASSET: ${{ matrix.asset }}
-          BASE_SHA: ${{ matrix.sha }}
+          BASE_ASSET: ${{ matrix.edition == 'master' && '748058133' || '748058137' }}
+          BASE_SHA: ${{ matrix.edition == 'master' && '2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb' || '8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46' }}
         run: |
           bash scripts/task18/verify_pair.sh
           cp "$RUNNER_TEMP/task18-baseline27/$TASK18_EDITION$TASK18_BASELINE.apk" "$RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk"

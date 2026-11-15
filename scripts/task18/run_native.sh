@@ -12,6 +12,7 @@ fi
 native_status=0
 python3 scripts/task18/native_upgrade.py || native_status=$?
 if [ "$native_status" -ne 0 ]; then
+  python3 scripts/task18/emulator_crash_metadata.py || true
   echo TASK18_HOST_FAILURE_DIAGNOSTICS
   df -Pk "$RUNNER_TEMP"
   free -m

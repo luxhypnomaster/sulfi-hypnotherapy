@@ -6,7 +6,7 @@ receipts=[]
 with zipfile.ZipFile(args.logs) as z:
  for job in z.namelist():
   if '/' in job or not job.endswith('.txt'):continue # root logs only, not duplicated steps
-  scope='probe' if re.search(r'\d+_probe18\.txt$',job) else 'master' if 'native18 (master,' in job else 'client' if 'native18 (client,' in job else None
+  scope='probe' if re.search(r'\d+_probe18\.txt$',job) else 'master' if 'native18 (master' in job else 'client' if 'native18 (client' in job else None
   if scope is None:continue
   metadata={};chunks={};totals={}
   for raw in z.read(job).decode(errors='replace').splitlines():
