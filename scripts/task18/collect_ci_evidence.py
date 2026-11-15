@@ -28,7 +28,7 @@ with zipfile.ZipFile(args.logs) as z:
   for name,v in metadata.items():
    assert re.fullmatch(r'[A-Za-z0-9_.-]{1,150}',name),'UNSAFE_EVIDENCE_NAME'
    indexes=sorted(i for (n,i) in chunks if n==name)
-   assert indexes and indexes==list(range(len(indexes))),'MISSING_CHUNK:'+name
+   assert (indexes or v.get('bytes')==0) and indexes==list(range(len(indexes))),'MISSING_CHUNK:'+name
    if name in totals:
     assert len(indexes)==totals[name],'INCOMPLETE_EVIDENCE:'+name
     data=base64.b64decode(''.join(chunks[name,i] for i in indexes),validate=True)

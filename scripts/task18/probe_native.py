@@ -70,6 +70,28 @@ def native_audio_active(pkg):
    (OUT/'client-native-local-audio.txt').write_text('\n'.join(lines));return True
   time.sleep(.5)
  return False
+def system_ui_preflight():
+ # Run before either fixture is installed/launched. sys.boot_completed alone
+ # did not prove SystemUI was interactive: probe6 had an external modal ANR.
+ adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard')
+ adb('shell','cmd','statusbar','expand-notifications');time.sleep(2)
+ adb('shell','cmd','statusbar','collapse')
+ until=time.monotonic()+90;stable=0;waited=False;events=[]
+ while time.monotonic()<until:
+  nodes=tree();labels=[n.get('text') or n.get('content-desc') or '' for n in nodes]
+  anr=next((v for v in labels if "isn't responding" in v),None)
+  if anr:
+   shot('system-ui-preflight-anr')
+   assert anr in ["System UI isn't responding","Pixel Launcher isn't responding"], 'NON_INFRASTRUCTURE_ANR_STOP:'+anr
+   assert not waited,'REPEATED_SYSTEM_UI_ANR_PREFLIGHT_BLOCKED'
+   click('Wait');waited=True;stable=0;events.append({'externalANR':anr,'action':'Wait_ONCE_BEFORE_FIXTURE_START'})
+  elif nodes:
+   stable+=1
+   if stable>=3:
+    (OUT/'system-ui-preflight.json').write_text(json.dumps({'status':'INTERACTIVE_3_OBSERVATIONS','events':events,'noFixtureAppStarted':True},indent=2));return
+  time.sleep(2)
+ raise AssertionError('SYSTEM_UI_NOT_INTERACTIVE_BEFORE_FIXTURE_START')
+
 def launch(pkg):
  (OUT/'latest-launch.txt').write_text(adb('shell','am','start','-W','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity'))
  until=time.monotonic()+60
@@ -84,6 +106,7 @@ try:
  adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
  (OUT/'display-preflight.txt').write_text(adb('shell','wm','size')+adb('shell','wm','density'))
  adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
+ system_ui_preflight()
  packages={e:'ru.sulfi.sulfi_hypnotherapy'+('.clienttest' if e=='client' else '')+'.transferprobe' for e in ['master','client']}
  for e,pkg in packages.items():
   adb('install','-r','-t',str(ROOT/(e+'.apk')));adb('shell','pm','grant',pkg,'android.permission.POST_NOTIFICATIONS',check=False)
