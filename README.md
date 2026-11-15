@@ -1,6 +1,6 @@
-# №18 — P0: полноценная фоновая передача MASTER и CLIENT
+# №18 — P0: фоновая передача MASTER и CLIENT
 
-[ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor реализованы: controlled API34 (11) и API36 (10) PASS, CLIENT27→28 (13) PASS. MASTER upgrade/API33 recovery/API35 SQLite остаются открытыми native gates; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.
+[ТЗ](docs/task18/TASK_RU.md) · [Результат](reports/task18/RESULT_18.md) · [Контрольная точка](reports/task18/CHECKPOINT_18.json). Отдельная ветка `feat/task18-native-background-transfer`, draft PR49 поверх **необъединённого PR48**. Текущий исходник APK28 `de408f1`:489Flutter/3CLIENT/47+24Node PASS; full controlled API34 11PASS, реальное OS cold-process recovery6,98sec; CLIENT normal27→28 13PASS. MASTER update/API33/35/36 gates завершаются, до них APK не выдаётся. Проверки с настоящими Google-аккаунтами и физическими телефонами NOT_RUN. Main/GAS6/OAuth/ACL/signing/данные27 не менялись.
 
 # №17 — native PASS, APK27 для приёмки
 

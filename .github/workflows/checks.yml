@@ -1251,8 +1251,8 @@ jobs:
       contents: write
       actions: read
     env:
-      PAIR_SOURCE_SHA: 59c3667a28357767533b25e92661b87d081d7227
-      TASK18_PAIR_SOURCE: 59c3667a28357767533b25e92661b87d081d7227
+      PAIR_SOURCE_SHA: de408f1cae08fce16069a701d147a0b1064053ba
+      TASK18_PAIR_SOURCE: de408f1cae08fce16069a701d147a0b1064053ba
     steps:
       - uses: actions/checkout@v4
         with:
@@ -1264,7 +1264,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/task18-apks
-          key: task18-quarantine-pair-59c3667a28357767533b25e92661b87d081d7227
+          key: task18-quarantine-pair-de408f1cae08fce16069a701d147a0b1064053ba
           fail-on-cache-miss: true
       - uses: actions/setup-java@v4
         with:
@@ -1273,6 +1273,8 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Verify every cached byte/certificate/config before any external append
         run: bash scripts/task18/verify_pair.sh
+      - name: Reject empty, mixed-source, tampered or incomplete delivery receipts
+        run: python3 scripts/task18/test_delivery_gate.py
       - name: Append exactly new28 APKs only after six actual native gates; preserve original27 draft assets
         env:
           GH_TOKEN: ${{ github.token }}

@@ -31,3 +31,7 @@ SQLite: фактические pool1/43736599516 и pool4/43737027095 на nativ
 
 ## a894 cold-process gate: actual cause boundary
 API34/43742074940: oldPID2942, no newPID for660sec; uploaded2621440 and verified0. Both1801(original nownon-UIJ) and1802persistentwatchdog Ready=true/notpending/notactive, network100validated, no newworker/bootstrap/DBopen occurred. This proves scheduling did not restart the process in the test window; it does not indicate corruptDB or failedSQLite recovery. New standardconditionalJobScheduler deadline (delay+10sec onlyif currentnetworkpolicy allows) addresses batchedreadyregularjobs. Crashwatchdog2min onlywhile active; regularrecoveryrun bounded8min, OSstop/quotas stillauthoritative. Offline/metered waits do not get deadlinepolling; lease rechecksactualnetwork beforeeveryHTTP and startupnetworkfailures becomeWAITING_NETWORK. New runtime stillunverified: no issuea894.
+
+## Текущий DE408: подтверждение исправления cold-recovery
+
+43744948169 API34 full SUCCESS11: реальный новый PID3205 после SIGKILL PID2975 за6,98sec, прежние task/request/session/source SHA/offset и2новых уникальных чанка. Никакого UI или force-run в cold-case. Это проверяет conditional-deadline реализацию на Android14; не гарантирует старт вопреки Force Stop/OS quota/OEM. Fullverify текущего исходника489Flutter PASS. CLIENT normal27→28 13PASS. MASTER API34 QEMU SIGSEGV до update — отдельная инфраструктурная ошибка без OOM; current-source native rerouteAPI35 ещё должен завершиться.

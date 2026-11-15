@@ -3,109 +3,46 @@
   "branch": "feat/task18-native-background-transfer",
   "draftPR": 49,
   "basePR48": "UNMERGED",
-  "sourceAPK28": "59c3667a28357767533b25e92661b87d081d7227",
+  "sourceAPK28": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "driver": "e430e561c604098388d65a2658b5cae22670c2fa",
   "mainPreserved": "b88637a105b2182c7b836311ebb3de7ad037b08f",
-  "fullDartVerify": {
-    "run": 43704911303,
-    "source": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
-    "job": "verify",
-    "conclusion": "success",
-    "passedFlutter": 485,
-    "failedFlutter": 0,
-    "scope": "HISTORICAL_BEFORE_NEW_FGS_DART_CHANGE_REUSE_NOW_INVALID"
+  "fullVerifyRun": 43744944796,
+  "fullVerifyJob": "SUCCESS",
+  "flutter": 489,
+  "clientFlutter": 3,
+  "node": [
+    47,
+    24
+  ],
+  "clientUpgrade": {
+    "run": 43744944796,
+    "cases": 13,
+    "status": "PASS"
   },
-  "nativeCandidateAndUpgrade": {
-    "run": 43708103115,
-    "conclusion": "success",
-    "masterCases": 14,
-    "clientCases": 12,
-    "independentManifestReadbacks": 3,
-    "scope": "LOCAL_UI_DATA_NOT_GOOGLE"
+  "api34": {
+    "run": 43744948169,
+    "cases": 11,
+    "status": "PASS",
+    "coldRecoverySeconds": 6.98
   },
-  "currentControlledProbe": {
-    "run": 43730572606,
-    "driver": "102add21f8825d1d377daaeed21adfb20bb671b1",
-    "appSource": "59c3667a28357767533b25e92661b87d081d7227",
-    "statusAtCheckpoint": "PASS_API34_11"
+  "legacyConversion": {
+    "run": 43764140442,
+    "status": "PASS_BOTH_CONTROLLED"
   },
-  "delivery": "BLOCKED_NEW_EXACT_SOURCE_NATIVE_GATES_REQUIRED",
+  "activeRuns": {
+    "masterUpgrade35": 43764129343,
+    "full33": 43764132106,
+    "full35": 43764134857,
+    "full36": 43764137702
+  },
+  "delivery": "BLOCKED_UNTIL_CURRENT_SOURCE_ALL_SIX_GATES_PASS",
   "GAS": "EXISTING6_UNCHANGED",
   "OAuthACLSigning": "UNCHANGED",
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Commit new scheduling/network gate and run fresh full/candidate + API34 process gate first",
-    "Do not issue a894 despite other passes; no newPID means no DB/bootstrap was attempted in failed case",
-    "After new API34 passes reuse exact new fixture for33/35/36/legacy; all signed-pair native upgrades required current source",
-    "Never combine receipts from different source to bypass six delivery gates",
-    "Keep GAS6/main/OAuth/ACL/signing/userdata preserved; update same private Drive report IDs"
-  ],
-  "historicalCeaPair": "SUPERSEDED_DO_NOT_ISSUE",
-  "currentNativeSafety": {
-    "run": 43730982434,
-    "source": "59c3667a28357767533b25e92661b87d081d7227",
-    "driver": "4268cbf9dbf63ce9a54237440f0b671a3cca5d59",
-    "mode": "CACHED_NO_REBUILD",
-    "statusAtCheckpoint": "CLIENT13_PASS_MASTER_PREUPDATE_BLOCKED"
-  },
-  "nativeLegacyConversion": {
-    "run": 43715411268,
-    "status": "PASS_BOTH_CONTROLLED_NATIVE_SQLITE",
-    "Google": "NOT_RUN"
-  },
-  "candidate59": {
-    "run": 43715408673,
-    "candidateJob": "SUCCESS",
-    "upgradeJobs": "BLOCKED_BEFORE_BASELINE_SYSTEM_UI_ANR"
-  },
-  "activeRuns": {},
-  "api36": {
-    "run": 43732895132,
-    "status": "PASS10_CONTROLLED"
-  },
-  "api35": {
-    "run": 43732892168,
-    "status": "FAIL_SQLITE_LOCKS_HYPOTHESIS_UNCONFIRMED"
-  },
-  "sourceCode": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
-  "existingPair59": "SUPERSEDED_QUARANTINE_NEVER_ISSUE",
-  "targetedNewTests": {
-    "foregroundRetry": 4,
-    "localAnalyzer": "PASS"
-  },
-  "newForegroundFix": "CODE_TARGETED_PASS_NATIVE_NOT_RUN",
-  "sqliteDiagnosis": "NATIVE_SOURCE_OVERLAY_TWO_COMMITS_ROWS2_INTEGRITY_OK; default-timeout assertion made run43739426806 overallFAIL; source promoted, real-app regression pending",
-  "candidateSourcePending": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
-  "schedulerJVMInvariants": 5,
-  "vendorStorageGuard": "ORIGINAL16G_SHA_UNCHANGED",
-  "existingPairA894": "QUARANTINED_COLD_RECOVERY34_FAILED_NO_ISSUE",
-  "currentSourceState": "NEW_CONDITIONAL_DEADLINE_2MIN_WATCHDOG_8MIN_BUDGET_AND_NETWORK_GATE_NOT_YET_BUILT",
-  "a894Results": {
-    "fullAndNormalUpgrades": {
-      "run": 43740142417,
-      "status": "SUCCESS",
-      "masterCases": 15,
-      "clientCases": 13
-    },
-    "api33": {
-      "run": 43742072087,
-      "status": "SUCCESS10"
-    },
-    "api35": {
-      "run": 43740145687,
-      "status": "SUCCESS10"
-    },
-    "api36": {
-      "run": 43742077665,
-      "status": "SUCCESS10"
-    },
-    "legacy": {
-      "run": 43742080443,
-      "status": "SUCCESS_BOTH"
-    },
-    "api34": {
-      "run": 43742074940,
-      "status": "FAIL_NO_NEW_PID660SEC_OS_JOBS_READY_NOT_STARTED"
-    }
-  }
+    "Read actual active runs; collect SHA-verified evidence, never repeat blindly",
+    "If six exact-source gates pass, append checked pair only to existing private draft; no public release or Drive APK",
+    "Update existing owner-only Drive reports and PR49, preserve original27"
+  ]
 }

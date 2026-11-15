@@ -34,3 +34,9 @@ G0 завершён до implementation. Контролируемый review: na
 
 ## Conditional recovery deadline after native a894 cold-failure
 An OS-owned persistent2minute watchdog exists onlywhile actual transfers are active. A normalreadyjob may otherwise remain batched afterprocessdeath. If networkpolicy currentlyallows, standardoverrideDeadline=minimumLatency+10sec bounds normalbatch eligibility; Androidmaystilldefer underquotas/restriction/stoppedstate. Network/unmetered policy is rechecked by the worker beforeHTTP because deadlinecanoverride jobconstraints. Offline/metered policywait has nodeadline, hence no endlessdeadlinetimerpoll. Recoveryrun has8mincooperativebudget belowordinary10minwindow; OSstopcancomeearlier and preserves checkpoints. Nonowningwatchdog cannotstop/pause duplicateanexecutor. This is not expedited/FGS-start-from-background, force-run, exactalarm or force-stopbypass. Native/source tests mustverify currentbytes beforeissuance.
+
+## Проверка текущего исполнения и короткой сети
+
+API24–33 уже запущенный пользователем dataSync FGS сохраняет максимум90sec ожидания краткого network retry, выполняя его только в durable due time. Ручная пауза/cancel/auth/policy/чужой owner исключены; обычный regular JobService не получает этого продления. Idle wait прерывается stop/control. Нет дополнительных HTTP до due time.
+
+SQLite остаётся однопоточным: native SQL scheduler откладывает чужую connection, пока текущая transaction владеет thread; COMMIT/ROLLBACK/close освобождают владельца. Это внутреннее упорядочение SQL, не вторая transfer queue. Отсутствует изменение SQL schema, timeout, WAL или реальных данных. Integrity/upgrade/background проходят отдельные native gates.
