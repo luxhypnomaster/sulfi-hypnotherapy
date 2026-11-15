@@ -1,0 +1,32 @@
+[
+  {
+    "job": "0_native18 (client).txt",
+    "path": "client/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 207719,
+    "sha256": "06b6e9340f53edf13a70f5e6a7b21bb53783ba7a4ad582f45be02079e748a547"
+  },
+  {
+    "job": "0_native18 (client).txt",
+    "path": "client/25-before-upgrade.png",
+    "bytes": 803351,
+    "sha256": "874cf96441e2066e87b0bd594396f6e81e4328b1ac148d25f1ef1331f9205582"
+  },
+  {
+    "job": "0_native18 (client).txt",
+    "path": "client/26-library.png",
+    "bytes": 60960,
+    "sha256": "0a9e004919d719e8a3eac252b3f426ab57e142704c88a4f7a15bad12bf65aaf2"
+  },
+  {
+    "job": "0_native18 (client).txt",
+    "path": "client/26-modules.png",
+    "bytes": 911640,
+    "sha256": "970d43e6fc6317be8f00819e36eae5dd7602a692d613b4ba2f2ab298cb183038"
+  },
+  {
+    "job": "1_native18 (master).txt",
+    "path": "master/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 36771,
+    "sha256": "33319f81dc1339f069f011f5b3bc686e88f8f7e39b5ab39ba10a6406e39d869f"
+  }
+]

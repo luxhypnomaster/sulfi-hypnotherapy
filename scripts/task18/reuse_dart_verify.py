@@ -1,6 +1,6 @@
 """Reuse only actually passed unchanged Dart/server inputs; native stays gated."""
 import base64,hashlib,json,os,pathlib,re,subprocess
-REPO='luxhypnomaster/sulfi-hypnotherapy';BASE='19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03';RUN=43704911303
+REPO='luxhypnomaster/sulfi-hypnotherapy';BASE='de408f1cae08fce16069a701d147a0b1064053ba';RUN=43744944796
 assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs/heads/feat/task18-native-background-transfer'
 def api(path):return json.loads(subprocess.check_output(['gh','api','repos/'+REPO+'/'+path],text=True))
 r=api('actions/runs/'+str(RUN));assert r['head_sha']==BASE and r['status']=='completed'

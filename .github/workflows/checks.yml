@@ -39,7 +39,7 @@ on:
         type: boolean
         default: false
       task18_api:
-        description: 'Android probe API; start34, then policy coverage35/36 only after evidence'
+        description: 'Task18 native/probe emulator API; exact APK bytes and all criteria unchanged'
         type: choice
         options: ['33', '34', '35', '36']
         default: '34'
@@ -1168,7 +1168,7 @@ jobs:
       - name: UI-created native baseline to28 and cold data verification
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: ${{ inputs.task18_api }}
           arch: x86_64
           target: default
           profile: pixel_2
