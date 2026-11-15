@@ -12,7 +12,9 @@ def tree():
  raw=adb('shell','am','instrument','-w','-e','op','dump','org.alchemist.p0probe/.Probe')
  (OUT/'latest-instrumentation.txt').write_text(raw[-5000:])
  m=re.search(r'INSTRUMENTATION_RESULT: payload=([^\s]+)',raw)
- return list(ET.fromstring(base64.b64decode(m[1])).iter('node')) if m else []
+ if not m:return []
+ xml=base64.b64decode(m[1]);(OUT/'latest-window.xml').write_bytes(xml)
+ return list(ET.fromstring(xml).iter('node'))
 def click(text,wait=20):
  until=time.monotonic()+wait
  while time.monotonic()<until:
@@ -70,12 +72,26 @@ def native_audio_active(pkg):
    (OUT/'client-native-local-audio.txt').write_text('\n'.join(lines));return True
   time.sleep(.5)
  return False
+def window_focus():
+ raw=adb('shell','dumpsys','window','windows')
+ lines=[x.strip() for x in raw.splitlines() if 'mCurrentFocus=' in x]
+ (OUT/'latest-window-focus.txt').write_text('\n'.join(lines))
+ return ' '.join(lines)
+def collapse_system_shade():
+ # cmd statusbar collapse returned success in probe7 while the actual
+ # NotificationShade stayed foreground. Observe focus before any physical Back.
+ for _ in range(3):
+  focus=window_focus()
+  if 'NotificationShade' not in focus:return focus
+  adb('shell','input','keyevent','KEYCODE_BACK');time.sleep(2)
+ raise AssertionError('SYSTEM_NOTIFICATION_SHADE_DID_NOT_CLOSE')
 def system_ui_preflight():
  # Run before either fixture is installed/launched. sys.boot_completed alone
  # did not prove SystemUI was interactive: probe6 had an external modal ANR.
  adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard')
  adb('shell','cmd','statusbar','expand-notifications');time.sleep(2)
- adb('shell','cmd','statusbar','collapse')
+ adb('shell','cmd','statusbar','collapse');collapse_system_shade()
+ adb('shell','input','keyevent','KEYCODE_HOME')
  until=time.monotonic()+90;stable=0;waited=False;events=[]
  while time.monotonic()<until:
   nodes=tree();labels=[n.get('text') or n.get('content-desc') or '' for n in nodes]
@@ -85,14 +101,15 @@ def system_ui_preflight():
    assert anr in ["System UI isn't responding","Pixel Launcher isn't responding"], 'NON_INFRASTRUCTURE_ANR_STOP:'+anr
    assert not waited,'REPEATED_SYSTEM_UI_ANR_PREFLIGHT_BLOCKED'
    click('Wait');waited=True;stable=0;events.append({'externalANR':anr,'action':'Wait_ONCE_BEFORE_FIXTURE_START'})
-  elif nodes:
+  elif nodes and 'NotificationShade' not in collapse_system_shade() and any('launcher' in (n.get('resource-id') or '').lower() for n in nodes):
    stable+=1
    if stable>=3:
-    (OUT/'system-ui-preflight.json').write_text(json.dumps({'status':'INTERACTIVE_3_OBSERVATIONS','events':events,'noFixtureAppStarted':True},indent=2));return
+    (OUT/'system-ui-preflight.json').write_text(json.dumps({'status':'COLLAPSED_SHADE_AND_LAUNCHER_3_OBSERVATIONS','events':events,'noFixtureAppStarted':True},indent=2));return
   time.sleep(2)
  raise AssertionError('SYSTEM_UI_NOT_INTERACTIVE_BEFORE_FIXTURE_START')
 
 def launch(pkg):
+ adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');collapse_system_shade()
  (OUT/'latest-launch.txt').write_text(adb('shell','am','start','-W','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity'))
  until=time.monotonic()+60
  while time.monotonic()<until:
