@@ -1,0 +1,96 @@
+{
+  "uploadedSource": "f231542074618788bc77ab88605d21244da15bb0",
+  "scope": "REPORT_FILE_BYTES_AND_PERMISSIONS_ONLY_NOT_APP_QA",
+  "files": [
+    {
+      "name": "RESULT_18.md",
+      "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+      "bytes": 3917,
+      "sha256": "d044e92e01f89250f8d7a28c1edfc8866b78f5640ba497fd3a5a632d90766769",
+      "expectedSHA256": "d044e92e01f89250f8d7a28c1edfc8866b78f5640ba497fd3a5a632d90766769",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "TESTS_18.md",
+      "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+      "bytes": 6015,
+      "sha256": "8ed7576f112cf1bc83154bc117af241d6a9da3cdee182b967389fe8b95daa0ae",
+      "expectedSHA256": "8ed7576f112cf1bc83154bc117af241d6a9da3cdee182b967389fe8b95daa0ae",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+      "bytes": 11108,
+      "sha256": "efbee965f8f35df826c47a7581a9faaa6c6b60eb675d0427616f1bb4fdd782b9",
+      "expectedSHA256": "efbee965f8f35df826c47a7581a9faaa6c6b60eb675d0427616f1bb4fdd782b9",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "ACCEPTANCE_18.csv",
+      "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+      "bytes": 8747,
+      "sha256": "964084eabdf5b2ea796977dcdc79dd3ba61d14f56d5351d3b0bef1b2a1f78507",
+      "expectedSHA256": "964084eabdf5b2ea796977dcdc79dd3ba61d14f56d5351d3b0bef1b2a1f78507",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "CHANGES_18.md",
+      "id": "1xtvrS5opmZpmrAZFPdIwf4qY1Y6wFc5r",
+      "bytes": 3155,
+      "sha256": "101abafeba1f38e89a5454116448bf3a97ae71ede02e31421ecab1f21912f73c",
+      "expectedSHA256": "101abafeba1f38e89a5454116448bf3a97ae71ede02e31421ecab1f21912f73c",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "MIGRATION_18.md",
+      "id": "13DMcEVynh4DlwoJePRtMhKfthj8H5mwt",
+      "bytes": 2636,
+      "sha256": "4a4a82685357bdd32839dc70026c651a5b5c4d565ff86780b6f6028bcba7aae4",
+      "expectedSHA256": "4a4a82685357bdd32839dc70026c651a5b5c4d565ff86780b6f6028bcba7aae4",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "PERFORMANCE_18.md",
+      "id": "1xEKoNiyXeDGrtiIVUSolDm1xS9Jg2T1G",
+      "bytes": 2583,
+      "sha256": "793bd830204d524199808e7cdb272ccf292e7a8e282fd9faa6df0c9cf701a7c7",
+      "expectedSHA256": "793bd830204d524199808e7cdb272ccf292e7a8e282fd9faa6df0c9cf701a7c7",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "PHONE_QA_18.md",
+      "id": "1zgOmZ-pLuQZiARuhu1rEfzgnV6PAGetG",
+      "bytes": 1876,
+      "sha256": "a8ecdbacb4ffa7a19e8101bdefcd12bf455110091dbd02d03912642db62882a7",
+      "expectedSHA256": "a8ecdbacb4ffa7a19e8101bdefcd12bf455110091dbd02d03912642db62882a7",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    },
+    {
+      "name": "SECURITY_18.md",
+      "id": "1-jRfpnX_kJA7DPrCb0v_HBTyT4gGmeoj",
+      "bytes": 2521,
+      "sha256": "f00574c22bb82f8e99e44695c5a462f4a27c8ac09c22cb7c1c71800e690064cf",
+      "expectedSHA256": "f00574c22bb82f8e99e44695c5a462f4a27c8ac09c22cb7c1c71800e690064cf",
+      "ownerOnly": true,
+      "parentVerified": true,
+      "status": "PASS_READBACK"
+    }
+  ]
+}
