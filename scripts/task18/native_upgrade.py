@@ -99,7 +99,7 @@ def launch():
  raise AssertionError('HOME_NOT_READY:'+repr([label(n) for n in ns if label(n)][:20]))
 def is_android_launcher(nodes):
  if any("isn't responding" in n.get('text','') for n in nodes):return False
- return any(n.get('resource-id','').startswith('com.google.android.apps.nexuslauncher:id/') for n in nodes)
+ return any(n.get('resource-id','').startswith(('com.google.android.apps.nexuslauncher:id/','com.android.launcher3:id/')) for n in nodes)
 def home():
  # New hypothesis from16V failure XML: Back exited to Android launcher.
  # Relaunch only when actually at Android launcher, not over an open editor.
