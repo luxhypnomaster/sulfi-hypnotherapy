@@ -28,17 +28,19 @@
     "appSource": "59c3667a28357767533b25e92661b87d081d7227",
     "statusAtCheckpoint": "PASS_API34_11"
   },
-  "delivery": "BLOCKED_NOT_EXECUTED_NATIVE_GATES_INCOMPLETE",
+  "delivery": "BLOCKED_NEW_EXACT_SOURCE_NATIVE_GATES_REQUIRED",
   "GAS": "EXISTING6_UNCHANGED",
   "OAuthACLSigning": "UNCHANGED",
   "GooglePhysicalOEM": "NOT_RUN",
   "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
   "next": [
-    "Check actual43737664851 result with SHA evidence, do not apply unproven pool-only patch",
-    "Only if bounded busy+pool control passes prepare minimal connection fix and fresh full/native regression",
-    "Remove unused failed Dart-only experimental harness; preserve evidence/history",
-    "Current code needs new exact-source signed pair and all native gates; old59 must NOT be issued",
-    "Update same private report IDs and raw-byte readback; do not touch GAS/main/OAuth/ACL/signing/ownerdata"
+    "Read actual fresh verify/candidate/native jobs43740142417 and full35 probe43740145687; retain SHA evidence",
+    "No reuse19 after production Dart changes",
+    "On full35 success advance cached-probe KNOWN to actually compiled a894 source, then test33/34/36 and legacy-only from same cache without rebuild",
+    "Separate probe concurrency scopes before overlapping full34 and legacy34 (currently sameAPI cancels)",
+    "Actual normal MASTER andCLIENT27\u219228 gates needPASS current source, no old59 reuse",
+    "Update delivery tool source+digests only from actual new manifest and six real native gates; no upload before gates",
+    "Same private Drive report IDs/readback; no GAS/main/OAuth/ACL/signing/userdata changes"
   ],
   "historicalCeaPair": "SUPERSEDED_DO_NOT_ISSUE",
   "currentNativeSafety": {
@@ -59,7 +61,8 @@
     "upgradeJobs": "BLOCKED_BEFORE_BASELINE_SYSTEM_UI_ANR"
   },
   "activeRuns": {
-    "nativePoolBusyControl": 43737664851
+    "fresh_full_and_candidates_upgrades": 43740142417,
+    "fresh_api35_full": 43740145687
   },
   "api36": {
     "run": 43732895132,
@@ -69,12 +72,15 @@
     "run": 43732892168,
     "status": "FAIL_SQLITE_LOCKS_HYPOTHESIS_UNCONFIRMED"
   },
-  "sourceCode": "3852f65",
-  "existingPair59": "SUPERSEDED_QUARANTINE_NOT_FOR_ISSUE_AFTER_NEW_FGS_FIX",
+  "sourceCode": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
+  "existingPair59": "SUPERSEDED_QUARANTINE_NEVER_ISSUE",
   "targetedNewTests": {
     "foregroundRetry": 4,
     "localAnalyzer": "PASS"
   },
   "newForegroundFix": "CODE_TARGETED_PASS_NATIVE_NOT_RUN",
-  "sqliteDiagnosis": "POOL_ONLY_REJECTED_BOTH1_AND4_WRITE_FAILED_WITH_DEFAULT_TIMEOUT"
+  "sqliteDiagnosis": "NATIVE_SOURCE_OVERLAY_TWO_COMMITS_ROWS2_INTEGRITY_OK; default-timeout assertion made run43739426806 overallFAIL; source promoted, real-app regression pending",
+  "candidateSourcePending": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
+  "schedulerJVMInvariants": 5,
+  "vendorStorageGuard": "ORIGINAL16G_SHA_UNCHANGED"
 }

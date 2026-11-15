@@ -32,3 +32,9 @@ Signed source59 hashes: MASTER78fb218edc59b2ddf761cda38e6faaf76e6bcea9b5bea6ab6e
 SQLite pool-only стратегия отвергнута: реальные1/4-thread nativecontrols оба получили SQLiteDatabaseLockedException. THREAD_COUNT/PRAGMA/WAL/schema в приложении не изменены. Пробный busy-control childexit137 объяснён журналом: uncaught SQLiteException от execSQL для row-returning PRAGMA, затем RuntimeInit kill-handler. Это ошибка только тестовой обвязки, не hostOOM/QEMU. Исправлен rawQuery call и readback; незавершённый positivecontrol43738782150 ещё выполняется. Его результат не предполагать. Неиспользуемый Dart-only experiment удалён из актуального testtarget, история/failedreports сохранены.
 
 MASTERobserver также распознаёт actualAOSPLauncher и ждёт настоящийsecondsSeekBar; реальное обновление нового кандидата остаётся NOT_RUN. Следующий шаг — закончить причинный SQLitecontrol, применить только доказанный узкий fix и провести свежие full/native gates перед новой парой.
+
+## Новый кандидатный исходник a89471d — проверки запущены
+
+Подтверждённый source-overlay контроль исполнил2commits/rows2/integrityok. Он сохраняет исходный singlethread/native busy_timeout2500, без изменений schema/WAL/данных. Подробный scope и отличие failedrun от функциональногоPASS: SQLITE_SCHEDULER_PROOF_18.md. Новый internalSQLscheduler перенесён в vendor runtime: чужой connection ожидает завершения транзакции владельца, не блокируя еёCOMMIT. Это не вторая очередь передач. Добавлен checkCancelled между строками capsule restore для быстрого rollback при nativeStop; исходный16GStorageSafety SHA сохранён. FiveJVMorderinginvariants и localfullanalyze PASS.
+
+**Свежие** fullverify→candidate→normalupgrades43740142417 и API35full43740145687 работают на точномsource a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d. Результаты не предполагать. Исторические59 APK не содержат эти изменения и не выдаются. Новая пара ещё не собрана/не допущена/не загружена.
