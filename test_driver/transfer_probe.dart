@@ -387,6 +387,7 @@ class _Controlled18State extends State<Controlled18> {
                         message = 'SQLITE LOCK EXPERIMENT ${receipt['status']}';
                         busy = false;
                       });
+                    }
                   },
             child: const Text('RUN SQLITE LOCK CHECK'),
           ),
