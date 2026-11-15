@@ -9,6 +9,16 @@
       "candidateValidationOrUpload": "NOT_REACHED",
       "old27": "UNCHANGED",
       "fix": "Request only build-tools;36.0.0 needed for read-only APK inspections; no rebuild/signing/native gate repetition"
+    },
+    {
+      "run": 43765701087,
+      "status": "FAIL_BEFORE_APPEND",
+      "step": "repository privacy read",
+      "reason": "Repository API root with trailing slash returns404; exact same read without slash returns200/private=true",
+      "candidateVerification": "PASS",
+      "guardTests": "8PASS",
+      "upload": "NOT_REACHED",
+      "fix": "Canonical repo endpoint without trailing slash; new regression check; no safety condition removed"
     }
   ]
 }

@@ -2,6 +2,10 @@
 import hashlib
 import json
 
+
+def repo_endpoint(repo, path):
+    return 'repos/' + repo + ('/' + path if path else '')
+
 UPGRADE = {
     'install_baseline', 'ui_import_1', 'ui_import_2', 'ui_import_3',
     'ui_module_elman', 'ui_module_pause', 'ui_template', 'ui_history',

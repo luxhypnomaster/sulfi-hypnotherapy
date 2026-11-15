@@ -1,6 +1,6 @@
 """Append verified candidates to an EXISTING private draft; never publish/create/tag/clobber."""
 import argparse,hashlib,json,os,pathlib,subprocess
-from delivery_gate import validate_receipt
+from delivery_gate import repo_endpoint, validate_receipt
 REPO='luxhypnomaster/sulfi-hypnotherapy';SOURCE='de408f1cae08fce16069a701d147a0b1064053ba';RELEASE=445425835
 BASE={'master27.apk':(748058133,'2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb'),'client27.apk':(748058137,'8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46'),'APK_PAIR_17.json':(748058143,'51636ab3170a66e4d00fa888359873ac597dc71193b42e9dbe6551bffa78cafd')}
 EXPECTED={'master':'2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e','client':'637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051'}
@@ -8,7 +8,7 @@ CERT='0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6'
 p=argparse.ArgumentParser();p.add_argument('--execute',action='store_true');args=p.parse_args()
 assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs/heads/feat/task18-native-background-transfer'
 def api(path):
- r=subprocess.run(['gh','api','repos/'+REPO+'/'+path],capture_output=True,text=True);assert r.returncode==0,'GITHUB_READ_FAILED';return json.loads(r.stdout)
+ r=subprocess.run(['gh','api',repo_endpoint(REPO,path)],capture_output=True,text=True);assert r.returncode==0,'GITHUB_READ_FAILED';return json.loads(r.stdout)
 def sha(p):
  with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def release():

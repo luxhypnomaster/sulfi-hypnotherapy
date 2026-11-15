@@ -6,10 +6,14 @@ import pathlib
 import tempfile
 import unittest
 
-from delivery_gate import PROBE, UPGRADE, validate_receipt
+from delivery_gate import PROBE, UPGRADE, repo_endpoint, validate_receipt
 
 
 class GateTest(unittest.TestCase):
+    def test_repository_endpoint_has_no_trailing_slash(self):
+        self.assertEqual(repo_endpoint('owner/project', ''), 'repos/owner/project')
+        self.assertEqual(repo_endpoint('owner/project', 'releases/1'), 'repos/owner/project/releases/1')
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
