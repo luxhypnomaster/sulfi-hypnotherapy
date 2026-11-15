@@ -1,6 +1,6 @@
 """Strict source/recipe gate for known cached test APKs, independent of OS image."""
 import base64,json,os,pathlib,subprocess
-REPO='luxhypnomaster/sulfi-hypnotherapy';KNOWN='cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429'
+REPO='luxhypnomaster/sulfi-hypnotherapy';KNOWN='59c3667a28357767533b25e92661b87d081d7227'
 assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs/heads/feat/task18-native-background-transfer'
 v=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-probe-apks/PROBE_MANIFEST_18.json').read_text());source=v['appSource'];current=os.environ['GITHUB_SHA']
 assert source in [KNOWN,current],'UNREVIEWED_CACHED_FIXTURE_SOURCE'

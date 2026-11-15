@@ -1,0 +1,19 @@
+{
+  "appSource": "59c3667a28357767533b25e92661b87d081d7227",
+  "driverSource": "59c3667a28357767533b25e92661b87d081d7227",
+  "classification": "CONTROLLED_NATIVE_SQLITE_NOT_GOOGLE_OR_PHONE",
+  "cases": [
+    {
+      "edition": "master",
+      "status": "PASS_NATIVE_SQLITE_CONTROLLED_CONVERSION",
+      "normalApkUpgrade": "SEPARATE_43708103115",
+      "Google": "NOT_RUN"
+    },
+    {
+      "edition": "client",
+      "status": "PASS_NATIVE_SQLITE_CONTROLLED_CONVERSION",
+      "normalApkUpgrade": "SEPARATE_43708103115",
+      "Google": "NOT_RUN"
+    }
+  ]
+}
