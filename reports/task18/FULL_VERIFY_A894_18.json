@@ -1,0 +1,136 @@
+{
+  "run": 43740142417,
+  "source": "a89471d3e967a0c84ed8b7ed84892dedc2dd4d5d",
+  "runConclusion": "IN_PROGRESS_CANDIDATE_NATIVE_NOT_ASSUMED",
+  "job": {
+    "id": 132891279281,
+    "name": "verify",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43740142417/job/132891279281"
+  },
+  "steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "P0 STOP-SHIP forbids building or signing any Sulfi candidate",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-java@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run ./.github/actions/setup-flutter",
+      "conclusion": "success"
+    },
+    {
+      "name": "Validate offline Task15 JSON schemas and contract fixtures",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run node --test server/google_apps_script/test/backend.test.mjs",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run node --test server/alchemist/test/*.test.mjs",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run node scripts/alchemist/build.mjs \"$RUNNER_TEMP/alchemist-source\"",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run flutter pub get --enforce-lockfile",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run dart format --output=none --set-exit-if-changed lib test",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run flutter analyze --fatal-infos",
+      "conclusion": "success"
+    },
+    {
+      "name": "Flutter tests with failure summaries",
+      "conclusion": "success"
+    },
+    {
+      "name": "Preserve test report",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run flutter test test/task5_client_build_test.dart test/task15_client_test.dart --dart-define=SULFI_EDITION=client",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify configured cloud endpoint before embedding it",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Require accepted real two-account server before final pair",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Restore persistent user-test signing key",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Build author APK (explicit configuration, no invented endpoint)",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Record public APK diagnostics",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Build separate client test APK (same code and persistent key)",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Record client APK diagnostics",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run ./.github/actions/setup-flutter",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-java@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ],
+  "exactTestCounters": "READ_RAW_COMPLETE_LOGS_WHEN_AVAILABLE_NOT_GUESSED",
+  "GooglePhysical": "NOT_RUN"
+}
