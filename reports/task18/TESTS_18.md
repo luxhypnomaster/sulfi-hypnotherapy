@@ -32,3 +32,9 @@ Verify job SUCCESS:485 Flutter PASS/0FAIL, CLIENT3PASS, Node47+24PASS,13schema/4
 Уточнение по хранилищу артефактов: шаг Preserve test report имел conclusion success благодаря continue-on-error, но сырые логи содержат Artifact storage quota has been hit. Реальный upload НЕ состоялся, API artifacts пуст. Не повторять вслепую, не удалять старые артефакты, не менять тариф/права. Использованы ограниченные доказательства в CI logs и private cache; выпуск/доставка новых APK ещё не выполнены.
 
 Native probe43704911357 SUCCESS7: actual API34 Activity+engine destroyed/samePID, bytes both directions, complete unique commit,3files/3hash/module/program, CLIENT offline cold start + native UID-bound AudioTrack. App4ab0588, driver19c3345; доказательства probe5/. Новое native ownership исправлениеcea4897 требует собственного compile/JVM/native результата: старый probe PASS его не сертифицирует. Текущие43708103115 finalize и43708105791 extendedprobe запущены с одной checkpointcea4897.
+
+
+## Actual43708103115 native finalization SUCCESS
+Full run SUCCESS atcea4897. Strict reuse18 actual-tree gate PASS (unchanged verified Dart/server); fresh native compile/build and :app:testDebugUnitTest executed SUCCESS. Normal signed MASTER27→28 UI data14PASS; CLIENT27→28 UI data12PASS. Proofs native27_to28/ and NATIVE_UPGRADE_GATE_18.json.3 independent full APK manifests/byte SHA/certificate readbacks identical. No physical Google/owner phone claimed.
+
+Extendedprobe6 failed before first transfer because external SystemUI ANR hid the actually drawn fixture UI; screenshot/crash0 preserved probe6/. New preflight observer run7 uses exact cached sourcecea4897 APKs, still in progress. Historical native5 app4ab remains valid only for that source.
