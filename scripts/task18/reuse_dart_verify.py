@@ -5,7 +5,9 @@ assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs
 def api(path):return json.loads(subprocess.check_output(['gh','api','repos/'+REPO+'/'+path],text=True))
 r=api('actions/runs/'+str(RUN));assert r['head_sha']==BASE and r['status']=='completed'
 jobs=api('actions/runs/'+str(RUN)+'/jobs?per_page=100')['jobs'];assert any(j['name']=='verify' and j['conclusion']=='success' for j in jobs)
-def tree(sha):return {v['path']:v['sha'] for v in api('git/trees/'+sha+'?recursive=1')['tree'] if v['type']=='blob'}
+def tree(sha):
+ value=api('git/trees/'+sha+'?recursive=1');assert value.get('truncated') is False,'INCOMPLETE_TREE_REQUIRES_FULL_VERIFY'
+ return {v['path']:v['sha'] for v in value['tree'] if v['type']=='blob'}
 a,b=tree(BASE),tree(os.environ['GITHUB_SHA']);changes=sorted(k for k in set(a)|set(b) if a.get(k)!=b.get(k))
 allowed_prefix=('reports/task18/','docs/task18/','scripts/task18/','android/app/src/test/')
 allowed_exact={'README.md','BACKLOG.md','CHANGELOG.md','.github/workflows/checks.yml',
