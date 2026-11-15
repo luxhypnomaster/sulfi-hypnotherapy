@@ -72,25 +72,21 @@ def native_audio_active(pkg):
    (OUT/'client-native-local-audio.txt').write_text('\n'.join(lines));return True
   time.sleep(.5)
  return False
-def window_focus():
- raw=adb('shell','dumpsys','window','windows')
- lines=[x.strip() for x in raw.splitlines() if 'mCurrentFocus=' in x]
- (OUT/'latest-window-focus.txt').write_text('\n'.join(lines))
- return ' '.join(lines)
 def collapse_system_shade():
- # cmd statusbar collapse returned success in probe7 while the actual
- # NotificationShade stayed foreground. Observe focus before any physical Back.
+ # The Android14 `dumpsys window windows` subset omitted mCurrentFocus in
+ # probe8. Use actual visible notification-panel semantics, never absence
+ # of a field or shell command success as proof of a closed shade.
  for _ in range(3):
-  focus=window_focus()
-  if 'NotificationShade' not in focus:return focus
-  adb('shell','input','keyevent','KEYCODE_BACK');time.sleep(2)
+  nodes=tree()
+  shade=any(n.get('resource-id')=='com.android.systemui:id/notification_panel' for n in nodes)
+  if not shade:return 'OBSERVED_NO_NOTIFICATION_PANEL'
+  adb('shell','input','swipe','360','1150','360','180','500');time.sleep(2)
  raise AssertionError('SYSTEM_NOTIFICATION_SHADE_DID_NOT_CLOSE')
 def system_ui_preflight():
  # Run before either fixture is installed/launched. sys.boot_completed alone
  # did not prove SystemUI was interactive: probe6 had an external modal ANR.
  adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard')
- adb('shell','cmd','statusbar','expand-notifications');time.sleep(2)
- adb('shell','cmd','statusbar','collapse');collapse_system_shade()
+ collapse_system_shade()
  adb('shell','input','keyevent','KEYCODE_HOME')
  until=time.monotonic()+90;stable=0;waited=False;events=[]
  while time.monotonic()<until:
@@ -101,10 +97,11 @@ def system_ui_preflight():
    assert anr in ["System UI isn't responding","Pixel Launcher isn't responding"], 'NON_INFRASTRUCTURE_ANR_STOP:'+anr
    assert not waited,'REPEATED_SYSTEM_UI_ANR_PREFLIGHT_BLOCKED'
    click('Wait');waited=True;stable=0;events.append({'externalANR':anr,'action':'Wait_ONCE_BEFORE_FIXTURE_START'})
-  elif nodes and 'NotificationShade' not in collapse_system_shade() and any('launcher' in (n.get('resource-id') or '').lower() for n in nodes):
+  elif nodes and not any(n.get('resource-id')=='com.android.systemui:id/notification_panel' for n in nodes) and any('launcher' in (n.get('resource-id') or '').lower() for n in nodes):
    stable+=1
    if stable>=3:
     (OUT/'system-ui-preflight.json').write_text(json.dumps({'status':'COLLAPSED_SHADE_AND_LAUNCHER_3_OBSERVATIONS','events':events,'noFixtureAppStarted':True},indent=2));return
+  else:stable=0
   time.sleep(2)
  raise AssertionError('SYSTEM_UI_NOT_INTERACTIVE_BEFORE_FIXTURE_START')
 
