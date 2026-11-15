@@ -210,6 +210,9 @@ object TransferRuntime {
     fun start(c: Context, finished: () -> Unit): Boolean {
         if (running) { channel?.invokeMethod("wake", null); return false }
         context = c.applicationContext; complete = finished; stopReason = null; runId++
+        // Recovery is a new executor too: remove the obsolete WAITING notice
+        // before posting active progress, not just on an explicit UI start.
+        (c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(TransferPlatform.NOTIFICATION + 1)
         if (Build.VERSION.SDK_INT < 34) wake = (c.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, c.packageName + ":transfers18").apply { setReferenceCounted(false); acquire(600000L) }
         val loader = FlutterInjector.instance().flutterLoader(); loader.startInitialization(c); loader.ensureInitializationComplete(c, null)
         val headless = FlutterEngine(c.applicationContext, null, false)

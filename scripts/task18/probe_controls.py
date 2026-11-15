@@ -36,11 +36,14 @@ class NativeControls:
    else:raise AssertionError('NATIVE_NOTIFICATION_SHADE_NOT_ACTUALLY_EXPOSED')
    for _ in range(6):
     nodes=self.tree()
+    if not any(n.get('resource-id')=='com.android.systemui:id/notification_panel' for n in nodes):
+     self.adb('shell','input','swipe','360','5','360','980','500');time.sleep(2);continue
     if any((n.get('text') or n.get('content-desc') or '').casefold()==label.casefold() for n in nodes):
      self.click(label);return
     titles=[n for n in nodes if 'CONTROLLED18' in ((n.get('text') or '')+' '+(n.get('content-desc') or ''))]
     if not titles:
-     self.adb('shell','input','swipe','360','1050','360','400','400');time.sleep(1);continue
+     # A loading/grouped shade is not a reason to swipe up and close it.
+     time.sleep(2);continue
     y=int(re.findall(r'\d+',titles[0].get('bounds',''))[1])
     expand=[n for n in nodes if 'expand' in n.get('resource-id','').lower() and n.get('enabled')!='false' and len(re.findall(r'\d+',n.get('bounds','')))>=4]
     expand.sort(key=lambda n:abs(int(re.findall(r'\d+',n.get('bounds',''))[1])-y))
@@ -53,7 +56,7 @@ class NativeControls:
    (self.out/'notification-action-missing.xml').write_bytes(ET.tostring(root))
    shot=subprocess.run(['adb','exec-out','screencap','-p'],capture_output=True,timeout=20)
    if shot.returncode==0:(self.out/'notification-action-missing.png').write_bytes(shot.stdout)
-   (self.out/'notification-native-readback.txt').write_text(self.adb('shell','dumpsys','notification',check=False)[-60000:])
+   (self.out/'notification-native-readback.txt').write_text(self.adb('shell','dumpsys','notification','--noredact',check=False)[:120000])
    raise AssertionError('NATIVE_NOTIFICATION_ACTION_NOT_EXPOSED:'+label)
   finally:self.adb('shell','cmd','statusbar','collapse')
  def master_pause_resume(self,pkg):

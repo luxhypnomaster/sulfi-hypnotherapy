@@ -275,6 +275,42 @@ def diary_boundary():
  if not any('Новая запись' in label(n) for n in ns):
   raise AssertionError('REAL_MASTER_GOOGLE_LOGIN_REQUIRED_BY_IMMUTABLE_APK25; no UI draft creation possible offline; no fake identity or SQL substitute')
  raise AssertionError('AUTHOR_WORKSPACE_AVAILABLE_NEEDS_SEPARATE_UI_DIARY_DRIVER')
+def seed_legacy_queues():
+ # Supplemental synthetic old-format rows ONLY in this disposable emulator's
+ # real27 UI-created database. Do not replace DB/schema/media or fake Google.
+ assert adb('shell','getprop','ro.kernel.qemu').strip()=='1'
+ assert package_info()['versionCode']==27
+ owner='CONTROLLED_NATIVE_OLD27_OWNER';rows=[]
+ for i,kind in enumerate(['running','queued','paused','unbound']):
+  who=None if kind=='unbound' else owner
+  v={'ownerBinding':who,'card':{'title':'CONTROLLED_NATIVE_OLD27_'+kind},
+     'pending':{'operation':'catalog.publish','parameters':{'requestId':'CONTROLLED_NATIVE_OLD27_request_'+kind,'ifMatch':'7'}}}
+  revision=hashlib.sha256(json.dumps({'card':v['card']},sort_keys=True,separators=(',',':')).encode()).hexdigest()
+  v['_work']={'phase':'paused' if kind=='paused' else 'queued' if kind=='queued' else 'running',
+              'taskId':chr(ord('a')+i)*32,'revision':revision,'ownerBinding':who,
+              'runnerEpoch':'CONTROLLED_NATIVE_OLD27','bytes':262144,'totalBytes':15728640,
+              'attempts':2,'networkRetries':1}
+  if kind=='paused':v['_work'].update({'code':'USER_PAUSED','pauseReason':'USER_PAUSED'})
+  rows.append({'name':'alchemist_card:controlled_native18_legacy_'+kind,'value':json.dumps(v,separators=(',',':'))})
+ checkpoint={'ownerBinding':owner,'sessionId':'CONTROLLED_NATIVE_OLD27_session','requestId':'CONTROLLED_NATIVE_OLD27_upload','offset':262144,'receipt':None}
+ rows.append({'name':'alchemist_upload:controlled_native18_legacy_running','value':json.dumps(checkpoint,separators=(',',':'))})
+ fixture={'classification':'CONTROLLED_NATIVE_OLD27_QUEUE_NOT_GOOGLE','rows':rows}
+ adb('shell','am','force-stop',PKG) # controlled emulator only, not owner phone
+ def put_private(name,data):
+  assert re.fullmatch('[a-z0-9.-]+',name)
+  r=subprocess.run(['adb','exec-out','run-as',PKG,'tee','files/'+name],input=data,capture_output=True,timeout=30)
+  assert r.returncode==0 and r.stdout==data,'CONTROLLED_PRIVATE_MARKER_COPY_FAILED'
+ put_private('task18-marker.jar',(pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-queue-marker/marker.jar').read_bytes())
+ adb('shell','run-as',PKG,'chmod','400','files/task18-marker.jar') # Android14 read-only dynamic code requirement
+ put_private('task18-queue-input.json',json.dumps(fixture).encode())
+ base='/data/user/0/'+PKG+'/files/'
+ raw=adb('shell','run-as',PKG,'env','CLASSPATH='+base+'task18-marker.jar','app_process','/system/bin','org.alchemist.p0probe.LegacyQueueMarker','seed',PKG,base+'task18-queue-input.json')
+ lines=[line for line in raw.splitlines() if line.startswith('{')];assert len(lines)==1,'NO_NATIVE_SQLITE_MARKER_RECEIPT'
+ receipt=json.loads(lines[0]);assert receipt['status']=='PASS' and receipt['schema']==9 and len(receipt['fixtureRowDigests'])==5
+ (OUT/'native-old27-queue-seed.json').write_text(json.dumps(receipt,indent=2)+'\n')
+ launch()
+ return {'status':'PASS_NATIVE_ANDROID_SQLITE_FIXTURE_SEED','classification':'SUPPLEMENTAL_CONTROLLED_OLD27_ROWS_NOT_GOOGLE','rows':5,'createdPersonalMedia':'STILL_ANDROID_UI_NOT_SQL_SEEDED','databaseReplaced':False,'Google':'NOT_RUN'}
+
 def before():
  home();v=inventory('beforeBaseline');assert v['package']['versionCode']==BASE,'BASELINE_NOT_PINNED_APK'
  assert len(v['rows']['audio_assets'])>=3,'NOT_ENOUGH_UI_AUDIO'
@@ -291,6 +327,9 @@ def compare(name):
  for table in ['audio_assets','module_definitions','session_templates','current_draft','session_runs','diary_author']:
   absent=[r for r in old['rows'][table] if r not in v['rows'][table]]
   if absent:missing[table]=absent
+ old_queue=[r for r in old['rows']['app_settings'] if r['name'].startswith(('alchemist_card:controlled_native18_legacy_','alchemist_upload:controlled_native18_legacy_'))]
+ assert len(old_queue)==5,'MISSING_CONTROLLED_NATIVE_OLD27_QUEUE_BASELINE'
+ assert all(r in v['rows']['app_settings'] for r in old_queue),'OLD27_QUEUE_REQUEST_OFFSET_PAUSE_OR_OWNER_BYTES_CHANGED'
  for p,b in old['files'].items():
   if p.startswith(('files/audio/','files/diary_media/','files/history_media/','external/')) and v['files'].get(p)!=b:missing[p]=b
  assert not missing,'PRESERVATION_FAILURE:'+json.dumps(missing)
@@ -376,6 +415,8 @@ def main():
      # APK27 now supports an offline local-device diary. Create it BEFORE
      # update too; it must survive exact-row comparison, no fake Google auth.
      case('ui_baseline_local_draft27',local_draft_after) if EDITION=='master' else None
+     case('native_controlled_old27_queue_seed',seed_legacy_queues)
+     assert CASES[-1]['status']=='PASS','NATIVE_OLD_QUEUE_SETUP_FAILED_STOP'
      case('beforeBaseline_inventory',before)
      case('native_update_to28',upgrade)
      case('ui_afterCandidate',ui_after)
