@@ -110,7 +110,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}${{ inputs.task18_probe && format('-probe18-api{0}', inputs.task18_api) || '' }}
+  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}${{ inputs.task18_probe && format('-probe18-api{0}-{1}', inputs.task18_api, inputs.task18_scope) || '' }}
   cancel-in-progress: true
 
 jobs:
