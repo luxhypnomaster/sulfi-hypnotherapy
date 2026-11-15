@@ -93,7 +93,7 @@ public final class NativePoolProbe {
       b.close(); a.close(); poolType.getMethod("quit").invoke(pool);
       if (!fixture.delete()) throw new AssertionError("FIXTURE_CLEANUP_FAILED");
     }
-    JSONObject result = new JSONObject().put("classification", "ACTUAL_APK_NATIVE_SQFLITE_POOL_ANDROID_SQLITE")
+    JSONObject result = new JSONObject().put("classification", "CANDIDATE_SOURCE_SCHEDULER_NATIVE_ANDROID_SQLITE")
         .put("pool", count).put("busyTimeoutMs", actualBusy).put("status", finished && errors.isEmpty() ? "BOTH_COMMITS_COMPLETE" : finished ? "WRITE_FAILED_LOCK_ORDER" : "BLOCKED_NATIVE_POOL_LOCK_ORDER")
         .put("events", new JSONArray(events)).put("errors", new JSONArray(errors)).put("rows", rows).put("integrity", integrity)
         .put("productionDatabaseOpened", false).put("Google", "NOT_RUN");
