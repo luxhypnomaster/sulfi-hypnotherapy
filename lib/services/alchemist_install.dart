@@ -21,6 +21,23 @@ class AlchemistInstall {
   final CapsuleService service;
   final AlchemistApi api;
   static final _active = <String, Future<File>>{};
+  Future<void> _finalize(Map<String, dynamic> asset) async {
+    final receipt = await api.call('media.finalizeDownload', {
+      'assetRevisionId': asset['assetRevisionId'],
+      'sha256': asset['sha256'],
+      'byteLength': asset['byteLength'],
+    });
+    if (receipt['verified'] != true ||
+        receipt['assetRevisionId'] != asset['assetRevisionId']) {
+      throw const AlchemistFailure(
+        'Сервер не подтвердил завершение загрузки.',
+        422,
+        'DOWNLOAD_RECEIPT_INVALID',
+        DiaryFailure.invalidData,
+      );
+    }
+  }
+
   Future<File> downloadAsset(
     Map<String, dynamic> asset, {
     bool Function()? interrupted,
@@ -103,11 +120,7 @@ class AlchemistInstall {
     if (await file.exists() &&
         await file.length() == size &&
         (await sha256.bind(file.openRead()).first).toString() == hash) {
-      await api.call('media.finalizeDownload', {
-        'assetRevisionId': revision,
-        'sha256': hash,
-        'byteLength': size,
-      });
+      await _finalize(asset);
       progress?.call(size, size);
       return file;
     }
@@ -246,11 +259,7 @@ class AlchemistInstall {
         'Контрольная сумма загрузки не совпала; неполный материал не установлен',
       );
     }
-    await api.call('media.finalizeDownload', {
-      'assetRevisionId': asset['assetRevisionId'],
-      'sha256': hash,
-      'byteLength': size,
-    });
+    await _finalize(asset);
     state['verified'] = true;
     await save();
     return file;

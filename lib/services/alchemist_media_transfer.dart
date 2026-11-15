@@ -169,14 +169,15 @@ class AlchemistMediaTransfer {
       }
       check();
       await stage('transferring');
-      final start = await api.call('media.beginUpload', {
+      final beginParameters = <String, dynamic>{
         'requestId': state['requestId'],
         'logicalId': logicalId,
         'revisionId': revisionId,
         'sha256': hash,
         'byteLength': size,
         'mime': mime,
-      });
+      };
+      final start = await api.call('media.beginUpload', beginParameters);
       check();
       if (state['sessionId'] == start['sessionId'] &&
           start['offset'] is int &&
@@ -201,11 +202,28 @@ class AlchemistMediaTransfer {
           final bytes = await input.read(262144);
           if (bytes.isEmpty) throw const FormatException('Файл оборвался');
           final chunkClock = Stopwatch()..start();
-          final result = await api.call('media.uploadChunk', {
-            'sessionId': start['sessionId'],
-            'offset': offset,
-            'base64': base64Encode(bytes),
-          });
+          final result = await api.call(
+            'media.uploadChunk',
+            {
+              'sessionId': start['sessionId'],
+              'offset': offset,
+              'base64': base64Encode(bytes),
+            },
+            beforeRetry: () async {
+              check();
+              final remote = await api.call(
+                'media.beginUpload',
+                beginParameters,
+              );
+              if (remote['sessionId'] != start['sessionId'] ||
+                  remote['offset'] != offset &&
+                      remote['offset'] != offset + bytes.length) {
+                throw const FormatException(
+                  'Сервер не подтвердил позицию повторяемого блока',
+                );
+              }
+            },
+          );
           check();
           final next = result['offset'];
           if (next is! int || next != offset + bytes.length) {

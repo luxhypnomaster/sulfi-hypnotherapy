@@ -149,8 +149,9 @@ class AlchemistApi {
 
   Future<Map<String, dynamic>> call(
     String operation,
-    Map<String, dynamic> parameters,
-  ) async {
+    Map<String, dynamic> parameters, {
+    Future<void> Function()? beforeRetry,
+  }) async {
     var originalScope = identityScope?.call();
     final originalEpoch = identityEpoch?.call(), trace = diagnostics.begin();
     var initialBinding = originalScope == 'public';
@@ -241,7 +242,10 @@ class AlchemistApi {
           );
         }
         _checkInterrupted();
-        if (parameters['requestId'] is String) {
+        if (beforeRetry != null) {
+          await beforeRetry().timeout(callTimeout - watch.elapsed);
+          checkScope(false);
+        } else if (parameters['requestId'] is String) {
           final remaining = callTimeout - watch.elapsed;
           if (remaining <= Duration.zero) {
             throw AlchemistFailure.from(TimeoutException('deadline'));

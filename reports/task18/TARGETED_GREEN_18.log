@@ -1,0 +1,22 @@
+00:00 +0: loading /dev/shm/sulfi18/test/task18_queue_test.dart
+00:00 +0: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 UI enqueue is persistent OS dispatch, never a second UI executor
+00:00 +1: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 legacy user pause/upload offsets are untouched; other owner cannot resume
+00:00 +2: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 same-owner policy stop recovers; explicit native pause and cancel never auto-start
+00:00 +3: /dev/shm/sulfi18/test/task18_queue_test.dart: 18 duplicate taps remain one stable revision task and preserve request/receipt
+00:00 +4: loading /dev/shm/sulfi18/test/task18_download_test.dart
+00:00 +4: /dev/shm/sulfi18/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail
+00:01 +5: /dev/shm/sulfi18/test/task18_download_test.dart: 18 corrupt saved chunk stops before network/installation and preserves diagnostic bytes
+00:01 +6: /dev/shm/sulfi18/test/task18_download_test.dart: 18 no server chunk support is explicit compatibility failure, no full-file fallback
+00:01 +7: loading /dev/shm/sulfi18/test/task17_queue_test.dart
+00:01 +7: /dev/shm/sulfi18/test/task17_queue_test.dart: 17 G2 five taps and restart reuse one owner/revision; changed revision is distinct
+00:02 +8: /dev/shm/sulfi18/test/task17_queue_test.dart: 17 G2 resume during cooperative pause is deferred, never silently dropped; recover does not fake process death
+00:02 +9: /dev/shm/sulfi18/test/task17_queue_test.dart: 17 G2 auth/network/permission preflight distinct with zero send attempts; same owner resumes, other owner denied
+00:02 +10: /dev/shm/sulfi18/test/task17_queue_test.dart: 17 G2 production retry measurements remain accurate without opt-in trace collection
+00:02 +11: loading /dev/shm/sulfi18/test/task17_auth_test.dart
+00:03 +11: /dev/shm/sulfi18/test/task17_auth_test.dart: 17 G1 same-owner cold/expiry restore without chooser; logout intent blocks SDK restore and private hints
+00:03 +12: /dev/shm/sulfi18/test/task17_auth_test.dart: 17 G1 offline local author draft before Google does not reveal or rescope other account draft
+00:03 +13: /dev/shm/sulfi18/test/task17_auth_test.dart: 17 G1 explicit logout invalidates pending chooser without clearing a newer login busy state
+00:03 +14: /dev/shm/sulfi18/test/task17_auth_test.dart: 17 G0 trace opt-in, bounded TTL, safe codes and explicit redacted export
+00:03 +15: loading /dev/shm/sulfi18/test/task16_catalog_integration_test.dart
+00:06 +15: /dev/shm/sulfi18/test/task16_catalog_integration_test.dart: local cross-language author → production JS domain → client selective install, metadata-only retry and revoke
+00:09 +16: All tests passed!

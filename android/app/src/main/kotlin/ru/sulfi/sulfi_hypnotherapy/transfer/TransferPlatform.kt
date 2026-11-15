@@ -28,6 +28,7 @@ object TransferPlatform {
     const val RECOVERY = 1802
     const val NOTIFICATION = 1810
     private const val KEY = "sulfi-transfer-lease18"
+    private val mediaExecutor = java.util.concurrent.Executors.newSingleThreadExecutor()
     internal fun prefs(c: Context) = c.getSharedPreferences("transfer_authority18", Context.MODE_PRIVATE)
     private fun hash(s: String) = MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
     private fun secret(): SecretKey {
@@ -64,8 +65,8 @@ object TransferPlatform {
         val token = m["token"] as? String
         require(public && token == null || !public && token != null && token.length in 100..16384)
         val previous = lease(c)
-        val epoch = if (previous?.optString("ownerBinding") == owner) previous.getString("epoch") else java.util.UUID.randomUUID().toString()
-        if (previous != null && previous.optString("ownerBinding") != owner) TransferRuntime.stop("OWNER_CHANGED")
+        val epoch = if (previous?.optString("ownerBinding") == owner && previous.optString("role") == role) previous.getString("epoch") else java.util.UUID.randomUUID().toString()
+        if (previous != null && (previous.optString("ownerBinding") != owner || previous.optString("role") != role)) TransferRuntime.stop("OWNER_CHANGED")
         val networkPolicy = m["networkPolicy"] as? String ?: "any"
         require(networkPolicy in listOf("any", "unmetered"))
         val value = JSONObject().put("networkPolicy", networkPolicy).put("endpoint", endpoint).put("scope", scope).put("ownerBinding", owner)
@@ -136,7 +137,7 @@ object TransferPlatform {
             if (lease(c)?.optString("networkPolicy") == "unmetered") network.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
             val job = JobInfo.Builder(JOB, ComponentName(c, TransferJobService::class.java))
                 .setUserInitiated(true).setRequiredNetwork(network.build())
-                .setEstimatedNetworkBytes(JobInfo.NETWORK_BYTES_UNKNOWN, JobInfo.NETWORK_BYTES_UNKNOWN).build()
+                .setEstimatedNetworkBytes(JobInfo.NETWORK_BYTES_UNKNOWN.toLong(), JobInfo.NETWORK_BYTES_UNKNOWN.toLong()).build()
             return if (scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS) "QUEUED" else "WAITING_POLICY"
         }
         val i = Intent(c, TransferForegroundService::class.java)
@@ -172,7 +173,18 @@ object TransferPlatform {
                         result.success(mapOf("available" to (manager.activeNetwork != null), "metered" to manager.isActiveNetworkMetered))
                     }
                     "freeBytes" -> result.success(c.filesDir.usableSpace)
-                    "probeAudio" -> { val r = MediaMetadataRetriever(); try { r.setDataSource(m["path"] as String); result.success(r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()) } finally { r.release() } }
+                    "probeAudio", "probeVideo" -> mediaExecutor.execute {
+                        val r = MediaMetadataRetriever()
+                        try {
+                            r.setDataSource(m["path"] as String)
+                            val duration = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
+                            val value: Any? = if (call.method == "probeAudio") duration else mapOf("durationMs" to duration,
+                                "width" to r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt(),
+                                "height" to r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt())
+                            Handler(Looper.getMainLooper()).post { result.success(value) }
+                        } catch (_: Exception) { Handler(Looper.getMainLooper()).post { result.error("MEDIA_PROBE_FAILED", "Не удалось проверить медиа", null) } }
+                        finally { r.release() }
+                    }
                     else -> result.notImplemented()
                 }
             } catch (_: Exception) { result.error("TRANSFER_POLICY", "Передача сохранена. Откройте очередь для продолжения.", null) }

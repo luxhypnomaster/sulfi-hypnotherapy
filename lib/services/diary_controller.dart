@@ -574,9 +574,9 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await beforeAccountLogout?.call();
     ++_authGeneration;
     ++_loadGeneration;
+    await beforeAccountLogout?.call();
     authorBusy = false;
     _restoring = null;
     if (api?.supportsServerIdentity ?? false) {

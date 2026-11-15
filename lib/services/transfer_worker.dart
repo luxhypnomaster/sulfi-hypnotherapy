@@ -171,11 +171,31 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       pick: (_) async => null,
       probe: library.probe,
     );
+    Future<({int width, int height, int durationMs})> videoProbe(
+      File file,
+    ) async {
+      final m = await channel.invokeMapMethod<String, dynamic>('probeVideo', {
+        'path': file.path,
+      });
+      if (m == null ||
+          m['width'] is! int ||
+          m['height'] is! int ||
+          m['durationMs'] is! int) {
+        throw const FormatException('Видео не проверено');
+      }
+      return (
+        width: m['width'] as int,
+        height: m['height'] as int,
+        durationMs: m['durationMs'] as int,
+      );
+    }
+
     final capsules = CapsuleService(
       database: database,
       library: library,
       diaryDirectory: media.directory,
       workspace: Directory(p.join(root.path, 'transfer_workspace18')),
+      videoProbe: videoProbe,
       availableBytes: () async =>
           (await channel.invokeMethod<int>('freeBytes'))!,
     );

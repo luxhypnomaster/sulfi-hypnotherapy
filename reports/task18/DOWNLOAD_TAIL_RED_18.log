@@ -1,0 +1,16 @@
+00:00 +0: loading /dev/shm/sulfi18/test/task18_download_test.dart
+00:00 +0: /dev/shm/sulfi18/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail
+00:00 +0 -1: /dev/shm/sulfi18/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail [E]
+  FormatException: Контрольная сумма загрузки не совпала; неполный материал не установлен
+  package:sulfi_hypnotherapy/services/alchemist_install.dart 244:7  AlchemistInstall._downloadAsset
+  
+00:00 +0 -1: /dev/shm/sulfi18/test/task18_download_test.dart: 18 corrupt saved chunk stops before network/installation and preserves diagnostic bytes
+00:00 +1 -1: /dev/shm/sulfi18/test/task18_download_test.dart: 18 no server chunk support is explicit compatibility failure, no full-file fallback
+00:00 +2 -1: loading /dev/shm/sulfi18/test/task16_catalog_integration_test.dart
+00:03 +2 -1: /dev/shm/sulfi18/test/task16_catalog_integration_test.dart: local cross-language author → production JS domain → client selective install, metadata-only retry and revoke
+00:06 +3 -1: loading /dev/shm/sulfi18/test/task17_catalog_session_test.dart
+00:06 +3 -1: /dev/shm/sulfi18/test/task17_catalog_session_test.dart: 17 G0 catalog API constructed before login must see later shared login and explicit logout
+00:06 +4 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi18/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail

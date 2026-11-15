@@ -7,3 +7,9 @@ G0/G1 до реализации:81b7c71. Анализатор после тек�
 Промежуточная ошибка команды dart fix: интерфейс принимает один путь, исправлено адресным запуском. Две WIP-синтаксические ошибки closures/signature выявлены analyze, исправлены до CI. Неуспешная компиляция loading5 тестов не названа PASS; итоговая реально исполненная серия16 PASS.
 
 Native Kotlin/Android OS lifecycle, API34/35/36, native27→28 обеих APK, реальные Google/две физические установки — NOT_RUN. Выдача APK28 пока заблокирована safety gate. Текущий CI только targeted compile без подписи/APK; полный suite запускать после завершения G2, не повторять вслепую.
+
+## Второй implementation checkpoint
+
+Upload lost-ack test: реальный MediaTransfer отправляет блок, controlled transport теряет ответ после принятия, клиент сначала выполняет beginUpload с ТЕМ ЖЕ requestId, затем повторяет тот же offset. Ровно2 новых блока для400001bytes,3HTTP upload попытки, повторная операция использует descriptor/старый receipt без передачи байтов.1новый тест + прежний production JS-domain integration PASS2. Обновлённые queue/download18 PASS7. Analyzer clean после исправления typed video-probe record.
+
+Targeted native compile43658921493 наc94e668: FAIL до APK:2 Kotlin Int→Long errors у JobInfo.NETWORK_BYTES_UNKNOWN. Исправлено toLong для обоих аргументов, без ослабления OS policy. Следующий адресный compile сохранён отдельным запуском; Google/signing secrets не требуются. Изменения послеc94: async native media probe вне main thread, role-change invalidates authority epoch, typed video codec probe, finalizeDownload receipt validation и upload uncertainty reconciliation. Native lifecycle/upgrade/реальный Google пока NOT_RUN.
