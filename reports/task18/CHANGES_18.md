@@ -16,3 +16,6 @@
 Native JobOwnership: scheduler ID+nonce+run generation; non-owner/late onStop never stops primary/newer run; recovery re-armed during long primary; FGS timeout/destruction limited to owned run.4 JVM invariants prepared and executing in candidate pipeline. No schema/path/key/ACL/OAuth/server changes.
 
 Private draft403 fixed by isolated manual baseline GET+SHA/cache job, not by exposing draft or granting rights to APK code. Strict actual-run/tree gate reuses only unchanged passed Dart/server checks. Extended native observers require actual notification Pause/Cancel, same-task/session checkpoints, network automatic recovery and exact resumed range. No prepared test is marked PASS before real receipt.
+
+## Продолжение16:25UTC
+Сохранены actualAPI34/36 full PASS иCLIENT27→28 PASS receipts source59; доставка остаётся закрытой. Observer waiting реального SeekBar исправляет подтверждённую race только в nativeUIтесте. Добавлены boundedread-only scheduler/network failure snapshots и отдельный AndroidSQLite двухhandle causality probe на временном файле. Runtime source59/normalAPKbytes пока НЕ менялись; hypothesis ещё не принят заfix. Временная синтаксическая ошибка test-only UI была замечена локальным анализатором и исправлена до актуальногоnativebuild; ошибочный ожидавшийrun отменён.

@@ -9,3 +9,6 @@ Private задачи привязаны к hash(endpoint|server-verified scope),
 Отчёты18 в owner-only MyDrive root folder100klr45KcMk0CNx21nYhoPvwMJ8i8xv-. Повторный metadata read показал только user/owner. Наследование public-writer For_Codex не использовано, существующие ACL не менялись. APK18 на Drive не загружались; отдельное старое исключение public CLIENT27 не считается разрешением на любой следующий APK.
 
 Реальные Google-пользователи, две физические установки, OEM/power-policy и конечная конфиденциальность уведомлений на телефоне — NOT_RUN. CODE/контролируемые тесты этого не заменяют.
+
+## Изолированные продолжения
+Новые SQLite causality probes используют отдельный временный файл внутри testOnly.transferprobe; перед сменой экспериментального числа потоков не открыта production DB. Изменение pool на живой базе не производится. Host minidump parser читает только exception/module metadata с allowlist basename и bounds; stack/environment/raw dump не выгружаются. На диагностическом MASTER43733477006 minidump отсутствует; это не доказательство fault function. Новые normalAPK вexisting PRIVATE draft не загружены: fail-closed delivery требует6реальных native receipts; no create/publish/tag/delete/clobber/main/ACL/OAuth.
