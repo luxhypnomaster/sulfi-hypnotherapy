@@ -1,0 +1,44 @@
+{
+  "source": "4984a7bed3d327d4ad5430d9b4f20757bf8d673d",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "master_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "client_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "master_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN",
+      "transport": "REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN"
+    },
+    {
+      "case": "master_confirmed_unique_program_publication",
+      "status": "PASS",
+      "proof": 1,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "native_probe_failure",
+      "status": "FAIL",
+      "type": "AssertionError",
+      "reason": "NO_REMOTE_PROGRESS:downloaded:{\"uploaded\": 15728646, \"downloaded\": 0, \"verifiedBytes\": 15728646, \"calls\": {\"auth.whoami\": 5, \"media.beginUpload\": 3, \"media.uploadChunk\": 62, \"media.commitUpload\": 62, \"content.registerManifest\": 5, \"catalog.createDraft\": 1, \"catalog.publish\": 1, \"catalog.get\": 2, \"catalog.list\": 1}, \"publishedPrograms\": 1, \"blobs\": 3, \"classification\": \"CONTROLLED_NATIVE_NO_GOOGLE_NO_GAS\"}"
+    }
+  ]
+}

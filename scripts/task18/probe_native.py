@@ -38,6 +38,36 @@ def wait_bytes(field,minimum,timeout):
   if v[field]>=minimum:return v
   time.sleep(2)
  raise AssertionError('NO_REMOTE_PROGRESS:'+field+':'+json.dumps(stats()))
+def confirm_ui_destroyed(pkg,expected_pid):
+ until=time.monotonic()+20
+ while time.monotonic()<until:
+  raw=adb('shell','run-as',pkg,'cat','files/probe18-ui-destroy.json',check=False)
+  try:
+   v=json.loads(raw)
+   assert v['activityDestroyed'] and v['engineDestroyed'] and v['cachedUiEngineAbsent'],'UI_DESTRUCTION_NOT_CONFIRMED'
+   assert str(v['pid'])==expected_pid==adb('shell','pidof',pkg).strip(),'PROCESS_CRASH_IS_NOT_PURE_UI_DESTRUCTION'
+   (OUT/(pkg.split('.')[-2]+'-ui-destroy-receipt.json')).write_text(json.dumps(v,indent=2))
+   return v
+  except json.JSONDecodeError:time.sleep(.5)
+ raise AssertionError('MISSING_OBSERVED_ACTIVITY_ENGINE_DESTROY_RECEIPT')
+def expect_inventory(pkg,offline=False,timeout=45):
+ until=time.monotonic()+timeout
+ while time.monotonic()<until:
+  click('READ OFFLINE INVENTORY' if offline else 'READ INVENTORY');time.sleep(1)
+  labels=[n.get('text','') for n in tree()]
+  if any('NATIVE INVENTORY 3 AUDIO / 3 HASH / 1 MODULE / 1 PROGRAM' in x for x in labels):
+   if offline or any(x.startswith('complete ') for x in labels):return
+  time.sleep(1)
+ raise AssertionError('INSTALL_HASH_MANIFEST_OR_RECEIPT_NOT_CONFIRMED:'+repr(labels[:15]))
+def native_audio_active(pkg):
+ uid=re.search(r'uid:(\d+)',adb('shell','cmd','package','list','packages','-U',pkg));assert uid,'NO_AUDIO_APP_UID'
+ for _ in range(15):
+  raw=adb('shell','dumpsys','audio')
+  lines=[x for x in raw.splitlines() if re.search(r'(?:u/pid|uid/pid|uid)[:=]\s*'+uid[1]+r'(?:/|\b)',x)]
+  if any(re.search(r'state[:=]\s*(?:started|3)\b',x,re.I) for x in lines):
+   (OUT/'client-native-local-audio.txt').write_text('\n'.join(lines));return True
+  time.sleep(.5)
+ return False
 def launch(pkg):
  (OUT/'latest-launch.txt').write_text(adb('shell','am','start','-W','-n',pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity'))
  until=time.monotonic()+60
@@ -56,7 +86,7 @@ try:
  for e,pkg in packages.items():
   adb('install','-r','-t',str(ROOT/(e+'.apk')));adb('shell','pm','grant',pkg,'android.permission.POST_NOTIFICATIONS',check=False)
   CASES.append({'case':e+'_install_disposable_probe','status':'PASS','package':pkg,'Google':'NOT_RUN','candidateAPK':False})
- pkg=packages['master'];launch(pkg);click('UPLOAD AND DESTROY UI')
+ pkg=packages['master'];launch(pkg);initial_pid=adb('shell','pidof',pkg).strip();click('UPLOAD AND DESTROY UI');confirm_ui_destroyed(pkg,initial_pid)
  before=wait_bytes('uploaded',262144,60)
  # Application has explicitly destroyed its UI engine. OS must own progress.
  activities=adb('shell','dumpsys','activity','activities');assert pkg+'/ru.sulfi.sulfi_hypnotherapy.MainActivity' not in '\n'.join(x for x in activities.splitlines() if 'mResumedActivity' in x)
@@ -72,14 +102,22 @@ try:
  CASES.append({'case':'master_confirmed_unique_program_publication','status':'PASS','proof':stats()['publishedPrograms'],'Google':'NOT_RUN'})
  adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');launch(pkg)
  click('READ INVENTORY');time.sleep(3);shot('master-after-background')
- pkg=packages['client'];launch(pkg);click('DOWNLOAD AND DESTROY UI');before=wait_bytes('downloaded',262144,60)
+ pkg=packages['client'];launch(pkg);initial_pid=adb('shell','pidof',pkg).strip();click('DOWNLOAD AND DESTROY UI');confirm_ui_destroyed(pkg,initial_pid);before=wait_bytes('downloaded',262144,60)
  adb('shell','input','keyevent','KEYCODE_SLEEP');time.sleep(3);after=wait_bytes('downloaded',before['downloaded']+524288,30)
  CASES.append({'case':'client_real_tcp_bytes_after_UI_engine_destroy_and_screen_off','status':'PASS','before':before['downloaded'],'after':after['downloaded'],'Google':'NOT_RUN'})
  final=wait_bytes('downloaded',15*1024*1024,210)
- time.sleep(5);adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');launch(pkg);click('READ INVENTORY');time.sleep(3)
- labels=[n.get('text','') for n in tree()];assert any('NATIVE INVENTORY 3 AUDIO / 3 HASH / 1 MODULE / 1 PROGRAM' in x for x in labels),'INSTALL_HASH_MANIFEST_INVENTORY_NOT_CONFIRMED:'+repr(labels[:15])
+ time.sleep(2);adb('shell','input','keyevent','KEYCODE_WAKEUP');adb('shell','wm','dismiss-keyguard');launch(pkg);expect_inventory(pkg)
  shot('client-verified-install');snapshot(pkg,'client-after-install')
  CASES.append({'case':'client_background_atomic_program_install_3_real_wav_files_hashes_module_template','status':'PASS','Google':'NOT_RUN','heardByHuman':'NOT_RUN'})
+ # Only after a receipted completed install: cold restart with both networks off.
+ before_offline=stats()['downloaded']
+ adb('shell','cmd','connectivity','airplane-mode','enable',check=False);adb('shell','svc','wifi','disable');adb('shell','svc','data','disable')
+ adb('shell','am','force-stop',pkg);launch(pkg);expect_inventory(pkg,offline=True)
+ click('PLAY LOCAL FILE');assert native_audio_active(pkg),'NO_UID_BOUND_OFFLINE_AUDIO_TRACK'
+ assert stats()['downloaded']==before_offline,'UNEXPECTED_DOWNLOAD_DURING_OFFLINE_PROOF'
+ shot('client-offline-cold-local-audio')
+ CASES.append({'case':'client_cold_offline_3_hash_program_and_native_UID_bound_audio','status':'PASS','Google':'NOT_RUN','physicalHumanHearing':'NOT_RUN','network':'WIFI_DATA_OFF_AIRPLANE'})
+
 except Exception as e:
  CASES.append({'case':'native_probe_failure','status':'FAIL','type':type(e).__name__,'reason':str(e)[-1200:]});shot('failure')
  try:
@@ -87,7 +125,9 @@ except Exception as e:
   (OUT/'fixture-runtime.txt').write_text(adb('logcat','-d','-s','flutter','AndroidRuntime','ActivityManager','Flutter','FlutterJNI',check=False)[-28000:])
   (OUT/'fixture-activities.txt').write_text(adb('shell','dumpsys','activity','activities',check=False)[-16000:])
   (OUT/'last-anr.txt').write_text(adb('shell','dumpsys','activity','lastanr',check=False)[-40000:])
-  pid=adb('shell','pidof',pkg,check=False).strip().split()[0]
+  pids=adb('shell','pidof',pkg,check=False).strip().split()
+  if not pids:raise RuntimeError('PROCESS_ABSENT_CRASH_LOG_ALREADY_SAVED')
+  pid=pids[0]
   app_log=adb('logcat','-d','--pid='+pid,check=False)[-64000:]
   app_log=re.sub(r'CONTROLLED_(?:OWNER|CLIENT)_18_[A-Za-z0-9_]+','CONTROLLED_REDACTED',app_log)
   (OUT/'app-runtime-only.txt').write_text(app_log)
@@ -95,7 +135,11 @@ except Exception as e:
   (OUT/'app-java-threads.txt').write_text(adb('shell','debuggerd','-j',pid,check=False)[-40000:])
  except Exception:pass
 finally:
- result={'source':os.environ['GITHUB_SHA'],'scope':'CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY','Google':'NOT_RUN','GAS':'NOT_TOUCHED','ownerPhones':'NOT_RUN','actualCandidateUpgrade':'NOT_RUN','cases':CASES}
+ crash=adb('logcat','-d','-b','crash',check=False)
+ if 'Process: ru.sulfi.sulfi_hypnotherapy' in crash:
+  (OUT/'crash.txt').write_text(crash)
+  CASES.append({'case':'unexpected_probe_app_crash','status':'FAIL','reason':'Real process crash is not a clean UI-lifecycle PASS; see crash.txt'})
+ result={'source':os.environ.get('TASK18_PROBE_APP_SOURCE',os.environ['GITHUB_SHA']),'driverSource':os.environ['GITHUB_SHA'],'scope':'CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY','Google':'NOT_RUN','GAS':'NOT_TOUCHED','ownerPhones':'NOT_RUN','actualCandidateUpgrade':'NOT_RUN','cases':CASES}
  (OUT/'NATIVE_PROBE_18.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
  data=(OUT/'NATIVE_PROBE_18.json').read_bytes();print('TASK18_NATIVE_PROBE_JSON_BASE64='+base64.b64encode(data).decode());print('TASK18_NATIVE_PROBE_SHA256='+hashlib.sha256(data).hexdigest())
 assert not any(c['status']=='FAIL' for c in CASES),'CONTROLLED_NATIVE_PROBE_FAILED_NO_APK_DELIVERY'

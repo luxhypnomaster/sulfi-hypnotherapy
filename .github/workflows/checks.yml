@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_finalize:
+        description: 'Task18 exact-source verify + QUARANTINED signed28 pair + real27→28 safety; no APK delivery/deploy'
+        type: boolean
+        default: false
       task18_probe:
         description: 'Disposable native headless/real TCP probe, NO real Google/GAS/signing or candidate delivery'
         type: boolean
@@ -84,7 +88,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}
+  group: checks-${{ github.ref }}${{ inputs.p0_checks && '-p0-diagnostics' || '' }}${{ inputs.task18_probe && format('-probe18-api{0}', inputs.task18_api) || '' }}
   cancel-in-progress: true
 
 jobs:
@@ -952,7 +956,13 @@ jobs:
           java-version: '21'
       - uses: ./.github/actions/setup-flutter
       - run: flutter pub get --enforce-lockfile
+      - uses: actions/cache/restore@v4
+        id: probe_cache18
+        with:
+          path: ${{ runner.temp }}/task18-probe-apks
+          key: task18-probe-v2-${{ hashFiles('lib/**', 'test_driver/**', 'third_party/**/*.java', 'third_party/**/pubspec.yaml', 'android/app/src/**', 'android/*.kts', 'android/app/*.kts', 'android/gradle/**', 'android/gradle.properties', 'pubspec.*', '.github/actions/setup-flutter/**', '.github/workflows/checks.yml') }}
       - name: Build disposable testOnly packages, NEVER user candidates or existing signing
+        if: steps.probe_cache18.outputs.cache-hit != 'true'
         run: |
           mkdir -p "$RUNNER_TEMP/task18-probe-apks"
           for EDITION in master client; do
@@ -963,6 +973,15 @@ jobs:
           done
           cd android
           ./gradlew --stop
+          cd ..
+          python3 scripts/task18/probe_apk_manifest.py create
+      - uses: actions/cache/save@v4
+        if: steps.probe_cache18.outputs.cache-hit != 'true'
+        with:
+          path: ${{ runner.temp }}/task18-probe-apks
+          key: ${{ steps.probe_cache18.outputs.cache-primary-key }}
+      - name: Verify every fixture byte and exact testOnly package before any ADB install
+        run: python3 scripts/task18/probe_apk_manifest.py verify
       - name: Disposable host space and UI helper, no owner data or credentials
         run: |
           bash scripts/task16g/prepare_native_runner.sh
@@ -998,3 +1017,149 @@ jobs:
           for q in [pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-forensics/EMULATOR_TERMINATION.json']:
             if q.exists():print('TASK18_EMULATOR_EXIT='+q.read_text())
           PROBEPY
+
+  candidate18:
+    needs: verify
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true && inputs.build_mode == 'checks'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    env:
+      ALCHEMIST_API: ${{ vars.SULFI_ALCHEMIST_API }}
+      GOOGLE_WEB_CLIENT_ID: ${{ vars.SULFI_GOOGLE_WEB_CLIENT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - name: Verify exact public configuration and immutable storage guard
+        run: |
+          node scripts/alchemist/check-build-config.mjs
+          python3 - <<'PYCODE'
+          import pathlib,json,hashlib,os
+          assert 'version: 0.4.20+28' in pathlib.Path('pubspec.yaml').read_text()
+          guard=pathlib.Path('third_party/sqflite_android/android/src/main/java/com/tekartik/sqflite/StorageSafety.java').read_bytes()
+          assert hashlib.sha256(guard).hexdigest()==json.loads(pathlib.Path('reports/task16g/NATIVE_STORAGE_16G.json').read_text())['productionSHA256']
+          assert os.environ['GOOGLE_WEB_CLIENT_ID']==json.loads(pathlib.Path('server/alchemist/android-oauth-public.json').read_text())['webClientId']
+          PYCODE
+      - name: Read existing signing key on trusted manual branch only
+        env:
+          KEY_B64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KEY_B64"
+          umask 077
+          printf '%s' "$KEY_B64" | base64 --decode > "$RUNNER_TEMP/sulfi-test.keystore"
+      - name: Build exact-source MASTER and CLIENT candidates28
+        env:
+          SULFI_SIGNING_STORE_FILE: ${{ runner.temp }}/sulfi-test.keystore
+          SULFI_SIGNING_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_SIGNING_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+          SULFI_SIGNING_KEY_PASSWORD: ${{ secrets.SULFI_TEST_KEY_PASSWORD }}
+        run: |
+          flutter pub get --enforce-lockfile
+          mkdir -p "$RUNNER_TEMP/task18-apks"
+          flutter build apk --debug --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-apks/master28.apk"
+          flutter build apk --debug --dart-define=SULFI_EDITION=client --dart-define="SULFI_ALCHEMIST_API=$ALCHEMIST_API" --dart-define="SULFI_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$RUNNER_TEMP/task18-apks/client28.apk"
+          bash scripts/task18/verify_pair.sh
+      - name: Quarantine only, no APK delivery before native safety gates
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/task18-apks
+          key: task18-quarantine-pair-${{ github.sha }}
+      - name: Erase temporary runner signing copy
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sulfi-test.keystore"
+
+
+  native18:
+    needs: candidate18
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && inputs.task18_finalize == true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - edition: master
+            baseline: 27
+            asset: '748058133'
+            sha: 2bb394232b631d0b6498b9b6ef6e7846a2be60b1be914b287d6bcf35593f35eb
+          - edition: client
+            baseline: 27
+            asset: '748058137'
+            sha: 8e3ddaa19a37fbc5ab66474800ae4d6f3ec5ae937eb08909a4c8bd08831fdd46
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    env:
+      TASK18_EDITION: ${{ matrix.edition }}
+      TASK18_BASELINE: ${{ matrix.baseline }}
+      TASK17_EMULATOR_PIN: 37.2.12
+      TASK17_PROCESS_FORENSIC: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task18-apks
+          key: task18-quarantine-pair-${{ github.sha }}
+          fail-on-cache-miss: true
+      - name: Reclaim only disposable host toolchains before SDK install
+        run: bash scripts/task16g/prepare_native_runner.sh
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-35 build-tools;36.0.0
+      - name: Verify candidate and baseline bytes; build disposable UI probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_ASSET: ${{ matrix.asset }}
+          BASE_SHA: ${{ matrix.sha }}
+        run: |
+          bash scripts/task18/verify_pair.sh
+          gh api -H 'Accept: application/octet-stream' "repos/luxhypnomaster/sulfi-hypnotherapy/releases/assets/$BASE_ASSET" > "$RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk"
+          echo "$BASE_SHA  $RUNNER_TEMP/task18-apks/$TASK18_EDITION$TASK18_BASELINE.apk" | sha256sum -c -
+          bash scripts/task16v/build_ui_probe.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: UI-created native baseline to28 and cold data verification
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          emulator-boot-timeout: 180
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -Vulkan
+          script: bash scripts/task18/run_native.sh
+      - name: Keep bounded synthetic native receipt (no artifact-quota retries)
+        if: always()
+        run: |
+          python3 - <<'GATEPY'
+          import pathlib,os,json,hashlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'task18-evidence'/'NATIVE_UI_UPGRADE_18.json'
+          if p.exists():
+            b=p.read_bytes();v=json.loads(b)
+            print('TASK18_SAFETY_DIGEST='+hashlib.sha256(b).hexdigest())
+            print('TASK18_SAFETY_CASES='+json.dumps([{k:c[k] for k in ['case','status'] if k in c} for c in v['cases']]))
+          else:print('TASK18_SAFETY=BLOCKED_NO_NATIVE_RECEIPT')
+          GATEPY
+

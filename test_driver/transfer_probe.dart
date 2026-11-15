@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -75,8 +76,24 @@ class _Controlled18State extends State<Controlled18> {
   String message = 'CONTROLLED NATIVE18 · Google NOT_RUN';
   bool busy = false;
   AudioSelection? nextSelection;
-  Future<void> initialize() async {
-    if (c != null) return;
+  AudioPlayer? localPlayer;
+  Future<void> fixtureIdentity(
+    AlchemistDiaryApi api,
+    AccessPolicy policy,
+  ) async {
+    final actor = policy.clientEdition ? 'CLIENT' : 'OWNER';
+    await api.authenticateReader('CONTROLLED_${actor}_18_${'x' * 180}');
+    policy.applyVerifiedServerRole(api.verifiedRole);
+  }
+
+  Future<void> initialize({bool authenticate = true}) async {
+    if (c != null) {
+      final api = c!.diary!.api as AlchemistDiaryApi;
+      if (authenticate && !api.readerAuthenticated) {
+        await fixtureIdentity(api, c!.policy);
+      }
+      return;
+    }
     final root = await getApplicationSupportDirectory();
     final repo = await SqliteLibraryRepository.open(
       p.join(root.path, 'library.sqlite'),
@@ -121,9 +138,7 @@ class _Controlled18State extends State<Controlled18> {
       media: media,
       connection: fixtureRequest,
     );
-    final actor = policy.clientEdition ? 'CLIENT' : 'OWNER';
-    await api.authenticateReader('CONTROLLED_${actor}_18_${'x' * 180}');
-    policy.applyVerifiedServerRole(api.verifiedRole);
+    if (authenticate) await fixtureIdentity(api, policy);
     final diary = DiaryController(
       AlchemistDiaryRepository(repo.database, scope: () => api.readerScope),
       api: api,
@@ -284,8 +299,8 @@ class _Controlled18State extends State<Controlled18> {
     }
   }
 
-  Future<void> inventory() async {
-    await initialize();
+  Future<void> inventory({bool offline = false}) async {
+    await initialize(authenticate: !offline);
     await c!.reload();
     await c!.cloudQueue.refresh();
     final assets = await c!.library.repository.list();
@@ -306,9 +321,25 @@ class _Controlled18State extends State<Controlled18> {
     }
   }
 
+  Future<void> playLocal() async {
+    await initialize(authenticate: false);
+    final assets = await c!.library.repository.list();
+    if (assets.isEmpty) throw StateError('NO_LOCAL_AUDIO');
+    localPlayer ??= AudioPlayer();
+    await localPlayer!.setFilePath(c!.library.fileFor(assets.first).path);
+    await localPlayer!.setLoopMode(LoopMode.one);
+    unawaited(localPlayer!.play());
+    if (mounted) {
+      setState(
+        () => message = 'CONTROLLED LOCAL AUDIO REQUESTED · no network · human hearing NOT_RUN',
+      );
+    }
+  }
+
   @override
   void dispose() {
     timer?.cancel();
+    if (localPlayer != null) unawaited(localPlayer!.dispose());
     super.dispose();
   }
 
@@ -328,6 +359,14 @@ class _Controlled18State extends State<Controlled18> {
             child: const Text('DOWNLOAD AND DESTROY UI'),
           ),
           TextButton(onPressed: inventory, child: const Text('READ INVENTORY')),
+          TextButton(
+            onPressed: () => inventory(offline: true),
+            child: const Text('READ OFFLINE INVENTORY'),
+          ),
+          TextButton(
+            onPressed: playLocal,
+            child: const Text('PLAY LOCAL FILE'),
+          ),
           for (final row in c?.cloudQueue.rows ?? <Map<String, dynamic>>[])
             Text(
               '${row['_work']?['phase']} ${row['_work']?['bytes']} / ${row['_work']?['totalBytes']}',

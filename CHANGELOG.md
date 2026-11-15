@@ -1,3 +1,9 @@
+# №18 — кандидат 0.4.20+28 (STOP-SHIP до native safety gate)
+
+Отдельный OS-owned transfer engine UIDT34+/dataSync24–33, durable owner-bound upload/download, проверяемая докачка и receipts, системные уведомления и честные причины ожидания. Home/lock не пользовательская пауза. Сохранены SQLite9, IDs, исходные записи и данные27; никакого изменения GAS6/OAuth/ACL/main/signing. Добавлены защита queued payload и ручной паузы, измеримые stage metrics.
+
+CODE/controlled regressions проходят, но полная актуальная native27→28/physical Google/OEM приёмка ещё не завершена. Этот номер зарезервирован для кандидатов одной пары, не production release. Не выдавать APK до двустороннего native data-safety PASS. Пакеты .transferprobe — только одноразовый стенд, не пользовательские APK.
+
 # №17 — кандидат 0.4.19+27 (приёмка не завершена)
 
 Единая Google-сессия и silent restore без fallback к неподтверждённым аккаунтам; durable очередь с причинами паузы, явным Resume и сверкой неопределённого commit; обязательный предпросмотр публикации; отдельные каталог/дневник; исправленные статусы, фокус формы, профиль автора и категории. Схема SQLite9, идентификаторы, подпись и прежние APK сохраняются.
