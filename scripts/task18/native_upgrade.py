@@ -217,7 +217,14 @@ def module(title,tracks,pause=False):
  if pause:
   click('Добавить паузу');time.sleep(1)
   # Genuine vertical seconds wheel gesture; no model injection.
-  wheel=next((n for n in tree() if 'Секунды' in label(n)),None)
+  # The previous failure capture contains the real seconds SeekBar after the
+  # one-shot lookup had already failed. Observe semantics settling; never tap
+  # Add twice or inject a pause/model as a substitute for the real gesture.
+  wheel=None;deadline=time.monotonic()+20
+  while time.monotonic()<deadline:
+   wheel=next((n for n in tree() if 'Секунды' in label(n) and n.get('class')=='android.widget.SeekBar'),None)
+   if wheel is not None:break
+   time.sleep(.5)
   assert wheel is not None,'SECONDS_WHEEL_NOT_FOUND'
   x1,y1,x2,y2=map(int,re.findall(r'\d+',wheel.get('bounds','')))
   assert y2-y1>80,'SECONDS_WHEEL_BOUNDS_INVALID'

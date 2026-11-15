@@ -176,6 +176,11 @@ def main():
  except Exception as e:
   CASES.append({'case':'native_probe_failure','status':'FAIL','type':type(e).__name__,'reason':str(e)[-1200:]});shot('failure')
   try:
+   from probe_snapshot import snapshot as read_snapshot
+   (OUT/'failure-native-state.json').write_text(json.dumps(read_snapshot(pkg),indent=2)+'\n')
+   (OUT/'failure-native-jobs.txt').write_text(adb('shell','dumpsys','jobscheduler',pkg,check=False))
+  except Exception:pass
+  try:
    (OUT/'crash.txt').write_text(adb('logcat','-d','-b','crash','-t','50',check=False))
    (OUT/'fixture-runtime.txt').write_text(adb('logcat','-d','-s','flutter','AndroidRuntime','ActivityManager','Flutter','FlutterJNI',check=False)[-28000:])
    (OUT/'fixture-activities.txt').write_text(adb('shell','dumpsys','activity','activities',check=False)[-16000:])

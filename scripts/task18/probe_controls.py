@@ -123,7 +123,14 @@ class NativeControls:
   while time.monotonic()<until:
    if self.stats()['downloaded']>stable:break
    time.sleep(2)
-  else:raise AssertionError('NO_OS_NETWORK_RECOVERY_WITHOUT_UI_OR_RESUME')
+  else:
+   # Diagnose the actual FGS/JobScheduler/network boundary before another run.
+   # Read-only on the disposable probe: no force-run, UI start, or user Resume.
+   self.save('client-network-recovery-blocked',{'snapshot':snapshot(pkg),'stats':self.stats(),
+    'jobs':self.adb('shell','dumpsys','jobscheduler',pkg,check=False),
+    'services':self.adb('shell','dumpsys','activity','services',pkg,check=False),
+    'network':self.adb('shell','dumpsys','connectivity',check=False)[-40000:]})
+   raise AssertionError('NO_OS_NETWORK_RECOVERY_WITHOUT_UI_OR_RESUME')
   resumed=snapshot(pkg);assert resumed['queues'][name]['work']['taskId']==row['work']['taskId']
   self.save('client-network-automatic-recovery',resumed)
   self.notification('Отменить');cancelled,_,cancelrow=self.wait_state(pkg,['cancelled'])

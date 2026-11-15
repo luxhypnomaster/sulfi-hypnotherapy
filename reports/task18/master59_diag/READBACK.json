@@ -1,0 +1,20 @@
+[
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/NATIVE_UI_UPGRADE_18.json",
+    "bytes": 36601,
+    "sha256": "65434c0f27f385ce8e848ae75c149c277b6727725ff4aec9421789b9201a14aa"
+  },
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/failure-ui_module_pause.png",
+    "bytes": 1149394,
+    "sha256": "1de90f46be4968e19fac5e8ab0127ea64b0bc8ce437960998db4de6a65855199"
+  },
+  {
+    "job": "0_native18 (master).txt",
+    "path": "master/failure-ui_module_pause.xml",
+    "bytes": 3791,
+    "sha256": "c3835235447c8b19822a8a2bef03995f624a766d8c36b8ddd676ba4ab379594c"
+  }
+]

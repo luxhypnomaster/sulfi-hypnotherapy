@@ -1,0 +1,70 @@
+{
+  "source": "59c3667a28357767533b25e92661b87d081d7227",
+  "driverSource": "267fbbcb74f9578121f132f1f8e2078d7f93ea1c",
+  "scope": "CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY",
+  "Google": "NOT_RUN",
+  "GAS": "NOT_TOUCHED",
+  "ownerPhones": "NOT_RUN",
+  "actualCandidateUpgrade": "NOT_RUN",
+  "cases": [
+    {
+      "case": "master_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "client_install_disposable_probe",
+      "status": "PASS",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest.transferprobe",
+      "Google": "NOT_RUN",
+      "candidateAPK": false
+    },
+    {
+      "case": "master_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN",
+      "transport": "REAL_LOOPBACK_TCP_PRODUCTION_JS_DOMAIN"
+    },
+    {
+      "case": "non_owning_recovery_watchdog_does_not_stop_primary",
+      "status": "PASS",
+      "before": 786432,
+      "after": 1048576,
+      "scope": "CONTROLLED_NATIVE_OS"
+    },
+    {
+      "case": "master_notification_pause_cold_restart_explicit_same_owner_resume",
+      "status": "PASS",
+      "proof": {
+        "taskIdPreserved": true,
+        "sourceHashesPreserved": true,
+        "requestAndSessionPreserved": true,
+        "forceStop": "NO_AUTO_RESUME_CLAIM_EXPLICIT_USER_START_ONLY"
+      },
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "master_confirmed_unique_program_publication",
+      "status": "PASS",
+      "proof": 1,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "client_real_tcp_bytes_after_UI_engine_destroy_and_screen_off",
+      "status": "PASS",
+      "before": 262144,
+      "after": 786432,
+      "Google": "NOT_RUN"
+    },
+    {
+      "case": "native_probe_failure",
+      "status": "FAIL",
+      "type": "AssertionError",
+      "reason": "NO_OS_NETWORK_RECOVERY_WITHOUT_UI_OR_RESUME"
+    }
+  ]
+}
