@@ -1,15 +1,20 @@
-# №18: PARTIAL, APK пока STOP-SHIP
+# №18 — PARTIAL; новая APK не выдана
 
-Разработка продолжается в feat/task18-native-background-transfer, draft PR49 (base PR48, НЕ main). Последняя кодовая точка7f6c637; исходная база приложений27 fbdaa7b, Git base506619a. G0/G1 выполнены81b7c71 и повторно не запускаются. Продукционный GAS6, OAuth, ACL, подпись и данные MASTER27/CLIENT27 не изменялись.
+Контрольная точка native-кода: cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429, ветка feat/task18-native-background-transfer, draft PR49. main, GAS6, OAuth, ACL, подпись и материалы27 сохранены.
 
-G2: реализован отдельный Android headless executor — UIDT34+, dataSync foreground24–33 и ограниченное JobScheduler recovery. Существующие upload intents сохранены, selective install/диарийные медиа и reader-sync передаются той же очередью. Защищены owner/epoch/роли, ручная пауза, неизменность отправляемой редакции, проверяемая докачка, whole SHA, final receipt и повтор запроса с прежним ключом. Это больше, чем onPause fix, но native runtime ещё требует доказательств.
+Реализован OS-owned headless executor для обеих APK: UIDT34+, dataSync FGS24–33, ограниченный persisted recovery. Существующие intent/очередь/SQLite schema9 сохранены. Добавлены durable download/media/read-sync adapters, owner/role/epoch lease, chunk/whole SHA и final receipts, воспроизводимые retries, системные Pause/Cancel и честные статусы. Дополнительное native исправление ограничивает onStop/timeout конкретным владеющим запуском, чтобы вспомогательное задание не останавливало основной transfer.
 
-Проверки: текущая адресная серия16 PASS с production JS-domain selective install; analyzer clean перед последними отрицательными тестами. Ранее промежуточный полный Flutter480PASS/2SKIP, CLIENT3PASS, Node47+24PASS, offline contractPASS. Это не финальная проверка будущей пары28: после неё были изменения, полный CI должен проверять точный final source. Google/два физических телефона/OEM NOT_RUN.
+## Что действительно проверено
 
-CI: compile43660087187 SUCCESS. Probe43662532407 и43663729317 реально построили/установили два изолированных testOnly пакета, но FAILED до передачи. Второй выявил окно Pixel Launcher ANR и тайм-аут первого кадра. Новый прогон43700853248/source4984a7b использует доказанную ранее GLES-конфигурацию720×1280 и отдельную диагностику PID/ANR; результат в момент этой контрольной точки ещё не принят. Нельзя считать установку probe или компиляцию проверкой работы передачи.
+- Полный verify job43704911303/source19c3345:485 Flutter/3CLIENT/47+24Node PASS, contract13schema+4fixture+10negative PASS, формат и анализ чистые. Native изменения после него проверяются отдельно; reuse18 проверяет реально успешный job и неизменность всех Dart/test/server/dependency inputs.
+- Native probe43704911357:7PASS на Android API34. После наблюдаемого уничтожения UI-движка и Activity, в том же процессе, при выключенном экране продолжались обе передачи.3 реальных PCM WAV/15728646bytes,1 программа, уникальный commit. CLIENT проверил3whole hashes/модуль/программу, холодно стартовал без Wi-Fi/data и запустил UID-bound AudioTrack. App4ab0588/driver19c3345; это controlled native proof, НЕ Google/GAS/физическая слышимость.
+- Новые расширенные native/JVM/27→28 safety проверки запущены на cea4897: finalize43708103115, probe43708105791. На текущей точке ещё не завершены. Реальный baseline18 job SUCCESS: обе исходные27 прочитаны без изменения release и сверены по закреплённым SHA. Старый403 воспроизведён и устранён узко.
+- Скорость:1/15/50MiB loopback TCP/domain и раздельные стадии измерены; Google throughput ещё не измерен. Фиксированное ускорение не заявляется.
 
-Исследование скорости: реально измерены1/15/50MiB в loopback TCP к production JS DOMAIN, отдельно upload/server verification/download; сохранены исходные JSON. Это не Google Drive throughput. Продакшн health был прочитан анонимно трижды, без изменений сервера. Фиксированного ускорения не заявлено.
+## Блокировки / границы доказательств
 
-APK28 не выданы, APK_PAIR_18 отсутствует намеренно. Native MASTER27→28 и CLIENT27→28 с UI-created материалами пока NOT_RUN. Далее Codex должен завершить OS background/pause/network/process tests, data-preservation gates, final CI/build и независимую SHA/signature/config проверку. Только затем — ограниченная приёмка владельца. Повторной авторизации или испытаний старой27 сейчас не требуется.
+Нормальная пара28 source19c3345 действительно собрана с прежним сертификатом, но остаётся quarantined safeForOwnerInstall=false; новый native fix требует новой пары и green27→28. Независимый readback и безопасная выдача ещё не выполнены. Actions artifact upload фактически BLOCKED_QUOTA: continue-on-error не является доказательством upload. Старые artifacts не удалены; APK28 на Drive не загружались.
 
-Приватные отчёты: https://drive.google.com/drive/folders/100klr45KcMk0CNx21nYhoPvwMJ8i8xv- . Folder owner-only проверен повторно. For_Codex public writer не используется для личных отчётов. №17 не перезаписан; production apply/rollback по №17 не выполнялись.
+Настоящие Google MASTER/CLIENT, физические телефоны/OEM, мобильный metered переход, слышимость и25-я приёмка NOT_RUN. TestOnly .transferprobe не выдаётся владельцу и не заменяет сохранность настоящих пакетов. №17 и его server patch не объявлены завершёнными.
+
+Отчёты: https://drive.google.com/drive/folders/100klr45KcMk0CNx21nYhoPvwMJ8i8xv- (owner-only). Дальше: закончить текущие native gates, исправить только подтверждённые дефекты, провести независимую проверку пары, затем согласовать доступную выдачу и дать физический протокол.

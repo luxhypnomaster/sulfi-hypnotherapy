@@ -10,3 +10,9 @@
 - Тестовый native target имеет другие package IDs и testOnly. Его synthetic identity/TCP не являются Google/GAS proof и не включаются в обычный main. Проверка отсутствия fixture в shipping binary обязательна до выдачи.
 
 Не менялись: production GAS6/deployment/ACL/OAuth/signing/main, старый дневник, package IDs обычных приложений, schema9/template IDs/API. Не создавались№19/второй сервер/платный сервис. Новые APK ещё не выданы; 25-критериальная матрица сохраняет NOT_RUN/BLOCKED честно.
+
+
+## Checkpoint cea4897
+Native JobOwnership: scheduler ID+nonce+run generation; non-owner/late onStop never stops primary/newer run; recovery re-armed during long primary; FGS timeout/destruction limited to owned run.4 JVM invariants prepared and executing in candidate pipeline. No schema/path/key/ACL/OAuth/server changes.
+
+Private draft403 fixed by isolated manual baseline GET+SHA/cache job, not by exposing draft or granting rights to APK code. Strict actual-run/tree gate reuses only unchanged passed Dart/server checks. Extended native observers require actual notification Pause/Cancel, same-task/session checkpoints, network automatic recovery and exact resumed range. No prepared test is marked PASS before real receipt.
