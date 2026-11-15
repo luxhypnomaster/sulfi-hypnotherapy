@@ -1,0 +1,53 @@
+{
+  "task": 18,
+  "branch": "feat/task18-native-background-transfer",
+  "draftPR": 49,
+  "basePR48": "UNMERGED",
+  "sourceAPK28": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+  "mainPreserved": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "fullDartVerify": {
+    "run": 43704911303,
+    "source": "19c3345cd42d369fa3a0bc9a76e0f1ee55bf8c03",
+    "job": "verify",
+    "conclusion": "success",
+    "passedFlutter": 485,
+    "failedFlutter": 0
+  },
+  "nativeCandidateAndUpgrade": {
+    "run": 43708103115,
+    "conclusion": "success",
+    "masterCases": 14,
+    "clientCases": 12,
+    "independentManifestReadbacks": 3,
+    "scope": "LOCAL_UI_DATA_NOT_GOOGLE"
+  },
+  "currentControlledProbe": {
+    "run": 43710239769,
+    "driver": "a645655c5a4581cb99e642b26235b2a36655d5d4",
+    "appSource": "cea4897cbf8b3a4ee33bd6ad0f40edc1bd55b429",
+    "statusAtCheckpoint": "IN_PROGRESS_CHECK_REAL_API_BEFORE_RESUME",
+    "previousFailures": [
+      {
+        "run": 43708105791,
+        "cause": "external SystemUI modal ANR; no transfer"
+      },
+      {
+        "run": 43709505162,
+        "cause": "cmd statusbar collapse did not actually close shade; observer readiness false-positive; no transfer"
+      }
+    ]
+  },
+  "delivery": "NOT_DONE_QUARANTINE_ONLY_ARTIFACT_QUOTA_BLOCKED",
+  "GAS": "EXISTING6_UNCHANGED",
+  "OAuthACLSigning": "UNCHANGED",
+  "GooglePhysicalOEM": "NOT_RUN",
+  "reportsDrive": "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-",
+  "next": [
+    "Read actual current probe result, collect raw ZIP/SHA evidence; do not assume green",
+    "If observer failure, diagnose exact evidence; never blindly rerun",
+    "After API34 extended PASS use same immutable cached fixture bytes for API33/35/36 (no rebuild unless inputs changed)",
+    "Do not issue probes or old source19 quarantine",
+    "Prepare concrete safe APK28 delivery only after background/safety gates; never upload APK to Drive without specific authorization",
+    "Update existing owner-only report IDs and raw-byte readback; preserve17/history"
+  ]
+}
