@@ -1,0 +1,145 @@
+{
+  "checkpoint": "43fcf26",
+  "files": [
+    {
+      "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+      "name": "RESULT_18.md",
+      "metadata": {
+        "id": "1MLCM5QsLg2yD_eQLab8aXBImdtlc1Clc",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "sha256": "50dfbd2b6c4795a7947a2318241e0200ae4c1e741a31c2b755f3dc859f7851cb",
+      "bytes": 5106,
+      "status": "PASS_RAW_BYTES_PARENT_OWNER_ONLY"
+    },
+    {
+      "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+      "name": "TESTS_18.md",
+      "metadata": {
+        "id": "1g6PqejoXKjZGytFRkjrtxEmYTEIZqOzG",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "sha256": "b9c22776220bca2a5af826169a99e2cfa7a8b5f0332778208f95e7be02706389",
+      "bytes": 9600,
+      "status": "PASS_RAW_BYTES_PARENT_OWNER_ONLY"
+    },
+    {
+      "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+      "name": "PROGRESS.md",
+      "metadata": {
+        "id": "1uFjES3KpjdYpB8Nt4NuDctYnXONdbLzp",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "sha256": "a5f829fc028989f57da749e3a1c82b46768c81131ab13982c7e47792c5c69dba",
+      "bytes": 31401,
+      "status": "PASS_RAW_BYTES_PARENT_OWNER_ONLY"
+    },
+    {
+      "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+      "name": "ACCEPTANCE_18.csv",
+      "metadata": {
+        "id": "1Q-q7BWMBxVr2nDpsVnLYTFPlNdm8hbg7",
+        "title": "",
+        "mime_type": null,
+        "size": null,
+        "url": null,
+        "file_or_folder": null,
+        "created_time": null,
+        "modified_time": null,
+        "parent_ids": [
+          "100klr45KcMk0CNx21nYhoPvwMJ8i8xv-"
+        ],
+        "drive_id": null,
+        "current_user_can_share": null,
+        "has_augmented_permissions": null,
+        "shared": null,
+        "permissions": [
+          {
+            "type": "user",
+            "role": "owner",
+            "emailAddress": null,
+            "domain": null,
+            "displayName": null,
+            "allowFileDiscovery": null
+          }
+        ],
+        "source_visibility_status": "permission_metadata_available"
+      },
+      "sha256": "172edf324725e25dc68a49f1a567cc13da77c83acc3963c18692b4c3800dbfcb",
+      "bytes": 12652,
+      "status": "PASS_RAW_BYTES_PARENT_OWNER_ONLY"
+    }
+  ]
+}
