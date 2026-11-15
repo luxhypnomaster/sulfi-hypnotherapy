@@ -49,6 +49,9 @@ class DiaryController extends ChangeNotifier {
   Timer? _expiry;
   String _readScope = 'public';
   VoidCallback? onAccountLogout;
+  Future<void> Function()? beforeAccountLogout;
+  Future<void> Function(DiaryEntry, bool?)? enqueueCloudOperation;
+  bool get backgroundCloudTransfers => enqueueCloudOperation != null;
   int _rotation = 0;
   final _readerAudio = <String, DiaryAudio>{};
   final _heard = <String, HeardAudio>{};
@@ -471,6 +474,7 @@ class DiaryController extends ChangeNotifier {
       policy?.applyVerifiedServerRole(null);
       drafts = [];
     }
+    await beforeAccountLogout?.call();
     onAccountLogout?.call();
     published = published
         .where(
@@ -570,6 +574,7 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    await beforeAccountLogout?.call();
     ++_authGeneration;
     ++_loadGeneration;
     authorBusy = false;
@@ -656,6 +661,10 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> saveToCloud(DiaryEntry entry) async {
+    if (enqueueCloudOperation != null) {
+      await enqueueCloudOperation!(entry, null);
+      return;
+    }
     if (!(api?.supportsAdvancedPublication ?? false) &&
         (entry.extra.containsKey('contentLinks') ||
             entry.extra.containsKey('publication'))) {
@@ -682,6 +691,10 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> publish(DiaryEntry entry, {required bool published}) async {
+    if (enqueueCloudOperation != null) {
+      await enqueueCloudOperation!(entry, published);
+      return;
+    }
     if (!(api?.supportsAdvancedPublication ?? false) &&
         (entry.extra.containsKey('contentLinks') ||
             entry.extra.containsKey('publication'))) {

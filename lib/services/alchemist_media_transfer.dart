@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/session_plan.dart';
 import 'alchemist_api.dart';
+import 'alchemist_diagnostics.dart';
 import 'alchemist_errors.dart';
 import 'diary_api.dart';
 
@@ -28,8 +29,16 @@ class AlchemistMediaTransfer {
     void Function(int, int)? progress,
     void Function(String)? onStage,
   }) async {
+    final hashClock = Stopwatch()..start();
     final size = await file.length(),
         hash = (await sha256.bind(file.openRead()).first).toString();
+    final diag = AlchemistDiagnostics.instance;
+    diag.record(
+      diag.begin(),
+      'media.localHash',
+      'complete',
+      hashClock.elapsedMilliseconds,
+    );
     if (size == 0 || expectedHash != null && expectedHash != hash) {
       throw const FormatException('Файл изменён или пуст');
     }
@@ -169,6 +178,13 @@ class AlchemistMediaTransfer {
         'mime': mime,
       });
       check();
+      if (state['sessionId'] == start['sessionId'] &&
+          start['offset'] is int &&
+          (state['offset'] as int? ?? 0) > start['offset']) {
+        throw const FormatException(
+          'Серверная позиция уменьшилась. Исходник сохранён; нужен reconcile',
+        );
+      }
       state['sessionId'] = start['sessionId'];
       var offset = start['offset'] as int;
       if (offset < 0 || offset > size) {
@@ -184,6 +200,7 @@ class AlchemistMediaTransfer {
           await input.setPosition(offset);
           final bytes = await input.read(262144);
           if (bytes.isEmpty) throw const FormatException('Файл оборвался');
+          final chunkClock = Stopwatch()..start();
           final result = await api.call('media.uploadChunk', {
             'sessionId': start['sessionId'],
             'offset': offset,
@@ -194,6 +211,14 @@ class AlchemistMediaTransfer {
           if (next is! int || next != offset + bytes.length) {
             throw const FormatException('Сервер не подтвердил блок');
           }
+          final diag = AlchemistDiagnostics.instance;
+          diag.record(
+            diag.begin(),
+            'media.uploadChunk',
+            'acked',
+            chunkClock.elapsedMilliseconds,
+            confirmedBytes: bytes.length,
+          );
           offset = next;
           state['offset'] = offset;
           await checkpoint();

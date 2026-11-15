@@ -155,13 +155,27 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
       error = null;
     });
     try {
-      await AlchemistInstall(widget.controller.capsules!, api).install(
-        c,
-        interrupted: () => paused || !mounted,
-        progress: (n, total) {
-          if (mounted) setState(() => progress = '$n / $total байт');
-        },
-      );
+      if (widget.controller.nativeTransfers) {
+        final task = await widget.controller.installInBackground(c);
+        if (mounted) {
+          await Navigator.of(context).push<void>(
+            MaterialPageRoute(
+              builder: (_) => AlchemistSyncScreen(
+                controller: widget.controller,
+                focusName: task,
+              ),
+            ),
+          );
+        }
+      } else {
+        await AlchemistInstall(widget.controller.capsules!, api).install(
+          c,
+          interrupted: () => paused || !mounted,
+          progress: (n, total) {
+            if (mounted) setState(() => progress = '$n / $total байт');
+          },
+        );
+      }
       await widget.controller.reload();
       await load();
     } catch (e) {
@@ -199,18 +213,17 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                     ),
                   ),
                 ),
-              if (widget.controller.policy.isAuthor)
-                TextButton.icon(
-                  icon: const Icon(Icons.sync),
-                  label: const Text('Очередь передач'),
-                  onPressed: () => Navigator.push<void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          AlchemistSyncScreen(controller: widget.controller),
-                    ),
+              TextButton.icon(
+                icon: const Icon(Icons.sync),
+                label: const Text('Очередь передач'),
+                onPressed: () => Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        AlchemistSyncScreen(controller: widget.controller),
                   ),
                 ),
+              ),
               TextButton.icon(
                 icon: const Icon(Icons.account_circle_outlined),
                 label: Text(
@@ -408,10 +421,7 @@ class _AlchemistCoverState extends State<AlchemistCover> {
           (d['byteLength'] as int) > 20 * 1024 * 1024) {
         throw const FormatException('Обложка недоступна');
       }
-      final f = await AlchemistInstall(
-        widget.controller.capsules!,
-        widget.api,
-      ).downloadAsset(d);
+      final f = await widget.controller.downloadAsset(d);
       if (mounted) setState(() => file = f);
     } catch (_) {
       if (mounted) setState(() => file = null);

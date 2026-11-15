@@ -78,16 +78,20 @@ class AlchemistApi {
             'entry.archive',
             'entry.restore',
             'reads.merge',
+            'sync.push',
           }.contains(op) &&
           p['requestId'] is String &&
           (p['requestId'] as String).isNotEmpty ||
       const {
         'auth.whoami',
         'feed.list',
+        'sync.pull',
         'entry.get',
         'catalog.list',
         'catalog.get',
         'catalog.getRevision',
+        'catalog.getInstallPlan',
+        'media.finalizeDownload',
         'catalog.resolveReference',
         'catalog.changes',
         'catalog.checkUpdates',

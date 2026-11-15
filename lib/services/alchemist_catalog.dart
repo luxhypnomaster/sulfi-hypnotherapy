@@ -464,12 +464,21 @@ class AlchemistCatalog {
     if (!['withdraw', 'archive', 'restore'].contains(action)) {
       throw const FormatException('Неизвестное действие публикации');
     }
+    if (controller.nativeTransfers) {
+      draft['requestedAction'] = action;
+      await _store(draft, enqueue: true);
+      await controller.cloudQueue.enqueue(
+        'alchemist_card:${draft['catalogItemId']}',
+      );
+      return;
+    }
     if (draft['pending'] != null) await _recover(draft);
     final result = await _mutation(draft, 'catalog.$action', {
       'catalogItemId': draft['catalogItemId'],
       'ifMatch': draft['etag'],
     });
     draft['status'] = result['publicationState'];
+    draft.remove('requestedAction');
     await _store(draft);
   }
 

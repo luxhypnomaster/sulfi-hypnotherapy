@@ -27,6 +27,14 @@ class AlchemistFailure extends DiaryApiException {
         true,
       );
     }
+    if (error is FileSystemException && error.osError?.errorCode == 28) {
+      return const AlchemistFailure(
+        'Недостаточно места. Освободите память; исходные файлы и очередь сохранены.',
+        0,
+        'STORAGE_FULL',
+        DiaryFailure.invalidData,
+      );
+    }
     if (error is HttpException) {
       return const AlchemistFailure(
         'Соединение оборвалось. Подтверждённый прогресс сохранён.',

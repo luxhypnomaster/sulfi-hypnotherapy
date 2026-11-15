@@ -8,6 +8,9 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/content_revision.dart';
 import 'alchemist_api.dart';
+import 'alchemist_diagnostics.dart';
+import 'alchemist_errors.dart';
+import 'diary_api.dart';
 import 'capsule_service.dart';
 import 'local_content_catalog.dart';
 
@@ -23,7 +26,8 @@ class AlchemistInstall {
     bool Function()? interrupted,
     void Function(int, int)? progress,
   }) {
-    final key = '${service.library.directory.parent.path}:${asset['sha256']}';
+    final key =
+        '${service.library.directory.parent.path}:${api.ownerBinding ?? 'public'}:${asset['assetRevisionId']}:${asset['sha256']}';
     final existing = _active[key];
     if (existing != null) return existing;
     late Future<File> pending;
@@ -57,64 +61,198 @@ class AlchemistInstall {
         return f;
       }
     }
+    final owner = api.ownerBinding ?? 'public';
+    final revision = asset['assetRevisionId'];
+    if (revision is! String || revision.isEmpty) {
+      throw const FormatException('Нет редакции файла');
+    }
     final cache = Directory(
-      p.join(service.library.directory.parent.path, 'alchemist_transfers'),
+      p.join(
+        service.library.directory.parent.path,
+        'alchemist_transfers',
+        owner,
+      ),
     );
     await cache.create(recursive: true);
     final file = File(p.join(cache.path, '$hash.part'));
-    if (!await file.exists()) await file.create();
-    var offset = await file.length();
-    // Only complete, flushed chunks are resumable after process death.
-    if (offset > size || offset < size && offset % 262144 != 0) {
-      offset -= offset % 262144;
-      if (offset > size) offset = 0;
-      final repair = await file.open(mode: FileMode.append);
-      try {
-        await repair.truncate(offset);
-      } finally {
-        await repair.close();
-      }
+    final key = 'alchemist_download_checkpoint:$owner:$revision:$hash';
+    final previous = await service.database.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: [key],
+    );
+    final state = previous.isEmpty
+        ? <String, dynamic>{
+            'ownerBinding': owner,
+            'assetRevisionId': revision,
+            'sha256': hash,
+            'byteLength': size,
+            'offset': 0,
+            'chunks': <dynamic>[],
+          }
+        : Map<String, dynamic>.from(
+            jsonDecode(previous.single['value'] as String),
+          );
+    if (state['ownerBinding'] != owner ||
+        state['assetRevisionId'] != revision ||
+        state['sha256'] != hash ||
+        state['byteLength'] != size) {
+      throw const FormatException('Конфликт checkpoint загрузки');
     }
+    // Same-owner complete verified bytes may satisfy another exact asset link.
+    if (await file.exists() &&
+        await file.length() == size &&
+        (await sha256.bind(file.openRead()).first).toString() == hash) {
+      await api.call('media.finalizeDownload', {
+        'assetRevisionId': revision,
+        'sha256': hash,
+        'byteLength': size,
+      });
+      progress?.call(size, size);
+      return file;
+    }
+    var offset = state['offset'] as int;
+    if (offset < 0 || offset > size) {
+      throw const FormatException('Некорректный checkpoint загрузки');
+    }
+    if (!await file.exists()) {
+      if (offset != 0) {
+        throw const FormatException(
+          'Часть загрузки недоступна; исходники сохранены',
+        );
+      }
+      await file.create();
+    }
+    final chunks = List<dynamic>.from(state['chunks']);
     final out = await file.open(mode: FileMode.append);
+    Future<void> save() => service.database
+        .insert('app_settings', {
+          'name': key,
+          'value': jsonEncode(state),
+        }, conflictAlgorithm: ConflictAlgorithm.replace)
+        .then((_) {});
     try {
+      if (await out.length() < offset) {
+        throw const FormatException('Часть загрузки оборвана');
+      }
+      // Read-only verify every previously flushed/recorded chunk before resume.
+      final input = await file.open();
+      var verified = 0;
+      try {
+        for (final raw in chunks) {
+          final m = Map<String, dynamic>.from(raw);
+          final length = m['length'];
+          if (m['offset'] != verified ||
+              length is! int ||
+              length <= 0 ||
+              length > 262144 ||
+              verified + length > offset) {
+            throw const FormatException('Нарушен журнал загрузки');
+          }
+          final data = await input.read(length);
+          if (data.length != length ||
+              sha256.convert(data).toString() != m['sha256']) {
+            throw const AlchemistFailure(
+              'Повреждён сохранённый блок. Установка остановлена; исходники сохранены.',
+              422,
+              'LOCAL_CHUNK_CORRUPT',
+              DiaryFailure.invalidData,
+            );
+          }
+          verified += length;
+        }
+      } finally {
+        await input.close();
+      }
+      if (verified != offset) {
+        throw const FormatException('Нет подтверждения сохранённых байтов');
+      }
+      // Discard only this job's unacknowledged staging tail, never user media.
+      if (await out.length() > offset) await out.truncate(offset);
+      await out.setPosition(offset);
+      progress?.call(offset, size);
       while (offset < size) {
         if (interrupted?.call() == true) {
           throw const FormatException(
             'Загрузка приостановлена. Можно продолжить.',
           );
         }
-        final chunk = await api.call('media.downloadChunk', {
-          'assetRevisionId': asset['assetRevisionId'],
-          'offset': offset,
-          'length': 262144,
-        });
+        Map<String, dynamic> chunk;
+        final clock = Stopwatch()..start();
+        try {
+          chunk = await api.call('media.downloadChunk', {
+            'assetRevisionId': revision,
+            'offset': offset,
+            'length': 262144,
+          });
+        } on AlchemistFailure catch (e) {
+          if (const [
+            'DRIVE_RANGE_FAILED',
+            'DRIVE_RANGE_SIZE',
+            'UNKNOWN_OPERATION',
+            'OPERATION_NOT_FOUND',
+            'OPERATION_NOT_SUPPORTED',
+          ].contains(e.code)) {
+            throw const AlchemistFailure(
+              'Сервер не поддержал проверяемую докачку. Установка не завершена.',
+              501,
+              'CHUNK_RESUME_UNAVAILABLE',
+              DiaryFailure.blocked,
+            );
+          }
+          rethrow;
+        }
         final bytes = base64Decode(chunk['base64'] as String);
         final expected = (size - offset).clamp(0, 262144);
+        final chunkHash = sha256.convert(bytes).toString();
         if (chunk['offset'] != offset ||
             chunk['byteLength'] != size ||
             chunk['sha256'] != hash ||
             bytes.length != expected ||
-            sha256.convert(bytes).toString() != chunk['chunkSha256']) {
+            chunkHash != chunk['chunkSha256']) {
           throw const FormatException('Повреждённый блок загрузки');
+        }
+        if (interrupted?.call() == true) {
+          throw const FormatException(
+            'Загрузка приостановлена до сохранения блока',
+          );
         }
         await out.writeFrom(bytes);
         await out.flush();
+        chunks.add({
+          'offset': offset,
+          'length': bytes.length,
+          'sha256': chunkHash,
+        });
         offset += bytes.length;
+        state['offset'] = offset;
+        state['chunks'] = chunks;
+        await save();
+        final d = AlchemistDiagnostics.instance;
+        d.record(
+          d.begin(),
+          'media.downloadChunk',
+          'acked',
+          clock.elapsedMilliseconds,
+          confirmedBytes: bytes.length,
+        );
         progress?.call(offset, size);
       }
     } finally {
       await out.close();
     }
     if ((await sha256.bind(file.openRead()).first).toString() != hash) {
-      // A corrupt checkpoint must not poison every subsequent retry.
-      await file.delete();
-      throw const FormatException('Контрольная сумма загрузки не совпала');
+      throw const FormatException(
+        'Контрольная сумма загрузки не совпала; неполный материал не установлен',
+      );
     }
     await api.call('media.finalizeDownload', {
       'assetRevisionId': asset['assetRevisionId'],
       'sha256': hash,
       'byteLength': size,
     });
+    state['verified'] = true;
+    await save();
     return file;
   }
 
@@ -251,6 +389,8 @@ class AlchemistInstall {
         await service.availableBytes!() < needed) {
       throw const FormatException('Недостаточно места. Установка не началась.');
     }
+    var downloaded = 0;
+    final downloadTotal = sizes.values.fold<int>(0, (n, s) => n + s);
     for (final r in closure.revisions.where(
       (r) => r.key.content.type == ContentType.track,
     )) {
@@ -258,8 +398,9 @@ class AlchemistInstall {
       files[r.payload['contentHash']] = await downloadAsset(
         descriptors[r.key.token]!,
         interrupted: cancelled,
-        progress: progress,
+        progress: (n, _) => progress?.call(downloaded + n, downloadTotal),
       );
+      downloaded += r.payload['fileSizeBytes'] as int;
     }
     await service.workspace.create(recursive: true);
     final stage = await service.workspace.createTemp('remote-selection-');

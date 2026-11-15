@@ -1,3 +1,7 @@
+# №18 — P0: полноценная фоновая передача MASTER и CLIENT
+
+[ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor в разработке; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.
+
 # №17 — native PASS, APK27 для приёмки
 
 MASTER25/26→27 и CLIENT25→27 прошли native-проверки сохранности; пара27 независимо скачана и проверена по SHA, подписи и конфигурации. [Результат](reports/task17/RESULT_17.md) · [APK и Android-протокол](reports/task17/PHONE_QA_17.md) · [Контрольная точка](reports/task17/PROGRESS.md). Исходник fbdaa7b, draft PR48; production GAS6 и main в этом цикле сохранены. Реальные Google и два телефона **NOT_RUN**, №17 не закрыто.

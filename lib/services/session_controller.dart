@@ -1,3 +1,12 @@
+import 'package:crypto/crypto.dart';
+
+import 'native_transfer_bridge.dart';
+import 'alchemist_install.dart';
+
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+
 import 'diary_api.dart';
 import 'alchemist_announcement.dart';
 import 'alchemist_work_queue.dart';
@@ -37,8 +46,25 @@ class SessionController extends ChangeNotifier {
     this.capsules,
     this.historyAttachments,
     this.preview,
+    this.backgroundWorker = false,
   }) : modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
+    if (!backgroundWorker &&
+        capsules != null &&
+        NativeTransferBridge.available) {
+      diary?.beforeAccountLogout = NativeTransferBridge.revoke;
+      final api = diary?.api;
+      if (api is AlchemistDiaryApi) {
+        api.enqueueReaderSync = _enqueueReaderSync;
+        diary?.enqueueCloudOperation = (entry, published) async {
+          await ensurePublicationIdentity();
+          await api.enqueueDurablePublication(entry, published: published);
+          await cloudQueue.enqueue('alchemist_diary_queue:${entry.id}');
+        };
+        api.downloadInBackground = (descriptor, target) =>
+            downloadAsset(descriptor, target: target);
+      }
+    }
     if (diary != null && diary!.onAccountLogout == null) {
       diary!.onAccountLogout = () {
         _catalogIdentity?.invalidate();
@@ -50,6 +76,9 @@ class SessionController extends ChangeNotifier {
       };
     }
   }
+  final bool backgroundWorker;
+  bool get nativeTransfers =>
+      !backgroundWorker && NativeTransferBridge.available;
   AccessPolicy get policy => library.policy;
   SessionController? _editorSource;
   String? _editorBaseline;
@@ -140,6 +169,9 @@ class SessionController extends ChangeNotifier {
     }
     return AlchemistApi(
       Uri.parse(endpoint),
+      connection: diary?.api is AlchemistDiaryApi
+          ? (diary!.api as AlchemistDiaryApi).connection
+          : null,
       identityScope: () => diary?.api?.readerScope ?? 'public',
       identityEpoch: () => diary?.api?.identityGeneration ?? 0,
       onUnauthorized: diary?.api?.refreshRejectedIdentity,
@@ -193,45 +225,299 @@ class SessionController extends ChangeNotifier {
   }
 
   AlchemistWorkQueue? _cloudQueue;
+  String? get transferOwner =>
+      catalog.api?.ownerBinding ?? (catalog.api == null ? null : 'public');
+  Future<void> _authorizeTransfer() async {
+    final rows = await capsules!.database.query(
+      'app_settings',
+      where: 'name=?',
+      whereArgs: ['transfer_network_policy18'],
+    );
+    final networkPolicy = rows.isEmpty ? 'any' : rows.single['value'] as String;
+    await NativeTransferBridge.authorize(
+      catalog.api!,
+      diary?.api,
+      networkPolicy: networkPolicy,
+    );
+  }
+
+  Future<void> applyTransferNetworkPolicy() async {
+    if (!nativeTransfers) return;
+    await _authorizeTransfer();
+    await cloudQueue.refresh();
+    if (cloudQueue.rows.any(
+      (r) =>
+          r['_work']?['executor'] == 'android18' &&
+          const [
+            'queued',
+            'running',
+            'preparing',
+            'waiting_network',
+            'waiting_policy',
+          ].contains(r['_work']?['phase']),
+    )) {
+      await NativeTransferBridge.start();
+    }
+  }
+
   AlchemistWorkQueue get cloudQueue => _cloudQueue ??= AlchemistWorkQueue(
     db: capsules!.database,
-    owner: () => catalog.api?.ownerBinding,
-    prepare: ensurePublicationIdentity,
-    send: (name, value, stop, stage, progress) async {
-      if (name.startsWith('alchemist_card:')) {
-        await catalog.publish(
-          value,
-          interrupted: stop,
-          onStage: stage,
-          progress: progress,
-        );
-      } else {
-        final api = diary?.api;
-        if (api is! AlchemistDiaryApi) {
-          throw const FormatException('Сервер не подключён');
-        }
-        final previous = api.beforePublication;
-        api.beforePublication = (entry) => commitAnnouncementDependency(
-          catalog,
-          entry,
-          interrupted: stop,
-          onStage: stage,
-          progress: progress,
-        );
-        try {
-          await api.sendQueued(
-            name,
-            interrupted: stop,
-            onStage: stage,
-            progress: progress,
-          );
-        } finally {
-          api.beforePublication = previous;
-        }
-        await diary!.load();
-      }
-    },
+    owner: () => transferOwner,
+    prepareTask: prepareCloudTask,
+    dispatch: nativeTransfers ? NativeTransferBridge.start : null,
+    canAutoRecover: nativeTransfers
+        ? () async {
+            final status = await NativeTransferBridge.channel
+                .invokeMapMethod<String, dynamic>('status');
+            return status == null || status['needsUserStart'] != true;
+          }
+        : null,
+    nativeControl: nativeTransfers
+        ? (name, action) async {
+            if (action == 'resume') await _authorizeTransfer();
+            await NativeTransferBridge.control(name, action, transferOwner!);
+          }
+        : null,
+    send: sendCloudTask,
+    worker: backgroundWorker,
   );
+  Future<void> prepareCloudTask(String name, Map<String, dynamic> row) async {
+    if (name.startsWith('alchemist_download:') ||
+        name.startsWith('alchemist_read_sync_queue:')) {
+      return;
+    }
+    await ensurePublicationIdentity();
+  }
+
+  Future<void> sendCloudTask(
+    String name,
+    Map<String, dynamic> value,
+    bool Function() stop,
+    void Function(String) stage,
+    void Function(int, int) progress,
+  ) async {
+    if (name.startsWith('alchemist_read_sync_queue:')) {
+      final parameters = <String, dynamic>{
+        for (final key in ['requestId', 'ifMatch', 'entries']) key: value[key],
+      };
+      final receipt = await catalog.api!.call('sync.push', parameters);
+      await capsules!.database.transaction((tx) async {
+        final rows = await tx.query(
+          'app_settings',
+          where: 'name=?',
+          whereArgs: [name],
+        );
+        if (rows.isEmpty) return;
+        final record = Map<String, dynamic>.from(
+          jsonDecode(rows.single['value'] as String),
+        );
+        if (record['ownerBinding'] != transferOwner ||
+            record['requestId'] != value['requestId']) {
+          throw const FormatException('Очередь синхронизации изменилась');
+        }
+        record['_work'] = {
+          ...Map<String, dynamic>.from(record['_work']),
+          'receipt': receipt,
+        };
+        await tx.update(
+          'app_settings',
+          {'value': jsonEncode(record)},
+          where: 'name=?',
+          whereArgs: [name],
+        );
+      });
+      stage('reader_synced');
+      return;
+    }
+    if (name.startsWith('alchemist_download:')) {
+      final d = Map<String, dynamic>.from(value['download']);
+      stage('transferring');
+      final install = AlchemistInstall(capsules!, catalog.api!);
+      if (d['kind'] == 'install') {
+        await install.install(
+          Map<String, dynamic>.from(d['card']),
+          interrupted: stop,
+          progress: progress,
+        );
+      } else if (d['kind'] == 'media') {
+        final descriptor = Map<String, dynamic>.from(d['descriptor']);
+        final f = await install.downloadAsset(
+          descriptor,
+          interrupted: stop,
+          progress: progress,
+        );
+        if (stop()) throw const FormatException('Передача приостановлена');
+        if (d['target'] case final String target) {
+          final allowed = p.join(library.directory.parent.path, 'diary_media');
+          if (!p.isWithin(allowed, target)) {
+            throw const FormatException('Путь медиа вне приватного хранилища');
+          }
+          final destination = File(target);
+          await destination.parent.create(recursive: true);
+          if (await destination.exists()) {
+            if ((await sha256.bind(destination.openRead()).first).toString() !=
+                descriptor['sha256']) {
+              throw const FormatException(
+                'Прежний файл не заменён: конфликт контрольной суммы',
+              );
+            }
+          } else {
+            final tmp = File('$target.transfer18.part');
+            await f.copy(tmp.path);
+            if (stop()) throw const FormatException('Передача приостановлена');
+            await tmp.rename(target);
+          }
+        }
+        d['localPath'] = f.path;
+        await capsules!.database.transaction((tx) async {
+          final current = await tx.query(
+            'app_settings',
+            where: 'name=?',
+            whereArgs: [name],
+          );
+          if (current.isEmpty) {
+            throw const FormatException('Задача отсутствует');
+          }
+          final record = Map<String, dynamic>.from(
+            jsonDecode(current.single['value'] as String),
+          );
+          if (record['ownerBinding'] != transferOwner) {
+            throw const FormatException('Аккаунт изменился');
+          }
+          record['download'] = d;
+          await tx.update(
+            'app_settings',
+            {'value': jsonEncode(record)},
+            where: 'name=?',
+            whereArgs: [name],
+          );
+        });
+      } else {
+        throw const FormatException('Неизвестный вид загрузки');
+      }
+      stage('installed');
+      return;
+    }
+    if (name.startsWith('alchemist_card:')) {
+      if (value['requestedAction'] case final String action) {
+        await catalog.transition(value, action);
+        return;
+      }
+      await catalog.publish(
+        value,
+        interrupted: stop,
+        onStage: stage,
+        progress: progress,
+      );
+    } else {
+      final api = diary?.api;
+      if (api is! AlchemistDiaryApi) {
+        throw const FormatException('Сервер не подключён');
+      }
+      final previous = api.beforePublication;
+      api.beforePublication = (entry) => commitAnnouncementDependency(
+        catalog,
+        entry,
+        interrupted: stop,
+        onStage: stage,
+        progress: progress,
+      );
+      try {
+        await api.sendQueued(
+          name,
+          interrupted: stop,
+          onStage: stage,
+          progress: progress,
+        );
+      } finally {
+        api.beforePublication = previous;
+      }
+      await diary!.load();
+    }
+  }
+
+  Future<void> _enqueueReaderSync(String name) async {
+    final owner = transferOwner;
+    if (owner == null || owner == 'public') return;
+    await capsules!.database.transaction((tx) async {
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [name],
+      );
+      if (rows.isEmpty) return;
+      final record = Map<String, dynamic>.from(
+        jsonDecode(rows.single['value'] as String),
+      );
+      if (record['ownerBinding'] != null && record['ownerBinding'] != owner) {
+        throw const FormatException('Другой владелец синхронизации');
+      }
+      record['ownerBinding'] = owner;
+      record.putIfAbsent('_work', () => initialQueuedWork(record, owner));
+      await tx.update(
+        'app_settings',
+        {'value': jsonEncode(record)},
+        where: 'name=?',
+        whereArgs: [name],
+      );
+    });
+    await cloudQueue.enqueue(name);
+  }
+
+  Future<String> installInBackground(Map<String, dynamic> card) async {
+    final name =
+        'alchemist_download:$transferOwner:install:${card['catalogItemId']}:${card['immutableRevisionId']}';
+    await cloudQueue.enqueueDownload(name, {
+      'kind': 'install',
+      'card': card,
+      'title': card['card']?['title'],
+    });
+    return name;
+  }
+
+  Future<File> downloadAsset(
+    Map<String, dynamic> descriptor, {
+    String? target,
+  }) async {
+    if (!nativeTransfers) {
+      return AlchemistInstall(
+        capsules!,
+        catalog.api!,
+      ).downloadAsset(descriptor);
+    }
+    final name =
+        'alchemist_download:$transferOwner:media:${descriptor['assetRevisionId']}:${descriptor['sha256']}:${contentDigest({'target': target})}';
+    await cloudQueue.enqueueDownload(name, {
+      'kind': 'media',
+      'descriptor': descriptor,
+      'target': target,
+      'title': 'Медиа дневника или обложка',
+    });
+    final until = DateTime.now().add(const Duration(minutes: 3));
+    while (DateTime.now().isBefore(until)) {
+      await cloudQueue.refresh();
+      final row = cloudQueue.rows.where((r) => r['_name'] == name).firstOrNull;
+      if (row?['_work']?['phase'] == 'complete' &&
+          row?['download']?['localPath'] is String) {
+        return File(row!['download']['localPath']);
+      }
+      if (const [
+        'failed',
+        'failed_permanent',
+        'cancelled',
+        'waiting_auth',
+      ].contains(row?['_work']?['phase'])) {
+        throw const FormatException(
+          'Откройте очередь передач: загрузка требует внимания',
+        );
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 750));
+    }
+    throw const FormatException(
+      'Загрузка продолжается в Android. Состояние доступно в очереди передач.',
+    );
+  }
+
   final LibraryService library;
   CurrentSessionDraft draft = CurrentSessionDraft(
     plan: SessionPlan(steps: const []),

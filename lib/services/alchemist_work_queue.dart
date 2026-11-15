@@ -24,6 +24,7 @@ String alchemistStageLabel(Object? phase) =>
       'bytes_acked': 'Байты приняты; ждём проверку',
       'server_verifying': 'Сервер проверяет файл',
       'verified': 'Файл проверен',
+      'installed': 'Установлено и проверено',
       'manifest_registering': 'Проверка состава',
       'publishing': 'Подтверждение каталога',
       'catalog_committed': 'Подтверждено сервером',
@@ -53,8 +54,9 @@ String alchemistWorkLabel(Map work) {
         'complete': 'Подтверждено сервером',
         'waiting_auth': 'Ожидает Google-вход',
         'waiting_permission': 'Нужны права сервера',
-        'waiting_network':
-            'Ожидает сеть — нажмите «Продолжить» после подключения',
+        'waiting_network': 'Ожидает сеть; Android повторит при подключении',
+        'waiting_policy': 'Android отложил работу; задача сохранена',
+        'failed_permanent': 'Повторы исчерпаны — проверьте причину',
         'pausing': 'Завершается текущий запрос',
         'failed': 'Сбой — можно повторить',
         'cancelled': 'Отправка отменена',
@@ -90,6 +92,15 @@ String queueRevision(Map<String, dynamic> row) => sha256
           if (row['root'] != null) 'root': row['root'],
           if (row['card'] != null) 'card': row['card'],
           if (row['localCover'] != null) 'localCover': row['localCover'],
+          if (row['download'] != null) 'download': row['download'],
+          if (row['requestedAction'] != null)
+            'requestedAction': row['requestedAction'],
+          if (row['requestId'] != null && row['entries'] != null)
+            'readerSync': {
+              'requestId': row['requestId'],
+              'ifMatch': row['ifMatch'],
+              'entries': row['entries'],
+            },
         }),
       ),
     )
@@ -112,15 +123,91 @@ Map<String, dynamic> initialQueuedWork(
 };
 
 /// One runner over the existing card and diary outbox records. No second queue.
-/// Survives editor navigation. Android suspension cooperatively pauses work;
-/// restart never silently starts an upload under a newly selected account.
+/// UI enqueues durable intent; Android dispatch owns production execution.
+/// The same single pump is also used by controlled non-Android tests.
 class AlchemistWorkQueue extends ChangeNotifier {
   AlchemistWorkQueue({
     required this.db,
     required this.owner,
     required this.send,
     this.prepare,
+    this.prepareTask,
+    this.dispatch,
+    this.nativeControl,
+    this.externalStop,
+    this.worker = false,
+    this.canAutoRecover,
   });
+  final Future<void> Function(String, Map<String, dynamic>)? prepareTask;
+  final Future<void> Function()? dispatch;
+  final Future<void> Function(String, String)? nativeControl;
+  final bool Function()? externalStop;
+  final bool worker;
+  final Future<bool> Function()? canAutoRecover;
+  Future<void> runPending() => _pump();
+  Future<void> _schedule() async {
+    if (dispatch != null) {
+      await dispatch!();
+    } else {
+      unawaited(_pump());
+    }
+  }
+
+  /// Only explicit18 intents auto-resume. Legacy USER_PAUSED and unowned rows
+  /// are preserved byte-for-byte until their original owner explicitly resumes.
+  Future<void> recoverNativeIntents() async {
+    await refresh();
+    for (final row in List<Map<String, dynamic>>.of(rows)) {
+      final w = row['_work'] as Map;
+      if (w['executor'] != 'android18' ||
+          w['autoResume'] != true ||
+          const [
+            'complete',
+            'cancelled',
+            'failed_permanent',
+            'failed',
+          ].contains(w['phase']) ||
+          (w['phase'] == 'paused' &&
+              w['pauseReason'] != 'WAITING_POLICY' &&
+              w['pauseReason'] != 'LIFECYCLE_PAUSED') ||
+          w['pauseReason'] == 'USER_PAUSED' ||
+          (w['retryAtMs'] as int? ?? 0) >
+              DateTime.now().millisecondsSinceEpoch) {
+        continue;
+      }
+      await _patch(row['_name'], {
+        'phase': 'queued',
+        'runnerEpoch': _runnerEpoch,
+      });
+    }
+  }
+
+  Future<void> enqueueDownload(
+    String name,
+    Map<String, dynamic> download,
+  ) async {
+    final current = owner();
+    if (current == null) throw const FormatException('Нет владельца загрузки');
+    await db.transaction((tx) async {
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [name],
+      );
+      if (rows.isNotEmpty) return;
+      final value = <String, dynamic>{
+        'ownerBinding': current,
+        'download': download,
+      };
+      value['_work'] = initialQueuedWork(value, current);
+      await tx.insert('app_settings', {
+        'name': name,
+        'value': jsonEncode(value),
+      });
+    });
+    await enqueue(name);
+  }
+
   final Future<void> Function()? prepare;
   final Database db;
   final String? Function() owner;
@@ -191,6 +278,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
         jsonDecode(r.single['value'] as String),
       );
       final work = Map<String, dynamic>.from(v['_work'] ?? {})..addAll(values);
+      work['updatedAtMs'] = DateTime.now().millisecondsSinceEpoch;
+      if (values.containsKey('bytes')) {
+        work['lastProgressAtMs'] = DateTime.now().millisecondsSinceEpoch;
+      }
       v['_work'] = work;
       await tx.update(
         'app_settings',
@@ -206,8 +297,13 @@ class AlchemistWorkQueue extends ChangeNotifier {
     final current = owner();
     final records = await db.query(
       'app_settings',
-      where: 'name LIKE ? OR name LIKE ?',
-      whereArgs: ['alchemist_card:%', 'alchemist_diary_queue:%'],
+      where: 'name LIKE ? OR name LIKE ? OR name LIKE ? OR name LIKE ?',
+      whereArgs: [
+        'alchemist_card:%',
+        'alchemist_diary_queue:%',
+        'alchemist_download:%',
+        'alchemist_read_sync_queue:%',
+      ],
     );
     rows = records
         .map(
@@ -266,6 +362,22 @@ class AlchemistWorkQueue extends ChangeNotifier {
           'complete',
           existing: true,
           reason: 'ALREADY_COMMITTED',
+        );
+      }
+      if (dispatch != null &&
+          work['executor'] == 'android18' &&
+          const ['running', 'preparing', 'pausing'].contains(phase)) {
+        if (work['revision'] != revision) {
+          throw const AlchemistFailure(
+            'Дождитесь текущей передачи.',
+            409,
+            'REVISION_IN_FLIGHT',
+          );
+        }
+        return QueueEnqueueResult(
+          phase as String,
+          existing: true,
+          reason: 'ALREADY_RUNNING',
         );
       }
       if (_backgroundPaused) {
@@ -344,6 +456,15 @@ class AlchemistWorkQueue extends ChangeNotifier {
         'pauseReason': null,
         'attempts': same ? work['attempts'] ?? 0 : 0,
         'resumeRequested': false,
+        if (dispatch != null || worker) ...{
+          'executor': 'android18',
+          'autoResume': true,
+          'direction': name.startsWith('alchemist_download:')
+              ? 'download'
+              : 'upload',
+          'retryAtMs': null,
+          'jobRetries': 0,
+        },
       };
       await tx.update(
         'app_settings',
@@ -354,7 +475,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
       return const QueueEnqueueResult('queued');
     });
     await refresh();
-    if (result.phase != 'complete') unawaited(_pump());
+    if (result.phase != 'complete') {
+      await nativeControl?.call(name, 'resume');
+      await _schedule();
+    }
     AlchemistDiagnostics.instance.stage('RESUME_ALLOWED');
     return result;
   }
@@ -370,8 +494,12 @@ class AlchemistWorkQueue extends ChangeNotifier {
       'OWNER_CHANGED',
       'WAITING_AUTH',
       'WAITING_NETWORK',
+      'WAITING_POLICY',
     }.contains(reason)) {
       throw ArgumentError('Invalid pause reason');
+    }
+    if (reason == 'USER_PAUSED') {
+      await nativeControl?.call(name, cancel ? 'cancel' : 'pause');
     }
     _pauseCodes[name] = reason;
     _resumeRequested.remove(name);
@@ -412,6 +540,54 @@ class AlchemistWorkQueue extends ChangeNotifier {
   Future<void> recover() async {
     await refresh();
     if (_running) return;
+    if (dispatch != null) {
+      for (final row in List<Map<String, dynamic>>.of(rows)) {
+        final w = row['_work'] as Map;
+        if (w['executor'] != 'android18' &&
+            const [
+              'queued',
+              'running',
+              'preparing',
+              'pausing',
+            ].contains(w['phase'])) {
+          await _patch(row['_name'], {
+            'phase': 'waiting_policy',
+            'code': 'LEGACY_EXECUTOR_STOPPED',
+            'legacyPhase': w['phase'],
+            'autoResume': false,
+            'message': 'Задача сохранена из APK27. Подтвердите Продолжить для нового фонового исполнителя.',
+          });
+        }
+      }
+      final eligible = rows
+          .where(
+            (r) =>
+                r['_work']?['executor'] == 'android18' &&
+                r['_work']?['autoResume'] == true &&
+                const [
+                  'queued',
+                  'running',
+                  'preparing',
+                  'waiting_network',
+                  'waiting_policy',
+                ].contains(r['_work']?['phase']) &&
+                (r['_work']?['retryAtMs'] as int? ?? 0) <=
+                    DateTime.now().millisecondsSinceEpoch,
+          )
+          .firstOrNull;
+      if (eligible != null && (await canAutoRecover?.call() ?? true)) {
+        try {
+          await nativeControl?.call(eligible['_name'], 'resume');
+          await dispatch!();
+        } catch (_) {
+          await _patch(eligible['_name'], {
+            'phase': 'waiting_auth',
+            'code': 'NATIVE_RESTORE_NEEDS_ATTENTION',
+          });
+        }
+      }
+      return;
+    }
     for (final row in List<Map<String, dynamic>>.of(rows)) {
       if (!const [
             'complete',
@@ -448,6 +624,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
         final name = row['_name'] as String, originalOwner = owner();
         bool stop() =>
             _closed ||
+            externalStop?.call() == true ||
             _backgroundPaused ||
             _runnerEpoch != pumpEpoch ||
             _stops[name] == true ||
@@ -465,6 +642,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
         await _patch(name, {'phase': 'preparing', 'stage': 'restoring'});
 
         final retries = <String, int>{};
+        final measurements = <String, Map<String, int>>{};
+        final measured = Stopwatch()..start();
+        var confirmed = 0;
+
         void diagnostic() {
           final event = AlchemistDiagnostics.instance.lastMeasurement;
           if (event == null ||
@@ -477,16 +658,38 @@ class AlchemistWorkQueue extends ChangeNotifier {
           retries[trace] = attempt > (retries[trace] ?? 0)
               ? attempt
               : (retries[trace] ?? 0);
-          _recordProgress(name, {
-            'traceId': trace,
-            'networkRetries':
-                (row['_work']?['networkRetries'] as int? ?? 0) +
-                retries.values.fold<int>(0, (n, v) => n + v),
-          });
+          if (event['phase'] == 'complete' || event['phase'] == 'acked') {
+            final op = event['operation'] as String;
+            final stat = measurements.putIfAbsent(
+              '$op:${event['phase'] as String}',
+              () => {'count': 0, 'elapsedMs': 0},
+            );
+            stat['count'] = stat['count']! + 1;
+            stat['elapsedMs'] =
+                stat['elapsedMs']! + (event['elapsedMs'] as int);
+            confirmed += event['confirmedBytes'] as int? ?? 0;
+            _recordProgress(name, {
+              'traceId': trace,
+              'httpStatus': event['status'],
+              'networkRetries':
+                  (row['_work']?['networkRetries'] as int? ?? 0) +
+                  retries.values.fold<int>(0, (n, v) => n + v),
+              'performance': {
+                'confirmedBytesThisRun': confirmed,
+                'wallMs': measured.elapsedMilliseconds,
+                'byStage': {
+                  for (final e in measurements.entries)
+                    e.key: Map<String, int>.from(e.value),
+                },
+                'bottleneck': 'RPC_AND_SERVER_VERIFY_TIMING_NOT_SERVER_CPU',
+              },
+            });
+          }
         }
 
         AlchemistDiagnostics.instance.addListener(diagnostic);
         try {
+          await prepareTask?.call(name, row);
           await prepare?.call();
           if (stop()) {
             throw const AlchemistFailure(
@@ -518,6 +721,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
             ),
             zoneValues: {
               #alchemistTask: row['_work']?['taskId'],
+              #alchemistTaskName: name,
               #alchemistInterrupted: stop,
             },
           );
@@ -539,6 +743,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? 'paused'
                 : name.startsWith('alchemist_diary_queue:')
                 ? 'diary_committed'
+                : name.startsWith('alchemist_download:')
+                ? 'installed'
                 : 'catalog_committed',
             if (!stop() && !_cancelled.contains(name))
               'revision': queueRevision((await _read(name)) ?? value),
@@ -547,16 +753,36 @@ class AlchemistWorkQueue extends ChangeNotifier {
           await _progress;
           final failure = AlchemistFailure.from(e);
           await _patch(name, {
+            if (worker) ...{
+              'jobRetries': (row['_work']?['jobRetries'] as int? ?? 0) + 1,
+              'retryAtMs': DateTime.now()
+                  .add(
+                    Duration(
+                      seconds:
+                          30 *
+                          (1 <<
+                              (row['_work']?['jobRetries'] as int? ?? 0).clamp(
+                                0,
+                                5,
+                              )),
+                    ),
+                  )
+                  .millisecondsSinceEpoch,
+            },
             'phase': _cancelled.contains(name)
                 ? 'cancelled'
                 : stop()
                 ? 'paused'
+                : failure.code == 'WAITING_POLICY'
+                ? 'waiting_policy'
                 : failure.status == 401
                 ? 'waiting_auth'
                 : failure.status == 403
                 ? 'waiting_permission'
                 : failure.kind == DiaryFailure.network
-                ? 'waiting_network'
+                ? ((row['_work']?['jobRetries'] as int? ?? 0) >= 5
+                      ? 'failed_permanent'
+                      : 'waiting_network')
                 : 'failed',
             'code': _cancelled.contains(name)
                 ? 'CANCELLED'

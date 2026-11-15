@@ -9,6 +9,8 @@ import 'storage_preflight.dart';
 Future<Database> openAppDatabase(
   String path, {
   DatabaseFactory? factory,
+  bool independentConnection = false,
+  bool allowMigrations = true,
 }) async {
   final backend = factory ?? databaseFactory;
   await preflightStorage(path, backend);
@@ -16,11 +18,15 @@ Future<Database> openAppDatabase(
     path,
     options: OpenDatabaseOptions(
       version: 9,
+      singleInstance: !independentConnection,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
         await db.execute('PRAGMA secure_delete = ON');
       },
       onCreate: (db, version) async {
+        if (!allowMigrations) {
+          throw const FormatException('Фоновое создание базы запрещено');
+        }
         await db.execute('''CREATE TABLE audio_assets (
         id TEXT PRIMARY KEY,title TEXT NOT NULL,filePath TEXT NOT NULL UNIQUE,
         durationMs INTEGER NOT NULL CHECK(durationMs > 0),format TEXT NOT NULL,
@@ -38,6 +44,9 @@ Future<Database> openAppDatabase(
         await _addContentRevisions(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        if (!allowMigrations) {
+          throw const FormatException('Обновите базу в обычном приложении');
+        }
         if (oldVersion < 2) {
           // Additive migration: no rename/delete of audio metadata or media files.
           await db.execute(

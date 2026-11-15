@@ -8,6 +8,10 @@ on:
     paths-ignore: ['docs/**', 'reports/**', 'README.md', 'BACKLOG.md', 'CHANGELOG.md']
   workflow_dispatch:
     inputs:
+      task18_compile:
+        description: 'Task18 targeted Android compile only, no signing/APK/deploy, isolated feature branch'
+        type: boolean
+        default: false
       task17_native_cached:
         description: 'MASTER-only API34 comparison; cached signed fbdaa7b pair, verified469/build PASS, no rebuild/sign/deploy'
         type: boolean
@@ -76,7 +80,7 @@ concurrency:
 
 jobs:
   verify:
-    if: inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
+    if: inputs.task18_compile != true && inputs.task17_native_cached != true && inputs.task17_delivery != true && inputs.task16g_delivery != true && inputs.task16g_fault != true && inputs.task16g_reuse_verify != true && inputs.task16g_storage != true && inputs.p0_native != true && inputs.p0_checks != true && inputs.emulator_qa != true
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -901,3 +905,23 @@ jobs:
             ${{ runner.temp }}/task17-evidence/failure-*.xml
           retention-days: 14
           if-no-files-found: ignore
+
+  compile18:
+    if: github.event_name == 'workflow_dispatch' && inputs.task18_compile == true && github.ref == 'refs/heads/feat/task18-native-background-transfer' && github.repository == 'luxhypnomaster/sulfi-hypnotherapy'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - run: flutter pub get --enforce-lockfile
+      - name: Compile native executor without signing or constructing an APK
+        run: |
+          flutter build apk --debug --config-only
+          cd android
+          ./gradlew :app:compileDebugKotlin --no-daemon --console=plain

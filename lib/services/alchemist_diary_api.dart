@@ -36,6 +36,8 @@ class AlchemistDiaryApi extends DiaryApi {
   final CapsuleService capsules;
   final DiaryMediaStore media;
   final DiaryRequest? connection;
+  Future<File> Function(Map<String, dynamic>, String?)? downloadInBackground;
+  Future<void> Function(String)? enqueueReaderSync;
   String? _token;
   bool _identityRejected = false;
   @override
@@ -1042,7 +1044,16 @@ class AlchemistDiaryApi extends DiaryApi {
       where: 'name=?',
       whereArgs: [name],
     )).firstOrNull;
-    if (pending != null) {
+    final previousSync = pending == null
+        ? null
+        : jsonDecode(pending['value'] as String);
+    if (pending != null &&
+        enqueueReaderSync != null &&
+        previousSync['_work']?['phase'] != 'complete') {
+      await enqueueReaderSync!(name);
+      return;
+    }
+    if (pending != null && enqueueReaderSync == null) {
       try {
         await author.call(
           'sync.push',
@@ -1076,6 +1087,10 @@ class AlchemistDiaryApi extends DiaryApi {
       'name': name,
       'value': jsonEncode(q),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+    if (enqueueReaderSync != null) {
+      await enqueueReaderSync!(name);
+      return;
+    }
     await author.call('sync.push', q);
     await db.delete('app_settings', where: 'name=?', whereArgs: [name]);
   }
@@ -1093,7 +1108,9 @@ class AlchemistDiaryApi extends DiaryApi {
         d['byteLength'] != m.bytes) {
       throw const FormatException('Описание медиа не совпало');
     }
-    final source = await AlchemistInstall(capsules, api).downloadAsset(d);
+    final source = downloadInBackground == null
+        ? await AlchemistInstall(capsules, api).downloadAsset(d)
+        : await downloadInBackground!(d, media.file(m)?.path);
     final target = media.file(m);
     if (target == null) {
       throw const FormatException('Неподдерживаемый формат медиа');

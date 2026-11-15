@@ -70,6 +70,7 @@ class AlchemistDiagnostics extends ChangeNotifier {
     int elapsedMs, {
     int attempt = 0,
     int? status,
+    int? confirmedBytes,
     String? code,
   }) {
     _prune();
@@ -89,6 +90,8 @@ class AlchemistDiagnostics extends ChangeNotifier {
       'elapsedMs': elapsedMs,
       'attempt': attempt,
       'status': ?status,
+      if (confirmedBytes != null && confirmedBytes >= 0)
+        'confirmedBytes': confirmedBytes,
       if (code != null && RegExp(r'^[A-Z0-9_]{1,80}$').hasMatch(code))
         'code': code,
     };
