@@ -144,6 +144,9 @@ def main():
   controls.save('master-watchdog-readback',{'command':watchdog,'jobs':adb('shell','dumpsys','jobscheduler',pkg)})
   proof=controls.master_pause_resume(pkg)
   CASES.append({'case':'master_notification_pause_cold_restart_explicit_same_owner_resume','status':'PASS','proof':proof,'Google':'NOT_RUN'})
+  if adb('shell','getprop','ro.build.version.sdk').strip()=='34':
+   proof=controls.master_process_loss(pkg)
+   CASES.append({'case':'master_actual_SIGKILL_cold_OS_recovery_preserves_request_and_source','status':'PASS','proof':proof,'Google':'NOT_RUN'})
   final=wait_bytes('verifiedBytes',15*1024*1024,270)
   # Wait for actual catalog commit, not just acknowledged media bytes.
   until=time.monotonic()+40

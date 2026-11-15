@@ -84,6 +84,33 @@ class NativeControls:
    assert new['sessionId']==old['sessionId'] and new['requestId']==old['requestId'] and new['offset']>=old['offset'],'UPLOAD_CHECKPOINT_REPLACED'
   self.adb('shell','input','keyevent','KEYCODE_SLEEP');self.save('master-explicit-resume',after)
   return {'taskIdPreserved':True,'sourceHashesPreserved':True,'requestAndSessionPreserved':True,'forceStop':'NO_AUTO_RESUME_CLAIM_EXPLICIT_USER_START_ONLY'}
+ def master_process_loss(self,pkg):
+  assert self.adb('shell','getprop','ro.kernel.qemu').strip()=='1','EMULATOR_ONLY_PROCESS_LOSS'
+  before,name,row=self.wait_state(pkg,['running'])
+  assert 'stopped=false' in self.adb('shell','dumpsys','package',pkg),'NO_STOPPED_PACKAGE_BYPASS'
+  pid=self.adb('shell','pidof',pkg).strip();assert pid.isdigit()
+  count=self.stats()['uploaded'];started=time.monotonic()
+  self.save('master-before-process-loss',before)
+  self.adb('shell','run-as',pkg,'kill','-9',pid) # SIGKILL is NOT Android Force Stop
+  until=time.monotonic()+660;newpid='';after=None
+  while time.monotonic()<until:
+   newpid=self.adb('shell','pidof',pkg,check=False).strip()
+   # At most one prior request was in flight. Two further unique chunks plus
+   # a different actual PID proves a new OS-started worker, not its old reply.
+   if newpid and newpid!=pid and self.stats()['uploaded']>=count+524288:
+    after=snapshot(pkg);break
+   time.sleep(3)
+  if after is None:
+   self.save('master-process-loss-blocked',{'oldPid':pid,'newPid':newpid,'jobs':self.adb('shell','dumpsys','jobscheduler',pkg),'stats':self.stats()})
+   raise AssertionError('NO_OBSERVED_OS_COLD_PROCESS_RECOVERY_WITHIN_WATCHDOG_BUDGET')
+  assert after['queues'][name]['work']['taskId']==row['work']['taskId'],'PROCESS_LOSS_REPLACED_TASK_ID'
+  assert after['sourceFiles']==before['sourceFiles'],'PROCESS_LOSS_CHANGED_PERSONAL_SOURCE_BYTES'
+  for key,old in before['uploads'].items():
+   fresh=after['uploads'][key]
+   assert fresh['requestId']==old['requestId'] and fresh['sessionId']==old['sessionId'] and fresh['offset']>=old['offset'],'PROCESS_LOSS_REPLACED_UPLOAD_CHECKPOINT'
+  assert 'stopped=false' in self.adb('shell','dumpsys','package',pkg),'UNEXPECTED_STOPPED_FLAG'
+  proof={'oldPid':pid,'newPid':newpid,'elapsedSeconds':round(time.monotonic()-started,2),'taskIdAndSourceHashesPreserved':True,'requestSessionOffsetsPreserved':True,'recovery':'ACTUAL_OS_NO_UI_NO_FORCE_RUN_NO_FORCE_STOP_BYPASS','Google':'NOT_RUN'}
+  self.save('master-actual-process-loss-recovered',{'proof':proof,'after':after});return proof
  def client_network_cancel_resume(self,pkg):
   self.adb('shell','cmd','connectivity','airplane-mode','enable',check=False);self.adb('shell','svc','wifi','disable');self.adb('shell','svc','data','disable')
   try:
