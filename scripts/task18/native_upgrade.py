@@ -115,7 +115,7 @@ def home():
 def restart():adb('shell','am','force-stop',PKG);launch()
 def report():
  v={'fixture':'created through immutable baseline APK Android UI; no SQL/DB injection','baseline':BASE,'target':28,'edition':EDITION,'source':os.environ.get('TASK18_APK_SOURCE',os.environ.get('GITHUB_SHA')),'driverSource':os.environ.get('GITHUB_SHA'),'googleIdentities':'NOT_RUN_NO_REAL_ACCOUNT','ownerPhone':'NOT_TOUCHED','cases':CASES,'actions':ACTIONS,'inventories':inventories}
- (OUT/'NATIVE_UI_UPGRADE_17.json').write_text(json.dumps(v,ensure_ascii=False,indent=2))
+ (OUT/'NATIVE_UI_UPGRADE_18.json').write_text(json.dumps(v,ensure_ascii=False,indent=2))
 def case(name,fn):
  print('NATIVE18_START='+name,flush=True)
  try:details=fn();CASES.append({'case':name,'status':'PASS','details':details})
@@ -389,7 +389,7 @@ def main():
       enc=base64.b64encode(data).decode();chunks=[enc[i:i+12000] for i in range(0,len(enc),12000)]
       print('NATIVE18_DIGEST='+name+':'+hashlib.sha256(data).hexdigest(),flush=True)
       for i,chunk in enumerate(chunks):print('NATIVE18_CHUNK='+name+':'+str(i)+':'+str(len(chunks))+':'+chunk,flush=True)
-     emit('NATIVE_UI_UPGRADE_17.json',(OUT/'NATIVE_UI_UPGRADE_17.json').read_bytes())
+     emit('NATIVE_UI_UPGRADE_18.json',(OUT/'NATIVE_UI_UPGRADE_18.json').read_bytes())
      for p in sorted(OUT.glob('*.png')):
       if p.name in ['26-library.png','26-modules.png','25-before-upgrade.png','26-client-programs.png'] or p.name.startswith('failure-'):
        emit(p.name,p.read_bytes())

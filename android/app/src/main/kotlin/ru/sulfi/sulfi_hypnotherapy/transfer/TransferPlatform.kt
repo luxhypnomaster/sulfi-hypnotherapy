@@ -240,9 +240,9 @@ object TransferRuntime {
         preferences.edit().putInt("initFailures", failures).commit()
         val newlyEnqueued = observedDispatch >= 0 && preferences.getLong("dispatchSeq", 0) > observedDispatch
         if ((retryAfter != null || newlyEnqueued) && failures < 5 && !preferences.getBoolean("needsUserStart", false)) TransferPlatform.recoverLater(c, if (newlyEnqueued) 30000L else retryAfter!!)
-        if (state in listOf("WAITING_AUTH", "WAITING_POLICY", "WAITING_NETWORK")) {
+        if (state in listOf("WAITING_AUTH", "WAITING_POLICY", "WAITING_NETWORK", "COMPLETED", "FAILED_PERMANENT")) {
             val manager = c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val pending = TransferPlatform.notify(c, mapOf("title" to "Передача сохранена", "label" to when (state) { "WAITING_AUTH" -> "Откройте Сульфи и подтвердите Google-вход"; "WAITING_NETWORK" -> "Ожидает сеть; задача и подтверждённые байты сохранены"; else -> "Android отложил работу — откройте очередь" }), false)
+            val pending = TransferPlatform.notify(c, mapOf("title" to if (state == "COMPLETED") "Передачи завершены" else "Передача сохранена", "label" to when (state) { "WAITING_AUTH" -> "Откройте Сульфи и подтвердите Google-вход"; "WAITING_NETWORK" -> "Ожидает сеть; задача и подтверждённые байты сохранены"; "COMPLETED" -> "Результат передач проверен — откройте очередь"; "FAILED_PERMANENT" -> "Передача остановлена — проверьте причину в очереди"; else -> "Android отложил работу — откройте очередь" }), false)
             manager.notify(TransferPlatform.NOTIFICATION + 1, pending)
         }
         (c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(TransferPlatform.NOTIFICATION)

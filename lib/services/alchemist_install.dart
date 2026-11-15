@@ -21,7 +21,7 @@ class AlchemistInstall {
   final CapsuleService service;
   final AlchemistApi api;
   static final _active = <String, Future<File>>{};
-  Future<void> _finalize(Map<String, dynamic> asset) async {
+  Future<Map<String, dynamic>> _finalize(Map<String, dynamic> asset) async {
     final receipt = await api.call('media.finalizeDownload', {
       'assetRevisionId': asset['assetRevisionId'],
       'sha256': asset['sha256'],
@@ -36,6 +36,19 @@ class AlchemistInstall {
         DiaryFailure.invalidData,
       );
     }
+    await service.database.insert('app_settings', {
+      'name':
+          'alchemist_download_receipt:${api.ownerBinding ?? 'public'}:${asset['assetRevisionId']}:${asset['sha256']}',
+      'value': jsonEncode({
+        'ownerBinding': api.ownerBinding ?? 'public',
+        'assetRevisionId': asset['assetRevisionId'],
+        'sha256': asset['sha256'],
+        'byteLength': asset['byteLength'],
+        'receipt': receipt,
+        'confirmedAtMs': DateTime.now().millisecondsSinceEpoch,
+      }),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    return receipt;
   }
 
   Future<File> downloadAsset(
@@ -75,6 +88,8 @@ class AlchemistInstall {
           await f.exists() &&
           await f.length() == size &&
           (await sha256.bind(f.openRead()).first).toString() == hash) {
+        await _finalize(asset);
+        progress?.call(size, size);
         return f;
       }
     }
@@ -259,7 +274,7 @@ class AlchemistInstall {
         'Контрольная сумма загрузки не совпала; неполный материал не установлен',
       );
     }
-    await _finalize(asset);
+    state['receipt'] = await _finalize(asset);
     state['verified'] = true;
     await save();
     return file;
@@ -392,6 +407,12 @@ class AlchemistInstall {
       ];
     }
     final closure = resolveContentRoots(roots, revisions);
+    sizes.clear();
+    for (final r in closure.revisions.where(
+      (r) => r.key.content.type == ContentType.track,
+    )) {
+      sizes[r.payload['contentHash']] = r.payload['fileSizeBytes'] as int;
+    }
     final needed =
         sizes.values.fold<int>(0, (n, s) => n + s) * 4 + 16 * 1024 * 1024;
     if (service.availableBytes != null &&

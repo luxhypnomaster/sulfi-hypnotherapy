@@ -57,7 +57,8 @@ String alchemistWorkLabel(Map work) {
         'waiting_permission': 'Нужны права сервера',
         'waiting_network': 'Ожидает сеть; Android повторит при подключении',
         'waiting_policy': 'Android отложил работу; задача сохранена',
-        'failed_permanent': 'Повторы исчерпаны — проверьте причину',
+        'failed_permanent': 'Передача остановлена — исправьте причину',
+        'retry_scheduled': 'Сервер временно недоступен; повтор запланирован',
         'pausing': 'Завершается текущий запрос',
         'failed': 'Сбой — можно повторить',
         'cancelled': 'Отправка отменена',
@@ -623,6 +624,7 @@ class AlchemistWorkQueue extends ChangeNotifier {
                   'running',
                   'preparing',
                   'waiting_network',
+                  'retry_scheduled',
                   'waiting_policy',
                 ].contains(r['_work']?['phase']) &&
                 (r['_work']?['retryAtMs'] as int? ?? 0) <=
@@ -835,6 +837,13 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? 'waiting_auth'
                 : failure.status == 403
                 ? 'waiting_permission'
+                : failure.retryable && failure.status >= 429
+                ? ((row['_work']?['jobRetries'] as int? ?? 0) >= 5
+                      ? 'failed_permanent'
+                      : 'retry_scheduled')
+                : failure.code == 'LOCAL_CHUNK_CORRUPT' ||
+                      failure.code == 'CHUNK_RESUME_UNAVAILABLE'
+                ? 'failed_permanent'
                 : failure.kind == DiaryFailure.network
                 ? ((row['_work']?['jobRetries'] as int? ?? 0) >= 5
                       ? 'failed_permanent'

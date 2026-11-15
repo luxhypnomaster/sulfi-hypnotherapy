@@ -983,7 +983,7 @@ jobs:
           disk-size: 3G
           disable-animations: true
           pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
-          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front none
           script: python3 scripts/task18/probe_native.py
       - name: Retain only bounded synthetic receipts/screens with exact byte SHA (no artifact quota retry)
         if: always()

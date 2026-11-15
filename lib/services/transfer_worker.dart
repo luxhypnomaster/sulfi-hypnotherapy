@@ -119,6 +119,8 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       if (m['action'] == 'pause' || m['action'] == 'cancel') {
         await queue?.pause(m['name'], cancel: m['action'] == 'cancel');
       } else {
+        // Reuse the pump's deferred-resume path, not just a native wake hint.
+        await queue?.enqueue(m['name']);
         wake = true;
       }
     } else if (call.method == 'wake') {
@@ -128,7 +130,7 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
 
   Timer? heartbeat;
   int? retryAfter;
-  String completion = 'COMPLETED';
+  String completion = 'IDLE';
   try {
     // This hint grants no network authority; it only scopes a durable waiting
     // status when an expired/inaccessible lease fails before whoami.
@@ -311,6 +313,7 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
                 'running',
                 'preparing',
                 'waiting_network',
+                'retry_scheduled',
                 'waiting_policy',
               ].contains(r['_work']?['phase']) ||
               r['_work']?['phase'] == 'paused' &&
@@ -339,6 +342,20 @@ Future<void> runTransferWorker({DiaryRequest? controlledConnection}) async {
       (r) => alchemistCanonicalState(r['_work']) == 'WAITING_POLICY',
     )) {
       completion = 'WAITING_POLICY';
+    } else if (queue.rows.any(
+      (r) =>
+          const ['failed', 'failed_permanent'].contains(r['_work']?['phase']),
+    )) {
+      completion = 'FAILED_PERMANENT';
+    } else if (queue.rows.any((r) => r['_work']?['phase'] == 'paused')) {
+      completion = 'PAUSED_BY_USER';
+    } else if (queue.rows.isNotEmpty &&
+        queue.rows.every(
+          (r) => const ['complete', 'cancelled'].contains(r['_work']?['phase']),
+        )) {
+      completion = queue.rows.any((r) => r['_work']?['phase'] == 'complete')
+          ? 'COMPLETED'
+          : 'CANCELED';
     }
   } catch (e) {
     completion = e is AlchemistFailure && e.status == 401

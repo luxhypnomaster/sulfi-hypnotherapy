@@ -47,6 +47,10 @@ def launch(pkg):
  raise AssertionError('FIXTURE_FIRST_FRAME_NOT_READY_WITHIN_60S')
 try:
  ready=json.loads(pathlib.Path('.task17-sdk-ready.json').read_text());assert ready['version']=='37.2.12' and ready['validatedHeadlessVersion']
+ # Match proven Task17 native baseline: lower actual framebuffer plus GLES,
+ # not a changed app renderer or relaxed test. Previous proof showed launcher ANR.
+ adb('shell','wm','size','720x1280');adb('shell','wm','density','280')
+ (OUT/'display-preflight.txt').write_text(adb('shell','wm','size')+adb('shell','wm','density'))
  adb('install','-r',str(pathlib.Path(os.environ['RUNNER_TEMP'])/'task16v-ui-probe/probe.apk'))
  packages={e:'ru.sulfi.sulfi_hypnotherapy'+('.clienttest' if e=='client' else '')+'.transferprobe' for e in ['master','client']}
  for e,pkg in packages.items():
@@ -81,7 +85,14 @@ except Exception as e:
  try:
   (OUT/'crash.txt').write_text(adb('logcat','-d','-b','crash','-t','50',check=False))
   (OUT/'fixture-runtime.txt').write_text(adb('logcat','-d','-s','flutter','AndroidRuntime','ActivityManager','Flutter','FlutterJNI',check=False)[-28000:])
-  (OUT/'fixture-activities.txt').write_text(adb('shell','dumpsys','activity','activities',check=False)[-12000:])
+  (OUT/'fixture-activities.txt').write_text(adb('shell','dumpsys','activity','activities',check=False)[-16000:])
+  (OUT/'last-anr.txt').write_text(adb('shell','dumpsys','activity','lastanr',check=False)[-40000:])
+  pid=adb('shell','pidof',pkg,check=False).strip().split()[0]
+  app_log=adb('logcat','-d','--pid='+pid,check=False)[-64000:]
+  app_log=re.sub(r'CONTROLLED_(?:OWNER|CLIENT)_18_[A-Za-z0-9_]+','CONTROLLED_REDACTED',app_log)
+  (OUT/'app-runtime-only.txt').write_text(app_log)
+  (OUT/'app-main-wchan.txt').write_text(adb('shell','run-as',pkg,'cat','/proc/'+pid+'/task/'+pid+'/wchan',check=False))
+  (OUT/'app-java-threads.txt').write_text(adb('shell','debuggerd','-j',pid,check=False)[-40000:])
  except Exception:pass
 finally:
  result={'source':os.environ['GITHUB_SHA'],'scope':'CONTROLLED_NATIVE_REAL_LOOPBACK_TCP_ONLY','Google':'NOT_RUN','GAS':'NOT_TOUCHED','ownerPhones':'NOT_RUN','actualCandidateUpgrade':'NOT_RUN','cases':CASES}

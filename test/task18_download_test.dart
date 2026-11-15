@@ -92,6 +92,15 @@ void main() {
       expect(offsets, [chunkSize, chunkSize * 2]);
       expect(await result.readAsBytes(), bytes);
       expect(await source.readAsBytes(), [4, 3, 2, 1]);
+      final ledger = (await f.db.query(
+        'app_settings',
+        where: 'name LIKE ?',
+        whereArgs: ['alchemist_download_receipt:%'],
+      )).single;
+      final receipt = jsonDecode(ledger['value'] as String);
+      expect(receipt['receipt']['verified'], true);
+      expect(receipt['assetRevisionId'], 'fixture18');
+      expect(receipt['sha256'], hash);
       offsets.clear();
       await install.downloadAsset(descriptor);
       expect(

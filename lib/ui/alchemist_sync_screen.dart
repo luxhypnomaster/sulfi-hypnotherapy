@@ -223,6 +223,7 @@ class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
                                           'queued',
                                           'waiting_auth',
                                           'waiting_network',
+                                          'retry_scheduled',
                                           'waiting_permission',
                                           'pausing',
                                         ].contains(phase))

@@ -258,6 +258,7 @@ class SessionController extends ChangeNotifier {
             'running',
             'preparing',
             'waiting_network',
+            'retry_scheduled',
             'waiting_policy',
           ].contains(r['_work']?['phase']),
     )) {
