@@ -24,3 +24,11 @@ Signed source59 hashes: MASTER78fb218edc59b2ddf761cda38e6faaf76e6bcea9b5bea6ab6e
 Скорость: real-loopback1/15/50MiB измерена, RPC budget/negative PASS; стабильное ускорение не заявляется. Анонимный catalog.list200/4405ms не является Google-входом или измерением Drive throughput. Production Diary message-only EMPTY_ENTRY остаётся отдельным№17 blocker; deploy не выполнялся.
 
 Реальные Google/two phones/OEM/human hearing — NOT_RUN. Задание не закрыто. Отчёты owner-only: https://drive.google.com/drive/folders/100klr45KcMk0CNx21nYhoPvwMJ8i8xv-
+
+## Текущая точка продолжения после кода2ec64b4
+
+Подписанная пара59 выше историческая и остаётся НЕ выданной. В новом коде2ec64b4 устранён подтверждённый API33 переход от короткого network failure к ready-but-not-running regular JobScheduler: user-started pre34 foregroundService сохраняет90sec retry-window с исходным durable retryAt, без overrideDeadline/force-run; Pause/Cancel/stop прерывают ожидание. Fourtargeted tests и full localanalyze PASS. **Новый full verify/native background/build НЕ выполнены; reuse старых485тестов больше не допускается из-за нового productionDart.**
+
+SQLite pool-only стратегия отвергнута: реальные1/4-thread nativecontrols оба получили SQLiteDatabaseLockedException. THREAD_COUNT/PRAGMA/WAL/schema в приложении не изменены. Пробный busy-control childexit137 объяснён журналом: uncaught SQLiteException от execSQL для row-returning PRAGMA, затем RuntimeInit kill-handler. Это ошибка только тестовой обвязки, не hostOOM/QEMU. Исправлен rawQuery call и readback; незавершённый positivecontrol43738782150 ещё выполняется. Его результат не предполагать. Неиспользуемый Dart-only experiment удалён из актуального testtarget, история/failedreports сохранены.
+
+MASTERobserver также распознаёт actualAOSPLauncher и ждёт настоящийsecondsSeekBar; реальное обновление нового кандидата остаётся NOT_RUN. Следующий шаг — закончить причинный SQLitecontrol, применить только доказанный узкий fix и провести свежие full/native gates перед новой парой.
