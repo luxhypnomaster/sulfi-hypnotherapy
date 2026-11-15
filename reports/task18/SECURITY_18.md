@@ -12,3 +12,7 @@ Private задачи привязаны к hash(endpoint|server-verified scope),
 
 ## Изолированные продолжения
 Новые SQLite causality probes используют отдельный временный файл внутри testOnly.transferprobe; перед сменой экспериментального числа потоков не открыта production DB. Изменение pool на живой базе не производится. Host minidump parser читает только exception/module metadata с allowlist basename и bounds; stack/environment/raw dump не выгружаются. На диагностическом MASTER43733477006 minidump отсутствует; это не доказательство fault function. Новые normalAPK вexisting PRIVATE draft не загружены: fail-closed delivery требует6реальных native receipts; no create/publish/tag/delete/clobber/main/ACL/OAuth.
+
+## Текущий кандидат DE408
+
+Candidate43744944796 реально проверил оба normal APK: прежний certificate SHA256, package/version/config, permissions, StorageSafety, отсутствие fixture classes/testOnly/cleartext. FullVerify489Flutter PASS. Signing/main/Google OAuth/ACL/GAS6/старые27 неизменны. Доставочный guard теперь дополнительно отвергает пустые/неполные/дублированные/не-PASS cases, иной source/driver, изменённый JSON и path traversal:8локальных tests PASS. Metadata read15.11 подтвердил owner-only folder; ACL не переписывались.
