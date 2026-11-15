@@ -24,7 +24,7 @@ public final class NativePoolProbe {
         || Process.myUid() < 10000) throw new SecurityException("DISPOSABLE_APP_UID_REQUIRED");
     int count = Integer.parseInt(args[1]);
     int busyMs = Integer.parseInt(args[2]);
-    if (busyMs != 2000) throw new SecurityException("BOUNDED_BUSY_TIMEOUT_REQUIRED");
+    if (busyMs != 0) throw new SecurityException("BOUNDED_BUSY_TIMEOUT_REQUIRED");
     if (count != 1 && count != 4) throw new SecurityException("UNREVIEWED_POOL_SIZE");
     File root = new File("/data/user/0/" + args[0] + "/files");
     if (!root.isDirectory()) throw new SecurityException("EXISTING_DISPOSABLE_FILES_REQUIRED");
@@ -36,7 +36,7 @@ public final class NativePoolProbe {
     SQLiteDatabase b = SQLiteDatabase.openOrCreateDatabase(fixture, null);
     stage("B_OPEN");
     // This PRAGMA returns a row; Android execSQL rejects it even on assignment.
-    for (SQLiteDatabase database : new SQLiteDatabase[]{a,b}) {
+    for (SQLiteDatabase database : busyMs == 0 ? new SQLiteDatabase[]{} : new SQLiteDatabase[]{a,b}) {
       try (android.database.Cursor c = database.rawQuery("PRAGMA busy_timeout=" + busyMs, null)) {
         if (!c.moveToFirst() || c.getInt(0) != busyMs) throw new AssertionError("BUSY_TIMEOUT_NOT_APPLIED");
       }

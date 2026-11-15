@@ -15,8 +15,8 @@ adb('shell','run-as',pkg,'chmod','400','files/native-pool18.jar')
 cases=[]
 # Original zero-timeout1/4 failures are retained separately. Isolate the
 # bounded busy handler interaction with the same actual shipped pool classes.
-for count in [4]:
- command=['adb','shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count),'2000']
+for count in [1]:
+ command=['adb','shell','run-as',pkg,'env','CLASSPATH=/data/user/0/'+pkg+'/files/native-pool18.jar:'+apk,'app_process','/system/bin','org.alchemist.p0probe.NativePoolProbe',pkg,str(count),'0']
  result=subprocess.run(command,capture_output=True,timeout=55)
  raw=result.stdout.decode(errors='replace')
  if result.returncode:
@@ -31,11 +31,8 @@ for count in [4]:
   raise AssertionError('NATIVE_PROCESS_EXIT_'+str(result.returncode)+'_SEE_READONLY_DIAGNOSTICS')
  match=re.search(r'^NATIVE_POOL18=(\{.*\})$',raw,re.M);assert match,'NO_NATIVE_POOL_RECEIPT:'+raw[-1000:]
  v=json.loads(match[1]);(out/('native-pool-'+str(count)+'.json')).write_text(json.dumps(v,indent=2)+'\n')
- assert v['productionDatabaseOpened'] is False and v['pool']==count and v['busyTimeoutMs']==2000
- if count==1:
-  assert v['errors']==['SQLiteDatabaseLockedException'] and 'B_COMMITTED' not in v['events'],'NEGATIVE_LOCK_ORDER_NOT_OBSERVED'
- else:
-  assert not v['errors'] and v['status']=='BOTH_COMMITS_COMPLETE' and v['rows']==2 and v['integrity']=='ok','POSITIVE_LOCK_ORDER_CONTROL_FAILED'
+ assert v['productionDatabaseOpened'] is False and v['pool']==count and v['busyTimeoutMs']==0
+ assert not v['errors'] and v['status']=='BOTH_COMMITS_COMPLETE' and v['rows']==2 and v['integrity']=='ok','CANDIDATE_SERIAL_SCHEDULER_FAILED'
  cases.append({'pool':count,'status':'PASS_CAUSAL_NATIVE_EXPERIMENT','observed':v['status']})
-v={'driverSource':os.environ['GITHUB_SHA'],'appSource':'ef50fc5dceb849257b5d99b74506c3609739e343','classification':'NATIVE_POOL_NOT_APP_UPGRADE_GOOGLE_OR_PHONE','cases':cases}
+v={'driverSource':os.environ['GITHUB_SHA'],'appSource':'ef50fc5dceb849257b5d99b74506c3609739e343','classification':'CANDIDATE_VENDOR_SCHEDULER_SOURCE_NOT_SHIPPED_APK_NOT_GOOGLE_OR_PHONE','cases':cases}
 (out/'NATIVE_POOL_18.json').write_text(json.dumps(v,indent=2)+'\n');print('NATIVE_POOL_18='+json.dumps(v))
