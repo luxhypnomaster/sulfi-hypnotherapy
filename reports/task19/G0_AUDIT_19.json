@@ -1,0 +1,15 @@
+{
+  "base": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+  "apk28Source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "mainExpectedUnchanged": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "task18PR": 49,
+  "task18PRState": "OPEN_DRAFT_NOT_MERGED",
+  "task18LastRun": 43765843573,
+  "task18LastRunState": "COMPLETED_SUCCESS",
+  "worktree": "ISOLATED_TASK19",
+  "originalWorktree": "UNCHANGED_RESEARCH16_WITH_PREEXISTING_UNTRACKED_FILES",
+  "baselineServer": "GAS6_REPORTED_NOT_REDEPLOYED_OR_ADMIN_READ",
+  "conflict": "NO_ACTIVE_TASK18_CI_DETECTED_NO_WORKTREE_SHARED",
+  "supabaseProject": "NOT_PROVIDED_LIVE_BLOCKED",
+  "ownerPhone": "NOT_RUN"
+}

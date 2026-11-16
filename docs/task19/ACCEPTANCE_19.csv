@@ -1,0 +1,52 @@
+ID,Критерий,Обязательное доказательство,Этап,Статус
+AUTH-01,Постоянный Supabase session после cold start,INTEGRATION+OWNER_PHONE,G1,NOT_RUN
+AUTH-02,Нет picker при app switch/recents,OWNER_PHONE,G1,NOT_RUN
+AUTH-03,Refresh one coordinator; no rotation race,UNIT+INTEGRATION,G1,NOT_RUN
+AUTH-04,503/BUSY/timeout не приводит к logout,UNIT+INTEGRATION,G1,NOT_RUN
+AUTH-05,401 восстановление допустимого токена до REAUTH,UNIT+INTEGRATION,G1,NOT_RUN
+AUTH-06,Google OAuth PKCE vs native id/access documented,SOURCE+PROTOTYPE,G0,NOT_RUN
+AUTH-07,"MASTER/CLIENT отдельные пакеты, один аккаунт",OWNER_PHONE,G1,NOT_RUN
+AUTH-08,Явный logout запрещает silent restore,UNIT+OWNER_PHONE,G1,NOT_RUN
+AUTH-09,Owner bound queue never switches to account B,INTEGRATION,G1,NOT_RUN
+AUTH-10,"No secrets in APK, logs, repo",SECURITY,G1,NOT_RUN
+USER-01,app_user_id независим от Google sub/UID,SCHEMA+INTEGRATION,G2,NOT_RUN
+USER-02,Legacy Google sub mapping verified,INTEGRATION+SECURITY,G2,NOT_RUN
+USER-03,Не merge по одному email,SECURITY,G2,NOT_RUN
+USER-04,Тестовая лицензия после reinstall,OWNER_PHONE,G2,NOT_RUN
+USER-05,Другой аккаунт не получает лицензию,SECURITY,G2,NOT_RUN
+USER-06,Ledger idempotent atomic grant/debit,UNIT+INTEGRATION,G2,NOT_RUN
+BRIDGE-01,Supabase JWT verified server-side,SECURITY,G3,NOT_RUN
+BRIDGE-02,Legacy owner/data preserved,MIGRATION+OWNER_PHONE,G3,NOT_RUN
+BRIDGE-03,No client edition impersonation,SECURITY,G3,NOT_RUN
+QUEUE-01,User transfer starts automatically,OWNER_PHONE,G4,NOT_RUN
+QUEUE-02,Resume after drop/background,OWNER_PHONE,G4,NOT_RUN
+QUEUE-03,Card title/type/cover/date/progress,OWNER_PHONE,G4,NOT_RUN
+QUEUE-04,History deletion preserves files,UNIT+OWNER_PHONE,G4,NOT_RUN
+QUEUE-05,Cancel retained draft/open draft,OWNER_PHONE,G4,NOT_RUN
+QUEUE-06,publish ack not turned FAILED by get,UNIT+INTEGRATION,G4,NOT_RUN
+QUEUE-07,"Queue singleton navigation, Back safe",WIDGET+OWNER_PHONE,G4,NOT_RUN
+NOTIF-01,Active shows progress/direction/actions,OWNER_PHONE,G4,NOT_RUN
+NOTIF-02,Completed static icon + Готово,OWNER_PHONE,G4,NOT_RUN
+NOTIF-03,No running arrow when idle,OWNER_PHONE,G4,NOT_RUN
+CAT-01,Diary absent from content catalog,INTEGRATION+OWNER_PHONE,G5,NOT_RUN
+CAT-02,Tabs programs/modules/tracks,WIDGET+OWNER_PHONE,G5,NOT_RUN
+CAT-03,Mini 88dp not 56dp,VISUAL+OWNER_PHONE,G5,NOT_RUN
+CAT-04,"Mini auto cache load, no repeat",UNIT+OWNER_PHONE,G5,NOT_RUN
+CAT-05,SQLite snapshot instant offline,INTEGRATION+OWNER_PHONE,G5,NOT_RUN
+CAT-06,Incremental changes + removals,INTEGRATION,G5,NOT_RUN
+CAT-07,Licensed download server checked,SECURITY,G5,NOT_RUN
+CAT-08,Deferred intent fetch on reconnect,OWNER_PHONE,G5,NOT_RUN
+MASTER-01,Editor metadata without audio reupload,INTEGRATION+OWNER_PHONE,G5,NOT_RUN
+UI-01,Green diary sticker overlay no black strip,VISUAL+OWNER_PHONE,G4,NOT_RUN
+UI-02,Top transfer badge no layout shift,VISUAL+OWNER_PHONE,G4,NOT_RUN
+UI-03,Library cloud shortcut return context,WIDGET+OWNER_PHONE,G4,NOT_RUN
+TRANS-01,256KiB baseline metrics,PERFORMANCE,G6,NOT_RUN
+TRANS-02,768KiB transport feasibility gate,INTEGRATION,G6,NOT_RUN
+TRANS-03,Resume from server accepted position,INTEGRATION+OWNER_PHONE,G6,NOT_RUN
+TRANS-04,Whole SHA mandatory,INTEGRATION,G6,NOT_RUN
+TRANS-05,Byte speed distinct total wall time,PERFORMANCE,G6,NOT_RUN
+LOCK-01,No global lock during Drive IO,CONCURRENCY,G6,NOT_RUN
+LOCK-02,Per-upload lease and atomic commit,CONCURRENCY,G6,NOT_RUN
+LOCK-03,Read/auth no BUSY from transfer,INTEGRATION,G6,NOT_RUN
+LOCK-04,Independent rollback 256/768 and lock mode,INTEGRATION,G6,NOT_RUN
+STORAGE-01,"Only TUS staging prototype, no migration",SOURCE+PROTOTYPE,G7,NOT_RUN

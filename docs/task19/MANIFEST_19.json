@@ -1,0 +1,26 @@
+{
+  "package": "Задание_19.zip",
+  "baseline": "v0.3.1",
+  "files": {
+    "ACCEPTANCE_19.csv": {
+      "bytes": 3883,
+      "sha256": "b25c019a4c4c1a3bacfbb51b3f99eb58db312f2324f8d57a55dac63360e98e39"
+    },
+    "DECISIONS_19.md": {
+      "bytes": 3217,
+      "sha256": "f049986f4b3ea24c12ce302aa86e55be380b376c0fa9f097481ab92567710644"
+    },
+    "MASTER_SPEC_19.md": {
+      "bytes": 25541,
+      "sha256": "e365a2ca7333156ec1266ddc34dd70d4f40298328a351325c1a45d25186c9744"
+    },
+    "README_19.md": {
+      "bytes": 1670,
+      "sha256": "0f817360593d886f5a7ad6074337808fc02821b3f22702bdba22a3232b54ce96"
+    },
+    "TASK_19_STAGE_0_1.md": {
+      "bytes": 5913,
+      "sha256": "50d77ee7ca0a6eafbac7b829c8acb80bead88e512c2be5105403c18e7b56a7c0"
+    }
+  }
+}
