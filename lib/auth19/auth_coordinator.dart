@@ -86,7 +86,7 @@ class AuthCoordinator {
     return _request('initialize', {
       'projectRef': projectRef,
       'publishableKey': publishableKey,
-      if (expectedUid != null) 'expectedUid': expectedUid,
+      'expectedUid': ?expectedUid,
     });
   }
 
@@ -148,7 +148,7 @@ class AuthCoordinator {
     if (!enabled || expectedUid.isEmpty) return null;
     return _channel.invokeMapMethod<dynamic, dynamic>('lease', {
       'expectedUid': expectedUid,
-      if (expectedEpoch != null) 'expectedEpoch': expectedEpoch,
+      'expectedEpoch': ?expectedEpoch,
     });
   }
 

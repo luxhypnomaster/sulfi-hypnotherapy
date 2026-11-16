@@ -1,7 +1,9 @@
-# №19 — контрольная точка
+# №19 — финальная точка G0–G1
 
-G0commitcf5fadb:6sourcefiles+hashes, baseline363a024/APKde408, sourceauditдоimplementation. Prototypecommit5d61c63, затемконтролируемыерасширенияheadlesspolicy/RESTtests/authorityepoch. ПоследнийGitHubCI43949403640BLOCKEDbeforeallocation,billingannotation сохранена; automaticpush повторовнет, manualworkflowprepared.
+База363a024 / APK28de408f1. Веткаfeat/task19-auth-stage01. cf5fadb — read-only G0 до implementation;5d61c63 — initial PoC;481889a — дополнительные guards/reports. Последний source/PR фиксируются в CHECKPOINT_19.json. Оригинальные ветки16/17/18/main не изменены.
 
-Локально493Flutter(2skips), latesttargeted5,Node47+24; standaloneKotlin25+ наборуточняетсяпофинальномулогу; all4Androidnative source typecompileSDK36проходили,последняяповторнаяпослеизменений. StageAPK localbuildидётсRAMGradle/SDKcache,originalsdk/privatefilesuntouched. AndroidKVMabsent; noGoogle/Supabaseconfig. Никакихproduction migrations/deploy/main/ACL/signing/ownerdataoperations.
+Архив19SHA/CRC/manifest PASS,6files read. 493Flutter+2SKIP; финальныеtargeted5, JVM28, Node47+24; analyze clean; actual AndroidSDK36/Flutterembedding4native files compilePASS. Sourceguards: legacy runtime/pubspec/signing byte-identical, только guardedMainActivity/Gradle +новые auth19 files.
 
-Дальше: получитьactuallocalbuildoutcome; finalJVM/sdkcompile; consistency/securityguards; сформировать51matrix/draftPR/точныйsourceSHA. LiveonlyпослеOWNER_SETUPиownerphoneproof. Не повторятьblockedCIдоисправлениявнешнейпричины. ReportsGoogleDriveuploadrequiresapprovalпоMASTER_SPEC19§14,полныйreviewableпакетготовитьвGit.
+HostedCI43949403640BLOCKEDbeforeallocation:accountbilling/spendingmessage. Повторовнет,manualworkflowсохранён. LocalAPK FAIL: daemon disappeared/OOMobserved afterproxy/TLSsetupresolved. NoKVM, nativevault/coldprocess/Google/Supabase/OWNERphoneNOT_RUN. НикакихAPK19release/productionchanges.
+
+До дальнейших действий: OWNER_SETUP(publicstagingref/key only), liveconformance/ownerproof, доступныйrunner. G2–G7DEFERRED_NOT_AUTHORIZED. Не подставлять SupabaseJWT в GAS, не мигрировать UID/SQLite/queues. Код и отчёты возвращаются через draftPR, Drive upload требует отдельного approval по§14MASTER_SPEC19.

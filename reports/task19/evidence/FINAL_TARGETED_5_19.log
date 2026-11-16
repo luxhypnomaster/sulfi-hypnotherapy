@@ -1,0 +1,8 @@
+00:00 +0: loading /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart
+00:00 +0: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 default OFF never invokes a platform method or opens credentials
+00:00 +1: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 startup gate, deduplicated restores and explicit errors contain no token
+00:00 +2: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 restore never invokes interactive method; lease uses exact requested owner
+00:00 +3: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 rejected staging endpoint is not opened
+00:00 +4: loading /dev/shm/sulfi19/test/task19_legacy_auth_audit_test.dart
+00:03 +4: /dev/shm/sulfi19/test/task19_legacy_auth_audit_test.dart: 19 SOURCE repro: generic401 + same SDK cached ID token leaves legacy identity rejected, without proving phone cause
+00:03 +5: All tests passed!

@@ -1,13 +1,38 @@
-# №19 G0–G1 — PARTIAL, только изолированный прототип
+# №19, G0–G1 — PARTIAL
 
-АрхивЗадание_19.zip SHA256591271cc99ee485c2fad775b0077b756c5c37ecf7401a19f97652f7d4f913b3f совпал,6файлов прочитаны, manifest/CRC PASS. БазаGit363a024 отнеобъединённогоPR49, sourceAPK28de408f1. Веткаfeat/task19-auth-stage01, отдельныйworktree. Последние№18CIзавершены; егоruntime/source сохранены, чужой research16worktree и егоuntrackedfiles не трогались.
+Архив «Задание_19.zip» проверен: SHA-256 `591271cc99ee485c2fad775b0077b756c5c37ecf7401a19f97652f7d4f913b3f`, CRC и все пять записей MANIFEST совпали; прочитаны все шесть файлов. Исполнялись только G0–G1.
 
-G0: составлен фактический call graph и кандидатный401/samecachedID path с controlled unit reproduction. Точная причина picker на телефоне не доказана, требуетсяownertrace. СвереныGoogle7.2.0/fork7.2.18, packages/SHA1/publicWebaudience поисторическойрегистрации/неизменнымAPK28digest; текущийGoogleConsoleTesting/scopes не выдаётсяза проверенный. СравненыофициальныеPKCEиnativeID+access flows. InventorylegacyGoogle sub иplan immutableapp_user_id подготовлен без миграции.
+## Исходная точка и сохранность
 
-G1: реализован отдельный PKCE/S256 Supabase Auth REST prototype, single native refresh broker, KeystoreAES-GCM/AtomicFile+per-install OSlock, readygate, restore/401refresh/revoked/offline/backendstates, local logout, strictcallbacks/replay denial, nativeworker allowlist/pinneduid+epoch. Same-owner token refresh не меняет authorityepoch. DartonAuthStateChange обработанonError. FlagdefaultOFF; .auth19packages и отдельныйentrypoint, оригинальныйmain/GoogleSDK/auth/SQLite/transferMain не переписаны.
+Ветка `feat/task19-auth-stage01` создана от `363a0244ce761e317dd09a6c5cb366d1e8ba7315` ветки №18. PR49 остаётся необъединённым draft, последние runs №18 завершены; общий worktree не используется. Исходник подписанных APK28 — `de408f1`, текущий Git HEAD не приравнивается к нему. Неизменность обоих asset digests сверена через GitHub API.
 
-Не предоставлена конфигурация staging Supabase: liveLogin/refresh/2аккаунта/2телефона BLOCKED, OWNER_SETUP_19.mdготов. PrototypeнеподключёнкGAS: нуженfutureG3bridge, нельзяподставлятьSupabaseJWTвстарыйGoogleissuer verifier. G2+billing/Storage/migrations/catalog/UX/transport768KiB/locks не выполнялись.
+GAS6, main, Google OAuth ACL, signing configuration/keys, публикации и личные данные не менялись. `SOURCE_GUARDS_19.json` доказывает побайтную сохранность original main.dart, auth/services/queue, SQLite/data/models/UI, transfer native code, server, third_party, pubspec/lockfile и assets. MainActivity дополнен только ветками для package suffix `.auth19`; Back и рабочие обработчики сохранены. Никакая настоящая база не мигрировала.
 
-Фактические тесты:493Flutter+2skips, targeted5, Node47+24, JVMinitial17/24; latestnativechecks/localbuildstatus см.TESTS. CI43949403640 не стартовал из-заGitHubbilling/spendingerror, не sourcefailure. ПовторCI/платежи/productiondeploy не запускались. ЛокальноAndroidcode компилируетсясоSDK36/Flutterembedding; Gradlebuild исследуется. Keystore/emulator/Googlephone не объявленыPASS.
+## G0 — выполнен аудит
 
-GAS6, main, OAuthACL, signing keys, опубликованные материалы и личные данные не изменены. РабочиеMASTER28/CLIENT28 не заменены. Отчёты/исходники в featurebranch; draftPR будет создан после финальной локальной проверки. Это не завершение всего№19 и не разрешение наcutover.
+Сохранены call graph, legacy Google sub inventory, сравнение PKCE/native ID+access flows, threat model и план verified legacy mapping. Отдельный controlled test воспроизвёл `401 → rejectIdentity → forced restore возвращает тот же cached ID token → refresh=false`. Последующий успешный whoami с тем же токеном восстанавливает доверие без picker. Поэтому это подтверждённый путь в коде, **не установленная причина события на телефоне**. Google Console Testing/scopes и реальный SDK trace пока не проверены.
+
+## G1 — реализован изолированный прототип
+
+Официальный Supabase Auth REST PKCE/S256 flow через браузер; отдельный native broker с единым refresh ownership, Android Keystore AES-GCM, AtomicFile/fsync и межпроцессным FileLock. Restore ready gate проверяет `/user` и Google provider-managed identity; нет доверия email/user_metadata/локальному edition. Состояния offline/backend/revoked/reauth различаются; 401 сначала пытается восстановить допустимый credential, 503/timeout не logout.
+
+UI и headless API используют один broker. Worker требует pinned UID/epoch и не может открыть chooser, сменить аккаунт или сделать logout. Обычный same-owner refresh не меняет authority epoch; logout/account switch её меняет. Callback nonce, PKCE verifier, origin/path/TTL/replay checks, локальный logout tombstone и stream `onError` реализованы.
+
+Флаг по умолчанию OFF. При ON Gradle требует отдельный `lib/main_auth19.dart` и добавляет `.auth19` к обоим applicationId. Это отдельный диагностический профиль, а не замена рабочей APK28. Supabase SDK с независимыми auto-refresh timers не запускается; выбран native REST adapter по официальному OpenAPI.
+
+## Фактические проверки
+
+- Полный локальный Flutter: **493 PASS, 2 штатных opt-in SKIP**. Последний адресный прогон: **5 PASS**.
+- Финальные JVM: **28 PASS** — 20 coordinator/policy/owner/epoch и 8 REST adapter negative controls.
+- Node: **47 + 24 PASS**. Анализ Dart без замечаний.
+- Четыре актуальных native-файла успешно скомпилированы с настоящими Android SDK36 и Flutter embedding. Это type compilation, не исполнение Android Keystore.
+
+[CI43949403640](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43949403640) не получил runner из-за сообщения GitHub о billing/spending limit: **0 шагов, код не запускался**. Повторы и платные настройки не выполнялись. Локальная полная APK-сборка после устранения proxy/TLS setup завершилась потерей Gradle daemon; cgroup сообщил OOM. Причинная привязка всех resource events к одному процессу не заявляется. APK19 и физический Android PASS не выдаются.
+
+## Что заблокировано и следующий шаг
+
+Настроенная тестовая Supabase-конфигурация не предоставлена; variables API недоступен403, поэтому не утверждается, что проекта вообще нет. LIVE Google/Supabase consent, refresh/rotation, два аккаунта/телефона, 15/30/60мин и reboot — **NOT_RUN/BLOCKED**. Локально нет KVM, CI runner недоступен: native Keystore/cold-process harness подготовлен, но не исполнен.
+
+`OWNER_SETUP_19.md` содержит шаги с телефона. Нужны только публичные ref + publishable key отдельного staging-проекта; Google client secret вводится владельцем только в provider settings, не в чат. Оригинальный OAuth не менять. После конфигурации — conformance и owner QA отдельного профиля.
+
+Supabase JWT **не подключён к GAS/очереди №18**: это G3. Нет account/file migration, лицензий/платежей/Storage, нового сервера, каталога/UX/768KiB/lock-рефакторинга. Все 51 критерий сохранены в матрице: G0–G1 разделены по уровням доказательств, G2–G7 — DEFERRED_NOT_AUTHORIZED. Никакого автоматического merge/deploy. Отчёты возвращаются в Git/draft PR; Drive upload по §14 пакета требует отдельного согласования.

@@ -15,3 +15,7 @@ Legacy sub inventory: GoogleJwt validatesGoogleiss/aud/RS256/exp/sub and serverm
 Выборprototype: официальный SupabaseAuth REST PKCE/S256 via browser, nativebroker single refresh owner + AndroidKeystore encrypted atomicrecord/OSfilelock; DartUI+worker readonlyboundedlease API, no second SDK auto-refresh. Separate .auth19 packages/entrypoint and flagOFF; noGAS integration untilG3. NativeGoogle+Supabase comparison prepared separately; ID+accessToken needed, currentDiaryIdentity has IDonly. CurrentOAuth/signing/packages untouched.
 
 Official references: https://supabase.com/docs/guides/auth/sessions/pkce-flow ; https://supabase.com/docs/reference/dart/auth-signinwithidtoken ; https://supabase.com/docs/guides/auth/sessions ; https://raw.githubusercontent.com/supabase/auth/master/openapi.yaml ; https://pub.dev/packages/google_sign_in . Fetched16.11.2026. Persistent appsession does not mean perpetual validity; refresh revocation/network/crash ambiguity must be distinguished.
+
+## Controlled reproduction и граница вывода
+
+`test/task19_legacy_auth_audit_test.dart` PASS: generic401 и тот же SDK cached ID token временно оставляют readerAuthenticated=false; pinned scope сохраняется, interactive=0. Следующий успешный auth.whoami с тем же токеном восстанавливает доверие. Поэтому реальный телефонный trigger и неизбежность picker не установлены; не считать source candidate полным ROOT_CAUSE OWNER.

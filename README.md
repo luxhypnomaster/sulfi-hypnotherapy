@@ -1,3 +1,7 @@
+# №19 G0–G1 — изолированный Auth19 prototype, PARTIAL
+
+[Результат](reports/task19/RESULT_19_STAGE01.md) · [Проверки](reports/task19/TESTS_19.md) · [OWNER_SETUP](reports/task19/OWNER_SETUP_19.md). Ветка `feat/task19-auth-stage01` от необъединённого №18/PR49. Флаг по умолчанию OFF, отдельные `.auth19` пакеты и entrypoint. Рабочие APK28/Google/GAS/SQLite/очередь не заменены. 493 Flutter + final targeted5 + JVM28 + Node47/24 PASS; Android type compile PASS. Hosted CI не стартовал из-за billing/spending annotation, local APK assembly потерял daemon при OOM observed. Live Supabase/Google и физические устройства NOT_RUN, APK19 не выдан. Только G0–G1; G2–G7 не выполняются.
+
 # №18 — P0: фоновая передача MASTER и CLIENT
 
 [ТЗ](docs/task18/TASK_RU.md) · [Результат](reports/task18/RESULT_18.md) · [Контрольная точка](reports/task18/CHECKPOINT_18.json). Отдельная ветка `feat/task18-native-background-transfer`, draft PR49 поверх **необъединённого PR48**. Текущий исходник APK28 `de408f1`:489Flutter/3CLIENT/47+24Node PASS; full controlled API34 11PASS, реальное OS cold-process recovery6,98sec; CLIENT normal27→28 13PASS. MASTER normal27→28 15PASS; full33/35/36 по10PASS; все6native gates текущего источника пройдены, пара28 проверена и добавлена в существующий private draft. [APK и протокол](reports/task18/PHONE_QA_18.md). Проверки с настоящими Google-аккаунтами и физическими телефонами NOT_RUN. Main/GAS6/OAuth/ACL/signing/данные27 не менялись.

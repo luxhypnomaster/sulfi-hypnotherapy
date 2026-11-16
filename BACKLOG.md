@@ -1,3 +1,13 @@
+# №19 — только G0–G1
+
+- [x] Проверены SHA/CRC/manifest6файлов, actualGit/APK28provenance; отдельный worktree/ветка от363a024.
+- [x] Read-only source audit и401/sameID controlled reproduction; phone trigger UNKNOWN.
+- [x] OfficialPKCE/native comparison, isolateddefaultOFF nativebroker, protectedpersistence/refresh/owner/epoch gates.
+- [x] 493Flutter(2SKIP), targeted5, JVM28, Node47+24, analyze и AndroidSDK36typecompile PASS.
+- [ ] Supabase staging config/liveGoogle/15–30–60мин/двеPHONE — OWNER_SETUP.
+- [ ] Android runtime/Keystore/packaging: hostedrunnerblockedbilling; localdaemonloss/OOMobserved; APK19невыдавать.
+- [ ] G2–G7: DEFERRED_NOT_AUTHORIZED, нет миграции/bridge/billing/Storage/productiondeploy.
+
 # №18 — P0: полноценная фоновая передача MASTER и CLIENT
 
 [ТЗ](docs/task18/TASK_RU.md) · [Контрольная точка](reports/task18/PROGRESS.md). Отдельная ветка feat/task18-native-background-transfer от506619a/PR48. Исторический №17 остаётся PARTIAL; владелец остановил тяжёлую физическую приёмку до готовности фона. Native JobService/dataSync + отдельный headless executor в разработке; новые APK ещё не выданы. Production GAS6, OAuth/ACL/signing/main и данные27 сохраняются. Не выдавать CODE/controlled tests за native/OWNER PASS.

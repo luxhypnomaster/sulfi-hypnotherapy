@@ -24,3 +24,15 @@ attachWorker(Context,BinaryMessenger) — отдельная headless регис
 **Не подключено к GAS/реальной очереди №18**: это запрещённый пока G3. Старый transferMain/Keystore Google lease/owner scope/SQLite полностью сохранены. Существующие tasks нельзя автоматически заменить Supabase UID; отсутствие legacy proof означает WAITING_AUTH, не присвоение новому аккаунту. Staging access lease имеет provider=SUPABASE_STAGING_ONLY и не является Google credential.
 
 Dart onAuthStateChange имеет onError: ошибка stream→BACKEND_UNAVAILABLE без очистки credential. initialize не запускает protected operations до verified ready. Два пакета .auth19 получают разные UID/Keystore/noBackup storage, но могут в будущем пройти Google одним человеком; реальное совпадение Supabase UID на2устройствах NOT_RUN.
+
+Verified Google provider должен находиться в server-managed identities ответа /user; editable user_metadata недостаточно. Проверено REST negative test. На данный момент source +28JVM tests +SDK typecompile, но не live server conformance/Android vault runtime.
+
+```mermaid
+flowchart LR
+  UI["Isolated Flutter UI"] --> B["Native auth broker"]
+  W["Pinned headless API"] --> B
+  B --> V["Keystore + atomic encrypted file"]
+  B --> S["Supabase Auth REST staging"]
+```
+
+GAS/очередь18 в эту схему не включены: до отдельного G3 они продолжают использовать исходную Google authority.
