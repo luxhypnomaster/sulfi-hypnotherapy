@@ -21,6 +21,9 @@ class MainActivity: AudioServiceActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         ru.sulfi.sulfi_hypnotherapy.transfer.TransferPlatform.attach(this, flutterEngine.dartExecutor.binaryMessenger)
+        if (packageName.endsWith(".auth19")) {
+            Class.forName("ru.sulfi.sulfi_hypnotherapy.auth19.Auth19Platform").getMethod("attach", Activity::class.java, FlutterEngine::class.java).invoke(null, this, flutterEngine)
+        }
         if (packageName.endsWith(".transferprobe")) {
             // Test implementation is not compiled into MASTER/CLIENT candidates.
             Class.forName("ru.sulfi.sulfi_hypnotherapy.probe.TransferProbeControl").getMethod("attach", Activity::class.java, FlutterEngine::class.java).invoke(null, this, flutterEngine)
@@ -88,6 +91,7 @@ class MainActivity: AudioServiceActivity() {
     }
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        if (packageName.endsWith(".auth19")) Class.forName("ru.sulfi.sulfi_hypnotherapy.auth19.Auth19Platform").getMethod("callback", Intent::class.java).invoke(null, intent)
         if (intent.getBooleanExtra("sulfi_transfer_queue", false)) ru.sulfi.sulfi_hypnotherapy.transfer.TransferRuntime.requestOpen()
     }
     @Deprecated("Activity result API used by the Flutter Activity")

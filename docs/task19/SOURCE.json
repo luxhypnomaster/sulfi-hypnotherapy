@@ -1,0 +1,12 @@
+{
+  "driveId": "1IYn_dduUlkkixTHxHN2UsBxV6MN7Iuam",
+  "sha256": "591271cc99ee485c2fad775b0077b756c5c37ecf7401a19f97652f7d4f913b3f",
+  "bytes": 19133,
+  "files": 6,
+  "zipCRC": "PASS",
+  "manifestChecks": "PASS_ALL5",
+  "executionScope": [
+    "G0",
+    "G1"
+  ]
+}

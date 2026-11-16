@@ -1,0 +1,57 @@
+{
+  "capturedAt": "2026-11-16T21:03:14.834934+00:00",
+  "fullFlutter": 493,
+  "skipped": 2,
+  "finalTargeted": 5,
+  "finalJVM": 28,
+  "nodeAlchemist": 47,
+  "nodeLegacy": 24,
+  "analyze": "PASS",
+  "nativeTypeCompile": "PASS_ANDROID36_ACTUAL_FLUTTER_EMBEDDING_NO_RUNTIME",
+  "apkAssembly": "BLOCKED_LOCAL_DAEMON_DISAPPEARED_OOM_OBSERVED",
+  "CI": "BLOCKED_BEFORE_RUNNER",
+  "emulator": "NOT_RUN_NO_KVM",
+  "liveGoogleSupabase": "NOT_RUN_CONFIG_UNCONFIRMED",
+  "files": [
+    {
+      "path": "reports/task19/evidence/FULL_DART_493_19.log",
+      "bytes": 73679,
+      "sha256": "fac9d8d591c5c797a6e8326f28a291c6b858fedcb553a3b925a00d07c79d90be"
+    },
+    {
+      "path": "reports/task19/evidence/FINAL_TARGETED_5_19.log",
+      "bytes": 894,
+      "sha256": "c5b943908d72536a446d71f1e74cae1fba8015622f0617c7704b968e675b4b8f"
+    },
+    {
+      "path": "reports/task19/evidence/FINAL_ANALYZE_19.log",
+      "bytes": 96,
+      "sha256": "d9608fdc902123a540bd7dc871afd01430362abdb1cc909328927f9ad0157778"
+    },
+    {
+      "path": "reports/task19/evidence/FINAL_JVM_28_19.log",
+      "bytes": 78,
+      "sha256": "b1648243e4f66085539050e5f53fa9f52dfc3c6e7cdc8cfc8398f0b114f730fb"
+    },
+    {
+      "path": "reports/task19/evidence/FINAL_NATIVE_TYPE_COMPILE_19.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/task19/evidence/NODE_ALCHEMIST_47_19.log",
+      "bytes": 5356,
+      "sha256": "34b23cdf14d5a3dd74a6b956062dc9ba7204f06a941f9a391f4d02ceed387e63"
+    },
+    {
+      "path": "reports/task19/evidence/NODE_LEGACY_24_19.log",
+      "bytes": 1998,
+      "sha256": "c3d318a07c69e529c64c1f27d432b560ed885836b0310eba8783fb04320c8936"
+    },
+    {
+      "path": "reports/task19/evidence/LOCAL_APK_FAILURE_19.log",
+      "bytes": 6509,
+      "sha256": "01dbdfc0f570886ebe43d50bec0adbcdf6c8104055173052ae1a93909cdf4e8a"
+    }
+  ]
+}

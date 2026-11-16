@@ -1,0 +1,14 @@
+# №19 G0 — сравнение официальных вариантов
+
+| Вариант | Что нужно | Отличия и ограничения | Статус |
+|---|---|---|---|
+| Google OAuth → Supabase PKCE/S256 → callback | Отдельный Supabase staging; Google Web OAuth client и его HTTPS callback; allowlist app callbacks | Не требует новых Android Google signers для браузерного входа; нужен browser roundtrip. Custom scheme может перехватываться другим приложением: nonce+PKCE защищают exchange, но возможен отказ доставки. Verified App Links — будущий production gate. | Выбран для изолированного прототипа; LIVE BLOCKED |
+| google_sign_in7 → Supabase signInWithIdToken | Android packages/SHA1, Web audience, ID token и Google access token; дополнительные SDK authorization calls при необходимости | Native first-login UX; не путать authentication и authorization. Существующий DiaryIdentity возвращает только ID token. Современный SDK7 не устарел; v6 snippets с signIn()/authentication.accessToken нельзя копировать в7. authorizationForScopes может вернутьnull, authorizeScopes — только после действия пользователя. | SOURCE comparison; новый native live flow NOT_RUN |
+
+Оба варианта выдают Supabase session, а не делают Google ID token бессрочным. Сам факт получения session не даёт GAS роли/лицензии. Persistent credentials проверяются через Auth /user; expiry/revocation/network различаются. Ни один flow не оценивался на реальных Google-аккаунтах, скорость/надёжность сравнительно не измерены.
+
+Выбор G1: PKCE с официальным Supabase Auth REST OpenAPI, native single refresh broker. **supabase_flutter SDK не добавлен**: его отдельные auto-refresh timers в нескольких Flutter engines здесь не запускаются. Это осознанный ограниченный PoC, не утверждение, что ручной адаптер всегда лучше SDK; перед adoption обязательна live conformance с настоящим staging. Никакого Firebase/Storage/paid service. pubspec и lockfile не менялись.
+
+Версии: проект google_sign_in7.2.0, Androidfork7.2.18; Kotlin local compiler2.1.0/JDK21 только как инструмент теста; Android compileSdk36. REST specification fetched16.11.2026; managed Supabase tenant version неизвестна до OWNER_SETUP.
+
+Источники: [Google provider](https://supabase.com/docs/guides/auth/social-sign-in/auth-google), [PKCE](https://supabase.com/docs/guides/auth/sessions/pkce-flow), [Native ID token requirements](https://supabase.com/docs/reference/dart/auth-signinwithidtoken), [Sessions](https://supabase.com/docs/guides/auth/sessions), [Auth OpenAPI](https://raw.githubusercontent.com/supabase/auth/master/openapi.yaml), [Google Flutter SDK](https://pub.dev/packages/google_sign_in), [Google OAuth lifecycle](https://developers.google.com/identity/protocols/oauth2). Google OAuth Testing/scopes/live redirect configuration не проверены административно; не делать универсального вывода «Testing всегда7дней» либо «ID expiry=logout».

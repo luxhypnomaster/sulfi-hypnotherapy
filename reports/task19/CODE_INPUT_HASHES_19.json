@@ -1,0 +1,78 @@
+{
+  "base": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+  "scope": "TASK19_CODE_AND_TEST_INPUTS",
+  "files": [
+    {
+      "path": ".github/workflows/task19-stage01.yml",
+      "sha256": "54a7178a09e11f0d606fe80908167c33d2154a18ef7e22c800c9e49d9713b6a9"
+    },
+    {
+      "path": "android/app/build.gradle.kts",
+      "sha256": "f1fe33736d6d5943151611d6135940d6e20b483d77e672e528fb185905c534d4"
+    },
+    {
+      "path": "android/app/src/auth19/AndroidManifest.xml",
+      "sha256": "c9c31aa3321a43ee6f0976de3e61a49c1a56df2edfc5a5e0971f84871885c7ac"
+    },
+    {
+      "path": "android/app/src/auth19/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/Auth19Platform.kt",
+      "sha256": "7923b6a760ef86cc3cab73ae47982e344424accb7e313db76c8c4bd984c7553e"
+    },
+    {
+      "path": "android/app/src/auth19/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/AuthCoordinator.kt",
+      "sha256": "d391cf4b640304ae575aed2826734bb5eb3bdf8876b1a1a5de4d1eff7e4f8889"
+    },
+    {
+      "path": "android/app/src/auth19/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/SecureSessionStore.kt",
+      "sha256": "29c4e79710b618f81f74bf55074a26cbbfbd4370d9b0fabafa7ad5c3ad93d1e1"
+    },
+    {
+      "path": "android/app/src/auth19/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/SupabaseRest.kt",
+      "sha256": "dcfe28296aa88016546a222bb9cba85766e07a724ceedbbda4802a4cdc6a62af"
+    },
+    {
+      "path": "android/app/src/auth19AndroidTest/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/Auth19NativeTest.kt",
+      "sha256": "e7caf5846a363689853e1b889d011bf5473197e17bcc4e8396e66df6a27b7915"
+    },
+    {
+      "path": "android/app/src/auth19Test/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/AuthCoordinatorTest.kt",
+      "sha256": "9cf02e7fcd72ad939b075da0410e5c23b9d48b674f626162d75263f7cfd7bb90"
+    },
+    {
+      "path": "android/app/src/auth19Test/kotlin/ru/sulfi/sulfi_hypnotherapy/auth19/SupabaseRestTest.kt",
+      "sha256": "c0e40eafeffaaca87e328f7f6c38da6d5608d15c5d0610780329188d547fb0c4"
+    },
+    {
+      "path": "android/app/src/main/kotlin/ru/sulfi/sulfi_hypnotherapy/MainActivity.kt",
+      "sha256": "8aaaa2ab4ace37e85d72ff420124c4a788601fe8378ddf4ab17b3958ab34d5b7"
+    },
+    {
+      "path": "lib/auth19/auth_coordinator.dart",
+      "sha256": "a4b6f9736e095167fe1adce170f4bdb76b8ff2d5a8cf77aa3c9c34484cc58dea"
+    },
+    {
+      "path": "lib/main_auth19.dart",
+      "sha256": "3e5fc7316b22fb06a40abe9a64abd6bee963c39af04d378517e2d3fe374350be"
+    },
+    {
+      "path": "scripts/task19/build_prototype.sh",
+      "sha256": "afec61182bd3170ef92c6704988d22a716a059c74c0a8fed5ce655b9c0dc4842"
+    },
+    {
+      "path": "scripts/task19/native_qa.sh",
+      "sha256": "245248ba23608f8adde563a4c5f54c5bffcab875c395230930970f0ec691aa40"
+    },
+    {
+      "path": "scripts/task19/record_build.py",
+      "sha256": "2667418dac2fcc12b5c19139c12560feb470c77ee4aa42e8d5f379f6f196214f"
+    },
+    {
+      "path": "test/task19_auth_coordinator_test.dart",
+      "sha256": "d2f91d9750eb0848f81437f067ea08d20cdfcd20a95cc7ae747306dea3a699b7"
+    },
+    {
+      "path": "test/task19_legacy_auth_audit_test.dart",
+      "sha256": "01727086faf2e9fe63fb5c394d5a6bc7b07247e5feee922ce1eeff8ef0204083"
+    }
+  ]
+}

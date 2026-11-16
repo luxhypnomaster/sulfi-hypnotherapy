@@ -1,0 +1,92 @@
+name: Task19 isolated auth G0-G1
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: task19-stage01-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify_build:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.ref == 'refs/heads/feat/task19-auth-stage01'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: ./.github/actions/setup-flutter
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: task19-gradle-${{ runner.os }}-${{ hashFiles('android/**/*.kts', 'pubspec.lock') }}
+          restore-keys: task19-gradle-${{ runner.os }}-
+      - name: All Dart/code checks, old auth and task18 regression (no credentials)
+        run: |
+          flutter pub get --enforce-lockfile
+          dart format --output=none --set-exit-if-changed lib test
+          flutter analyze --no-pub
+          flutter test --no-pub --reporter expanded
+          flutter test --no-pub --dart-define=SULFI_EDITION=client test/task15_client_test.dart --reporter expanded
+          node --test server/alchemist/test/*.test.mjs
+          node --test server/google_apps_script/test/backend.test.mjs
+      - name: Default OFF native compile and original JVM tests (NO APK/signing)
+        run: |
+          test -z "${SULFI_SIGNING_STORE_FILE:-}"
+          printf 'sdk.dir=%s\nflutter.sdk=%s\n' "$ANDROID_HOME" "$GITHUB_WORKSPACE/.tooling/flutter" > android/local.properties
+          cd android
+          ./gradlew :app:compileDebugKotlin :app:testDebugUnitTest -Pdart-defines= --no-daemon --console=plain
+          test -z "$(find app/build ../build/app -type f -path '*/auth19/*.class' 2>/dev/null || true)"
+          echo 'AUTH19_DEFAULT_OFF_NATIVE_COMPILE=PASS_NO_AUTH19_CLASSES'
+      - name: Build isolated MASTER + CLIENT, JVM and Android test harnesses
+        run: bash scripts/task19/build_prototype.sh
+      - uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/task19-prototypes
+          key: task19-isolated-${{ github.sha }}
+  native_qa:
+    needs: verify_build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      TASK17_EMULATOR_PIN: '37.2.12'
+      TASK17_PROCESS_FORENSIC: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/task19-prototypes
+          key: task19-isolated-${{ github.sha }}
+          fail-on-cache-miss: true
+      - name: Prepare disposable runner, preserve existing caches and owner data
+        run: bash scripts/task16g/prepare_native_runner.sh
+      - name: Actual Android Keystore/cold-process/owner isolation, controlled backend only
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          cores: 2
+          ram-size: 1536M
+          disk-size: 3G
+          disable-animations: true
+          force-avd-creation: true
+          pre-emulator-launch-script: python3 scripts/task17/pre_emulator.py
+          emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader -feature -Vulkan
+          script: bash scripts/task19/native_qa.sh

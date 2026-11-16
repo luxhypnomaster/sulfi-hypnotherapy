@@ -1,4 +1,5 @@
 import java.util.Base64
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -13,6 +14,15 @@ val sulfiDefines = (project.findProperty("dart-defines") as String?).orEmpty()
     }.toSet()
 val sulfiClientTest = sulfiDefines.contains("SULFI_EDITION=client")
 val sulfiTransferProbe = sulfiDefines.contains("SULFI_TRANSFER_PROBE=true")
+val sulfiAuth19 = sulfiDefines.contains("SULFI_AUTH19_STAGING=true")
+check(!(sulfiAuth19 && sulfiTransferProbe)) { "Separate isolated probes cannot be combined" }
+if (sulfiAuth19) {
+    val target = (project.findProperty("target") as String?).orEmpty()
+    val targetFile = if (File(target).isAbsolute) File(target) else rootProject.file("../$target")
+    check(targetFile.canonicalFile == rootProject.file("../lib/main_auth19.dart").canonicalFile) {
+        "Auth19 requires its isolated entrypoint, never the legacy application entrypoint"
+    }
+}
 
 android {
     namespace = "ru.sulfi.sulfi_hypnotherapy"
@@ -26,10 +36,15 @@ android {
 
     defaultConfig {
         // Keep this ID stable to preserve the on-device library across upgrades.
-        applicationId = (if (sulfiClientTest) "ru.sulfi.sulfi_hypnotherapy.clienttest" else "ru.sulfi.sulfi_hypnotherapy") + (if (sulfiTransferProbe) ".transferprobe" else "")
+        applicationId = (if (sulfiClientTest) "ru.sulfi.sulfi_hypnotherapy.clienttest" else "ru.sulfi.sulfi_hypnotherapy") + (if (sulfiTransferProbe) ".transferprobe" else if (sulfiAuth19) ".auth19" else "")
         manifestPlaceholders["sulfiAppLabel"] = if (sulfiClientTest) "Сульфи — клиент (тест)" else "Сульфи"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
+        if (sulfiAuth19) {
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            manifestPlaceholders["sulfiAppLabel"] = if (sulfiClientTest) "Сульфи Auth19 CLIENT" else "Сульфи Auth19 MASTER"
+            manifestPlaceholders["auth19Scheme"] = if (sulfiClientTest) "sulfiauth19client" else "sulfiauth19master"
+        }
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
         // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
@@ -41,6 +56,12 @@ android {
     if (sulfiTransferProbe) {
         sourceSets.getByName("main").java.srcDir("../../test_driver/android")
         sourceSets.getByName("debug").manifest.srcFile("../../test_driver/android/AndroidManifest.xml")
+    }
+    if (sulfiAuth19) {
+        sourceSets.getByName("main").java.srcDir("src/auth19/kotlin")
+        sourceSets.getByName("debug").manifest.srcFile("src/auth19/AndroidManifest.xml")
+        sourceSets.getByName("test").java.srcDir("src/auth19Test/kotlin")
+        sourceSets.getByName("androidTest").java.srcDir("src/auth19AndroidTest/kotlin")
     }
 
     buildTypes {
@@ -76,4 +97,9 @@ flutter {
 
 dependencies {
     testImplementation("junit:junit:4.13.2")
+    if (sulfiAuth19) {
+        testImplementation("org.json:json:20240303")
+        androidTestImplementation("androidx.test:runner:1.6.2")
+        androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    }
 }

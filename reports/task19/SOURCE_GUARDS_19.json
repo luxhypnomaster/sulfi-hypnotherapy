@@ -1,0 +1,28 @@
+{
+  "base": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+  "protectedSourcePathsUnchanged": [
+    "server",
+    "third_party",
+    "lib/services",
+    "lib/data",
+    "lib/models",
+    "lib/ui",
+    "lib/main.dart",
+    "pubspec.yaml",
+    "pubspec.lock",
+    "assets",
+    "android/app/src/main/AndroidManifest.xml",
+    "android/app/src/main/kotlin/ru/sulfi/sulfi_hypnotherapy/transfer"
+  ],
+  "originalSigningBuildTypes": "BYTE_IDENTICAL",
+  "mainActivity": "ONLY_AUTH19_SUFFIX_GUARDED_ATTACH_AND_CALLBACK",
+  "normalMainAndAuthAndQueue": "BYTE_IDENTICAL",
+  "defaultFlag": "OFF_LANGUAGE_DEFAULT_AND4DART_TESTS",
+  "schemaAndMediaMigration": "NONE",
+  "stagingPackages": [
+    "ru.sulfi.sulfi_hypnotherapy.auth19",
+    "ru.sulfi.sulfi_hypnotherapy.clienttest.auth19"
+  ],
+  "productionGASOAuthACLMain": "NOT_MODIFIED",
+  "status": "PASS_SOURCE_NOT_NATIVE_UPGRADE_OR_PHONE"
+}
