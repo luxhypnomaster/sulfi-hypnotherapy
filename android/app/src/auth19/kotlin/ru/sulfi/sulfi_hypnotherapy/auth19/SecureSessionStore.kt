@@ -27,7 +27,6 @@ class SecureSessionStore(context: Context, project: String) : AuthStore {
     override fun <T> exclusive(block: () -> T): T {
         lock.lock()
         try {
-            check(data.baseFile.length() <= 131072 && File(data.baseFile.path + ".bak").length() <= 131072)
             check(directory.exists() || directory.mkdirs())
             RandomAccessFile(lockFile, "rw").use { file ->
                 file.channel.lock().use { return block() }
@@ -46,6 +45,7 @@ class SecureSessionStore(context: Context, project: String) : AuthStore {
     override fun load(): AuthRecord {
         if (!data.baseFile.exists() && !File(data.baseFile.path + ".bak").exists()) return AuthRecord()
         try {
+            check(data.baseFile.length() <= 131072 && File(data.baseFile.path + ".bak").length() <= 131072)
             val encrypted = data.openRead().use { input -> input.readBytes().also { check(it.size in 29..131072) } }
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, encrypted.copyOfRange(0, 12)))

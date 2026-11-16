@@ -18,7 +18,8 @@ tests=[]
 for path in pathlib.Path('build/app/test-results/testDebugUnitTest').glob('TEST-*.xml'):
  v=E.parse(path).getroot();assert int(v.get('failures','0'))==0 and int(v.get('errors','0'))==0
  tests.append({'suite':v.get('name'),'tests':int(v.get('tests','0'))})
-assert any(x['suite'].endswith('.AuthCoordinatorTest') and x['tests']>=17 for x in tests),'NATIVE_JVM_TESTS_MISSING'
+assert any(x['suite'].endswith('.AuthCoordinatorTest') and x['tests']>=20 for x in tests),'NATIVE_JVM_TESTS_MISSING'
+assert any(x['suite'].endswith('.SupabaseRestTest') and x['tests']>=8 for x in tests),'REST_ADAPTER_TESTS_MISSING'
 value={'source':os.environ['GITHUB_SHA'],'edition':edition,'package':package,'apkBytes':apk.stat().st_size,
  'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'jvm':tests,'SupabaseGoogleLive':'NOT_RUN_PROJECT_NOT_CONFIGURED',
  'ownerPhone':'NOT_RUN','productionSigning':'NOT_USED','distributeToOwner':'NO_UNCONFIGURED_PROTOTYPE','legacyData':'NOT_OPENED'}

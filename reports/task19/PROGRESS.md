@@ -1,0 +1,7 @@
+# №19 — контрольная точка
+
+G0commitcf5fadb:6sourcefiles+hashes, baseline363a024/APKde408, sourceauditдоimplementation. Prototypecommit5d61c63, затемконтролируемыерасширенияheadlesspolicy/RESTtests/authorityepoch. ПоследнийGitHubCI43949403640BLOCKEDbeforeallocation,billingannotation сохранена; automaticpush повторовнет, manualworkflowprepared.
+
+Локально493Flutter(2skips), latesttargeted5,Node47+24; standaloneKotlin25+ наборуточняетсяпофинальномулогу; all4Androidnative source typecompileSDK36проходили,последняяповторнаяпослеизменений. StageAPK localbuildидётсRAMGradle/SDKcache,originalsdk/privatefilesuntouched. AndroidKVMabsent; noGoogle/Supabaseconfig. Никакихproduction migrations/deploy/main/ACL/signing/ownerdataoperations.
+
+Дальше: получитьactuallocalbuildoutcome; finalJVM/sdkcompile; consistency/securityguards; сформировать51matrix/draftPR/точныйsourceSHA. LiveonlyпослеOWNER_SETUPиownerphoneproof. Не повторятьblockedCIдоисправлениявнешнейпричины. ReportsGoogleDriveuploadrequiresapprovalпоMASTER_SPEC19§14,полныйreviewableпакетготовитьвGit.

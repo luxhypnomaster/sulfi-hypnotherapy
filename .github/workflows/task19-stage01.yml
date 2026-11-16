@@ -1,8 +1,5 @@
 name: Task19 isolated auth G0-G1
 on:
-  push:
-    branches: [feat/task19-auth-stage01]
-    paths: ['lib/auth19/**', 'lib/main_auth19.dart', 'test/task19*', 'android/app/src/auth19*/**', 'android/app/src/main/**/MainActivity.kt', 'android/app/build.gradle.kts', 'scripts/task19/**', '.github/workflows/task19-stage01.yml']
   workflow_dispatch:
 permissions:
   contents: read

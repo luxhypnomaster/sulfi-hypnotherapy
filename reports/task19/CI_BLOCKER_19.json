@@ -1,0 +1,15 @@
+{
+  "run": 43949403640,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/43949403640",
+  "source": "5d61c63221446206102c2d8040da35300460fbca",
+  "status": "BLOCKED_BEFORE_RUNNER_NO_CODE_EXECUTED",
+  "annotations": [
+    {
+      "level": "failure",
+      "message": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    }
+  ],
+  "retries": "NOT_PERFORMED_BILLING_NOT_CHANGED",
+  "paidActions": "NOT_AUTHORIZED_NOT_PERFORMED",
+  "next": "Owner handles GitHub account separately; continue local checks; manual-only workflow retained"
+}

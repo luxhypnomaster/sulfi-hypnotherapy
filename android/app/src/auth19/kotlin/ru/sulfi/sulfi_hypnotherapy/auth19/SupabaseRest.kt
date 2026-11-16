@@ -8,9 +8,11 @@ import javax.net.ssl.HttpsURLConnection
 
 /** Official Supabase Auth OpenAPI PKCE/refresh/user/local-logout endpoints.
  * No Supabase SDK with a second automatic refresh timer is instantiated. */
-class SupabaseRest(private val base: String, private val publishableKey: String) : AuthBackend {
+class SupabaseRest(private val base: String, private val publishableKey: String,
+    private val connectionFactory: (URL) -> HttpsURLConnection = { it.openConnection() as HttpsURLConnection }) : AuthBackend {
     private fun request(path: String, body: JSONObject? = null, token: String? = null): JSONObject {
-        val connection = URL(base + "/auth/v1/" + path).openConnection() as HttpsURLConnection
+        val connection = try { connectionFactory(URL(base + "/auth/v1/" + path)) }
+        catch (_: IOException) { throw AuthFault(AuthState.OFFLINE, "AUTH_NETWORK_UNAVAILABLE") }
         try {
             connection.requestMethod = if (body == null) "GET" else "POST"
             connection.instanceFollowRedirects = false
@@ -50,6 +52,13 @@ class SupabaseRest(private val base: String, private val publishableKey: String)
     }
     override fun exchange(code: String, verifier: String) = session(request("token?grant_type=pkce", JSONObject().put("auth_code", code).put("code_verifier", verifier)))
     override fun refresh(token: String) = session(request("token?grant_type=refresh_token", JSONObject().put("refresh_token", token)))
-    override fun verify(token: String) = request("user", token = token).getString("id")
+    override fun verify(token: String): String {
+        val user = request("user", token = token)
+        val identities = user.optJSONArray("identities")
+        if (identities == null || (0 until identities.length()).none { identities.optJSONObject(it)?.optString("provider") == "google" })
+            throw AuthFault(AuthState.REAUTH_REQUIRED, "GOOGLE_PROVIDER_REQUIRED")
+        // Provider-managed identities, never editable user_metadata or email.
+        return user.getString("id")
+    }
     override fun logout(token: String) { request("logout?scope=local", JSONObject(), token) }
 }

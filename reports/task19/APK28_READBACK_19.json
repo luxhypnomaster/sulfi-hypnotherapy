@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-16T20:42:32.199946+00:00",
+  "apkSource": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "baselineGit": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+  "assets": [
+    {
+      "id": 752461821,
+      "name": "alchemist-master28-task18-de408f1.apk",
+      "size": 193900724,
+      "digest": "sha256:2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e"
+    },
+    {
+      "id": 752462315,
+      "name": "alchemist-client28-task18-de408f1.apk",
+      "size": 193900756,
+      "digest": "sha256:637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051"
+    }
+  ],
+  "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "registeredSHA1FromHistoricalSource": "8eb995f14b65676fdff30548ce361aec1f479256",
+  "certificateEvidence": "Task18 independent byte/cert/config readback, unchanged asset digests confirmed now",
+  "GoogleConsoleTestingAndScopes": "NOT_INDEPENDENTLY_VERIFIED_NO_CONFIG_MODIFIED",
+  "stage19APKs": "SEPARATE_AUTH19_IDS_NO_STABLE_SIGNING"
+}

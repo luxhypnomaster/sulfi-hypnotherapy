@@ -7,6 +7,10 @@ import java.security.SecureRandom
 import java.util.Base64
 
 enum class AuthState { SIGNED_OUT, RESTORING, AUTHENTICATED, REFRESHING, OFFLINE, BACKEND_UNAVAILABLE, REAUTH_REQUIRED, REVOKED }
+object Auth19Policy {
+    fun allowed(interactive: Boolean, method: String, expectedUid: String?) =
+        interactive || method in setOf("initialize", "restore", "lease") && !expectedUid.isNullOrBlank()
+}
 class AuthFault(val kind: AuthState, val code: String) : Exception(code)
 class AuthSession(val uid: String, val access: String, val refresh: String, val expires: Long) {
     override fun toString() = "AuthSession(REDACTED)"
@@ -69,7 +73,7 @@ class AuthCoordinator(private val store: AuthStore, private val backend: AuthBac
                 if (session.uid != current.uid || session.expires <= now()) throw AuthFault(AuthState.REAUTH_REQUIRED, "OWNER_MISMATCH")
                 // Save rotated token before a subsequent user-check can fail on
                 // network. It is not yet an authenticated/usable lease.
-                r.session = session; r.epoch++; store.save(r)
+                r.session = session; store.save(r) // Refresh does not change owner authority epoch.
                 if (backend.verify(session.access) != current.uid) throw AuthFault(AuthState.REAUTH_REQUIRED, "OWNER_MISMATCH")
             }
             r.retryAt = 0; store.save(r)
@@ -148,13 +152,16 @@ class AuthCoordinator(private val store: AuthStore, private val backend: AuthBac
         snapshot(r, AuthState.SIGNED_OUT)
     }
 
-    fun lease(expectedUid: String): Map<String, Any> {
+    fun lease(expectedUid: String, expectedEpoch: Long? = null): Map<String, Any> {
         require(expectedUid.isNotBlank())
+        if (expectedEpoch != null) store.exclusive {
+            if (store.load().epoch != expectedEpoch) throw AuthFault(AuthState.REAUTH_REQUIRED, "OWNER_OR_EPOCH_CHANGED")
+        }
         val result = restore(expectedUid)
         if (result.state != AuthState.AUTHENTICATED) throw AuthFault(result.state, result.code.ifBlank { "WAITING_AUTH" })
         return store.exclusive {
             val r = store.load(); val s = r.session
-            if (r.epoch != result.epoch || r.loggedOut || r.pending != null || r.terminal != null || s == null || s.uid != expectedUid || s.expires <= now())
+            if (r.epoch != result.epoch || expectedEpoch != null && expectedEpoch != r.epoch || r.loggedOut || r.pending != null || r.terminal != null || s == null || s.uid != expectedUid || s.expires <= now())
                 throw AuthFault(AuthState.REAUTH_REQUIRED, "OWNER_OR_EPOCH_CHANGED")
             mapOf("uid" to s.uid, "accessToken" to s.access, "expiresAt" to s.expires, "epoch" to r.epoch, "provider" to "SUPABASE_STAGING_ONLY")
         }

@@ -1,4 +1,5 @@
 import java.util.Base64
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -15,6 +16,13 @@ val sulfiClientTest = sulfiDefines.contains("SULFI_EDITION=client")
 val sulfiTransferProbe = sulfiDefines.contains("SULFI_TRANSFER_PROBE=true")
 val sulfiAuth19 = sulfiDefines.contains("SULFI_AUTH19_STAGING=true")
 check(!(sulfiAuth19 && sulfiTransferProbe)) { "Separate isolated probes cannot be combined" }
+if (sulfiAuth19) {
+    val target = (project.findProperty("target") as String?).orEmpty()
+    val targetFile = if (File(target).isAbsolute) File(target) else rootProject.file("../$target")
+    check(targetFile.canonicalFile == rootProject.file("../lib/main_auth19.dart").canonicalFile) {
+        "Auth19 requires its isolated entrypoint, never the legacy application entrypoint"
+    }
+}
 
 android {
     namespace = "ru.sulfi.sulfi_hypnotherapy"
@@ -90,6 +98,7 @@ flutter {
 dependencies {
     testImplementation("junit:junit:4.13.2")
     if (sulfiAuth19) {
+        testImplementation("org.json:json:20240303")
         androidTestImplementation("androidx.test:runner:1.6.2")
         androidTestImplementation("androidx.test.ext:junit:1.2.1")
     }

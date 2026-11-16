@@ -67,6 +67,7 @@ class AuthCoordinator {
   Future<Auth19Snapshot> initialize({
     required String projectRef,
     required String publishableKey,
+    String? expectedUid,
   }) async {
     if (!enabled) return snapshot;
     _subscription ??=
@@ -85,6 +86,7 @@ class AuthCoordinator {
     return _request('initialize', {
       'projectRef': projectRef,
       'publishableKey': publishableKey,
+      if (expectedUid != null) 'expectedUid': expectedUid,
     });
   }
 
@@ -139,10 +141,14 @@ class AuthCoordinator {
   Future<Auth19Snapshot> cancelLogin() => _request('cancelLogin');
 
   /// Staging-only future gateway contract; MUST NOT be used by the GAS18 worker.
-  Future<Map<dynamic, dynamic>?> workerLease(String expectedUid) async {
+  Future<Map<dynamic, dynamic>?> workerLease(
+    String expectedUid, {
+    int? expectedEpoch,
+  }) async {
     if (!enabled || expectedUid.isEmpty) return null;
     return _channel.invokeMapMethod<dynamic, dynamic>('lease', {
       'expectedUid': expectedUid,
+      if (expectedEpoch != null) 'expectedEpoch': expectedEpoch,
     });
   }
 

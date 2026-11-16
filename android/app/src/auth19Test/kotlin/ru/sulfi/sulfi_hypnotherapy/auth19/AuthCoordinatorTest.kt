@@ -37,6 +37,13 @@ class FakeAuthBackend(private val clock: () -> Long) : AuthBackend {
     override fun logout(token: String) { logoutFailure?.let { throw it } }
 }
 class AuthCoordinatorTest {
+    @Test fun headlessCannotPickAccountLogoutOrReadAnUnboundIdentity() {
+        assertFalse(Auth19Policy.allowed(false,"beginLogin","account-A"))
+        assertFalse(Auth19Policy.allowed(false,"logout","account-A"))
+        assertFalse(Auth19Policy.allowed(false,"initialize",null))
+        assertTrue(Auth19Policy.allowed(false,"lease","account-A"))
+        assertTrue(Auth19Policy.allowed(true,"initialize",null))
+    }
     private var time = 10_000_000L
     private val store = MemoryAuthStore()
     private val backend = FakeAuthBackend { time }
@@ -49,6 +56,16 @@ class AuthCoordinatorTest {
     @Test fun coldStartVerifiesStoredCredentialWithoutGooglePicker() {
         seed(); assertEquals(AuthState.AUTHENTICATED, coordinator().restore().state)
         assertEquals(AuthState.AUTHENTICATED, coordinator().restore().state); assertEquals(0, backend.refreshes.get())
+    }
+    @Test fun sameOwnerRefreshKeepsAuthorityEpochAndWorkerLease() {
+        seed(true);val record=store.load();record.epoch=12;store.save(record)
+        assertEquals(12L,coordinator().lease("account-A",12)["epoch"])
+        assertEquals(1,backend.refreshes.get());assertEquals(12L,store.load().epoch)
+    }
+    @Test fun staleWorkerCannotResumeAfterLogoutAndNewLoginOfSameAccount() {
+        seed();coordinator().logout();seed();val record=store.load();record.epoch=5;store.save(record)
+        try { coordinator().lease("account-A",0);fail() } catch(e:AuthFault){assertEquals("OWNER_OR_EPOCH_CHANGED",e.code)}
+        assertEquals(0,backend.refreshes.get())
     }
     @Test fun twoEnginesConcurrentExpiryRotateExactlyOnce() {
         seed(true); val pool = Executors.newFixedThreadPool(8)
