@@ -7,3 +7,5 @@
 HostedCI43949403640BLOCKEDbeforeallocation:accountbilling/spendingmessage. Повторовнет,manualworkflowсохранён. LocalAPK FAIL: daemon disappeared/OOMobserved afterproxy/TLSsetupresolved. NoKVM, nativevault/coldprocess/Google/Supabase/OWNERphoneNOT_RUN. НикакихAPK19release/productionchanges.
 
 До дальнейших действий: OWNER_SETUP(publicstagingref/key only), liveconformance/ownerproof, доступныйrunner. G2–G7DEFERRED_NOT_AUTHORIZED. Не подставлять SupabaseJWT в GAS, не мигрировать UID/SQLite/queues. Код и отчёты возвращаются через draftPR, Drive upload требует отдельного approval по§14MASTER_SPEC19.
+
+Финальный код82c6458, draftPR50https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/50. Mainb88637a и branch18/363a024 повторноreadbackverifiedunchanged. Все9обязательныхотчётов+OWNER_SETUP+51matrix вreports/task19. НикакихдальнейшихCI/productionдействий; остановканачеловеческомliveconfiguration/Androidrunnergate.

@@ -1,0 +1,36 @@
+{
+  "task": 19,
+  "scope": [
+    "G0",
+    "G1"
+  ],
+  "branch": "feat/task19-auth-stage01",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/50",
+  "codeSource": "82c6458eb64e11dc9b980f248290b26d3591bea3",
+  "base": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+  "apk28Source": "de408f1cae08fce16069a701d147a0b1064053ba",
+  "mainPreserved": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "status": "PARTIAL_LIVE_CONFIG_AND_ANDROID_RUNTIME_BLOCKED",
+  "G0": "SOURCE_AUDIT_AND_CONTROLLED_REPRO_COMPLETE_OWNER_TRIGGER_UNKNOWN",
+  "G1": "ISOLATED_CODE_UNIT_SDK_TYPECOMPILE_PASS_LIVE_NOT_RUN",
+  "flutterFull": 493,
+  "flutterSkip": 2,
+  "finalTargeted": 5,
+  "jvm": 28,
+  "node": [
+    47,
+    24
+  ],
+  "native": "COMPILE_ONLY_NOT_RUNTIME",
+  "ciRun": 43949403640,
+  "ci": "BLOCKED_BEFORE_RUNNER_BILLING_ANNOTATION",
+  "localAPK": "FAIL_DAEMON_DISAPPEARED_OOM_OBSERVED",
+  "ownerSetup": "reports/task19/OWNER_SETUP_19.md",
+  "next": [
+    "Provide public configuration for an isolated Supabase project; client secret stays only in provider console",
+    "Obtain available Android runner; do not blindly retry GitHub billing-blocked CI or resource-identical local build",
+    "Run native Keystore/cold process and actual Google/Supabase 15/30/60min tests; only then consider configured prototype APK",
+    "No G2-G7, no GAS bridge/migrations/main merge/deploy without authorization"
+  ],
+  "DriveWrites": "NOT_PERFORMED_PACKAGE14_REQUIRES_APPROVAL"
+}

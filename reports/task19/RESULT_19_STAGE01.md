@@ -36,3 +36,7 @@ UI и headless API используют один broker. Worker требует p
 `OWNER_SETUP_19.md` содержит шаги с телефона. Нужны только публичные ref + publishable key отдельного staging-проекта; Google client secret вводится владельцем только в provider settings, не в чат. Оригинальный OAuth не менять. После конфигурации — conformance и owner QA отдельного профиля.
 
 Supabase JWT **не подключён к GAS/очереди №18**: это G3. Нет account/file migration, лицензий/платежей/Storage, нового сервера, каталога/UX/768KiB/lock-рефакторинга. Все 51 критерий сохранены в матрице: G0–G1 разделены по уровням доказательств, G2–G7 — DEFERRED_NOT_AUTHORIZED. Никакого автоматического merge/deploy. Отчёты возвращаются в Git/draft PR; Drive upload по §14 пакета требует отдельного согласования.
+
+## Ссылки и checkpoint
+
+[Draft PR50](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/50) · [Проверенный код82c6458](https://github.com/luxhypnomaster/sulfi-hypnotherapy/commit/82c6458eb64e11dc9b980f248290b26d3591bea3) · [OWNER_SETUP](OWNER_SETUP_19.md) · [28JVM/прочие логи](TEST_EVIDENCE_19.json) · [51критерий](ACCEPTANCE_STAGE01_19.csv). Точка продолжения: CHECKPOINT_19.json. PR draft, без merge; base PR49 не объединён.
