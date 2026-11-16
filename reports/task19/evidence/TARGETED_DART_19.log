@@ -1,0 +1,31 @@
+00:00 +0: loading /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart
+00:00 +0: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 default OFF never invokes a platform method or opens credentials
+00:00 +1: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 startup gate, deduplicated restores and explicit errors contain no token
+00:00 +2: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 restore never invokes interactive method; lease uses exact requested owner
+00:00 +3: /dev/shm/sulfi19/test/task19_auth_coordinator_test.dart: 19 rejected staging endpoint is not opened
+00:00 +4: loading /dev/shm/sulfi19/test/task17_auth_test.dart
+00:04 +4: /dev/shm/sulfi19/test/task17_auth_test.dart: 17 G1 same-owner cold/expiry restore without chooser; logout intent blocks SDK restore and private hints
+00:05 +5: /dev/shm/sulfi19/test/task17_auth_test.dart: 17 G1 offline local author draft before Google does not reveal or rescope other account draft
+00:05 +6: /dev/shm/sulfi19/test/task17_auth_test.dart: 17 G1 explicit logout invalidates pending chooser without clearing a newer login busy state
+00:06 +7: /dev/shm/sulfi19/test/task17_auth_test.dart: 17 G0 trace opt-in, bounded TTL, safe codes and explicit redacted export
+00:06 +8: loading /dev/shm/sulfi19/test/task16b_auth_transport_test.dart
+00:08 +8: /dev/shm/sulfi19/test/task16b_auth_transport_test.dart: G1 official restore shares refreshed RAM identity; offline is not logout; wrong restored account fails closed
+00:09 +9: /dev/shm/sulfi19/test/task16b_auth_transport_test.dart: G1 server-rejected cached token stops showing authenticated without erasing identity or drafts
+00:09 +10: /dev/shm/sulfi19/test/task16b_auth_transport_test.dart: G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry
+00:09 +11: /dev/shm/sulfi19/test/task16b_auth_transport_test.dart: G1-G2 retry cannot send old task after account switch during backoff; 401 refresh is bounded
+00:09 +12: loading /dev/shm/sulfi19/test/task18_queue_test.dart
+00:10 +12: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 UI enqueue is persistent OS dispatch, never a second UI executor
+00:11 +13: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 legacy user pause/upload offsets are untouched; other owner cannot resume
+00:11 +14: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 same-owner policy stop recovers; explicit native pause and cancel never auto-start
+00:11 +15: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 duplicate taps remain one stable revision task and preserve request/receipt
+00:11 +16: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 denied OS start is durable WAITING_AUTH/POLICY, never ghost RUNNING
+00:11 +17: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 additive canonical states distinguish system restrictions from user pause
+00:11 +18: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 periodic reader sync never resumes a manually paused persistent snapshot
+00:11 +19: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 transient server failure schedules a bounded retry, never an immediate busy loop
+00:12 +20: /dev/shm/sulfi19/test/task18_queue_test.dart: 18 APK27 active work converts only to policy wait; explicit same-owner resume preserves IDs/checkpoints
+00:12 +21: loading /dev/shm/sulfi19/test/foreground_transfer_retry_test.dart
+00:13 +21: /dev/shm/sulfi19/test/foreground_transfer_retry_test.dart: network retry keeps durable due time, no immediate HTTP retry
+00:13 +22: /dev/shm/sulfi19/test/foreground_transfer_retry_test.dart: manual pause, auth, policy, cancel and terminal work never wake
+00:13 +23: /dev/shm/sulfi19/test/foreground_transfer_retry_test.dart: window exhausted or backoff beyond window yields to OS, never shortens
+00:13 +24: /dev/shm/sulfi19/test/foreground_transfer_retry_test.dart: unknown, legacy and malformed records cannot create a retry loop
+00:13 +25: All tests passed!
