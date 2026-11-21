@@ -1,6 +1,6 @@
 # №21 — runtime каталога и витрины · кандидат, без production-переключения
 
-[Контрольная точка](reports/task21/PROGRESS.md) · [Контракт](reports/task21/CONTRACT_21.md) · [Аудит](reports/task21/G0_AUDIT_21.md).
+[Результат](reports/task21/RESULT_21.md) · [Матрица28](reports/task21/ACCEPTANCE_21.csv) · [draft PR52](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/52) · [Контрольная точка](reports/task21/PROGRESS.md) · [Контракт](reports/task21/CONTRACT_21.md) · [Аудит](reports/task21/G0_AUDIT_21.md).
 
 Отдельная ветка поверх PR51. Durable sandbox SQLite проверяет CAS/receipt/rollback; общий runtime MASTER и CLIENT использует существующую очередь №18. Новый протокол включается только при `SULFI_METADATA_V1=true` и проверенном capability handshake; по умолчанию OFF, прежний GAS6 API работает как раньше. В редакторе дневника «В баннере главной» показывает выбранный несохранённый текст в настоящем Home без ротации и записи прочтения. Production GAS6, Auth19, signing, main, данные и APK28 сохранены. Локальный sandbox с синтетическими аккаунтами не заменяет Google/Android-приёмку.
 

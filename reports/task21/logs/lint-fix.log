@@ -1,0 +1,28 @@
+Computing fixes in sulfi21...
+Applying fixes...
+
+lib/services/metadata_gateway.dart
+  curly_braces_in_flow_control_structures - 5 fixes
+
+lib/services/metadata_runtime.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+lib/services/session_controller.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib/services/vitrine_settings.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+lib/ui/diary_editor.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+lib/ui/vitrine_settings_screen.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+pubspec.yaml
+  missing_dependency - 1 fix
+
+test/support/task21_server.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+17 fixes made in 8 files.

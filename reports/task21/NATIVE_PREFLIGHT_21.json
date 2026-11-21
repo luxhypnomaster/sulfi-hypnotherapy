@@ -1,0 +1,24 @@
+{
+  "source": "b584e610426b1db329016e70341db6b39bfdca84",
+  "root": {
+    "total": 8417406976,
+    "used": 7848681472,
+    "free": 122454016
+  },
+  "shm": {
+    "total": 5226229760,
+    "used": 1490944000,
+    "free": 3735285760
+  },
+  "cgroupMemoryMax": "8589934592",
+  "kvmExists": false,
+  "gradleCacheExists": false,
+  "gradleCacheSymlink": true,
+  "signingEnvPresent": {
+    "SULFI_SIGNING_STORE_FILE": false,
+    "SULFI_SIGNING_STORE_PASSWORD": false,
+    "SULFI_SIGNING_KEY_ALIAS": false,
+    "SULFI_SIGNING_KEY_PASSWORD": false
+  },
+  "nativeDecision": "BLOCKED_ENV: root FS < 128MiB, old Gradle cache missing, known Task19 OOM within same8GiB; no new viable native hypothesis. No Gradle/emulator launch. No signing change; no APK issued."
+}

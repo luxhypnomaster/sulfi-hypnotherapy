@@ -19,3 +19,9 @@ Static preview показывает выбранный unsaved draft через 
 
 ## G3 recovery correction
 Подтверждён RED: lost COMMIT response → cold settings instance → refreshApplied → publish менял requestId и создавал лишнюю редакцию. Fix сохраняет unconfirmed intent/CAS до восстановления исходной квитанции; receipt не откатывает более новую appliedRevision другого автора. Два real HTTP/SQLite regression сценария (concurrent=false/true) PASS; вместе с runtime/UI/legacy admin12PASS. Полный прогон b584 остановлен SIGINT ради исправления, не считается PASS; при остановке harness сообщил stream shutdown error. Промежуточная ошибка скобки теста устранена, итоговые адресные тесты зелёные. Далее единственный полный прогон окончательного source. Hosted CI44959026009: verify FAILURE,0steps, billing/spending annotation; повторять без изменения инфраструктуры нельзя.
+
+
+## G4 FINAL, 2026-11-21
+Code source8546bc66137bc7796954cd04f0b65cdc2851c416. Full Flutter526PASS/2SKIP/0FAIL(4m18s), client define1PASS, final analyze no issues, format18files0changes. Node62+legacy24, JVM scheduler5 и no-cloud GAS drybuild PASS. MASTER/CLIENT Android-arm64 debug Flutter bundles каждая25files/121462047B, kernel SHA разные. Это НЕ APK; native/upgrade/signing NOT_RUN/BLOCKED_ENV. New Gradle/emulator не запускались, CI44959026009 verify0steps billing, без повторов. PR52 draft от PR51, source8546 pushed [skip ci]. Physical/Google/live NOT_RUN. Main/GAS/signing/OAuth/ACL/data/APK28 сохранены.
+
+G5: отчёты и28matrix (25LOCAL/synthetic/policy PASS;1PARTIAL PR46;2BLOCKED native+CI) готовы; sanitized Drive delivery/readback фиксируется отдельно в DELIVERY_21.md и DRIVE_READBACK_21.json; code source8546 заморожен. Новый report folder1V-Sc63j_YaTCrF6GbxdAF-qyvSfOzNqr inherits anyone:writer, ACL не менялась. Не начинать №22 в этом поручении.

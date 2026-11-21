@@ -1,0 +1,26 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_runtime_test.dart
+00:00 +0: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
+00:00 +1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+00:01 +2: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
+00:01 +3: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
+00:01 +4: loading /dev/shm/sulfi21/test/task21_ui_runtime_test.dart
+00:02 +4: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 real runtime cached catalog stays visible while metadata HEAD offline
+00:05 +5: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 settings UI publishes only through verified capability and real sandbox receipt
+00:07 +6: loading /dev/shm/sulfi21/test/task20_admin_test.dart
+00:08 +6: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin lost response retry reuses request, no duplicate commit; saved draft != published
+00:08 +7: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin deny and invalid receipt cannot fabricate publication; owner switch prevents apply
+00:08 +8: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 pending publish preserves new saved edits and coalesces repeated taps
+00:08 +9: loading /dev/shm/sulfi21/test/task20_widget_test.dart
+00:09 +9: /dev/shm/sulfi21/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+00:13 +10: /dev/shm/sulfi21/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 reader fixture ready
+T20 explicit audio mark verified
+T20 independent link view ready
+T20 link no-download verified
+00:15 +11: /dev/shm/sulfi21/test/task20_widget_test.dart: 20 banner fake clock3/7, exact slot geometry, play uses shared preview and no read, revoke immediate
+00:16 +12: /dev/shm/sulfi21/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+00:19 +13: /dev/shm/sulfi21/test/task20_widget_test.dart: 20 actual HOME 9:16 portrait/board/navigation unchanged through splash and entry
+T20 HOME prepare complete
+T20 HOME before capture
+T20 HOME after capture
+00:20 +14: All tests passed!

@@ -1,0 +1,26 @@
+{
+  "base": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+  "source": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "protectedPaths": [
+    "android",
+    ".github/workflows",
+    "pubspec.yaml",
+    "pubspec.lock",
+    "lib/data",
+    "lib/main.dart",
+    "lib/transfer_worker.dart",
+    "lib/main_auth19.dart",
+    "lib/auth19",
+    "lib/services/shared_google_identity.dart",
+    "server/alchemist/src",
+    "server/google_apps_script",
+    "third_party/sqflite_android"
+  ],
+  "changedProtectedPaths": [],
+  "mainReadback": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "pr51Ancestor": true,
+  "metadataDefaultOff": true,
+  "task21ReportsFolder": "1V-Sc63j_YaTCrF6GbxdAF-qyvSfOzNqr",
+  "productionOperationsPerformed": false,
+  "personalDatabaseOpened": false
+}

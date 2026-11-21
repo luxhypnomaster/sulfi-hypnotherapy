@@ -1,0 +1,6 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_runtime_test.dart
+00:00 +0: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
+00:00 +1: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+00:01 +2: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
+00:01 +3: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
+00:01 +4: All tests passed!

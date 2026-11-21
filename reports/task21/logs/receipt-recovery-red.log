@@ -1,0 +1,19 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart
+00:00 +0: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision
+00:00 +0 -1: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision [E]
+  Expected: '95f197c98af8908d23ffbd027c44342b'
+    Actual: 'c36b8659bc32586ad5382fa468a322a9'
+     Which: is different.
+            Expected: 95f197c98a ...
+              Actual: c36b8659bc ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task21_receipt_recovery_test.dart 26:7         main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision

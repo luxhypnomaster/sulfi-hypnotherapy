@@ -403,5 +403,5 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [x] G1: исполняемый persistent SQLite sandbox, immutable readback, CAS+receipt, SIGKILL/rollback, scopes, expiry/revoke и lost-response.
 - [x] G2: capability-gated shared UI/headless factory, existing queue18 priority, lastGood cached catalog, default OFF/legacy fallback, bounded transient probe retry.
 - [x] G3: independent config prepare/commit → CLIENT, honest saved/applied/receipt states; static selected Home banner preview, old reader preview retained.
-- [ ] G4/G5: exact-source full tests / Android bundles / draft PR / sanitized Drive reports — продолжение в reports/task21/PROGRESS.md.
+- [x] G4: final source8546, full Flutter526/2SKIP, analyze/format, Node62+24/JVM5, две Android bundles PASS. CI0steps/native BLOCKED_ENV. Draft PR52. G5 delivery/readback — reports/task21/DELIVERY_21.md.
 - [ ] Native signed APK/upgrade and physical Google two-device acceptance; пригодный runner и отдельное решение владельца. Production provider/ACL atomicity not selected or deployed.

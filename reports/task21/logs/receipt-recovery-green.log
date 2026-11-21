@@ -1,0 +1,71 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart
+test/task21_receipt_recovery_test.dart:61:1: Error: Expected a declaration, but got '}'.
+}
+^
+test/task21_receipt_recovery_test.dart:8:132: Error: Undefined name 'advanced'.
+  test('21 cold settings after lost commit response and applied refresh recover original receipt without new revision (concurrent=$advanced)', () async {
+                                                                                          ^^^^^^^^
+test/task21_receipt_recovery_test.dart:21:11: Error: Undefined name 'advanced'.
+      if (advanced) {
+          ^^^^^^^^
+test/task21_receipt_recovery_test.dart:31:23: Error: Undefined name 'advanced'.
+      final current = advanced ? 2 : 1;
+                      ^^^^^^^^
+test/task21_receipt_recovery_test.dart:48:12: Error: Undefined name 'advanced'.
+      if (!advanced) await cold.publish();
+           ^^^^^^^^
+00:00 +0 -1: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart [E]
+  Failed to load "/dev/shm/sulfi21/test/task21_receipt_recovery_test.dart":
+  Compilation failed for testPath=/dev/shm/sulfi21/test/task21_receipt_recovery_test.dart: test/task21_receipt_recovery_test.dart:61:1: Error: Expected a declaration, but got '}'.
+  }
+  ^
+  test/task21_receipt_recovery_test.dart:8:132: Error: Undefined name 'advanced'.
+    test('21 cold settings after lost commit response and applied refresh recover original receipt without new revision (concurrent=$advanced)', () async {
+                                                                                                                                     ^^^^^^^^
+  test/task21_receipt_recovery_test.dart:21:11: Error: Undefined name 'advanced'.
+        if (advanced) {
+            ^^^^^^^^
+  test/task21_receipt_recovery_test.dart:31:23: Error: Undefined name 'advanced'.
+        final current = advanced ? 2 : 1;
+                        ^^^^^^^^
+  test/task21_receipt_recovery_test.dart:48:12: Error: Undefined name 'advanced'.
+        if (!advanced) await cold.publish();
+             ^^^^^^^^
+  .
+00:00 +0 -1: loading /dev/shm/sulfi21/test/task21_runtime_test.dart
+00:00 +0 -1: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart [E]
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1024:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 816:35                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 810:35                      _CustomZone.run
+  dart:async/zone.dart 702:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 743:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+  
+00:00 +0 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
+00:00 +1 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+00:00 +2 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
+00:01 +3 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
+00:01 +4 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 transient capability failure has bounded retry, no permanent unsupported state
+00:01 +5 -1: loading /dev/shm/sulfi21/test/task21_ui_runtime_test.dart
+00:02 +5 -1: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 real runtime cached catalog stays visible while metadata HEAD offline
+00:04 +6 -1: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 settings UI publishes only through verified capability and real sandbox receipt
+00:06 +7 -1: loading /dev/shm/sulfi21/test/task20_admin_test.dart
+00:08 +7 -1: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin lost response retry reuses request, no duplicate commit; saved draft != published
+00:08 +8 -1: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin deny and invalid receipt cannot fabricate publication; owner switch prevents apply
+00:08 +9 -1: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 pending publish preserves new saved edits and coalesces repeated taps
+00:09 +10 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart

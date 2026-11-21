@@ -1,0 +1,136 @@
+{
+  "source": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "edition": "master",
+  "platform": "android-arm64",
+  "mode": "debug Flutter bundle only, NOT APK",
+  "metadataFlag": "OFF (default)",
+  "fileCount": 25,
+  "bytes": 121462047,
+  "files": [
+    {
+      "path": ".last_build_id",
+      "bytes": 32,
+      "sha256": "e24cc77163370dfb5fd5cd0121aa28a7ab6275329080c93fa9fb928f3bf98a8c"
+    },
+    {
+      "path": "AssetManifest.bin",
+      "bytes": 935,
+      "sha256": "67fc070529ae9912d73c621634508b04e2d20f36ea7f66ec942bd1fb6a085e97"
+    },
+    {
+      "path": "FontManifest.json",
+      "bytes": 169,
+      "sha256": "f95f0f595a0fbbe0bf020d031221db59d3c3cbadc3821d24498b54ca35113118"
+    },
+    {
+      "path": "NOTICES.Z",
+      "bytes": 110375,
+      "sha256": "ec12fdf9feb4b8fad162cc134f8b9d8f8ca8e4d6c24e7cf4db4f05ae2ca8e8a7"
+    },
+    {
+      "path": "NativeAssetsManifest.json",
+      "bytes": 135,
+      "sha256": "fb97696b7a34baa65032aa9f95cb187877474b1423aacd5162fc86d3ddeb9959"
+    },
+    {
+      "path": "assets/art/home_reference.jpg",
+      "bytes": 152255,
+      "sha256": "6b9b3978950a5152127c80f32958bf5ed83c3f2b5d8f4cccca9ca351f2aba0de"
+    },
+    {
+      "path": "assets/art/home_task3_reference.jpg",
+      "bytes": 601734,
+      "sha256": "fb3023ac9c9d46ad2207798a14ebd1391bea4c9d69d2e4879b0a41ffd2efb6d8"
+    },
+    {
+      "path": "assets/art/leather_board.png",
+      "bytes": 2186756,
+      "sha256": "85940455142450ffe11277a6c1b96b93c85b7ca4a13b25cebe4561fa33d2bc05"
+    },
+    {
+      "path": "assets/art/pause_approved.png",
+      "bytes": 2592546,
+      "sha256": "b4196f1a3775650d346a7c2d4d4ee0df001b02a9ffb4ed130255f510029cbea9"
+    },
+    {
+      "path": "assets/art/pocket_watch.png",
+      "bytes": 2364940,
+      "sha256": "3dbdde379ca6098c0394b43eef8251c00865b6b88af4d40b26944126b3d0a0fa"
+    },
+    {
+      "path": "assets/art/sulfi_header.png",
+      "bytes": 2039415,
+      "sha256": "71825e184d333ef79fecfb7b45b09641d2cf1e58bab058abd0c19f9edc0991c8"
+    },
+    {
+      "path": "assets/brand/spiral.png",
+      "bytes": 62775,
+      "sha256": "bf14e98a68fb707ab12ecdffce62e43c20f86c468d2d73118fedb6b071bc3f8d"
+    },
+    {
+      "path": "assets/pause/FONT_LICENSE.txt",
+      "bytes": 5756,
+      "sha256": "f32df582a2aab128c07b2f7e36e7b928dc5f6bd82657b905c04f91459f9e5cf9"
+    },
+    {
+      "path": "assets/pause/LiberationSerif-Regular.ttf",
+      "bytes": 393692,
+      "sha256": "9caef765d2e891c10dd73658894f01e660fe0c1c83e0bda7d6edf561d8f623d4"
+    },
+    {
+      "path": "assets/pause/approved.png",
+      "bytes": 2763501,
+      "sha256": "92862d0cdc124e2b7e6c26cdab23aa42bb694d22222c7ea0f861bb1a94d32943"
+    },
+    {
+      "path": "assets/pause/sigil.png",
+      "bytes": 186163,
+      "sha256": "9fac135feac9f15e8cc60b38dc199a58d534997deeb323b6f21efdf09fb3f966"
+    },
+    {
+      "path": "assets/player/approved.png",
+      "bytes": 2128932,
+      "sha256": "3689f5fbed5e1f9a97fd8e85bcf5f7a4735d9268ec673c6a4ed1dad06e7478bc"
+    },
+    {
+      "path": "assets/player/snake_front.png",
+      "bytes": 2282840,
+      "sha256": "74501886ce08bb80d156b107eba087d2a8b553498ba8cd879450dad3852fe3eb"
+    },
+    {
+      "path": "fonts/MaterialIcons-Regular.otf",
+      "bytes": 1645184,
+      "sha256": "d9865b671a09d683d13a863089d8825e0f61a37696ce5d7d448bc8023aa62453"
+    },
+    {
+      "path": "isolate_snapshot_data",
+      "bytes": 11647016,
+      "sha256": "e226cc7a31ce0d20fbfa4cc003875aa064a1eade8dbc4f26de4f14fd84a3807c"
+    },
+    {
+      "path": "kernel_blob.bin",
+      "bytes": 88425640,
+      "sha256": "4a6f6ec089ff3911c6a7cca4075dfa0d123eed6a6b4974554d125c6686d27080"
+    },
+    {
+      "path": "native_assets/jniLibs/lib/arm64-v8a/libsqlite3.so",
+      "bytes": 1831784,
+      "sha256": "0c2d3bfc8c87abceb21ed72a4bb49964121c5fe1a8ef3848d83ba907d01b6161"
+    },
+    {
+      "path": "shaders/ink_sparkle.frag",
+      "bytes": 21856,
+      "sha256": "1fe8436a743884cb65078fe8c7b38e18f5365f2a2961270916f426fd13c604af"
+    },
+    {
+      "path": "shaders/stretch_effect.frag",
+      "bytes": 17616,
+      "sha256": "bc7599dbbbaab310efe41520574138d21fb18a88c8fe4495ed79315309336f6f"
+    },
+    {
+      "path": "vm_snapshot_data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
