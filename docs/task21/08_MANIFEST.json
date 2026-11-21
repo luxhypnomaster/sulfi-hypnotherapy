@@ -1,0 +1,50 @@
+{
+  "task": 21,
+  "date": "2026-11-21",
+  "package": "Задание_21.zip",
+  "scope": "integration candidate; no production deploy",
+  "source_pr": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/51",
+  "expected_checks": 28,
+  "files": [
+    {
+      "name": "00_START_HERE.md",
+      "sha256": "7d16ccabda294bac76b67133023eaef3b5a71ad0e919aed809ac326722300839",
+      "size": 2392
+    },
+    {
+      "name": "01_TASK.md",
+      "sha256": "72181c81de218dd65298609fce67062bee4e61bd9003f465f8cf4e797755d773",
+      "size": 6693
+    },
+    {
+      "name": "02_STAGES.md",
+      "sha256": "e33aa9f81bed3b5529bcf73a99175679ca93cc79d56040af14636965abd87155",
+      "size": 3454
+    },
+    {
+      "name": "03_ACCEPTANCE.csv",
+      "sha256": "ebf2db1d9d2075feeee2c344cca31bcd3fb9ae57c07ebaee9e814d1f002ecfed",
+      "size": 2864
+    },
+    {
+      "name": "04_SOURCES.md",
+      "sha256": "e821a7141828cf4ea6c0e33843e5562a300af4360e48f5893bcab0de5026c78f",
+      "size": 1996
+    },
+    {
+      "name": "05_SAFETY.md",
+      "sha256": "de766f44f075b27c39b04f8704bc74be95bc85e9880955392bc59f0cde95c734",
+      "size": 2268
+    },
+    {
+      "name": "06_CODEX_COMMAND.txt",
+      "sha256": "847b355af57d0a9a1c82460611402d0fc4af3d5484b4dc03ad4a742c7494ba30",
+      "size": 1803
+    },
+    {
+      "name": "07_WIRE_AND_QA.md",
+      "sha256": "27d2a999011b54cbd234031905ee50eb5a41f04c24d128335223e0f55598c997",
+      "size": 2343
+    }
+  ]
+}

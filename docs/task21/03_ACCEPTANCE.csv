@@ -1,0 +1,29 @@
+ID;Gate;Requirement;Evidence;Level
+T21-001;G0;Exact PR51 ancestry and source SHA established;read-only audit;LOCAL
+T21-002;G0;GAS6 current API capabilities and adapter insertion points verified;Router source scan;LOCAL
+T21-003;G0;No unintended changes of main/signing/OAuth/ACL/user DB/production;git diff and metadata;LOCAL
+T21-004;G1;Canonical HEAD/snapshot/schema/error contract documented and golden-tested;Node + Dart serialization;LOCAL
+T21-005;G1;Scope and authorized principal server checked including 401/403/CLIENT write deny;security negative tests;LOCAL
+T21-006;G1;Prepared snapshot immutable and hash readback before any HEAD flip;fixture storage tests;LOCAL
+T21-007;G1;CAS/stale duplicate concurrent writes keep one consistent HEAD;concurrency tests;LOCAL
+T21-008;G1;Idempotent retries reuse one receipt and no ghost publication;lost-response test;LOCAL
+T21-009;G1;Non-atomic backing storage fails closed with rollback;injection test;LOCAL
+T21-010;G2;Injectable Flutter runtime connector behind verified capability handshake;factory test;LOCAL
+T21-011;G2;Equal HEAD makes zero snapshot requests;request counting test;LOCAL
+T21-012;G2;Changed HEAD verifies/deps/applies SQLite current atomically;SQLite integration;LOCAL
+T21-013;G2;Corrupt/stale/offline/403 retains old lastGood without cross-account leak;negative tests;LOCAL
+T21-014;G2;Six refresh intents coalesce, existing queue reused, no second worker;queue18 test;LOCAL
+T21-015;G2;Priority control-plane never interrupts active file job or loops Google picker;scheduler tests;LOCAL
+T21-016;G3;MASTER draft not conflated with applied/published receipt;UI+contract test;LOCAL
+T21-017;G3;Successful server config revision yields verifiable CLIENT application;synthetic E2E;STAGING
+T21-018;G3;"Static selected entry preview in original Home banner; no carousel/read write";widget render and state;LOCAL
+T21-019;G3;CLIENT cannot open admin screen and cannot call privileged write;roles tests;LOCAL
+T21-020;G4;Relevant targeted + full Flutter/node regressions pass or failures detailed;test logs;LOCAL
+T21-021;G4;Two Android-arm64 Flutter bundles compile without modifying signing;build logs;LOCAL
+T21-022;G4;Native Gradle APK/signature/versionCode proven only if compatible env available;native build record;NATIVE
+T21-023;G4;Hosted CI verified with executed steps or honestly BLOCKED billing 0steps;CI URL and steps;CI
+T21-024;G4;No real mobile/Google/live marks PASS without performed tests;report audit;OWNER
+T21-025;G5;Draft PR, exact branch and source checkpoint, no main merge;PR link;LOCAL
+T21-026;G5;Report includes scope and provider uncertainty and stop gates;RESULT/ISSUES;LOCAL
+T21-027;G5;Known PR46 user data risk explicitly preserved/covered by regression;migration tests;LOCAL
+T21-028;G5;Delivery docs/evidence hash, no secrets/APK/source in public report folder;Drive readback;LOCAL
