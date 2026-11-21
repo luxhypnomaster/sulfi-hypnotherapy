@@ -138,11 +138,24 @@ class VitrineSettingsStore {
     // Persist stable request identity before calling transport; lost response can
     // be retried without creating another publication. Preserve previous receipt.
     final fingerprint = contentDigest(config);
-    final expectedRevision =
+    final knownRevision =
         (old['appliedRevision'] as int? ?? 0) >
             (old['publishedRevision'] as int? ?? 0)
         ? old['appliedRevision'] as int
         : old['publishedRevision'] as int? ?? 0;
+    // A HEAD read is not this operation's receipt. After a lost response (and
+    // even a cold restart) recover the ORIGINAL request/CAS before considering
+    // a new publication. Otherwise refreshApplied can silently duplicate it.
+    final unconfirmed =
+        old['pendingHash'] == fingerprint &&
+        old['requestId'] is String &&
+        (old['receipt'] is! Map ||
+            old['receipt']['requestId'] != old['requestId']);
+    final expectedRevision = unconfirmed
+        ? old['pendingExpectedRevision'] as int? ??
+              old['publishedRevision'] as int? ??
+              0
+        : knownRevision;
     if (old['published'] != null &&
         contentDigest(old['published']) == fingerprint &&
         expectedRevision == (old['publishedRevision'] ?? 0)) {
@@ -206,7 +219,11 @@ class VitrineSettingsStore {
           ...latest,
           'published': config,
           'publishedRevision': receipt['configRevision'],
-          'appliedRevision': receipt['configRevision'],
+          'appliedRevision':
+              (latest['appliedRevision'] as int? ?? 0) >
+                  receipt['configRevision']
+              ? latest['appliedRevision']
+              : receipt['configRevision'],
           'receipt': receipt,
         }),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
