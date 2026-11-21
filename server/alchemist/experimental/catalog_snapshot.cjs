@@ -46,10 +46,10 @@ function validateSnapshot(s) {
     visiting.delete(exact(r)); seen.add(exact(r));
   }
   s.items.forEach(visit);
-  config(s.vitrineConfig);
+  if (s.vitrineConfig !== undefined) config(s.vitrineConfig);
   return s;
 }
-function createSnapshotService({store, authorize, listCommitted, canExpose, now}) {
+function createSnapshotService({store, authorize, listCommitted, canExpose, now, separateVitrineConfig = false}) {
   // authorize returns an opaque server-owned audience scope, never a client ACL.
   async function scopeFor(actor, q, write) {
     const scope = await authorize(actor, q.scope, write);
@@ -88,6 +88,11 @@ function createSnapshotService({store, authorize, listCommitted, canExpose, now}
           if (r.state !== 'published' || !r.current || !await canExpose(r, scope)) continue;
           items.push({contentId:r.contentId, revisionId:r.revisionId, type:r.type,
             title:r.title, description:r.description || '', sha256:r.sha256,
+            ...(r.validUntil ? {expiresAt:r.validUntil} : {}),
+            ...(r.catalogItemId ? {catalogItemId:r.catalogItemId,card:{title:r.title,
+              shortAnnotation:r.shortAnnotation||r.title,description:r.description||'',
+              categoryIds:r.categoryIds||[],tags:r.tags||[],language:r.language||'ru',
+              authorDisplayName:r.authorDisplayName||'',coverAssetId:r.coverAssetId||null}} : {}),
             byteLength:r.byteLength, dependencies:(r.dependencies || []).map(d => ({
               contentId:d.contentId, revisionId:d.revisionId, sha256:d.sha256}))});
         }
@@ -96,18 +101,21 @@ function createSnapshotService({store, authorize, listCommitted, canExpose, now}
         const vitrineConfig = config(q.vitrineConfig || previous?.vitrineConfig || defaultConfig);
         const snapshot = validateSnapshot({schemaVersion:1, scope,
           catalogRevision:(old?.catalogRevision || 0) + 1, createdAt:now(), items,
-          vitrineConfig, configRevision:previous && digest(previous.vitrineConfig) === digest(vitrineConfig)
-            ? previous.configRevision : (previous?.configRevision || 0) + 1});
+          ...(separateVitrineConfig ? {} : {vitrineConfig,
+            configRevision:previous && digest(previous.vitrineConfig) === digest(vitrineConfig)
+              ? previous.configRevision : (previous?.configRevision || 0) + 1})});
         const hash = digest(snapshot), snapshotId = 'sha256-' + hash;
         await store.putImmutable(scope, snapshotId, copy(snapshot));
         if (digest(await store.snapshot(scope, snapshotId)) !== hash) throw Error('READBACK_HASH_MISMATCH');
         const head = {schemaVersion:1, scope, catalogRevision:snapshot.catalogRevision,
           snapshotId, snapshotHash:hash, createdAt:snapshot.createdAt};
+        const expiries=items.filter(r=>r.expiresAt).map(r=>Date.parse(r.expiresAt));
+        if(expiries.length)head.validUntil=new Date(Math.min(...expiries)).toISOString();
         // Commit must compare old revision + head + receipt atomically. No code
         // path marks a publication successful before this adapter boundary.
-        await store.commitHeadReceipt(scope, q.ifRevision, head, receiptKey,
+        const committed = await store.commitHeadReceipt(scope, q.ifRevision, head, receiptKey,
           {digest:requestDigest, head});
-        return copy(head);
+        return copy(committed?.head || head);
       });
     },
   };
