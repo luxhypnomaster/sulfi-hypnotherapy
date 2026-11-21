@@ -174,7 +174,12 @@ void main() {
             );
           }
           await reader.textProgress(cached, 0, end: true);
-          expect(reader.reads.isRead(cached), false);
+          expect(
+            reader.reads.isRead(cached),
+            true,
+            reason:
+                '№20: deliberate end confirmation does not require listening',
+          );
           await reader.reads.progress(
             cached,
             audioId: 'voice',

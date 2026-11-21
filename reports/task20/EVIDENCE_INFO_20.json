@@ -1,0 +1,8 @@
+{
+  "file": "EVIDENCE_20.zip",
+  "bytes": 3548380,
+  "sha256": "9c84eb101ab71bc5f8d7a0d4085b27d5c98925582226ef57d604f0d664eba211",
+  "contains": "technical reports, synthetic Flutter screens and test logs only",
+  "noApk": true,
+  "noSourceArchive": true
+}

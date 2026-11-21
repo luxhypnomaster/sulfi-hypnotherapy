@@ -1,0 +1,5 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_snapshot_test.dart
+00:00 +0: 20 SQLite: six refreshes one existing durable queue task; equal HEAD zero snapshot; cold read
+00:00 +1: 20 lastGood survives offline, bad hash, older HEAD and account swap; prepared/current atomic
+00:00 +2: 20 snapshot rejects schema, scope, cycle and missing exact dependency even when hashed
+00:00 +3: All tests passed!

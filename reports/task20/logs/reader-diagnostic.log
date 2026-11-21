@@ -1,0 +1,7 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_widget_test.dart
+00:00 +0: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 reader fixture ready
+T20 explicit audio mark verified
+T20 independent link view ready
+T20 link no-download verified
+00:03 +1: All tests passed!

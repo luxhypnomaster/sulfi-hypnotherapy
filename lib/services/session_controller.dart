@@ -14,6 +14,8 @@ import 'alchemist_diary_api.dart';
 import 'alchemist_identity_session.dart';
 import 'alchemist_catalog.dart';
 import 'alchemist_api.dart';
+import 'catalog_snapshot_sync.dart';
+import 'alchemist_errors.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -47,6 +49,7 @@ class SessionController extends ChangeNotifier {
     this.historyAttachments,
     this.preview,
     this.backgroundWorker = false,
+    this.snapshotTransport,
   }) : modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
     if (!backgroundWorker &&
@@ -82,6 +85,19 @@ class SessionController extends ChangeNotifier {
     }
   }
   final bool backgroundWorker;
+
+  /// Explicit negotiated/staging adapter only. GAS6 has no HEAD contract, so
+  /// default null preserves the existing catalog and Android worker path.
+  final CatalogSnapshotTransport? snapshotTransport;
+  CatalogSnapshotSync? _snapshotSync;
+  CatalogSnapshotSync? get snapshotSync =>
+      snapshotTransport == null || capsules == null
+      ? null
+      : _snapshotSync ??= CatalogSnapshotSync(
+          db: capsules!.database,
+          transport: snapshotTransport!,
+          owner: () => transferOwner,
+        );
   bool get nativeTransfers =>
       !backgroundWorker && NativeTransferBridge.available;
   AccessPolicy get policy => library.policy;
@@ -302,6 +318,25 @@ class SessionController extends ChangeNotifier {
     void Function(String) stage,
     void Function(int, int) progress,
   ) async {
+    if (value['download']?['kind'] == 'catalogSnapshot20') {
+      final sync = snapshotSync;
+      if (sync == null) {
+        throw const AlchemistFailure(
+          'Новый протокол каталога ещё не подключён.',
+          422,
+          'SNAPSHOT_PROTOCOL_UNAVAILABLE',
+          DiaryFailure.invalidData,
+        );
+      }
+      stage('verifying');
+      await sync.execute(value, stop);
+      final scope = value['download']['scope'] as String;
+      final view = await sync.lastGood(scope);
+      if (!stop() && transferOwner == value['ownerBinding'] && view != null) {
+        diary?.applyVerifiedVitrine(view, scope);
+      }
+      return;
+    }
     if (name.startsWith('alchemist_read_sync_queue:')) {
       final parameters = <String, dynamic>{
         for (final key in ['requestId', 'ifMatch', 'entries']) key: value[key],
@@ -1232,6 +1267,7 @@ class SessionController extends ChangeNotifier {
   void dispose() {
     library.policy.removeListener(_notify);
     _cloudQueue?.dispose();
+    _snapshotSync?.dispose();
     _disposed = true;
     super.dispose();
   }

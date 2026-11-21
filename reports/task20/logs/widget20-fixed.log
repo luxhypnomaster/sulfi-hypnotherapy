@@ -1,0 +1,8 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_widget_test.dart
+00:00 +0: 20 banner fake clock3/7, exact slot geometry, play uses shared preview and no read, revoke immediate
+00:02 +1: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+00:05 +2: 20 actual HOME 9:16 portrait/board/navigation unchanged through splash and entry
+T20 HOME prepare complete
+T20 HOME before capture
+T20 HOME after capture
+00:06 +3: All tests passed!

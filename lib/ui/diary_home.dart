@@ -3,17 +3,50 @@ import 'package:flutter/material.dart';
 import '../services/diary_controller.dart';
 import 'diary_screen.dart';
 import 'design.dart';
+import 'vitrine_settings_screen.dart';
 
 /// The tab is attached to the board edge; it occupies no session content row.
 class DiaryHomeBoard extends StatelessWidget {
-  const DiaryHomeBoard({super.key, required this.child, this.diary});
+  const DiaryHomeBoard({
+    super.key,
+    required this.child,
+    this.diary,
+    this.management,
+  });
   final Widget child;
   final DiaryController? diary;
+  final DiaryController? management;
   @override
   Widget build(BuildContext context) => Stack(
     clipBehavior: Clip.none,
     fit: StackFit.expand,
     children: [
+      if (management != null && management!.policy?.clientEdition != true)
+        Positioned(
+          top: 0,
+          right: 20,
+          width: 135,
+          height: 42,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color(0xFF25051A),
+              border: Border.all(color: neonPink),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Center(
+                child: Text(
+                  'Управление',
+                  style: TextStyle(
+                    color: neonPink,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       if (diary != null)
         Positioned(
           top: 0,
@@ -99,6 +132,28 @@ class DiaryHomeBoard extends StatelessWidget {
                 ),
               );
             },
+          ),
+        ),
+      if (management != null && management!.policy?.clientEdition != true)
+        Positioned(
+          top: 0,
+          right: 20,
+          width: 135,
+          height: 48,
+          child: Semantics(
+            button: true,
+            label: 'Управление',
+            child: GestureDetector(
+              key: const Key('home-management'),
+              behavior: HitTestBehavior.translucent,
+              onTap: () => Navigator.push<void>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PublicationsVitrineScreen(diary: management!),
+                ),
+              ),
+              child: const SizedBox.expand(),
+            ),
           ),
         ),
     ],

@@ -1,0 +1,36 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_diary_test.dart
+00:00 +0: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 local read: account+entry+cycle, quiet edit, reannounce and legacy rows preserved
+00:00 +1: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 own audio requires explicit mark, not listening; ContentLink does not count as own media
+00:00 +2: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 carousel defaults3/7, all unread, 1:1, full cycle and empty has no tick work
+00:00 +3: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 pins3/4/N1 fair; all ordinary posts and multiple pins appear each bounded cycle
+00:00 +4: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 refresh coalesces at slide boundary, urgent removal immediate; between-post splash
+00:00 +5: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 settings1..60, local saved != published; CLIENT denied and previous records retained
+00:00 +6: loading /dev/shm/sulfi20/test/task15_diary_test.dart
+00:00 +6: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY categories, unknown fields, quiet edit, reannounce, manual/time/combined UTC expiry archive
+00:01 +7: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY deterministic rotation newest then normal/high fairness, stable build and explicit advance
+00:01 +8: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media
+00:01 +8 -1: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media [E]
+  NoSuchMethodError: The method '[]' was called on null.
+  Receiver: null
+  Tried calling: []("audio")
+  dart:core                           Object.noSuchMethod
+  test/task15_diary_test.dart 213:35  main.<fn>
+
+00:01 +8 -1: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY diff metadata/reorder/reannounce zero upload, one new image one upload; private path never public
+00:01 +9 -1: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY future metadata cannot reach legacy API even when authenticated
+00:01 +10 -1: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate
+00:01 +10 -2: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task15_diary_test.dart 380:7                   main.<fn>
+
+00:01 +10 -2: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY reader opens unread, last real page confirmation removes Home only; preview has no effects
+00:04 +11 -2: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY author exact ContentLink picker uses registry, saves draft and original fields
+00:06 +12 -2: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi20/test/task15_diary_test.dart: DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate
+  /dev/shm/sulfi20/test/task15_diary_test.dart: DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media

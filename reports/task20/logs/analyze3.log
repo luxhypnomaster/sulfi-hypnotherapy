@@ -1,0 +1,10 @@
+Analyzing sulfi20...
+
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/alchemist_diary_api.dart:1089:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/vitrine_settings.dart:83:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/vitrine_settings.dart:93:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/vitrine_settings.dart:110:9 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • test/task20_diary_test.dart:163:33 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/task20_snapshot_test.dart:178:9 • curly_braces_in_flow_control_structures
+
+6 issues found. (ran in 3.7s)

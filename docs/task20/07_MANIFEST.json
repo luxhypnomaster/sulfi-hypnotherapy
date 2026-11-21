@@ -1,0 +1,44 @@
+{
+  "task": 20,
+  "version": "21.11.2026-fast-scoped-v1.1-audit",
+  "assembled_utc": "2026-11-21T14:36:22.905779+00:00",
+  "files": [
+    {
+      "file": "00_START_HERE.md",
+      "sha256": "4576f3de73d8861b2b4931fb2a19dedded3f570b8ba92f61aa5010105caa98e7",
+      "bytes": 3769
+    },
+    {
+      "file": "01_TASK20.md",
+      "sha256": "5e0257a439379994e7205e42f322a719609efd32f15a4d044c9b7a25643ae658",
+      "bytes": 19428
+    },
+    {
+      "file": "02_CONTINUE_AUTONOMOUSLY.md",
+      "sha256": "092d174b6c8da0d30aa825bc7844e0ffae72a5ce733e3808f264c0be6391f78f",
+      "bytes": 4823
+    },
+    {
+      "file": "03_ACCEPTANCE.csv",
+      "sha256": "08b05234e2805edd3b4f803f223346e12d4c49e179449acb1449b4f9cdf991e5",
+      "bytes": 2730
+    },
+    {
+      "file": "04_SOURCES.md",
+      "sha256": "9b4cc76ba99413863f2eb7e795c99902ce3445fdf50f312d7b836b0ab64129c1",
+      "bytes": 3560
+    },
+    {
+      "file": "05_BOUNDARIES_AND_FALLBACKS.md",
+      "sha256": "cbedaf90fb25db5db97f75311872bcc795e78a5644386baaa58ce54e2e135657",
+      "bytes": 2232
+    },
+    {
+      "file": "06_CODEX_COMMAND.txt",
+      "sha256": "837ceb3d3cf82fa2a304abcb53366f90a85bc7f6fb9b7572207fc2b5dfe164b8",
+      "bytes": 1761
+    }
+  ],
+  "boundary": "branch + draft PR; no live deploy/merge",
+  "scope_note": "Only minimal MASTER vitrine within #20; full seven-card admin overview is future scope; acceptance CSV delimiter corrected."
+}

@@ -17,6 +17,8 @@ import 'diary_identity.dart';
 import 'diary_media_store.dart';
 import 'diary_audio.dart';
 import 'access_policy.dart';
+import '../models/vitrine_config.dart';
+import 'catalog_snapshot_sync.dart';
 
 class DiaryController extends ChangeNotifier {
   bool _closed = false;
@@ -45,6 +47,21 @@ class DiaryController extends ChangeNotifier {
     }
   }
   final DiaryReadStore reads;
+  VitrineConfig _homeConfig = const VitrineConfig();
+  VitrineConfig get homeConfig => _homeConfig;
+
+  /// Only a verified, account-scoped cache view reaches the carousel. Local
+  /// MASTER drafts and local-save receipts are never applied as server config.
+  void applyVerifiedVitrine(Map<String, dynamic> view, String scope) {
+    CatalogSnapshotSync.verify(view['head'], view['snapshot'], scope);
+    final raw = view['snapshot']['vitrineConfig'];
+    if (raw == null) {
+      return;
+    }
+    _homeConfig = VitrineConfig.fromMap(raw);
+    notifyListeners();
+  }
+
   final DateTime Function() clock;
   Timer? _expiry;
   String _readScope = 'public';
@@ -84,7 +101,21 @@ class DiaryController extends ChangeNotifier {
   Future<void> textProgress(DiaryEntry e, int page, {bool end = false}) async {
     if (!reads.loaded) return;
     final wasRead = reads.isRead(e);
-    await reads.progress(e, page: page, textEnd: end);
+    await reads.progress(e, page: page, textEnd: end, confirmed: end);
+    if (wasRead != reads.isRead(e)) notifyListeners();
+  }
+
+  Future<void> reachedTextEnd(DiaryEntry e, int page) async {
+    if (!reads.loaded) return;
+    final wasRead = reads.isRead(e);
+    final saved = reads.state(e);
+    if (wasRead ||
+        saved['textEnd'] == true &&
+            saved['page'] == page &&
+            saved['fingerprint'] == reads.fingerprint(e)) {
+      return;
+    }
+    await reads.progress(e, page: page, textEnd: true);
     if (wasRead != reads.isRead(e)) notifyListeners();
   }
 
@@ -94,6 +125,7 @@ class DiaryController extends ChangeNotifier {
     final key = '${reads.key(e)}:${reads.fingerprint(e)}';
     return _readerAudio.putIfAbsent(key, () {
       final audio = audioFactory!();
+      if (reads.localOnly) return audio;
       audio.addListener(() {
         final latest = published.where((p) => p.id == e.id).firstOrNull;
         if (latest != null &&
@@ -275,6 +307,7 @@ class DiaryController extends ChangeNotifier {
     await api?.loadLocalIdentityHint();
     final scope = api?.readerScope ?? 'public';
     if (scope != _readScope) {
+      _homeConfig = const VitrineConfig();
       await reads.switchReader(scope == 'public' ? null : scope);
       _readScope = scope;
     }
@@ -355,7 +388,7 @@ class DiaryController extends ChangeNotifier {
       if (syncScope != api!.readerScope) return;
       await repository.cache(entries, removed, revision);
       await load();
-      await api!.synchronizeReads(reads, published);
+      if (!reads.localOnly) await api!.synchronizeReads(reads, published);
     } catch (e) {
       error = e is DiaryApiException ? e.message : 'Не удалось обновить дневник. Последний сохранённый каталог не изменён.';
     } finally {

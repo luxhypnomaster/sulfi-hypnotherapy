@@ -1,0 +1,12 @@
+Analyzing sulfi20...
+
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:69:11 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:115:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:146:11 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:155:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:177:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/catalog_snapshot_sync.dart:183:9 • curly_braces_in_flow_control_structures
+   info • Use an initializing formal to assign a parameter to a field. Try using an initialing formal ('this._readerId') to initialize the field • lib/services/diary_read_state.dart:17:7 • prefer_initializing_formals
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/diary_read_state.dart:188:7 • curly_braces_in_flow_control_structures
+
+8 issues found. (ran in 5.7s)

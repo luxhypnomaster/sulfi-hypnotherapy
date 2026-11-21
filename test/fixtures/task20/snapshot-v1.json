@@ -1,0 +1,38 @@
+{
+  "head": {
+    "schemaVersion": 1,
+    "scope": "client:public",
+    "catalogRevision": 1,
+    "snapshotHash": "f2009526fe5d0a05bb626f15872b29af49813ff2998daf5c91aae9dfeb898e71",
+    "snapshotId": "sha256-f2009526fe5d0a05bb626f15872b29af49813ff2998daf5c91aae9dfeb898e71",
+    "createdAt": "2026-11-21T00:00:00.000Z"
+  },
+  "snapshot": {
+    "schemaVersion": 1,
+    "scope": "client:public",
+    "catalogRevision": 1,
+    "createdAt": "2026-11-21T00:00:00.000Z",
+    "configRevision": 1,
+    "vitrineConfig": {
+      "schemaVersion": 1,
+      "splashSeconds": 3,
+      "entrySeconds": 7,
+      "splashMode": "fullCycle",
+      "highWeight": 1,
+      "normalWeight": 1,
+      "pinnedEveryNth": 3
+    },
+    "items": [
+      {
+        "contentId": "module_test",
+        "revisionId": "v1",
+        "type": "module",
+        "title": "Тест 🧪",
+        "description": "Кавычки \" \\ и строка\n ",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "byteLength": 0,
+        "dependencies": []
+      }
+    ]
+  }
+}

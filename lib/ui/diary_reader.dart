@@ -54,7 +54,6 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   void diaryChanged() {
     if (!mounted || widget.preview) return;
-    unawaited(audio?.navigationPause());
     setState(() {});
   }
 
@@ -233,83 +232,135 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                           if (calculating)
                             const LinearProgressIndicator(minHeight: 2),
                           Expanded(
-                            child: SingleChildScrollView(
-                              key: ValueKey('diary-page-$index'),
-                              child: SizedBox(
-                                width: box.maxWidth,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    if (index == 0)
-                                      DiaryHeader(
-                                        entry: entry,
-                                        size: value.header,
-                                      ),
-                                    for (final f
-                                        in value.pages[index].fragments) ...[
-                                      if (f.text != null)
-                                        SizedBox(
-                                          height: f.height,
-                                          child: Text(
-                                            f.text!,
-                                            style: diaryTextStyle,
-                                            textScaler: MediaQuery.textScalerOf(
-                                              context,
-                                            ),
-                                            locale: const Locale('ru'),
-                                          ),
-                                        )
-                                      else
-                                        SizedBox(
-                                          height: f.height,
-                                          child:
-                                              f.block.type ==
-                                                  DiaryBlockType.image
-                                              ? DiaryImage(
-                                                  block: f.block,
-                                                  diary: widget.diary,
-                                                )
-                                              : f.block.type ==
-                                                    DiaryBlockType.video
-                                              ? DiaryVideo(
-                                                  block: f.block,
-                                                  diary: widget.diary,
-                                                )
-                                              : DiaryAudioCard(
-                                                  block: f.block,
-                                                  audio: audio,
-                                                ),
-                                        ),
-                                      // Text fragments include their original whitespace; gaps only between blocks.
-                                      if (f.text == null ||
-                                          f.end == f.block.text.length)
-                                        const SizedBox(height: 12),
-                                    ],
-                                    if (index == value.pages.length - 1 &&
-                                        !widget.preview &&
+                            child:
+                                NotificationListener<ScrollMetricsNotification>(
+                                  onNotification: (n) {
+                                    if (!widget.preview &&
                                         !widget.calculateOnly &&
-                                        widget.diary != null &&
-                                        entry.blocks.any(
-                                          (b) =>
-                                              b.substantive &&
-                                              b.type != DiaryBlockType.audio,
-                                        ))
-                                      TextButton.icon(
-                                        key: const Key('diary-text-end'),
-                                        onPressed: () =>
-                                            widget.diary!.textProgress(
-                                              entry,
-                                              index,
-                                              end: true,
-                                            ),
-                                        icon: const Icon(Icons.done),
-                                        label: const Text('Дочитано'),
+                                        value.pages.length > 1 &&
+                                        index == value.pages.length - 1 &&
+                                        n.metrics.axis == Axis.vertical &&
+                                        n.metrics.maxScrollExtent <= 1) {
+                                      unawaited(
+                                        widget.diary?.reachedTextEnd(
+                                          entry,
+                                          index,
+                                        ),
+                                      );
+                                    }
+                                    return false;
+                                  },
+                                  child: NotificationListener<ScrollNotification>(
+                                    onNotification: (n) {
+                                      if (!widget.preview &&
+                                          !widget.calculateOnly &&
+                                          index == value.pages.length - 1 &&
+                                          n.metrics.axis == Axis.vertical &&
+                                          n is ScrollEndNotification &&
+                                          n.metrics.maxScrollExtent > 0 &&
+                                          n.metrics.extentAfter <= 1) {
+                                        unawaited(
+                                          widget.diary?.reachedTextEnd(
+                                            entry,
+                                            index,
+                                          ),
+                                        );
+                                      }
+                                      return false;
+                                    },
+                                    child: SingleChildScrollView(
+                                      key: ValueKey('diary-page-$index'),
+                                      child: SizedBox(
+                                        width: box.maxWidth,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            if (index == 0)
+                                              DiaryHeader(
+                                                entry: entry,
+                                                size: value.header,
+                                              ),
+                                            for (final f
+                                                in value
+                                                    .pages[index]
+                                                    .fragments) ...[
+                                              if (f.text != null)
+                                                SizedBox(
+                                                  height: f.height,
+                                                  child: Text(
+                                                    f.text!,
+                                                    style: diaryTextStyle,
+                                                    textScaler:
+                                                        MediaQuery.textScalerOf(
+                                                          context,
+                                                        ),
+                                                    locale: const Locale('ru'),
+                                                  ),
+                                                )
+                                              else
+                                                SizedBox(
+                                                  height: f.height,
+                                                  child:
+                                                      f.block.type ==
+                                                          DiaryBlockType.image
+                                                      ? DiaryImage(
+                                                          block: f.block,
+                                                          diary: widget.diary,
+                                                        )
+                                                      : f.block.type ==
+                                                            DiaryBlockType.video
+                                                      ? DiaryVideo(
+                                                          block: f.block,
+                                                          diary: widget.diary,
+                                                        )
+                                                      : DiaryAudioCard(
+                                                          block: f.block,
+                                                          audio: audio,
+                                                        ),
+                                                ),
+                                              // Text fragments include their original whitespace; gaps only between blocks.
+                                              if (f.text == null ||
+                                                  f.end == f.block.text.length)
+                                                const SizedBox(height: 12),
+                                            ],
+                                            if (index ==
+                                                    value.pages.length - 1 &&
+                                                !widget.preview &&
+                                                !widget.calculateOnly &&
+                                                widget.diary != null &&
+                                                entry.blocks.any(
+                                                  (b) => b.substantive,
+                                                ))
+                                              TextButton.icon(
+                                                key: const Key(
+                                                  'diary-text-end',
+                                                ),
+                                                onPressed: () =>
+                                                    widget.diary!.textProgress(
+                                                      entry,
+                                                      index,
+                                                      end: true,
+                                                    ),
+                                                icon: const Icon(Icons.done),
+                                                label: Text(
+                                                  entry.blocks.any(
+                                                        (b) =>
+                                                            b.substantive &&
+                                                            b.type ==
+                                                                DiaryBlockType
+                                                                    .audio,
+                                                      )
+                                                      ? 'Отметить прочитанным'
+                                                      : 'Дочитано',
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                  ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
                           ),
                         ],
                       ),

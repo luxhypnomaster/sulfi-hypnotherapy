@@ -1,0 +1,29 @@
+Computing fixes in sulfi20...
+Applying fixes...
+
+lib/models/vitrine_config.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib/services/catalog_snapshot_sync.dart
+  curly_braces_in_flow_control_structures - 6 fixes
+
+lib/services/diary_carousel.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib/services/diary_read_state.dart
+  curly_braces_in_flow_control_structures - 1 fix
+  prefer_initializing_formals - 1 fix
+
+lib/services/vitrine_settings.dart
+  curly_braces_in_flow_control_structures - 3 fixes
+
+lib/ui/diary_home_banner.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib/ui/vitrine_settings_screen.dart
+  curly_braces_in_flow_control_structures - 3 fixes
+
+pubspec.yaml
+  missing_dependency - 1 fix
+
+18 fixes made in 8 files.

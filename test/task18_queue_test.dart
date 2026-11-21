@@ -260,7 +260,11 @@ void main() {
     );
     try {
       await api.authenticateReader('CONTROLLED_NOT_GOOGLE');
-      final reads = DiaryReadStore(f.db, readerId: api.readerScope);
+      final reads = DiaryReadStore(
+        f.db,
+        readerId: api.readerScope,
+        localOnly: false,
+      );
       await reads.load();
       final name = 'alchemist_read_sync_queue:${api.readerScope}';
       final raw = jsonEncode({

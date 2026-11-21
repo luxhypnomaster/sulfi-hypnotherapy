@@ -1,0 +1,25 @@
+ID;Требование;Обязательное доказательство;Уровень;Начальный статус;Фактический статус;Доказательство №20
+T20-001;База git PR48-49-50, API и подтверждённые регрессии;BASELINE_20 SHA+ancestry+diff;SOURCE;NOT_RUN;PASS;"Ancestry and draft PR51; main readback unchanged"
+T20-002;HEAD лёгкий и не пересобирает catalog на чтении;no-change zero full-snapshot tests;UNIT/INTEGRATION;NOT_RUN;PASS;"LOCAL_INJECTED HEAD O(1), zero extra list scans; live unavailable"
+T20-003;Snapshot immutable и HEAD переключается после verify;atomic fail injection two versions;INTEGRATION;NOT_RUN;PASS;"LOCAL_INJECTED immutable put/readback and fail-before-flip; GAS atomicity not claimed"
+T20-004;Repeated publish same requestId не даёт дубль;idempotency/concurrency tests;INTEGRATION;NOT_RUN;PASS;LOCAL_INJECTED same requestId replay and concurrent CAS conflict
+T20-005;ACL/owner/privacy scope safe и без старых secret ссылок;negative security suite;SECURITY;NOT_RUN;PARTIAL;"Negative scoped/role/privacy tests PASS; actual GAS ACL overlay not integrated"
+T20-006;CLIENT first lastGood and background HEAD check;widget/unit offline test;UNIT;NOT_RUN;PARTIAL;"LOCAL_SQLITE lastGood/cold ready; legacy catalog UI retained until protocol negotiation"
+T20-007;Equal revision не качает full catalog;transport count assertions;INTEGRATION;NOT_RUN;PASS;LOCAL_SQLITE equal HEAD: exactly zero extra snapshot requests
+T20-008;Changed snapshot checked hash schema scope;tamper/fallback test;UNIT/INTEGRATION;NOT_RUN;PASS;LOCAL_SQLITE schema/scope/hash/exact deps/cycle and Node-Dart UTF8 golden
+T20-009;Concurrent refresh coalesced existing queue;6 refresh one durable task;INTEGRATION;NOT_RUN;PASS;LOCAL_SQLITE six intents -> one task in existing AlchemistWorkQueue
+T20-010;Owner A/B isolated overlay and no destructive local reset;owner switch and cold restart;INTEGRATION;NOT_RUN;PASS;"LOCAL_SQLITE A/B/client-master scopes; current preserved on offline/corrupt/stale"
+T20-011;Diary carousel default 3s/7s ratio1:1 splash full cycle;clock-controlled tests;UNIT/WIDGET;NOT_RUN;PASS;LOCAL_WIDGET 3/7, 1:1 and complete-cycle splash incl quiet refresh
+T20-012;Pinned N=3 and N=4, fair no starvation, read filtered;carousel selection tests;UNIT;NOT_RUN;PASS;LOCAL_UNIT N=3/4/1 fairness, multiple pins, read excluded
+T20-013;Read state account entry cycle local only;legacy read migration test;INTEGRATION;NOT_RUN;PASS;LOCAL_SQLITE additive completed-legacy migration, original rows retained, local-only state
+T20-014;Read behavior page-end, audio manual end, ContentLink ignored;reader tests;WIDGET;NOT_RUN;PASS;"LOCAL_WIDGET rendered multipage end; own audio manual without listening; ContentLink ignored"
+T20-015;Reannounce changes cycle vs quiet edit;2 accounts and revision tests;UNIT/INTEGRATION;NOT_RUN;PASS;LOCAL_SQLITE quiet revision/reannounce/two synthetic accounts, no real Google identity
+T20-016;Own diary media verified, no auto download of catalog ContentLink;transfer mock and offline;INTEGRATION;NOT_RUN;PASS;"LOCAL_WIDGET own hashed asset through resolver; ContentLink resolver count zero"
+T20-017;Banner geometry, play existing player, no session interruption;screens/widget/OWNER if possible;WIDGET/OWNER_PHONE;NOT_RUN;PARTIAL;"LOCAL_WIDGET exact frame/header/nav rects and shared player PASS; OWNER/OEM NOT_RUN"
+T20-018;New entry slide-end switch, urgent revoke immediate;fake clock/effects;UNIT/WIDGET;NOT_RUN;PASS;"LOCAL_UNIT_WIDGET next-boundary coalescing and immediate invalidation; no HTTP per slide"
+T20-019;MASTER admin vitrine and CLIENT denied;route and permissions tests;WIDGET/SECURITY;NOT_RUN;PARTIAL;"LOCAL_WIDGET CLIENT denied / MASTER tabs PASS; server admin transport absent"
+T20-020;Timers 1..60, unsafe 0/61 rejected, config revision;validation tests;UNIT/INTEGRATION;NOT_RUN;PARTIAL;"LOCAL_INJECTED timers/configRevision/receipt and drafts PASS; real publication blocked"
+T20-021;Existing №18 transfers and user media intact;old and targeted regressions;LOCAL_CI;NOT_RUN;PARTIAL;"LOCAL_REGRESSION full outputs in TESTS_20; native OS/phone upgrade NOT_RUN"
+T20-022;Real GAS deployment;requires explicit user authorization;OWNER_LIVE;NOT_RUN;BLOCKED;"BLOCKED_OWNER no deployment permission; existing GAS6 unchanged"
+T20-023;Two actual Google-account phone checks;real physical QA;OWNER_PHONE;NOT_RUN;NOT_RUN;OWNER_PHONE NOT_RUN: no two real Google-account phones
+T20-024;Server quota and full backup requirements preserved as future;S-D-ADM-001 trace and zero false claims;SOURCE;NOT_RUN;PASS;"SOURCE full seven-card admin, quotas and backups are future; no false counts"
