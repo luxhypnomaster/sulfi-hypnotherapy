@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/content_revision.dart';
 import '../models/session_plan.dart' show newId;
 import '../models/vitrine_config.dart';
+import '../models/metadata_contract.dart';
 
 /// No production implementation until an approved, server-authorized contract
 /// exists. Implementations MUST verify role, expected revision and idempotency.
@@ -14,6 +15,13 @@ abstract interface class VitrineAdminTransport {
     required int expectedRevision,
     required Map<String, dynamic> config,
   });
+}
+
+abstract interface class ConditionalVitrineAdmin {
+  bool get available;
+  String get unavailableReason;
+  String get appliedScope;
+  Future<Map<String, dynamic>?> readAppliedView();
 }
 
 class VitrineSettingsStore {
@@ -27,6 +35,47 @@ class VitrineSettingsStore {
   final String? Function() account;
   final bool Function() canEdit;
   final VitrineAdminTransport? admin;
+  bool get canPublish =>
+      admin != null &&
+      (admin is! ConditionalVitrineAdmin ||
+          (admin as ConditionalVitrineAdmin).available);
+  Future<void> refreshApplied() async {
+    final a = account(), backend = admin;
+    if (a == null || backend == null || backend is! ConditionalVitrineAdmin) {
+      return;
+    }
+    final conditional = backend as ConditionalVitrineAdmin;
+    final view = await conditional.readAppliedView();
+    if (view == null) return;
+    final config = verifyVitrineView(view, conditional.appliedScope);
+    await db.transaction((tx) async {
+      if (a != account()) throw const FormatException('ACCOUNT_CHANGED');
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [_key(a)],
+      );
+      final old = rows.isEmpty
+          ? <String, dynamic>{}
+          : Map<String, dynamic>.from(
+              jsonDecode(rows.single['value'] as String),
+            );
+      if ((old['appliedRevision'] as int? ?? 0) >
+          view['head']['configRevision']) {
+        return;
+      }
+      await tx.insert('app_settings', {
+        'name': _key(a),
+        'value': jsonEncode({
+          ...old,
+          'applied': config.toMap(),
+          'appliedRevision': view['head']['configRevision'],
+          'appliedHead': view['head'],
+        }),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
   Future<void>? _publishing;
   String _key(String a) => 'vitrine20:${contentDigest(a)}';
   Future<Map<String, dynamic>> load() async {
@@ -89,14 +138,28 @@ class VitrineSettingsStore {
     // Persist stable request identity before calling transport; lost response can
     // be retried without creating another publication. Preserve previous receipt.
     final fingerprint = contentDigest(config);
+    final expectedRevision =
+        (old['appliedRevision'] as int? ?? 0) >
+            (old['publishedRevision'] as int? ?? 0)
+        ? old['appliedRevision'] as int
+        : old['publishedRevision'] as int? ?? 0;
     if (old['published'] != null &&
-        contentDigest(old['published']) == fingerprint) {
+        contentDigest(old['published']) == fingerprint &&
+        expectedRevision == (old['publishedRevision'] ?? 0)) {
       return;
     }
-    final requestId = old['pendingHash'] == fingerprint
+    final requestId =
+        old['pendingHash'] == fingerprint &&
+            (old['pendingExpectedRevision'] ?? old['publishedRevision'] ?? 0) ==
+                expectedRevision
         ? old['requestId'] as String
         : newId();
-    final intent = {...old, 'pendingHash': fingerprint, 'requestId': requestId};
+    final intent = {
+      ...old,
+      'pendingHash': fingerprint,
+      'requestId': requestId,
+      'pendingExpectedRevision': expectedRevision,
+    };
     await db.insert('app_settings', {
       'name': _key(a),
       'value': jsonEncode(intent),
@@ -106,7 +169,7 @@ class VitrineSettingsStore {
     }
     final receipt = await admin!.publish(
       requestId: requestId,
-      expectedRevision: old['publishedRevision'] as int? ?? 0,
+      expectedRevision: expectedRevision,
       config: config,
     );
     if (a != account() || !canEdit()) {
@@ -115,6 +178,7 @@ class VitrineSettingsStore {
     if (receipt['requestId'] != requestId ||
         receipt['configHash'] != fingerprint ||
         receipt['configRevision'] is! int ||
+        receipt['configRevision'] != expectedRevision + 1 ||
         receipt['configRevision'] <= (old['publishedRevision'] ?? 0)) {
       throw const FormatException('Некорректное подтверждение сервера');
     }
@@ -142,6 +206,7 @@ class VitrineSettingsStore {
           ...latest,
           'published': config,
           'publishedRevision': receipt['configRevision'],
+          'appliedRevision': receipt['configRevision'],
           'receipt': receipt,
         }),
       }, conflictAlgorithm: ConflictAlgorithm.replace);

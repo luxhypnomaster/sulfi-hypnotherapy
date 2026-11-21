@@ -1,6 +1,6 @@
 'use strict';
 const {createSnapshotService,digest,canonical,config}=require('./catalog_snapshot.cjs');
-const {fail}=require('./sqlite_snapshot_store.cjs');
+function fail(status,code){const e=new Error(code);e.status=status;e.code=code;throw e;}
 const CONTRACT='alchemist.metadata/1',CANONICAL='sorted-json-utf8-int-v1';
 const operations=['catalog.head','catalog.snapshot','vitrine.configRead','vitrine.configPrepare','vitrine.configCommit'];
 const errors=new Set(['AUTH_REQUIRED','SCOPE_DENIED','AUTHOR_REQUIRED','CONFIG_WRITE_DENIED','CONFIG_SCOPE_DENIED',

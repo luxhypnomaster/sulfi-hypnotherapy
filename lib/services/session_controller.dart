@@ -16,6 +16,8 @@ import 'alchemist_catalog.dart';
 import 'alchemist_api.dart';
 import 'catalog_snapshot_sync.dart';
 import 'alchemist_errors.dart';
+import 'metadata_runtime.dart';
+import 'metadata_gateway.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -50,7 +52,11 @@ class SessionController extends ChangeNotifier {
     this.preview,
     this.backgroundWorker = false,
     this.snapshotTransport,
-  }) : modules = modules ?? ModuleCatalog(null, library.policy) {
+    this.metadataRpc,
+    bool? metadataEnabled,
+  }) : metadataEnabled =
+           metadataEnabled ?? const bool.fromEnvironment('SULFI_METADATA_V1'),
+       modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
     if (!backgroundWorker &&
         capsules != null &&
@@ -85,6 +91,31 @@ class SessionController extends ChangeNotifier {
     }
   }
   final bool backgroundWorker;
+  final bool metadataEnabled;
+  final MetadataRpc? metadataRpc;
+  MetadataRuntime? _metadataRuntime;
+  MetadataRuntime? get metadata {
+    if (!metadataEnabled || capsules == null || catalog.api == null) {
+      return null;
+    }
+    if (_metadataRuntime != null) return _metadataRuntime;
+    final api = catalog.api!;
+    final runtime = MetadataRuntime(
+      db: capsules!.database,
+      gateway: MetadataGateway(
+        rpc: metadataRpc ?? ExistingMetadataRpc(api),
+        owner: () => transferOwner,
+        epoch: () => diary?.api?.identityGeneration ?? 0,
+        scope: policy.clientEdition ? 'client:public' : 'master:public',
+      ),
+      owner: () => transferOwner,
+      settingsAccount: () => diary?.api?.readerScope ?? transferOwner,
+      canEdit: () => policy.isAuthor,
+      applyConfig: (value) => diary?.applyMetadataConfig(value),
+    );
+    runtime.addListener(_notify);
+    return _metadataRuntime = runtime;
+  }
 
   /// Explicit negotiated/staging adapter only. GAS6 has no HEAD contract, so
   /// default null preserves the existing catalog and Android worker path.
@@ -319,6 +350,12 @@ class SessionController extends ChangeNotifier {
     void Function(int, int) progress,
   ) async {
     if (value['download']?['kind'] == 'catalogSnapshot20') {
+      final runtime = metadata;
+      if (runtime != null) {
+        stage('catalog_checking');
+        await runtime.execute(value, stop);
+        return;
+      }
       final sync = snapshotSync;
       if (sync == null) {
         throw const AlchemistFailure(
@@ -633,6 +670,17 @@ class SessionController extends ChangeNotifier {
   Future<void> initialize() async {
     if (!isEditor) await repository.interruptUnfinished();
     await reload();
+    final runtime = metadata;
+    if (runtime != null) {
+      await runtime.restoreConfig();
+      unawaited(() async {
+        try {
+          await runtime.refresh(cloudQueue);
+        } catch (_) {
+          /* LastGood and queue remain. */
+        }
+      }());
+    }
   }
 
   Future<void> reload() async {
@@ -1268,6 +1316,8 @@ class SessionController extends ChangeNotifier {
     library.policy.removeListener(_notify);
     _cloudQueue?.dispose();
     _snapshotSync?.dispose();
+    _metadataRuntime?.removeListener(_notify);
+    _metadataRuntime?.dispose();
     _disposed = true;
     super.dispose();
   }

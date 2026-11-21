@@ -94,3 +94,13 @@ test('21 expiry rejects stale HEAD and snapshot without scan or mutation of prio
  assert.equal((await q('catalog.head')).status,200);
  }finally{f.close();}
 });
+test('21 commit rechecks current principal role after an authorized prepare',async()=>{
+ const f=fixture();try{
+ let actor=owner;const r=createMetadataRuntime({store:f.store,now,resolveCredential:()=>actor});
+ const call=(operation,parameters)=>r.request({version:1,operation,parameters:{scope:'master:public',...parameters}});
+ const p=await call('vitrine.configPrepare',{requestId:'race_p',expectedRevision:0,config:defaultConfig});assert.equal(p.status,200);
+ actor={...owner,roles:['client'],permissions:[]};
+ const denied=await call('vitrine.configCommit',{requestId:'race',prepareId:p.result.prepareId});assert.equal(denied.status,403);assert.equal(f.store.head('vitrine:public'),null);
+ actor=owner;assert.equal((await call('vitrine.configCommit',{requestId:'race',prepareId:p.result.prepareId})).result.configRevision,1);
+ }finally{f.close();}
+});

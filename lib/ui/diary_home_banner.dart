@@ -158,9 +158,26 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
   }
 
   @override
+  Widget build(BuildContext context) => rotation.current == null
+      ? widget.splash
+      : DiaryPublicationSlide(entry: rotation.current!, diary: widget.diary);
+}
+
+/// Shared production banner renderer. Static mode has no clock, store access,
+/// remote resolver, read marking or player action; only already-local images.
+class DiaryPublicationSlide extends StatelessWidget {
+  const DiaryPublicationSlide({
+    super.key,
+    required this.entry,
+    required this.diary,
+    this.interactive = true,
+  });
+  final DiaryEntry entry;
+  final DiaryController diary;
+  final bool interactive;
+  @override
   Widget build(BuildContext context) {
-    final e = rotation.current;
-    if (e == null) return widget.splash;
+    final e = entry;
     final images = e.blocks
             .where((b) => b.type == DiaryBlockType.image && b.media != null)
             .toList(),
@@ -173,7 +190,7 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
     void open() => Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => DiaryReader(entry: e, diary: widget.diary),
+        builder: (_) => DiaryReader(entry: e, diary: diary),
       ),
     );
     return ColoredBox(
@@ -188,7 +205,7 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   GestureDetector(
-                    onTap: open,
+                    onTap: interactive ? open : null,
                     child: Text(
                       e.displayTitle,
                       maxLines: 1,
@@ -198,7 +215,7 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: open,
+                      onTap: interactive ? open : null,
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -230,8 +247,9 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
                             key: const Key('diary-home-play'),
                             tooltip: 'Слушать публикацию',
                             padding: EdgeInsets.zero,
-                            onPressed: () =>
-                                widget.diary.audioFor(e)?.toggle(audio.first),
+                            onPressed: interactive
+                                ? () => diary.audioFor(e)?.toggle(audio.first)
+                                : null,
                             icon: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -259,11 +277,11 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
               AspectRatio(
                 aspectRatio: .75,
                 child: GestureDetector(
-                  onTap: open,
+                  onTap: interactive ? open : null,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      if (widget.diary.mediaStore?.file(images.first.media)
+                      if (diary.mediaStore?.file(images.first.media)
                           case final file?)
                         Image.file(
                           file,
