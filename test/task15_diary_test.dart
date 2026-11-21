@@ -161,9 +161,9 @@ void main() {
       await f.close();
     }
   });
-  test('DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media', () async {
+  test('LEGACY DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media', () async {
     final f = await Fixture15.open();
-    final r = DiaryReadStore(f.db, readerId: 'reader');
+    final r = DiaryReadStore(f.db, readerId: 'reader', localOnly: false);
     await r.load();
     final e = entry15(
       'mixed',
@@ -204,7 +204,7 @@ void main() {
       sample(5000, 5200, epoch: 2);
       await r.progress(e, audioId: 'audio', intervals: h.intervals);
       await r.progress(e, page: 2);
-      final reopen = DiaryReadStore(f.db, readerId: 'reader');
+      final reopen = DiaryReadStore(f.db, readerId: 'reader', localOnly: false);
       await reopen.load();
       final saved = reopen.state(e);
       expect(saved['page'], 2);
@@ -332,7 +332,7 @@ void main() {
       }
     },
   );
-  test('DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate', () async {
+  test('LEGACY DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate', () async {
     final f = await Fixture15.open();
     var now = DateTime.utc(2026, 11, 9);
     final store = DiaryMediaStore(
@@ -348,6 +348,7 @@ void main() {
     final d = DiaryController(
       DiaryRepository(f.db),
       clock: () => now,
+      reads: DiaryReadStore(f.db, localOnly: false),
       audioFactory: () => DiaryAudio(transport: transport, store: store),
     );
     final e = entry15('voice', blocks: [block]);

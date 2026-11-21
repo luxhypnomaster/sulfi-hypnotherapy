@@ -425,8 +425,13 @@ void main() {
       final readsA = DiaryReadStore(
             author.db,
             readerId: diaryAuthor.readerScope,
+            localOnly: false,
           ),
-          readsB = DiaryReadStore(client.db, readerId: diaryReader.readerScope);
+          readsB = DiaryReadStore(
+            client.db,
+            readerId: diaryReader.readerScope,
+            localOnly: false,
+          );
       await readsA.load();
       await readsB.load();
       await readsA.progress(received, textEnd: true, page: 2);

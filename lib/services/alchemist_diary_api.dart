@@ -1085,6 +1085,8 @@ class AlchemistDiaryApi extends DiaryApi {
     DiaryReadStore reads,
     List<DiaryEntry> entries,
   ) async {
+    if (reads.localOnly)
+      return; // Preserve historical queue/rows; no new telemetry.
     if (_token == null || reads.readerId != readerScope) return;
     final name = 'alchemist_read_sync_queue:$readerScope';
     final pending = (await db.query(

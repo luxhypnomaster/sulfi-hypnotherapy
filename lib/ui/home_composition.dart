@@ -13,6 +13,7 @@ import 'session_actions.dart';
 import '../services/preview_player.dart';
 import 'preview_bar.dart';
 import 'diary_home.dart';
+import 'diary_home_banner.dart';
 import 'home_start_art.dart';
 
 const _lime = Color(0xFFDFFF00);
@@ -197,7 +198,13 @@ class HomeComposition extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      const HomeReferenceHeader(),
+                      if (controller.diary case final diary?)
+                        DiaryHomeBanner(
+                          diary: diary,
+                          splash: const HomeReferenceHeader(),
+                        )
+                      else
+                        const HomeReferenceHeader(),
                       Positioned(
                         top: 0,
                         right: 4,
@@ -240,6 +247,9 @@ class HomeComposition extends StatelessWidget {
                 Expanded(
                   child: DiaryHomeBoard(
                     diary: controller.diary,
+                    management: controller.policy.clientEdition
+                        ? null
+                        : controller.diary,
                     child: LayoutBuilder(
                       builder: (context, content) {
                         final compact = content.maxHeight < 240;
@@ -322,8 +332,6 @@ class HomeComposition extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            if (controller.diary != null)
-                              DiaryHomeMessage(diary: controller.diary!),
                             if (controller.saveError != null)
                               Text(
                                 controller.saveError!,

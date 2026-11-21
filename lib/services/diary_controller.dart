@@ -84,7 +84,14 @@ class DiaryController extends ChangeNotifier {
   Future<void> textProgress(DiaryEntry e, int page, {bool end = false}) async {
     if (!reads.loaded) return;
     final wasRead = reads.isRead(e);
-    await reads.progress(e, page: page, textEnd: end);
+    await reads.progress(e, page: page, textEnd: end, confirmed: end);
+    if (wasRead != reads.isRead(e)) notifyListeners();
+  }
+
+  Future<void> reachedTextEnd(DiaryEntry e, int page) async {
+    if (!reads.loaded) return;
+    final wasRead = reads.isRead(e);
+    await reads.progress(e, page: page, textEnd: true);
     if (wasRead != reads.isRead(e)) notifyListeners();
   }
 
@@ -94,6 +101,7 @@ class DiaryController extends ChangeNotifier {
     final key = '${reads.key(e)}:${reads.fingerprint(e)}';
     return _readerAudio.putIfAbsent(key, () {
       final audio = audioFactory!();
+      if (reads.localOnly) return audio;
       audio.addListener(() {
         final latest = published.where((p) => p.id == e.id).firstOrNull;
         if (latest != null &&
@@ -355,7 +363,7 @@ class DiaryController extends ChangeNotifier {
       if (syncScope != api!.readerScope) return;
       await repository.cache(entries, removed, revision);
       await load();
-      await api!.synchronizeReads(reads, published);
+      if (!reads.localOnly) await api!.synchronizeReads(reads, published);
     } catch (e) {
       error = e is DiaryApiException ? e.message : 'Не удалось обновить дневник. Последний сохранённый каталог не изменён.';
     } finally {

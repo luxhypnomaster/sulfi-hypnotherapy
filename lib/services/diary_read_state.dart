@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_initializing_formals
 import 'package:crypto/crypto.dart';
 
 import 'dart:convert';
@@ -12,9 +13,12 @@ import '../models/session_plan.dart';
 /// No user schema migration or destructive rewrite is needed.
 class DiaryReadStore {
   // Explicit reader IDs are for isolated local profiles/conformance fixtures.
-  // ignore: prefer_initializing_formals
-  DiaryReadStore(this.db, {String? readerId}) : _readerId = readerId;
+  DiaryReadStore(this.db, {String? readerId, this.localOnly = true})
+    : _readerId = readerId;
   final Database db;
+
+  /// New local-only mode preserves every legacy row; never sends audio analytics.
+  final bool localOnly;
   String? _readerId;
   String get readerId => _readerId!;
   bool get loaded => _readerId != null;
@@ -46,7 +50,7 @@ class DiaryReadStore {
     for (final r in await db.query(
       'app_settings',
       where: 'name LIKE ?',
-      whereArgs: ['diary_read:%'],
+      whereArgs: [localOnly ? 'diary_local20:%' : 'diary_read:%'],
     )) {
       try {
         final state = Map<String, dynamic>.from(
@@ -59,10 +63,43 @@ class DiaryReadStore {
         /* Preserve an unreadable row rather than infer completion. */
       }
     }
+    if (localOnly) {
+      // Additive compatibility migration: completed legacy cycles only. Partial
+      // audio intervals remain in their original namespace and are not reset.
+      for (final r in await db.query(
+        'app_settings',
+        where: 'name LIKE ?',
+        whereArgs: ['diary_read:%'],
+      )) {
+        try {
+          final old = Map<String, dynamic>.from(
+            jsonDecode(r['value'] as String),
+          );
+          if (old['readerId'] != readerId || old['read'] != true) continue;
+          final k =
+              'diary_local20:${jsonEncode([readerId, old['entryId'], old['activationCycleId']])}';
+          final value = <String, dynamic>{
+            'readerId': readerId,
+            'entryId': old['entryId'],
+            'activationCycleId': old['activationCycleId'],
+            'read': true,
+            'page': old['page'] ?? 0,
+            'migratedLegacy': true,
+          };
+          await db.insert('app_settings', {
+            'name': k,
+            'value': jsonEncode(value),
+          }, conflictAlgorithm: ConflictAlgorithm.ignore);
+          _states.putIfAbsent(k, () => value);
+        } catch (_) {
+          /* Preserve corrupt legacy row; never infer completion. */
+        }
+      }
+    }
   }
 
   String key(DiaryEntry e) =>
-      'diary_read:${jsonEncode([readerId, e.id, DiaryPublication.of(e).cycle])}';
+      '${localOnly ? 'diary_local20' : 'diary_read'}:${jsonEncode([readerId, e.id, DiaryPublication.of(e).cycle])}';
   Map<String, dynamic> state(DiaryEntry e) =>
       _readerId == null ? {} : Map.of(_states[key(e)] ?? {});
   String fingerprint(DiaryEntry e) => jsonEncode(
@@ -78,7 +115,9 @@ class DiaryReadStore {
     String? audioId,
     List<List<int>>? intervals,
     bool audioDone = false,
+    bool confirmed = false,
   }) {
+    if (localOnly && audioId != null) return Future<void>.value();
     // Update memory synchronously; serialize SQLite writes to avoid lost partial progress.
     final k = key(e), old = state(e);
     if (old['read'] != true && old['fingerprint'] != fingerprint(e)) {
@@ -100,7 +139,7 @@ class DiaryReadStore {
     final audioBlocks = e.blocks.where(
       (b) => b.substantive && b.type == DiaryBlockType.audio,
     );
-    final read =
+    final legacyRead =
         old['read'] == true ||
         (visualDone &&
             audioBlocks.every(
@@ -114,8 +153,10 @@ class DiaryReadStore {
       'fingerprint': fingerprint(e),
       'textEnd': visualDone,
       'page': page ?? old['page'] ?? 0,
-      'audio': audios,
-      'read': read,
+      if (!localOnly) 'audio': audios,
+      'read': localOnly
+          ? old['read'] == true || textEnd && (audioBlocks.isEmpty || confirmed)
+          : legacyRead,
     };
     _states[k] = value;
     final snapshot = jsonEncode(value);
@@ -133,7 +174,7 @@ class DiaryReadStore {
       sha256.convert(utf8.encode(fingerprint(e))).toString();
   List<Map<String, dynamic>> syncSnapshot(List<DiaryEntry> entries) => [
     for (final e in entries)
-      if (state(e).isNotEmpty)
+      if (!localOnly && state(e).isNotEmpty)
         {
           'entryId': e.id,
           'cycle': DiaryPublication.of(e).cycle,
@@ -143,6 +184,9 @@ class DiaryReadStore {
         },
   ];
   Future<void> mergeSynced(DiaryEntry e, Map<String, dynamic> remote) async {
+    if (localOnly) {
+      return; // New local state cannot be overwritten by server progress.
+    }
     if (remote['cycle'] != DiaryPublication.of(e).cycle ||
         remote['fingerprint'] != syncFingerprint(e) && remote['read'] != true) {
       return;
