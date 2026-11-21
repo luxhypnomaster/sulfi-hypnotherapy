@@ -383,3 +383,15 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - №18/current DE408: fullverify489Flutter/3CLIENT/47+24Node PASS; fullAPI34 11PASS incl actual OS cold recovery6,98sec; CLIENT normal27→28 13PASS. Native MASTERAPI35 15PASS + full33/35/36 по10PASS; old59/a894 do not issue. Device Google/OEM/hearing/live throughput NOT_RUN.
 
 - №18/de408: six native gates PASS; actual private delivery43765843573 SUCCESS, independent uploaded-asset SHA/cert verified, old27 preserved. Two owner phones/Google/live GAS throughput still NOT_RUN; Task18 PARTIAL. No main/GAS/OAuth/ACL/signing change, no APK Drive upload.
+
+# №20 · 21.11.2026 · PARTIAL
+
+- [x] Verified ZIP/manifest, PR48/49/50 readback and isolated branch/draft PR51.
+- [x] Tested injected HEAD/snapshot, exact metadata deps, whitelist, idempotency/CAS, config revision; no live Router mutation.
+- [x] Existing queue metadata intent, scope-bound SQLite lastGood/prepared/current, zero fetch on unchanged HEAD, tamper/offline/older guards.
+- [x] Local read, additive legacy protection, reader end/manual-audio semantics, carousel/pinned/full-cycle defaults and coalescing.
+- [x] MASTER-only sticker/two tabs and honest local settings states, disabled unavailable server publication; existing artwork/player preserved.
+- [ ] Approved production wire/atomic store+ACL overlay/negotiation, headless adapter binding and actual lastGood catalog UI integration. GAS6 remains unchanged.
+- [ ] Static editor banner preview integration; existing reader preview preserved.
+- [ ] Native/signature/upgrade/physical two-account candidate acceptance; do not replaceAPK28 with unverified build.
+- [ ] Full seven-section management, server quota metrics and verified full backups after backend selection, future scope; no fake counters/success. №19 G2–G7 remains future.

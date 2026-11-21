@@ -1,0 +1,123 @@
+{
+  "folderId": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+  "parentId": "1iG5L28UybhIxLayHebggTAyH5cP5IPLJ",
+  "folderUrl": "https://drive.google.com/drive/folders/13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+  "inheritedAnyoneWriter": true,
+  "aclChanged": false,
+  "apkUpload": false,
+  "sourceUpload": false,
+  "verifiedFiles": [
+    {
+      "name": "RESULT_20.md",
+      "id": "1GBeWNdBiNMfxrx4cGTnR8n8Z7SMidLgJ",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "502018b15fe0aeef39570c8ef97a652a619dd60ba3fa80d1b3733d23fd6769bc",
+      "bytes": 5361,
+      "readback": "PASS"
+    },
+    {
+      "name": "BASELINE_20.md",
+      "id": "1S2AZZO7jZOZi5oRV7RevhA4QHbVoJTgH",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "7c8cc209debb647a45f13ab284959b4c14ead50b7200fc4924c181984984587e",
+      "bytes": 2725,
+      "readback": "PASS"
+    },
+    {
+      "name": "CHANGES_20.md",
+      "id": "1XU5u4Tlh8oyGE-06uKwePTt61O2XGWuU",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "36bd83731fc6b9beb908b02b8ebdb526d0db40e0a01e4d2c2a4be6c75f3d7131",
+      "bytes": 4360,
+      "readback": "PASS"
+    },
+    {
+      "name": "TESTS_20.md",
+      "id": "1M2IW1uRkE-437nH2YpjIGYjjC3o78qSZ",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "17fa5ca4655ea84688fc6d7830905b5932719be024589c4306ecd0dc56d6a64d",
+      "bytes": 6436,
+      "readback": "PASS"
+    },
+    {
+      "name": "ISSUES_20.md",
+      "id": "1YJl3p-zbO02cvGSmrzuEmtHBU3hbmqti",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "02fd54dbc378b9e20aab9f39264ed625e25b7d787af75ff59c6d0155dd1b155f",
+      "bytes": 3820,
+      "readback": "PASS"
+    },
+    {
+      "name": "SECURITY_20.md",
+      "id": "1d7ltE97yRe4dy_B2RaFiPmLXfSn6-uQr",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "8f9075d3ac8d4a78e814f61dc978b0212ac3dea09b9f5fc7c9d855941906228b",
+      "bytes": 2810,
+      "readback": "PASS"
+    },
+    {
+      "name": "MIGRATION_20.md",
+      "id": "1sM2vWANMmjSfkNFZ3WaGm8CXnz_rVw1e",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "d1ddad0fc4ecef83341c9c0f49689dedbd3cb4557f9c10e08350c158c65e5ddc",
+      "bytes": 3119,
+      "readback": "PASS"
+    },
+    {
+      "name": "ACCEPTANCE_20.csv",
+      "id": "1oBvCR6xdYTHwVpats9dJ89zW0JPnKp3P",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "f9c8a964e16e0bbcb97b05f4e2c15b9a1d024c60ca805d8f154f17f267bfcc12",
+      "bytes": 4803,
+      "readback": "PASS"
+    },
+    {
+      "name": "CODEX_EFFICIENCY_20.md",
+      "id": "1uDSPitU010JeehsJZKx9qgEC8ailP6i4",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "f0c45ff312246e1ade291998f46678a0bc62e8255ec5b2eab72adce9421129f5",
+      "bytes": 2415,
+      "readback": "PASS"
+    },
+    {
+      "name": "OWNER_PHONE_QA_20.md",
+      "id": "1hrNDqwJB7s8Mdr028DmjmNxxZ7-YPKeE",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "df55d69810cd588b41cdd7bb8a417a0469d5f98fc7365b770ada941a6438348d",
+      "bytes": 2257,
+      "readback": "PASS"
+    },
+    {
+      "name": "EVIDENCE_20.zip",
+      "id": "12714uzlRqn3Bp0nj0aZSc1MUpy6Vdywy",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "9c84eb101ab71bc5f8d7a0d4085b27d5c98925582226ef57d604f0d664eba211",
+      "bytes": 3548380,
+      "readback": "PASS"
+    },
+    {
+      "name": "home20-splash.png",
+      "id": "1GYt_2NKC14xuOj3Sq_nazxFLO4Qll_UX",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "9aeed89b1756acd72dbe3364b07041fc0ba05fc2aad6d4650ab9beafc8c17aef",
+      "bytes": 962601,
+      "readback": "PASS"
+    },
+    {
+      "name": "home20-entry.png",
+      "id": "1yfU1s7fmCPvSXLou56Byw-eaRma7p6HN",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "73384e617b472db14a92250be0798af233b4bcfdf2825a5d65e05ab91ac8a0b9",
+      "bytes": 740618,
+      "readback": "PASS"
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "19wdvTyf9IDRGdi8e8xgRk_ARYBzukW_K",
+      "parent": "13hLTnJEjQCx_SrNw4lEojOPA-ZPQX4q2",
+      "sha256": "ca9d2a0893d876b2668e7daaf69893c756b33e22f385e68599bcee48e05234c3",
+      "bytes": 4397,
+      "readback": "PASS"
+    }
+  ]
+}

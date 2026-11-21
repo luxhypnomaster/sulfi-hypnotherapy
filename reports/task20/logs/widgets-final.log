@@ -1,0 +1,17 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_widget_test.dart
+00:00 +0: /dev/shm/sulfi20/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+00:04 +1: /dev/shm/sulfi20/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 reader fixture ready
+T20 explicit audio mark verified
+T20 independent link view ready
+T20 link no-download verified
+00:06 +2: /dev/shm/sulfi20/test/task20_widget_test.dart: 20 banner fake clock3/7, exact slot geometry, play uses shared preview and no read, revoke immediate
+00:07 +3: /dev/shm/sulfi20/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+00:10 +4: /dev/shm/sulfi20/test/task20_widget_test.dart: 20 actual HOME 9:16 portrait/board/navigation unchanged through splash and entry
+T20 HOME prepare complete
+T20 HOME before capture
+T20 HOME after capture
+00:12 +5: loading /dev/shm/sulfi20/test/task15_client_test.dart
+00:12 +5: /dev/shm/sulfi20/test/task15_client_test.dart: CLI independent stores author -> immutable fake provider -> client media/read/exact install/player; reannounce/expiry/private isolation
+00:16 +6: /dev/shm/sulfi20/test/task15_client_test.dart: SRV contract enforces permission, conditional publish, idempotent receipt, blob entitlement and SHA
+00:16 +7: All tests passed!

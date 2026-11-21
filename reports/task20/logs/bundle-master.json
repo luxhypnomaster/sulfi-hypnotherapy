@@ -1,0 +1,9 @@
+{
+  "sourceSha": "9e898024a51f23c602fe216784b0532e4bee90e4",
+  "edition": "master",
+  "target": "android-arm64",
+  "apk": false,
+  "files": 25,
+  "totalBytes": 121393991,
+  "kernelSha256": "0051e13b4d76028e6c30daad3cb98320b08ec9f931ce51c04fb4ba71b2ad03a9"
+}

@@ -1,0 +1,19 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_snapshot_test.dart
+00:00 +0: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 Node/Dart canonical UTF8 JSON contract golden
+00:00 +1: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 only verified snapshot applies vitrine config, bad bytes preserve previous
+00:00 +2: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 SQLite: six refreshes one existing durable queue task; equal HEAD zero snapshot; cold read
+00:00 +3: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 lastGood survives offline, bad hash, older HEAD and account swap; prepared/current atomic
+00:00 +4: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 snapshot rejects schema, scope, cycle and missing exact dependency even when hashed
+00:00 +5: loading /dev/shm/sulfi20/test/task20_diary_test.dart
+00:01 +5: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 local read: account+entry+cycle, quiet edit, reannounce and legacy rows preserved
+00:01 +6: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 own audio requires explicit mark, not listening; ContentLink does not count as own media
+00:01 +7: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 carousel defaults3/7, all unread, 1:1, full cycle and empty has no tick work
+00:01 +8: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 pins3/4/N1 fair; all ordinary posts and multiple pins appear each bounded cycle
+00:01 +9: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 refresh coalesces at slide boundary, urgent removal immediate; between-post splash
+00:01 +10: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 quiet refresh cannot repeat shown base items or remove full-cycle splash
+00:01 +11: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 settings1..60, local saved != published; CLIENT denied and previous records retained
+00:02 +12: loading /dev/shm/sulfi20/test/task20_admin_test.dart
+00:02 +12: /dev/shm/sulfi20/test/task20_admin_test.dart: 20 admin lost response retry reuses request, no duplicate commit; saved draft != published
+00:02 +13: /dev/shm/sulfi20/test/task20_admin_test.dart: 20 admin deny and invalid receipt cannot fabricate publication; owner switch prevents apply
+00:02 +14: /dev/shm/sulfi20/test/task20_admin_test.dart: 20 pending publish preserves new saved edits and coalesces repeated taps
+00:03 +15: All tests passed!

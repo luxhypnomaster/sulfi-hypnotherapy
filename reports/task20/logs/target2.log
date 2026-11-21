@@ -1,0 +1,31 @@
+00:00 +0: loading /dev/shm/sulfi20/test/task20_snapshot_test.dart
+00:00 +0: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 SQLite: six refreshes one existing durable queue task; equal HEAD zero snapshot; cold read
+00:00 +1: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 lastGood survives offline, bad hash, older HEAD and account swap; prepared/current atomic
+00:00 +2: /dev/shm/sulfi20/test/task20_snapshot_test.dart: 20 snapshot rejects schema, scope, cycle and missing exact dependency even when hashed
+00:00 +3: loading /dev/shm/sulfi20/test/task20_diary_test.dart
+00:01 +3: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 local read: account+entry+cycle, quiet edit, reannounce and legacy rows preserved
+00:01 +4: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 own audio requires explicit mark, not listening; ContentLink does not count as own media
+00:01 +5: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 carousel defaults3/7, all unread, 1:1, full cycle and empty has no tick work
+00:01 +6: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 pins3/4/N1 fair; all ordinary posts and multiple pins appear each bounded cycle
+00:01 +7: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 refresh coalesces at slide boundary, urgent removal immediate; between-post splash
+00:01 +8: /dev/shm/sulfi20/test/task20_diary_test.dart: 20 settings1..60, local saved != published; CLIENT denied and previous records retained
+00:01 +9: loading /dev/shm/sulfi20/test/task15_diary_test.dart
+00:02 +9: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY categories, unknown fields, quiet edit, reannounce, manual/time/combined UTC expiry archive
+00:02 +10: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY deterministic rotation newest then normal/high fairness, stable build and explicit advance
+00:02 +11: /dev/shm/sulfi20/test/task15_diary_test.dart: LEGACY DAY real heard intervals need EOF, seek jump not completion; persisted partial and mixed both media
+00:02 +12: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY diff metadata/reorder/reannounce zero upload, one new image one upload; private path never public
+00:02 +13: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY future metadata cannot reach legacy API even when authenticated
+00:02 +14: /dev/shm/sulfi20/test/task15_diary_test.dart: LEGACY DAY actual DiaryAudio callbacks mark full EOF only, seek alone rejected, preview stays separate
+00:02 +15: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY reader opens unread, last real page confirmation removes Home only; preview has no effects
+00:05 +16: /dev/shm/sulfi20/test/task15_diary_test.dart: DAY author exact ContentLink picker uses registry, saves draft and original fields
+00:07 +17: loading /dev/shm/sulfi20/test/task18_queue_test.dart
+00:08 +17: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 UI enqueue is persistent OS dispatch, never a second UI executor
+00:08 +18: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 legacy user pause/upload offsets are untouched; other owner cannot resume
+00:08 +19: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 same-owner policy stop recovers; explicit native pause and cancel never auto-start
+00:08 +20: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 duplicate taps remain one stable revision task and preserve request/receipt
+00:08 +21: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 denied OS start is durable WAITING_AUTH/POLICY, never ghost RUNNING
+00:08 +22: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 additive canonical states distinguish system restrictions from user pause
+00:08 +23: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 periodic reader sync never resumes a manually paused persistent snapshot
+00:08 +24: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 transient server failure schedules a bounded retry, never an immediate busy loop
+00:08 +25: /dev/shm/sulfi20/test/task18_queue_test.dart: 18 APK27 active work converts only to policy wait; explicit same-owner resume preserves IDs/checkpoints
+00:08 +26: All tests passed!

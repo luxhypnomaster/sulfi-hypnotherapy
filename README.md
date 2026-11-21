@@ -1,3 +1,7 @@
+# №20 — каталог и локальная витрина · PARTIAL
+
+[Результат](reports/task20/RESULT_20.md) · [Матрица24](reports/task20/ACCEPTANCE_20.csv) · [Проверки](reports/task20/TESTS_20.md) · [draft PR51](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/51). Отдельная ветка поверх необъединённого PR50, source9e89802. HEAD/snapshot и SQLite sync проверены изолированно; local-only read, HOME carousel и MASTER settings добавлены. GAS6 legacy API сохранён, transport default null, server publish disabled без нового подтверждённого API. Auth19 OFF; main/signing/данные/APK28 не менялись. Live/физическая приёмка не пройдены.
+
 # №19 G0–G1 — изолированный Auth19 prototype, PARTIAL
 
 [Результат](reports/task19/RESULT_19_STAGE01.md) · [Проверки](reports/task19/TESTS_19.md) · [OWNER_SETUP](reports/task19/OWNER_SETUP_19.md). Ветка `feat/task19-auth-stage01` от необъединённого №18/PR49. Флаг по умолчанию OFF, отдельные `.auth19` пакеты и entrypoint. Рабочие APK28/Google/GAS/SQLite/очередь не заменены. 493 Flutter + final targeted5 + JVM28 + Node47/24 PASS; Android type compile PASS. Hosted CI не стартовал из-за billing/spending annotation, local APK assembly потерял daemon при OOM observed. Live Supabase/Google и физические устройства NOT_RUN, APK19 не выдан. Только G0–G1; G2–G7 не выполняются.
