@@ -1,0 +1,63 @@
+# №22 — проверочная матрица (обязательно статус каждого T22-xx)
+
+- T22-001: №18–21 baseline/ancestry/branch verified; no lost code/overlap conflicting edits.
+- T22-002: before any live server change: full scoped backup, independent hash+readback, isolated restore test, documented rollback.
+- T22-003: server job durable owner-bound operationId; repeated same request one successful commit/receipt.
+- T22-004: lost response → reconcile exact receipt, no duplicate public revision; modified payload same ID → conflict.
+- T22-005: server job retry bounded and no global long lock/polling; simultaneous publication consistent.
+- T22-006: server error incident one per cause/operation with attempts and redaction; never expose auth/diary secrets.
+- T22-007: metadata control-plane queue can refresh under pending 15MB download without duplicate queue or audio interruption.
+- T22-008: source-supported quotas db/storage/outbound/api with used/remaining/time or honest `unknown`.
+- T22-009: adminOverview 7 sections, one cheap versioned read, distinct per-metric source/updatedAt/unknown; offline lastGood.
+- T22-010: two concurrent MASTER refresh intents produce single logical HEAD+overview request; no repeated account chooser.
+- T22-011: A→B role/entitlement/diary ownership never cross; OWNER role from verified mapping only.
+- T22-012: OWNER alone changes role definitions/lead ADMIN flags; lead ADMIN can assign subordinate not OWNER/lead ADMIN.
+- T22-013: regular ADMIN has same seven views but no implicit staff management; CLIENT server-denied mutation.
+- T22-014: silent credential restore after cold start/one hour; actual revoked session yields controlled WAITING_AUTH.
+- T22-015: no forced Supabase Cloud/VPN dependence; provider-neutral export/id map.
+- T22-016: catalog HEAD unchanged 0 snapshot download; changed verified hash schema activates atomic; bad hash lastGood.
+- T22-017: content revision frozen; module update rematerializes official dependent programs, not personal forks/history.
+- T22-018: author publish/withdraw/quiet edit and batch changes have exact receipts and revision/ACL; CLIENT 403.
+- T22-019: staged production additive catalog head schema can coexist with legacy GAS6 clients.
+- T22-020: course contains ordered program refs without media duplication; source/dedup manifest verified.
+- T22-021: course A ready B downloading can start A; A finished advances only to B; B locked/no media doesn't skip to C.
+- T22-022: previously deleted official program not automatically reinstalled; user-created copies unchanged.
+- T22-023: ContentLink CTA visible only when valid entitled material exists; no dead button.
+- T22-024: local F031 post-session rating optional/offline, skip still records completed session/cursor, no server upload by default.
+- T22-025: same feedback id/retry does not change count; consent-only send and revocation correction adjust aggregates.
+- T22-026: one 5★ program rating N=1 shown as preliminary; no direct vote automatically to included module/track.
+- T22-027: module direct vs inheritedContextSignal separated with independent N and explicit source.
+- T22-028: original feedback captures exact contentRevision/execution, while public rating aggregates by stable contentId + ratingEpochId. Content revision changes (including replacing a track) do NOT automatically reset parent program/module rating. New trackId does not inherit old track's rating.
+- T22-029: rating-only change updates ratingsRevision/hash, not catalogRevision/media/track bytes; client fetches small ratings layer only.
+- T22-030: no rating source => «Нет оценок»; stale data labelled, not zero/5 fake.
+- T22-031: dirty aggregates and bounded coalesced update instead of full scan on every MASTER open/tap.
+- T22-032: MASTER ratings source/N/confidence/lastGood time visible; unauthorized raw feedback not exposed.
+- T22-033: seven admin cards each show meaningful known KPI; no blank placeholder-only route if data exists.
+- T22-034: one error within Catalog makes entire Catalog section title red-fuchsia, not green; unavailable → yellow; verified healthy → green.
+- T22-035: no decorative colored separators with no meaning; captions readable and default neutral.
+- T22-036: exact two tabs in four paired sections, exactly single panel in Statistics and Server Limits.
+- T22-037: Backup history last successful backup independent from restore verification; no falsely green from upload only.
+- T22-038: manual backup encrypted private, manifest/media+db/identity complete, independent restore test; no keys in APK.
+- T22-039: static Home preview of selected diary draft, no carousel advancement/reader state mutation.
+- T22-040: native transfer after background/lock/network loss resumes safely; system limitations explicitly tested.
+- T22-041: add regression fixtures/migration tests and a future no-data-loss native upgrade acceptance plan; actual APK upgrade NOT IN SCOPE №22.
+- T22-042: MASTER/CLIENT tested against two real Google identities and actual permitted server read/write where access available.
+- T22-043: DEFERRED_BY_OWNER — verify a reproducible release readiness checklist and scripts (original signing policy and increasing versionCode) without building or distributing an APK. Do NOT count a deferred build as environment BLOCKED/failure in №22.
+- T22-044: tests and report distinguish LOCAL/STAGING/NATIVE/LIVE/OWNER, CI blocked 0 steps is not PASS.
+- T22-045: no STT voice recognition, MERIT economics/Taro, PRO app, novel therapy claims.
+
+- T22-046: program A/B/C exposure COMPLETED/PARTIAL/NOT_EXPOSED: only A gets full context signal, B explicitly partial (weight OPEN), C no context; program direct review remains one event, including partialExecution.
+- T22-047: repeated occurrence of one module/track in session logs each occurrence but not duplicate independent context votes from one program review.
+- T22-048: metadata/pause/order/audio edit or new contentRevision never silently switches ratingEpoch or wipes parent public rating; independent new trackId starts separate ratings; exact execution revisions retained.
+
+- T22-049: Course rating 30/direct vs program rating 3/direct; course-derived signals separated, no 30 fake program votes.
+- T22-050: PRO-verified review separated from CLIENT, raw N/averages, author self-test excluded, no arbitrary weighted mean.
+- T22-051: small sample N=1 and no component direct votes: true N/provenance/evidence, no misleading defaults.
+- T22-052: partially completed course with only program A exposed: B/C receive no context, unknown exposure flagged.
+
+- T22-053: consumer 4.0/N5, PRO absent/null, weighted=NOT_CALIBRATED: three distinct fields, not fake 0.
+- T22-054: one verified PRO 5★ vs ten CLIENT 3★, self-test excluded, authentic N/provenance.
+- T22-055: two policy versions/strategy versions use immutable same evidence and produce reproducible different experimental weighted; direct reviews invariant.
+- T22-056: OWNER draft/preview/diff/validate/publish, ACL on server; arbitrary JS in config rejected; admin/client cannot publish absent explicit grant.
+- T22-057: recomputation failure retains lastGood, rollback previous policy without changing raw data/asset/content/session.
+- T22-058: per-target COURSE/PROGRAM/MODULE/TRACK, sparse N, partial exposure, duplicate occurrence with common root and optional indirect-only: separate evidence and no fake direct votes.
