@@ -1,0 +1,27 @@
+{
+  "task": 21,
+  "state": "PARTIAL - all safe G0-G5 work complete; native/CI blocked, live/owner NOT_RUN",
+  "codeSource": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "basePr51": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+  "branch": "feat/task21-runtime-sandbox",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/52",
+  "frozenReportSnapshotCommit": "ee8f23f",
+  "reportFolder": "https://drive.google.com/drive/folders/1V-Sc63j_YaTCrF6GbxdAF-qyvSfOzNqr",
+  "deliveryFile": "https://drive.google.com/file/d/1FSHl32obUMULjVKT1_dF6k-IBRg4mfrO/view",
+  "matrix": {
+    "PASS_LOCAL_OR_SYNTHETIC_OR_POLICY": 25,
+    "PARTIAL": 1,
+    "BLOCKED": 2
+  },
+  "nextSafeStep": "Review stacked draftPR52. No repeat full tests without code change. Native build only after eligible runner with existing protected signing, independent cert/SHA and native retention gate; no unverified APK. Production provider/binding/enable/deploy requires separate exact owner approval. Do not auto-start task22.",
+  "unchanged": [
+    "main",
+    "live GAS6",
+    "OAuth/ACL",
+    "signing/packageIDs/versionCode",
+    "personal data",
+    "APK28",
+    "Auth19 OFF",
+    "SULFI_METADATA_V1 default OFF"
+  ]
+}
