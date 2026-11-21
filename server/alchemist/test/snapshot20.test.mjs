@@ -63,3 +63,7 @@ test('20: versioned vitrine settings approved defaults, 1..60 validation and CLI
  await assert.rejects(f.service.publish(owner,{requestId:'bad',scope:'public',ifRevision:2,vitrineConfig:{...cfg,entrySeconds:61}}),/INVALID_CONFIG/);
  assert.deepEqual(f.heads.get('public'),h2);
 });
+test('20: conflicting current revisions cannot publish one logical ID twice',async()=>{
+ const f=fixture();f.records.push(item('same'),{...item('same'),revisionId:'v2'});
+ await assert.rejects(publish(f,'bad-current'),/INVALID_ITEM/);assert.equal(f.heads.size,0);
+});

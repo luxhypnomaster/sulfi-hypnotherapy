@@ -5,12 +5,16 @@ import '../models/vitrine_config.dart';
 /// Pure slide-boundary state machine; no network, audio, read marks or timers.
 /// Widget supplies the clock and one cancellable timer, fake clock in tests.
 class DiaryCarousel {
-  DiaryCarousel({this.config = const VitrineConfig()});
+  DiaryCarousel({this.config = const VitrineConfig()}) {
+    config.validate();
+  }
   VitrineConfig config;
   List<DiaryEntry> _entries = [], _slides = [];
   List<DiaryEntry>? _pending;
   VitrineConfig? _pendingConfig;
   int _index = -1, _pinCursor = 0;
+  final _shown = <String>{};
+  String _token(DiaryEntry e) => '${e.id}|${DiaryPublication.of(e).cycle}';
   DiaryEntry? get current =>
       _index < 0 || _slides.isEmpty ? null : _slides[_index];
   bool get hasEntries => _entries.isNotEmpty || (_pending?.isNotEmpty ?? false);
@@ -45,6 +49,7 @@ class DiaryCarousel {
       _pending = null;
       _slides = _cycle(ready);
       _index = -1;
+      _shown.clear();
     } else if (_entries.isEmpty && was == null) {
       _entries = ready;
       _slides = _cycle(ready);
@@ -70,9 +75,14 @@ class DiaryCarousel {
       final ids = remaining.map((e) => e.id).toSet();
       _slides = [
         ...remaining.where((e) => _entries.any((v) => v.id == e.id)),
-        ..._cycle(_entries).where((e) => !ids.contains(e.id) && e.id != oldId),
+        ..._cycle(_entries)
+            .where((e) => !ids.contains(e.id) && !_shown.contains(_token(e))),
       ];
       _index = -1;
+      if (_slides.isEmpty && oldId != null) {
+        _shown.clear();
+        return; // End of full cycle still gets its splash after a quiet refresh.
+      }
       if (config.splashMode == VitrineSplashMode.betweenEntries &&
           oldId != null) {
         return;
@@ -81,6 +91,9 @@ class DiaryCarousel {
         config.splashMode == VitrineSplashMode.betweenEntries) {
       _slides = _slides.skip(_index + 1).toList();
       _index = -1;
+      if (_slides.isEmpty) {
+        _shown.clear();
+      }
       return;
     }
     if (_slides.isEmpty) _slides = _cycle(_entries);
@@ -92,6 +105,9 @@ class DiaryCarousel {
     if (_index >= _slides.length) {
       _slides = _cycle(_entries);
       _index = -1;
+      _shown.clear();
+    } else if (current != null) {
+      _shown.add(_token(current!));
     }
   }
 
@@ -118,7 +134,11 @@ class DiaryCarousel {
       }
     }
     final pins = sorted
-        .where((e) => (e.extra['publication'] as Map?)?['pinned'] == true)
+        .where(
+          (e) =>
+              e.extra['publication'] is Map &&
+              (e.extra['publication'] as Map)['pinned'] == true,
+        )
         .toList();
     if (pins.isEmpty || pins.length == entries.length) return ordered;
     final result = <DiaryEntry>[];

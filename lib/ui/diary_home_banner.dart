@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/content_revision.dart';
 import '../models/diary_entry.dart';
+import '../models/diary_publication.dart';
 import '../services/diary_carousel.dart';
 import '../services/diary_controller.dart';
 import 'design.dart';
@@ -20,7 +21,7 @@ class DiaryHomeBanner extends StatefulWidget {
 
 class _DiaryHomeBannerState extends State<DiaryHomeBanner>
     with WidgetsBindingObserver {
-  final rotation = DiaryCarousel();
+  late final DiaryCarousel rotation;
   Timer? timer;
   String? signature;
   String? accountScope;
@@ -29,6 +30,7 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
   @override
   void initState() {
     super.initState();
+    rotation = DiaryCarousel(config: widget.diary.homeConfig);
     WidgetsBinding.instance.addObserver(this);
     widget.diary.addListener(changed);
     changed();
@@ -57,7 +59,12 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
 
   void apply(List<DiaryEntry> ready) {
     final old = rotation.current?.id;
-    rotation.update(ready, widget.diary.clock(), widget.diary.reads.isRead);
+    rotation.update(
+      ready,
+      widget.diary.clock(),
+      widget.diary.reads.isRead,
+      nextConfig: widget.diary.homeConfig,
+    );
     if (mounted) setState(() {});
     if (old != rotation.current?.id || timer == null || !timer!.isActive) {
       schedule();
@@ -74,18 +81,32 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
     }
     final next = contentDigest([
       scope,
-      for (final e in d.published) [e.toMap(), d.reads.isRead(e)],
+      d.homeConfig.toMap(),
+      for (final e in d.published)
+        [
+          e.toMap(),
+          d.reads.isRead(e),
+          DiaryPublication.of(e).active(e, d.clock()),
+        ],
     ]);
     if (signature == next) return;
     signature = next;
     final epoch = ++generation;
     // Revoke/read invalidation is immediate, even while new media are pending.
-    final ready = d.published
+    final visible = d.published
+        .where(
+          (e) =>
+              e.extra['_alchemistScope'] == null ||
+              e.extra['_alchemistScope'] == 'public' ||
+              e.extra['_alchemistScope'] == scope,
+        )
+        .toList();
+    final ready = visible
         .where((e) => e.blocks.every((b) => b.media == null))
         .toList();
     final old = rotation.current;
     if (old != null && !ready.any((e) => e.id == old.id)) {
-      final latest = d.published
+      final latest = visible
           .where(
             (e) =>
                 e.id == old.id &&
@@ -99,7 +120,7 @@ class _DiaryHomeBannerState extends State<DiaryHomeBanner>
     }
     apply(ready);
     unawaited(() async {
-      for (final e in d.published) {
+      for (final e in visible) {
         if (e.blocks.every((b) => b.media == null)) continue;
         var verified = true;
         for (final b in e.blocks.where((b) => b.media != null)) {

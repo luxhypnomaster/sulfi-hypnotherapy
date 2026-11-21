@@ -180,13 +180,15 @@ class CatalogSnapshotSync extends ChangeNotifier {
     }
     final items = snapshot['items'] as List;
     final exact = <String, Map>{};
+    final logical = <String>{};
     for (final raw in items) {
       final r = raw as Map;
       final key = '${r['contentId']}:${r['revisionId']}';
       if (r['contentId'] is! String ||
           r['revisionId'] is! String ||
           !RegExp(r'^[a-f0-9]{64}$').hasMatch(r['sha256'] as String? ?? '') ||
-          exact.containsKey(key)) {
+          exact.containsKey(key) ||
+          !logical.add(r['contentId'] as String)) {
         throw const FormatException('INVALID_ITEM');
       }
       exact[key] = r;

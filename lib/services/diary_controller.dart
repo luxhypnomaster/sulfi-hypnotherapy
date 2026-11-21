@@ -17,6 +17,8 @@ import 'diary_identity.dart';
 import 'diary_media_store.dart';
 import 'diary_audio.dart';
 import 'access_policy.dart';
+import '../models/vitrine_config.dart';
+import 'catalog_snapshot_sync.dart';
 
 class DiaryController extends ChangeNotifier {
   bool _closed = false;
@@ -45,6 +47,21 @@ class DiaryController extends ChangeNotifier {
     }
   }
   final DiaryReadStore reads;
+  VitrineConfig _homeConfig = const VitrineConfig();
+  VitrineConfig get homeConfig => _homeConfig;
+
+  /// Only a verified, account-scoped cache view reaches the carousel. Local
+  /// MASTER drafts and local-save receipts are never applied as server config.
+  void applyVerifiedVitrine(Map<String, dynamic> view, String scope) {
+    CatalogSnapshotSync.verify(view['head'], view['snapshot'], scope);
+    final raw = view['snapshot']['vitrineConfig'];
+    if (raw == null) {
+      return;
+    }
+    _homeConfig = VitrineConfig.fromMap(raw);
+    notifyListeners();
+  }
+
   final DateTime Function() clock;
   Timer? _expiry;
   String _readScope = 'public';
@@ -91,6 +108,13 @@ class DiaryController extends ChangeNotifier {
   Future<void> reachedTextEnd(DiaryEntry e, int page) async {
     if (!reads.loaded) return;
     final wasRead = reads.isRead(e);
+    final saved = reads.state(e);
+    if (wasRead ||
+        saved['textEnd'] == true &&
+            saved['page'] == page &&
+            saved['fingerprint'] == reads.fingerprint(e)) {
+      return;
+    }
     await reads.progress(e, page: page, textEnd: true);
     if (wasRead != reads.isRead(e)) notifyListeners();
   }
@@ -283,6 +307,7 @@ class DiaryController extends ChangeNotifier {
     await api?.loadLocalIdentityHint();
     final scope = api?.readerScope ?? 'public';
     if (scope != _readScope) {
+      _homeConfig = const VitrineConfig();
       await reads.switchReader(scope == 'public' ? null : scope);
       _readScope = scope;
     }

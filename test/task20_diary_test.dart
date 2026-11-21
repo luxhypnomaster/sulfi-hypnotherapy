@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/diary_entry.dart';
+import 'package:sulfi_hypnotherapy/models/content_link.dart';
+import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/models/diary_publication.dart';
 import 'package:sulfi_hypnotherapy/models/vitrine_config.dart';
 import 'package:sulfi_hypnotherapy/services/diary_carousel.dart';
@@ -82,7 +84,22 @@ void main() {
       await r.progress(e, textEnd: true, confirmed: true);
       expect(r.isRead(e), true);
       expect(r.state(e).containsKey('audio'), false);
-      final text = entry15('text');
+      final text = entry15('text').copyWith(
+        extra: {
+          ...entry15('text').extra,
+          'contentLinks': [
+            ContentLink(
+              RevisionKey(
+                const ContentKey(ContentType.track, 'linked'),
+                'v1',
+                'a' * 64,
+              ),
+              ContentLinkAction.install,
+            ).toMap(),
+          ],
+        },
+      );
+      expect(text.contentLinks.length, 1);
       await r.progress(text, textEnd: true);
       expect(r.isRead(text), true);
     } finally {
@@ -160,7 +177,9 @@ void main() {
     c.update([a], now, (_) => false);
     c.advance();
     expect(c.current?.id, 'a');
-    for (var i = 0; i < 6; i++) c.update([a, b], now, (_) => false);
+    for (var i = 0; i < 6; i++) {
+      c.update([a, b], now, (_) => false);
+    }
     expect(c.current?.id, 'a');
     c.advance();
     expect(c.current?.id, 'b');
@@ -176,6 +195,27 @@ void main() {
     expect(between.current, null);
     between.advance();
     expect(between.current?.id, 'b');
+  });
+  test('20 quiet refresh cannot repeat shown base items or remove full-cycle splash', () {
+    final now = DateTime.utc(2026, 11, 21),
+        a = entry15('a'),
+        b = entry15('b'),
+        c = DiaryCarousel();
+    c.update([a, b], now, (_) => false);
+    c.advance();
+    expect(c.current?.id, 'a');
+    c.update([a, b], now, (_) => false);
+    c.advance();
+    expect(c.current?.id, 'b');
+    c.update([a, b], now, (_) => false);
+    c.advance();
+    expect(c.current, null);
+    c.advance();
+    expect(c.current?.id, 'a');
+    expect(
+      () => DiaryCarousel(config: const VitrineConfig(highWeight: 0)),
+      throwsFormatException,
+    );
   });
   test('20 settings1..60, local saved != published; CLIENT denied and previous records retained', () async {
     for (final seconds in [1, 60]) {

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/services/alchemist_work_queue.dart';
 import 'package:sulfi_hypnotherapy/services/catalog_snapshot_sync.dart';
+import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
+import 'package:sulfi_hypnotherapy/data/diary_repository.dart';
 
 import 'support/task15_fixture.dart';
 
@@ -44,6 +47,43 @@ class Transport20 implements CatalogSnapshotTransport {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('20 Node/Dart canonical UTF8 JSON contract golden', () async {
+    final value = jsonDecode(
+      await File('test/fixtures/task20/snapshot-v1.json').readAsString(),
+    );
+    CatalogSnapshotSync.verify(
+      value['head'],
+      value['snapshot'],
+      'client:public',
+    );
+    expect(contentDigest(value['snapshot']), value['head']['snapshotHash']);
+  });
+  test('20 only verified snapshot applies vitrine config, bad bytes preserve previous', () async {
+    final f = await Fixture15.open();
+    final d = DiaryController(DiaryRepository(f.db));
+    try {
+      await d.load();
+      final v = jsonDecode(
+        await File('test/fixtures/task20/snapshot-v1.json').readAsString(),
+      ) as Map<String, dynamic>;
+      v['snapshot']['vitrineConfig']['entrySeconds'] = 1;
+      v['snapshot']['configRevision'] = 2;
+      final h = contentDigest(v['snapshot']);
+      v['head']['snapshotHash'] = h;
+      v['head']['snapshotId'] = 'sha256-$h';
+      d.applyVerifiedVitrine(v, 'client:public');
+      expect(d.homeConfig.entrySeconds, 1);
+      v['snapshot']['vitrineConfig']['entrySeconds'] = 60;
+      expect(
+        () => d.applyVerifiedVitrine(v, 'client:public'),
+        throwsFormatException,
+      );
+      expect(d.homeConfig.entrySeconds, 1);
+    } finally {
+      d.dispose();
+      await f.close();
+    }
+  });
   test('20 SQLite: six refreshes one existing durable queue task; equal HEAD zero snapshot; cold read', () async {
     final f = await Fixture15.open(),
         t = Transport20()..gate = Completer<void>();
@@ -174,7 +214,7 @@ void main() {
   test('20 snapshot rejects schema, scope, cycle and missing exact dependency even when hashed', () {
     for (final mode in ['schema', 'scope', 'missing', 'cycle']) {
       final items = <dynamic>[];
-      if (mode == 'missing' || mode == 'cycle')
+      if (mode == 'missing' || mode == 'cycle') {
         items.add({
           'contentId': 'm',
           'revisionId': '1',
@@ -187,6 +227,7 @@ void main() {
             },
           ],
         });
+      }
       final body = {
         'schemaVersion': mode == 'schema' ? 2 : 1,
         'scope': mode == 'scope' ? 'other' : 'client:public',

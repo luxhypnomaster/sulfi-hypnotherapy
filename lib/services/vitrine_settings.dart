@@ -49,18 +49,29 @@ class VitrineSettingsStore {
     if (a == null || !canEdit()) {
       throw const FormatException('Авторский режим недоступен');
     }
-    final old = await load();
-    if (a != account() || !canEdit()) {
-      throw const FormatException('ACCOUNT_CHANGED');
-    }
-    await db.insert('app_settings', {
-      'name': _key(a),
-      'value': jsonEncode({
-        ...old,
-        'saved': config.toMap(),
-        'savedAt': DateTime.now().toUtc().toIso8601String(),
-      }),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.transaction((tx) async {
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [_key(a)],
+      );
+      final old = rows.isEmpty
+          ? <String, dynamic>{}
+          : Map<String, dynamic>.from(
+              jsonDecode(rows.single['value'] as String),
+            );
+      if (a != account() || !canEdit()) {
+        throw const FormatException('ACCOUNT_CHANGED');
+      }
+      await tx.insert('app_settings', {
+        'name': _key(a),
+        'value': jsonEncode({
+          ...old,
+          'saved': config.toMap(),
+          'savedAt': DateTime.now().toUtc().toIso8601String(),
+        }),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 
   Future<void> publish() =>
@@ -79,8 +90,9 @@ class VitrineSettingsStore {
     // be retried without creating another publication. Preserve previous receipt.
     final fingerprint = contentDigest(config);
     if (old['published'] != null &&
-        contentDigest(old['published']) == fingerprint)
+        contentDigest(old['published']) == fingerprint) {
       return;
+    }
     final requestId = old['pendingHash'] == fingerprint
         ? old['requestId'] as String
         : newId();
@@ -89,8 +101,9 @@ class VitrineSettingsStore {
       'name': _key(a),
       'value': jsonEncode(intent),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
-    if (a != account() || !canEdit())
+    if (a != account() || !canEdit()) {
       throw const FormatException('ACCOUNT_CHANGED');
+    }
     final receipt = await admin!.publish(
       requestId: requestId,
       expectedRevision: old['publishedRevision'] as int? ?? 0,
@@ -106,8 +119,9 @@ class VitrineSettingsStore {
       throw const FormatException('Некорректное подтверждение сервера');
     }
     await db.transaction((tx) async {
-      if (a != account() || !canEdit())
+      if (a != account() || !canEdit()) {
         throw const FormatException('ACCOUNT_CHANGED');
+      }
       final rows = await tx.query(
         'app_settings',
         where: 'name=?',

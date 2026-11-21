@@ -10,3 +10,6 @@ GAS6, OAuth, ACL, main, signing, данные и APK28 не менять. Auth19
 
 ## Checkpoint 1
 HEAD/snapshot изолированный Node adapter: light read, immutable prepare/readback, atomic commit boundary, scoped ACL, idempotency, CAS, config1..60. Не подключён к Router. SQLite lastGood sync использует существующие download tasks;6intents/1job/equalHEAD/no-full-fetch, scope/corrupt/atomic tests PASS. Local-only read namespace additive; legacy completed cycles перенесены без удаления, старый режим проверяется явно. Targeted Flutter26 PASS. HOME/settings код добавлен; widget/security/regression проверки в работе.
+
+## Checkpoint 2
+15 новых unit/integration +5widget и2прежних provider/client теста PASS. Исправлены: не сбрасывать полный круг при quiet refresh, сохранение новых drafts во время publish receipt, точный конец последней rendered/scrollable страницы; ContentLink не вызывает media resolver, собственное audio manual read не зависит от прослушивания. Верифицированный config может применяться из account-bound snapshot; draft save не применяется. Legacy catalog UI/production API сохраняются, snapshotTransport по умолчанию null. Первый full run509PASS/2SKIP/1старое ожидание FAIL; тест обновлён под новую явную отметку, legacy tests отдельно сохранены. Финальная общая регрессия и compile далее.

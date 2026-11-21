@@ -323,14 +323,18 @@ class SessionController extends ChangeNotifier {
       if (sync == null) {
         throw const AlchemistFailure(
           'Новый протокол каталога ещё не подключён.',
-          0,
-          'WAITING_POLICY',
-          DiaryFailure.blocked,
-          true,
+          422,
+          'SNAPSHOT_PROTOCOL_UNAVAILABLE',
+          DiaryFailure.invalidData,
         );
       }
       stage('verifying');
       await sync.execute(value, stop);
+      final scope = value['download']['scope'] as String;
+      final view = await sync.lastGood(scope);
+      if (!stop() && transferOwner == value['ownerBinding'] && view != null) {
+        diary?.applyVerifiedVitrine(view, scope);
+      }
       return;
     }
     if (name.startsWith('alchemist_read_sync_queue:')) {

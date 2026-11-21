@@ -27,11 +27,11 @@ function config(value) {
 function validateSnapshot(s) {
   if (s.schemaVersion !== 1 || !s.scope || !Number.isSafeInteger(s.catalogRevision) ||
       s.catalogRevision < 1 || !Array.isArray(s.items)) throw Error('UNSUPPORTED_SNAPSHOT');
-  const ids = new Set();
+  const ids = new Set(), logical = new Set();
   for (const r of s.items) {
     if (!r.contentId || !r.revisionId || !/^[a-f0-9]{64}$/.test(r.sha256) ||
-        ids.has(exact(r)) || !Array.isArray(r.dependencies)) throw Error('INVALID_ITEM');
-    ids.add(exact(r));
+        ids.has(exact(r)) || logical.has(r.contentId) || !Array.isArray(r.dependencies)) throw Error('INVALID_ITEM');
+    ids.add(exact(r)); logical.add(r.contentId);
   }
   const visiting = new Set(), seen = new Set(), items = new Map(s.items.map(r => [exact(r), r]));
   function visit(r) {
