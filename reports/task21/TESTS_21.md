@@ -43,3 +43,5 @@
 [CI44959026009](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/44959026009) автоматически создан PR52 на b584e61: runner не выделен, verify0steps, annotation failed recent account payments / spending limit. Последний Dart fix и docs помечены [skip ci], hosted проверки source8546 отсутствуют; локальные проверки указаны отдельно. Billing/privacy/workflows не менялись.
 
 Root117MiB free, cgroup8GiB, dangling old Gradle cache, noKVM и отсутствие прежнего signing env не дают безопасного native path; известный OOM19 не повторялся. Signing preflight снят на b584e61; последующая правка8546 затрагивает только Dart receipt recovery, все native/protected sources неизменны. APK21 не создан, APK28 не заменён. Установка и физическая приёмка NOT_RUN.
+
+Текстовые log-файлы и CSV нормализованы к LF без завершающих пробелов; диагностическое содержимое/результаты не менялись. Empty bundle logs оставлены пустыми.

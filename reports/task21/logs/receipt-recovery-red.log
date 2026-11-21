@@ -8,11 +8,11 @@
               Actual: c36b8659bc ...
                       ^
              Differ at offset 0
-  
+
   package:matcher                                     expect
   package:flutter_test/src/widget_tester.dart 473:18  expect
   test/task21_receipt_recovery_test.dart 26:7         main.<fn>
-  
+
 00:00 +0 -1: Some tests failed.
 
 Failing tests:

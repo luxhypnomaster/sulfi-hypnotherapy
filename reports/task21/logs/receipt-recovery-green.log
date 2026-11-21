@@ -52,7 +52,7 @@ test/task21_receipt_recovery_test.dart:48:12: Error: Undefined name 'advanced'.
   dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
   dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
   dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
-  
+
 00:00 +0 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
 00:00 +1 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
 00:00 +2 -1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact

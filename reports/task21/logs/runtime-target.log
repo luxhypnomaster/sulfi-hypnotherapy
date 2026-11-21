@@ -3,7 +3,7 @@
 00:00 +0 -1: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer [E]
   Сервер отклонил данные (HTTP_400). Черновик сохранён; исправьте причину перед повтором.
   package:sulfi_hypnotherapy/services/alchemist_api.dart 237:11  AlchemistApi.call
-  
+
 Warning: At least one test in this suite creates an HttpClient. When running a test suite that uses
 TestWidgetsFlutterBinding, all HTTP requests will return status code 400, and no network request
 will actually be made. Any test expecting a real network connection and status code will fail.
@@ -13,17 +13,17 @@ test, so that your test can consistently provide a testable response to the code
 00:00 +0 -2: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate [E]
   Сервер отклонил данные (HTTP_400). Черновик сохранён; исправьте причину перед повтором.
   package:sulfi_hypnotherapy/services/alchemist_api.dart 237:11  AlchemistApi.call
-  
+
 00:00 +0 -2: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
 00:00 +0 -3: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact [E]
   Сервер отклонил данные (HTTP_400). Черновик сохранён; исправьте причину перед повтором.
   package:sulfi_hypnotherapy/services/alchemist_api.dart 237:11  AlchemistApi.call
-  
+
 00:00 +0 -3: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
 00:00 +0 -4: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected [E]
   Сервер отклонил данные (HTTP_400). Черновик сохранён; исправьте причину перед повтором.
   package:sulfi_hypnotherapy/services/alchemist_api.dart 237:11  AlchemistApi.call
-  
+
 00:00 +0 -4: Some tests failed.
 
 Failing tests:
