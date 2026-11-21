@@ -1,0 +1,34 @@
+{
+  "source": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "base": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+  "fullFlutter": {
+    "passed": 526,
+    "skipped": 2,
+    "failed": 0
+  },
+  "node": 62,
+  "legacyNode": 24,
+  "jvmScheduler": 5,
+  "clientDefine": 1,
+  "analyze": "PASS",
+  "formatChangedDartFiles": 18,
+  "androidBundles": {
+    "master": "PASS",
+    "client": "PASS"
+  },
+  "nativeApk": "BLOCKED_ENV_NOT_RUN",
+  "ci": {
+    "run": 44959026009,
+    "steps": 0,
+    "result": "BLOCKED_ENV",
+    "source": "b584e610426b1db329016e70341db6b39bfdca84"
+  },
+  "liveGoogle": "NOT_RUN",
+  "physicalAndroid": "NOT_RUN",
+  "matrix": {
+    "PASS": 25,
+    "PARTIAL": 1,
+    "BLOCKED": 2,
+    "NOT_RUN": 0
+  }
+}

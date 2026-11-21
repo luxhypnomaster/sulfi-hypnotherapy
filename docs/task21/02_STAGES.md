@@ -1,0 +1,15 @@
+# Автономные этапы и STOP-гейты
+
+**G0 — READ-ONLY PRE-FLIGHT.** Audit PR51 code/source and ancestry; прочитать reports/task20/RESULT_20, ISSUES_20, TESTS_20, SECURITY_20, MIGRATION_20, SOURCE_READBACK_20, CHANGESET; S-X-CAT-HEAD, S-M-CAT-SYNC, S-D-CAT, S-D-ADM. Вернуть exact `BASE_SHA`, `PR51_HEAD_SHA`, `SERVER_IMPL` (что реально существует). Создать isolated branch от PR51 head; не повторять №20 целиком. Задокументировать известные аварийные риски PR46 data visibility, №18 queue and №19 Auth19.
+
+**G1 — CONTRACT & STORAGE ADAPTER.** Реальный в рамках тестового инстанса Node/GAS-compatible storage adapter, server authoritative identity/scope gate, revision/hash canonical UTF8, prepare→persist/readback→flip with CAS guard, immutable storage, consistent read under concurrent writers, abort old HEAD intact. Для GAS только локальный кандидат, а не изменение живой версии. Проверить повтор операции при lost response, null/unauthorized/403, scope-switch, deletion/expiry/withdrawn, stale/partial snapshot and 500.
+
+**G2 — FLUTTER RUNTIME INTEGRATION.** Injectable gateway + capability handshake into MASTER/CLIENT; task scheduler priority: lightweight HEAD/admin read above WAITING large transfers, but no preemption/duplicate job or re-login. Compose with prior queue18; current SQLite lastGood stays on failed auth/timeout; default production adapter OFF when backend cannot prove handshake. Вынести status capability in UI so legacy API still works. Server data never inferred from local fabricated metrics.
+
+**G3 — VITRINE & STATIC PREVIEW.** Local draft and committed receipt distinct; actual two tabs «Публикации»/«Настройки витрины». Static preview real Home banner selected entry and no timers/reannounce/save; accessibility/layout tests 9:16, same banner/board/nav geometry. Ensure Client cannot enter admin screen; real server role checked for writes.
+
+**G4 — REGRESSION & NATIVE.** Focused tests first, full suite only after changed behavior, Android target Flutter bundles. Try Gradle native build *only* if free storage/memory and signing build environment are suitable; no repeated known OOM/CI blocked job. If can build both APK as candidates, report package IDs/SDK/signature/versionCode and safety; never infer device QA. If cannot, maintain `BLOCKED_ENV` with evidence and exact recommended device/runner actions; do not fail the whole task.
+
+**G5 — DELIVERY.** Draft PR with isolated branch and checks, tests, security, migration, owner-QA, efficiency and STOP blockers. GitHub Actions `0steps` is environmental block; report as such, not PASS. No main merge. Output `RESULT_21.md`, `CHANGES_21.md`, `TESTS_21.md`, `SECURITY_21.md`, `MIGRATION_21.md`, `ISSUES_21.md`, `ACCEPTANCE_21.csv`, `OWNER_PHONE_QA_21.md`, `PROGRESS.md`. If Google Drive upload permission available, report all relevant Drive IDs/hashes. Skip uploading sensitive data.
+
+**Stop conditions:** if uncertain server ACL/atomicity → STOP integration into production and retain sandbox; if non-rollbackable data migration or signing mismatch → STOP native install; if GitHub billing 0steps → document rather than retry without hypothesis; independent work continues.

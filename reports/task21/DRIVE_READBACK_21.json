@@ -1,0 +1,158 @@
+{
+  "checkedAt": "2026-11-21T23:08:31.352029+00:00",
+  "source": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "reportSnapshotCommit": "ee8f23f",
+  "folderId": "1V-Sc63j_YaTCrF6GbxdAF-qyvSfOzNqr",
+  "parentId": "1iG5L28UybhIxLayHebggTAyH5cP5IPLJ",
+  "sourceVisibility": "inherited anyone:writer, unchanged",
+  "filesVerified": 16,
+  "archiveEntriesVerified": 43,
+  "verification": "metadata parent/name/bytes + independent Drive raw download SHA256 + ZIP CRC/internal manifest; no source/APK/DB/secrets",
+  "selfExclusion": "This proof and DELIVERY_21 are uploaded after payload. Their raw readback is recorded separately in Git, no recursive self-hash claim.",
+  "files": [
+    {
+      "name": "RESULT_21.md",
+      "id": "1pBp3gUMDvB2ge1nlBvYWYy8vuyv5-dKz",
+      "url": "https://drive.google.com/file/d/1pBp3gUMDvB2ge1nlBvYWYy8vuyv5-dKz/view",
+      "bytes": 4447,
+      "sha256": "8564ab211b1a81535d27b559f2bddd0d8b34d65029f3710ec5071575718edb0d",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "CHANGES_21.md",
+      "id": "1tXBIltsD0anXtlZJhDUZPVr-wXx8V3Wd",
+      "url": "https://drive.google.com/file/d/1tXBIltsD0anXtlZJhDUZPVr-wXx8V3Wd/view",
+      "bytes": 3520,
+      "sha256": "2d5dbbc970b4b165afee433bdb96bfa3d2584ed0cd42c00f506a8d92b9faa504",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "TESTS_21.md",
+      "id": "10CO6h00kGAgGxEl23y3UVIKsdZooQIKb",
+      "url": "https://drive.google.com/file/d/10CO6h00kGAgGxEl23y3UVIKsdZooQIKb/view",
+      "bytes": 8266,
+      "sha256": "2e26b56f2e2258a29847c6e78d551704ca301bde1070fee3ed9901ab23ea3559",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "SECURITY_21.md",
+      "id": "1ifLmMwjGejIpFOcmDoBxjykAbQmbo9PV",
+      "url": "https://drive.google.com/file/d/1ifLmMwjGejIpFOcmDoBxjykAbQmbo9PV/view",
+      "bytes": 3576,
+      "sha256": "bad7dbad6630dab63c22adaa38e9d3941080c4f0871f60ca68547c3e530fe33e",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "MIGRATION_21.md",
+      "id": "1nX7cHDxDDM2_vyCbclBJycqYGFXf_0Pk",
+      "url": "https://drive.google.com/file/d/1nX7cHDxDDM2_vyCbclBJycqYGFXf_0Pk/view",
+      "bytes": 3187,
+      "sha256": "02f20f4b2335f1a921a92e14c926708bb2ece8acd70d55a379f080a5a09af353",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "ISSUES_21.md",
+      "id": "12r8JKqbtxytEkLsIv78SoX2xkTRtBvHG",
+      "url": "https://drive.google.com/file/d/12r8JKqbtxytEkLsIv78SoX2xkTRtBvHG/view",
+      "bytes": 2818,
+      "sha256": "9cf7e1bfdbf87a3157c1bd6a76e5b6dd214438c37242a67df2b91981469811ec",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "ACCEPTANCE_21.csv",
+      "id": "1triyRxzVTTaQhA7JtyeJeL74cIWD8hvm",
+      "url": "https://drive.google.com/file/d/1triyRxzVTTaQhA7JtyeJeL74cIWD8hvm/view",
+      "bytes": 6798,
+      "sha256": "716595d2b2e9b8d2153af4c68de72eae0697861699bced78dd72177fe2e80aaf",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "OWNER_PHONE_QA_21.md",
+      "id": "1KUhHDbJchU7Zp908ttn4fSGHte9Be8QZ",
+      "url": "https://drive.google.com/file/d/1KUhHDbJchU7Zp908ttn4fSGHte9Be8QZ/view",
+      "bytes": 3289,
+      "sha256": "fa31662ada359d43d7e9f0456a54a535f1b77356529115e998c0ec8bcc58b67b",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "PROGRESS.md",
+      "id": "1SPTT6S3CpdTBdFY8KSb8OOpY_Dl6WY-l",
+      "url": "https://drive.google.com/file/d/1SPTT6S3CpdTBdFY8KSb8OOpY_Dl6WY-l/view",
+      "bytes": 5028,
+      "sha256": "b0ef4d82f4bba7a9d005712964b79cbcca470b42baec5e5e308fe7f36397b13c",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "RISK_REPORT_21.md",
+      "id": "1Lj233xyChIAc8Wb6yBorVHIz9OKuf3yV",
+      "url": "https://drive.google.com/file/d/1Lj233xyChIAc8Wb6yBorVHIz9OKuf3yV/view",
+      "bytes": 2346,
+      "sha256": "199fe589befdbca50101549113f83bf876035a099bfbb379f5451bd267106287",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "OWNER_CHANGE_GATES_21.md",
+      "id": "19bVswqXq5JX9POxK4VZvMU-vzfxtHvTE",
+      "url": "https://drive.google.com/file/d/19bVswqXq5JX9POxK4VZvMU-vzfxtHvTE/view",
+      "bytes": 2450,
+      "sha256": "3aabac2692f4238afe6d03fb565e86a7e5fa73fc2ec0523ee740cf0140829ce6",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "CODEX_EFFICIENCY_21.md",
+      "id": "15jt-uX-Ct99tW1DsX-b3-ZjT96y0pYZm",
+      "url": "https://drive.google.com/file/d/15jt-uX-Ct99tW1DsX-b3-ZjT96y0pYZm/view",
+      "bytes": 2155,
+      "sha256": "47682be1478d3c92ed3762265a60efe4854d3447abf255be523985fedc1c471f",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "G0_AUDIT_21.md",
+      "id": "1UT1644t07mE5j6tGP3Tt0T2QKp09Ux8R",
+      "url": "https://drive.google.com/file/d/1UT1644t07mE5j6tGP3Tt0T2QKp09Ux8R/view",
+      "bytes": 4370,
+      "sha256": "2c37d4a1957d59bc4398fc57ed60678bd2bc17fd19cdcfd683b71806c22d5649",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "CONTRACT_21.md",
+      "id": "1wpQ8mX5cahf9JqYnVWqd3t7OX4dt1Ptm",
+      "url": "https://drive.google.com/file/d/1wpQ8mX5cahf9JqYnVWqd3t7OX4dt1Ptm/view",
+      "bytes": 2992,
+      "sha256": "c871355fd77a4b4f45e0ae4615f1af38ee9a1cb7234f053a3f7dc123e7fdcdab",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "EVIDENCE_21.zip",
+      "id": "11DxbIYzZ9WuFwKSMSIdwm5hc2i_T7FUI",
+      "url": "https://drive.google.com/file/d/11DxbIYzZ9WuFwKSMSIdwm5hc2i_T7FUI/view",
+      "bytes": 812782,
+      "sha256": "0aa793ba263a332ff1a5a619560e54fc71a7763cd0a9ba1db8d7f83028194629",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "task21-static-selected-home.png",
+      "id": "1PLfNu8hzij-8Wmq6qCNknmHap0Z5mQRT",
+      "url": "https://drive.google.com/file/d/1PLfNu8hzij-8Wmq6qCNknmHap0Z5mQRT/view",
+      "bytes": 745617,
+      "sha256": "1be4ba39839d3c001266bdb7bed6b00abf1dad7d983be7b12eb6a15ad6abd305",
+      "parentVerified": true,
+      "rawShaVerified": true
+    }
+  ]
+}

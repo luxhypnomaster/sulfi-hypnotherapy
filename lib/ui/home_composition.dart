@@ -14,6 +14,8 @@ import '../services/preview_player.dart';
 import 'preview_bar.dart';
 import 'diary_home.dart';
 import 'diary_home_banner.dart';
+import '../models/diary_entry.dart';
+import '../services/diary_controller.dart';
 import 'home_start_art.dart';
 
 const _lime = Color(0xFFDFFF00);
@@ -125,6 +127,8 @@ class HomeComposition extends StatelessWidget {
     required this.onPreview,
     required this.clock,
     this.player,
+    this.previewEntry,
+    this.previewDiary,
   });
   final SessionController controller;
   final PreviewPlayer? player;
@@ -133,53 +137,59 @@ class HomeComposition extends StatelessWidget {
   final VoidCallback? onStart;
   final Future<void> Function(SessionStep) onPreview;
   final Widget clock;
+  final DiaryEntry? previewEntry;
+  final DiaryController? previewDiary;
 
   @override
   Widget build(BuildContext context) {
     final plan = modularize(controller.draft.plan);
+    final homeDiary = previewDiary ?? controller.diary;
     return Scaffold(
       backgroundColor: ink,
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (player != null)
-                PreviewBar(
-                  player: player!,
-                  library: controller.library,
-                  compact: true,
+      bottomNavigationBar: IgnorePointer(
+        ignoring: previewEntry != null,
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (player != null)
+                  PreviewBar(
+                    player: player!,
+                    library: controller.library,
+                    compact: true,
+                  ),
+                TransformationButton(onPressed: onStart),
+                const SizedBox(height: 4),
+                Row(
+                  key: const Key('home-navigation'),
+                  children: [
+                    _NavButton(
+                      label: BookingConfig.label.replaceFirst(' к ', '\nк '),
+                      master: true,
+                      onPressed: busy ? null : () => showBooking(context),
+                    ),
+                    _NavButton(
+                      label: 'Библиотека',
+                      icon: Icons.headphones,
+                      onPressed: busy ? null : onLibrary,
+                    ),
+                    _NavButton(
+                      label: 'Программы\nи модули',
+                      icon: Icons.layers_outlined,
+                      onPressed: busy ? null : onTemplates,
+                    ),
+                    _NavButton(
+                      label: 'История',
+                      icon: Icons.history,
+                      onPressed: busy ? null : onHistory,
+                    ),
+                  ],
                 ),
-              TransformationButton(onPressed: onStart),
-              const SizedBox(height: 4),
-              Row(
-                key: const Key('home-navigation'),
-                children: [
-                  _NavButton(
-                    label: BookingConfig.label.replaceFirst(' к ', '\nк '),
-                    master: true,
-                    onPressed: busy ? null : () => showBooking(context),
-                  ),
-                  _NavButton(
-                    label: 'Библиотека',
-                    icon: Icons.headphones,
-                    onPressed: busy ? null : onLibrary,
-                  ),
-                  _NavButton(
-                    label: 'Программы\nи модули',
-                    icon: Icons.layers_outlined,
-                    onPressed: busy ? null : onTemplates,
-                  ),
-                  _NavButton(
-                    label: 'История',
-                    icon: Icons.history,
-                    onPressed: busy ? null : onHistory,
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -198,7 +208,13 @@ class HomeComposition extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      if (controller.diary case final diary?)
+                      if (previewEntry != null && homeDiary != null)
+                        DiaryPublicationSlide(
+                          entry: previewEntry!,
+                          diary: homeDiary,
+                          interactive: false,
+                        )
+                      else if (homeDiary case final diary?)
                         DiaryHomeBanner(
                           diary: diary,
                           splash: const HomeReferenceHeader(),
@@ -209,13 +225,19 @@ class HomeComposition extends StatelessWidget {
                         top: 0,
                         right: 4,
                         child: IconButton(
-                          key: const Key('home-space'),
-                          tooltip: 'Аккаунт, права и данные',
+                          key: previewEntry == null
+                              ? const Key('home-space')
+                              : const Key('static-preview-close'),
+                          tooltip: previewEntry == null
+                              ? 'Аккаунт, права и данные'
+                              : 'Закрыть предпросмотр',
                           constraints: const BoxConstraints(
                             minWidth: 48,
                             minHeight: 48,
                           ),
-                          onPressed: busy || player == null
+                          onPressed: previewEntry != null
+                              ? () => Navigator.maybePop(context)
+                              : busy || player == null
                               ? null
                               : () => showSpaceSheet(
                                   context,
@@ -237,7 +259,11 @@ class HomeComposition extends StatelessWidget {
                                         await controller.reload();
                                       }),
                                 ),
-                          icon: const Icon(Icons.shield_outlined),
+                          icon: Icon(
+                            previewEntry == null
+                                ? Icons.shield_outlined
+                                : Icons.close,
+                          ),
                           color: transferYellow,
                         ),
                       ),
@@ -245,142 +271,147 @@ class HomeComposition extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: DiaryHomeBoard(
-                    diary: controller.diary,
-                    management: controller.policy.clientEdition
-                        ? null
-                        : controller.diary,
-                    child: LayoutBuilder(
-                      builder: (context, content) {
-                        final compact = content.maxHeight < 240;
-                        final heading = Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _SessionStrip(
-                              controller: controller,
-                              clock: clock,
-                              onNotes: busy ? null : onNotes,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextButton(
-                                    onPressed: busy ? null : onStructure,
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.only(left: 3),
-                                      minimumSize: const Size(48, 36),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      foregroundColor: const Color(0xFFF5F0EE),
-                                    ),
-                                    child: const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Структура сессии',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.w800,
+                  child: IgnorePointer(
+                    ignoring: previewEntry != null,
+                    child: DiaryHomeBoard(
+                      diary: homeDiary,
+                      management: controller.policy.clientEdition
+                          ? null
+                          : homeDiary,
+                      child: LayoutBuilder(
+                        builder: (context, content) {
+                          final compact = content.maxHeight < 240;
+                          final heading = Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _SessionStrip(
+                                controller: controller,
+                                clock: clock,
+                                onNotes: busy ? null : onNotes,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: busy ? null : onStructure,
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.only(left: 3),
+                                        minimumSize: const Size(48, 36),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        foregroundColor: const Color(
+                                          0xFFF5F0EE,
+                                        ),
+                                      ),
+                                      child: const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Структура сессии',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                IconButton(
-                                  tooltip: 'Открыть конструктор',
-                                  constraints: const BoxConstraints(
-                                    minWidth: 36,
-                                    minHeight: 36,
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  visualDensity: VisualDensity.compact,
-                                  onPressed: busy ? null : onStructure,
-                                  icon: const Icon(
-                                    Icons.open_in_full,
-                                    color: neonPink,
-                                    size: 23,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Semantics(
-                              label: PlanDuration.plan(plan).semantics,
-                              child: Wrap(
-                                spacing: 5,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Text(
-                                    _counts(plan),
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      height: 1.15,
+                                  IconButton(
+                                    tooltip: 'Открыть конструктор',
+                                    constraints: const BoxConstraints(
+                                      minWidth: 36,
+                                      minHeight: 36,
                                     ),
-                                  ),
-                                  const Text(
-                                    'Длительность',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                  Text(
-                                    PlanDuration.plan(plan).label,
-                                    key: const Key('home-duration'),
-                                    style: const TextStyle(
-                                      color: _lime,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
+                                    padding: EdgeInsets.zero,
+                                    visualDensity: VisualDensity.compact,
+                                    onPressed: busy ? null : onStructure,
+                                    icon: const Icon(
+                                      Icons.open_in_full,
+                                      color: neonPink,
+                                      size: 23,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            if (controller.saveError != null)
-                              Text(
-                                controller.saveError!,
-                                style: const TextStyle(
-                                  color: Colors.redAccent,
-                                  fontSize: 11,
+                              Semantics(
+                                label: PlanDuration.plan(plan).semantics,
+                                child: Wrap(
+                                  spacing: 5,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text(
+                                      _counts(plan),
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        height: 1.15,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Длительность',
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                    Text(
+                                      PlanDuration.plan(plan).label,
+                                      key: const Key('home-duration'),
+                                      style: const TextStyle(
+                                        color: _lime,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            const SizedBox(height: 7),
-                          ],
-                        );
-                        final overview = HomePlanOverview(
-                          plan: plan,
-                          moduleDiffers: controller.moduleDiffersFromSource,
-                          player: player,
-                          unavailableStepIds:
-                              controller.draft.unavailableStepIds,
-                          onStructure: busy ? null : onStructure,
-                          onPreview: busy ? null : onPreview,
-                        );
-                        final template = _TemplateStrip(
-                          controller: controller,
-                          onPressed: busy ? null : onTemplates,
-                        );
-                        if (compact) {
-                          return SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                heading,
-                                overview,
-                                const SizedBox(height: 12),
-                                template,
-                              ],
-                            ),
+                              if (controller.saveError != null)
+                                Text(
+                                  controller.saveError!,
+                                  style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              const SizedBox(height: 7),
+                            ],
                           );
-                        }
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            heading,
-                            Expanded(
-                              child: SingleChildScrollView(child: overview),
-                            ),
-                            const SizedBox(height: 5),
-                            template,
-                          ],
-                        );
-                      },
+                          final overview = HomePlanOverview(
+                            plan: plan,
+                            moduleDiffers: controller.moduleDiffersFromSource,
+                            player: player,
+                            unavailableStepIds:
+                                controller.draft.unavailableStepIds,
+                            onStructure: busy ? null : onStructure,
+                            onPreview: busy ? null : onPreview,
+                          );
+                          final template = _TemplateStrip(
+                            controller: controller,
+                            onPressed: busy ? null : onTemplates,
+                          );
+                          if (compact) {
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  heading,
+                                  overview,
+                                  const SizedBox(height: 12),
+                                  template,
+                                ],
+                              ),
+                            );
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              heading,
+                              Expanded(
+                                child: SingleChildScrollView(child: overview),
+                              ),
+                              const SizedBox(height: 5),
+                              template,
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

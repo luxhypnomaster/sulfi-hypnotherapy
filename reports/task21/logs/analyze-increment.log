@@ -1,0 +1,17 @@
+Analyzing sulfi21...
+
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_gateway.dart:103:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_gateway.dart:125:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_gateway.dart:164:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_gateway.dart:175:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_gateway.dart:237:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_runtime.dart:98:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/metadata_runtime.dart:108:11 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/session_controller.dart:99:7 • curly_braces_in_flow_control_structures
+  error • The method 'readAppliedView' can't be unconditionally invoked because the receiver can be 'null'. Try making the call conditional (using '?.') or adding a null check to the target ('!') • lib/services/vitrine_settings.dart:45:32 • unchecked_use_of_nullable_value
+  error • The property 'appliedScope' can't be unconditionally accessed because the receiver can be 'null'. Try making the access conditional (using '?.') or adding a null check to the target ('!') • lib/services/vitrine_settings.dart:47:52 • unchecked_use_of_nullable_value
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/services/vitrine_settings.dart:62:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/ui/vitrine_settings_screen.dart:79:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/ui/vitrine_settings_screen.dart:155:7 • curly_braces_in_flow_control_structures
+
+13 issues found. (ran in 8.3s)

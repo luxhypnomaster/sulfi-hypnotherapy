@@ -395,3 +395,13 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [ ] Static editor banner preview integration; existing reader preview preserved.
 - [ ] Native/signature/upgrade/physical two-account candidate acceptance; do not replaceAPK28 with unverified build.
 - [ ] Full seven-section management, server quota metrics and verified full backups after backend selection, future scope; no fake counters/success. №19 G2–G7 remains future.
+
+
+## №21 — runtime metadata / independent vitrine stream
+
+- [x] G0: точная ancestry PR51, архив/manifest и независимый source audit.
+- [x] G1: исполняемый persistent SQLite sandbox, immutable readback, CAS+receipt, SIGKILL/rollback, scopes, expiry/revoke и lost-response.
+- [x] G2: capability-gated shared UI/headless factory, existing queue18 priority, lastGood cached catalog, default OFF/legacy fallback, bounded transient probe retry.
+- [x] G3: independent config prepare/commit → CLIENT, honest saved/applied/receipt states; static selected Home banner preview, old reader preview retained.
+- [x] G4: final source8546, full Flutter526/2SKIP, analyze/format, Node62+24/JVM5, две Android bundles PASS. CI0steps/native BLOCKED_ENV. Draft PR52. G5 delivery/readback — reports/task21/DELIVERY_21.md.
+- [ ] Native signed APK/upgrade and physical Google two-device acceptance; пригодный runner и отдельное решение владельца. Production provider/ACL atomicity not selected or deployed.

@@ -1,0 +1,17 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart
+00:00 +0: /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision (concurrent=false)
+00:00 +1: /dev/shm/sulfi21/test/task21_receipt_recovery_test.dart: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision (concurrent=true)
+00:00 +2: loading /dev/shm/sulfi21/test/task21_runtime_test.dart
+00:01 +2: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
+00:02 +3: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+00:02 +4: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
+00:02 +5: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
+00:03 +6: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 transient capability failure has bounded retry, no permanent unsupported state
+00:03 +7: loading /dev/shm/sulfi21/test/task21_ui_runtime_test.dart
+00:03 +7: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 real runtime cached catalog stays visible while metadata HEAD offline
+00:06 +8: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 settings UI publishes only through verified capability and real sandbox receipt
+00:08 +9: loading /dev/shm/sulfi21/test/task20_admin_test.dart
+00:08 +9: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin lost response retry reuses request, no duplicate commit; saved draft != published
+00:08 +10: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 admin deny and invalid receipt cannot fabricate publication; owner switch prevents apply
+00:08 +11: /dev/shm/sulfi21/test/task20_admin_test.dart: 20 pending publish preserves new saved edits and coalesces repeated taps
+00:08 +12: All tests passed!

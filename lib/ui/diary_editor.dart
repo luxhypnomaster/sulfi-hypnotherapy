@@ -16,6 +16,7 @@ import 'design.dart';
 import 'session_scope.dart';
 import 'recorder_screen.dart';
 import '../services/recorder_service.dart';
+import 'home_composition.dart';
 
 class DiaryEditor extends StatefulWidget {
   const DiaryEditor({
@@ -46,6 +47,7 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
   String saved = 'Изменения ещё не сохранены';
   int? pages;
   bool allowPop = false, busy = false;
+  bool previewingBanner = false;
   @override
   void initState() {
     super.initState();
@@ -54,7 +56,9 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!busy && state != AppLifecycleState.resumed) unawaited(save());
+    if (!previewingBanner && !busy && state != AppLifecycleState.resumed) {
+      unawaited(save());
+    }
   }
 
   DiaryEntry get value => entry.copyWith(
@@ -111,6 +115,52 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
             DiaryReader(entry: value, preview: true, diary: widget.diary),
       ),
     );
+  }
+
+  Future<void> previewHomeBanner() async {
+    final scope = SessionScope.maybeOf(context);
+    if (scope == null || busy) return;
+    final pending = timer?.isActive ?? false;
+    timer?.cancel();
+    previewingBanner = true;
+    final selected = value;
+    FocusScope.of(context).unfocus();
+    try {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Semantics(
+            label: 'Статичный предпросмотр выбранной публикации',
+            child: HomeComposition(
+              controller: scope.controller,
+              player: scope.player,
+              busy: false,
+              previewEntry: selected,
+              previewDiary: widget.diary,
+              onStructure: () {},
+              onTemplates: () {},
+              onLibrary: () {},
+              onHistory: () {},
+              onNotes: () {},
+              onStart: () {},
+              onPreview: (_) async {},
+              clock: const Text(
+                'Предпросмотр баннера',
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+        ),
+      );
+    } finally {
+      previewingBanner = false;
+      if (mounted && pending) {
+        timer = Timer(
+          const Duration(milliseconds: 350),
+          () => unawaited(save()),
+        );
+      }
+    }
   }
 
   Future<void> cloud({bool? publish}) async {
@@ -871,6 +921,12 @@ class _DiaryEditorState extends State<DiaryEditor> with WidgetsBindingObserver {
                       onPressed: busy ? null : preview,
                       child: const Text('Предпросмотр'),
                     ),
+                    if (SessionScope.maybeOf(context) != null)
+                      TextButton(
+                        key: const Key('diary-preview-home'),
+                        onPressed: busy ? null : previewHomeBanner,
+                        child: const Text('В баннере главной'),
+                      ),
                     TextButton(
                       onPressed: busy ? null : save,
                       child: const Text('Сохранить черновик'),

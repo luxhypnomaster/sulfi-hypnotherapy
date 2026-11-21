@@ -26,6 +26,8 @@ String alchemistStageLabel(Object? phase) =>
       'verified': 'Файл проверен',
       'installed': 'Установлено и проверено',
       'reader_synced': 'Состояние чтения подтверждено сервером',
+      'catalog_checking': 'Сверка редакции каталога',
+      'catalog_checked': 'Каталог проверен; локальная копия сохранена',
       'manifest_registering': 'Проверка состава',
       'publishing': 'Подтверждение каталога',
       'catalog_committed': 'Подтверждено сервером',
@@ -671,13 +673,24 @@ class AlchemistWorkQueue extends ChangeNotifier {
       while (!_closed) {
         if (owner() != pumpOwner || _runnerEpoch != pumpEpoch) break;
         await refresh();
-        final row = rows
+        final eligible = rows
             .where(
               (v) =>
                   v['_work']?['phase'] == 'queued' &&
                   v['_work']?['runnerEpoch'] == _runnerEpoch,
             )
-            .firstOrNull;
+            .toList();
+        // Control-plane wins only at a dispatch boundary. Never stop/requeue
+        // the active file, change owner/network policy, or create a new runner.
+        final row =
+            eligible
+                .where(
+                  (r) =>
+                      r['download'] is Map &&
+                      r['download']['kind'] == 'catalogSnapshot20',
+                )
+                .firstOrNull ??
+            eligible.firstOrNull;
         if (row == null) break;
         final name = row['_name'] as String, originalOwner = owner();
         bool stop() =>
@@ -810,6 +823,8 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? 'paused'
                 : name.startsWith('alchemist_diary_queue:')
                 ? 'diary_committed'
+                : value['download']?['kind'] == 'catalogSnapshot20'
+                ? 'catalog_checked'
                 : name.startsWith('alchemist_download:')
                 ? 'installed'
                 : name.startsWith('alchemist_read_sync_queue:')

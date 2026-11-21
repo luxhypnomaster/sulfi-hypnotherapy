@@ -1,0 +1,15 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_runtime_test.dart
+00:00 +0: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 actual runtime factory handshake + six queue refresh + cold/equal HEAD and no media transfer
+00:00 +1: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+00:01 +2: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 offline/corrupt/403 keep lastGood and existing personal database/media rows intact
+00:01 +3: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 disabled/default or unsupported handshake uses no new endpoints, stale bindings rejected
+00:01 +4: /dev/shm/sulfi21/test/task21_runtime_test.dart: 21 transient capability failure has bounded retry, no permanent unsupported state
+00:02 +5: loading /dev/shm/sulfi21/test/task21_ui_runtime_test.dart
+00:02 +5: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 real runtime cached catalog stays visible while metadata HEAD offline
+00:05 +6: /dev/shm/sulfi21/test/task21_ui_runtime_test.dart: 21 settings UI publishes only through verified capability and real sandbox receipt
+00:07 +7: loading /dev/shm/sulfi21/test/task21_preview_test.dart
+00:08 +7: /dev/shm/sulfi21/test/task21_preview_test.dart: 21 selected draft static preview reuses exact HOME9:16 geometry, no save/read/rotation/remote/media effects
+00:15 +8: /dev/shm/sulfi21/test/task21_preview_test.dart: 21 existing full reader preview remains reachable from same editor
+00:17 +9: loading /dev/shm/sulfi21/test/task21_queue_test.dart
+00:17 +9: /dev/shm/sulfi21/test/task21_queue_test.dart: 21 control metadata overtakes waiting files, never preempts active file or alters its bytes/owner
+00:18 +10: All tests passed!

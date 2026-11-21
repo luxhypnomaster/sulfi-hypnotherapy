@@ -1,0 +1,217 @@
+{
+  "source": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "contains": "Sanitized reports/logs/Flutter render only; no APK/source/DB/secrets",
+  "excludedSelf": "EVIDENCE_CONTENTS_21.json is not self-hashed",
+  "files": [
+    {
+      "path": "ACCEPTANCE_21.csv",
+      "bytes": 6798,
+      "sha256": "716595d2b2e9b8d2153af4c68de72eae0697861699bced78dd72177fe2e80aaf"
+    },
+    {
+      "path": "ARCHIVE_INTEGRITY_21.json",
+      "bytes": 1780,
+      "sha256": "0137558f8b58ec1c3fdd5934b7e8ee38481e052ba54b96a8b0b65550fc1b600f"
+    },
+    {
+      "path": "CHANGES_21.md",
+      "bytes": 3520,
+      "sha256": "2d5dbbc970b4b165afee433bdb96bfa3d2584ed0cd42c00f506a8d92b9faa504"
+    },
+    {
+      "path": "CODEX_EFFICIENCY_21.md",
+      "bytes": 2155,
+      "sha256": "47682be1478d3c92ed3762265a60efe4854d3447abf255be523985fedc1c471f"
+    },
+    {
+      "path": "CONTRACT_21.md",
+      "bytes": 2992,
+      "sha256": "c871355fd77a4b4f45e0ae4615f1af38ee9a1cb7234f053a3f7dc123e7fdcdab"
+    },
+    {
+      "path": "G0_AUDIT_21.md",
+      "bytes": 4370,
+      "sha256": "2c37d4a1957d59bc4398fc57ed60678bd2bc17fd19cdcfd683b71806c22d5649"
+    },
+    {
+      "path": "ISSUES_21.md",
+      "bytes": 2818,
+      "sha256": "9cf7e1bfdbf87a3157c1bd6a76e5b6dd214438c37242a67df2b91981469811ec"
+    },
+    {
+      "path": "MIGRATION_21.md",
+      "bytes": 3187,
+      "sha256": "02f20f4b2335f1a921a92e14c926708bb2ece8acd70d55a379f080a5a09af353"
+    },
+    {
+      "path": "NATIVE_PREFLIGHT_21.json",
+      "bytes": 750,
+      "sha256": "e087a0b806912569c6479b398de63108eb442b08ba0b9d5a55183c7cd395ad01"
+    },
+    {
+      "path": "OWNER_CHANGE_GATES_21.md",
+      "bytes": 2450,
+      "sha256": "3aabac2692f4238afe6d03fb565e86a7e5fa73fc2ec0523ee740cf0140829ce6"
+    },
+    {
+      "path": "OWNER_PHONE_QA_21.md",
+      "bytes": 3289,
+      "sha256": "fa31662ada359d43d7e9f0456a54a535f1b77356529115e998c0ec8bcc58b67b"
+    },
+    {
+      "path": "PROGRESS.md",
+      "bytes": 5028,
+      "sha256": "b0ef4d82f4bba7a9d005712964b79cbcca470b42baec5e5e308fe7f36397b13c"
+    },
+    {
+      "path": "RESULT_21.md",
+      "bytes": 4447,
+      "sha256": "8564ab211b1a81535d27b559f2bddd0d8b34d65029f3710ec5071575718edb0d"
+    },
+    {
+      "path": "RISK_REPORT_21.md",
+      "bytes": 2346,
+      "sha256": "199fe589befdbca50101549113f83bf876035a099bfbb379f5451bd267106287"
+    },
+    {
+      "path": "RUN_RESULTS_21.json",
+      "bytes": 715,
+      "sha256": "74e870ad3b3c7bcae5ce0b07157cf4a25734221afcebc945c17279dd7dc55c1b"
+    },
+    {
+      "path": "SECURITY_21.md",
+      "bytes": 3576,
+      "sha256": "bad7dbad6630dab63c22adaa38e9d3941080c4f0871f60ca68547c3e530fe33e"
+    },
+    {
+      "path": "SOURCES_21.json",
+      "bytes": 1510,
+      "sha256": "f46aa7cf8b64b34db6327a45ae0698c6c1ccc84c1a439e5213433902b4a986fb"
+    },
+    {
+      "path": "SOURCE_PURITY_21.json",
+      "bytes": 764,
+      "sha256": "562def4e6a64a7bdf46b3246192fec979c990003a715ffa7877c82aca90b592c"
+    },
+    {
+      "path": "TESTS_21.md",
+      "bytes": 8266,
+      "sha256": "2e26b56f2e2258a29847c6e78d551704ca301bde1070fee3ed9901ab23ea3559"
+    },
+    {
+      "path": "bundle-client.json",
+      "bytes": 4303,
+      "sha256": "64dfce1c59b8cb652d24ca6f521fc69ed493588171cb6d60300dba12348c3fc2"
+    },
+    {
+      "path": "bundle-master.json",
+      "bytes": 4303,
+      "sha256": "221b991f6d192fa407415afb93cf1957d4155278bbb839066b7b6df7249204ee"
+    },
+    {
+      "path": "ci-annotations.json",
+      "bytes": 450,
+      "sha256": "7303aa14404f1560ae2c6fe58630616e10deeb9b3c454f41b7d2e13e1a003ca3"
+    },
+    {
+      "path": "ci-jobs.json",
+      "bytes": 975,
+      "sha256": "fd78c38b2051d5103079d6942cc938da9111dc2400321e0c25e71b7b76b8091c"
+    },
+    {
+      "path": "ci-runs.json",
+      "bytes": 299,
+      "sha256": "542b14da3355b1ab853dd33fc6a046ca70b9ee5243317e4a42bc1acc86d987c0"
+    },
+    {
+      "path": "logs/analyze-release-source.log",
+      "bytes": 52,
+      "sha256": "5a03b653f489a0c0a7b974351fcd34b042664448f09088904651ea5bdd1e5195"
+    },
+    {
+      "path": "logs/android-client-bundle.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/android-master-bundle.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/client-flag.log",
+      "bytes": 174,
+      "sha256": "9b55a479cce52dfb80a187b738619dfbc32ebd8f021f87431c0a16169e0db6b6"
+    },
+    {
+      "path": "logs/flutter-final.log",
+      "bytes": 71088,
+      "sha256": "f7963f3cde53580dab4a7ad0fd1c64f5be9ef1d58af98d7c731f6961f479238f"
+    },
+    {
+      "path": "logs/flutter-pre-recovery-interrupted.log",
+      "bytes": 44465,
+      "sha256": "48f335200dc1d9f15db72bbbf6a59e70c43c0c8234718f259766916caeac41db"
+    },
+    {
+      "path": "logs/format-final.log",
+      "bytes": 48,
+      "sha256": "dc5fc0af4b8f2d70a08f38473b89e8f70e5f02f90037c2661f304727dd6a48a0"
+    },
+    {
+      "path": "logs/g2-g3-final-target.log",
+      "bytes": 1764,
+      "sha256": "c6c8eb08167889f358657e7696e0424879facb6d8cc90c6124c72c2908b5b4ff"
+    },
+    {
+      "path": "logs/gas-drybuild.log",
+      "bytes": 60,
+      "sha256": "02015b5d02f196a770247a66ccf19c22498eff5b76f869dddd0c27937c67d956"
+    },
+    {
+      "path": "logs/legacy-node.log",
+      "bytes": 2002,
+      "sha256": "2e1fe6307925275a15647f30ad56767bbe4c23639fcbb0af1b155755cf366777"
+    },
+    {
+      "path": "logs/node-full.log",
+      "bytes": 6836,
+      "sha256": "58abfc7333bd8483c93ed31eeafbb67655d5459679d940d1abf7bdec65902e0a"
+    },
+    {
+      "path": "logs/pub-get.log",
+      "bytes": 233,
+      "sha256": "d6612e9bb0c08377840da87c963d8d28c9cf29d03539e9f7a2cd08f4ac427483"
+    },
+    {
+      "path": "logs/receipt-recovery-green-final.log",
+      "bytes": 2145,
+      "sha256": "c8c3090ce0a0c2f4379f590b1fe296c19c0f65efd0e56a025150824729dd3ae8"
+    },
+    {
+      "path": "logs/receipt-recovery-red.log",
+      "bytes": 976,
+      "sha256": "51c60daa36460f06b22eace9a0f6eb308786e146952074422042850ca0b2fb01"
+    },
+    {
+      "path": "logs/scheduler-jvm.log",
+      "bytes": 316,
+      "sha256": "42adcd82178063b37dfdef51db03a8a35190a5085be32f9d6e47f712342107c1"
+    },
+    {
+      "path": "main-readback.txt",
+      "bytes": 41,
+      "sha256": "8fe9986c4f8e70c8651215413b2455feafaa5850b193da83d2f856a92e13ab17"
+    },
+    {
+      "path": "pr-readback.json",
+      "bytes": 280,
+      "sha256": "02cfe112dbed794d5ceb6d7e9608e7fc3cd4455a54151fd9e961cf8b3a69251b"
+    },
+    {
+      "path": "screens/task21-static-selected-home.png",
+      "bytes": 745617,
+      "sha256": "1be4ba39839d3c001266bdb7bed6b00abf1dad7d983be7b12eb6a15ad6abd305"
+    }
+  ]
+}

@@ -49,6 +49,11 @@ class DiaryController extends ChangeNotifier {
   final DiaryReadStore reads;
   VitrineConfig _homeConfig = const VitrineConfig();
   VitrineConfig get homeConfig => _homeConfig;
+  void applyMetadataConfig(VitrineConfig config) {
+    config.validate();
+    _homeConfig = config;
+    notifyListeners();
+  }
 
   /// Only a verified, account-scoped cache view reaches the carousel. Local
   /// MASTER drafts and local-save receipts are never applied as server config.

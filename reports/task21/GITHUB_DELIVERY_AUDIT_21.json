@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-11-21T23:09:36.191321+00:00",
+  "codeSource": "8546bc66137bc7796954cd04f0b65cdc2851c416",
+  "payloadFilesVerified": 16,
+  "controlFilesVerified": 2,
+  "controlReceipts": [
+    {
+      "name": "DRIVE_READBACK_21.json",
+      "id": "10kheIgjmkl_MCdPQEOMBkPo0OGm1DFb7",
+      "url": "https://drive.google.com/file/d/10kheIgjmkl_MCdPQEOMBkPo0OGm1DFb7/view",
+      "bytes": 6242,
+      "sha256": "87ed29c525fa3da7014bede085b583b8f859e58719cf17afb8304bf69c95a5a5",
+      "parentVerified": true,
+      "rawShaVerified": true
+    },
+    {
+      "name": "DELIVERY_21.md",
+      "id": "1FSHl32obUMULjVKT1_dF6k-IBRg4mfrO",
+      "url": "https://drive.google.com/file/d/1FSHl32obUMULjVKT1_dF6k-IBRg4mfrO/view",
+      "bytes": 4679,
+      "sha256": "1998b347b843b20d537594aacb31aa83dc03eba0ffb0f32b102d24cacae7ccc5",
+      "parentVerified": true,
+      "rawShaVerified": true
+    }
+  ],
+  "storage": "Git-only closing audit, no recursive self-hash or public immutability claim",
+  "prodChanged": false
+}

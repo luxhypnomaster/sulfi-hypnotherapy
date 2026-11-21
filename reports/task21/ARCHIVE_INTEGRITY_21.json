@@ -1,0 +1,68 @@
+{
+  "sha256": "064b51f2fcf002a3718cb3fbc388817fa45e72d444c65df37d2ad4157d887fc7",
+  "bytes": 14177,
+  "crc": "PASS",
+  "allFiles": [
+    "00_START_HERE.md",
+    "01_TASK.md",
+    "02_STAGES.md",
+    "03_ACCEPTANCE.csv",
+    "04_SOURCES.md",
+    "05_SAFETY.md",
+    "06_CODEX_COMMAND.txt",
+    "07_WIRE_AND_QA.md",
+    "08_MANIFEST.json"
+  ],
+  "manifestEntries": [
+    {
+      "name": "00_START_HERE.md",
+      "size": 2392,
+      "sha256": "7d16ccabda294bac76b67133023eaef3b5a71ad0e919aed809ac326722300839",
+      "match": true
+    },
+    {
+      "name": "01_TASK.md",
+      "size": 6693,
+      "sha256": "72181c81de218dd65298609fce67062bee4e61bd9003f465f8cf4e797755d773",
+      "match": true
+    },
+    {
+      "name": "02_STAGES.md",
+      "size": 3454,
+      "sha256": "e33aa9f81bed3b5529bcf73a99175679ca93cc79d56040af14636965abd87155",
+      "match": true
+    },
+    {
+      "name": "03_ACCEPTANCE.csv",
+      "size": 2864,
+      "sha256": "ebf2db1d9d2075feeee2c344cca31bcd3fb9ae57c07ebaee9e814d1f002ecfed",
+      "match": true
+    },
+    {
+      "name": "04_SOURCES.md",
+      "size": 1996,
+      "sha256": "e821a7141828cf4ea6c0e33843e5562a300af4360e48f5893bcab0de5026c78f",
+      "match": true
+    },
+    {
+      "name": "05_SAFETY.md",
+      "size": 2268,
+      "sha256": "de766f44f075b27c39b04f8704bc74be95bc85e9880955392bc59f0cde95c734",
+      "match": true
+    },
+    {
+      "name": "06_CODEX_COMMAND.txt",
+      "size": 1803,
+      "sha256": "847b355af57d0a9a1c82460611402d0fc4af3d5484b4dc03ad4a742c7494ba30",
+      "match": true
+    },
+    {
+      "name": "07_WIRE_AND_QA.md",
+      "size": 2343,
+      "sha256": "27d2a999011b54cbd234031905ee50eb5a41f04c24d128335223e0f55598c997",
+      "match": true
+    }
+  ],
+  "manifestCount": 8,
+  "docsCopiesUnchanged": true
+}

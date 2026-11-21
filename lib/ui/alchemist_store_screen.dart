@@ -29,6 +29,31 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   bool paused = false, loading = false, authenticated = false;
   int _loadGeneration = 0;
   String _scope = 'public';
+  Future<void> metadataChanged() async {
+    final generation = _loadGeneration;
+    final cached = await widget.controller.metadata?.cachedCards();
+    if (mounted && generation == _loadGeneration && cached != null) {
+      setState(() {
+        cards = filterCached(cached);
+        cursor = null;
+      });
+    }
+  }
+
+  List<Map<String, dynamic>> filterCached(List<Map<String, dynamic>> values) =>
+      values.where((r) {
+        final c = r['card'] as Map;
+        return (kind == null || r['type'] == kind) &&
+            '${c['title']} ${c['shortAnnotation']}'.toLowerCase().contains(
+              query.text.trim().toLowerCase(),
+            ) &&
+            (category.text.trim().isEmpty ||
+                (c['categoryIds'] as List? ?? []).contains(
+                  category.text.trim(),
+                )) &&
+            (tag.text.trim().isEmpty ||
+                (c['tags'] as List? ?? []).contains(tag.text.trim()));
+      }).toList();
   void accountChanged() {
     final current = widget.controller.diary?.api?.readerScope ?? 'public';
     final signedIn = widget.controller.diary?.authenticated ?? false;
@@ -53,6 +78,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
     _scope = widget.controller.diary?.api?.readerScope ?? 'public';
     authenticated = widget.controller.diary?.authenticated ?? false;
     widget.controller.diary?.addListener(accountChanged);
+    widget.controller.metadata?.addListener(metadataChanged);
     load();
   }
 
@@ -60,6 +86,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   void dispose() {
     paused = true;
     widget.controller.diary?.removeListener(accountChanged);
+    widget.controller.metadata?.removeListener(metadataChanged);
     query.dispose();
     category.dispose();
     tag.dispose();
@@ -74,6 +101,31 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
       error = null;
     });
     try {
+      final runtime = widget.controller.metadata;
+      if (runtime != null && !more) {
+        final cached = await runtime.cachedCards();
+        if (mounted && generation == _loadGeneration && cached != null) {
+          setState(() {
+            cards = filterCached(cached);
+            cursor = null;
+          });
+        }
+        final ready = await runtime.refresh(widget.controller.cloudQueue);
+        if (ready || cached != null && runtime.gateway.state != 'legacy') {
+          final receipts = await widget.controller.capsules!.database.query(
+            'app_settings',
+            where: 'name LIKE ?',
+            whereArgs: ['alchemist_installed:%'],
+          );
+          installed.clear();
+          for (final r in receipts) {
+            final v = jsonDecode(r['value'] as String);
+            installed[v['catalogItemId']] = v['immutableRevisionId'];
+          }
+          await metadataChanged();
+          return;
+        }
+      }
       final result = await api.call('catalog.list', {
         'search': query.text.trim(),
         'state': 'published',
@@ -197,6 +249,12 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
       onRefresh: load,
       child: ListView(
         children: [
+          Text(
+            widget.controller.metadata?.gateway.label ??
+                'Каталог: прежний API; новый протокол выключен',
+            key: const Key('metadata-capability-status'),
+            style: const TextStyle(fontSize: 11),
+          ),
           Wrap(
             spacing: 8,
             children: [

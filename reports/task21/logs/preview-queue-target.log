@@ -1,0 +1,6 @@
+00:00 +0: loading /dev/shm/sulfi21/test/task21_preview_test.dart
+00:00 +0: /dev/shm/sulfi21/test/task21_preview_test.dart: 21 selected draft static preview reuses exact HOME9:16 geometry, no save/read/rotation/remote/media effects
+00:04 +1: /dev/shm/sulfi21/test/task21_preview_test.dart: 21 existing full reader preview remains reachable from same editor
+00:05 +2: loading /dev/shm/sulfi21/test/task21_queue_test.dart
+00:06 +2: /dev/shm/sulfi21/test/task21_queue_test.dart: 21 control metadata overtakes waiting files, never preempts active file or alters its bytes/owner
+00:06 +3: All tests passed!

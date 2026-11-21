@@ -4,6 +4,7 @@ import '../models/vitrine_config.dart';
 import '../services/diary_controller.dart';
 import '../services/vitrine_settings.dart';
 import 'diary_screen.dart';
+import 'session_scope.dart';
 
 class PublicationsVitrineScreen extends StatelessWidget {
   const PublicationsVitrineScreen({super.key, required this.diary});
@@ -29,15 +30,20 @@ class PublicationsVitrineScreen extends StatelessWidget {
           children: [
             DiaryScreen(diary: diary),
             VitrineSettingsScreen(
-              store: VitrineSettingsStore(
-                diary.repository.database,
-                account: () =>
-                    diary.api?.readerScope ??
-                    (diary.reads.loaded ? diary.reads.readerId : null),
-                canEdit: () =>
-                    diary.policy?.clientEdition != true &&
-                    diary.authorWorkspace,
-              ),
+              store:
+                  SessionScope.maybeOf(context)
+                      ?.controller
+                      .metadata
+                      ?.settings ??
+                  VitrineSettingsStore(
+                    diary.repository.database,
+                    account: () =>
+                        diary.api?.readerScope ??
+                        (diary.reads.loaded ? diary.reads.readerId : null),
+                    canEdit: () =>
+                        diary.policy?.clientEdition != true &&
+                        diary.authorWorkspace,
+                  ),
             ),
           ],
         ),
@@ -62,19 +68,34 @@ class _VitrineSettingsScreenState extends State<VitrineSettingsScreen> {
   VitrineSplashMode mode = VitrineSplashMode.fullCycle;
   String status = 'Черновик';
   bool busy = true;
+  void capabilityChanged() {
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    if (widget.store.admin is Listenable) {
+      (widget.store.admin as Listenable).addListener(capabilityChanged);
+    }
     load();
   }
 
   Future<void> load() async {
     try {
+      String? remoteError;
+      try {
+        await widget.store.refreshApplied();
+      } catch (_) {
+        remoteError =
+            'Серверная сверка недоступна; сохранённые настройки оставлены.';
+      }
       final state = await widget.store.load();
       if (!mounted) return;
-      final c = state['saved'] == null
+      final raw = state['saved'] ?? state['applied'];
+      final c = raw == null
           ? const VitrineConfig()
-          : VitrineConfig.fromMap(state['saved']);
+          : VitrineConfig.fromMap(raw);
       splash.text = '${c.splashSeconds}';
       entry.text = '${c.entrySeconds}';
       high.text = '${c.highWeight}';
@@ -85,7 +106,8 @@ class _VitrineSettingsScreenState extends State<VitrineSettingsScreen> {
         busy = false;
         status = state['saved'] == null
             ? 'Черновик'
-            : 'Сохранено на этом устройстве. Опубликованная редакция: ${state['publishedRevision'] ?? 'нет'}';
+            : 'Сохранено на этом устройстве. Применяемая серверная редакция: ${state['appliedRevision'] ?? state['publishedRevision'] ?? 'нет'}';
+        if (remoteError != null) status = '$status\n$remoteError';
       });
     } catch (_) {
       if (mounted) {
@@ -130,6 +152,9 @@ class _VitrineSettingsScreenState extends State<VitrineSettingsScreen> {
 
   @override
   void dispose() {
+    if (widget.store.admin is Listenable) {
+      (widget.store.admin as Listenable).removeListener(capabilityChanged);
+    }
     for (final c in [splash, entry, high, normal, pinned]) {
       c.dispose();
     }
@@ -185,15 +210,16 @@ class _VitrineSettingsScreenState extends State<VitrineSettingsScreen> {
         child: const Text('Сохранить на устройстве'),
       ),
       OutlinedButton(
-        onPressed: busy || widget.store.admin == null
-            ? null
-            : () => action(true),
+        onPressed: busy || !widget.store.canPublish ? null : () => action(true),
         child: const Text('Опубликовать настройки'),
       ),
       if (widget.store.admin == null)
         const Text(
           'Серверная публикация настроек пока не подключена. Локальное сохранение не изменяет витрину CLIENT.',
         ),
+      if (widget.store.admin is ConditionalVitrineAdmin &&
+          !widget.store.canPublish)
+        Text((widget.store.admin as ConditionalVitrineAdmin).unavailableReason),
       TextButton(
         onPressed: busy ? null : load,
         child: const Text('Вернуть сохранённые настройки'),

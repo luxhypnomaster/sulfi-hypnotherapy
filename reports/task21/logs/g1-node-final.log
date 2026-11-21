@@ -1,0 +1,22 @@
+✔ 21 genuine SQLite immutable persistence, cold reopening and readback guards (13.190578ms)
+✔ 21 actual SQLite rollback between pointer update and receipt, SIGKILL recovery (96.343374ms)
+✔ 21 lost response after durable COMMIT replays same receipt; cross-connection writers CAS (3.769745ms)
+✔ 21 null/expired principal, scope switch, CLIENT write, role hints deny; errors redact secrets (5.689579ms)
+✔ 21 separate config prepare/commit -> CLIENT, no unrelated catalog revision bump (5.79103ms)
+✔ 21 withdrawal/epoch invalidates stale scope, partial/non-atomic storage fail closed (2.592122ms)
+✔ 21 expiry rejects stale HEAD and snapshot without scan or mutation of prior immutable bytes (4.789129ms)
+✔ 20: cheap equal HEAD never scans; strict public projection no reader/secret leakage (5.852321ms)
+✔ 20: interrupted commit and corrupt readback leave old head and receipt unchanged (5.410323ms)
+✔ 20: idempotent retries and concurrent writers use CAS, no lost update (1.533624ms)
+✔ 20: scopes, CLIENT write, unpublished/withdrawn and private dependency fail closed (4.35063ms)
+✔ 20: 100 items / 20 shared modules, exact old snapshots immutable, one batch one head (14.341882ms)
+✔ 20: versioned vitrine settings approved defaults, 1..60 validation and CLIENT denial (0.594757ms)
+✔ 20: conflicting current revisions cannot publish one logical ID twice (0.281733ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 373.54607

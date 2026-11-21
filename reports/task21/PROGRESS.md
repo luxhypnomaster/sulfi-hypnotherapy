@@ -1,0 +1,27 @@
+# №21 — checkpoint G0, 2026-11-21
+
+Архив SHA/CRC/8manifest entries PASS, прочитаны все9файлов. PR51 HEAD a7c29a7b478b6c3b001d70d3158b4a65d57b3c50; code source9e89802. Новая stacked ветка feat/task21-runtime-sandbox. PR48/49/50/51 не считаются merged.
+
+G0 audit → G1 sandbox contract+durable storage → G2 runtime handshake/queue/UI → G3 config/selected static preview → G4 tests/native-readiness → G5 reports/PR/Drive.
+
+Запрещены production GAS6/OAuth/ACL/main/signing/user data и Auth19 ON. Native Gradle только после пригодного preflight; известные CI0steps/KVM ограничения не повторять вслепую. Старые APK28 и исходники №20 сохраняются.
+
+## G1 checkpoint
+Реальный sandbox SQLite/WAL/FULL + immutable triggers, CAS+receipt transaction, readback, SIGKILL rollback, lost-response replay, cross-connection writers, scopes/401/403, separate vitrine stream. Targeted Node13PASS на первой версии; расширен expiry check, повтор адресных тестов далее. Runtime factory UI/headless source добавлен за SULFI_METADATA_V1=false; gateway требует nonce/binding/schema/hash/atomic capabilities. Runtime real-loopback4tests PASS: six intents/equalHEAD/config MASTER→CLIENT/lostresponse/retention/offline/corrupt/403/defaultOFF. Это synthetic staging, не Google. Static preview и очередной priority gate в работе.
+
+
+## G2/G3 checkpoint, 2026-11-21 (после возобновления)
+
+10 новых targeted Flutter PASS, прежние runtime+admin+widgets14PASS. Analyzer No issues; full Node62PASS (8новых SQLite runtime tests). Два unused imports устранены. Тестовый HTTP400 harness исправлен private loopback override, production TLS не менялся. Проверка сети обнаружила permanent error suppression при временном сбое capability: теперь20sec cooldown и retryable503, 401/403 сохраняют верный auth/role статус; новый real HTTP тест PASS. Сохранён readerScope namespace настроек20.
+
+Static preview показывает выбранный unsaved draft через тот же DiaryPublicationSlide/Home;35sec без ротации/save/read/media/network. Screenshot — Flutter render720×1280, не Android. Queue control priority применяется только между задачами; активный файл/checkpoint8192/owner не меняются. G4: полный Flutter + два Android bundles, cheap native preflight, no blind Gradle/CI retry. G5 ещё предстоит.
+
+
+## G3 recovery correction
+Подтверждён RED: lost COMMIT response → cold settings instance → refreshApplied → publish менял requestId и создавал лишнюю редакцию. Fix сохраняет unconfirmed intent/CAS до восстановления исходной квитанции; receipt не откатывает более новую appliedRevision другого автора. Два real HTTP/SQLite regression сценария (concurrent=false/true) PASS; вместе с runtime/UI/legacy admin12PASS. Полный прогон b584 остановлен SIGINT ради исправления, не считается PASS; при остановке harness сообщил stream shutdown error. Промежуточная ошибка скобки теста устранена, итоговые адресные тесты зелёные. Далее единственный полный прогон окончательного source. Hosted CI44959026009: verify FAILURE,0steps, billing/spending annotation; повторять без изменения инфраструктуры нельзя.
+
+
+## G4 FINAL, 2026-11-21
+Code source8546bc66137bc7796954cd04f0b65cdc2851c416. Full Flutter526PASS/2SKIP/0FAIL(4m18s), client define1PASS, final analyze no issues, format18files0changes. Node62+legacy24, JVM scheduler5 и no-cloud GAS drybuild PASS. MASTER/CLIENT Android-arm64 debug Flutter bundles каждая25files/121462047B, kernel SHA разные. Это НЕ APK; native/upgrade/signing NOT_RUN/BLOCKED_ENV. New Gradle/emulator не запускались, CI44959026009 verify0steps billing, без повторов. PR52 draft от PR51, source8546 pushed [skip ci]. Physical/Google/live NOT_RUN. Main/GAS/signing/OAuth/ACL/data/APK28 сохранены.
+
+G5: отчёты и28matrix (25LOCAL/synthetic/policy PASS;1PARTIAL PR46;2BLOCKED native+CI) готовы; sanitized Drive delivery/readback фиксируется отдельно в DELIVERY_21.md и DRIVE_READBACK_21.json; code source8546 заморожен. Новый report folder1V-Sc63j_YaTCrF6GbxdAF-qyvSfOzNqr inherits anyone:writer, ACL не менялась. Не начинать №22 в этом поручении.
