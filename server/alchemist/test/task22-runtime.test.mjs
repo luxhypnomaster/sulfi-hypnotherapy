@@ -39,3 +39,18 @@ test('22 ratings-only revision never touches catalog HEAD/media and public summa
  assert.equal(view.items[0].consumerDirect.mean,5);assert.equal(view.items[0].professionalDirect.mean,null);assert.equal(view.items[0].weighted.value,null);assert.equal(JSON.stringify(view).includes('usr_'),false);assert.equal(digest22(f.base.records()),before);assert.equal(f.base.head('client:public'),null);
  assert.equal((await f.call('project.users',{},'client')).status,403);
 }finally{f.close();}});
+test('22 private metadata does not become public and listing never includes diary/private payloads',async()=>{const f=fixture();try{
+ f.base.putRecord({contentId:'private',revisionId:'r1',type:'track',sha256:'b'.repeat(64),byteLength:0,title:'Private',state:'published',public:false,current:true,dependencies:[],owner:f.owner.uid,ratingEpochId:'initial',secretPayload:'NEVER_RETURN'});
+ f.base.putRecord({contentId:'diary',revisionId:'r1',type:'diaryEntry',title:'Private diary',state:'draft',public:false,owner:'other',privateBody:'NEVER_RETURN'});
+ const change={requestId:'quiet',changes:[{contentId:'private',action:'quietEdit',expectedRevisionId:'r1',patch:{title:'Changed'}}]},j=(await f.call('project.catalogBatch',change)).result;
+ assert.equal((await f.call('project.runOperation',{operationId:j.operationId})).result.state,'SUCCEEDED');assert.equal(f.base.records().find(r=>r.contentId==='private').public,false);
+ assert.equal(f.base.snapshot('client:public',f.base.head('client:public').snapshotId).items.some(r=>r.contentId==='private'),false);
+ assert.equal(JSON.stringify(await f.call('project.catalogList')).includes('NEVER_RETURN'),false);
+}finally{f.close();}});
+test('22 exact target type/revision and legacy author ownership persist in server jobs',async()=>{const f=fixture();try{
+ const root={type:'PROGRAM',contentId:'program',revisionId:'r1',ratingEpochId:'initial'},initial=f.base.records().find(r=>r.contentId==='program');
+ assert.equal(f.r.catalog.target(f.owner,{...root,type:'TRACK'}),null);f.r.store.set('catalog-revisions','program:r1',initial);f.base.putRecord({...initial,revisionId:'r2'});assert.equal(f.r.catalog.target(f.owner,root).revisionId,'r1');assert.equal(f.r.catalog.target(f.owner,{...root,revisionId:'forged'}),null);
+ const identity=f.r.iam.resolve({verified:true,issuer:'synthetic',sub:'other',expiresAt:Date.now()+100000});f.r.iam.change(f.owner,{requestId:'grant',uid:identity.uid,role:'AUTHOR'});f.base.putRecord({...initial,contentId:'authored',owner:'other'});
+ const job=(await f.call('project.catalogBatch',{requestId:'edit',changes:[{contentId:'authored',action:'quietEdit',expectedRevisionId:'r1',patch:{title:'Original author'}}]},'other')).result;
+ assert.equal((await f.r.jobs.run(job.operationId,f.r.handlers)).state,'SUCCEEDED');assert.equal((await f.call('project.categoryEdit',{requestId:'bad',id:'unsafe',name:'No'},'other')).status,403);
+}finally{f.close();}});

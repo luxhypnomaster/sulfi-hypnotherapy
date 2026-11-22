@@ -42,12 +42,12 @@ test('22 portable encrypted complete backup independent restore, tamper/keys/pri
  const bad=Buffer.from(bytes);bad[bad.length-1]^=1;const output=join(f.root,'badrestore');assert.throws(()=>backup.restoreIsolated(bad,key,output));assert.equal(existsSync(output),false);
  const restored=backup.restoreIsolated(bytes,key,join(f.root,'restore'));assert.equal(restored.files,2);assert.equal(readFileSync(join(f.root,'restore/media/synthetic.bin')).toString(),'synthetic-safe');assert.throws(()=>backup.restoreIsolated(bytes,key,join(f.root,'restore')),/EXISTS/);
  await assert.rejects(backup.verifiedPrivateBackup(b,key,{privateVerified:false}),/PRIVATE/);
- let cloud;const receipt=await backup.verifiedPrivateBackup(b,key,{privateVerified:true,put:async data=>{cloud=Buffer.from(data);return{id:'synthetic-private-file'}},read:async()=>cloud});assert.equal(receipt.restoreVerified,true);
+ let cloud;const receipt=await backup.verifiedPrivateBackup(b,key,{privateVerified:true,put:async data=>{cloud=Buffer.from(data);return{id:'synthetic-private-file'}},read:async()=>cloud});assert.equal(receipt.restoreVerified,false);assert.equal(receipt.integrityVerified,true);
  assert.throws(()=>backup.pack({...groups,identity:undefined},[]));
 }finally{f.close();}});
 test('22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link',()=>{const f=fixture();try{
  const a=f.actor('same-sub'),b=f.iam.resolve({verified:true,issuer:'other',sub:'same-sub',email:'same@synthetic.invalid',expiresAt:Date.now()+100000});assert.notEqual(a.uid,b.uid);assert.equal(f.actor('same-sub').uid,a.uid);
- assert.throws(()=>f.iam.change(f.client,{requestId:'bad',uid:f.client.uid,role:'OWNER'}),/DENIED/);
+ assert.throws(()=>f.iam.change(f.client,{requestId:'bad',uid:f.client.uid,role:'OWNER'}),/OWNER_IMMUTABLE/);
  f.iam.change(f.owner,{requestId:'lead',uid:a.uid,role:'ADMIN',canManageSubordinateRoles:true});f.iam.change(a,{requestId:'author',uid:b.uid,role:'AUTHOR'});assert.equal(f.iam.current(b.uid).role,'AUTHOR');
  assert.throws(()=>f.iam.change(a,{requestId:'grant',uid:b.uid,role:'ADMIN',canManageSubordinateRoles:true}),/DENIED/);
  f.iam.change(f.owner,{requestId:'revoke-lead',uid:a.uid,role:'ADMIN'});assert.throws(()=>f.iam.change(a,{requestId:'remove',uid:b.uid,role:'CLIENT'}),/DENIED/);
@@ -81,4 +81,32 @@ test('22 three ratings sparse500/pro/author; two immutable policy strategies pre
  r.inject=()=>{};r.activate(f.owner,{requestId:'activate',hash:draft.hash,expectedRevision:expected});assert.equal(r.activePolicy().configVersion,1);assert.equal(r.snapshot(r.readHead().head.ratingsSnapshotHash).items[0].weighted.value,null);
  const second=r.draft(f.owner,{requestId:'draft2',policy:two});r.validate(f.owner,{hash:second.hash});const first=r.readHead().head;r.activate(f.owner,{requestId:'act2',hash:second.hash,expectedRevision:first.ratingsRevision});r.activate(f.owner,{requestId:'rollback',hash:first.policyHash,expectedRevision:r.readHead().head.ratingsRevision,rollback:true});assert.equal(r.activePolicy().configVersion,1);assert.equal(JSON.stringify(f.s.db.prepare('SELECT * FROM t22_feedback ORDER BY owner,id').all()),before);
  const synthetic=Array.from({length:500},(_,i)=>({target:program,kind:'direct',rating:4,reviewerKind:'CLIENT',owner:'c'+i,rootFeedbackId:'x'+i,receivedSequence:i}));assert.equal(summary(program,synthetic,r.defaultPolicy(),'now').consumerDirect.n,500);
+}finally{f.close();}});
+test('22 actual full SQLite/database roles/ratings/media encrypted restoration and cold readback',async()=>{const f=fixture();try{
+ const {r}=ratingFixture(f);r.ingest(f.client,{requestId:'f',feedback:feedback()});r.flush();
+ const media=Buffer.from('synthetic audio bytes only'),hash=crypto.createHash('sha256').update(media).digest('hex'),file=join(f.root,'synthetic.bin');require('node:fs').writeFileSync(file,media);
+ f.sql.putRecord({contentId:'audio',revisionId:'r1',type:'track',sha256:hash,byteLength:media.length});
+ assert.throws(()=>backup.captureCandidate(f.sql,f.s,[]),/BACKUP_MISSING_MEDIA/);
+ const bundle=backup.captureCandidate(f.sql,f.s,[{contentId:'audio',revisionId:'r1',path:file}]),key=crypto.randomBytes(32),bytes=backup.encrypt(bundle,key);
+ const proof=backup.restoreDatabaseIsolated(bytes,key,join(f.root,'isolated'));
+ const cold=new SqliteSnapshotStore(proof.path),store=new ProjectStore22(cold.db);
+ assert.deepEqual(cold.records(),f.sql.records());assert.deepEqual(store.list('roles'),f.s.list('roles'));assert.deepEqual(store.get('ratings','head'),f.s.get('ratings','head'));
+ assert.equal(crypto.createHash('sha256').update(readFileSync(join(f.root,'isolated/media',hash))).digest('hex'),hash);assert.equal(proof.databaseVerified,true);cold.close();
+ let cloud;const receipt=await backup.verifiedPrivateBackup(bundle,key,{privateVerified:true,put:async b=>{cloud=b;return{id:'synthetic-private'}},read:async()=>cloud},{restoreVerifier:async (b,k)=>backup.restoreDatabaseIsolated(b,k,join(f.root,'independent-restore'))});assert.equal(receipt.restoreVerified,true);
+}finally{f.close();}});
+test('22 Google bridge verifies before decode, stable legacy subject binding and no email/role auto-link',async()=>{
+ const {googleBridge22}=require('../experimental/google_bridge22.cjs');let calls=0;
+ const token=claims=>'header.'+Buffer.from(JSON.stringify(claims)).toString('base64url')+'.signature';
+ const bridge=googleBridge22({verify:async()=>{calls++;return{sub:'real-shape-synthetic-sub'}},endpoint:'https://synthetic.invalid/exec'}),claims={sub:'real-shape-synthetic-sub',iss:'accounts.google.com',exp:Math.floor(Date.now()/1000)+1000,email:'ignored@synthetic.invalid',role:'OWNER'};
+ const a=await bridge(token(claims)),b=await bridge(token({...claims,iss:'https://accounts.google.com'}));assert.equal(a.binding,b.binding);assert.equal(a.issuer,'https://accounts.google.com');assert.equal(a.role,undefined);assert.equal(a.email,undefined);assert.equal(calls,2);
+ await assert.rejects(bridge(token({...claims,sub:'forged'})),/GOOGLE_TOKEN_INVALID/);
+ await assert.rejects(googleBridge22({verify:async()=>{throw Error('DENIED')},endpoint:'x'})(token(claims)),/DENIED/);
+});
+test('22 policy stable immutable identity, exact public hash and changed parameters same version rejected',()=>{const f=fixture();try{
+ const {r}=ratingFixture(f);r.ingest(f.client,{requestId:'r1',feedback:feedback()});r.flush();const hash=r.readHead().head.policyHash;
+ r.ingest(f.client,{requestId:'r2',feedback:{...feedback(),sequence:2,rating:3}});r.flush({actor:f.owner});assert.equal(r.readHead().head.policyHash,hash);assert.equal(r.snapshot(r.readHead().head.ratingsSnapshotHash).items[0].weighted.policyHash,hash);
+ const p=policy(),draft=r.draft(f.owner,{requestId:'d1',policy:p});r.validate(f.owner,{hash:draft.hash});r.activate(f.owner,{requestId:'a1',hash:draft.hash,expectedRevision:r.readHead().head.ratingsRevision});
+ assert.throws(()=>r.draft(f.owner,{requestId:'d2',policy:{...p,algorithmVersion:2}}),/POLICY_VERSION_CONFLICT/);
+ // Policy rollback recomputes current evidence, cannot resurrect withdrawn review.
+ r.ingest(f.client,{requestId:'withdraw',feedback:{...feedback(),sequence:3,consent:{schemaVersion:1,share:false}}});r.flush();r.activate(f.owner,{requestId:'rollback-safe',hash,expectedRevision:r.readHead().head.ratingsRevision,rollback:true});assert.equal(r.snapshot(r.readHead().head.ratingsSnapshotHash).items[0].consumerDirect.n,0);
 }finally{f.close();}});

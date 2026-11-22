@@ -92,17 +92,18 @@ class Ratings22 {
  flush({limit=32,policy=this.activePolicy(),requestId='aggregate',actor=null}={}){
   if(!Number.isInteger(limit)||limit<1||limit>1000)fail(422,'INVALID_BATCH_LIMIT');validatePolicy(policy);
   return this.s.tx(()=>{
+   const policyCoreHash=digest22(policy);let policyRef=this.s.get('rating-policy-documents',policyCoreHash);
+   if(!policyRef){const hash=this.s.immutable({schemaVersion:1,policy,createdBy:actor?.uid||'system',status:'active',scope:'sandbox',approvedBy:null});policyRef={hash};this.s.set('rating-policy-documents',policyCoreHash,policyRef);}
+   const policyHash=policyRef.hash;this.s.read(policyHash);
    const dirty=this.s.db.prepare('SELECT target FROM t22_dirty ORDER BY target LIMIT ?').all(limit);
    for(const {target:key}of dirty){const evidence=this.evidence(key);let target=evidence[0]?.target||this.s.get('rating-targets',key);
-    if(target){this.s.set('rating-targets',key,target);this.s.set('rating-cache',key,summary(target,evidence,policy,this.clock()));}
+    if(target){this.s.set('rating-targets',key,target);const computed=summary(target,evidence,policy,this.clock());computed.weighted.policyHash=policyHash;this.s.set('rating-cache',key,computed);}
     this.s.db.prepare('DELETE FROM t22_dirty WHERE target=?').run(key);
    }
    const remaining=this.s.db.prepare('SELECT COUNT(*) AS n FROM t22_dirty').get().n;
    if(remaining)return {state:'RECOMPUTING',remaining,processed:dirty.length};
    const old=this.s.get('ratings','head');
    if(!dirty.length&&old&&digest22(policy)===digest22(this.activePolicy()))return {head:old,state:'NO_CHANGE'};
-   const policyDocument={schemaVersion:1,policy,createdBy:actor?.uid||'system',status:'active',scope:'sandbox',approvedBy:null};
-   const policyHash=this.s.immutable(policyDocument);
    const snapshot={schemaVersion:22,scope:'ratings:public',ratingsRevision:(old?.ratingsRevision||0)+1,policyHash,inputSequence:this.s.get('ratings','inputSequence')||0,computedAt:this.clock(),items:this.s.list('rating-cache').map(r=>r.value)};
    const hash=this.s.immutable(snapshot);this.s.read(hash);this.inject('beforeRatingHead');
    const head={schemaVersion:22,scope:'ratings:public',ratingsRevision:snapshot.ratingsRevision,ratingsSnapshotHash:hash,policyHash,computedAt:snapshot.computedAt};
@@ -112,9 +113,9 @@ class Ratings22 {
  }
  readHead(){const h=this.s.get('ratings','head');return {head:h,dirty:this.s.db.prepare('SELECT COUNT(*) AS n FROM t22_dirty').get().n>0};}
  snapshot(hash){const head=this.s.get('ratings','head');if(head?.ratingsSnapshotHash!==hash)fail(409,'STALE_RATINGS_SNAPSHOT');return this.s.read(hash);}
- draft(actor,q){const a=this.iam.admin(actor);if(a.role!=='OWNER'&&!a.canManageSubordinateRoles)fail(403,'RATING_DRAFT_DENIED');validatePolicy(q.policy);return this.s.receipt(actor.uid,q.requestId,q,()=>{const hash=this.s.immutable({policy:q.policy,status:'draft',createdAt:this.clock(),createdBy:actor.uid,scope:'sandbox',approvedBy:null});this.s.set('rating-drafts',hash,{hash,owner:actor.uid,validated:false});return {hash,status:'draft'};});}
+ draft(actor,q){const a=this.iam.admin(actor);if(a.role!=='OWNER'&&!a.canManageSubordinateRoles)fail(403,'RATING_DRAFT_DENIED');validatePolicy(q.policy);return this.s.receipt(actor.uid,q.requestId,q,()=>{const version=digest22([q.policy.policyId,q.policy.configVersion]),coreHash=digest22(q.policy),old=this.s.get('rating-policy-versions',version);if(old&&old.coreHash!==coreHash)fail(409,'POLICY_VERSION_CONFLICT');this.s.set('rating-policy-versions',version,{coreHash});const hash=this.s.immutable({policy:q.policy,status:'draft',createdAt:this.clock(),createdBy:actor.uid,scope:'sandbox',approvedBy:null});this.s.set('rating-drafts',hash,{hash,owner:actor.uid,validated:false});this.s.audit(actor.uid,'policy.draft',hash);return {hash,status:'draft'};});}
  preview(actor,q){this.iam.admin(actor);const policy=q.policyHash?this.s.read(q.policyHash).policy:validatePolicy(q.policy);validatePolicy(policy);const target=q.target,key=keyOf(target),evidence=this.evidence(key);return {policyHash:digest22(policy),direct:summary(target,evidence,policy,this.clock()),experimental:calculate(target,evidence,policy,{experimental:true}),activeExperimental:calculate(target,evidence,this.activePolicy(),{experimental:true})};}
- validate(actor,q){this.iam.owner(actor);const d=this.s.get('rating-drafts',q.hash);if(!d)fail(404,'POLICY_DRAFT_NOT_FOUND');validatePolicy(this.s.read(q.hash).policy);this.s.set('rating-drafts',q.hash,{...d,validated:true});return {hash:q.hash,status:'validated'};}
+ validate(actor,q){this.iam.owner(actor);const d=this.s.get('rating-drafts',q.hash);if(!d)fail(404,'POLICY_DRAFT_NOT_FOUND');validatePolicy(this.s.read(q.hash).policy);this.s.set('rating-drafts',q.hash,{...d,validated:true});this.s.audit(actor.uid,'policy.validate',q.hash);return {hash:q.hash,status:'validated'};}
  activate(actor,q){this.iam.owner(actor);return this.s.receipt(actor.uid,q.requestId,q,()=>{
   const h=this.s.get('ratings','head');if((h?.ratingsRevision||0)!==q.expectedRevision)fail(409,'REVISION_CONFLICT');
   const d=this.s.get('rating-drafts',q.hash),historical=this.s.list('ratings-history').some(r=>r.value.policyHash===q.hash);
@@ -122,7 +123,7 @@ class Ratings22 {
   // Activation stays atomic; bounded preparations may be retried separately.
   const targets=this.s.list('rating-targets');if(targets.length>1000)fail(503,'POLICY_RECOMPUTE_REQUIRES_BATCH');
   for(const r of targets)this.s.db.prepare('INSERT OR IGNORE INTO t22_dirty VALUES(?)').run(r.key);
-  this.inject('policyRecompute');const result=this.flush({limit:1000,policy,requestId:q.requestId,actor});this.s.audit(actor.uid,q.rollback?'policy.rollback':'policy.activate',q.hash);return {...result,approvedProductionWeights:false};
+  this.inject('policyRecompute');const result=this.flush({limit:1000,policy,requestId:q.requestId,actor});if(!['COMMITTED','NO_CHANGE'].includes(result.state))fail(503,'POLICY_RECOMPUTE_REQUIRES_BATCH');this.s.audit(actor.uid,q.rollback?'policy.rollback':'policy.activate',q.hash);return {...result,approvedProductionWeights:false};
  });}
 }
 module.exports={Ratings22,keyOf,validatePolicy,calculate,summary,strategies,TYPES};

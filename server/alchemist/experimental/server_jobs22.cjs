@@ -12,7 +12,7 @@ class ServerJobs22 {
   this.s.set('jobs',key,job);return job;
  });}
  status(owner,operationId){const j=this.s.get('jobs',operationId);if(!j||j.owner!==owner)fail(403,'OPERATION_SCOPE_DENIED');return j;}
- claim(operationId){return this.s.tx(()=>{const j=this.s.get('jobs',operationId),now=this.clock();if(!j||j.state==='SUCCEEDED'||j.state==='QUARANTINED'||j.nextAt>now||j.lease&&j.lease.until>now)return null;
+ claim(operationId){return this.s.tx(()=>{const j=this.s.get('jobs',operationId),now=this.clock();if(!j||j.state==='SUCCEEDED'||['QUARANTINED','BLOCKED'].includes(j.state)||j.nextAt>now||j.lease&&j.lease.until>now)return null;
   if(j.attempts>=this.maxAttempts){j.state='QUARANTINED';j.lease=null;this.s.set('jobs',operationId,j);return null;}
   j.attempts++;j.state='RUNNING';j.lease={token:digest22([operationId,j.attempts,now]),until:now+this.leaseMs};this.s.set('jobs',operationId,j);return j;
  });}
@@ -32,8 +32,8 @@ class ServerJobs22 {
    });this.inject('afterCommit',j);return result;
   }catch(e){return this.s.tx(()=>{const c=this.s.get('jobs',operationId);if(c.state==='SUCCEEDED')return c; // reconcile lost response, never replay committed work.
    if(c.lease?.token!==j.lease.token)return c;
-   const code=['LEASE_LOST','UNSUPPORTED_OPERATION_KIND','REVISION_CONFLICT'].includes(e.code)?e.code:'OPERATION_UNAVAILABLE';
-   c.state=c.attempts>=this.maxAttempts?'QUARANTINED':'WAITING';c.lease=null;c.nextAt=this.clock()+this.retryMs*2**(c.attempts-1);c.errorCode=code;
+   const code=/^[A-Z][A-Z0-9_]{1,80}$/.test(e.code||'')?e.code:'OPERATION_UNAVAILABLE';
+   c.state=[401,403].includes(e.status)?'BLOCKED':e.status===422||c.attempts>=this.maxAttempts?'QUARANTINED':'WAITING';c.lease=null;c.nextAt=this.clock()+this.retryMs*2**(c.attempts-1);c.errorCode=code;
    this.s.set('jobs',operationId,c);this.s.set('incidents',digest22([operationId,code]),{operationId,code,attempts:c.attempts,at:this.clock()});return c;
   });}
  }

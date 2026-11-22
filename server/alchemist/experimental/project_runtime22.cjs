@@ -32,7 +32,7 @@ function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>ne
    if(envelope.version!==1||!envelope.parameters||typeof envelope.parameters!=='object'||Array.isArray(envelope.parameters))fail(422,'INVALID_ENVELOPE');
    const v=await resolveCredential(envelope.credential),actor=iam.resolve(v),q=envelope.parameters;let result;
    if(q.scope!==undefined&&(!['client:public','master:public'].includes(q.scope)||q.scope==='master:public'&&actor.role==='CLIENT'))fail(403,'SCOPE_DENIED');
-   if(op==='project.capabilities')result={contract:'alchemic.project22/1',schemaVersion:22,canonical:'sorted-json-milli-v1',nonce:q.nonce,principalBinding:v.binding,expiresAt:v.expiresAt,scope:q.scope,admin:['OWNER','ADMIN'].includes(actor.role),canPublishPolicy:actor.role==='OWNER',canManageRoles:actor.role==='OWNER'||actor.role==='ADMIN'&&actor.canManageSubordinateRoles===true,backups:backupAdapter!==null,ratings:true,courses:true,serverJobs:true};
+   if(op==='project.capabilities')result={contract:'alchemic.project22/1',schemaVersion:22,canonical:'sorted-json-milli-v1',nonce:q.nonce,principalBinding:v.binding,expiresAt:v.expiresAt,scope:q.scope,admin:['OWNER','ADMIN'].includes(actor.role),adminScope:'admin:'+actor.uid,canPublishPolicy:actor.role==='OWNER',canManageRoles:actor.role==='OWNER'||actor.role==='ADMIN'&&actor.canManageSubordinateRoles===true,backups:backupAdapter!==null,ratings:true,courses:true,serverJobs:true};
    else if(op==='project.overview')result=overview(actor);
    else if(op==='ratings.head')result=ratings.readHead();
    else if(op==='ratings.snapshot')result=ratings.snapshot(q.hash);
@@ -42,12 +42,13 @@ function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>ne
    else if(op==='project.users'){iam.admin(actor);result={users:store.list('roles').map(r=>({uid:r.key,...r.value}))};}
    else if(op==='project.categories'){iam.admin(actor);result={categories:store.list('categories').map(r=>r.value)};}
    else if(op==='project.categoryEdit')result=catalog.categories(actor,q);
-   else if(op==='project.catalogList'){iam.admin(actor);result={records:baseStore.records()};}
+   else if(op==='project.catalogList'){iam.admin(actor);result={records:baseStore.records().filter(r=>r.type!=='diaryEntry'&&(r.public||r.owner===actor.uid||r.owner===actor.subject||actor.role==='OWNER')).map(r=>Object.fromEntries(['catalogItemId','contentId','revisionId','type','title','description','sha256','byteLength','dependencies','state','public','current','ratingEpochId'].filter(k=>r[k]!==undefined).map(k=>[k,r[k]])))};}
    else if(op==='project.catalogBatch'){catalog.author(actor);result=jobs.enqueue(actor.uid,{requestId:q.requestId,kind:'catalog',input:q});}
    else if(op==='project.operations'){iam.admin(actor);result={jobs:store.list('jobs').map(r=>r.value).filter(j=>actor.role==='OWNER'||j.owner===actor.uid).map(({input,...j})=>j)};}
    else if(op==='project.incidents'){iam.admin(actor);result={incidents:store.list('incidents').map(r=>r.value),audit:store.db.prepare('SELECT actor,action,object,at FROM t22_audit ORDER BY seq DESC LIMIT 100').all()};}
    else if(op==='project.runOperation'){iam.admin(actor);const job=jobs.status(actor.uid,q.operationId);result=await jobs.run(job.operationId,handlers);}
    else if(op==='project.operationStatus')result=jobs.status(actor.uid,q.operationId);
+   else if(op==='project.operationResult'){const j=jobs.status(actor.uid,q.operationId);if(j.state!=='SUCCEEDED')fail(409,'OPERATION_NOT_COMMITTED');result=store.read(j.receipt.preparedHash);}
    else if(op==='project.backups'){iam.admin(actor);result={backups:store.list('backup-history').map(r=>r.value),available:backupAdapter!==null};}
    else if(op==='project.backup'){iam.owner(actor);if(!backupAdapter)fail(503,'BACKUP_ADAPTER_UNAVAILABLE');result=jobs.enqueue(actor.uid,{requestId:q.requestId,kind:'backup',input:q});}
    else if(op==='policy.history'){iam.admin(actor);result={active:ratings.readHead().head,history:store.list('ratings-history').map(r=>r.value),drafts:store.list('rating-drafts').map(r=>({...store.read(r.key),hash:r.key,validated:r.value.validated}))};}
