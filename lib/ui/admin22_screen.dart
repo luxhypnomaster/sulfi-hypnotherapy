@@ -1,3 +1,4 @@
+import 'catalog22_batch_screen.dart';
 import 'course22_editor.dart';
 
 import 'dart:convert';
@@ -128,6 +129,17 @@ class _Admin22ScreenState extends State<Admin22Screen> {
                   ),
                 ),
                 child: const Text('Создать курс'),
+              ),
+              TextButton(
+                onPressed: r?.admin == true
+                    ? () => Navigator.push<void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Catalog22BatchScreen(controller: c),
+                        ),
+                      )
+                    : null,
+                child: const Text('Управление материалами'),
               ),
               Expanded(child: AlchemistStoreScreen(controller: c)),
             ],
@@ -507,11 +519,38 @@ class _CategoryPanel22State extends State<CategoryPanel22> {
 
   Future<void> edit([Map? row]) async {
     final c = TextEditingController(text: row?['name']);
+    String? parent = row?['parentId'];
+    bool archived = row?['archived'] == true;
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Категория'),
-        content: TextField(controller: c, autofocus: true),
+        content: StatefulBuilder(
+          builder: (_, update) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: c, autofocus: true),
+              DropdownButton<String>(
+                value: parent ?? '',
+                isExpanded: true,
+                items: [
+                  const DropdownMenuItem(
+                    value: '',
+                    child: Text('Корневая категория'),
+                  ),
+                  for (final r in rows.where((r) => r['id'] != row?['id']))
+                    DropdownMenuItem(value: r['id'], child: Text(r['name'])),
+                ],
+                onChanged: (v) => update(() => parent = v!.isEmpty ? null : v),
+              ),
+              CheckboxListTile(
+                value: archived,
+                onChanged: (v) => update(() => archived = v!),
+                title: const Text('Архивировать категорию'),
+              ),
+            ],
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -531,7 +570,8 @@ class _CategoryPanel22State extends State<CategoryPanel22> {
         'requestId': newId(),
         'id': row?['id'] ?? newId(),
         'name': name,
-        'parentId': row?['parentId'],
+        'parentId': parent,
+        'archived': archived,
       });
       await load();
     } catch (_) {

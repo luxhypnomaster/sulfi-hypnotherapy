@@ -6,6 +6,7 @@ import 'package:sulfi_hypnotherapy/models/content_revision.dart';
 import 'package:sulfi_hypnotherapy/services/feedback22_store.dart';
 import 'package:sulfi_hypnotherapy/ui/admin22_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/course22_editor.dart';
+import 'package:sulfi_hypnotherapy/ui/catalog22_batch_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/feedback22_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_content_link.dart';
 import 'package:sulfi_hypnotherapy/ui/session_scope.dart';
@@ -197,6 +198,42 @@ void main() {
           find.textContaining('право установки пока не подтверждены'),
           findsOneWidget,
         );
+        expect(t.takeException(), null);
+      } finally {
+        await t.pumpWidget(const SizedBox());
+        await t.runAsync(() async {
+          await app.close();
+          await s.close();
+        });
+      }
+    },
+  );
+  testWidgets(
+    '22 actual metadata batch UI persists intent and confirms one server receipt without changing audio revision',
+    (t) async {
+      final s = (await t.runAsync(() => Server21.open(script: script22)))!,
+          app = (await t.runAsync(() => App21.open(s, projectEnabled: true)))!;
+      try {
+        await t.runAsync(() => s.call('control.seed', {'version': 1}));
+        await show15(t, app.f, Catalog22BatchScreen(controller: app.c));
+        await io15(t);
+        await t.tap(find.byKey(const ValueKey('batch22-module-one')));
+        await t.pump();
+        await t.ensureVisible(find.text('Предпросмотр и применение'));
+        await t.tap(find.text('Предпросмотр и применение'));
+        await t.pumpAndSettle();
+        await t.tap(find.text('Подтвердить правку'));
+        await io15(t);
+        expect(
+          find.text('Пакетная правка подтверждена серверной квитанцией'),
+          findsOneWidget,
+        );
+        final state = (await t.runAsync(() => s.call('control.state', {})))!;
+        expect(state['counts']['project.catalogBatch'], 1);
+        final list = (await t.runAsync(
+          () => s.call('project.catalogList', {}),
+        ))!;
+        expect((list['records'] as List).single['revisionId'], 'version-1');
         expect(t.takeException(), null);
       } finally {
         await t.pumpWidget(const SizedBox());

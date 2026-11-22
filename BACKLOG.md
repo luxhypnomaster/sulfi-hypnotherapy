@@ -405,3 +405,10 @@ MASTER25/26→27 и CLIENT25→27: native PASS. Пара APK27 независи�
 - [x] G3: independent config prepare/commit → CLIENT, honest saved/applied/receipt states; static selected Home banner preview, old reader preview retained.
 - [x] G4: final source8546, full Flutter526/2SKIP, analyze/format, Node62+24/JVM5, две Android bundles PASS. CI0steps/native BLOCKED_ENV. Draft PR52. G5 delivery/readback — reports/task21/DELIVERY_21.md.
 - [ ] Native signed APK/upgrade and physical Google two-device acceptance; пригодный runner и отдельное решение владельца. Production provider/ACL atomicity not selected or deployed.
+
+## №22 v1.7 — текущая отдельная ветка, без APK
+- Добавлены изолированные server jobs/receipt, зашифрованное восстановление тестовой SQLite/media, provider-neutral UID/роли и независимый ratings overlay.
+- Три рейтинга и заменяемая typed policy/strategy; weighted публично NOT_CALIBRATED до решения владельца. Добровольный локальный отзыв, consent/revoke, exposure и stable rating epoch.
+- Курсы (точные ссылки/курсор/установка через очередь №18), семь разделов управления, пакетные metadata-правки и категории. Флаг SULFI_PROJECT22 по умолчанию OFF.
+- Требуют продолжения: production adapter/полный GAS+Drive backup gate, автоматическая рематериализация official зависимостей, merge категорий/запланированный backup, утверждённая Rubedo-графика; реальные аккаунты/live не заявлены.
+- APK/Gradle/эмуляторы/телефоны в №22 отложены владельцем. Подробная матрица и фактические проверки: reports/task22.

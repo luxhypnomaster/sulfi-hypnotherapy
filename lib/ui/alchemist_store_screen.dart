@@ -386,14 +386,31 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
           DropdownButton<String?>(
             value: kind,
             isExpanded: true,
-            items: const [
-              DropdownMenuItem(value: null, child: Text('Все материалы')),
-              DropdownMenuItem(value: 'collection', child: Text('Сборки')),
-              DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
-              DropdownMenuItem(value: 'track', child: Text('Треки')),
-              DropdownMenuItem(value: 'module', child: Text('Модули')),
-              DropdownMenuItem(value: 'template', child: Text('Программы')),
-              DropdownMenuItem(value: 'session', child: Text('Сессии')),
+            items: [
+              const DropdownMenuItem(value: null, child: Text('Все материалы')),
+              const DropdownMenuItem(
+                value: 'collection',
+                child: const Text('Сборки'),
+              ),
+              const DropdownMenuItem(
+                value: 'package',
+                child: const Text('ZIP-пакеты'),
+              ),
+              const DropdownMenuItem(
+                value: 'track',
+                child: const Text('Треки'),
+              ),
+              const DropdownMenuItem(
+                value: 'module',
+                child: const Text('Модули'),
+              ),
+              const DropdownMenuItem(
+                value: 'template',
+                child: const Text('Программы'),
+              ),
+              const DropdownMenuItem(value: 'session', child: Text('Сессии')),
+              if (widget.controller.project22 != null)
+                const DropdownMenuItem(value: 'course', child: Text('Курсы')),
             ],
             onChanged: loading
                 ? null
