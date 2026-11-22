@@ -14,7 +14,8 @@
     "targetSdk": 36,
     "minSdk": 24,
     "ndk": "28.2.13676358",
-    "buildToolsInstalled": "36.0.0"
+    "buildToolsInstalled": "36.0.0",
+    "jdk": "Temurin 21.0.13+9-LTS"
   },
   "files": {
     "android/app/build.gradle.kts": "f1fe33736d6d5943151611d6135940d6e20b483d77e672e528fb185905c534d4",

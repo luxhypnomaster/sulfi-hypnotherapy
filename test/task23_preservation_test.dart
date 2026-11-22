@@ -158,10 +158,11 @@ void main() {
           );
         } finally {
           await reopened?.close();
-          if (f.db.isOpen)
+          if (f.db.isOpen) {
             await f.close();
-          else if (await f.root.exists())
+          } else if (await f.root.exists()) {
             await f.root.delete(recursive: true);
+          }
           await parent.delete(recursive: true);
         }
       },
@@ -371,4 +372,56 @@ void main() {
       }
     },
   );
+
+  test('23 account switch during export refuses mixed-owner output and leaves every original unchanged', () async {
+    final f = await Fixture15.open();
+    try {
+      await seed15(f);
+      var owner = 'synthetic-owner-A';
+      final service = CapsuleService(
+        database: f.db,
+        library: f.c.library,
+        diaryDirectory: f.c.capsules!.diaryDirectory,
+        workspace: f.c.capsules!.workspace,
+        availableBytes: () async {
+          owner = 'synthetic-owner-B';
+          return 1 << 40;
+        },
+      )..exportOwnerBinding = () => owner;
+      final before = await media23(f.root),
+          rows = await f.db.query('audio_assets');
+      await expectLater(
+        service.export(moduleId: 'portable-module'),
+        throwsFormatException,
+      );
+      expect(await media23(f.root), before);
+      expect(await f.db.query('audio_assets'), rows);
+    } finally {
+      await f.close();
+    }
+  });
+
+  test('23 missing audio and unknown media do not erase catalog on cold initialization', () async {
+    final f = await Fixture15.open();
+    try {
+      await seed15(f);
+      final rows = await f.db.query('audio_assets');
+      await File('${f.c.library.directory.path}/${rows.first['filePath']}')
+          .delete();
+      final unknown = await File(
+        '${f.c.library.directory.path}/asset_unknown.part',
+      ).writeAsString('KEEP');
+      await f.c.library.initialize();
+      await f.c.reload();
+      expect(await f.db.query('audio_assets'), rows);
+      expect(await unknown.readAsString(), 'KEEP');
+      await expectLater(
+        f.c.capsules!.export(moduleId: 'portable-module'),
+        throwsFormatException,
+      );
+      expect(await f.db.query('audio_assets'), rows);
+    } finally {
+      await f.close();
+    }
+  });
 }
