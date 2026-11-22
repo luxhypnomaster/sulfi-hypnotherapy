@@ -1,0 +1,88 @@
+{
+  "trees": {
+    "main": {
+      "lib": null,
+      "android": null,
+      "third_party": null,
+      "server": "a248a3f127072380b414a0584be4dc07a52b8779",
+      ".github": "da6b168393331fabbb90a1f7b3c55accf308c913"
+    },
+    "pr51": {
+      "lib": "1c1a9aa98b306f38edef6b28821a1a7c49444227",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "be7fcc21df07442e0e23302470537cc010effa76",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    },
+    "pr52": {
+      "lib": "1f34f1e12003550773f6792abb317f8002e76875",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "c2e2656a84eaac09ce48262e5828b33c91bed5a1",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    },
+    "pr54": {
+      "lib": "df50cd9c85b47940a9cb401f3c5c1a68bda67e92",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "c9031a55fa0d34e52256f799806e0c64768d0361",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    },
+    "pr55": {
+      "lib": "ef7376cc8d8f5617ad969021d56cb4ea55ae52f2",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "c9031a55fa0d34e52256f799806e0c64768d0361",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    },
+    "pr56": {
+      "lib": "a05ee52787463990f47d8404eabc0b78e647ec49",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "c9031a55fa0d34e52256f799806e0c64768d0361",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    },
+    "task25": {
+      "lib": "a05ee52787463990f47d8404eabc0b78e647ec49",
+      "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+      "third_party": "586467322154e4a0f5ccac2780dac31af03074e9",
+      "server": "c9031a55fa0d34e52256f799806e0c64768d0361",
+      ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0"
+    }
+  },
+  "diffFromPR56": [
+    "M\tBACKLOG.md",
+    "M\tREADME.md",
+    "A\tdocs/task25/00_START_HERE.md",
+    "A\tdocs/task25/01_ARCHITECTURAL_PREFLIGHT.md",
+    "A\tdocs/task25/02_GIT_INTEGRATION.md",
+    "A\tdocs/task25/03_DATA_P0.md",
+    "A\tdocs/task25/04_NATIVE_CI_AND_DELIVERY.md",
+    "A\tdocs/task25/05_APP_QA_AND_GAPS.md",
+    "A\tdocs/task25/06_PERMISSIONS_SECURITY.md",
+    "A\tdocs/task25/07_REPORTING.md",
+    "A\tdocs/task25/08_ACCEPTANCE_25.csv",
+    "A\tdocs/task25/09_CODEX_COMMAND.txt",
+    "A\tdocs/task25/10_MANIFEST.json",
+    "A\treports/task25/ARCHIVE_25.json",
+    "A\treports/task25/CI_PROBE_25.json",
+    "A\treports/task25/ENVIRONMENT_PREFLIGHT_25.json",
+    "A\treports/task25/GITHUB_BASELINE_25.json",
+    "A\treports/task25/PROGRESS.md",
+    "A\treports/task25/PROTECTED_25.json",
+    "A\treports/task25/SDK_REVIEW_25.json",
+    "A\tscripts/task25/source_gate.py",
+    "A\tscripts/task25/test_source_gate.py",
+    "A\ttest/task25_integration_test.dart"
+  ],
+  "newTestSHA256": "04c7918b29e5510b9fc032daddcb8b55b855b5a8910279008bf0f0d9544fa84c",
+  "diffCountsFromEachParent": {
+    "pr51": 347,
+    "pr52": 258,
+    "pr54": 132,
+    "pr55": 78,
+    "pr56": 23
+  },
+  "mainAbsence": "main is server/operations only; missing Flutter/native subtrees are recorded null, not integration loss",
+  "inputArchiveOwnerPin": "Fresh operational passport independently confirms cc1264a1afba03ff7ebb781702106d1162fdab16b6f9c9ba3b2b41ff36bba4b9; archive readback identical"
+}

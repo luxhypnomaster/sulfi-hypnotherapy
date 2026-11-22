@@ -1,0 +1,177 @@
+{
+  "folderId": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "folderURL": "https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "parentId": "1iG5L28UybhIxLayHebggTAyH5cP5IPLJ",
+  "ACL": "inherited anyone:writer, not changed; sanitized reports only, readback is point-in-time",
+  "uploads": [
+    {
+      "name": "ARCHIVE_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1BLOwgQEtesItorj0QmgL0MliEXg4mXKg",
+        "title": "ARCHIVE_25.json",
+        "file_name": "ARCHIVE_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/1BLOwgQEtesItorj0QmgL0MliEXg4mXKg/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "GITHUB_BASELINE_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1TZgz817TArySB-leSDjjVc5PzpRRooHB",
+        "title": "GITHUB_BASELINE_25.json",
+        "file_name": "GITHUB_BASELINE_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/1TZgz817TArySB-leSDjjVc5PzpRRooHB/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "SOURCE_GATE_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1RbQBw3qEz3BaGs_h1nLA6qLhhaAGcz76",
+        "title": "SOURCE_GATE_25.json",
+        "file_name": "SOURCE_GATE_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/1RbQBw3qEz3BaGs_h1nLA6qLhhaAGcz76/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "DEPENDENCY_GRAPH_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1yY4QliblUZXkLYHIXVbtV_jYqZWP6AE2",
+        "title": "DEPENDENCY_GRAPH_25.md",
+        "file_name": "DEPENDENCY_GRAPH_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1yY4QliblUZXkLYHIXVbtV_jYqZWP6AE2/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "APK_BLOCKER_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1FZ_CBeD2UY9veztMswhTlvjlnLndM6rG",
+        "title": "APK_BLOCKER_25.md",
+        "file_name": "APK_BLOCKER_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1FZ_CBeD2UY9veztMswhTlvjlnLndM6rG/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "NATIVE_UPGRADE_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1UjqLnzwTuNL941OJ4feD4QTwvIKqHGya",
+        "title": "NATIVE_UPGRADE_25.md",
+        "file_name": "NATIVE_UPGRADE_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1UjqLnzwTuNL941OJ4feD4QTwvIKqHGya/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "CI_SECURITY_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1nFeIGWcWeplJMWVeC7nGKAJFoc47At0r",
+        "title": "CI_SECURITY_25.md",
+        "file_name": "CI_SECURITY_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1nFeIGWcWeplJMWVeC7nGKAJFoc47At0r/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "SAFE_NATIVE_PLAN_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1YmnXvCDZ7ZqeKUnfKtp5s7zXphOJ5hEB",
+        "title": "SAFE_NATIVE_PLAN_25.md",
+        "file_name": "SAFE_NATIVE_PLAN_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1YmnXvCDZ7ZqeKUnfKtp5s7zXphOJ5hEB/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "ANDROID_AUDIT_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1pQUqpFBSusAnrYEtFS3Kv_GaB1YIfMwf",
+        "title": "ANDROID_AUDIT_25.md",
+        "file_name": "ANDROID_AUDIT_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1pQUqpFBSusAnrYEtFS3Kv_GaB1YIfMwf/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "SDK_REVIEW_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1fZkcMlh9PnxB_Ob2IXzayQ38EulVmdMZ",
+        "title": "SDK_REVIEW_25.json",
+        "file_name": "SDK_REVIEW_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/1fZkcMlh9PnxB_Ob2IXzayQ38EulVmdMZ/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "OWNER_QA_25.md",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1tR0KD1RriuFVkXJE64aHJYPsIc3xODg4",
+        "title": "OWNER_QA_25.md",
+        "file_name": "OWNER_QA_25.md",
+        "mime_type": "text/markdown",
+        "url": "https://docs.google.com/document/d/1tR0KD1RriuFVkXJE64aHJYPsIc3xODg4/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "SOURCE_TREES_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "163JkOgRoI-jLaeV1wdjCbQM4JBeUf2ra",
+        "title": "SOURCE_TREES_25.json",
+        "file_name": "SOURCE_TREES_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/163JkOgRoI-jLaeV1wdjCbQM4JBeUf2ra/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    },
+    {
+      "name": "CI_PROBE_25.json",
+      "result": {
+        "accepted_input": "file_uri",
+        "success": true,
+        "id": "1v3Zk0sLXGkwjhMaPdOERU32_8kzcUth5",
+        "title": "CI_PROBE_25.json",
+        "file_name": "CI_PROBE_25.json",
+        "mime_type": "application/json",
+        "url": "https://drive.google.com/file/d/1v3Zk0sLXGkwjhMaPdOERU32_8kzcUth5/view?usp=drivesdk",
+        "parent_id": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      }
+    }
+  ]
+}

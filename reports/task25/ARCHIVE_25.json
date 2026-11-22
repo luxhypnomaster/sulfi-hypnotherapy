@@ -5,5 +5,5 @@
   "manifestSHAAndSize": "PASS_10FILES",
   "filesRead": 11,
   "criteria": 55,
-  "outerSHA": "Observed; independent owner pin not supplied"
+  "outerSHA": "PASS matches fresh operational passport independent readback pin"
 }
