@@ -1,0 +1,14 @@
+{
+  "signingConfigured": {
+    "SULFI_SIGNING_STORE_FILE": false,
+    "SULFI_SIGNING_STORE_PASSWORD": false,
+    "SULFI_SIGNING_KEY_ALIAS": false,
+    "SULFI_SIGNING_KEY_PASSWORD": false
+  },
+  "keystoreConfiguredFileExists": false,
+  "KVM": false,
+  "emulatorBinary": false,
+  "adbBinary": true,
+  "rootFreeBytes": 38780928,
+  "worktreeTemp": "/dev/shm; no original user data"
+}

@@ -1,0 +1,57 @@
+{
+  "atUTC": "2026-11-22T17:11:23.577785+00:00",
+  "owner": "luxhypnomaster",
+  "visibility": "public",
+  "defaultBranch": "main",
+  "mainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "basePR56": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+  "prs": [
+    {
+      "number": 51,
+      "headSHA": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+      "headBranch": "feat/task20-catalog-vitrine",
+      "baseBranch": "feat/task19-auth-stage01",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 52,
+      "headSHA": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+      "headBranch": "feat/task21-runtime-sandbox",
+      "baseBranch": "feat/task20-catalog-vitrine",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 54,
+      "headSHA": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+      "headBranch": "feat/task22-server-ratings-admin",
+      "baseBranch": "feat/task21-runtime-sandbox",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 55,
+      "headSHA": "85fa5321c043ef97b43cb30a88a0909e7edf66f2",
+      "headBranch": "feat/task23-data-integrity-native-qa",
+      "baseBranch": "feat/task22-server-ratings-admin",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 56,
+      "headSHA": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+      "headBranch": "feat/task24-local-ux-navigation",
+      "baseBranch": "feat/task23-data-integrity-native-qa",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    }
+  ],
+  "ancestry": "PASS_ALL",
+  "parentPRs": "OPEN_DRAFT_UNMERGED"
+}

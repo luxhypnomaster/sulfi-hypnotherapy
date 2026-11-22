@@ -1,0 +1,9 @@
+{
+  "bytes": 19023,
+  "sha256": "cc1264a1afba03ff7ebb781702106d1162fdab16b6f9c9ba3b2b41ff36bba4b9",
+  "CRC": "PASS",
+  "manifestSHAAndSize": "PASS_10FILES",
+  "filesRead": 11,
+  "criteria": 55,
+  "outerSHA": "Observed; independent owner pin not supplied"
+}

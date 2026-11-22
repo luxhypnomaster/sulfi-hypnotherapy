@@ -1,0 +1,25 @@
+{
+  "startedAtUTC": "2026-11-22T17:11:57.595413+00:00",
+  "workflow": ".github/workflows/alchemist-server-checks.yml",
+  "trustedRef": "main",
+  "trustedMainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "workflowSHA256": "63e60c160b3bee03e3403b9fc62efffc8fcdba6c96650fdf7dde1a780b1a45b6",
+  "priorMaxRunID": 0,
+  "purpose": "One cheap standard-runner probe, no secrets; Node tests and build, deploy helper must stop at missing OAuth before any network or writes",
+  "dispatchAttempts": 1,
+  "state": "PASS_RUNNER_PROBE",
+  "dispatchExitCode": 0,
+  "error": null,
+  "runID": 45048084597,
+  "runURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45048084597",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success",
+      "steps": 9
+    }
+  ],
+  "observedAtUTC": "2026-11-22T17:16:21.708062+00:00"
+}
