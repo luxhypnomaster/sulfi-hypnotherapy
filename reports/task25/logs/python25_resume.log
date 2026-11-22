@@ -1,0 +1,27 @@
+test_controlled_certificate_match_is_not_private_signing_or_native_pass (test_signing_inspect.InspectTest.test_controlled_certificate_match_is_not_private_signing_or_native_pass) ... ok
+test_invalid_and_oversize_stores_never_launch_keytool (test_signing_inspect.InspectTest.test_invalid_and_oversize_stores_never_launch_keytool) ... ok
+test_missing_secret_has_public_code_and_no_temp_store (test_signing_inspect.InspectTest.test_missing_secret_has_public_code_and_no_temp_store) ... ok
+test_no_build_sign_export_private_key_or_network_operations (test_signing_inspect.InspectTest.test_no_build_sign_export_private_key_or_network_operations) ... ok
+test_preexisting_or_symlink_output_never_overwritten (test_signing_inspect.InspectTest.test_preexisting_or_symlink_output_never_overwritten) ... ok
+test_pull_request_fork_push_and_workflow_run_all_denied (test_signing_inspect.InspectTest.test_pull_request_fork_push_and_workflow_run_all_denied) ... ok
+test_timeout_cleanup_is_bounded_and_has_no_exception_echo (test_signing_inspect.InspectTest.test_timeout_cleanup_is_bounded_and_has_no_exception_echo) ... ok
+test_tool_failure_stderr_and_argv_never_in_public_receipt (test_signing_inspect.InspectTest.test_tool_failure_stderr_and_argv_never_in_public_receipt) ... ok
+test_trusted_cert_entry_does_not_prove_private_key_entry (test_signing_inspect.InspectTest.test_trusted_cert_entry_does_not_prove_private_key_entry) ... ok
+test_unexpected_exception_is_redacted_and_store_deleted (test_signing_inspect.InspectTest.test_unexpected_exception_is_redacted_and_store_deleted) ... ok
+test_untrusted_context_cannot_even_read_secret_fields (test_signing_inspect.InspectTest.test_untrusted_context_cannot_even_read_secret_fields) ... ok
+test_wrong_certificate_is_stop_not_signing_pass (test_signing_inspect.InspectTest.test_wrong_certificate_is_stop_not_signing_pass) ... ok
+test_both_embedded_python_blocks_compile_without_execution (test_signing_workflow.WorkflowTest.test_both_embedded_python_blocks_compile_without_execution) ... ok
+test_only_inspection_step_gets_three_required_existing_secrets (test_signing_workflow.WorkflowTest.test_only_inspection_step_gets_three_required_existing_secrets) ... ok
+test_owner_main_dispatch_and_re_run_actor_are_all_required (test_signing_workflow.WorkflowTest.test_owner_main_dispatch_and_re_run_actor_are_all_required) ... ok
+test_proposal_cannot_be_dispatched_from_feature_branch (test_signing_workflow.WorkflowTest.test_proposal_cannot_be_dispatched_from_feature_branch) ... ok
+test_reviewed_tool_hash_and_actions_are_immutable (test_signing_workflow.WorkflowTest.test_reviewed_tool_hash_and_actions_are_immutable) ... ok
+test_upload_cannot_capture_keystore_workspace_or_apks (test_signing_workflow.WorkflowTest.test_upload_cannot_capture_keystore_workspace_or_apks) ... ok
+test_manifest_path_escape_never_reads_external_file (test_source_gate.SourceGateTest.test_manifest_path_escape_never_reads_external_file) ... ok
+test_modified_or_deleted_native_file_refuses_without_repinning (test_source_gate.SourceGateTest.test_modified_or_deleted_native_file_refuses_without_repinning) ... ok
+test_real_integration_ancestry_and_all_runtime_pins (test_source_gate.SourceGateTest.test_real_integration_ancestry_and_all_runtime_pins) ... ok
+test_same_bytes_symlink_is_not_approved_source (test_source_gate.SourceGateTest.test_same_bytes_symlink_is_not_approved_source) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.101s
+
+OK

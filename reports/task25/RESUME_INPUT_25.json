@@ -1,0 +1,53 @@
+{
+  "atUTC": "2026-11-22T19:56:40.420760+00:00",
+  "archiveCRC": "PASS",
+  "archiveSHA256": "cc1264a1afba03ff7ebb781702106d1162fdab16b6f9c9ba3b2b41ff36bba4b9",
+  "all11SourceFiles": "identical to fully read official input, no replacement spec",
+  "currentParents": [
+    {
+      "number": 51,
+      "headSHA": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+      "base": "feat/task19-auth-stage01",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 52,
+      "headSHA": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+      "base": "feat/task20-catalog-vitrine",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 54,
+      "headSHA": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+      "base": "feat/task21-runtime-sandbox",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 55,
+      "headSHA": "85fa5321c043ef97b43cb30a88a0909e7edf66f2",
+      "base": "feat/task22-server-ratings-admin",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 56,
+      "headSHA": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+      "base": "feat/task23-data-integrity-native-qa",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    }
+  ],
+  "mainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "currentTask25Checkpoint": "14fb674cb2198ea4667ce7e6174946f7bd8c4f13",
+  "environment": "same Cloud id, connected, secrets bindings empty, no signing/native configuration change",
+  "runnerProbe": "not repeated;45048084597 alreadySUCCESS",
+  "scope": "additional dormant read-only signing inspection tool; no main/production/signing use"
+}

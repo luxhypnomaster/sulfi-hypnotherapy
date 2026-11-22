@@ -1,0 +1,83 @@
+# REVIEW ONLY. Not under .github/workflows; no activation or dispatch granted.
+# Proposed main promotion: this file -> .github/workflows/sulfi-signing-inspect25.yml
+# plus scripts/task25/signing_inspect.py. No other source changes.
+name: Task25 existing public certificate inspect only
+"on":
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Read only existing certificate; no build, signing, APK or deployment
+        required: true
+        default: ''
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: task25-public-certificate-inspect
+  cancel-in-progress: false
+jobs:
+  inspect:
+    if: >-
+      ${{ github.repository == 'luxhypnomaster/sulfi-hypnotherapy' &&
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/main' &&
+          github.actor == 'luxhypnomaster' &&
+          github.triggering_actor == 'luxhypnomaster' &&
+          inputs.confirmation == 'READ_ONLY_EXISTING_CERTIFICATE' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read trusted main tool only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: scripts/task25/signing_inspect.py
+          sparse-checkout-cone-mode: false
+      - name: Verify approved inspection tool before credentials
+        shell: bash
+        run: |
+          python3 - <<'PY_TOOL_PIN'
+          import hashlib
+          from pathlib import Path
+          expected = '54a22dfdb1d01b170f6da4c709c66d80156d2d3fea7329a0b5507581d0aa45ee'
+          actual = hashlib.sha256(Path('scripts/task25/signing_inspect.py').read_bytes()).hexdigest()
+          if actual != expected:
+              raise SystemExit('STOP: unreviewed inspection tool')
+          print('Approved tool bytes match; no credentials used by this step')
+          PY_TOOL_PIN
+      - name: Inspect existing public certificate
+        env:
+          TASK25_INSPECT_CONFIRMATION: ${{ inputs.confirmation }}
+          SULFI_TEST_KEYSTORE_BASE64: ${{ secrets.SULFI_TEST_KEYSTORE_BASE64 }}
+          SULFI_TEST_STORE_PASSWORD: ${{ secrets.SULFI_TEST_STORE_PASSWORD }}
+          SULFI_TEST_KEY_ALIAS: ${{ secrets.SULFI_TEST_KEY_ALIAS }}
+        shell: bash
+        run: python3 scripts/task25/signing_inspect.py
+      - name: Remove scoped temporary stores even after failure
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          python3 - <<'PY_CLEAN'
+          import os, shutil
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          for p in root.glob('.sulfi25-cert-*'):
+              if p.is_symlink():
+                  p.unlink()
+              elif p.is_dir():
+                  shutil.rmtree(p)
+          if list(root.glob('.sulfi25-cert-*')):
+              raise SystemExit('STOP: cleanup incomplete')
+          print('Scoped temporary stores absent')
+          PY_CLEAN
+      - name: Upload public result only
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: task25-public-certificate-inspect-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/task25-signing-inspect/public-result.json
+          if-no-files-found: ignore
+          include-hidden-files: false
+          retention-days: 3
+          overwrite: false
