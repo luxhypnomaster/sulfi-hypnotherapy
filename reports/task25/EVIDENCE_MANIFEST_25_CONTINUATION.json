@@ -1,0 +1,99 @@
+{
+  "sourceToolSHA": "5790139b0c2dc45363434451aa951b14b496d8fc",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "scope": "additional dormant certificate inspection +23 controlled tests +protectedmainREDGREEN +copy dryrun; no real credentials/APK/owner data",
+  "files": {
+    "reports/task25/ACCEPTANCE_25_CONTINUATION.csv": {
+      "size": 10210,
+      "sha256": "2e8d0367f9f65288e6c5cd58bc9ce725a2d9435ac01a8b1396673e97eebb30ba"
+    },
+    "reports/task25/CONTINUATION_25.md": {
+      "size": 7353,
+      "sha256": "1bb8cc2e0eddd8bb43ded173f6a3889e32d0c019882e79b9132bca190e83cf93"
+    },
+    "reports/task25/ISSUES_25_CONTINUATION.md": {
+      "size": 2242,
+      "sha256": "b55ca6b3ae9e1cd5d7feaec3cfc5dc31409c2dffdb0fbee7a9ad58cc45936e10"
+    },
+    "reports/task25/MAIN_TRUST_BOUNDARY_25.json": {
+      "size": 656,
+      "sha256": "8b1c13f292a12c9b60d050d2fefeec21757649f94cd936d4b6ae792f0d301a61"
+    },
+    "reports/task25/PROGRESS_25_CONTINUATION.md": {
+      "size": 2590,
+      "sha256": "4cfa58423f2bbb78a1f49b5e36de9a2ac2c1575bedf73bb60712c6d801f8c574"
+    },
+    "reports/task25/RESUME_INPUT_25.json": {
+      "size": 1706,
+      "sha256": "e876a3c270b61912b1c71ee27aa109a120e9a010135a358b202f2d1930c4bf25"
+    },
+    "reports/task25/SECURITY_25_CONTINUATION.json": {
+      "size": 454,
+      "sha256": "c32ca9def718cfe3f3195e1164dd7790766e66ccf969182a5714681c328e9b77"
+    },
+    "reports/task25/SIGNING_INSPECT_DRYRUN_25.json": {
+      "size": 642,
+      "sha256": "08276ad7833e3ab1e63a3d60bbe1d2630835f532059666d0e1e6db5753cbd319"
+    },
+    "reports/task25/SIGNING_INSPECT_LINT_25.json": {
+      "size": 1062,
+      "sha256": "2cfa15498d6543498b888c3e58f6a85d6fa048c8632384243c17f8c15035b22f"
+    },
+    "reports/task25/SIGNING_INSPECT_MAIN_PROPOSAL_25.diff": {
+      "size": 11940,
+      "sha256": "deaeed856500d2f2f35a6ed5bd101a1364db2ff1af83e341393f06aa63d0daba"
+    },
+    "reports/task25/SIGNING_INSPECT_REVIEW_REQUEST_25.md": {
+      "size": 6239,
+      "sha256": "32fc1b85553b8b6b4c332172cec8ef3c667c90b9a5b3b024749a1f8e5b0247f8"
+    },
+    "reports/task25/SIGNING_INSPECT_SECURITY_REVIEW_25.md": {
+      "size": 3810,
+      "sha256": "e78f21b01ecfc0b7970ab15e41e48e8d819c92eddafa50b1d528178366f4d058"
+    },
+    "reports/task25/SOURCE_GATE_25_CONTINUATION.json": {
+      "size": 1648,
+      "sha256": "81d0e5fc815b8c56b2a95ca45d3345bd65856f14b272a34c9fdd5358e17b09e6"
+    },
+    "reports/task25/TESTS_25_CONTINUATION.md": {
+      "size": 3362,
+      "sha256": "389d244327842a41ca9110241b872169059b839f30f82c6d10075ccda859ae91"
+    },
+    "reports/task25/logs/python25_resume.log": {
+      "size": 3661,
+      "sha256": "36ec1de6ee12d83344bb971608ab86f8763e6af6e508342a5b52f72a78b9d36f"
+    },
+    "reports/task25/logs/signing_unprotected_RED_25.log": {
+      "size": 885,
+      "sha256": "76afded2ff4cd4b74560567dd6afee47ca88526dd1c4afd2dc4c6bd56a3cf58f"
+    },
+    "reports/task25/logs/signing_workflow_actionlint25.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scripts/task25/review_only/sulfi-signing-inspect25.yml": {
+      "size": 4615,
+      "sha256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492"
+    },
+    "scripts/task25/signing_inspect.py": {
+      "size": 6666,
+      "sha256": "510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c"
+    },
+    "scripts/task25/source_gate.py": {
+      "size": 3348,
+      "sha256": "3f4a39f18bb8520f335f927d17a405dbebbf6248989e7b38b6aa8e12e1504133"
+    },
+    "scripts/task25/test_signing_inspect.py": {
+      "size": 9507,
+      "sha256": "9c4b1c88fb3043f5eee6a78319ecfb306212c3d48c3bd221d423c56f74282390"
+    },
+    "scripts/task25/test_signing_workflow.py": {
+      "size": 5010,
+      "sha256": "8e3ffbb3129085402d1d8deae711c95382a5ccacad6204ebab292ccf9337f44c"
+    },
+    "scripts/task25/test_source_gate.py": {
+      "size": 2066,
+      "sha256": "aeea32afae4080163457b0badf914577526d135cbf602defa037934918ee1720"
+    }
+  }
+}

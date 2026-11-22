@@ -1,0 +1,12 @@
+{
+  "status": "PASS_SCANNED_SCOPE_ONLY",
+  "sourceToolSHA": "5790139b0c2dc45363434451aa951b14b496d8fc",
+  "filesScanned": 22,
+  "hits": [],
+  "scope": "new continuation sources/reports/control logs only; not entire Git history or absent APK",
+  "canaryTestValues": "synthetic literals in tests, not issued credentials/certificates",
+  "actualSecretReadback": "NOT_RUN",
+  "privateSigning": "NOT_PROVEN",
+  "mainProtected": false,
+  "APKs": "NOT_BUILT"
+}

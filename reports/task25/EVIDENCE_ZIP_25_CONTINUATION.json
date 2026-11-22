@@ -1,0 +1,11 @@
+{
+  "archive": "EVIDENCE_25_CONTINUATION.zip",
+  "size": 42399,
+  "sha256": "1838efde441479176ed3aab8e751cb158aea7735a16730fdc69c887a5424c5e8",
+  "CRC": "PASS",
+  "manifestEntries": 23,
+  "includesManifestFile": true,
+  "oldEvidence25": "preserved unchanged",
+  "APKs": 0,
+  "sourceToolSHA": "5790139b0c2dc45363434451aa951b14b496d8fc"
+}

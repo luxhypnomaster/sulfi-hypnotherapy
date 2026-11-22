@@ -12,7 +12,7 @@
 
 Проверки: **23PythonPASS** (19новых +4существующих source-gate); controlled subprocess/canary, **не настоящий ключ**. Actionlintv1.7.12PASS, официальный бинарник+checksums+GitHub asset digests сверены. YAML/expressions/action-schema lint и6структурных security tests не равны GitHub execution. Никакого нового сертификата даже для тестов не создавалось; используются помеченные синтетические bytes, subprocessподменён только в тестах.
 
-Предыдущие574FlutterPASS/2SKIP/0FAIL,114Node и53Python остаются исходными проверенными результатами. Полные Flutter/Node не повторялись: ни одна строка app/server/native/testsFlutter/lock не менялась. Новый targeted23 перекрывается с прежними4; нельзя складывать53+22 как75уникальных. Подробности TESTS_25_CONTINUATION.
+Предыдущие574FlutterPASS/2SKIP/0FAIL,114Node и53Python остаются исходными проверенными результатами. Полные Flutter/Node не повторялись: ни одна строка app/server/native/testsFlutter/lock не менялась. Новый targeted23 перекрывается с прежними4; нельзя складывать53+23 как76уникальных. Подробности TESTS_25_CONTINUATION.
 
 **Гейты не переименованы вPASS:** реальные GitHub Secrets/сертификат NOT_RUN, private keypassword/signing usable NOT_PROVEN, APKs0, nativeupgradeBLOCKED, реальныеGoogle/телефоныNOT_RUN, production22BLOCKED_LIVE. Приглашение повторить №25 не является разрешением менятьmain. Матрица55 дополнена в отдельном ACCEPTANCE_25_CONTINUATION.csv:43PASS по заявленным уровням,1ALREADY_DONE,7BLOCKED,3PARTIAL,1NOT_RUN — без изменения уже сохранённых оригинальных отчётов.
 
