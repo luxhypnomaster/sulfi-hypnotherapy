@@ -28,6 +28,8 @@ String alchemistStageLabel(Object? phase) =>
       'reader_synced': 'Состояние чтения подтверждено сервером',
       'catalog_checking': 'Сверка редакции каталога',
       'catalog_checked': 'Каталог проверен; локальная копия сохранена',
+      'feedback_sending': 'Передача добровольного отзыва',
+      'feedback_confirmed': 'Согласие и отзыв подтверждены сервером',
       'manifest_registering': 'Проверка состава',
       'publishing': 'Подтверждение каталога',
       'catalog_committed': 'Подтверждено сервером',
@@ -687,7 +689,10 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 .where(
                   (r) =>
                       r['download'] is Map &&
-                      r['download']['kind'] == 'catalogSnapshot20',
+                      const [
+                        'catalogSnapshot20',
+                        'projectMetadata22',
+                      ].contains(r['download']['kind']),
                 )
                 .firstOrNull ??
             eligible.firstOrNull;
@@ -823,7 +828,12 @@ class AlchemistWorkQueue extends ChangeNotifier {
                 ? 'paused'
                 : name.startsWith('alchemist_diary_queue:')
                 ? 'diary_committed'
-                : value['download']?['kind'] == 'catalogSnapshot20'
+                : value['download']?['kind'] == 'feedback22'
+                ? 'feedback_confirmed'
+                : const [
+                    'catalogSnapshot20',
+                    'projectMetadata22',
+                  ].contains(value['download']?['kind'])
                 ? 'catalog_checked'
                 : name.startsWith('alchemist_download:')
                 ? 'installed'

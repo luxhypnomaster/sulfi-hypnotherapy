@@ -4,6 +4,8 @@ import '../services/diary_controller.dart';
 import 'diary_screen.dart';
 import 'design.dart';
 import 'vitrine_settings_screen.dart';
+import 'admin22_screen.dart';
+import 'session_scope.dart';
 
 /// The tab is attached to the board edge; it occupies no session content row.
 class DiaryHomeBoard extends StatelessWidget {
@@ -149,7 +151,11 @@ class DiaryHomeBoard extends StatelessWidget {
               onTap: () => Navigator.push<void>(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PublicationsVitrineScreen(diary: management!),
+                  builder: (_) => SessionScope.maybeOf(context) == null
+                      ? PublicationsVitrineScreen(diary: management!)
+                      : Admin22Screen(
+                          controller: SessionScope.maybeOf(context)!.controller,
+                        ),
                 ),
               ),
               child: const SizedBox.expand(),

@@ -7,6 +7,7 @@ import '../models/session_timeline.dart';
 import 'library_service.dart';
 import 'session_controller.dart';
 import 'session_transport.dart';
+import 'playback22_evidence.dart';
 
 // Execution state is independent of widgets; Android media service owns this engine.
 class SessionEngine extends ChangeNotifier {
@@ -36,6 +37,7 @@ class SessionEngine extends ChangeNotifier {
   final int Function() _now;
   late final StreamSubscription<String> _events;
   SessionRun? run;
+  final _exposure22 = Playback22Evidence();
   String? error;
   Timer? _timer;
   Future<void> _tail = Future.value();
@@ -171,6 +173,35 @@ class SessionEngine extends ChangeNotifier {
     await controller.preview?.stop();
     final snapshot = await controller.snapshotForStart();
     run = await controller.repository.startRun(snapshot);
+    if (controller.project22Enabled &&
+        controller.capsules != null &&
+        controller.metadata != null) {
+      try {
+        final origin = controller.policy.catalogOrigins
+            .where(
+              (o) =>
+                  o['key']['type'] == 'template' &&
+                  o['key']['logicalId'] == snapshot.baseTemplateId,
+            )
+            .firstOrNull;
+        final view = await controller.metadata!.sync.lastGood(
+          controller.metadata!.gateway.scope,
+        );
+        if (origin != null &&
+            view != null &&
+            controller.transferOwner != null) {
+          await freezeSources22(
+            controller.capsules!.database,
+            run!,
+            List<Map<String, dynamic>>.from(view['snapshot']['items']),
+            owner: controller.transferOwner!,
+            expectedRevision: origin['key']['revision'],
+          );
+        }
+      } catch (_) {
+        /* Missing exact provenance keeps feedback local-only. */
+      }
+    }
     await controller.preview?.stop();
     _generation++;
     _exiting = false;
@@ -181,6 +212,7 @@ class SessionEngine extends ChangeNotifier {
     _timer = Timer.periodic(const Duration(milliseconds: 200), (_) => tick());
   });
   Future<void> _beginStep(int index) async {
+    _exposure22.discontinuity();
     await transport.stop();
     final r = run!;
     if (index >= r.snapshot.plan.steps.length) {
@@ -225,6 +257,15 @@ class SessionEngine extends ChangeNotifier {
       }
       if (generation != _generation) return;
       if (autoplay) await transport.play();
+      if (controller.project22Enabled) {
+        _exposure22.sample(
+          s.id,
+          transport.position.inMilliseconds,
+          _now(),
+          playing: autoplay,
+          durationMs: s.durationMs ?? 0,
+        );
+      }
     } else if (s.kind == StepKind.voiceRecording) {
       throw const LibraryException('Запись микрофона ещё не поддерживается.');
     }
@@ -235,6 +276,13 @@ class SessionEngine extends ChangeNotifier {
     if (run == null) return;
     run = run!.checkpoint(playheadMs: phasePositionMs, elapsedMs: elapsedMs);
     await controller.repository.checkpoint(run!, event: event);
+    if (controller.project22Enabled && controller.capsules != null) {
+      try {
+        await savePlayback22(controller.capsules!.database, run!, _exposure22);
+      } catch (_) {
+        /* Missing evidence means UNKNOWN, never blocks session. */
+      }
+    }
     _lastSave = _now();
   }
 
@@ -251,6 +299,15 @@ class SessionEngine extends ChangeNotifier {
   @visibleForTesting
   void tick() {
     if (!active || paused || _busy || _disposed || _tickPending) return;
+    if (controller.project22Enabled && run!.phase == 'audio' && step != null) {
+      _exposure22.sample(
+        step!.id,
+        phasePositionMs,
+        _now(),
+        playing: _running,
+        durationMs: step!.durationMs ?? 0,
+      );
+    }
     final ended = run!.phase == 'audio'
         ? transport.completed ||
               (phaseDurationMs != null && phasePositionMs >= phaseDurationMs!)
@@ -387,6 +444,7 @@ class SessionEngine extends ChangeNotifier {
     return _enqueue(() async {
       if (!canSeek) return;
       await _persist('seek_from');
+      _exposure22.discontinuity();
       final target = value.inMilliseconds.clamp(0, step!.durationMs!);
       await transport.seek(Duration(milliseconds: target));
       await _persist('seek');
@@ -529,6 +587,13 @@ class SessionEngine extends ChangeNotifier {
     );
     await transport.stop();
     await controller.repository.checkpoint(run!, event: event);
+    if (controller.project22Enabled && controller.capsules != null) {
+      try {
+        await savePlayback22(controller.capsules!.database, run!, _exposure22);
+      } catch (_) {
+        /* No invented exposure. */
+      }
+    }
   }
 
   Future<void> close() async {

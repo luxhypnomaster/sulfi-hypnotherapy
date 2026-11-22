@@ -18,6 +18,8 @@ import 'catalog_snapshot_sync.dart';
 import 'alchemist_errors.dart';
 import 'metadata_runtime.dart';
 import 'metadata_gateway.dart';
+import 'project22_runtime.dart';
+import 'feedback22_store.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -53,8 +55,12 @@ class SessionController extends ChangeNotifier {
     this.backgroundWorker = false,
     this.snapshotTransport,
     this.metadataRpc,
+    this.project22Rpc,
+    bool? project22Enabled,
     bool? metadataEnabled,
-  }) : metadataEnabled =
+  }) : project22Enabled =
+           project22Enabled ?? const bool.fromEnvironment('SULFI_PROJECT22'),
+       metadataEnabled =
            metadataEnabled ?? const bool.fromEnvironment('SULFI_METADATA_V1'),
        modules = modules ?? ModuleCatalog(null, library.policy) {
     library.policy.addListener(_notify);
@@ -93,6 +99,33 @@ class SessionController extends ChangeNotifier {
   final bool backgroundWorker;
   final bool metadataEnabled;
   final MetadataRpc? metadataRpc;
+  final bool project22Enabled;
+  final MetadataRpc? project22Rpc;
+  Project22Runtime? _project22;
+  Feedback22Store? get feedback22 => capsules == null
+      ? null
+      : Feedback22Store(
+          capsules!.database,
+          owner: () => transferOwner,
+          runtime: project22,
+          queue: cloudQueue,
+        );
+  Project22Runtime? get project22 {
+    if (!project22Enabled || capsules == null || catalog.api == null) {
+      return null;
+    }
+    if (_project22 != null) return _project22;
+    final result = Project22Runtime(
+      db: capsules!.database,
+      rpc: project22Rpc ?? ExistingMetadataRpc(catalog.api!),
+      owner: () => transferOwner,
+      epoch: () => diary?.api?.identityGeneration ?? 0,
+      scope: policy.clientEdition ? 'client:public' : 'master:public',
+    );
+    result.addListener(_notify);
+    return _project22 = result;
+  }
+
   MetadataRuntime? _metadataRuntime;
   MetadataRuntime? get metadata {
     if (!metadataEnabled || capsules == null || catalog.api == null) {
@@ -349,6 +382,22 @@ class SessionController extends ChangeNotifier {
     void Function(String) stage,
     void Function(int, int) progress,
   ) async {
+    if (value['download']?['kind'] == 'feedback22') {
+      final store = feedback22;
+      if (store == null || project22 == null) {
+        throw const FormatException('PROJECT22_UNAVAILABLE');
+      }
+      stage('feedback_sending');
+      await store.execute(value, stop);
+      return;
+    }
+    if (value['download']?['kind'] == 'projectMetadata22') {
+      final runtime = project22;
+      if (runtime == null) throw const FormatException('PROJECT22_UNAVAILABLE');
+      stage('catalog_checking');
+      await runtime.execute(value, stop);
+      return;
+    }
     if (value['download']?['kind'] == 'catalogSnapshot20') {
       final runtime = metadata;
       if (runtime != null) {
@@ -670,6 +719,11 @@ class SessionController extends ChangeNotifier {
   Future<void> initialize() async {
     if (!isEditor) await repository.interruptUnfinished();
     await reload();
+    final extension = project22;
+    if (extension != null) {
+      await extension.restore();
+      unawaited(extension.refresh(cloudQueue).catchError((Object _) {}));
+    }
     final runtime = metadata;
     if (runtime != null) {
       await runtime.restoreConfig();
@@ -1316,6 +1370,8 @@ class SessionController extends ChangeNotifier {
     library.policy.removeListener(_notify);
     _cloudQueue?.dispose();
     _snapshotSync?.dispose();
+    _project22?.removeListener(_notify);
+    _project22?.dispose();
     _metadataRuntime?.removeListener(_notify);
     _metadataRuntime?.dispose();
     _disposed = true;
