@@ -1,0 +1,110 @@
+{
+  "checkedAtUTC": "2026-11-22T12:18:31.044447+00:00",
+  "method": "Connected metadata + fresh raw Drive fetch + independent sediment download + local byte/size/SHA256 comparison",
+  "folderID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+  "acl": "NOT_CHANGED",
+  "files": [
+    {
+      "name": "RESULT.md",
+      "id": "1MxadQ52hCxAKpYRKhCvZ7208oOUDNrjB",
+      "url": "https://drive.google.com/file/d/1MxadQ52hCxAKpYRKhCvZ7208oOUDNrjB/view",
+      "bytes": 5198,
+      "sha256": "f295fb05e8489d53d6c7738acbf120f86671ce7a424036314093c891971047b2",
+      "independentDownloadSHA256": "f295fb05e8489d53d6c7738acbf120f86671ce7a424036314093c891971047b2",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "CHANGES.md",
+      "id": "1y1soGjO_jTB1FTeOZIxEGXkz4d6nWOo0",
+      "url": "https://drive.google.com/file/d/1y1soGjO_jTB1FTeOZIxEGXkz4d6nWOo0/view",
+      "bytes": 5879,
+      "sha256": "05f45d7169c60f9b63bca8af22128d9cd816e005ed8ea25df102956b64f2f6e3",
+      "independentDownloadSHA256": "05f45d7169c60f9b63bca8af22128d9cd816e005ed8ea25df102956b64f2f6e3",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "TESTS.md",
+      "id": "1UzIr51mUlDePGgvtylLZHfdZr-M7Bnmz",
+      "url": "https://drive.google.com/file/d/1UzIr51mUlDePGgvtylLZHfdZr-M7Bnmz/view",
+      "bytes": 6517,
+      "sha256": "a31ba05af30b9f07b64724f3e552579454c4b6b9afc54f5f019bf81193200b5a",
+      "independentDownloadSHA256": "a31ba05af30b9f07b64724f3e552579454c4b6b9afc54f5f019bf81193200b5a",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "ISSUES.md",
+      "id": "18NtREprKFXvybUUlymoMp3oqOeHCZdOu",
+      "url": "https://drive.google.com/file/d/18NtREprKFXvybUUlymoMp3oqOeHCZdOu/view",
+      "bytes": 3783,
+      "sha256": "e15a88e26406888f30ccce5ca92e5661df66dd7fd4b66c13192552d483d4324a",
+      "independentDownloadSHA256": "e15a88e26406888f30ccce5ca92e5661df66dd7fd4b66c13192552d483d4324a",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "MIGRATION.md",
+      "id": "1Nm8DwaNNtm_EcXVujBsAO0sAlDxwo04x",
+      "url": "https://drive.google.com/file/d/1Nm8DwaNNtm_EcXVujBsAO0sAlDxwo04x/view",
+      "bytes": 6893,
+      "sha256": "e707bdce8f0f1ad6607baa1773b307810e5fb3292a68c74407debaf32edd8a15",
+      "independentDownloadSHA256": "e707bdce8f0f1ad6607baa1773b307810e5fb3292a68c74407debaf32edd8a15",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "OWNER_PHONE_QA.md",
+      "id": "1jTeZEl7OgvwgQbOSIn0PCIlQpmpUBOyv",
+      "url": "https://drive.google.com/file/d/1jTeZEl7OgvwgQbOSIn0PCIlQpmpUBOyv/view",
+      "bytes": 6672,
+      "sha256": "a5149953ed32e6aa8fbad8f9f30dd1155a52b805062aa7372873241df77c9828",
+      "independentDownloadSHA256": "a5149953ed32e6aa8fbad8f9f30dd1155a52b805062aa7372873241df77c9828",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "ACCEPTANCE_23.csv",
+      "id": "1xU_cqv8SAK84PHS1utIvTPrX6FAdvviw",
+      "url": "https://drive.google.com/file/d/1xU_cqv8SAK84PHS1utIvTPrX6FAdvviw/view",
+      "bytes": 5071,
+      "sha256": "a09c5bbfa605910ca839e2ae2636cd5ab794cbb58208e225372f6e87680a6367",
+      "independentDownloadSHA256": "a09c5bbfa605910ca839e2ae2636cd5ab794cbb58208e225372f6e87680a6367",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "DIFF_AUDIT_23.md",
+      "id": "19VxM7MbVN2uxDOoXiB9BfglBJo5cu20h",
+      "url": "https://drive.google.com/file/d/19VxM7MbVN2uxDOoXiB9BfglBJo5cu20h/view",
+      "bytes": 4749,
+      "sha256": "0b309df1767485b4cca23aadc612ef9b120fb5148dc453fbda6cdfea708ff4b2",
+      "independentDownloadSHA256": "0b309df1767485b4cca23aadc612ef9b120fb5148dc453fbda6cdfea708ff4b2",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "EVIDENCE_23.zip",
+      "id": "161-eHejgoVm6SGGI3DjcRDERrmw_qRm-",
+      "url": "https://drive.google.com/file/d/161-eHejgoVm6SGGI3DjcRDERrmw_qRm-/view",
+      "bytes": 57849,
+      "sha256": "5f6081422c395e69c1e812794f53eb90843ed390efc51fbd507bda2cff295de2",
+      "independentDownloadSHA256": "5f6081422c395e69c1e812794f53eb90843ed390efc51fbd507bda2cff295de2",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "DELIVERY_23.json",
+      "id": "1j_WGIQTwbM7grdu55lsm-x991IWKf8Fj",
+      "url": "https://drive.google.com/file/d/1j_WGIQTwbM7grdu55lsm-x991IWKf8Fj/view",
+      "bytes": 5384,
+      "sha256": "02caa2043a7501ad4e1be3cb6bce00c6254280874e726539862f156dc6164b7a",
+      "independentDownloadSHA256": "02caa2043a7501ad4e1be3cb6bce00c6254280874e726539862f156dc6164b7a",
+      "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+      "status": "PASS_BYTES_SHA_PARENT"
+    }
+  ],
+  "allVerified": true,
+  "notUploaded": "No APK/source/private DB/audio/tokens/signing material"
+}

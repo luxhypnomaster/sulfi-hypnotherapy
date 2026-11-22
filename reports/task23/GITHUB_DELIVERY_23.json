@@ -1,0 +1,18 @@
+{
+  "checkedAtUTC": "2026-11-22T12:15:12.345307+00:00",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/55",
+  "draft": true,
+  "merged": false,
+  "prHeadSHA": "e6ef9bd61ff029ab7523f2095b8d7df61a46c146",
+  "remoteRefSHA": "e6ef9bd61ff029ab7523f2095b8d7df61a46c146",
+  "localHeadSHA": "e6ef9bd61ff029ab7523f2095b8d7df61a46c146",
+  "testedSourceSHA": "5fae671c9829c021151e3c9e6ed0467692a7867a",
+  "basePR54": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+  "baseBranch": "feat/task22-server-ratings-admin",
+  "mainUnchangedSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "Task23ActionsRuns": 0,
+  "native": "DEFERRED_BY_OWNER",
+  "releaseCreated": false,
+  "mergePerformed": false,
+  "productionDeploymentPerformed": false
+}

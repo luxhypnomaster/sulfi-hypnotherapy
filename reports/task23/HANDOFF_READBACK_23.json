@@ -1,0 +1,13 @@
+{
+  "checkedAtUTC": "2026-11-22T12:19:16.977468+00:00",
+  "name": "DRIVE_READBACK_23.json",
+  "fileID": "1yRK9KagnnwMR2ociSDOFJ2Cp9Mw9lQXQ",
+  "bytes": 5203,
+  "localSHA256": "8f13300d06c3fd1822464c415a06a9e93eb2b58c7d387ef1a65eeeb06e96a2d8",
+  "independentDownloadSHA256": "8f13300d06c3fd1822464c415a06a9e93eb2b58c7d387ef1a65eeeb06e96a2d8",
+  "parentID": "1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+  "status": "PASS_BYTES_SHA_PARENT",
+  "allDeliveredFilesIncludingIndex": 11,
+  "scope": "Readback index covers 10 files; this independent Git receipt checks the index itself without self-hash recursion",
+  "noACLChange": true
+}
