@@ -27,7 +27,14 @@ class CapsulePreview {
     this.databaseToken,
     this.conflicts,
     this.alreadyImported,
-  );
+  ) : _verifiedDigest = CapsuleService.digest(manifest);
+  final String _verifiedDigest;
+  void assertUnchanged() {
+    if (CapsuleService.digest(manifest) != _verifiedDigest) {
+      throw const FormatException('Состав капсулы изменился после проверки');
+    }
+  }
+
   final Map<String, dynamic> manifest;
   final Directory staging;
   final String databaseToken;
@@ -63,6 +70,11 @@ class CapsuleService {
   final Future<int> Function()? availableBytes;
   final DiaryVideoProbe? videoProbe;
   final DateTime Function() clock;
+  // Existing verified API supplies these read-only callbacks. A role alone is
+  // not ownership of another account's saved private diary. No OAuth changes.
+  bool Function(Object? scope)? canReadAuthorDraftScope;
+  String Function()? exportOwnerBinding;
+
   static const schema = 1;
   static const tables = [
     'audio_assets',
@@ -83,22 +95,31 @@ class CapsuleService {
   static const maxBytes = 4 * 1024 * 1024 * 1024;
   static const maxManifest = 32 * 1024 * 1024;
 
-  /// Startup only, before any transfer. A killed process may leave staged bytes;
-  /// committed media live in different directories and are never visited here.
-  static Future<void> cleanWorkspace(Directory dir) async {
-    if (!await dir.exists()) return;
+  /// Logical quarantine, never a move/delete. A filename prefix is not proof
+  /// that a killed export or user's only capsule is disposable. Operation-owned
+  /// temporary files are still discarded by their explicit close/failure paths.
+  static Future<List<Map<String, String>>> quarantineWorkspace(
+    Directory dir,
+  ) async {
+    final rows = <Map<String, String>>[];
+    if (!await dir.exists()) return rows;
     await for (final entry in dir.list(followLinks: false)) {
       final name = p.basename(entry.path);
-      if (entry is Directory &&
-          (name.startsWith('restore-') || name.startsWith('export-'))) {
-        await entry.delete(recursive: true);
-      }
-      if (entry is File &&
-          ((name.startsWith('sulfi-') && name.endsWith('.zip')) ||
-              (name.startsWith('sulfi-legacy-') && name.endsWith('.part')))) {
-        await entry.delete();
+      if (name.startsWith('restore-') ||
+          name.startsWith('export-') ||
+          name.startsWith('sulfi-')) {
+        rows.add({
+          'name': name,
+          'status': 'QUARANTINED_UNKNOWN_OWNER',
+          'action': 'preserved',
+        });
       }
     }
+    return rows;
+  }
+
+  static Future<void> cleanWorkspace(Directory dir) async {
+    await quarantineWorkspace(dir);
   }
 
   static String canonical(Object? v) {
@@ -150,6 +171,15 @@ class CapsuleService {
     if ([moduleId, trackId, templateId].whereType<String>().length > 1) {
       throw ArgumentError("Выберите один материал");
     }
+    final initialOwner = exportOwnerBinding?.call(),
+        initialRole = library.policy.serverRole;
+    void checkExportOwner() {
+      if (exportOwnerBinding?.call() != initialOwner ||
+          library.policy.serverRole != initialRole) {
+        throw const FormatException('Аккаунт изменился; копия не создана');
+      }
+    }
+
     await workspace.create(recursive: true);
     final work = await workspace.createTemp('export-');
     File? generated;
@@ -157,19 +187,26 @@ class CapsuleService {
     String? originalTitle;
     try {
       final records = await _records();
-      // Local backup is not publication. Never include the master's private
-      // drafts when another Google identity (or guest) uses this installation.
-      if (library.policy.serverIdentityRequired &&
-          library.policy.serverRole != 'MASTER') {
-        records['diary_author'] = <dynamic>[];
-        records['diary_public'] = (records['diary_public'] as List).where((
-          row,
-        ) {
-          final entry = jsonDecode(row['payload'] as String) as Map;
-          return entry['_alchemistScope'] == null ||
-              entry['_alchemistScope'] == 'public';
-        }).toList();
-      }
+      checkExportOwner();
+      bool scoped(Object? scope) =>
+          canReadAuthorDraftScope?.call(scope) ??
+          (scope == null && !library.policy.serverIdentityRequired);
+      bool authorWorkspace =
+          !library.policy.clientEdition &&
+          library.policy.serverRole != 'CLIENT';
+      records['diary_author'] = (records['diary_author'] as List).where((row) {
+        final e = jsonDecode(row['payload'] as String) as Map;
+        return authorWorkspace &&
+            (e['_alchemistScope'] == 'local-device' ||
+                scoped(e['_alchemistScope']));
+      }).toList();
+      records['diary_public'] = (records['diary_public'] as List).where((row) {
+        final e = jsonDecode(row['payload'] as String) as Map,
+            scope = e['_alchemistScope'];
+        return scope == null ||
+            scope == 'public' ||
+            authorWorkspace && scoped(scope);
+      }).toList();
       if (moduleId != null || trackId != null || templateId != null) {
         final selectedModules = <Map<String, dynamic>>[];
         final selectedTemplates = <Map<String, dynamic>>[];
@@ -376,6 +413,7 @@ class CapsuleService {
       } finally {
         await zip.close();
       }
+      checkExportOwner();
       return output;
     } catch (_) {
       if (generated != null) {
@@ -924,20 +962,37 @@ class CapsuleService {
     }
 
     checkCancelled();
-    if (preview.alreadyImported) return;
+    preview.assertUnchanged();
     if (preview.conflicts.isNotEmpty &&
         choice == CapsuleConflictChoice.cancel) {
       throw const FormatException('Восстановление отменено: есть конфликты');
     }
     final created = <File>[];
     try {
-      final records =
-          jsonDecode(jsonEncode(preview.records)) as Map<String, dynamic>;
+      final validatedManifest =
+          jsonDecode(jsonEncode(preview.manifest)) as Map<String, dynamic>;
+      final records = validatedManifest['records'] as Map<String, dynamic>;
       final local = await _records();
       if (digest(local) != preview.databaseToken) {
         throw const FormatException(
           'Данные изменились после проверки. Откройте копию заново.',
         );
+      }
+      if (preview.alreadyImported) {
+        for (final table in tables.where(
+          (t) => !['run_events', 'app_counters'].contains(t),
+        )) {
+          for (final row in records[table] as List) {
+            final previous = (local[table] as List)
+                .where((v) => v['id'] == row['id'])
+                .firstOrNull;
+            if (previous == null || !await _matches(table, previous, row)) {
+              throw const FormatException('Данные изменились после проверки');
+            }
+          }
+        }
+        preview.assertUnchanged();
+        return;
       }
       Future<String> materialize(String uri, Directory dir, String ext) async {
         checkCancelled();
@@ -950,6 +1005,7 @@ class CapsuleService {
         }
         await dir.create(recursive: true);
         final target = File(p.join(dir.path, 'asset_capsule_${newId()}.$ext'));
+        await target.create(exclusive: true);
         created.add(target);
         await source.copy(target.path);
         if ((await sha256.bind(target.openRead()).first).toString() !=
@@ -1198,7 +1254,7 @@ class CapsuleService {
             if (type != null) importedMaterials.add('$type:${row['id']}');
           }
         }
-        for (final raw in preview.manifest['catalogOrigins'] as List? ?? []) {
+        for (final raw in validatedManifest['catalogOrigins'] as List? ?? []) {
           final value = AccessPolicy.validateCatalogOrigin(
             Map<String, dynamic>.from(raw),
           );
@@ -1229,9 +1285,10 @@ class CapsuleService {
           'value': counter,
         }, conflictAlgorithm: ConflictAlgorithm.replace);
         await beforeCommit?.call();
+        preview.assertUnchanged();
         checkCancelled();
         await tx.insert('capsule_imports', {
-          'id': preview.id,
+          'id': validatedManifest['id'],
           'importedAt': DateTime.now().toUtc().toIso8601String(),
         }, conflictAlgorithm: ConflictAlgorithm.replace);
       });

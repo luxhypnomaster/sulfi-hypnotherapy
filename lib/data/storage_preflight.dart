@@ -12,10 +12,30 @@ class StorageChangingException extends FormatException {
 
 /// Validate only a disposable derivative, before any RW bootstrap/migration.
 /// No original SQLite, WAL, journal or media is opened for writing or cleaned.
-Future<void> preflightStorage(String path, DatabaseFactory factory) async {
-  if (path == inMemoryDatabasePath) return;
+Future<void> preflightStorage(
+  String path,
+  DatabaseFactory factory, {
+  bool allowCreate = true,
+  int? requiredVersion,
+}) async {
+  if (path == inMemoryDatabasePath) {
+    if (!allowCreate) {
+      throw const FormatException('Фоновое создание базы запрещено');
+    }
+    return;
+  }
+  final type = await FileSystemEntity.type(path, followLinks: false);
+  if (type != FileSystemEntityType.notFound &&
+      type != FileSystemEntityType.file) {
+    throw const FormatException(
+      'Необычный путь базы; автоматическое открытие запрещено',
+    );
+  }
   final original = File(path);
   if (!await original.exists()) {
+    if (!allowCreate) {
+      throw const FormatException('Фоновое создание базы запрещено');
+    }
     final parent = p.dirname(path);
     if (await File('$path.storage-ready').exists()) {
       throw const FormatException('Прежняя база недоступна; сброс запрещён');
@@ -29,6 +49,26 @@ Future<void> preflightStorage(String path, DatabaseFactory factory) async {
       final dir = Directory(p.join(parent, name));
       if (await dir.exists() && !await dir.list().isEmpty) {
         throw const FormatException('Есть локальные файлы без доступной базы');
+      }
+    }
+    // A renamed/alternative SQLite source is evidence, not permission to
+    // create an empty replacement. Never choose an alias without owner proof.
+    final dir = Directory(parent);
+    if (await dir.exists()) {
+      await for (final entry in dir.list(followLinks: false)) {
+        if (entry is! File) continue;
+        final handle = await entry.open();
+        try {
+          final header = await handle.read(16);
+          if (ascii.decode(header, allowInvalid: true) ==
+              'SQLite format 3\u0000') {
+            throw const FormatException(
+              'Найдена другая локальная база; пустая замена запрещена',
+            );
+          }
+        } finally {
+          await handle.close();
+        }
       }
     }
     return; // Genuine first install only, no inherited storage evidence.
@@ -60,6 +100,9 @@ Future<void> preflightStorage(String path, DatabaseFactory factory) async {
     )!;
     if (version < 1 || version > 9) {
       throw const FormatException('Неизвестная версия локальных данных');
+    }
+    if (requiredVersion != null && version != requiredVersion) {
+      throw const FormatException('Обновите базу в обычном приложении');
     }
     final tables = (await copy.rawQuery(
       "SELECT name FROM sqlite_master WHERE type='table'",
