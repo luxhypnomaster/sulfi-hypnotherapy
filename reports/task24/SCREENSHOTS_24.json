@@ -1,0 +1,297 @@
+{
+  "screens": [
+    {
+      "file": "reports/task24/screens/before/task24-history-home.png",
+      "bytes": 997999,
+      "sha256": "8d4c4ed0b97457a59955011958b9516a954ea511b54c94bf89234e8907c42fd2",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-home-client.png",
+      "bytes": 934901,
+      "sha256": "f7f3aed0fac2a1480e9bce0e314ac308b8228ec5717ac91cb6a2fafc96d5ad27",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-home-master.png",
+      "bytes": 934901,
+      "sha256": "f7f3aed0fac2a1480e9bce0e314ac308b8228ec5717ac91cb6a2fafc96d5ad27",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-occurrence-reverted.png",
+      "bytes": 237556,
+      "sha256": "c81adbebbbf8add0be42708dd91c1282dadd24e871a6cec0a9abe09440a4325f",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-offline-editor.png",
+      "bytes": 1044731,
+      "sha256": "4ffc95936adb0a62cffaffbd05193d4752db36ca78c1d6f8b7b4491c5ac14cb7",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-only-occurrence-A.png",
+      "bytes": 242547,
+      "sha256": "871fba0abfd08ddf95f2b7bde9f2d073121c5a05a9cdbaf3e601515147b6e2e9",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-reader9x16.png",
+      "bytes": 1046188,
+      "sha256": "29a7b79ee5648f5313c98b88237c7a68e8a3bd0c4ca5404c49c6b81376b36a8e",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-shield-client.png",
+      "bytes": 170557,
+      "sha256": "e880d9071c7a2bc53e63288e60faf2eb9282ba7535c4cefcf78eac5bba0efcf9",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-shield-master.png",
+      "bytes": 142758,
+      "sha256": "7ac2fcd1917872d34beacfa13c8e89ab5fa952341fa72532fef40957c817c0f0",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/before/task24-timer-hierarchy.png",
+      "bytes": 425828,
+      "sha256": "f3daad3db845fde6b3cb2c81a7fc85a051d66ef5b5f62274052cc7521ab15438",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-history-home.png",
+      "bytes": 997999,
+      "sha256": "8d4c4ed0b97457a59955011958b9516a954ea511b54c94bf89234e8907c42fd2",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-home-client.png",
+      "bytes": 934668,
+      "sha256": "3aaf41fcdf8486093723c328cf3bf2024caff8f2eaf7b132c8dc01543cbf7afe",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-home-master.png",
+      "bytes": 934668,
+      "sha256": "3aaf41fcdf8486093723c328cf3bf2024caff8f2eaf7b132c8dc01543cbf7afe",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-occurrence-reverted.png",
+      "bytes": 237556,
+      "sha256": "c81adbebbbf8add0be42708dd91c1282dadd24e871a6cec0a9abe09440a4325f",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-offline-editor.png",
+      "bytes": 1044731,
+      "sha256": "4ffc95936adb0a62cffaffbd05193d4752db36ca78c1d6f8b7b4491c5ac14cb7",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-only-occurrence-A.png",
+      "bytes": 242547,
+      "sha256": "871fba0abfd08ddf95f2b7bde9f2d073121c5a05a9cdbaf3e601515147b6e2e9",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-pages-not-posts.png",
+      "bytes": 1174031,
+      "sha256": "9bba1b3360a3b3ce2053f098091aed1a7e7e4c079a0b0b9cc4a8eac989a5f720",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-post-siblings.png",
+      "bytes": 1055165,
+      "sha256": "aa802550ae813ab5868a45fe6a4825f92e19acca1a7f079450bc4d0d9809f9f7",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-queue-client.png",
+      "bytes": 924850,
+      "sha256": "df30d3458bddfc7bb5d64dfe5c8a5854a8f62b1b58658547934c5ba6263a0cb8",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-reader9x16.png",
+      "bytes": 1055268,
+      "sha256": "5527abc2409531da9c6d47e2ab3e43e2bf50472a34c99c389b29868b88b7cd4c",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-shield-client.png",
+      "bytes": 170557,
+      "sha256": "e880d9071c7a2bc53e63288e60faf2eb9282ba7535c4cefcf78eac5bba0efcf9",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-shield-master.png",
+      "bytes": 142758,
+      "sha256": "7ac2fcd1917872d34beacfa13c8e89ab5fa952341fa72532fef40957c817c0f0",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    },
+    {
+      "file": "reports/task24/screens/after/task24-timer-hierarchy.png",
+      "bytes": 425328,
+      "sha256": "53ee0b5920007383200df63f77f64455b24c09cc190a874c08fad796e229bf5c",
+      "width": 720,
+      "height": 1280,
+      "ratio": "9:16",
+      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+    }
+  ],
+  "comparison": [
+    {
+      "name": "task24-history-home.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-home-client.png",
+      "sameRGBPixels": false,
+      "changedRGBBox": [
+        281,
+        376,
+        550,
+        393
+      ],
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-home-master.png",
+      "sameRGBPixels": false,
+      "changedRGBBox": [
+        281,
+        376,
+        550,
+        393
+      ],
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-occurrence-reverted.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-offline-editor.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-only-occurrence-A.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-reader9x16.png",
+      "sameRGBPixels": false,
+      "changedRGBBox": [
+        40,
+        988,
+        676,
+        1196
+      ],
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-shield-client.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-shield-master.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null,
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    },
+    {
+      "name": "task24-timer-hierarchy.png",
+      "sameRGBPixels": false,
+      "changedRGBBox": [
+        664,
+        159,
+        703,
+        174
+      ],
+      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+    }
+  ],
+  "excluded": [
+    "First cold-cache MASTER queue decoration not decoded; not visual evidence"
+  ],
+  "method": "Flutter widget toImage pixelRatio2; copy bytes only; metadata/pixel comparison, no image editing/generation"
+}
