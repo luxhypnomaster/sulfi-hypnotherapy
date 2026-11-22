@@ -147,6 +147,9 @@ void main() {
         )!['consumerDirect']['n'],
         0,
       );
+      await store.execute(row, () => false);
+      expect((await store.load(run.id))!['serverSequence'], 3);
+      expect((await store.load(run.id))!['localOnly'], true);
       expect(await state(), before);
       for (final h in hashes.entries) {
         expect(digest22(await File(h.key).readAsBytes()), h.value);

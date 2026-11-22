@@ -153,6 +153,7 @@ class Feedback22Store {
       final v = Map<String, dynamic>.from(
         jsonDecode(rows.single['value'] as String),
       );
+      if ((v['serverSequence'] as int? ?? 0) > result['sequence']) return;
       final local = Map<String, dynamic>.from(v['feedback']);
       final sent = Map<String, dynamic>.from(payload['feedback']);
       local.remove('sequence');

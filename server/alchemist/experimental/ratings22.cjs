@@ -13,6 +13,10 @@ class Ratings22 {
   const previous=this.s.db.prepare('SELECT payload FROM t22_feedback WHERE owner=? AND id=?').get(actor.uid,f.feedbackId);
   // Withdrawal must remain possible after the content is revoked/withdrawn.
   if(!f.consent.share&&previous){const original=this.s.read(JSON.parse(previous.payload).hash);if(keyOf(original.target)!==keyOf(f.target))fail(409,'FEEDBACK_TARGET_CONFLICT');}
+  // A receipt for this verified owner is immutable history: lost response may
+  // arrive after withdrawal. Reconcile before checking today's content ACL.
+  id(q.requestId);const prior=this.s.get('receipts',digest22([actor.uid,q.requestId]));
+  if(prior){if(prior.hash!==digest22(q))fail(409,'IDEMPOTENCY_CONFLICT');return prior.result;}
   const root=f.consent.share?this.validateTarget(actor,f.target):{owner:null,exposureTargets:[]};
   if(!Array.isArray(f.occurrences)||f.occurrences.length>500||!Array.isArray(f.componentRatings||[]))fail(422,'EXPOSURE_SCHEMA');
   const reviewerKind=root.owner===actor.uid||root.owner===actor.subject?'AUTHOR_SELF_TEST':a.verifiedPro===true?'VERIFIED_PRO':a.role==='CLIENT'?'CLIENT':'UNVERIFIED';
