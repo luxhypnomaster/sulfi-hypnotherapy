@@ -44,7 +44,9 @@ String adminState22(Map? section, {bool stale = false}) {
   final metrics =
       (section?['metrics'] as Map?)?.values.cast<Map>().toList() ?? [];
   if (metrics.any((m) => m['state'] == 'problem')) return 'problem';
-  if (stale || metrics.isEmpty || metrics.any((m) => m['state'] != 'verified')) {
+  if (stale ||
+      metrics.isEmpty ||
+      metrics.any((m) => m['state'] != 'verified')) {
     return 'unknown';
   }
   return 'healthy';

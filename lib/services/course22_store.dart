@@ -126,13 +126,58 @@ class Course22Store {
       final refs = c['definition']['programs'] as List,
           cursor = c['cursor'] as int;
       if ((c['completed'] as List).contains(run.id)) return;
+      final binding = (c['bindings'] as Map?)?[run.id];
+      if (cursor >= refs.length ||
+          refs[cursor]['contentId'] != programId ||
+          run.snapshot.baseTemplateId != programId ||
+          binding == null ||
+          binding['programRevision'] != refs[cursor]['revisionId'] ||
+          binding['manifestHash'] != digest22(run.snapshot.plan.toMap())) {
+        throw const FormatException('COURSE_CURSOR_CONFLICT');
+      }
+      c['cursor'] = cursor + 1;
+      c['completed'] = [...c['completed'], run.id];
+      await tx.insert('app_settings', {
+        'name': _key(id),
+        'value': jsonEncode(c),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
+  Future<void> bindExecution(
+    String id,
+    String programId,
+    SessionRun run,
+  ) async {
+    final a = owner();
+    await db.transaction((tx) async {
+      final rows = await tx.query(
+        'app_settings',
+        where: 'name=?',
+        whereArgs: [_key(id)],
+      );
+      if (rows.isEmpty || a != owner()) {
+        throw const FormatException('COURSE_SCOPE');
+      }
+      final c = Map<String, dynamic>.from(
+            jsonDecode(rows.single['value'] as String),
+          ),
+          refs = c['definition']['programs'] as List;
+      final cursor = c['cursor'] as int;
       if (cursor >= refs.length ||
           refs[cursor]['contentId'] != programId ||
           run.snapshot.baseTemplateId != programId) {
         throw const FormatException('COURSE_CURSOR_CONFLICT');
       }
-      c['cursor'] = cursor + 1;
-      c['completed'] = [...c['completed'], run.id];
+      final binding = {
+        'programRevision': refs[cursor]['revisionId'],
+        'manifestHash': digest22(run.snapshot.plan.toMap()),
+      };
+      if ((c['bindings'] as Map?)?[run.id] != null &&
+          digest22(c['bindings'][run.id]) != digest22(binding)) {
+        throw const FormatException('EXECUTION_BINDING_IMMUTABLE');
+      }
+      c['bindings'] = {...?c['bindings'], run.id: binding};
       await tx.insert('app_settings', {
         'name': _key(id),
         'value': jsonEncode(c),

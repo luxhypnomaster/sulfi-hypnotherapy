@@ -244,7 +244,10 @@ class _RatingPolicy22ScreenState extends State<RatingPolicy22Screen> {
     enabled: !busy,
     keyboardType: TextInputType.number,
     decoration: InputDecoration(labelText: label),
-    onChanged: (_) => setState(() => draftHash = null),
+    onChanged: (_) => setState(() {
+      if (draftHash != null) configVersion++;
+      draftHash = null;
+    }),
   );
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -274,6 +277,7 @@ class _RatingPolicy22ScreenState extends State<RatingPolicy22Screen> {
           onChanged: busy
               ? null
               : (v) => setState(() {
+                  if (draftHash != null) configVersion++;
                   algorithm = v!;
                   draftHash = null;
                 }),

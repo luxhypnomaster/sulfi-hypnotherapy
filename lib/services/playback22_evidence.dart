@@ -169,5 +169,44 @@ Future<Map<String, dynamic>?> playbackFeedback22(
       'durationMs': duration,
     });
   }
+  for (final phase in run.snapshot.plan.phases ?? []) {
+    if (!phase.enabled) continue;
+    for (final child in phase.children) {
+      final ref = src['refs'][child.definitionId];
+      if (!child.enabled ||
+          child.modified ||
+          ref == null ||
+          ref['type'] != 'MODULE')
+        continue;
+      final audio = child.items
+          .where((s) => s.enabled && s.kind == StepKind.audio)
+          .toList();
+      final duration = audio.fold<int>(0, (n, s) => n + (s.durationMs ?? 0));
+      final played = audio.fold<int>(
+        0,
+        (n, s) =>
+            n +
+            (valid
+                ? (evidence['intervals'][s.id] as List? ?? []).fold<int>(
+                    0,
+                    (sum, r) => sum + (r[1] as int) - (r[0] as int),
+                  )
+                : 0),
+      );
+      occurrences.add({
+        'occurrenceId': 'module:${child.id}',
+        'target': ref,
+        'status': !valid
+            ? 'UNKNOWN'
+            : played == 0
+            ? 'NOT_EXPOSED'
+            : played == duration && duration > 0
+            ? 'COMPLETED'
+            : 'PARTIAL',
+        'playedMs': played,
+        'durationMs': duration,
+      });
+    }
+  }
   return {'target': src['root'], 'occurrences': occurrences};
 }

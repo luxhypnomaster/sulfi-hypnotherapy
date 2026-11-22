@@ -67,7 +67,8 @@ void verifyRatings22(Map head, Map snapshot) {
     }
     // No production coefficients are approved in22. Experimental scores never
     // enter a client-facing overlay, even if a malicious peer supplies a hash.
-    if (s['weighted']?['status'] != 'NOT_CALIBRATED' ||
+    if (s['weighted']?['policyHash'] != head['policyHash'] ||
+        s['weighted']?['status'] != 'NOT_CALIBRATED' ||
         s['weighted']?['value'] != null) {
       throw const FormatException('UNAPPROVED_WEIGHTED_RATING');
     }

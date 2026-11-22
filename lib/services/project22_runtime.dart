@@ -8,6 +8,7 @@ import '../models/ratings22.dart';
 import '../models/session_plan.dart' show newId;
 import 'alchemist_work_queue.dart';
 import 'metadata_gateway.dart';
+import 'alchemist_errors.dart';
 
 /// One negotiated extension, same existing API broker and queue18. No provider
 /// migration, auth picker, polling, native worker, or media download here.
@@ -24,12 +25,32 @@ class Project22Runtime extends ChangeNotifier {
   final String? Function() owner;
   final int Function() epoch;
   final String scope;
-  Map<String, dynamic>? capability, overview, ratings;
+  Map<String, dynamic>? capability, _overview, _ratings;
+  Map<String, dynamic>? get overview =>
+      _binding == owner() && _epoch == epoch() && !accessDenied
+      ? _overview
+      : null;
+  set overview(Map<String, dynamic>? v) => _overview = v;
+  Map<String, dynamic>? get ratings =>
+      _binding == owner() && _epoch == epoch() ? _ratings : null;
+  set ratings(Map<String, dynamic>? v) => _ratings = v;
   String? _binding;
   int? _epoch;
   Future<bool>? _probe;
   Future<void>? _refresh;
-  bool closed = false, stale = true;
+  bool closed = false, stale = true, accessDenied = false;
+  AlchemistFailure? _probeFailure;
+  void identityChanged() {
+    if (_binding != owner() || _epoch != epoch()) {
+      capability = null;
+      overview = null;
+      ratings = null;
+      stale = true;
+      accessDenied = false;
+      changed();
+    }
+  }
+
   String status = 'Не подключено';
   bool get ready =>
       !closed &&
@@ -75,10 +96,16 @@ class Project22Runtime extends ChangeNotifier {
         throw const FormatException('PROJECT22_CAPABILITY');
       }
       capability = c;
+      accessDenied = false;
       status = 'Серверный протокол №22 подтверждён';
       changed();
       return true;
-    } catch (_) {
+    } catch (e) {
+      _probeFailure = e is FormatException
+          ? AlchemistFailure.server(422, 'PROJECT22_UNSUPPORTED')
+          : AlchemistFailure.from(e);
+      accessDenied =
+          _probeFailure?.status == 401 || _probeFailure?.status == 403;
       capability = null;
       stale = true;
       status = 'Протокол №22 недоступен; сохранённые данные оставлены';
@@ -89,12 +116,24 @@ class Project22Runtime extends ChangeNotifier {
 
   Future<Map<String, dynamic>> call(String op, Map<String, dynamic> p) async {
     if (!await negotiate()) {
-      throw const FormatException('PROJECT22_UNAVAILABLE');
+      throw _probeFailure ??
+          AlchemistFailure.server(422, 'PROJECT22_UNAVAILABLE');
     }
     final a = owner(), e = epoch();
-    final v = await rpc
-        .call(op, {'scope': scope, ...p})
-        .timeout(const Duration(seconds: 20));
+    late final Map<String, dynamic> v;
+    try {
+      v = await rpc
+          .call(op, {'scope': scope, ...p})
+          .timeout(const Duration(seconds: 20));
+    } on AlchemistFailure catch (e) {
+      if (e.status == 401 || e.status == 403) {
+        accessDenied = true;
+        capability = null;
+        stale = true;
+        changed();
+      }
+      rethrow;
+    }
     if (a != owner() || e != epoch() || closed) {
       throw const FormatException('ACCOUNT_CHANGED');
     }
@@ -191,11 +230,13 @@ class Project22Runtime extends ChangeNotifier {
     }
     try {
       if (!await negotiate()) {
-        throw const FormatException('PROJECT22_UNAVAILABLE');
+        throw _probeFailure ??
+            AlchemistFailure.server(422, 'PROJECT22_UNAVAILABLE');
       }
       final nextOverview = admin ? await call('project.overview', {}) : null;
       if (nextOverview != null &&
           (nextOverview['schemaVersion'] != 22 ||
+              nextOverview['scope'] != capability?['adminScope'] ||
               nextOverview['sections'] is! List ||
               nextOverview['sections'].length != 7)) {
         throw const FormatException('OVERVIEW_SCHEMA');

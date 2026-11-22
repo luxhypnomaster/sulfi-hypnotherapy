@@ -35,13 +35,16 @@ class Feedback22Store {
     SessionRun run,
     int rating, {
     Map<String, dynamic>? exactTarget,
+    String? recordKey,
+    Map<String, dynamic>? execution,
     List<Map<String, dynamic>> occurrences = const [],
     List<Map<String, dynamic>> componentRatings = const [],
   }) async {
     if (rating < 1 || rating > 5) {
       throw const FormatException('Оценка от 1 до 5');
     }
-    final a = owner(), old = await load(run.id);
+    final key = recordKey ?? run.id;
+    final a = owner(), old = await load(key);
     final captured = await playbackFeedback22(db, run, owner: a);
     exactTarget ??= captured?['target'];
     if (occurrences.isEmpty && captured != null) {
@@ -66,11 +69,13 @@ class Feedback22Store {
       'sequence': (old?['serverSequence'] as int? ?? 0) + 1,
       'target': target,
       'rating': rating,
-      'execution': {
-        'executionId': run.id,
-        'manifestHash': digest22(run.snapshot.plan.toMap()),
-        'partialExecution': run.status != RunStatus.completed,
-      },
+      'execution':
+          execution ??
+          {
+            'executionId': run.id,
+            'manifestHash': digest22(run.snapshot.plan.toMap()),
+            'partialExecution': run.status != RunStatus.completed,
+          },
       'occurrences': occurrences,
       'componentRatings': componentRatings,
       'consent': {'schemaVersion': 1, 'share': false},
@@ -79,13 +84,15 @@ class Feedback22Store {
     await db.transaction((tx) async {
       if (a != owner()) throw const FormatException('ACCOUNT_CHANGED');
       await tx.insert('app_settings', {
-        'name': _key(run.id),
+        'name': _key(key),
         'value': jsonEncode({
           ...?old,
           'ownerBinding': a,
           'runId': run.id,
           'feedback': feedback,
-          'shareReady': exactTarget != null || old?['shareReady'] == true,
+          'shareReady':
+              target['ratingEpochId'] != 'local-unresolved' &&
+              (exactTarget != null || old?['shareReady'] == true),
           'localOnly': true,
           'dirty': true,
         }),
@@ -146,6 +153,13 @@ class Feedback22Store {
       final v = Map<String, dynamic>.from(
         jsonDecode(rows.single['value'] as String),
       );
+      final local = Map<String, dynamic>.from(v['feedback']);
+      final sent = Map<String, dynamic>.from(payload['feedback']);
+      local.remove('sequence');
+      local.remove('consent');
+      sent.remove('sequence');
+      sent.remove('consent');
+      final dirty = digest22(local) != digest22(sent);
       await tx.insert('app_settings', {
         'name': key,
         'value': jsonEncode({
@@ -153,7 +167,7 @@ class Feedback22Store {
           'serverSequence': result['sequence'],
           'receipt': result,
           'localOnly': !result['shared'],
-          'dirty': false,
+          'dirty': dirty,
         }),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     });

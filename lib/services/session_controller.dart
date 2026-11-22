@@ -123,6 +123,7 @@ class SessionController extends ChangeNotifier {
       scope: policy.clientEdition ? 'client:public' : 'master:public',
     );
     result.addListener(_notify);
+    diary?.addListener(result.identityChanged);
     return _project22 = result;
   }
 
@@ -1370,6 +1371,7 @@ class SessionController extends ChangeNotifier {
     library.policy.removeListener(_notify);
     _cloudQueue?.dispose();
     _snapshotSync?.dispose();
+    if (_project22 != null) diary?.removeListener(_project22!.identityChanged);
     _project22?.removeListener(_notify);
     _project22?.dispose();
     _metadataRuntime?.removeListener(_notify);

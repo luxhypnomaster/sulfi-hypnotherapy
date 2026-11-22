@@ -24,7 +24,10 @@ function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>ne
   catalog:{prepare:(input,j)=>catalog.prepare({uid:j.owner,...iam.current(j.owner)},input),commit:(prepared,j)=>catalog.commit({uid:j.owner,...iam.current(j.owner)},j.input,prepared)},
   ratingPolicy:{prepare:q=>q,commit:(q,j)=>ratings.activate({uid:j.owner},q)},
   ratings:{prepare:q=>q,commit:q=>ratings.flush(q)},
-  backup:async(q,j)=>{iam.owner({uid:j.owner});if(!backupAdapter)fail(503,'BACKUP_ADAPTER_UNAVAILABLE');return backupAdapter(q);},
+  backup:{prepare:async(q,j)=>{iam.owner({uid:j.owner});if(!backupAdapter)fail(503,'BACKUP_ADAPTER_UNAVAILABLE');return backupAdapter(q);},commit:(receipt,j)=>{
+   iam.owner({uid:j.owner});if(receipt.uploaded!==true||!/^[a-f0-9]{64}$/.test(receipt.sha256||''))fail(422,'BACKUP_RECEIPT_INVALID');
+   const value={...receipt,at:clock(),operationId:j.operationId};store.set('backup-history',j.operationId,value);store.set('backups','lastUploaded',value);if(receipt.restoreVerified===true)store.set('backups','lastVerified',value);return value;
+  }},
  };
  async function request(envelope){const op=envelope?.operation;
   if(!op?.startsWith('project.')&&!op?.startsWith('ratings.')&&!op?.startsWith('feedback.')&&!op?.startsWith('policy.'))return legacy.request(envelope);
@@ -43,6 +46,10 @@ function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>ne
    else if(op==='project.categories'){iam.admin(actor);result={categories:store.list('categories').map(r=>r.value)};}
    else if(op==='project.categoryEdit')result=catalog.categories(actor,q);
    else if(op==='project.catalogList'){iam.admin(actor);result={records:baseStore.records().filter(r=>r.type!=='diaryEntry'&&(r.public||r.owner===actor.uid||r.owner===actor.subject||actor.role==='OWNER')).map(r=>Object.fromEntries(['catalogItemId','contentId','revisionId','type','title','description','sha256','byteLength','dependencies','state','public','current','ratingEpochId'].filter(k=>r[k]!==undefined).map(k=>[k,r[k]])))};}
+   else if(op==='project.course'){
+    const r=baseStore.records().find(r=>r.contentId===q.contentId&&r.type==='course'&&r.public&&r.state==='published');if(!r)fail(403,'COURSE_NOT_AVAILABLE');
+    result={definition:{contentId:r.contentId,revisionId:r.revisionId,ratingEpochId:r.ratingEpochId,title:r.title,programs:r.programs},programs:r.programs.map(ref=>{const p=baseStore.records().find(p=>p.contentId===ref.contentId&&p.revisionId===ref.revisionId);return {contentId:ref.contentId,ratingEpochId:p?.ratingEpochId||null,entitled:p?.state==='published'&&p?.public===true,card:p?{catalogItemId:p.catalogItemId,immutableRevisionId:p.revisionId,logicalContentId:p.contentId,type:p.type,card:{title:p.title,shortAnnotation:p.title}}:null};})};
+   }
    else if(op==='project.catalogBatch'){catalog.author(actor);result=jobs.enqueue(actor.uid,{requestId:q.requestId,kind:'catalog',input:q});}
    else if(op==='project.operations'){iam.admin(actor);result={jobs:store.list('jobs').map(r=>r.value).filter(j=>actor.role==='OWNER'||j.owner===actor.uid).map(({input,...j})=>j)};}
    else if(op==='project.incidents'){iam.admin(actor);result={incidents:store.list('incidents').map(r=>r.value),audit:store.db.prepare('SELECT actor,action,object,at FROM t22_audit ORDER BY seq DESC LIMIT 100').all()};}
