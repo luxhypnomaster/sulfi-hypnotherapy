@@ -1,9 +1,9 @@
-# №25 — контрольная точка G0
+# №25 — финальная контрольная точка
 
-База PR56: `d0a6d9a6daaeca215992e0b771a2332502ecee41`. PR51→52→54→55→56 открыты, draft, не объединены.
-Архив: 11 файлов прочитаны, CRC + 10 SHA/размеров + 55 уникальных критериев PASS.
-Один проверочный Actions run45048084597 SUCCESS (main, без секретов); это проверка доступности runner, не текущего Flutter-кода. Повторный probe не требуется.
+Код `737ea741636e9abe7c20353d9d5b8301cf44a5bb`, draft PR57 https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57, от PR56d0a6d9a. Source/local integration завершена, общий результат PARTIAL. Runtime335/native31 pins unchanged, all parent PRs draft/unmerged.
 
-В Cloud отсутствуют signer/emulator/KVM. Защищённая сборка из актуального source пока BLOCKED; старые workflows pinned APK23/24 не подходят. `dual-apk` production gate неизменен. Никаких APK/установок/production-операций не выполнялось.
+Final Flutter574PASS/2SKIP, CLIENTdefine1, Node114, Python53, analyze/format/source/typecompilePASS. LiveGoogle/native/signing/device/production22 неPASS. Без новых APK, main/GAS6/OAuth/ACL/signing/userdata untouched.
 
-Следом: адресная интеграция текущего source, Flutter/Node/Python, read-only Android source audit, безопасный план снятия native/signing blockers. Все данные — только временные синтетические fixtures.
+Drive https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn . Upload IDs/independent hashes: DELIVERY/DRIVE_READBACK. Первый batch13files ужеreadbackPASS. Итоговая доставка фиксируется отдельно после этого source freeze. Reports-only commits не требуют ещё одного full Flutter run.
+
+При возобновлении не повторять G0/full suites/один runner probe45048084597. Сначала читать RESULT/ISSUES/APK_BLOCKER/SAFE_NATIVE_PLAN/55criteria. Следом только устранение signing+native blockers в отдельно доверенной среде, owner-approval на mainинструмент при необходимости. Не запускать pinned24 workflow или dual-apk безlivegate. Никакого uninstall/clear/downgrade/сменыkey. Не выдавать старые APK за№25.

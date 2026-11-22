@@ -30,5 +30,24 @@
   "diary_patch17": {
     "pass": 11,
     "fail": 0
+  },
+  "flutter_final": {
+    "pass": 574,
+    "skip": 2,
+    "fail": 0,
+    "sourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb"
+  },
+  "flutter_baseline": {
+    "pass": 571,
+    "skip": 2,
+    "fail": 0
+  },
+  "flutter_integration25": {
+    "pass": 3,
+    "fail": 0
+  },
+  "flutter_client_define": {
+    "pass": 1,
+    "fail": 0
   }
 }

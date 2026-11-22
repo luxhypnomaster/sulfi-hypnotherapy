@@ -1,0 +1,56 @@
+ID,Group,Acceptance criterion,Status,Evidence,Notes
+T25-001,INTEGRATION,Input ZIP CRC/manifest/size verified,PASS_LOCAL,ARCHIVE_25.json,"CRC,11entries,10 SHA+sizes,outerSHA matches current operational passport"
+T25-002,INTEGRATION,All source docs read and SHA pinned,PASS_SOURCE,docs/task25; ARCHIVE_25.json,"All11 source documents read, source SHA pinned"
+T25-003,INTEGRATION,Remote repo owner/visibility and PR ancestry current,PASS_SOURCE,GITHUB_BASELINE_25.json; SOURCE_TREES_25.json,"Actual public visibility recorded, owner/main/current ancestry checked"
+T25-004,INTEGRATION,PR51/52/54/55/56 genuinely open/draft mapped,PASS_SOURCE,GITHUB_BASELINE_25.json,All5 parents OPEN DRAFT UNMERGED
+T25-005,INTEGRATION,Fresh stack HEAD includes code21-24 without loss,PASS_SOURCE,SOURCE_GATE_25.json; DEPENDENCY_GRAPH_25.md,All runtime trees retained; no merging assumption
+T25-006,INTEGRATION,Feature flags/production boundary readback verified,PASS_SOURCE,SOURCE_GATE_25.json; logs/integration25.log,Both editions defaultOFF even when candidate server available; live not changed
+T25-007,INTEGRATION,New clean branch from verified PR56; draft PR only,PASS_SOURCE,DEPENDENCY_GRAPH_25.md,New branch from d0a6d9a; draft PR57 basePR56
+T25-008,INTEGRATION,No unauthorized merge or editing parent PR/main,PASS_POLICY,SOURCE_TREES_25.json,No main/parent merge/edit; own branch only
+T25-009,SOURCE,Protected file diff and dependencies graph reproducible,PASS_SOURCE,PROTECTED_25.json; SOURCE_GATE_25.json; SOURCE_TREES_25.json,335protected/31native pins; no runtime additions
+T25-010,SOURCE,Flutter pub get pinned without arbitrary dependency upgrade,PASS_LOCAL,logs/pub_get.log; SOURCE_GATE_25.json,"Offline enforce-lockfile, no dependency upgrade"
+T25-011,SOURCE,Full Flutter suite final snapshot with skips stated,PASS_LOCAL,logs/flutter_final.log; TESTS_25.md,Final complete suite 574PASS/2SKIP/0FAIL; not Android
+T25-012,SOURCE,Node+GAS legacy tests intact,PASS_LOCAL,logs/node.log; logs/legacy.log; logs/diary_patch17.log,"79+24+11 controlled Node PASS, no GAS writes"
+T25-013,SOURCE,Python23 recovery tests intact,PASS_LOCAL,logs/python23.log,13copy-only/release-plan tests; no real DB
+T25-014,SOURCE,Flutter analyze and format clean,PASS_LOCAL,logs/analyze.log; logs/format.log,"No issues,238Dart files0format changes"
+T25-015,SOURCE,No duplicate path/data model introduced,PASS_SOURCE,SOURCE_GATE_25.json; CHANGES_25.md,No runtime model/path/schema/queue/catalog added
+T25-016,SOURCE,Every new fix RED then GREEN proof,ALREADY_DONE,CHANGES_25.md; TESTS_25.md,"New runtime fixes0; no new defect observed, no fakeRED; inherited regressionsGREEN"
+T25-017,DATA_P0,SQLite6/7/8→9 +9→9 copy migration passes,PASS_LOCAL,logs/flutter_final.log: task23_preservation_test,Four isolated schema6/7/8→9 and9→9 migrations/cold reopen; not native
+T25-018,DATA_P0,Cold-open/offline/owner isolation tests pass,PASS_LOCAL,logs/integration25.log; logs/flutter_final.log,"Cold headless copy/offline/same-owner isolation, actual SQLite FFI"
+T25-019,DATA_P0,Original DB not overwritten/emptied on corrupted/missing path,PASS_LOCAL,logs/flutter_final.log: task23_repro_test/task16g_storage_test,Corrupt/missing/alternate source failclosed; no real DB attached
+T25-020,DATA_P0,WAL/SHM/journal/sidecar recovery preserved,PASS_LOCAL,logs/python23.log; logs/flutter_final.log,"Copy-only sidecars and interrupted journals, original bytes preserved"
+T25-021,DATA_P0,Unknown capsules/staging kept without unsafe GC,PASS_LOCAL,logs/flutter_final.log: task23_repro_test,"Unknown capsules/staging kept, no unsafeGC"
+T25-022,DATA_P0,Capsule inspect/commit immutable hash+manifest,PASS_LOCAL,logs/flutter_final.log: task23_preservation_test,Manifest/hash mutation beforeCommit/repeated restore refused
+T25-023,DATA_P0,Full/selective export excludes other owners,PASS_LOCAL,logs/flutter_final.log: task23_repro_test/task23_preservation_test,"Selective/full export owner boundaries, switching scope and logout tested"
+T25-024,DATA_P0,Media exact SHA frozen history/program refs/diary preserved,PASS_LOCAL,logs/integration25.log; logs/flutter_final.log,Exact3mediaSHA/program templateID/frozen history/private draft fixtures preserved
+T25-025,DATA_P0,Native synthetic old→new install-r checked or BLOCKED,BLOCKED,NATIVE_UPGRADE_25.md; ENVIRONMENT_PREFLIGHT_25.json,No emulator/KVM/signing or nativeUI dataset/install-r; not substitute withFFI
+T25-026,DATA_P0,Original owner MASTER24→25 root cause not falsely claimed resolved,PASS_REPORT,ISSUES_25.md; NATIVE_UPGRADE_25.md,Historical owner incident remains UNKNOWN/PARTIAL
+T25-027,IDENTITY_BUILD,MASTER applicationId immutable,PASS_SOURCE,ANDROID_AUDIT_25.md; SOURCE_GATE_25.json,"Immutable MASTER ID source proof only, no newAPK manifest"
+T25-028,IDENTITY_BUILD,CLIENT applicationId immutable,PASS_SOURCE,ANDROID_AUDIT_25.md; SOURCE_GATE_25.json,"Immutable CLIENT ID source proof only, no newAPK manifest"
+T25-029,IDENTITY_BUILD,Test certificate matches historical public SHA,BLOCKED,APK_BLOCKER_25.md,Historicalcert pinned; newAPK/signercert NOT_RUN
+T25-030,IDENTITY_BUILD,VersionCode strictly above installed baseline or owner install blocked,BLOCKED,APK_BLOCKER_25.md; OWNER_QA_25.md,"Installed codeUNKNOWN, no newversion chosen; owner install blocked"
+T25-031,IDENTITY_BUILD,Reproducible source SHA pinned for both APK,PARTIAL,SOURCE_TREES_25.json; APK_BLOCKER_25.md,Single candidate source pinned; no reproducible binary proof for pair
+T25-032,IDENTITY_BUILD,Existing live-only CI build mode gate not bypassed,PASS_POLICY,CI_SECURITY_25.md; SOURCE_GATE_25.json,Existing production server gate byte-identical; never bypassed/dispatched
+T25-033,IDENTITY_BUILD,CI runner billing state checked cheaply once,PASS_RUNNER,CI_PROBE_25.json; logs/runner_probe.log,One main standard-runner probe SUCCESS9steps; not currentFlutter CI
+T25-034,IDENTITY_BUILD,Secure trusted signing environment demonstrated,BLOCKED,CI_SECURITY_25.md; ENVIRONMENT_PREFLIGHT_25.json,Protected current-source signing job unavailable; secret list403
+T25-035,IDENTITY_BUILD,MASTER actual APK created and independently verified or BLOCKED,BLOCKED,APK_BLOCKER_25.md,"MASTER bytes absent, no fakeartifact"
+T25-036,IDENTITY_BUILD,CLIENT actual APK created and independently verified or BLOCKED,BLOCKED,APK_BLOCKER_25.md,"CLIENT bytes absent, no fakeartifact"
+T25-037,IDENTITY_BUILD,No second APK overwrites first build artifact,NOT_RUN,APK_BLOCKER_25.md; SAFE_NATIVE_PLAN_25.md,"No pair built; unique output/copy rule documented, not tested by actualbuild"
+T25-038,IDENTITY_BUILD,APK hashes/size/package/permissions/ABI readback,BLOCKED,APK_BLOCKER_25.md,No actualAPK size/ABI/permissions/apksigner readback
+T25-039,IDENTITY_BUILD,No keys/credentials/personal data in logs/APKs,PARTIAL,SECURITY_SCAN_25.json; APK_BLOCKER_25.md,New source/report/logscan only; APK absent and entireGit history not audited
+T25-040,IDENTITY_BUILD,No public release/tag or forbidden deployment,PASS_POLICY,CI_SECURITY_25.md; GITHUB_FINAL_25.json,No release/tag/deploy/main/signing/ACL/visibility change
+T25-041,FUNCTION,F038 queue readers/journal navigation tested,PASS_LOCAL,logs/flutter_final.log: task24_navigation_test,"Existing queue/reader/journal routing regression, no newBack changes"
+T25-042,FUNCTION,K025/026/027/029/030/037 regression tested,PASS_LOCAL,logs/flutter_final.log: task24_compatibility_test,Existing K025/026/027/029/030/037 reverified at9:16
+T25-043,FUNCTION,Master and Client edition boundaries test,PASS_LOCAL,logs/client_edition.log; logs/flutter_final.log,"CompiledCLIENT define +access controls, no server privilege changes"
+T25-044,FUNCTION,Existing Auth/background media and queue persistence tested,PARTIAL,logs/flutter_final.log; NATIVE_UPGRADE_25.md,"Local auth/queue/background logic PASS, realGoogle/OS killed recovery NOT_RUN"
+T25-045,FUNCTION,Catalog snapshot/overlays safe with defaultOFF,PASS_LOCAL,logs/integration25.log; logs/flutter_final.log,"Candidate overlays/lastGood/defaultOFF retained, not liveadapterPASS"
+T25-046,FUNCTION,Ratings consumer/pro/weighted separation with not calibrated,PASS_LOCAL,logs/node.log; logs/flutter_final.log: task22_models_test,"Consumer/pro/weighted distinct, uncalibrated null; no weights invented"
+T25-047,FUNCTION,Course exact refs/versions and safe graceful incomplete assets,PASS_LOCAL,logs/flutter_final.log: task22_models_test/task22_widgets_test,Exact course refs/cursor/deleted/unready safe; missingRubedo remainsOPEN
+T25-048,FUNCTION,Offline end-to-end session from historical content,PASS_LOCAL,logs/integration25.log,Full installed historical program offline via realFSM/controlledtransport; no Android sound claim
+T25-049,DELIVERY,SDK official current requirement review recorded,PASS_READONLY,SDK_REVIEW_25.json; ANDROID_AUDIT_25.md,"Fresh officialAPI36/FGS/backup review, actualsource SDK36; not storeapproval"
+T25-050,DELIVERY,Synthetic Android upgrade/smoke evidence correctly scoped,PASS_REPORT,NATIVE_UPGRADE_25.md,"Native0runs explicitly BLOCKED/NOT_RUN, no syntheticAndroidPASS"
+T25-051,DELIVERY,No real owner device or Google impersonation,PASS_POLICY,OWNER_QA_25.md; TESTS_25.md,No owner device/privateDB/Google impersonation; controlled identities labelled
+T25-052,DELIVERY,All known22/23 partial/live gaps carried forward,PASS_REPORT,ISSUES_25.md,All22/23 live/native/ownerUNKNOWN/policy/rematerialization/admin gaps retained
+T25-053,DELIVERY,55-row ACCEPTANCE evidence complete,PASS_REPORT,ACCEPTANCE_25.csv,"Exact55 unique official criteria, evidence and limits individually"
+T25-054,DELIVERY,"Draft PR, reports, readback and no secrets",PASS_REPORT,DELIVERY_25.md; DRIVE_READBACK_25.json,PR57+Drive delivery verified rawSHA/size/parent; final index own receipt keptinGit
+T25-055,DELIVERY,Truthful outcome separate INTEGRATION/NATIVE/OWNER/LIVE,PASS_REPORT,RESULT_25.md,"Separate sourceINTEGRATION_READY, nativeBLOCKED, ownerNOT_RUN, productionNOT_READY"

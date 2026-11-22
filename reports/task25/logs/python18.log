@@ -1,0 +1,14 @@
+test_cold_gate_required_for_api34 (test_delivery_gate.GateTest.test_cold_gate_required_for_api34) ... ok
+test_complete_native_proof (test_delivery_gate.GateTest.test_complete_native_proof) ... ok
+test_empty_and_partial_and_duplicate_rejected (test_delivery_gate.GateTest.test_empty_and_partial_and_duplicate_rejected) ... ok
+test_every_missing_case_rejected (test_delivery_gate.GateTest.test_every_missing_case_rejected) ... ok
+test_master_requires_both_diary_checks (test_delivery_gate.GateTest.test_master_requires_both_diary_checks) ... ok
+test_modified_receipt_rejected (test_delivery_gate.GateTest.test_modified_receipt_rejected) ... ok
+test_path_escape_rejected (test_delivery_gate.GateTest.test_path_escape_rejected) ... ok
+test_repository_endpoint_has_no_trailing_slash (test_delivery_gate.GateTest.test_repository_endpoint_has_no_trailing_slash) ... ok
+test_wrong_source_or_driver_rejected (test_delivery_gate.GateTest.test_wrong_source_or_driver_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.008s
+
+OK

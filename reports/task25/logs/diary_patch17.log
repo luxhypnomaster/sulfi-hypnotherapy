@@ -1,0 +1,19 @@
+✔ approved subset changes exactly Diary, preserves initial config/vendor/manifest and all other bytes (4.75956ms)
+✔ unpublished HEAD cannot be overwritten (1.084878ms)
+✔ candidate diagnostic Router/JWT cannot leak into baseline subset (0.670219ms)
+✔ file names and manifest are fail closed (0.662562ms)
+✔ only exact old and expected new Diary digests permitted (1.079534ms)
+✔ readback verifies every byte/type, not just one source name (1.11924ms)
+✔ deployment must retain exact endpoint, execution identity, access and ID (0.884099ms)
+✔ runtime source has no create/bootstrap/Drive permission actions and starts with main approval guard (0.748817ms)
+✔ inspection returns before any production writer and readonly grant cannot select writer (0.722676ms)
+✔ pinned JS source cannot be retyped as JSON even with identical bytes (0.645237ms)
+✔ rollback planner never silently overwrites foreign HEAD or active source (6.668183ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 164.442339

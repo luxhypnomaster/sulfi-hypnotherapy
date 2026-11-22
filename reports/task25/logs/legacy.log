@@ -1,0 +1,32 @@
+✔ real RSA signature verification accepts the configured Google issuer/audience/owner (33.29666ms)
+✔ Google-format PEM X.509 certificate verifies independently signed JWT (30.395482ms)
+✔ authentication rejects other owner (14.058216ms)
+✔ authentication rejects unverified email (12.948915ms)
+✔ authentication rejects other audience (10.426717ms)
+✔ authentication rejects array audience (12.419145ms)
+✔ authentication rejects other issuer (12.051622ms)
+✔ authentication rejects expired token (9.943903ms)
+✔ authentication rejects missing iat (12.709561ms)
+✔ authentication rejects future iat (10.883969ms)
+✔ authentication rejects future nbf (13.27138ms)
+✔ authentication rejects wrong algorithm (8.555993ms)
+✔ authentication rejects unrecognized critical header (7.502471ms)
+✔ authentication rejects unknown key (7.019186ms)
+✔ a modified token is rejected even with plausible claims and matching kid (10.179506ms)
+✔ missing server configuration fails closed (8.643292ms)
+✔ anonymous GET exposes only the public route; private calls authenticate before reading storage (8.339617ms)
+✔ draft → publish → edit draft → unpublish preserves private content and increments revisions (20.653346ms)
+✔ optimistic version conflicts preserve existing state; client timestamps/status/number are ignored (15.462423ms)
+✔ pagination is stable; mid-sync publication rejects old cursors; future since is rejected (57.291676ms)
+✔ malformed IDs, wrong entry ID, oversized bodies and non-boolean publish are rejected (20.74332ms)
+✔ HTTP envelopes carry logical errors without leaking tokens or private text (9.951646ms)
+✔ Drive store: anonymous feed does not create files; authenticated writes persist under a lock (13.685098ms)
+✔ Drive store refuses shared folders, duplicate state files and corrupt state without resetting data (9.815288ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 569.383742
