@@ -43,6 +43,13 @@ const metricLabels22 = {
   'lastUploaded': 'Последняя копия',
   'restoreVerified': 'Проверено восстановление',
 };
+Iterable<MapEntry<String, dynamic>> summaryMetrics22(Map metrics) => [
+  for (final k in metricLabels22.keys.where(metrics.containsKey))
+    MapEntry(k, metrics[k]),
+  for (final k in metrics.keys.where((k) => !metricLabels22.containsKey(k)))
+    MapEntry(k.toString(), metrics[k]),
+].take(3);
+
 String adminState22(Map? section, {bool stale = false}) {
   final metrics =
       (section?['metrics'] as Map?)?.values.cast<Map>().toList() ?? [];
@@ -265,9 +272,9 @@ class _Admin22ScreenState extends State<Admin22Screen> {
                   : Wrap(
                       spacing: 12,
                       children: [
-                        for (final entry
-                            in (section(item.$1)!['metrics'] as Map).entries
-                                .take(3))
+                        for (final entry in summaryMetrics22(
+                          section(item.$1)!['metrics'] as Map,
+                        ))
                           Text(
                             '${metricLabels22[entry.key] ?? entry.key}: ${entry.value['value'] ?? 'нет данных'}',
                             style: TextStyle(
