@@ -1,0 +1,39 @@
+{
+  "task": 23,
+  "revision": "v1.1",
+  "observedAtUTC": "2026-11-22T12:14:03.720485+00:00",
+  "branch": "feat/task23-data-integrity-native-qa",
+  "base": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+  "testedSourceSHA": "5fae671c9829c021151e3c9e6ed0467692a7867a",
+  "currentDocumentationHead": "71ba8d77a011bd0c89820d62c56642d9533a4187",
+  "sourceTrees": {
+    "lib": "ef7376cc8d8f5617ad969021d56cb4ea55ae52f2",
+    "test": "134ad123f7b1c5149c27eef968a7355595724af4",
+    "scripts": "3d943063183da4ae94dbdb8d91d7feb5884d6ae0",
+    "android": "5835ca8f858aef282a50cab6d8c700bcda7646e2",
+    "server": "c9031a55fa0d34e52256f799806e0c64768d0361",
+    ".github": "e168ba9291b1d9bff7f48fa71472ab33ceaa53c0",
+    "pubspec.yaml": "82047540d549556707d0486be84bf793d39d18af",
+    "pubspec.lock": "0969411b396c70c94ab97a9300853cf4d9dc383a"
+  },
+  "codeDiffSinceTestedSource": [],
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/55",
+  "reports": "https://drive.google.com/drive/folders/1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq",
+  "native": "DEFERRED_BY_OWNER",
+  "ownerIncidentFullRootCause": "UNKNOWN",
+  "result": "PARTIAL",
+  "acceptance": {
+    "PASS": 17,
+    "PARTIAL": 1,
+    "DEFERRED": 2,
+    "BLOCKED": 0
+  },
+  "tests": {
+    "flutterPASS": 554,
+    "flutterSKIP": 2,
+    "flutterFAIL": 0,
+    "pythonPASS": 13,
+    "analyze": "No issues found"
+  },
+  "next": "review stacked draft55/54/52; future native only after separate owner authorisation"
+}

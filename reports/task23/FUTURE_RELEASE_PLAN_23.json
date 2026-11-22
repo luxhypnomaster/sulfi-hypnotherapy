@@ -1,0 +1,54 @@
+{
+  "status": "DEFERRED_BY_OWNER",
+  "execute": false,
+  "approvedSourceMustEqual": "5fae671c9829c021151e3c9e6ed0467692a7867a",
+  "sourceConfig": "PASS_READ_ONLY_NOT_APK_VERIFICATION",
+  "toolchain": {
+    "flutter": "3.47.9",
+    "frameworkSHA": "c197ca5199e9ee5661e865596c9c07294dfab51c",
+    "engineSHA": "89c39edfdfae2949f6806e4a315c0c08522238b7",
+    "dart": "3.13.7",
+    "jdkMajor": 21,
+    "javaKotlinTarget": 17,
+    "gradle": "9.3.1",
+    "AGP": "9.1.0",
+    "kotlin": "2.4.0",
+    "compileSdk": 36,
+    "targetSdk": 36,
+    "minSdk": 24,
+    "ndk": "28.2.13676358",
+    "buildToolsInstalled": "36.0.0",
+    "jdk": "Temurin 21.0.13+9-LTS"
+  },
+  "historicalCertificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+  "historicalCertificateSource": "Task18 readback, not newly inspected APK",
+  "versionCode": 29,
+  "commandsForFutureApprovedTaskOnly": [
+    {
+      "edition": "master",
+      "applicationId": "ru.sulfi.sulfi_hypnotherapy",
+      "futureCommand": "flutter build apk --debug --no-pub --build-number=29",
+      "artifact": "build/app/outputs/flutter-apk/app-debug.apk (copy edition separately ONLY after later permission)"
+    },
+    {
+      "edition": "client",
+      "applicationId": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "futureCommand": "flutter build apk --debug --no-pub --build-number=29 --dart-define=SULFI_EDITION=client",
+      "artifact": "build/app/outputs/flutter-apk/app-debug.apk (copy edition separately ONLY after later permission)"
+    }
+  ],
+  "mandatoryBeforeFutureExecution": [
+    "owner authorises native gate",
+    "git HEAD equals approved SHA and clean tree",
+    "Flutter/engine/JDK/Gradle/AGP/Kotlin/SDK exact pins rechecked and dependencies cached",
+    "existing protected signing material provisioned; no generated default debug identity",
+    "both APK independently checked: SHA, apksigner public cert, aapt package/code/permissions",
+    "synthetic UI-created old-version normal install-r upgrade passes before owner device",
+    "no uninstall, clear, downgrade, cloud/API/ACL changes"
+  ],
+  "artifactRule": "Flutter ARM bundle is NOT APK/AAB and has NO Android signer proof",
+  "readOnlyFutureAdb": [
+    "adb shell dumpsys package ru.sulfi.sulfi_hypnotherapy",
+    "adb shell dumpsys package ru.sulfi.sulfi_hypnotherapy.clienttest"
+  ]
+}

@@ -1,0 +1,13 @@
+00:00 +0: loading /dev/shm/sulfi23/test/task23_preservation_test.dart
+00:00 +0: 23 schema6→9 and second cold start retain full synthetic graph and exact frozen payloads
+00:01 +1: 23 schema7→9 and second cold start retain full synthetic graph and exact frozen payloads
+00:01 +2: 23 schema8→9 and second cold start retain full synthetic graph and exact frozen payloads
+00:01 +3: 23 schema9→9 and second cold start retain full synthetic graph and exact frozen payloads
+00:02 +4: 23 wrong-path duplicate SQLite alias never creates empty replacement or selects owner by filename
+00:02 +5: 23 background rejects old schema before opening source RW or modifying journal
+00:02 +6: 23 existing verified same-owner aliases export only A then only B; logout/malformed hint preserve local data
+00:02 +7: 23 mutation at transaction hook rolls back every row and newly materialized file
+00:02 +8: 23 already-imported preview cannot mask later DB or audio mutation
+00:02 +9: 23 account switch during export refuses mixed-owner output and leaves every original unchanged
+00:02 +10: 23 missing audio and unknown media do not erase catalog on cold initialization
+00:02 +11: All tests passed!

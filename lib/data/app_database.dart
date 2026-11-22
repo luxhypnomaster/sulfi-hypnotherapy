@@ -13,7 +13,12 @@ Future<Database> openAppDatabase(
   bool allowMigrations = true,
 }) async {
   final backend = factory ?? databaseFactory;
-  await preflightStorage(path, backend);
+  await preflightStorage(
+    path,
+    backend,
+    allowCreate: allowMigrations,
+    requiredVersion: allowMigrations ? null : 9,
+  );
   return backend.openDatabase(
     path,
     options: OpenDatabaseOptions(

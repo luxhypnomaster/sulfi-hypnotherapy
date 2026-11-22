@@ -1,0 +1,51 @@
+00:00 +0: loading /dev/shm/sulfi23/test/task23_repro_test.dart
+00:00 +0: 23 RED→GREEN headless allowMigrations=false must never create missing local DB
+error FormatException: Фоновое создание базы запрещено during open, closing...
+00:00 +0 -1: 23 RED→GREEN headless allowMigrations=false must never create missing local DB [E]
+  Expected: <false>
+    Actual: <true>
+  A background bootstrap refusal cannot leave a new empty DB
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task23_repro_test.dart 42:7                    main.<fn>
+  
+00:00 +0 -1: 23 RED→GREEN startup never deletes name-only unknown-owner capsules or staging bytes
+00:01 +0 -2: 23 RED→GREEN startup never deletes name-only unknown-owner capsules or staging bytes [E]
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task23_repro_test.dart 64:7                    main.<fn>
+  
+00:01 +0 -2: 23 RED→GREEN validated capsule preview mutation is refused before any destination write
+00:01 +0 -3: 23 RED→GREEN validated capsule preview mutation is refused before any destination write [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/task23_repro_test.dart 82:13                  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/task23_repro_test.dart 72:15                  main.<fn>
+  
+00:01 +0 -3: 23 RED→GREEN a MASTER role alone cannot export another account private draft without owner scope proof
+00:01 +0 -4: 23 RED→GREEN a MASTER role alone cannot export another account private draft without owner scope proof [E]
+  Expected: ['local']
+    Actual: MappedListIterable<dynamic, dynamic>:['account-A', 'account-B', 'local']
+     Which: at location [0] is 'account-A' instead of 'local'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/task23_repro_test.dart 110:7                   main.<fn>
+  
+00:01 +0 -4: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN a MASTER role alone cannot export another account private draft without owner scope proof
+  /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN headless allowMigrations=false must never create missing local DB
+  /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN startup never deletes name-only unknown-owner capsules or staging bytes
+  /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN validated capsule preview mutation is refused before any destination write

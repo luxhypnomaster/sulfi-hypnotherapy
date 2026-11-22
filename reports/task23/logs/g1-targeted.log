@@ -1,0 +1,41 @@
+00:00 +0: loading /dev/shm/sulfi23/test/task23_repro_test.dart
+00:00 +0: /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN headless allowMigrations=false must never create missing local DB
+00:00 +1: /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN startup never deletes name-only unknown-owner capsules or staging bytes
+00:01 +2: /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN validated capsule preview mutation is refused before any destination write
+00:01 +3: /dev/shm/sulfi23/test/task23_repro_test.dart: 23 RED→GREEN a MASTER role alone cannot export another account private draft without owner scope proof
+00:01 +4: loading /dev/shm/sulfi23/test/task4_capsule_test.dart
+00:02 +4: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 selective track roundtrip and idempotence without private records
+00:03 +5: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 selective module roundtrip and idempotence without private records
+00:03 +6: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 selective template roundtrip and idempotence without private records
+00:03 +7: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 selective scope rejects absent metadata and absent bytes
+00:03 +8: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 offline catalog indexes before install, selects exact template, omits private rows and retries idempotently
+00:03 +9: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 catalog cancel, commit failure, retry and corrupt staged source leave no partial content
+00:04 +10: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 schema8 populated upgrade retains every table and media, then pins old definition after v2
+00:04 +11: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 installer checks storage before writes, retains abandoned files, and reopens after restart
+00:04 +12: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 immutable audio prevents package update silently replacing history dependencies
+00:04 +13: /dev/shm/sulfi23/test/task4_capsule_test.dart: full offline capsule restores IDs, bytes, plans, history, diary and survives restart
+00:05 +14: /dev/shm/sulfi23/test/task4_capsule_test.dart: repeated import is idempotent and keeps event counts
+00:05 +15: /dev/shm/sulfi23/test/task4_capsule_test.dart: merging equal session numbers preserves both histories and remains idempotent
+00:05 +16: /dev/shm/sulfi23/test/task4_capsule_test.dart: history may reference deliberately deleted audio without making its backup unrestorable
+00:05 +17: /dev/shm/sulfi23/test/task4_capsule_test.dart: same mechanism selectively exports module and its only dependency
+00:05 +18: /dev/shm/sulfi23/test/task4_capsule_test.dart: injected commit failure rolls back every row and staged media
+00:05 +19: /dev/shm/sulfi23/test/task4_capsule_test.dart: conflicts preview before mutation, cancel and keep-existing preserve local data
+00:06 +20: /dev/shm/sulfi23/test/task4_capsule_test.dart: database change after preview aborts without losing the new data
+00:06 +21: /dev/shm/sulfi23/test/task4_capsule_test.dart: explicit cancellation before commit rolls back both database and new files
+00:06 +22: /dev/shm/sulfi23/test/task4_capsule_test.dart: startup logically quarantines unknown-owned transfer cache and preserves all bytes
+00:06 +23: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects checksum without touching destination
+00:06 +24: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects schema without touching destination
+00:06 +25: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects dependency without touching destination
+00:06 +26: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects traversal without touching destination
+00:06 +27: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects size without touching destination
+00:06 +28: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects duplicate without touching destination
+00:07 +29: /dev/shm/sulfi23/test/task4_capsule_test.dart: rejects revision-payload without touching destination
+00:07 +30: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 legacy schema 6 capsule remains readable; access mode is never imported
+00:07 +31: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 legacy schema 7 capsule remains readable; access mode is never imported
+00:07 +32: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task14 legacy schema 8 capsule remains readable; access mode is never imported
+00:07 +33: /dev/shm/sulfi23/test/task4_capsule_test.dart: Task5: CLIENT capsule replacement cannot overwrite protected author audio
+00:07 +34: /dev/shm/sulfi23/test/task4_capsule_test.dart: free-space preflight blocks before extracting files
+00:08 +35: /dev/shm/sulfi23/test/task4_capsule_test.dart: a readable capsule can repair lost bytes after an earlier successful restore
+00:08 +36: loading /dev/shm/sulfi23/test/task4_migration_test.dart
+00:08 +36: /dev/shm/sulfi23/test/task4_migration_test.dart: real SQLite v5→v6 retains every old column, payload, stable ID and audio byte
+00:09 +37: All tests passed!

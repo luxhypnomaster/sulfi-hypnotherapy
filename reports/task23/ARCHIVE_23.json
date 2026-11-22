@@ -1,0 +1,11 @@
+{
+  "revision": "v1.1",
+  "bytes": 7718,
+  "sha256": "123d4bd298ebecc92176eec44fed718eecc6f04b09472e10ca197e3627d46a69",
+  "crc": "PASS",
+  "manifestEntries": 6,
+  "manifestHashAndSizes": "PASS",
+  "filesRead": 7,
+  "outerSHA": "matches independently retrieved operational source record \u00a7351, not merely self manifest",
+  "native": "DEFERRED_BY_OWNER"
+}

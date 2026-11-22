@@ -1,0 +1,7 @@
+{
+  "bytes": 57849,
+  "sha256": "5f6081422c395e69c1e812794f53eb90843ed390efc51fbd507bda2cff295de2",
+  "entries": 27,
+  "CRC": "PASS",
+  "scope": "Sanitized reports/source hashes and synthetic test logs only. No DB/media/secrets/APK/source archive."
+}

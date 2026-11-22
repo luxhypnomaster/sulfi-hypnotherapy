@@ -1,0 +1,42 @@
+{
+  "testedSourceSHA": "5fae671c9829c021151e3c9e6ed0467692a7867a",
+  "logs": {
+    "pub-get.log": {
+      "bytes": 233,
+      "sha256": "d6612e9bb0c08377840da87c963d8d28c9cf29d03539e9f7a2cd08f4ac427483"
+    },
+    "repro-red.log": {
+      "bytes": 3021,
+      "sha256": "71910106678a863f32e580e05a21abcec4ad0c5a241256d1ff66272d6e6a6058"
+    },
+    "repro-green.log": {
+      "bytes": 494,
+      "sha256": "0cb28ef56afe39a496d6f7e3f8dd82b613241ba14f9ecfcea2ec2b29810bc83d"
+    },
+    "g1-targeted.log": {
+      "bytes": 5084,
+      "sha256": "117ad18b6efc2d771733f02071bc58b8c912efd26f8e03ccf6f65dd4f1a88c79"
+    },
+    "preservation-g2-final.log": {
+      "bytes": 1182,
+      "sha256": "261d676f047cb6b0dff4a7f3e95423e2ba16d5c0174361e2a41389bac078694c"
+    },
+    "python-final.log": {
+      "bytes": 2133,
+      "sha256": "87320d171a0fcc5a6dbe6a7ca0bbfe83e7227951bc8b343e5080a411a976d0cf"
+    },
+    "format-final.log": {
+      "bytes": 47,
+      "sha256": "a79520f28b6f5a5d4d755cef41e960ffe8bfd9d7e5dbff5b80351e0bcd3b4f26"
+    },
+    "analyze-final.log": {
+      "bytes": 96,
+      "sha256": "9e9236811f8bbe7e65c4f6b4ee5bb0d1af8b7f4d29f373e172490981525932b9"
+    },
+    "flutter-full.log": {
+      "bytes": 84168,
+      "sha256": "00a14655ea50a81d490b58061d8236c7da4abe7d3d8a2b7b9e3af3fa0408a4b6"
+    }
+  },
+  "scope": "synthetic/local Linux and source only; no Android/real Google/prod"
+}

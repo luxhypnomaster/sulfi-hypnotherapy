@@ -654,7 +654,7 @@ void main() {
     expect(await target.directory.list().toList(), isEmpty);
     await preview.close();
   });
-  test('startup removes only abandoned transfer cache and preserves committed media and unrelated files', () async {
+  test('startup logically quarantines unknown-owned transfer cache and preserves all bytes', () async {
     await destination.workspace.create(recursive: true);
     final stale = Directory('${destination.workspace.path}/restore-old');
     await stale.create();
@@ -665,8 +665,14 @@ void main() {
       '${destination.workspace.path}/sulfi-incoming-old.zip',
     ).writeAsBytes([1]);
     await CapsuleService.cleanWorkspace(destination.workspace);
-    expect(await stale.exists(), isFalse);
-    expect(await cached.exists(), isFalse);
+    expect(await stale.exists(), isTrue);
+    expect(await cached.exists(), isTrue);
+    expect(
+      (await CapsuleService.quarantineWorkspace(destination.workspace))
+          .map((r) => r['status'])
+          .toSet(),
+      {'QUARANTINED_UNKNOWN_OWNER'},
+    );
     expect(await keep.exists(), isTrue);
     expect(await zip.exists(), isTrue);
     expect(await original.fileFor((await a.list()).first).exists(), isTrue);

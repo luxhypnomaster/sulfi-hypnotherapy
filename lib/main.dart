@@ -183,6 +183,8 @@ class _BootstrapState extends State<_Bootstrap> {
             );
       if (newDiaryApi != null) {
         diaryMedia.remoteResolver = newDiaryApi.resolveMedia;
+        capsules.canReadAuthorDraftScope = newDiaryApi.canReadAuthorDraftScope;
+        capsules.exportOwnerBinding = () => newDiaryApi.readerScope;
       }
       final diary = DiaryController(
         newDiaryApi == null
