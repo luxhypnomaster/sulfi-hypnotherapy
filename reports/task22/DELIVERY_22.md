@@ -31,4 +31,11 @@
 | EVIDENCE_22.zip | [Открыть](https://drive.google.com/file/d/1UEGIoMxTonZkm6Z_4_M8dRl4d0DHyGcf/view?usp=drivesdk) | `54575ed0a60ba6fd67449196d5e170ea4f2c0a78c1c8a091191c776852eaa273` |
 | task22-admin-seven-sections.png | [Открыть](https://drive.google.com/file/d/142Qn5GqmDdbcBYKXkgkND-LB9fXQ8DrF/view?usp=drivesdk) | `bbb7d6f1d0dfecfe95f1e2c621f6256b5e067e6ed703d3aa11304df948a8bd99` |
 
-Исходный immutable evidence manifest не включает последующие DELIVERY/DRIVE_READBACK,чтобы не вводить рекурсивные self-hashes. Проверка этих двух файлов фиксируется отдельно в Git. Унаследованный anyone:writer не меняли: хэш доказывает проверенный момент, не будущую неизменяемость. Private source остаётся в приватном GitHub. Ни APK,ни credentials,ни private data в этой папке нет.
+Исходный immutable evidence manifest не включает последующие DELIVERY/DRIVE_READBACK,чтобы не вводить рекурсивные self-hashes. Проверка этих двух файлов фиксируется отдельно в Git. Унаследованный anyone:writer не меняли: хэш доказывает проверенный момент, не будущую неизменяемость. Исходники находятся в указанном GitHub; финальный readback показал visibility:public. Видимость в №22 не менялась. Ранняя формулировка о приватности была ошибочной. Ни APK,ни credentials,ни private data в этой папке нет.
+
+## Уточнение видимости репозитория (приоритетнее раннего индекса)
+
+GitHub authenticated API и отдельный anonymous GET подтвердили public. Код/тесты/исходный evidence ZIP не меняются. Исправление индекса сохраняет прежний Drive fileID. Подробности и ограниченность проверки:
+
+- [CORRECTION_VISIBILITY_22.md](https://docs.google.com/document/d/11vcgEy8bibrvmYwSIQC9ROOUeCEqmVX-/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true)
+- [REPOSITORY_VISIBILITY_READBACK_22.json](https://drive.google.com/file/d/1uTJ7Rq0MJzRbXxTqbExfHHOQKgojHsq_/view?usp=drivesdk)
