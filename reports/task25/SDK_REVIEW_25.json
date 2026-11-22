@@ -1,0 +1,11 @@
+{
+  "url": "https://developer.android.com/google/play/requirements/target-sdk",
+  "readAtUTC": "2026-11-22",
+  "downloadSHA256": "81b06795e19ab14b59101a8798c8364eb8d07e0eb11b710ca7760e80908502db",
+  "currentRequirement": "Google Play mobile new apps and updates: Android16/API36 from2026-08-31; existing apps API35 for discoverability. Not a store submission.",
+  "sourceTargetSdk": 36,
+  "sourceCompileSdk": 36,
+  "minSdk": 24,
+  "toolchainSource": "scripts/task23/native_source_pins.json + installed Flutter gradle defaults",
+  "status": "PASS_READ_ONLY_REQUIREMENT_REVIEW_NOT_APK_MANIFEST"
+}

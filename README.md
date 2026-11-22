@@ -1,3 +1,7 @@
+# №25 — интеграция и P0-проверки
+
+[Контрольная точка](reports/task25/PROGRESS.md) · [ТЗ](docs/task25/00_START_HERE.md). Отдельная ветка поверх необъединённого PR56. Проверки текущего общего исходника MASTER/CLIENT, синтетические копии SQLite и медиа; production-возможности №22 остаются OFF. Подписанная пара и native install-r требуют отдельной подтверждённой среды, результаты не подменяются Flutter-тестами.
+
 # №21 — runtime каталога и витрины · кандидат, без production-переключения
 
 [Результат](reports/task21/RESULT_21.md) · [Матрица28](reports/task21/ACCEPTANCE_21.csv) · [draft PR52](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/52) · [Контрольная точка](reports/task21/PROGRESS.md) · [Контракт](reports/task21/CONTRACT_21.md) · [Аудит](reports/task21/G0_AUDIT_21.md).
