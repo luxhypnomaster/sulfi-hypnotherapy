@@ -1,9 +1,9 @@
-# №23 v1.1 — checkpoint G2 (2026-11-22 UTC)
+# №23 v1.1 — финальная контрольная точка
 
-Base ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2 (unmerged draft PR54 on PR52). Task23 branch feat/task23-data-integrity-native-qa. Checkpoints 806c96e, 2607045, 61dd90b pushed; ongoing tests/extensions not yet final frozen source.
+Статус PARTIAL. Проверенный код 5fae671c9829c021151e3c9e6ed0467692a7867a, собственная ветка feat/task23-data-integrity-native-qa, draft PR55 на неслитом PR54. Последующие коммиты только отчётность. Все20 критериев:17PASS/1PARTIAL/2DEFERRED, уровни явно указаны. Полный Flutter554PASS/2SKIP/0FAIL, Python13PASS, analyze/format/source-gate PASS. Четыре воспроизведённых дефекта устранены. Нативная сборка/эмуляторы/телефоны/APK строго DEFERRED_BY_OWNER.
 
-Four actual RED→GREEN proofs: headless bootstrap empty-file pollution; name-only capsule workspace deletion; mutable inspected manifest; role-only cross-owner full export. Targeted37 and added preservation11 PASS; Python copy/release13 PASS; analyze no issues. Actual FFI schema6/7/8→9, repeated cold9→9, full graph/frozen history/media/unknown capsules; existing actual domain account-A→B and malformed hints. No physical Android/Google claim. Full Flutter regression in progress.
+Фактический owner-wide диагноз MASTER24→25 UNKNOWN; новые синтетические дефекты не выдаются за него. SQLite schema9/IDs/payload сохранены. 43 файла №22 неизменны. Нет изменений Android/server/OAuth/signing/ACL/workflows/main/pubspec/данных владельца. GitHub public уже до №23, доступ не меняли.
 
-Task22 protected43 files byte-identical. All Android/server/OAuth/queue/ratings/pubspec/signing/main untouched. schema9 unchanged; optional callbacks use existing verified reader scope. No new cloud sync. Copy-only diagnostic tool requires explicit copy authorisation, exact caller-owner binding and independently retained manifest SHA; it is NOT a Google identity verifier. Source is never opened with SQLite.
+Отчёты: https://drive.google.com/drive/folders/1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq . PR: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/55 . DELIVERY/DRIVE_READBACK фиксируют загрузку и независимый download-SHA.
 
-No APK/AAB/Gradle/native/CI build/emulator/device/signing: DEFERRED_BY_OWNER. Historical MASTER24→25 owner-wide root cause remains UNKNOWN, not falsely explained by new synthetic defects. Future native gate plan-only. Report folder created, ACL unchanged: https://drive.google.com/drive/folders/1PTajEPsRzE-WdpprT3teQoh53Zr0NfRq . Next: finish full regression, independent diff/provenance review, reports20criteria, draft PR, upload and independent SHA readback.
+Возобновление: сначала прочесть RESULT, ISSUES, CHECKPOINT, DELIVERY и матрицу. Не повторять полный suite для одних документов и не запускать native. Следующий безопасный шаг — review цепочкиPR52/54/55; не merge автоматически. Будущий native gate требует отдельного разрешения. Реальных данных/телефонов здесь нет.

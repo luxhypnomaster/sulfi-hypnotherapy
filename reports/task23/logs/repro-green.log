@@ -1,0 +1,6 @@
+00:00 +0: loading /dev/shm/sulfi23/test/task23_repro_test.dart
+00:00 +0: 23 RED→GREEN headless allowMigrations=false must never create missing local DB
+00:00 +1: 23 RED→GREEN startup never deletes name-only unknown-owner capsules or staging bytes
+00:01 +2: 23 RED→GREEN validated capsule preview mutation is refused before any destination write
+00:01 +3: 23 RED→GREEN a MASTER role alone cannot export another account private draft without owner scope proof
+00:01 +4: All tests passed!
