@@ -1,0 +1,15 @@
+test_unprotected_main_must_refuse_before_reading_any_secret (test_signing_inspect.InspectTest.test_unprotected_main_must_refuse_before_reading_any_secret) ... FAIL
+
+======================================================================
+FAIL: test_unprotected_main_must_refuse_before_reading_any_secret (test_signing_inspect.InspectTest.test_unprotected_main_must_refuse_before_reading_any_secret)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25/scripts/task25/test_signing_inspect.py", line 104, in test_unprotected_main_must_refuse_before_reading_any_secret
+    with self.assertRaises(si.InspectError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: InspectError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)

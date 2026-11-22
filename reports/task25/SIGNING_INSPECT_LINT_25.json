@@ -17,5 +17,6 @@
   "status": "PASS_ACTIONLINT",
   "exitCode": 0,
   "binarySHA256": "c872d6db8c6bf83a8eaa704fc93999f027d55dffbc63b8a6abdccb47df5f4cd4",
-  "limits": "Static YAML/expressions/actions/schema lint only; not actual GitHub dispatch. External shellcheck/pyflakes disabled; embedded Python compiled in6 controlled workflow tests."
+  "limits": "Static YAML/expressions/actions/schema lint only; not actual GitHub dispatch. External shellcheck/pyflakes disabled; embedded Python compiled in6 controlled workflow tests.",
+  "workflowSHA256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492"
 }

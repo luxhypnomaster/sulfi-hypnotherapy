@@ -34,6 +34,7 @@ def trusted_context(env):
         "GITHUB_REPOSITORY": REPOSITORY,
         "GITHUB_EVENT_NAME": "workflow_dispatch",
         "GITHUB_REF": "refs/heads/main",
+        "GITHUB_REF_PROTECTED": "true",
         "GITHUB_ACTOR": OWNER,
         "GITHUB_TRIGGERING_ACTOR": OWNER,
         "GITHUB_WORKFLOW_REF": f"{REPOSITORY}/{WORKFLOW}@refs/heads/main",

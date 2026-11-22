@@ -21,6 +21,7 @@ class InspectTest(unittest.TestCase):
             "GITHUB_REPOSITORY": si.REPOSITORY, "GITHUB_EVENT_NAME": "workflow_dispatch",
             "GITHUB_REF": "refs/heads/main", "GITHUB_ACTOR": si.OWNER,
             "GITHUB_TRIGGERING_ACTOR": si.OWNER,
+            "GITHUB_REF_PROTECTED": "true",
             "GITHUB_WORKFLOW_REF": f"{si.REPOSITORY}/{si.WORKFLOW}@refs/heads/main",
             "TASK25_INSPECT_CONFIRMATION": si.CONFIRMATION, "GITHUB_SHA": "1" * 40,
             "RUNNER_TEMP": str(self.root), "PATH": "/usr/bin:/bin",
@@ -91,6 +92,19 @@ class InspectTest(unittest.TestCase):
             with self.assertRaises(si.InspectError):
                 si.run(self.env, runner=self.fake)
         self.assertFalse(self.calls)
+
+    def test_unprotected_main_must_refuse_before_reading_any_secret(self):
+        class NoSecretReads(dict):
+            def get(self, key, default=None):
+                if key.startswith("SULFI_TEST_"):
+                    raise AssertionError("unprotected ref reached secret read")
+                return super().get(key, default)
+        env = NoSecretReads(self.env)
+        env["GITHUB_REF_PROTECTED"] = "false"
+        with self.assertRaises(si.InspectError):
+            si.run(env, runner=self.fake)
+        self.assertFalse(self.calls)
+        self.assertFalse(list(self.root.iterdir()))
 
     def test_missing_secret_has_public_code_and_no_temp_store(self):
         del self.env["SULFI_TEST_KEYSTORE_BASE64"]

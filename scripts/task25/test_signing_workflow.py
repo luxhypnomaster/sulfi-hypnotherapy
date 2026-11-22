@@ -20,9 +20,16 @@ class WorkflowTest(unittest.TestCase):
         self.assertFalse((ROOT / ".github/workflows/sulfi-signing-inspect25.yml").exists())
         self.assertEqual(set(self.w["on"]), {"workflow_dispatch"})
         self.assertEqual(self.w["permissions"], {"contents": "read"})
-        self.assertEqual(list(self.w["jobs"]), ["inspect"])
+        self.assertEqual(list(self.w["jobs"]), ["trust", "inspect"])
         self.assertNotIn("env", self.w)
         self.assertNotIn("env", self.job)
+        trust = self.w["jobs"]["trust"]
+        self.assertEqual(trust["permissions"], {})
+        self.assertNotIn("secrets.", str(trust))
+        self.assertNotIn("uses", str(trust))
+        self.assertEqual(self.job["needs"], "trust")
+        self.assertIn("github.ref_protected == true", self.job["if"])
+        self.assertIn("needs.trust.result == 'success'", self.job["if"])
 
     def test_owner_main_dispatch_and_re_run_actor_are_all_required(self):
         condition = self.job["if"]
@@ -51,6 +58,10 @@ class WorkflowTest(unittest.TestCase):
         self.assertNotIn("CLASPRC_JSON", self.text)
         self.assertNotIn("SULFI_TEST_KEY_PASSWORD", self.text)
         self.assertLess(steps.index(next(s for s in steps if "Verify approved" in s["name"])), steps.index(step))
+        preflight = next(s for s in steps if "Verify approved" in s["name"])
+        self.assertIn("GITHUB_REF_PROTECTED", preflight["run"])
+        self.assertIn("protected main required", preflight["run"])
+        self.assertNotIn("continue-on-error", self.text)
 
     def test_reviewed_tool_hash_and_actions_are_immutable(self):
         expected = hashlib.sha256((ROOT / "scripts/task25/signing_inspect.py").read_bytes()).hexdigest()
@@ -74,8 +85,8 @@ class WorkflowTest(unittest.TestCase):
             self.assertNotIn(phrase, self.text)
 
     def test_both_embedded_python_blocks_compile_without_execution(self):
-        run_steps = [s for s in self.job["steps"] if "python3 - <<'" in s.get("run", "")]
-        self.assertEqual(len(run_steps), 2)
+        run_steps = [s for j in self.w["jobs"].values() for s in j["steps"] if "python3 - <<'" in s.get("run", "")]
+        self.assertEqual(len(run_steps), 3)
         for step in run_steps:
             lines = step["run"].splitlines()
             delimiter = re.search(r"<<'([^']+)'", lines[0])[1]

@@ -1,4 +1,4 @@
-# REVIEW ONLY. Not under .github/workflows; no activation or dispatch granted.
+# Prepared outside .github/workflows for review; separate owner approval is required before promotion.
 # Proposed main promotion: this file -> .github/workflows/sulfi-signing-inspect25.yml
 # plus scripts/task25/signing_inspect.py. No other source changes.
 name: Task25 existing public certificate inspect only
@@ -16,13 +16,37 @@ concurrency:
   group: task25-public-certificate-inspect
   cancel-in-progress: false
 jobs:
-  inspect:
+  trust:
     if: >-
       ${{ github.repository == 'luxhypnomaster/sulfi-hypnotherapy' &&
           github.event_name == 'workflow_dispatch' &&
           github.ref == 'refs/heads/main' &&
           github.actor == 'luxhypnomaster' &&
           github.triggering_actor == 'luxhypnomaster' &&
+          inputs.confirmation == 'READ_ONLY_EXISTING_CERTIFICATE' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Require protected main without credentials or checkout
+        shell: bash
+        run: |
+          python3 - <<'PY_TRUST'
+          import os
+          if os.environ.get('GITHUB_REF_PROTECTED') != 'true':
+              raise SystemExit('BLOCKED: protected main required; inspection job will not receive credentials')
+          print('Protected main context confirmed; no secrets used')
+          PY_TRUST
+  inspect:
+    needs: trust
+    if: >-
+      ${{ github.repository == 'luxhypnomaster/sulfi-hypnotherapy' &&
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/main' &&
+          github.actor == 'luxhypnomaster' &&
+          github.triggering_actor == 'luxhypnomaster' &&
+          github.ref_protected == true &&
+          needs.trust.result == 'success' &&
           inputs.confirmation == 'READ_ONLY_EXISTING_CERTIFICATE' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -39,8 +63,11 @@ jobs:
         run: |
           python3 - <<'PY_TOOL_PIN'
           import hashlib
+          import os
           from pathlib import Path
-          expected = '54a22dfdb1d01b170f6da4c709c66d80156d2d3fea7329a0b5507581d0aa45ee'
+          if os.environ.get('GITHUB_REF_PROTECTED') != 'true':
+              raise SystemExit('BLOCKED: protected main required; no credentials accessed')
+          expected = '510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c'
           actual = hashlib.sha256(Path('scripts/task25/signing_inspect.py').read_bytes()).hexdigest()
           if actual != expected:
               raise SystemExit('STOP: unreviewed inspection tool')
