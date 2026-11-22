@@ -1,0 +1,12 @@
+{
+  "id": "1E1RPwu47HCHF508502dLrayFFehR3fHz",
+  "file": "DELIVERY_25.md",
+  "size": 7953,
+  "localSHA256": "75578b0e3996d3fbc7d6e223821117617211ab966c1411eb57e0a3e43e4bab42",
+  "downloadSHA256": "75578b0e3996d3fbc7d6e223821117617211ab966c1411eb57e0a3e43e4bab42",
+  "parent": [
+    "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+  ],
+  "status": "PASS",
+  "whySeparate": "avoid circular self-hash; delivery index and receipts excluded from evidence archive"
+}
