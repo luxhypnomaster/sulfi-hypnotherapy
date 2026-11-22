@@ -4,11 +4,13 @@ const {ServerJobs22}=require('./server_jobs22.cjs');
 const {IdentityRoles22}=require('./identity_roles22.cjs');
 const {Ratings22}=require('./ratings22.cjs');
 const {Catalog22}=require('./catalog22.cjs');
+const {overviewCache22}=require('./admin_overview22.cjs');
 const SECTION_IDS=['publications','catalog','statistics','operations','server','users','backups'];
 function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>new Date().toISOString(),backupAdapter=null}){
  const store=new ProjectStore22(baseStore.db),iam=new IdentityRoles22(store),jobs=new ServerJobs22(store),catalog=new Catalog22(baseStore,store,iam,{clock});
  const ratings=new Ratings22(store,iam,{resolveTarget:(a,t)=>catalog.target(a,t),clock});
- function overview(actor){iam.admin(actor);const all=baseStore.records(),at=clock(),metric=(value,source='sqlite-sandbox',state='verified')=>({value,source,updatedAt:at,state});
+ const cachedOverview=overviewCache22(baseStore.db,store);
+ function overview(actor){iam.admin(actor);return cachedOverview(actor,()=>{const all=baseStore.records(),at=clock(),metric=(value,source='sqlite-sandbox',state='verified')=>({value,source,updatedAt:at,state});
   const jobRows=store.list('jobs').map(r=>r.value),errors=jobRows.filter(j=>j.state==='QUARANTINED').length;
   const sections=[{id:'publications',metrics:{published:metric(all.filter(r=>r.type==='diaryEntry'&&r.state==='published').length),drafts:metric(all.filter(r=>r.type==='diaryEntry'&&r.state!=='published').length)}},
    {id:'catalog',metrics:{published:metric(all.filter(r=>r.type!=='diaryEntry'&&r.state==='published').length),pending:metric(jobRows.filter(r=>r.kind==='catalog'&&r.state!=='SUCCEEDED').length),errors:metric(jobRows.filter(r=>r.kind==='catalog'&&r.state==='QUARANTINED').length,'server-jobs',jobRows.some(r=>r.kind==='catalog'&&r.state==='QUARANTINED')?'problem':'verified')}},
@@ -19,7 +21,7 @@ function createProjectRuntime22({baseStore,resolveCredential,legacy,clock=()=>ne
    {id:'backups',metrics:{lastUploaded:metric(store.get('backups','lastUploaded')?.at||null,'backup-receipt',store.get('backups','lastUploaded')?'verified':'unknown'),restoreVerified:metric(store.get('backups','lastVerified')?.at||null,'restore-receipt',store.get('backups','lastVerified')?'verified':'unknown')}}];
   for(const section of sections){const states=Object.values(section.metrics).map(m=>m.state);section.state=states.includes('problem')?'problem':states.some(s=>s!=='verified')?'unknown':'healthy';}
   const value={schemaVersion:22,scope:'admin:'+actor.uid,source:'sqlite-sandbox',updatedAt:at,sections};return {...value,revision:digest22(sections.map(s=>({id:s.id,state:s.state,metrics:Object.fromEntries(Object.entries(s.metrics).map(([k,v])=>[k,{value:v.value,state:v.state,source:v.source}]))})))};
- }
+ });}
  const handlers={
   catalog:{prepare:(input,j)=>catalog.prepare({uid:j.owner,...iam.current(j.owner)},input),commit:(prepared,j)=>catalog.commit({uid:j.owner,...iam.current(j.owner)},j.input,prepared)},
   ratingPolicy:{prepare:q=>q,commit:(q,j)=>ratings.activate({uid:j.owner},q)},

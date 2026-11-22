@@ -87,6 +87,7 @@ test('22 actual full SQLite/database roles/ratings/media encrypted restoration a
  const media=Buffer.from('synthetic audio bytes only'),hash=crypto.createHash('sha256').update(media).digest('hex'),file=join(f.root,'synthetic.bin');require('node:fs').writeFileSync(file,media);
  f.sql.putRecord({contentId:'audio',revisionId:'r1',type:'track',sha256:hash,byteLength:media.length});
  assert.throws(()=>backup.captureCandidate(f.sql,f.s,[]),/BACKUP_MISSING_MEDIA/);
+ require('../experimental/admin_overview22.cjs').overviewCache22(f.sql.db,f.s)(f.owner,()=>({scope:'admin:'+f.owner.uid,sections:[]}));
  const bundle=backup.captureCandidate(f.sql,f.s,[{contentId:'audio',revisionId:'r1',path:file}]),key=crypto.randomBytes(32),bytes=backup.encrypt(bundle,key);
  const proof=backup.restoreDatabaseIsolated(bytes,key,join(f.root,'isolated'));
  const cold=new SqliteSnapshotStore(proof.path),store=new ProjectStore22(cold.db);
