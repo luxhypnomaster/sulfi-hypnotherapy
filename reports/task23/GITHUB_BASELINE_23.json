@@ -1,0 +1,85 @@
+{
+  "observedAtUTC": "2026-11-22T12:09:02.892654+00:00",
+  "repositoryVisibility": "public",
+  "private": false,
+  "mainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "prs": [
+    {
+      "number": 46,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "b0cb53f374e651be70df98e479be9605280177b3",
+      "headBranch": "hotfix/task16v-p0-data-preservation",
+      "baseBranch": "fix/task16b-auth-transfer-publication"
+    },
+    {
+      "number": 47,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "25ecdf984a831a288bf85e14119a5e054144ccf9",
+      "headBranch": "fix/task16g-stabilize-programs",
+      "baseBranch": "hotfix/task16v-p0-data-preservation"
+    },
+    {
+      "number": 48,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "506619a9aa88d47315cccf31f75f068195d3da84",
+      "headBranch": "fix/task17-stable-auth-queue",
+      "baseBranch": "fix/task16g-stabilize-programs"
+    },
+    {
+      "number": 49,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "363a0244ce761e317dd09a6c5cb366d1e8ba7315",
+      "headBranch": "feat/task18-native-background-transfer",
+      "baseBranch": "fix/task17-stable-auth-queue"
+    },
+    {
+      "number": 50,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "dca81961146747adc4a3f06107012df429ed747a",
+      "headBranch": "feat/task19-auth-stage01",
+      "baseBranch": "feat/task18-native-background-transfer"
+    },
+    {
+      "number": 51,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+      "headBranch": "feat/task20-catalog-vitrine",
+      "baseBranch": "feat/task19-auth-stage01"
+    },
+    {
+      "number": 52,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+      "headBranch": "feat/task21-runtime-sandbox",
+      "baseBranch": "feat/task20-catalog-vitrine"
+    },
+    {
+      "number": 54,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "headSHA": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+      "headBranch": "feat/task22-server-ratings-admin",
+      "baseBranch": "feat/task21-runtime-sandbox"
+    }
+  ],
+  "task23ActionsRunCount": 0,
+  "ActionsDispatch": "NOT_PERFORMED",
+  "historicalBillingRun": 44959026009,
+  "historicalBillingEvidence": "reports/task22/CODEX_EFFICIENCY_22.md; not a Task23 run",
+  "native": "DEFERRED_BY_OWNER"
+}

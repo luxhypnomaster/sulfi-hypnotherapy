@@ -1,0 +1,68 @@
+{
+  "references": {
+    "APK24": "cbe05240d463b9dafbe9a12ee831c967bdbf6113",
+    "APK25": "012f7f69b7ad99c0d44f2a442d9649aa1481117e"
+  },
+  "method": "read-only git show/diff; no APK download/native execution",
+  "criticalPaths": [
+    {
+      "path": "lib/data/app_database.dart",
+      "hashes": {
+        "APK24": "c1098958c86075f17e6e055f060ff2f969320b2968bce22a8f90074ecbe98934",
+        "APK25": "c1098958c86075f17e6e055f060ff2f969320b2968bce22a8f90074ecbe98934"
+      },
+      "identical": true
+    },
+    {
+      "path": "lib/data/library_repository.dart",
+      "hashes": {
+        "APK24": "c515d83a2adb77cc306978cc8bc5de34f438a7732de7de08107708de0270fe8b",
+        "APK25": "c515d83a2adb77cc306978cc8bc5de34f438a7732de7de08107708de0270fe8b"
+      },
+      "identical": true
+    },
+    {
+      "path": "lib/data/module_catalog.dart",
+      "hashes": {
+        "APK24": "662ad9f32b0bd8fcded99f393cbac33ec5cf57d576e5fa2b2e65276d85a3d6c7",
+        "APK25": "662ad9f32b0bd8fcded99f393cbac33ec5cf57d576e5fa2b2e65276d85a3d6c7"
+      },
+      "identical": true
+    },
+    {
+      "path": "lib/data/session_repository.dart",
+      "hashes": {
+        "APK24": "11c738f100c656d35ed050f452a04ebb567b85ead96e4de6c0eb895f9a1ab19b",
+        "APK25": "11c738f100c656d35ed050f452a04ebb567b85ead96e4de6c0eb895f9a1ab19b"
+      },
+      "identical": true
+    },
+    {
+      "path": "lib/services/library_service.dart",
+      "hashes": {
+        "APK24": "e75ddd159dd8375f80d4bce25c03426c382c184d126b0566df553a7a0542f4b1",
+        "APK25": "e75ddd159dd8375f80d4bce25c03426c382c184d126b0566df553a7a0542f4b1"
+      },
+      "identical": true
+    },
+    {
+      "path": "lib/services/capsule_service.dart",
+      "hashes": {
+        "APK24": "a6af150b42edfb3e1638469146454ba0d60b1d38a22f96c07998aa9aa6b1181c",
+        "APK25": "a6af150b42edfb3e1638469146454ba0d60b1d38a22f96c07998aa9aa6b1181c"
+      },
+      "identical": true
+    },
+    {
+      "path": "android/app/build.gradle.kts",
+      "hashes": {
+        "APK24": "16d1277648b44d46bc30415a67a7677de89663e444624827688caeb07cd41bb9",
+        "APK25": "16d1277648b44d46bc30415a67a7677de89663e444624827688caeb07cd41bb9"
+      },
+      "identical": true
+    }
+  ],
+  "ownerPhysicalDB": "UNKNOWN_NOT_OBTAINED",
+  "incidentRootCause": "UNKNOWN_FOR_ALL_COLLECTIONS",
+  "scope": "same schema/repository/layout does not prove original owner storage stayed readable"
+}

@@ -1,6 +1,6 @@
 {
   "status": "PASS_SOURCE",
-  "head": "61dd90bfc2bd5bf2a577abd72b4d4e880d85a508",
+  "head": "5fae671c9829c021151e3c9e6ed0467692a7867a",
   "basePR54": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
   "parentPR52": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
   "protectedTask22Files": 43,
@@ -21,7 +21,9 @@
     "reports/task23/ARCHIVE_23.json",
     "reports/task23/G0_23.md",
     "reports/task23/PROGRESS.md",
+    "reports/task23/SOURCE_GATE_23.json",
     "reports/task23/TASK22_PROTECTED_23.json",
+    "scripts/task23/check_source.py",
     "scripts/task23/native_source_pins.json",
     "scripts/task23/preservation.py",
     "scripts/task23/release_plan.py",
