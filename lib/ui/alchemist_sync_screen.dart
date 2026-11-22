@@ -18,11 +18,55 @@ class AlchemistSyncScreen extends StatefulWidget {
   });
   final SessionController controller;
   final String? focusName;
+
+  // UI route ownership only; transfer jobs/owners/receipts stay in the existing
+  // durable queue. Reserve before push so rapid taps cannot race first build.
+  static final _routes = Expando<ModalRoute<dynamic>>();
+  static Future<void> open({
+    required NavigatorState? navigator,
+    required SessionController controller,
+  }) async {
+    if (navigator == null || !navigator.mounted || _routes[navigator] != null) {
+      return;
+    }
+    final route = MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/transfers'),
+      builder: (_) => AlchemistSyncScreen(controller: controller),
+    );
+    _routes[navigator] = route;
+    try {
+      await navigator.push<void>(route);
+    } finally {
+      if (identical(_routes[navigator], route)) _routes[navigator] = null;
+    }
+  }
+
   @override
   State<AlchemistSyncScreen> createState() => _AlchemistSyncScreenState();
 }
 
 class _AlchemistSyncScreenState extends State<AlchemistSyncScreen> {
+  NavigatorState? _navigator;
+  ModalRoute<dynamic>? _route;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navigator = Navigator.of(context);
+    _route = ModalRoute.of(context);
+    // Existing editor/catalog entry points may push this screen directly.
+    // Recognise that same route without changing their pending state or code.
+    if (_route != null) AlchemistSyncScreen._routes[_navigator!] ??= _route;
+  }
+
+  @override
+  void dispose() {
+    if (_navigator != null &&
+        identical(AlchemistSyncScreen._routes[_navigator!], _route)) {
+      AlchemistSyncScreen._routes[_navigator!] = null;
+    }
+    super.dispose();
+  }
+
   String _direction = 'all';
   String _networkPolicy = 'any';
   Future<void> networkPolicy(String value) async {

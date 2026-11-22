@@ -1,0 +1,14 @@
+{
+  "status": "PASS_SOURCE",
+  "head": "8f4945066b554773f0db18e72bf91cacf8bb1961",
+  "basePR55": "85fa5321c043ef97b43cb30a88a0909e7edf66f2",
+  "protectedPreviousFiles": 73,
+  "previousSource": "BYTE_IDENTICAL",
+  "changedUI": [
+    "lib/ui/alchemist_queue_indicator.dart",
+    "lib/ui/alchemist_sync_screen.dart",
+    "lib/ui/diary_reader.dart"
+  ],
+  "native": "DEFERRED_BY_OWNER",
+  "serverAuthStorageSigningMain": "NOT_CHANGED"
+}

@@ -11,8 +11,8 @@ import 'package:sulfi_hypnotherapy/services/diary_controller.dart';
 import 'package:sulfi_hypnotherapy/services/session_controller.dart';
 import 'package:sulfi_hypnotherapy/ui/alchemist_queue_indicator.dart';
 import 'package:sulfi_hypnotherapy/ui/alchemist_sync_screen.dart';
-import 'package:sulfi_hypnotherapy/ui/diary_reader.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/home_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/session_scope.dart';
 
 import 'support/task15_fixture.dart';
@@ -187,6 +187,65 @@ void main() {
           await io15(t);
           expect(audit.routes.length, 1);
           expect(find.text('Логический родитель очереди'), findsOneWidget);
+          // A protected editor/catalog may have opened its focused queue through
+          // the existing raw route. The overlay recognises it without rebuilding.
+          navigator.currentState!.push<void>(
+            MaterialPageRoute(
+              builder: (_) => AlchemistSyncScreen(
+                controller: c,
+                focusName: 'alchemist_download:task24',
+              ),
+            ),
+          );
+          await io15(t);
+          for (var i = 0; i < 10; i++) {
+            tap();
+            await t.pump();
+          }
+          await io15(t);
+          expect(audit.routes.length, 2);
+          expect(
+            t
+                .widget<AlchemistSyncScreen>(find.byType(AlchemistSyncScreen))
+                .focusName,
+            'alchemist_download:task24',
+          );
+          // A real modal/editor flow above an already-open queue must survive a
+          // global badge tap; singleton focus must not pop unsaved UI to get there.
+          showDialog<void>(
+            context: navigator.currentState!.context,
+            builder: (_) => const AlertDialog(
+              content: TextField(key: Key('task24-pending-editor')),
+            ),
+          );
+          await t.pumpAndSettle();
+          await t.enterText(
+            find.byKey(const Key('task24-pending-editor')),
+            'Несохранённый текст',
+          );
+          for (var i = 0; i < 10; i++) {
+            tap();
+          }
+          await io15(t);
+          expect(audit.routes.length, 3);
+          expect(
+            t
+                .widget<EditableText>(
+                  find.descendant(
+                    of: find.byKey(const Key('task24-pending-editor')),
+                    matching: find.byType(EditableText),
+                  ),
+                )
+                .controller
+                .text,
+            'Несохранённый текст',
+          );
+          await t.binding.handlePopRoute();
+          await io15(t);
+          expect(audit.routes.length, 2);
+          await t.binding.handlePopRoute();
+          await io15(t);
+          expect(audit.routes.length, 1);
           expect(
             await t.runAsync(
               () => f.db.query(
@@ -274,7 +333,15 @@ void main() {
         await io15(t);
         expect(find.byType(DiaryScreen), findsOneWidget);
         expect(
-          t.widget<TextField>(find.byType(TextField).first).controller!.text,
+          t
+              .widget<EditableText>(
+                find.descendant(
+                  of: find.byType(TextField).first,
+                  matching: find.byType(EditableText),
+                ),
+              )
+              .controller
+              .text,
           'post',
         );
         expect(audit.routes.length, 1);
@@ -337,10 +404,124 @@ void main() {
           t.widget<Text>(find.byKey(const Key('diary-pagination'))).data,
           isNot(before),
         );
-        expect(find.text('Название post-0'), findsOneWidget);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          'post-0',
+        );
         expect(audit.routes.length, 2);
         expect(find.byKey(const Key('diary-next-post')), findsOneWidget);
         await capture15(t, 'task24-pages-not-posts');
+      } finally {
+        await t.pumpWidget(const SizedBox());
+        d.dispose();
+        await t.runAsync(f.close);
+      }
+    },
+  );
+
+  testWidgets(
+    '24 rapid post taps coalesce, skip private/expired/withdrawn siblings and do not mark read',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!,
+          navigator = GlobalKey<NavigatorState>(),
+          audit = Routes24();
+      final d = (await t.runAsync(() => diary24(f)))!;
+      try {
+        final first = d.published.first, last = d.published[1];
+        d.published = [
+          first,
+          entry15('private-other')
+              .copyWith(extra: {'_alchemistScope': 'google:other'}),
+          entry15('expired').copyWith(
+            extra: {
+              'publication': {'validUntil': '2020-01-01T00:00:00Z'},
+            },
+          ),
+          entry15('withdrawn').copyWith(status: DiaryStatus.unpublished),
+          last,
+        ];
+        final readBefore = d.reads.state(first);
+        await show24(t, f, const Scaffold(), navigator, audit);
+        navigator.currentState!.push<void>(
+          MaterialPageRoute(
+            builder: (_) => DiaryReader(entry: first, diary: d),
+          ),
+        );
+        await io15(t);
+        expect(
+          t
+              .widget<OutlinedButton>(
+                find.byKey(const Key('diary-previous-post')),
+              )
+              .onPressed,
+          isNull,
+        );
+        final next = t
+            .widget<OutlinedButton>(find.byKey(const Key('diary-next-post')))
+            .onPressed!;
+        for (var i = 0; i < 10; i++) {
+          next();
+        }
+        await io15(t);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          last.id,
+        );
+        expect(audit.routes.length, 2);
+        expect(
+          t
+              .widget<OutlinedButton>(find.byKey(const Key('diary-next-post')))
+              .onPressed,
+          isNull,
+        );
+        expect(d.reads.state(first), readBefore);
+        await t.tap(find.byKey(const Key('diary-previous-post')));
+        await io15(t);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          first.id,
+        );
+        expect(audit.routes.length, 2);
+      } finally {
+        await t.pumpWidget(const SizedBox());
+        d.dispose();
+        await t.runAsync(f.close);
+      }
+    },
+  );
+
+  testWidgets(
+    '24 root reader Home fallback uses genuine Home and preview navigation stays isolated',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!,
+          navigator = GlobalKey<NavigatorState>(),
+          audit = Routes24();
+      final d = (await t.runAsync(() => diary24(f)))!;
+      try {
+        await show24(
+          t,
+          f,
+          DiaryReader(entry: d.published.first, diary: d),
+          navigator,
+          audit,
+        );
+        await t.tap(find.text('Вернуться на главную'));
+        await io15(t);
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(audit.routes.length, 1);
+        navigator.currentState!.push<void>(
+          MaterialPageRoute(
+            builder: (_) =>
+                DiaryReader(entry: d.published.first, diary: d, preview: true),
+          ),
+        );
+        await io15(t);
+        expect(find.byKey(const Key('diary-next-post')), findsNothing);
+        expect(find.byKey(const Key('diary-previous-post')), findsNothing);
+        await t.tap(find.text('Вернуться в редактор'));
+        await io15(t);
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(audit.routes.length, 1);
       } finally {
         await t.pumpWidget(const SizedBox());
         d.dispose();
