@@ -1,0 +1,54 @@
+{
+  "testedSourceSHA": "d04170271e9e9f3d9d10d28fdb4a49cf0494a1e0",
+  "finalFlutter": {
+    "PASS": 571,
+    "SKIP": 2,
+    "FAIL": 0
+  },
+  "targetedPASS": 17,
+  "baselinePASS": 7,
+  "renderFrozenPASS": 1,
+  "scope": "local FFI/widgets/source, not Android/Google/prod",
+  "logs": {
+    "pub-get.log": {
+      "bytes": 233,
+      "sha256": "d6612e9bb0c08377840da87c963d8d28c9cf29d03539e9f7a2cd08f4ac427483"
+    },
+    "navigation-red.log": {
+      "bytes": 21415,
+      "sha256": "c78fd8e6047eff515f8385d4dd02a4b6d025bff26dab70e1b1ee1c9dfcef893a"
+    },
+    "compatibility-before.log": {
+      "bytes": 758,
+      "sha256": "cc6edd3b31447687183a05267dc193a77b41e2ff0af5665f7b0bac35e2c78f1b"
+    },
+    "filter-red.log": {
+      "bytes": 2074,
+      "sha256": "6227570b3f59f4c45b38328f0a3d7a543e888e041e5778ad7a0170292c3d4acd"
+    },
+    "reader-dedup-red.log": {
+      "bytes": 1968,
+      "sha256": "a79afbd876d898d72b5a2ed67b4ca87757387e3bf43bcb366ba07eac7f65d8cc"
+    },
+    "targeted-final.log": {
+      "bytes": 2709,
+      "sha256": "a0d9f3503afb731d27e9f613649aca2b5871d0c5f9747866060a3285c24ae82f"
+    },
+    "analyze-final.log": {
+      "bytes": 96,
+      "sha256": "66717027815c8ab597fb0a550f88935a3bc93cf027d6d07909a5d01d470d9b3a"
+    },
+    "format-final.log": {
+      "bytes": 47,
+      "sha256": "9219654a1b9917a792fbe3a1351e70ebe5790cc91737cbfd2a301878bb51624b"
+    },
+    "flutter-full.log": {
+      "bytes": 86877,
+      "sha256": "f6083d8d8501e317120df790322c1d263862ce8d6b95bf340c671242c9061b3e"
+    },
+    "render-frozen-source.log": {
+      "bytes": 169,
+      "sha256": "1badef2705087bfb8718bd5a6220474d3ec154e5658f5ee121560eea2c7f213b"
+    }
+  }
+}

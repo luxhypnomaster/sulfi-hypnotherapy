@@ -4,10 +4,10 @@
 
 Ключевые изображения доступны также в Git:
 
-- [Читатель до](screens/before/task24-reader9x16.png) / [после](screens/after/task24-reader9x16.png): прежний планшет, шапка и пагинация; отдельно добавлены одобренные кнопки публикаций. Страницы сохраняют собственные подписи/номер.
-- [Только изменённый экземпляр A](screens/after/task24-only-occurrence-A.png): фуксиевый курсив и отдельное жёлтое «(Изменено)», неизменённые B и личный fork обычные. После revert метки нет.
-- [Таймер/иерархия](screens/after/task24-timer-hierarchy.png): прежний ярко-жёлтый elapsed/total в сводке, фаза→модуль→трек/пауза, прямой трек остаётся прямым. Плеер не перекрашивался по K025.
-- [Очередь](screens/after/task24-queue-client.png): общий экран и глобальный жёлтый badge, настоящие кнопки и сохранённая синтетическая USER_PAUSED задача. Ноль попыток здесь намеренно: тест не отправляет файлы.
+- [Читатель до](https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/feat/task24-local-ux-navigation/reports/task24/screens/before/task24-reader9x16.png) / [после](https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/feat/task24-local-ux-navigation/reports/task24/screens/after/task24-reader9x16.png): прежний планшет, шапка и пагинация; отдельно добавлены одобренные кнопки публикаций. Страницы сохраняют собственные подписи/номер.
+- [Только изменённый экземпляр A](https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/feat/task24-local-ux-navigation/reports/task24/screens/after/task24-only-occurrence-A.png): фуксиевый курсив и отдельное жёлтое «(Изменено)», неизменённые B и личный fork обычные. После revert метки нет.
+- [Таймер/иерархия](https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/feat/task24-local-ux-navigation/reports/task24/screens/after/task24-timer-hierarchy.png): прежний ярко-жёлтый elapsed/total в сводке, фаза→модуль→трек/пауза, прямой трек остаётся прямым. Плеер не перекрашивался по K025.
+- [Очередь](https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/feat/task24-local-ux-navigation/reports/task24/screens/after/task24-queue-client.png): общий экран и глобальный жёлтый badge, настоящие кнопки и сохранённая синтетическая USER_PAUSED задача. Ноль попыток здесь намеренно: тест не отправляет файлы.
 
 В полном архиве также: Home/общий щит обоих изданий, история с Home action, офлайн-редактор, reverted module, separate pages/posts. Превью и renderer не заменяют физическую приёмку. Первый холодный MASTER queue capture с ещё не декодированным bitmap исключён, а не представлен как подтверждение оформления; shared CLIENT render декодирован, навигационные тесты отдельно проходят в обоих изданиях.
 

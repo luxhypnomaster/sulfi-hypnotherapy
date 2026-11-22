@@ -1,4 +1,5 @@
 {
+  "testedApplicationSHA": "d04170271e9e9f3d9d10d28fdb4a49cf0494a1e0",
   "screens": [
     {
       "file": "reports/task24/screens/before/task24-history-home.png",
@@ -7,7 +8,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-home-client.png",
@@ -16,7 +17,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-home-master.png",
@@ -25,7 +26,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-occurrence-reverted.png",
@@ -34,7 +35,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-offline-editor.png",
@@ -43,7 +44,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-only-occurrence-A.png",
@@ -52,7 +53,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-reader9x16.png",
@@ -61,7 +62,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-shield-client.png",
@@ -70,7 +71,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-shield-master.png",
@@ -79,7 +80,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/before/task24-timer-hierarchy.png",
@@ -88,7 +89,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-history-home.png",
@@ -97,7 +98,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-home-client.png",
@@ -106,7 +107,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-home-master.png",
@@ -115,7 +116,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-occurrence-reverted.png",
@@ -124,7 +125,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-offline-editor.png",
@@ -133,7 +134,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-only-occurrence-A.png",
@@ -142,7 +143,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-pages-not-posts.png",
@@ -151,7 +152,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-post-siblings.png",
@@ -160,7 +161,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-queue-client.png",
@@ -169,7 +170,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-reader9x16.png",
@@ -178,7 +179,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-shield-client.png",
@@ -187,7 +188,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-shield-master.png",
@@ -196,7 +197,7 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     },
     {
       "file": "reports/task24/screens/after/task24-timer-hierarchy.png",
@@ -205,55 +206,29 @@
       "width": 720,
       "height": 1280,
       "ratio": "9:16",
-      "type": "ACTUAL_FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
+      "type": "FLUTTER_RENDER_SYNTHETIC_NOT_ANDROID"
     }
   ],
   "comparison": [
     {
-      "name": "task24-history-home.png",
-      "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
-    },
-    {
-      "name": "task24-home-client.png",
+      "name": "task24-timer-hierarchy.png",
       "sameRGBPixels": false,
       "changedRGBBox": [
-        281,
-        376,
-        550,
-        393
-      ],
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+        664,
+        159,
+        703,
+        174
+      ]
     },
     {
-      "name": "task24-home-master.png",
-      "sameRGBPixels": false,
-      "changedRGBBox": [
-        281,
-        376,
-        550,
-        393
-      ],
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
-    },
-    {
-      "name": "task24-occurrence-reverted.png",
+      "name": "task24-shield-master.png",
       "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+      "changedRGBBox": null
     },
     {
-      "name": "task24-offline-editor.png",
+      "name": "task24-shield-client.png",
       "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
-    },
-    {
-      "name": "task24-only-occurrence-A.png",
-      "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+      "changedRGBBox": null
     },
     {
       "name": "task24-reader9x16.png",
@@ -263,35 +238,59 @@
         988,
         676,
         1196
-      ],
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+      ]
     },
     {
-      "name": "task24-shield-client.png",
+      "name": "task24-only-occurrence-A.png",
       "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+      "changedRGBBox": null
     },
     {
-      "name": "task24-shield-master.png",
+      "name": "task24-offline-editor.png",
       "sameRGBPixels": true,
-      "changedRGBBox": null,
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+      "changedRGBBox": null
     },
     {
-      "name": "task24-timer-hierarchy.png",
+      "name": "task24-occurrence-reverted.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null
+    },
+    {
+      "name": "task24-home-master.png",
       "sameRGBPixels": false,
       "changedRGBBox": [
-        664,
-        159,
-        703,
-        174
-      ],
-      "note": "Reader adds approved post controls; wall clock dates may differ; no edited screenshot pixels"
+        281,
+        376,
+        550,
+        393
+      ]
+    },
+    {
+      "name": "task24-home-client.png",
+      "sameRGBPixels": false,
+      "changedRGBBox": [
+        281,
+        376,
+        550,
+        393
+      ]
+    },
+    {
+      "name": "task24-history-home.png",
+      "sameRGBPixels": true,
+      "changedRGBBox": null
     }
   ],
-  "excluded": [
-    "First cold-cache MASTER queue decoration not decoded; not visual evidence"
+  "identicalPairs": [
+    "task24-shield-master.png",
+    "task24-shield-client.png",
+    "task24-only-occurrence-A.png",
+    "task24-offline-editor.png",
+    "task24-occurrence-reverted.png",
+    "task24-history-home.png"
   ],
-  "method": "Flutter widget toImage pixelRatio2; copy bytes only; metadata/pixel comparison, no image editing/generation"
+  "capture": "targeted17 real widgets; reader re-rendered on frozen exact source; source assets unchanged; no screenshot editing",
+  "excluded": [
+    "first MASTER queue cold texture not decoded"
+  ]
 }

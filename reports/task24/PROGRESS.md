@@ -1,9 +1,13 @@
-# №24 — G1 / routing checkpoint
+# №24 — финальная контрольная точка
 
-BasePR55 85fa5321c043ef97b43cb30a88a0909e7edf66f2; own branchfeat/task24-local-ux-navigation. Committed/pushed baseline8f49450 and first routingbadf314. Archive7/CRC/manifest6 PASS. Protected73 Task21/22/23 files unchanged; edits only isolated UI queue indicator/sync/reader and minimal journal context wiring. No server/storage/auth/signing/main/native/APK/CI.
+Локальный этап завершён; готовность к релизу не заявлена. Код `d04170271e9e9f3d9d10d28fdb4a49cf0494a1e0`, ветка `feat/task24-local-ux-navigation` на PR55/base85fa532. Draft PR56: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/56 . Родительские PR51/52/54/55 не merged.
 
-Initial RED queue10tap ->11routes (both editions), journal Back loop, root fallback, absent post controls. Baseline compatibility7PASS before source edits. First targeted15PASS, analyzer clean. Screens before/after in /dev/shm/task24-before and task24-after; all720x1280, actual Flutter synthetic fixtures. ExplicitRoboto corrected tofu on new controls. First MASTER queue texture cold-cache capture excluded from layout proof (CLIENT shared view decoded normally).
+Проверено:17адресных и7baseline compatibility PASS; окончательный полный suite —571PASS/2SKIP/0FAIL. Анализатор, формат и source guard прошли. Все18критериев:10PASS/8ALREADY_DONE науказанных уровнях. APK/AAB/Gradle/native/emulator/телефоны —DEFERRED_BY_OWNER.
 
-One preliminary full suite interrupted, not claimed PASS, after audit found journal filter/order not carried to sibling navigation. FULL_RESTART_REASON records exact SIGINT child; no CI/native repetition. Extra RED on detached sourcebadf314 in /dev/shm/sulfi24-filter-red proves expected post10 but actualpost2 from filtered journal. OptionalpublicationIds wiring now implemented in reader+unprotected diary_screen, targeted16PASS. Shared Home banner itself unchanged; checking rapid raw opens via actual protected DiaryPublicationSlide before minimal leaf-reader dedup.
+73исходных файла предыдущих заданий не изменены. Правки только в четырёх незатронутых ими UI routing-файлах. Нет изменений auth/storage/catalog/server/signing/main. Исправлены дубли очереди/читателя, sibling filter/order и root fallback. K025/026/027/029/030/037 уже работали; добавлены проверки без переписывания функций.
 
-Next: confirm reader-dedup-red is a real11routes assertion (fix test finders if necessary), isolate same-owner/read-only published-route duplicates in DiaryReader without changing Home/Banner/editor. Targeted17 then analyze/freeze+commit and FINAL full suite. Do not rerun full for report-only changes. Folder confirmed https://drive.google.com/drive/folders/1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF . No PR24 yet. Complete18matrix/reports/screens and independentDrive SHA readback, own draftstacked onPR55.
+Отчёты: https://drive.google.com/drive/folders/1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF . DELIVERY/DRIVE_READBACK фиксируют загрузку и независимые SHA. Архив содержитrawlogs и23синтетических рендера720×1280;6пар уже работающих экранов попиксельно одинаковы. ХолодныйMASTER queue capture без декодированной текстуры исключён. Ни один render не назван Android screenshot.
+
+При возобновлении читать RESULT/ISSUES/CHECKPOINT/DELIVERY/матрицу. Не повторятьfull для документов и не запускатьnative. Следующий шаг —review draft56, комплексная интеграция21–24, затем отдельно разрешённый native/data gate. ПрежнийPARTIAL№23 и неизвестная причина owner-инцидента не изменены.
+
+Подготовительные full-runs доfiltergap и до чистогоstylefreeze прерваны, неPASS; окончательный прогон успешен. Detached /dev/shm/sulfi24-filter-red нужен исключительно дляsyntheticRED наbadf314, пользовательских данных/телефона там нет.

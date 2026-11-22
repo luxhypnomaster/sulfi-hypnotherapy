@@ -1,4 +1,4 @@
-00:00 +0: loading /dev/shm/sulfi24/test/task24_navigation_test.dart
+00:00 +0: loading /dev/shm/sulfi24-filter-red/test/task24_navigation_test.dart
 00:00 +0: 24 protected Home slide rapid opening cannot stack identical published readers
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following TestFailure was thrown running a test:
@@ -6,7 +6,7 @@ Expected: <2>
   Actual: <11>
 
 When the exception was thrown, this was the stack:
-#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:630:9)
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24-filter-red/test/task24_navigation_test.dart:630:9)
 <asynchronous suspension>
 #5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
 <asynchronous suspension>
@@ -16,7 +16,7 @@ When the exception was thrown, this was the stack:
 (elided one frame from package:stack_trace)
 
 This was caught by the test expectation on the following line:
-  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 630
+  file:///dev/shm/sulfi24-filter-red/test/task24_navigation_test.dart line 630
 The test description was:
   24 protected Home slide rapid opening cannot stack identical published readers
 ════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -27,4 +27,4 @@ The test description was:
 00:03 +0 -1: Some tests failed.
 
 Failing tests:
-  /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 protected Home slide rapid opening cannot stack identical published readers
+  /dev/shm/sulfi24-filter-red/test/task24_navigation_test.dart: 24 protected Home slide rapid opening cannot stack identical published readers
