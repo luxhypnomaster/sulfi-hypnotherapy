@@ -1,0 +1,120 @@
+{
+  "checkedAtUTC": "2026-11-22T16:31:23.115227+00:00",
+  "folderID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+  "method": "Drive metadata plus fresh raw fetch and independent materialized download; byte count/SHA256/parent; downloadedZIP CRC53entries",
+  "files": [
+    {
+      "name": "CHANGES.md",
+      "id": "1buIBvYStZmohw6D1kQjX0Jc-aXl1eISu",
+      "url": "https://drive.google.com/file/d/1buIBvYStZmohw6D1kQjX0Jc-aXl1eISu/view",
+      "bytes": 6844,
+      "sha256": "d010048f23625149d7b04660af77300164f69ca721f433d472675ca9eac9f6bf",
+      "independentDownloadSHA256": "d010048f23625149d7b04660af77300164f69ca721f433d472675ca9eac9f6bf",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "ISSUES.md",
+      "id": "1SCV-ItCfmzXc7k0_iup4NzkqDPdnW0FR",
+      "url": "https://drive.google.com/file/d/1SCV-ItCfmzXc7k0_iup4NzkqDPdnW0FR/view",
+      "bytes": 4423,
+      "sha256": "b30688c3cdd55e661a80f67385a3095eb60a27917ad3ca444c22f755401c407e",
+      "independentDownloadSHA256": "b30688c3cdd55e661a80f67385a3095eb60a27917ad3ca444c22f755401c407e",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "DEPENDENCIES_24.md",
+      "id": "1Z8A6NXKrQl9LC5ZZ7fGVXwjraIXflUYg",
+      "url": "https://drive.google.com/file/d/1Z8A6NXKrQl9LC5ZZ7fGVXwjraIXflUYg/view",
+      "bytes": 2704,
+      "sha256": "ad91d64300489b135a3340b9db1943aeb8d21abb85353dd021f593a4951b2568",
+      "independentDownloadSHA256": "ad91d64300489b135a3340b9db1943aeb8d21abb85353dd021f593a4951b2568",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "SCREENS_24.md",
+      "id": "1ElKyZ6qr5BIiWvnoiQ_8QCiBmABDxGV-",
+      "url": "https://drive.google.com/file/d/1ElKyZ6qr5BIiWvnoiQ_8QCiBmABDxGV-/view",
+      "bytes": 3791,
+      "sha256": "c80ad6dd00f2b2565a5f67a77afc952e1ed9c813c9b85f1a4f00ecb7a173d3f5",
+      "independentDownloadSHA256": "c80ad6dd00f2b2565a5f67a77afc952e1ed9c813c9b85f1a4f00ecb7a173d3f5",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "OWNER_QA_24.md",
+      "id": "1LI2-kcA6P3eYuke9ZwzVhrVsLLoGcees",
+      "url": "https://drive.google.com/file/d/1LI2-kcA6P3eYuke9ZwzVhrVsLLoGcees/view",
+      "bytes": 4310,
+      "sha256": "11d2da37a3654223f15dda4387aec52ac26bb77eadb697e48d8eba2c2e2c3d87",
+      "independentDownloadSHA256": "11d2da37a3654223f15dda4387aec52ac26bb77eadb697e48d8eba2c2e2c3d87",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "RESULT.md",
+      "id": "1i_8wzzERch6_CTeQJKcdwv6kuygVjB1x",
+      "url": "https://drive.google.com/file/d/1i_8wzzERch6_CTeQJKcdwv6kuygVjB1x/view",
+      "bytes": 4645,
+      "sha256": "8ed89672ae27365bbe8ba8701261b08a64c51ebfc3584cf38907019d040bb669",
+      "independentDownloadSHA256": "8ed89672ae27365bbe8ba8701261b08a64c51ebfc3584cf38907019d040bb669",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "TESTS.md",
+      "id": "1ui0mYefc7LkcyFrA_Zgd4XbnLm0kE3HH",
+      "url": "https://drive.google.com/file/d/1ui0mYefc7LkcyFrA_Zgd4XbnLm0kE3HH/view",
+      "bytes": 7122,
+      "sha256": "08d4a1173958d2d87884fe4e08763e9f2a5c7f350401c1d9282e87efeb893b1b",
+      "independentDownloadSHA256": "08d4a1173958d2d87884fe4e08763e9f2a5c7f350401c1d9282e87efeb893b1b",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "ACCEPTANCE_24.csv",
+      "id": "1Z8HNfSn5fipf2JgOMxECCMyviEO4JQMy",
+      "url": "https://drive.google.com/file/d/1Z8HNfSn5fipf2JgOMxECCMyviEO4JQMy/view",
+      "bytes": 4518,
+      "sha256": "5315d3f15f3917ae6a3ae88d9ef1ee78d56744c11d43cf2aa638725abbd9cc48",
+      "independentDownloadSHA256": "5315d3f15f3917ae6a3ae88d9ef1ee78d56744c11d43cf2aa638725abbd9cc48",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "SCREENSHOTS_24.json",
+      "id": "1x3fcc5GPhiEuxOZBayn1cDqPeqhM5P3o",
+      "url": "https://drive.google.com/file/d/1x3fcc5GPhiEuxOZBayn1cDqPeqhM5P3o/view",
+      "bytes": 9031,
+      "sha256": "c7efd37e3a45105092a7c87b1274471a5fae9513dfa1014a8e54726addc597ba",
+      "independentDownloadSHA256": "c7efd37e3a45105092a7c87b1274471a5fae9513dfa1014a8e54726addc597ba",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "EVIDENCE_24.zip",
+      "id": "1bRZhwEeEWcvclnTHUsYyDdue2jaKSLp1",
+      "url": "https://drive.google.com/file/d/1bRZhwEeEWcvclnTHUsYyDdue2jaKSLp1/view",
+      "bytes": 15508567,
+      "sha256": "0bc132c8030e63ae6785e09a0b7bba3ca442a54e790270657f36f2315719255d",
+      "independentDownloadSHA256": "0bc132c8030e63ae6785e09a0b7bba3ca442a54e790270657f36f2315719255d",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    },
+    {
+      "name": "DELIVERY_24.json",
+      "id": "1ZLc2B23PS76wQHfrRSibihlFyazCUkWP",
+      "url": "https://drive.google.com/file/d/1ZLc2B23PS76wQHfrRSibihlFyazCUkWP/view",
+      "bytes": 5789,
+      "sha256": "e1315baa1f604a091eb31b59f8df55c2f80e4179b6a249134c1c45fb5165baf0",
+      "independentDownloadSHA256": "e1315baa1f604a091eb31b59f8df55c2f80e4179b6a249134c1c45fb5165baf0",
+      "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+      "status": "PASS_BYTES_SHA_PARENT"
+    }
+  ],
+  "allVerified": true,
+  "ACL": "NOT_CHANGED",
+  "notUploaded": "NoAPK/AAB/DB/audio/keys/tokens/sourcearchive"
+}
