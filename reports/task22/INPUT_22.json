@@ -1,0 +1,11 @@
+{
+  "archiveSHA256": "a967a71dd370093444d506ca32f56a5542a0ee7243a2dee2ddc3f34bec92a13d",
+  "archiveBytes": 31966,
+  "revision": "v1.7",
+  "manifestEntries": 12,
+  "fileCount": 13,
+  "crc": "PASS",
+  "manifestHashes": "PASS",
+  "outerDigestIndependentlyPinned": false,
+  "note": "No externally pinned archive SHA supplied; observed digest recorded, all internal bytes/hash/CRC verified. Mutable source anyone:writer risk preserved."
+}

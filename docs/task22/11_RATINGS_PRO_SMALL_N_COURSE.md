@@ -1,0 +1,18 @@
+# №22 — Owner decision 21.11.2026: профессиональные отзывы / small-N / курс и программа
+
+Считать этот файл новейшим уточнением S-X-RATING-001 v0.4 §7: https://docs.google.com/document/d/1R8-ikXeQnSPTMXc-TLOwPFbE7k35SFeTbu7juCigTzM/edit . Он дополнительно ограничивает старые формулировки о ratings «только program/module/track» и «курса пока нет».
+
+1. FIRST CLASS: `COURSE` и `PROGRAM` получают прямые добровольные 1–5 ratings в простом массовом UX. `MODULE`, `TRACK` — необязательные подробные поля, не заставлять обычного пользователя ставить оценки всем вложенным элементам. Учесть курс с несколькими программами и незавершённое прохождение.
+2. DIRECT != CONTEXT: курс имеет `courseDirectRating`; исходный оцененный курс даёт `courseContextSignal` только реально исполненным программам (NOT_EXPOSED=нет, PARTIAL=маркированно, COMPLETED=с подтверждённой экспозицией). Не умножать оценку курса на несколько самостоятельных direct program votes; не распространять второй раз один и тот же course vote до track через program context. ProgramReview→module/track context по S12 также только фактически воспроизведённое. Все сигналы имеют upstream root feedback ID, exposure coverage и dedup independent N.
+3. REVIEWER: `reviewerKind=CLIENT|VERIFIED_PRO|AUTHOR_SELF_TEST|UNVERIFIED`, `sourceApp=CLIENT|PRO|MASTER`. PRO = будущее самостоятельное профессиональное приложение «Мастер Алхимик», НЕ админский MASTER. App origin != credential: профессиональную квалификацию/роль подтверждает сервер; нет подтверждения — не начислять повышенный вес. Owner self-rating исключить/сегрегировать от публичного рекомендательного среднего; учитывать конфликт интересов.
+4. OWNER decision: профессиональная рецензия должна иметь БОЛЬШУЮ ЗНАЧИМОСТЬ в будущем композитном рейтинге, чем отзыв обычного пользователя. ЧИСЛОВОЙ `weightPro > weightClient` — OPEN, не назначать 2x/3x и не выдавать «взвешенное N» за число людей. Сохранять raw consumer/pro N, raw averages, distribution, source и evidence; публичный/MASTER UI может отображать отдельно «Пользователи: ... N=», «Профессионалы: ... N=», composite withheld until explicit methodological approval. Допустить версионируемый configurable policy с disabled weighted composite, протестировать разные варианты на fixture без публикации одного произвольного числа.
+5. Рассчитывать на раннюю аудиторию порядка сотен/нескольких тысяч как ОЦЕНКУ ВЛАДЕЛЬЦА, а не существующую базу. Реальная N может быть меньше; N=1 real 5★ показывать как preliminary с N и source, не скрывать до больших порогов, не создавать фиктивный default 5/0. GAS bounded aggregation со sparse cohorts, no million-scale infrastructure by default.
+6. Новые требования не означают готовый PRO client, повышение прав редактора MASTER, раскрытие данных клиентов или утверждение медицинской эффективности. Типы/fixtures/aggregation and entitlement separation сейчас, детальные профессиональные UI и точные шкалы/политика веса — отдельный OPEN.
+
+ПРИЁМКА:
+T22-049: courseDirectN=30 vs programDirectN=3, course context по реально пройденным программам НЕ добавляет к трем программным direct votes тридцать.
+T22-050: одна verified pro 5★ / 10 clients 3★: сырой N/mean раздельно, owner/self-review исключён, no invented weighted score/credential by sourceApp.
+T22-051: early 1–5 sparse ratings, missing direct track/module: no invented 0★/5★, context N отдельно, small sample preliminary.
+T22-052: partial course started first program A, B/C not run: course review permitted but context only A; UNKNOWN exposure does not count as completed.
+
+NEW PRIORITY v1.5: three summary values CLIENT direct / VERIFIED_PRO direct / weighted, full policy extensibility; 12_THREE_RATINGS_VERSIONED_POLICY.md takes precedence for this aspect.

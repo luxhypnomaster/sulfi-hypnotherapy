@@ -21,7 +21,9 @@ class DiaryContentLink extends StatefulWidget {
 
 class _DiaryContentLinkState extends State<DiaryContentLink> {
   ContentRevision? installed;
-  bool checked = false, busy = false;
+  bool checked = false, busy = false, remoteVerified = false;
+  bool get strictAvailability =>
+      SessionScope.maybeOf(context)?.controller.project22Enabled == true;
   String? problem;
   @override
   void didChangeDependencies() {
@@ -38,6 +40,7 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
     if (oldWidget.link.key.token != widget.link.key.token ||
         oldWidget.link.key.digest != widget.link.key.digest) {
       installed = null;
+      remoteVerified = false;
       refresh();
     }
   }
@@ -48,6 +51,9 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
     ContentRevision? result;
     final key = widget.link.key;
     String? error;
+    var available = false;
+    final account = scope?.controller.transferOwner;
+    final strict = scope?.controller.project22Enabled == true;
     try {
       if (service != null) {
         final r = await ContentRevisionStore(service.database).get(key);
@@ -56,15 +62,38 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
           result = r;
         }
       }
+      if (strict &&
+          result == null &&
+          const String.fromEnvironment('SULFI_ALCHEMIST_API').isNotEmpty) {
+        final card = await scope!.controller.alchemistApi().call(
+          'catalog.resolveReference',
+          {
+            'logicalId': key.content.id,
+            'revisionId': key.revision,
+            'digest': key.digest,
+          },
+        );
+        available =
+            card['logicalContentId'] == key.content.id &&
+            card['immutableRevisionId'] == key.revision &&
+            card['type'] == key.content.type.name &&
+            key.digest == key.revision;
+      }
     } catch (_) {
       error = 'Точная ссылка недоступна или повреждена.';
     }
     if (mounted &&
+        account == scope?.controller.transferOwner &&
         widget.link.key.token == key.token &&
         widget.link.key.digest == key.digest) {
       setState(() {
         installed = result;
-        problem = error;
+        remoteVerified = available;
+        problem =
+            error ??
+            (strict && result == null && !available
+                ? 'Материал или право установки пока не подтверждены.'
+                : null);
       });
     }
   }
@@ -113,7 +142,7 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
       }
       if (const String.fromEnvironment('SULFI_ALCHEMIST_API').isNotEmpty) {
         final c = scope!.controller,
-            api = c.alchemistApi(authenticated: false),
+            api = c.alchemistApi(authenticated: strictAvailability),
             key = widget.link.key;
         final card = await api.call('catalog.resolveReference', {
           'logicalId': key.content.id,
@@ -181,9 +210,13 @@ class _DiaryContentLinkState extends State<DiaryContentLink> {
                     : 'Точная ревизия. Доступна выборочная установка с сервера.')
               : 'Установлено · точная ревизия'),
     ),
-    trailing: TextButton(
-      onPressed: busy ? null : openContent,
-      child: Text(installed == null ? 'Посмотреть / установить' : 'Открыть'),
-    ),
+    trailing: strictAvailability && installed == null && !remoteVerified
+        ? null
+        : TextButton(
+            onPressed: busy ? null : openContent,
+            child: Text(
+              installed == null ? 'Посмотреть / установить' : 'Открыть',
+            ),
+          ),
   );
 }

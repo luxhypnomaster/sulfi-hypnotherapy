@@ -17,6 +17,7 @@ import 'modular_structure_screen.dart';
 import '../services/session_audio_handler.dart';
 import 'templates_modules_screen.dart';
 import 'home_composition.dart';
+import 'feedback22_screen.dart';
 import '../services/library_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -195,6 +196,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         );
         await c.reload();
         if (finishedId != null && mounted) {
+          final finished = c.runs.where((r) => r.id == finishedId).firstOrNull;
+          if (c.policy.clientEdition &&
+              finished?.status == RunStatus.completed &&
+              c.feedback22 != null) {
+            await Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    Feedback22Screen(store: c.feedback22!, run: finished!),
+              ),
+            );
+          }
+          if (!mounted) return;
           repeat = await Navigator.push<SessionRun>(
             context,
             MaterialPageRoute(

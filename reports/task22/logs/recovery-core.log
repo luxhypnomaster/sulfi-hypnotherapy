@@ -1,0 +1,99 @@
+✔ 22 server jobs actual durable idempotency, cold readback, lease fencing, incident redaction/quarantine (24.342703ms)
+✔ 22 portable encrypted complete backup independent restore, tamper/keys/private destination gates (9.642925ms)
+✖ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (6.082012ms)
+✖ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (14.682836ms)
+✖ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (76.624361ms)
+✖ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (11.264929ms)
+✔ 22 existing catalog/head plus durable course publish and batch jobs commit one exact receipt, no media copy (28.74807ms)
+✔ 22 seven real admin summaries/unknown quotas, role denied, scoped identities and normalized categories (5.095186ms)
+✖ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (8.198108ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 4
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 420.846184
+
+✖ failing tests:
+
+test at server/alchemist/test/task22-core.test.mjs:48:1
+✖ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (6.082012ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /OWNER_IMMUTABLE/. Input:
+  
+  'Error: ROLE_ASSIGNMENT_DENIED'
+  
+      at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:52:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ROLE_ASSIGNMENT_DENIED
+        at fail (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:4:36)
+        at /dev/shm/sulfi22/server/alchemist/experimental/identity_roles22.cjs:24:259
+        at /dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:33:254
+        at ProjectStore22.tx (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:26:93)
+        at ProjectStore22.receipt (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:33:119)
+        at IdentityRoles22.change (/dev/shm/sulfi22/server/alchemist/experimental/identity_roles22.cjs:18:32)
+        at file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:52:26
+        at getActual (node:assert:611:5)
+        at strict.throws (node:assert:759:24)
+        at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:52:9),
+    expected: /OWNER_IMMUTABLE/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at server/alchemist/test/task22-core.test.mjs:56:1
+✖ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (14.682836ms)
+  ReferenceError: Cannot access 'policyHash' before initialization
+      at /dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:97:145
+      at ProjectStore22.tx (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:26:93)
+      at Ratings22.flush (/dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:94:17)
+      at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:58:46)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at server/alchemist/test/task22-core.test.mjs:63:1
+✖ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (76.624361ms)
+  ReferenceError: Cannot access 'policyHash' before initialization
+      at /dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:97:145
+      at ProjectStore22.tx (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:26:93)
+      at Ratings22.flush (/dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:94:17)
+      at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:68:4)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at server/alchemist/test/task22-core.test.mjs:71:1
+✖ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (11.264929ms)
+  ReferenceError: Cannot access 'policyHash' before initialization
+      at /dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:97:145
+      at ProjectStore22.tx (/dev/shm/sulfi22/server/alchemist/experimental/project_store22.cjs:26:93)
+      at Ratings22.flush (/dev/shm/sulfi22/server/alchemist/experimental/ratings22.cjs:94:17)
+      at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-core.test.mjs:74:281)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at server/alchemist/test/task22-runtime.test.mjs:34:1
+✖ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (8.198108ms)
+  TypeError: Cannot read properties of null (reading 'ratingsSnapshotHash')
+      at TestContext.<anonymous> (file:///dev/shm/sulfi22/server/alchemist/test/task22-runtime.test.mjs:38:117)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

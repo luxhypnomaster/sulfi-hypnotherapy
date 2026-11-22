@@ -1,0 +1,19 @@
+{
+  "source": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde",
+  "basePR52": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+  "mainExpected": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "protectedChangesSincePR52": {
+    "server/alchemist/src": [],
+    "server/google_apps_script": [],
+    "android": [],
+    "third_party": [],
+    "pubspec.yaml": [],
+    "pubspec.lock": [],
+    ".github/workflows": []
+  },
+  "apkBuilt": false,
+  "native": "DEFERRED_BY_OWNER",
+  "liveWrites": false,
+  "gasDrySourceHashFileSHA256": "de76c25d6596691d511d76f38803219590bc4cfcc85e207f73570acbc7dd7975",
+  "localMainReadback": "dcec7ed4f8562c8c394918faa68bcea8b468ee43"
+}

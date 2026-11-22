@@ -87,6 +87,7 @@ function createSnapshotService({store, authorize, listCommitted, canExpose, now,
         for (const r of records) {
           if (r.state !== 'published' || !r.current || !await canExpose(r, scope)) continue;
           items.push({contentId:r.contentId, revisionId:r.revisionId, type:r.type,
+            ...(typeof r.ratingEpochId==='string'?{ratingEpochId:r.ratingEpochId}:{}),
             title:r.title, description:r.description || '', sha256:r.sha256,
             ...(r.validUntil ? {expiresAt:r.validUntil} : {}),
             ...(r.catalogItemId ? {catalogItemId:r.catalogItemId,card:{title:r.title,

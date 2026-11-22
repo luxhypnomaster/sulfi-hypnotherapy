@@ -1,0 +1,69 @@
+{
+  "task": "TASK22",
+  "created_at": "2026-11-21",
+  "scope": "extensive-server-catalog-ratings-admin",
+  "revision": "v1.7 — owner defers APK/native build; PR52 delivered",
+  "required_files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 5126,
+      "sha256": "1a2c213b9ac6104e2fe8dd2efd79e9562d99ddcbd45309029676e3929b17c608"
+    },
+    {
+      "path": "01_MAIN_TASK.md",
+      "bytes": 9545,
+      "sha256": "93f5d4c2d96e7cf8f8625789a8427ba9ac97cc0fd8972f0bf8ceda2763482637"
+    },
+    {
+      "path": "02_AUTONOMOUS_EXECUTION.md",
+      "bytes": 3081,
+      "sha256": "fd40fe97ee24598e37e1ade973b0e35162758c17f3326a71aa61006cd2bdf44f"
+    },
+    {
+      "path": "03_ACCEPTANCE.md",
+      "bytes": 7473,
+      "sha256": "cf3ad4edb85551bf3e947ac3c2324d7c66ef038860ee6bf343b576fd0a9f5425"
+    },
+    {
+      "path": "04_SOURCES.md",
+      "bytes": 3558,
+      "sha256": "66a0eb0658213a53b96d01d7fd3c39077fd402935768cdd227cd367663338519"
+    },
+    {
+      "path": "05_LIVE_SAFETY.md",
+      "bytes": 1794,
+      "sha256": "d686f7e7152599582c62a8549f7ea6ed0cb9f8f393ae8c268d2ad9021486b056"
+    },
+    {
+      "path": "06_HANDOFF_REPORT.md",
+      "bytes": 1831,
+      "sha256": "5d844aa24d7e79bdba1dcea2fb00586e7b91a9d161d44a0fbf9de8e96f6c32c2"
+    },
+    {
+      "path": "07_CODEX_COMMAND.txt",
+      "bytes": 4209,
+      "sha256": "92f2394a0784245ce0112ebdeb4e2b2d55c9d9343cfcf0aa32c2b96cee24aea6"
+    },
+    {
+      "path": "09_RATINGS_DECISION_BOUNDARY.md",
+      "bytes": 3193,
+      "sha256": "819131913385b3d636287c57f984afa2aaff4c7c50824247b567370faf96fc85"
+    },
+    {
+      "path": "10_S12_RATINGS_EXPOSURE_EPOCH.md",
+      "bytes": 3675,
+      "sha256": "5fd08e8b8adac72d5cda4ec24d850e95562b56d7350228ec9b3acf4ba78e4dde"
+    },
+    {
+      "path": "11_RATINGS_PRO_SMALL_N_COURSE.md",
+      "bytes": 5371,
+      "sha256": "c1e7ffb1bd1a3d255d56e724eeac6c5063e97aa09ae4614368ade486655ebbce"
+    },
+    {
+      "path": "12_THREE_RATINGS_VERSIONED_POLICY.md",
+      "bytes": 10276,
+      "sha256": "11da0d240b12e6116bf2bed0e65da445316a9bcdda536c028646f95c164628f6"
+    }
+  ],
+  "manifest_note": "OWNER PRIO: NO APK BUILD, RELEASE, DEVICE QA in task22; technical preparation only, defer packaging until code stages complete. Original TASK22 acceptance NATIVE items are deferred, not BLOCKED. №21 delivered PR52 as PARTIAL; merge/deploy remains gated."
+}

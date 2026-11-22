@@ -1,0 +1,9 @@
+Analyzing sulfi22...                                            
+
+   info • Unnecessary 'const' keyword. Try removing the keyword • lib/ui/alchemist_store_screen.dart:393:24 • unnecessary_const
+   info • Unnecessary 'const' keyword. Try removing the keyword • lib/ui/alchemist_store_screen.dart:397:24 • unnecessary_const
+   info • Unnecessary 'const' keyword. Try removing the keyword • lib/ui/alchemist_store_screen.dart:401:24 • unnecessary_const
+   info • Unnecessary 'const' keyword. Try removing the keyword • lib/ui/alchemist_store_screen.dart:405:24 • unnecessary_const
+   info • Unnecessary 'const' keyword. Try removing the keyword • lib/ui/alchemist_store_screen.dart:409:24 • unnecessary_const
+
+5 issues found. (ran in 2.4s)

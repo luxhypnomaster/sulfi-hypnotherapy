@@ -1,0 +1,17 @@
+✔ 22 server jobs actual durable idempotency, cold readback, lease fencing, incident redaction/quarantine (15.17801ms)
+✔ 22 portable encrypted complete backup independent restore, tamper/keys/private destination gates (6.224947ms)
+✔ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (4.482883ms)
+✔ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (17.048534ms)
+✔ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (52.76821ms)
+✔ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (19.444129ms)
+✔ 22 existing catalog/head plus durable course publish and batch jobs commit one exact receipt, no media copy (20.265367ms)
+✔ 22 seven real admin summaries/unknown quotas, role denied, scoped identities and normalized categories (5.188767ms)
+✔ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (5.982631ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 329.995457

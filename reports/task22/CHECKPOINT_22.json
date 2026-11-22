@@ -1,0 +1,41 @@
+{
+  "task": 22,
+  "revision": "v1.7",
+  "status": "PARTIAL",
+  "branch": "feat/task22-server-ratings-admin",
+  "codeSource": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde",
+  "basePR52": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+  "pr": 54,
+  "draft": true,
+  "merged": false,
+  "reportsFolder": "1xYICmox_IY9Z5CRSIqjPJFyGuN4nk9fB",
+  "flags": {
+    "SULFI_PROJECT22": false,
+    "productionEnabled": false
+  },
+  "tests": {
+    "flutterFull": {
+      "pass": 539,
+      "skip": 2,
+      "fail": 0,
+      "source": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde"
+    },
+    "nodeFull": {
+      "pass": 79,
+      "source": "52ea01c1c50a39ec57ea8c74713b9927f98a65a3",
+      "serverBytesIdenticalToFinal": true
+    },
+    "legacyNode": 24,
+    "all22FlutterTarget": 13,
+    "clientDefine": 1,
+    "analyze": "No issues",
+    "formatFiles": 26
+  },
+  "native": "DEFERRED_BY_OWNER",
+  "apkBuilt": false,
+  "liveReadonlyHealth": "200/JSON",
+  "authenticatedLive": "NOT_RUN",
+  "productionWrites": false,
+  "privateAclVerified": false,
+  "resume": "Continue same branch/PR54; preserve PR51/52; do not redo G0/manifest when source unchanged. Open ISSUES22 and actual live safety gates, no auto Task23/native/main merge."
+}

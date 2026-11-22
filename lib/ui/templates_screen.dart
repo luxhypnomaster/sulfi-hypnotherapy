@@ -1,3 +1,4 @@
+import '../services/course22_store.dart';
 import 'alchemist_catalog_screen.dart';
 import '../models/content_revision.dart';
 
@@ -179,6 +180,12 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         confirm: 'Удалить',
       )) {
         return;
+      }
+      if (c.project22Enabled && c.capsules != null && t.origin == 'official') {
+        await Course22Store(
+          c.capsules!.database,
+          owner: () => c.transferOwner,
+        ).markDeleted(t.id);
       }
       await c.repository.deleteTemplate(t.id);
     }

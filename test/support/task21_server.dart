@@ -29,15 +29,13 @@ class Server21 {
     _LoopbackHttpOverrides(),
   );
   bool _closed = false;
-  static Future<Server21> open() async {
+  static Future<Server21> open({
+    String script = 'server/alchemist/test/support/runtime21-fixture.cjs',
+  }) async {
     final root = await Directory.systemTemp.createTemp('task21-server-');
     final child = await Process.start(
       'node',
-      [
-        'server/alchemist/test/support/runtime21-fixture.cjs',
-        '${root.path}/sandbox.sqlite',
-        endpoint21.toString(),
-      ],
+      [script, '${root.path}/sandbox.sqlite', endpoint21.toString()],
       environment: {'SULFI_TEST21_SANDBOX': '1'},
     );
     child.stderr.listen((_) {
@@ -111,6 +109,7 @@ class App21 {
     Server21 server, {
     bool client = false,
     bool enabled = true,
+    bool projectEnabled = false,
   }) async {
     final f = await Fixture15.open(client: client);
     final media = DiaryMediaStore(
@@ -140,6 +139,7 @@ class App21 {
       capsules: f.c.capsules,
       diary: diary,
       metadataEnabled: enabled,
+      project22Enabled: projectEnabled,
     );
     await c.reload();
     return App21(f, api, diary, c);

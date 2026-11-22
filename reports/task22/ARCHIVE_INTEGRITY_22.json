@@ -1,0 +1,12 @@
+{
+  "archiveBytes": 31966,
+  "archiveSHA256": "a967a71dd370093444d506ca32f56a5542a0ee7243a2dee2ddc3f34bec92a13d",
+  "revision": "v1.7 — owner defers APK/native build; PR52 delivered",
+  "files": 13,
+  "manifestEntries": 12,
+  "crc": "PASS",
+  "manifestHashes": "PASS",
+  "committedDocsIdentity": "PASS",
+  "outerDigestIndependentlyPinned": false,
+  "note": "Observed SHA; owner provided no independent external checksum."
+}

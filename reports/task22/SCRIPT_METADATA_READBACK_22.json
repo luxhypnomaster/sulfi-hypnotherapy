@@ -1,0 +1,15 @@
+{
+  "scriptId": "1810esAOGDfsUf6EYdT9y7uY5_v0dzBmb5YSfwPZkxtZJsKw_ByEre0Vc",
+  "name": "Сервер Проекта Алхимик",
+  "shared": true,
+  "permissions": [
+    {
+      "type": "user",
+      "role": "owner"
+    }
+  ],
+  "readOnly": true,
+  "aclChanged": false,
+  "privateAclVerified": false,
+  "note": "shared=true with only owner permission listed; not proof of public access or full private-ACL confirmation. Require authoritative administrative readback before live writes."
+}

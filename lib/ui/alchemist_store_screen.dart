@@ -1,7 +1,9 @@
+import 'course22_screen.dart';
 import 'alchemist_sync_screen.dart';
 
 import 'dart:io';
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,7 @@ import '../services/alchemist_install.dart';
 import '../services/session_controller.dart';
 import 'alchemist_catalog_screen.dart';
 import 'design.dart';
+import 'rating22_summary.dart';
 
 /// No automatic media transfer: loading cards only fetches metadata.
 class AlchemistStoreScreen extends StatefulWidget {
@@ -38,6 +41,10 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
         cursor = null;
       });
     }
+  }
+
+  void projectChanged() {
+    if (mounted) setState(() {});
   }
 
   List<Map<String, dynamic>> filterCached(List<Map<String, dynamic>> values) =>
@@ -79,6 +86,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
     authenticated = widget.controller.diary?.authenticated ?? false;
     widget.controller.diary?.addListener(accountChanged);
     widget.controller.metadata?.addListener(metadataChanged);
+    widget.controller.project22?.addListener(projectChanged);
     load();
   }
 
@@ -87,6 +95,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
     paused = true;
     widget.controller.diary?.removeListener(accountChanged);
     widget.controller.metadata?.removeListener(metadataChanged);
+    widget.controller.project22?.removeListener(projectChanged);
     query.dispose();
     category.dispose();
     tag.dispose();
@@ -101,6 +110,13 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
       error = null;
     });
     try {
+      if (!more && widget.controller.project22 != null) {
+        unawaited(
+          widget.controller.project22!
+              .refresh(widget.controller.cloudQueue)
+              .catchError((Object _) {}),
+        );
+      }
       final runtime = widget.controller.metadata;
       if (runtime != null && !more) {
         final cached = await runtime.cachedCards();
@@ -167,6 +183,18 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   }
 
   Future<void> install(Map<String, dynamic> c) async {
+    if (c['type'] == 'course' && widget.controller.project22 != null) {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Course22Screen(
+            controller: widget.controller,
+            contentId: c['logicalContentId'],
+          ),
+        ),
+      );
+      return;
+    }
     final id = c['catalogItemId'] as String;
     final detail = await api.call('catalog.get', {'catalogItemId': id});
     if (detail['immutableRevisionId'] != c['immutableRevisionId']) {
@@ -358,14 +386,25 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
           DropdownButton<String?>(
             value: kind,
             isExpanded: true,
-            items: const [
-              DropdownMenuItem(value: null, child: Text('Все материалы')),
-              DropdownMenuItem(value: 'collection', child: Text('Сборки')),
-              DropdownMenuItem(value: 'package', child: Text('ZIP-пакеты')),
-              DropdownMenuItem(value: 'track', child: Text('Треки')),
-              DropdownMenuItem(value: 'module', child: Text('Модули')),
-              DropdownMenuItem(value: 'template', child: Text('Программы')),
-              DropdownMenuItem(value: 'session', child: Text('Сессии')),
+            items: [
+              const DropdownMenuItem(value: null, child: Text('Все материалы')),
+              const DropdownMenuItem(
+                value: 'collection',
+                child: Text('Сборки'),
+              ),
+              const DropdownMenuItem(
+                value: 'package',
+                child: Text('ZIP-пакеты'),
+              ),
+              const DropdownMenuItem(value: 'track', child: Text('Треки')),
+              const DropdownMenuItem(value: 'module', child: Text('Модули')),
+              const DropdownMenuItem(
+                value: 'template',
+                child: Text('Программы'),
+              ),
+              const DropdownMenuItem(value: 'session', child: Text('Сессии')),
+              if (widget.controller.project22 != null)
+                const DropdownMenuItem(value: 'course', child: Text('Курсы')),
             ],
             onChanged: loading
                 ? null
@@ -398,13 +437,27 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                       ),
                     ),
               title: Text(c['card']['title']),
-              subtitle: Text(
-                '${c['card']['shortAnnotation']}\n${c['type']} · версия ${c['metadataRevision']} · файлы ${c['summary']?['downloadBytes'] ?? '—'} байт · '
-                '${installed[c['catalogItemId']] == c['immutableRevisionId']
-                    ? 'Установлено'
-                    : installed.containsKey(c['catalogItemId'])
-                    ? 'Есть обновление'
-                    : 'Не скачано'}',
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${c['card']['shortAnnotation']}\n${c['type']} · версия ${c['metadataRevision']} · файлы ${c['summary']?['downloadBytes'] ?? '—'} байт · '
+                    '${installed[c['catalogItemId']] == c['immutableRevisionId']
+                        ? 'Установлено'
+                        : installed.containsKey(c['catalogItemId'])
+                        ? 'Есть обновление'
+                        : 'Не скачано'}',
+                  ),
+                  Rating22Summary(
+                    value: widget.controller.project22?.summaryFor(
+                      c['type'],
+                      c['logicalContentId'] as String? ??
+                          c['catalogItemId'] as String? ??
+                          '',
+                    ),
+                    stale: widget.controller.project22?.stale ?? true,
+                  ),
+                ],
               ),
               trailing:
                   [
@@ -414,6 +467,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                     'collection',
                     'package',
                     'session',
+                    if (widget.controller.project22 != null) 'course',
                   ].contains(c['type'])
                   ? IconButton(
                       tooltip: 'Состав и установка',

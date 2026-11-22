@@ -1,0 +1,70 @@
+{
+  "source": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde",
+  "pr": 54,
+  "reportPackageArtifactsVerified": 22,
+  "additionalIndexesVerified": 2,
+  "totalDelivered": 26,
+  "indexes": [
+    {
+      "name": "DELIVERY_22.md",
+      "id": "1PcBCsKs8YObYLiXnRmAlsLeTRqOjVJX0",
+      "url": "https://docs.google.com/document/d/1PcBCsKs8YObYLiXnRmAlsLeTRqOjVJX0/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+      "bytes": 7799,
+      "sha256": "98c851a58fdacd66eb1b03884c81fad8c380624105341bc78b2cf8e89cf9a807",
+      "metadataVerified": true,
+      "downloadSHA256": "98c851a58fdacd66eb1b03884c81fad8c380624105341bc78b2cf8e89cf9a807",
+      "downloadBytes": 7799,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:25:37.767433+00:00"
+    },
+    {
+      "name": "DRIVE_READBACK_22.json",
+      "bytes": 14164,
+      "sha256": "00247050e09c40f3f9cb80e975a900e4bb04c212d69433831dbc08e60ca21455",
+      "id": "1eh9Kfo-i_Q8dvOpiUu6_RBWTQ-8n3rUj",
+      "url": "https://drive.google.com/file/d/1eh9Kfo-i_Q8dvOpiUu6_RBWTQ-8n3rUj/view?usp=drivesdk",
+      "metadataVerified": true,
+      "downloadSHA256": "00247050e09c40f3f9cb80e975a900e4bb04c212d69433831dbc08e60ca21455",
+      "downloadBytes": 14164,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:20:48.796742+00:00"
+    }
+  ],
+  "allRawReadbacks": "PASS",
+  "native": "DEFERRED_BY_OWNER",
+  "apkBuilt": false,
+  "mainUnchanged": true,
+  "productionWrites": false,
+  "evidenceFrozenCommit": "c713f2f3fd21c68d6eab9cb8551dc462b9e08487",
+  "correctionArtifactsVerified": 2,
+  "corrections": [
+    {
+      "name": "CORRECTION_VISIBILITY_22.md",
+      "bytes": 2665,
+      "sha256": "8a883d739ece7ee40c798bd874e15dc51a789274e89b6df6e18a2361bb202302",
+      "id": "11vcgEy8bibrvmYwSIQC9ROOUeCEqmVX-",
+      "url": "https://docs.google.com/document/d/11vcgEy8bibrvmYwSIQC9ROOUeCEqmVX-/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+      "metadataVerified": true,
+      "downloadSHA256": "8a883d739ece7ee40c798bd874e15dc51a789274e89b6df6e18a2361bb202302",
+      "downloadBytes": 2665,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:25:37.767433+00:00"
+    },
+    {
+      "name": "REPOSITORY_VISIBILITY_READBACK_22.json",
+      "bytes": 240,
+      "sha256": "b14158094c9baf24513a4ed9fa9091c1a7824572166fab2b7e5bb3aa7d429b1f",
+      "id": "1uTJ7Rq0MJzRbXxTqbExfHHOQKgojHsq_",
+      "url": "https://drive.google.com/file/d/1uTJ7Rq0MJzRbXxTqbExfHHOQKgojHsq_/view?usp=drivesdk",
+      "metadataVerified": true,
+      "downloadSHA256": "b14158094c9baf24513a4ed9fa9091c1a7824572166fab2b7e5bb3aa7d429b1f",
+      "downloadBytes": 240,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:25:37.767433+00:00"
+    }
+  ],
+  "repositoryVisibility": "public",
+  "repositoryVisibilityChangedByTask22": false,
+  "earlierDeliveryPrivateClaim": "CORRECTED_IN_PLACE_AND_RAW_VERIFIED",
+  "historicalSecretAudit": "NOT_RUN"
+}

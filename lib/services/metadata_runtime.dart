@@ -73,6 +73,8 @@ class MetadataRuntime extends ChangeNotifier {
             'type': r['type'],
             'logicalContentId': r['contentId'],
             'immutableRevisionId': r['revisionId'],
+            if (r['ratingEpochId'] is String)
+              'ratingEpochId': r['ratingEpochId'],
             'publicationState': 'published',
             'card': Map<String, dynamic>.from(r['card']),
           },

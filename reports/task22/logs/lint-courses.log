@@ -1,0 +1,13 @@
+Computing fixes in lib...
+Applying fixes...
+
+services/playback22_evidence.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+ui/course22_editor.dart
+  curly_braces_in_flow_control_structures - 8 fixes
+
+ui/course22_screen.dart
+  curly_braces_in_flow_control_structures - 6 fixes
+
+15 fixes made in 3 files.

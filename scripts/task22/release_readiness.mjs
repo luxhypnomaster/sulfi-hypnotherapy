@@ -1,0 +1,4 @@
+// Inspect only: no Gradle, Flutter/adb, cloud or signing-secret access.
+import {readFileSync} from 'node:fs';
+const text=readFileSync(new URL('../../pubspec.yaml',import.meta.url),'utf8'),version=/^version:\s*(\S+)$/m.exec(text)?.[1];if(!version)throw Error('VERSION_MISSING');
+console.log(JSON.stringify({task:22,native:'DEFERRED_BY_OWNER',buildExecuted:false,currentVersion:version,futureVersionCodeMustExceed:Number(version.split('+')[1]),packages:['ru.sulfi.sulfi_hypnotherapy','ru.sulfi.sulfi_hypnotherapy.clienttest'],requiredGates:['final source + full regression','protected existing signing, never new key','independent APK SHA/cert/package/versionCode','same-owner upgrade retention on copies','two-account owner QA after permission'],prohibited:['uninstall','clear','downgrade','main merge','unsafe production deploy']},null,2));
