@@ -176,8 +176,9 @@ Future<Map<String, dynamic>?> playbackFeedback22(
       if (!child.enabled ||
           child.modified ||
           ref == null ||
-          ref['type'] != 'MODULE')
+          ref['type'] != 'MODULE') {
         continue;
+      }
       final audio = child.items
           .where((s) => s.enabled && s.kind == StepKind.audio)
           .toList();

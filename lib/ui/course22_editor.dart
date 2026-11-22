@@ -142,17 +142,19 @@ class _Course22EditorState extends State<Course22Editor> {
           .toList();
       if (mounted && owner == widget.controller.transferOwner) setState(() {});
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(
           () => status =
               'Список программ не обновлён. Локальный черновик сохранён.',
         );
+      }
     }
   }
 
   Future<void> save() async {
-    if (owner != widget.controller.transferOwner)
+    if (owner != widget.controller.transferOwner) {
       throw const FormatException('ACCOUNT_CHANGED');
+    }
     await widget.controller.capsules!.database.insert('app_settings', {
       'name': key,
       'value': jsonEncode({
@@ -170,8 +172,9 @@ class _Course22EditorState extends State<Course22Editor> {
     if (busy) return;
     setState(() => busy = true);
     try {
-      if (title.text.trim().isEmpty || refs.isEmpty)
+      if (title.text.trim().isEmpty || refs.isEmpty) {
         throw const FormatException('COURSE_INCOMPLETE');
+      }
       final d = digest22(value());
       if (d == confirmedDigest) {
         setState(() => status = 'Эта редакция уже подтверждена сервером');
@@ -203,29 +206,33 @@ class _Course22EditorState extends State<Course22Editor> {
         'operationId': job['operationId'],
       });
       if (done['state'] != 'SUCCEEDED' ||
-          done['receipt']?['outcome'] != 'COMMITTED')
+          done['receipt']?['outcome'] != 'COMMITTED') {
         throw const FormatException('NOT_COMMITTED');
+      }
       final receipt = await r.call('project.operationResult', {
         'operationId': job['operationId'],
       });
       if (digest22(receipt) != done['receipt']['preparedHash'] ||
-          receipt['requestId'] != requestId)
+          receipt['requestId'] != requestId) {
         throw const FormatException('RECEIPT_HASH');
+      }
       expectedRevision = (receipt['changed'] as List).singleWhere(
         (r) => r['contentId'] == id,
       )['revisionId'];
       confirmedDigest = d;
       await save();
-      if (mounted)
+      if (mounted) {
         setState(
           () => status =
               'Опубликовано: подтверждены редакция и квитанция сервера',
         );
+      }
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(
           () => status = 'Публикация не подтверждена. Черновик и запрос сохранены для повтора.',
         );
+      }
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -233,8 +240,9 @@ class _Course22EditorState extends State<Course22Editor> {
 
   @override
   Widget build(BuildContext context) {
-    if (owner != widget.controller.transferOwner)
+    if (owner != widget.controller.transferOwner) {
       return const Scaffold(body: Center(child: Text('Аккаунт изменён')));
+    }
     return Scaffold(
       appBar: AppBar(title: const Text('Редактор курса')),
       body: ListView(

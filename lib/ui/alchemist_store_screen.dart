@@ -1,3 +1,4 @@
+import 'course22_screen.dart';
 import 'alchemist_sync_screen.dart';
 
 import 'dart:io';
@@ -182,6 +183,18 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
   }
 
   Future<void> install(Map<String, dynamic> c) async {
+    if (c['type'] == 'course' && widget.controller.project22 != null) {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Course22Screen(
+            controller: widget.controller,
+            contentId: c['logicalContentId'],
+          ),
+        ),
+      );
+      return;
+    }
     final id = c['catalogItemId'] as String;
     final detail = await api.call('catalog.get', {'catalogItemId': id});
     if (detail['immutableRevisionId'] != c['immutableRevisionId']) {
@@ -443,6 +456,7 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
                     'collection',
                     'package',
                     'session',
+                    if (widget.controller.project22 != null) 'course',
                   ].contains(c['type'])
                   ? IconButton(
                       tooltip: 'Состав и установка',

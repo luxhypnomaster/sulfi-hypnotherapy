@@ -1,3 +1,5 @@
+import 'course22_editor.dart';
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -116,7 +118,20 @@ class _Admin22ScreenState extends State<Admin22Screen> {
         title: 'Каталог и материалы',
         tabs: const ['Материалы', 'Структура каталога'],
         children: [
-          AlchemistStoreScreen(controller: c),
+          Column(
+            children: [
+              TextButton(
+                onPressed: () => Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Course22Drafts(controller: c),
+                  ),
+                ),
+                child: const Text('Создать курс'),
+              ),
+              Expanded(child: AlchemistStoreScreen(controller: c)),
+            ],
+          ),
           CategoryPanel22(runtime: r),
         ],
       ),
@@ -173,9 +188,21 @@ class _Admin22ScreenState extends State<Admin22Screen> {
         ],
       ),
     };
+    final originalOwner = c.transferOwner;
     await Navigator.push<void>(
       context,
-      MaterialPageRoute(builder: (_) => page),
+      MaterialPageRoute(
+        builder: (_) => ListenableBuilder(
+          listenable: Listenable.merge([?c.diary, ?r]),
+          builder: (_, child) =>
+              c.transferOwner == originalOwner &&
+                  (r == null ||
+                      ['publications', 'catalog'].contains(id) ||
+                      !r!.accessDenied)
+              ? page
+              : const Scaffold(body: Center(child: Text('Доступ изменён'))),
+        ),
+      ),
     );
   }
 
@@ -206,9 +233,16 @@ class _Admin22ScreenState extends State<Admin22Screen> {
           for (final item in admin22Sections)
             ListTile(
               key: Key('admin22-${item.$1}'),
+              dense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 0,
+              ),
               title: Text(
                 item.$2,
+                maxLines: 2,
                 style: TextStyle(
+                  fontSize: 14,
                   color: adminColor22(
                     adminState22(section(item.$1), stale: r?.stale ?? true),
                   ),
@@ -220,10 +254,12 @@ class _Admin22ScreenState extends State<Admin22Screen> {
                       spacing: 12,
                       children: [
                         for (final entry
-                            in (section(item.$1)!['metrics'] as Map).entries)
+                            in (section(item.$1)!['metrics'] as Map).entries
+                                .take(3))
                           Text(
                             '${metricLabels22[entry.key] ?? entry.key}: ${entry.value['value'] ?? 'нет данных'}',
                             style: TextStyle(
+                              fontSize: 12,
                               color: entry.value['state'] == 'problem'
                                   ? adminColor22('problem')
                                   : entry.value['state'] == 'unknown'

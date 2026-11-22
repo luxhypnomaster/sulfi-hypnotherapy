@@ -1,0 +1,80 @@
+{
+  "snapshot": {
+    "schemaVersion": 22,
+    "scope": "ratings:public",
+    "ratingsRevision": 1,
+    "policyHash": "eccc3db5749a46d4549f873399041cb909e4d9f8fa09165d28ca48447be1a168",
+    "items": [
+      {
+        "target": {
+          "type": "PROGRAM",
+          "contentId": "synthetic-program",
+          "ratingEpochId": "epoch1",
+          "revisionId": "r1"
+        },
+        "consumerDirect": {
+          "mean": 5,
+          "n": 1,
+          "distribution": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "updatedAt": "2026-11-22T00:00:00.000Z",
+          "evidenceLevel": "PRELIMINARY"
+        },
+        "professionalDirect": {
+          "mean": null,
+          "n": 0,
+          "distribution": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "updatedAt": "2026-11-22T00:00:00.000Z",
+          "evidenceLevel": "NO_DATA"
+        },
+        "weighted": {
+          "value": null,
+          "status": "NOT_CALIBRATED",
+          "algorithmId": "not-calibrated",
+          "algorithmVersion": 1,
+          "configVersion": 1,
+          "policyHash": "eccc3db5749a46d4549f873399041cb909e4d9f8fa09165d28ca48447be1a168",
+          "computedAt": "2026-11-22T00:00:00.000Z",
+          "evidenceLevel": "NOT_CALIBRATED",
+          "sourceBreakdown": {
+            "consumerDirectN": 1,
+            "professionalDirectN": 0,
+            "contextRootN": 0
+          }
+        },
+        "evidenceCounts": {
+          "directConsumerN": 1,
+          "directProN": 0,
+          "contextCourseN": 0,
+          "contextProgramN": 0,
+          "independentN": 1
+        },
+        "context": {
+          "rootN": 0,
+          "partialRootN": 0,
+          "occurrenceN": 0
+        },
+        "computedAt": "2026-11-22T00:00:00.000Z"
+      }
+    ]
+  },
+  "head": {
+    "schemaVersion": 22,
+    "scope": "ratings:public",
+    "ratingsRevision": 1,
+    "policyHash": "eccc3db5749a46d4549f873399041cb909e4d9f8fa09165d28ca48447be1a168",
+    "ratingsSnapshotHash": "92ea09af7d5fbc06db45cb33f7e1632d8a514cb68a9d5202ba65dc1baeb56b94"
+  },
+  "milliHash": "c4e4bc05ebc0e8b5547d9a5e5108e031480f8ed1ced00c4fab4422a8e6411d9f"
+}
