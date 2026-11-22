@@ -1,0 +1,19 @@
+test_id;priority;expected;method;pass_level
+T24-001;P0;tap queue route 10x -> exactly one instance;widget/navigation test;TEST
+T24-002;P0;Android back from queue returns correct logical parent once;navigation test;TEST
+T24-003;P0;diary next-post replaces sibling without stacking 10 routes;navigation test;TEST
+T24-004;P0;in-post next page remains distinct from next-post;widget test;TEST
+T24-005;P0;deep link to diary post has logical deterministic Back fallback;route test;TEST
+T24-006;P0;A/B same module name only changed A marked;widget/model test;TEST
+T24-007;P0;revert A to same content clears changed marker;model/widget test;TEST
+T24-008;P0;personal fork and official module identities not mixed;unit test;TEST
+T24-009;P1;yellow changed text and fuchsia italic appears only changed occurrence;widget screenshot;TEST
+T24-010;P1;history->home one action, no loop;navigation test;TEST
+T24-011;P1;task13 timer yellow and Phase>Module>Track hierarchy audited, unchanged if PASS;source/widget;SOURCE
+T24-012;P1;author/client shield reviewed without server ACL mutation;widget/source;SOURCE
+T24-013;P1;offline local draft accessible independent of interactive sign-in or conflict flagged;regression test;TEST
+T24-014;P0;no destructive database, server, auth, transport, catalog changes;diff review;SOURCE
+T24-015;P0;flutter analyze + targeted/full tests PASS or blocker exact;test logs;TEST
+T24-016;P0;9:16 layout preserved, no route duplication;widget/screenshot;TEST
+T24-017;P0;shared task21/22 path conflict explicitly isolated;handoff;REPORT
+T24-018;P0;draft PR plus per-issue ALREADY_DONE/FIXED/BLOCKED status;handoff;REPORT

@@ -1,0 +1,38 @@
+{
+  "task": 24,
+  "date": "2026-11-21",
+  "files": [
+    {
+      "file": "00_START_HERE.md",
+      "sha256": "ff30f114cf832adc56c88c88e5b2afca8a05ffd6b471c8c88a81bd8db46b0ad8",
+      "bytes": 1198
+    },
+    {
+      "file": "01_TASK.md",
+      "sha256": "685d51e38d7445ff25d4c0ff6c565fe858ef34bea202948de8c4a1c6658b47c1",
+      "bytes": 3117
+    },
+    {
+      "file": "02_COORDINATION.md",
+      "sha256": "03f72533de4c76ca7e0e993b973cf8b41707371ed08dba3327a4c6e6a18e17dd",
+      "bytes": 938
+    },
+    {
+      "file": "03_ACCEPTANCE.csv",
+      "sha256": "4de554dd9fd1c8b01326e65bc9541157a0a40b1d8e56438e0cc68f16380fd792",
+      "bytes": 1650
+    },
+    {
+      "file": "04_SOURCES.md",
+      "sha256": "e02c24297b7835ad52094b6bd623ca8528452a777dcb5676cd85316021bdd26e",
+      "bytes": 684
+    },
+    {
+      "file": "05_CODEX_COMMAND.txt",
+      "sha256": "6c16a5828e42efe1d6748818319b3fb619ca6f56319848712320222ddfc28778",
+      "bytes": 491
+    }
+  ],
+  "entry_count": 6,
+  "scope": "parallel isolated track, no production mutation"
+}

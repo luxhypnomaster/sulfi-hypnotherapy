@@ -1,0 +1,4 @@
+# Full sanitized render set is in the Drive evidence ZIP. Selected review PNGs
+# already tracked in Git remain tracked; avoid duplicating the full binary set.
+*
+!.gitignore

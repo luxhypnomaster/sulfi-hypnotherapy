@@ -6,8 +6,10 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../models/diary_entry.dart';
+import '../models/diary_publication.dart';
 import 'diary_content_link.dart';
 import '../services/diary_audio.dart';
 import '../services/preview_diary_transport.dart';
@@ -15,6 +17,8 @@ import '../services/diary_controller.dart';
 import '../services/diary_layout.dart';
 import 'design.dart';
 import 'diary_screen.dart';
+import 'home_screen.dart';
+import 'session_scope.dart';
 
 class DiaryReader extends StatefulWidget {
   const DiaryReader({
@@ -26,11 +30,16 @@ class DiaryReader extends StatefulWidget {
     this.onLayout,
     this.calculateOnly = false,
     this.publicationReview = false,
+    this.publicationIds,
   });
   final DiaryEntry entry;
   final bool preview, fromJournal, calculateOnly, publicationReview;
   final void Function(DiaryLayout, double, double)? onLayout;
   final DiaryController? diary;
+  // Routing selection, not persisted data. Resolve only still-visible published
+  // IDs so a journal's filter/order survives sibling replacement safely.
+  final List<String>? publicationIds;
+  static final _routes = Expando<Map<Object, ModalRoute<dynamic>>>();
   @override
   State<DiaryReader> createState() => _DiaryReaderState();
 }
@@ -41,6 +50,49 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   DiaryLayout? layout;
   DiaryAudio? audio;
   bool calculating = false;
+  bool _routing = false;
+  bool _refreshScheduled = false;
+  bool _duplicateRoute = false;
+  NavigatorState? _navigator;
+  ModalRoute<dynamic>? _readerRoute;
+  Object? _routeIdentity;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_readerRoute != null ||
+        _duplicateRoute ||
+        widget.preview ||
+        widget.calculateOnly ||
+        widget.publicationReview ||
+        widget.diary == null) {
+      return;
+    }
+    final nav = Navigator.of(context), route = ModalRoute.of(context);
+    if (route == null) return;
+    final routes = DiaryReader._routes[nav] ??= {};
+    final identity = (
+      widget.diary,
+      widget.diary?.api?.readerScope ?? 'public',
+      widget.entry.id,
+      widget.fromJournal,
+    );
+    final existing = routes[identity];
+    if (existing != null && existing.isActive && !identical(existing, route)) {
+      // Existing Home/journal callers are preserved. Coalesce only an exact
+      // same-owner published viewer; never remove editor/review/dialog routes.
+      _duplicateRoute = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && route.isActive) nav.removeRoute(route);
+      });
+      return;
+    }
+    _navigator = nav;
+    _readerRoute = route;
+    _routeIdentity = identity;
+    routes[identity] = route;
+  }
+
   final visited = <int>{};
   @override
   void initState() {
@@ -54,7 +106,19 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   void diaryChanged() {
     if (!mounted || widget.preview) return;
-    setState(() {});
+    // A sibling journal can synchronously announce sync in its initState while
+    // this outgoing reader still owns a listener. Rebuild after that frame.
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      if (_refreshScheduled) return;
+      _refreshScheduled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _refreshScheduled = false;
+        if (mounted) setState(() {});
+      });
+    } else {
+      setState(() {});
+    }
   }
 
   @override
@@ -64,6 +128,10 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    final routes = _navigator == null ? null : DiaryReader._routes[_navigator!];
+    if (identical(routes?[_routeIdentity], _readerRoute)) {
+      routes?.remove(_routeIdentity);
+    }
     generation++;
     WidgetsBinding.instance.removeObserver(this);
     widget.diary?.removeListener(diaryChanged);
@@ -151,21 +219,147 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   }
 
   Future<void> home() async {
-    await audio?.navigationPause();
-    if (mounted) Navigator.popUntil(context, (r) => r.isFirst);
+    if (_routing) return;
+    _routing = true;
+    var navigated = false;
+    try {
+      await audio?.navigationPause();
+      if (!mounted) return;
+      final nav = Navigator.of(context);
+      if (nav.canPop()) {
+        navigated = true;
+        nav.popUntil((r) => r.isFirst);
+      } else {
+        final scope = SessionScope.maybeOf(context);
+        if (scope != null) {
+          navigated = true;
+          unawaited(
+            nav.pushReplacement<void, void>(
+              MaterialPageRoute(
+                builder: (_) => HomeScreen(
+                  controller: scope.controller,
+                  player: scope.player,
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    } finally {
+      if (!navigated) _routing = false;
+    }
   }
 
   Future<void> journal() async {
-    await audio?.navigationPause();
-    if (!mounted) return;
-    if (widget.preview || widget.fromJournal || widget.diary == null) {
-      Navigator.maybePop(context);
-    } else {
-      await Navigator.push<void>(
-        context,
-        MaterialPageRoute(builder: (_) => DiaryScreen(diary: widget.diary!)),
-      );
+    if (_routing) return;
+    _routing = true;
+    var navigated = false;
+    try {
+      await audio?.navigationPause();
+      if (!mounted) return;
+      final nav = Navigator.of(context);
+      if (widget.preview ||
+          widget.diary == null ||
+          (widget.fromJournal && nav.canPop())) {
+        navigated = await nav.maybePop();
+      } else {
+        // Replace reader, never create Home -> Reader -> Journal -> Reader.
+        // Also supplies the deterministic parent of a root deep-link reader.
+        navigated = true;
+        unawaited(
+          nav.pushReplacement<void, void>(
+            MaterialPageRoute(
+              settings: const RouteSettings(name: '/diary'),
+              builder: (_) => DiaryScreen(diary: widget.diary!),
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (!navigated) _routing = false;
     }
+  }
+
+  List<DiaryEntry> get _posts {
+    if (widget.preview || widget.calculateOnly) return const [];
+    final visible = (widget.diary?.published ?? const <DiaryEntry>[]).where((
+      e,
+    ) {
+      final scope = e.extra['_alchemistScope'];
+      return DiaryPublication.of(e).active(e, widget.diary!.clock()) &&
+          (scope == null ||
+              scope == 'public' ||
+              scope == widget.diary?.api?.readerScope);
+    }).toList();
+    if (widget.publicationIds == null) return visible;
+    final byId = {for (final e in visible) e.id: e};
+    return [for (final id in widget.publicationIds!.toSet()) ?byId[id]];
+  }
+
+  Future<void> post(String id) async {
+    if (_routing || widget.diary == null) return;
+    _routing = true;
+    var navigated = false;
+    final scope = widget.diary!.api?.readerScope;
+    try {
+      await audio?.navigationPause();
+      if (!mounted || scope != widget.diary!.api?.readerScope) return;
+      final target = _posts.where((p) => p.id == id).firstOrNull;
+      if (target == null) {
+        return; // Withdrawn/expired/other-owner while awaiting.
+      }
+      navigated = true;
+      unawaited(
+        Navigator.of(context).pushReplacement<void, void>(
+          MaterialPageRoute(
+            settings: RouteSettings(name: '/diary/post', arguments: target.id),
+            builder: (_) => DiaryReader(
+              entry: target,
+              diary: widget.diary,
+              fromJournal: widget.fromJournal,
+              publicationIds: widget.publicationIds,
+            ),
+          ),
+        ),
+      );
+    } finally {
+      if (!navigated) _routing = false;
+    }
+  }
+
+  Widget _postNavigation() {
+    final posts = _posts;
+    final index = posts.indexWhere((p) => p.id == entry.id);
+    if (index < 0) return const SizedBox.shrink();
+    return Row(
+      children: [
+        for (final previous in [true, false])
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: OutlinedButton(
+                key: Key(previous ? 'diary-previous-post' : 'diary-next-post'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  foregroundColor: neonPink,
+                  textStyle: const TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 11,
+                  ),
+                ),
+                onPressed: (previous ? index > 0 : index < posts.length - 1)
+                    ? () => post(posts[index + (previous ? -1 : 1)].id)
+                    : null,
+                child: Text(
+                  previous ? 'Предыдущая запись' : 'Следующая запись',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   DiaryEntry get entry => widget.preview
@@ -175,65 +369,78 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                 .firstOrNull ??
             widget.entry;
   @override
-  Widget build(BuildContext context) =>
-      !widget.preview &&
-          entry.extra['_alchemistScope'] != null &&
-          entry.extra['_alchemistScope'] != 'public' &&
-          entry.extra['_alchemistScope'] != widget.diary?.api?.readerScope
-      ? const LeatherScaffold(
-          title: 'Дневник',
-          child: Center(
-            child: Text('Войдите в аккаунт, которому доступна эта запись.'),
-          ),
-        )
-      : DiaryReadingFrame(
-          preview: widget.preview,
-          onHome: home,
-          onJournal: journal,
-          child: Column(
-            children: [
-              for (final link in entry.contentLinks)
-                DiaryContentLink(link: link),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, box) {
-                    calculate(
-                      box.maxWidth,
-                      box.maxHeight,
-                      MediaQuery.textScalerOf(context),
-                    );
-                    if (!widget.preview &&
-                        widget.diary != null &&
-                        widget.diary!.hasCache &&
-                        !widget.diary!.published.any(
-                          (e) => e.id == widget.entry.id,
-                        )) {
-                      return const Center(
-                        child: Text(
-                          'Запись больше не опубликована. Вернитесь к списку записей.',
-                        ),
-                      );
-                    }
-                    final value = layout;
-                    if (widget.calculateOnly) return const SizedBox();
-                    if (value == null) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final index = page.clamp(0, value.pages.length - 1);
-                    return GestureDetector(
-                      onHorizontalDragEnd: (d) {
-                        final v = d.primaryVelocity ?? 0;
-                        if (v.abs() > 150) {
-                          unawaited(turn(index + (v < 0 ? 1 : -1)));
+  Widget build(BuildContext context) {
+    if (_duplicateRoute) return const SizedBox.shrink();
+    final rootReader =
+        !widget.preview &&
+        !widget.calculateOnly &&
+        widget.diary != null &&
+        ModalRoute.of(context)?.isFirst == true;
+    return PopScope<Object?>(
+      canPop: !rootReader,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && rootReader) unawaited(journal());
+      },
+      child:
+          !widget.preview &&
+              entry.extra['_alchemistScope'] != null &&
+              entry.extra['_alchemistScope'] != 'public' &&
+              entry.extra['_alchemistScope'] != widget.diary?.api?.readerScope
+          ? const LeatherScaffold(
+              title: 'Дневник',
+              child: Center(
+                child: Text('Войдите в аккаунт, которому доступна эта запись.'),
+              ),
+            )
+          : DiaryReadingFrame(
+              preview: widget.preview,
+              onHome: home,
+              onJournal: journal,
+              child: Column(
+                children: [
+                  for (final link in entry.contentLinks)
+                    DiaryContentLink(link: link),
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, box) {
+                        calculate(
+                          box.maxWidth,
+                          box.maxHeight,
+                          MediaQuery.textScalerOf(context),
+                        );
+                        if (!widget.preview &&
+                            widget.diary != null &&
+                            widget.diary!.hasCache &&
+                            !widget.diary!.published.any(
+                              (e) => e.id == widget.entry.id,
+                            )) {
+                          return const Center(
+                            child: Text(
+                              'Запись больше не опубликована. Вернитесь к списку записей.',
+                            ),
+                          );
                         }
-                      },
-                      child: Column(
-                        children: [
-                          if (calculating)
-                            const LinearProgressIndicator(minHeight: 2),
-                          Expanded(
-                            child:
-                                NotificationListener<ScrollMetricsNotification>(
+                        final value = layout;
+                        if (widget.calculateOnly) return const SizedBox();
+                        if (value == null) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        final index = page.clamp(0, value.pages.length - 1);
+                        return GestureDetector(
+                          onHorizontalDragEnd: (d) {
+                            final v = d.primaryVelocity ?? 0;
+                            if (v.abs() > 150) {
+                              unawaited(turn(index + (v < 0 ? 1 : -1)));
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              if (calculating)
+                                const LinearProgressIndicator(minHeight: 2),
+                              Expanded(
+                                child: NotificationListener<ScrollMetricsNotification>(
                                   onNotification: (n) {
                                     if (!widget.preview &&
                                         !widget.calculateOnly &&
@@ -361,38 +568,45 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
                                     ),
                                   ),
                                 ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              if (layout != null)
-                DiaryNavigation(
-                  page: page,
-                  count: layout!.pages.length,
-                  onPage: turn,
-                ),
-              if (widget.publicationReview && layout != null)
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: FilledButton(
-                    key: const Key('diary-confirm-publication'),
-                    onPressed:
-                        calculating || visited.length != layout!.pages.length
-                        ? null
-                        : () => Navigator.pop(context, true),
-                    child: Text(
-                      visited.length == layout!.pages.length
-                          ? 'Опубликовать запись'
-                          : 'Просмотрите все страницы (${visited.length}/${layout!.pages.length})',
+                        );
+                      },
                     ),
                   ),
-                ),
-            ],
-          ),
-        );
+                  if (layout != null)
+                    DiaryNavigation(
+                      page: page,
+                      count: layout!.pages.length,
+                      onPage: turn,
+                    ),
+                  if (layout != null &&
+                      !widget.preview &&
+                      !widget.calculateOnly)
+                    _postNavigation(),
+                  if (widget.publicationReview && layout != null)
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FilledButton(
+                        key: const Key('diary-confirm-publication'),
+                        onPressed:
+                            calculating ||
+                                visited.length != layout!.pages.length
+                            ? null
+                            : () => Navigator.pop(context, true),
+                        child: Text(
+                          visited.length == layout!.pages.length
+                              ? 'Опубликовать запись'
+                              : 'Просмотрите все страницы (${visited.length}/${layout!.pages.length})',
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+    );
+  }
 }
 
 class DiaryReadingFrame extends StatelessWidget {

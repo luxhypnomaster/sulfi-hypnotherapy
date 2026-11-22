@@ -1,0 +1,9 @@
+00:00 +0: loading /dev/shm/sulfi24/test/task24_compatibility_test.dart
+00:00 +0: 24 ALREADY_DONE K025 same-name occurrences and personal fork preserve exact identity, style and revert at9:16
+00:03 +1: 24 ALREADY_DONE K029 history Home action returns actual Home once and preserves history
+00:05 +2: 24 ALREADY_DONE K030 MASTER shield uses existing sheet at9:16 without server grants
+00:07 +3: 24 ALREADY_DONE K030 CLIENT shield uses existing sheet at9:16 without server grants
+00:08 +4: 24 ALREADY_DONE K037 offline local draft is reachable and editable without Google chooser
+00:11 +5: 24 visual baseline and after reader same9:16 approved frame
+00:12 +6: 24 ALREADY_DONE K026 K027 timer yellow and nested phase/module/track9:16
+00:13 +7: All tests passed!

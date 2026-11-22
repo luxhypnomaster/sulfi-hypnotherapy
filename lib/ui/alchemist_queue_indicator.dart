@@ -48,10 +48,10 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
         final status = await NativeTransferBridge.channel
             .invokeMapMethod<String, dynamic>('status');
         if (mounted && status?['openQueue'] == true) {
-          widget.navigatorKey.currentState?.push<void>(
-            MaterialPageRoute(
-              builder: (_) =>
-                  AlchemistSyncScreen(controller: widget.controller),
+          unawaited(
+            AlchemistSyncScreen.open(
+              navigator: widget.navigatorKey.currentState,
+              controller: widget.controller,
             ),
           );
         }
@@ -113,11 +113,9 @@ class _AlchemistQueueIndicatorState extends State<AlchemistQueueIndicator>
         child: SafeArea(
           bottom: false,
           child: InkWell(
-            onTap: () => widget.navigatorKey.currentState?.push<void>(
-              MaterialPageRoute(
-                builder: (_) =>
-                    AlchemistSyncScreen(controller: widget.controller),
-              ),
+            onTap: () => AlchemistSyncScreen.open(
+              navigator: widget.navigatorKey.currentState,
+              controller: widget.controller,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

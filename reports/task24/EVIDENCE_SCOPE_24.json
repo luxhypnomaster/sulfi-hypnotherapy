@@ -1,0 +1,9 @@
+{
+  "bytes": 15508567,
+  "sha256": "0bc132c8030e63ae6785e09a0b7bba3ca442a54e790270657f36f2315719255d",
+  "entries": 53,
+  "CRC": "PASS",
+  "screens": 23,
+  "scope": "Sanitized reports, hashes, synthetic logs and real widget renders; no source archive/DB/audio/tokens/signing/APK",
+  "storedOnDriveOnly": "Full ZIP not duplicated into Git; selected5PNG and indexes tracked"
+}

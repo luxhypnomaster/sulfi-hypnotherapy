@@ -1,0 +1,13 @@
+{
+  "checkedAtUTC": "2026-11-22T16:31:56.969663+00:00",
+  "file": "DRIVE_READBACK_24.json",
+  "id": "1HvFXhCsRwPoilKzCutXhOUREguR21-X9",
+  "bytes": 5702,
+  "localSHA256": "22e7a417275f3b88db524c2f02780ece43d7b741bf167af319ba2ddbe4b3af52",
+  "independentDownloadSHA256": "22e7a417275f3b88db524c2f02780ece43d7b741bf167af319ba2ddbe4b3af52",
+  "parentID": "1rCulDJG1HEX6Kl7M2pv2YsFtv8oqdGcF",
+  "status": "PASS_BYTES_SHA_PARENT",
+  "verifiedDeliveryFilesIncludingIndex": 12,
+  "scope": "Index verifies11files; this separate Git receipt verifies index bytes without circular self-hash",
+  "ACL": "UNCHANGED"
+}

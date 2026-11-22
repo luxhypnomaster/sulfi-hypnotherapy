@@ -1,0 +1,20 @@
+00:00 +0: loading /dev/shm/sulfi24/test/task24_navigation_test.dart
+00:00 +0: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and saved task
+00:05 +1: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and saved task
+00:09 +2: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop
+00:11 +3: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter
+00:18 +4: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN root deep-link reader system Back has deterministic journal fallback
+00:19 +5: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 in-post next-page preserves publication ID and route; post controls remain distinct
+00:22 +6: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 rapid post taps coalesce, skip private/expired/withdrawn siblings and do not mark read
+00:24 +7: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 root reader Home fallback uses genuine Home and preview navigation stays isolated
+00:26 +8: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 filtered journal sibling order survives actual row opening and Back
+00:29 +9: /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 protected Home slide rapid opening cannot stack identical published readers
+00:30 +10: loading /dev/shm/sulfi24/test/task24_compatibility_test.dart
+00:32 +10: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K025 same-name occurrences and personal fork preserve exact identity, style and revert at9:16
+00:35 +11: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K029 history Home action returns actual Home once and preserves history
+00:37 +12: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K030 MASTER shield uses existing sheet at9:16 without server grants
+00:40 +13: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K030 CLIENT shield uses existing sheet at9:16 without server grants
+00:42 +14: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K037 offline local draft is reachable and editable without Google chooser
+00:47 +15: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 visual baseline and after reader same9:16 approved frame
+00:48 +16: /dev/shm/sulfi24/test/task24_compatibility_test.dart: 24 ALREADY_DONE K026 K027 timer yellow and nested phase/module/track9:16
+00:50 +17: All tests passed!

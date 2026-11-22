@@ -221,6 +221,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         preview: author && snapshot == null,
                         diary: d,
                         fromJournal: true,
+                        publicationIds: entries(author)
+                            .map((e) => e.id)
+                            .toList(),
                       ),
                     ),
                   ),
