@@ -23,7 +23,7 @@ def check():
             raise ValueError("Task21/22/23 protected source changed")
     changed = git("diff", "--name-only", BASE).splitlines()
     allowed = {"lib/ui/alchemist_queue_indicator.dart", "lib/ui/alchemist_sync_screen.dart",
-               "lib/ui/diary_reader.dart"}
+               "lib/ui/diary_reader.dart", "lib/ui/diary_screen.dart"}
     for name in changed:
         if name.startswith("lib/") and name not in allowed:
             raise ValueError("outside isolated UI routing scope")

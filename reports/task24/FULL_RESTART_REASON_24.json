@@ -1,0 +1,21 @@
+{
+  "atUTC": "2026-11-22T16:06:02.888952+00:00",
+  "stopped": [
+    {
+      "pid": 13796,
+      "command": [
+        "test",
+        "--no-pub",
+        "--reporter",
+        "expanded"
+      ]
+    }
+  ],
+  "reason": "New concrete audit gap: diary sibling selection must keep filtered journal context. Stop outdated full run, add RED real-UI test, narrow fix, freeze new source before final full. No native/CI retry.",
+  "shortPreFreezeRun": {
+    "pids": [
+      15235
+    ],
+    "reason": "Analyze had3style infos; stop premature short run before source freeze, fix and verify analyze first; not infrastructure/native retry"
+  }
+}

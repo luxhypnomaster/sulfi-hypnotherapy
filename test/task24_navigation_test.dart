@@ -13,6 +13,7 @@ import 'package:sulfi_hypnotherapy/ui/alchemist_queue_indicator.dart';
 import 'package:sulfi_hypnotherapy/ui/alchemist_sync_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/diary_screen.dart';
 import 'package:sulfi_hypnotherapy/ui/home_screen.dart';
+import 'package:sulfi_hypnotherapy/ui/diary_home_banner.dart';
 import 'package:sulfi_hypnotherapy/ui/session_scope.dart';
 
 import 'support/task15_fixture.dart';
@@ -521,6 +522,120 @@ void main() {
         await t.tap(find.text('Вернуться в редактор'));
         await io15(t);
         expect(find.byType(HomeScreen), findsOneWidget);
+        expect(audit.routes.length, 1);
+      } finally {
+        await t.pumpWidget(const SizedBox());
+        d.dispose();
+        await t.runAsync(f.close);
+      }
+    },
+  );
+
+  testWidgets(
+    '24 filtered journal sibling order survives actual row opening and Back',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!,
+          navigator = GlobalKey<NavigatorState>(),
+          audit = Routes24();
+      final d = (await t.runAsync(() => diary24(f)))!;
+      try {
+        await show24(t, f, DiaryScreen(diary: d), navigator, audit);
+        await t.enterText(find.byType(TextField).first, 'post-1');
+        await io15(t);
+        await t.tap(
+          find
+              .descendant(
+                of: find.byKey(const ValueKey('post-1')),
+                matching: find.byType(InkWell),
+              )
+              .first,
+        );
+        await io15(t);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          'post-1',
+        );
+        await t.tap(find.byKey(const Key('diary-next-post')));
+        await io15(t);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          'post-10',
+        );
+        await t.tap(find.byKey(const Key('diary-next-post')));
+        await io15(t);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          'post-11',
+        );
+        expect(
+          t
+              .widget<OutlinedButton>(find.byKey(const Key('diary-next-post')))
+              .onPressed,
+          isNull,
+        );
+        expect(audit.routes.length, 2);
+        await t.binding.handlePopRoute();
+        await io15(t);
+        expect(
+          t
+              .widget<EditableText>(
+                find.descendant(
+                  of: find.byType(TextField).first,
+                  matching: find.byType(EditableText),
+                ),
+              )
+              .controller
+              .text,
+          'post-1',
+        );
+      } finally {
+        await t.pumpWidget(const SizedBox());
+        d.dispose();
+        await t.runAsync(f.close);
+      }
+    },
+  );
+
+  testWidgets(
+    '24 protected Home slide rapid opening cannot stack identical published readers',
+    (t) async {
+      final f = (await t.runAsync(Fixture15.open))!,
+          navigator = GlobalKey<NavigatorState>(),
+          audit = Routes24();
+      final d = (await t.runAsync(() => diary24(f)))!;
+      try {
+        await show24(
+          t,
+          f,
+          Scaffold(
+            body: DiaryPublicationSlide(entry: d.published[3], diary: d),
+          ),
+          navigator,
+          audit,
+        );
+        final open = t
+            .widget<GestureDetector>(
+              find
+                  .descendant(
+                    of: find.byType(DiaryPublicationSlide),
+                    matching: find.byType(GestureDetector),
+                  )
+                  .first,
+            )
+            .onTap!;
+        for (var i = 0; i < 10; i++) {
+          open();
+        }
+        await io15(t);
+        expect(audit.routes.length, 2);
+        expect(find.byType(DiaryReader, skipOffstage: false), findsOneWidget);
+        expect(
+          t.widget<DiaryReader>(find.byType(DiaryReader)).entry.id,
+          'post-3',
+        );
+        await t.binding.handlePopRoute();
+        await io15(t);
+        expect(find.byType(DiaryPublicationSlide), findsOneWidget);
         expect(audit.routes.length, 1);
       } finally {
         await t.pumpWidget(const SizedBox());

@@ -30,11 +30,16 @@ class DiaryReader extends StatefulWidget {
     this.onLayout,
     this.calculateOnly = false,
     this.publicationReview = false,
+    this.publicationIds,
   });
   final DiaryEntry entry;
   final bool preview, fromJournal, calculateOnly, publicationReview;
   final void Function(DiaryLayout, double, double)? onLayout;
   final DiaryController? diary;
+  // Routing selection, not persisted data. Resolve only still-visible published
+  // IDs so a journal's filter/order survives sibling replacement safely.
+  final List<String>? publicationIds;
+  static final _routes = Expando<Map<Object, ModalRoute<dynamic>>>();
   @override
   State<DiaryReader> createState() => _DiaryReaderState();
 }
@@ -47,6 +52,47 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
   bool calculating = false;
   bool _routing = false;
   bool _refreshScheduled = false;
+  bool _duplicateRoute = false;
+  NavigatorState? _navigator;
+  ModalRoute<dynamic>? _readerRoute;
+  Object? _routeIdentity;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_readerRoute != null ||
+        _duplicateRoute ||
+        widget.preview ||
+        widget.calculateOnly ||
+        widget.publicationReview ||
+        widget.diary == null) {
+      return;
+    }
+    final nav = Navigator.of(context), route = ModalRoute.of(context);
+    if (route == null) return;
+    final routes = DiaryReader._routes[nav] ??= {};
+    final identity = (
+      widget.diary,
+      widget.diary?.api?.readerScope ?? 'public',
+      widget.entry.id,
+      widget.fromJournal,
+    );
+    final existing = routes[identity];
+    if (existing != null && existing.isActive && !identical(existing, route)) {
+      // Existing Home/journal callers are preserved. Coalesce only an exact
+      // same-owner published viewer; never remove editor/review/dialog routes.
+      _duplicateRoute = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && route.isActive) nav.removeRoute(route);
+      });
+      return;
+    }
+    _navigator = nav;
+    _readerRoute = route;
+    _routeIdentity = identity;
+    routes[identity] = route;
+  }
+
   final visited = <int>{};
   @override
   void initState() {
@@ -82,6 +128,10 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    final routes = _navigator == null ? null : DiaryReader._routes[_navigator!];
+    if (identical(routes?[_routeIdentity], _readerRoute)) {
+      routes?.remove(_routeIdentity);
+    }
     generation++;
     WidgetsBinding.instance.removeObserver(this);
     widget.diary?.removeListener(diaryChanged);
@@ -230,15 +280,21 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
     }
   }
 
-  List<DiaryEntry> get _posts => widget.preview || widget.calculateOnly
-      ? const []
-      : (widget.diary?.published ?? const <DiaryEntry>[]).where((e) {
-          final scope = e.extra['_alchemistScope'];
-          return DiaryPublication.of(e).active(e, widget.diary!.clock()) &&
-              (scope == null ||
-                  scope == 'public' ||
-                  scope == widget.diary?.api?.readerScope);
-        }).toList();
+  List<DiaryEntry> get _posts {
+    if (widget.preview || widget.calculateOnly) return const [];
+    final visible = (widget.diary?.published ?? const <DiaryEntry>[]).where((
+      e,
+    ) {
+      final scope = e.extra['_alchemistScope'];
+      return DiaryPublication.of(e).active(e, widget.diary!.clock()) &&
+          (scope == null ||
+              scope == 'public' ||
+              scope == widget.diary?.api?.readerScope);
+    }).toList();
+    if (widget.publicationIds == null) return visible;
+    final byId = {for (final e in visible) e.id: e};
+    return [for (final id in widget.publicationIds!.toSet()) ?byId[id]];
+  }
 
   Future<void> post(String id) async {
     if (_routing || widget.diary == null) return;
@@ -261,6 +317,7 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
               entry: target,
               diary: widget.diary,
               fromJournal: widget.fromJournal,
+              publicationIds: widget.publicationIds,
             ),
           ),
         ),
@@ -313,6 +370,7 @@ class _DiaryReaderState extends State<DiaryReader> with WidgetsBindingObserver {
             widget.entry;
   @override
   Widget build(BuildContext context) {
+    if (_duplicateRoute) return const SizedBox.shrink();
     final rootReader =
         !widget.preview &&
         !widget.calculateOnly &&
