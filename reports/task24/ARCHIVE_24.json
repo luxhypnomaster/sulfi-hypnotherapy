@@ -1,0 +1,9 @@
+{
+  "sha256": "27f0ded55bf2aa000c254e46cf84810f9b575df2d161ed13f50385b832f87b75",
+  "bytes": 6057,
+  "ZIP_CRC": "PASS",
+  "filesRead": 7,
+  "manifestHashAndSizeEntries": 6,
+  "manifest": "PASS",
+  "outerSHA": "Observed; no separate owner pin supplied"
+}

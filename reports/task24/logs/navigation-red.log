@@ -1,0 +1,279 @@
+00:00 +0: loading /dev/shm/sulfi24/test/task24_navigation_test.dart
+00:00 +0: 24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and saved task
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: <2>
+  Actual: <11>
+root + one queue; no queue stack
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:176:11)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 176
+The test description was:
+  24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and
+  saved task
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -1: 24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and saved task [E]
+  Test failed. See exception logs above.
+  The test description was: 24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and saved task
+  
+00:03 +0 -1: 24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and saved task
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: <2>
+  Actual: <11>
+root + one queue; no queue stack
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:176:11)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 176
+The test description was:
+  24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and
+  saved task
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +0 -2: 24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and saved task [E]
+  Test failed. See exception logs above.
+  The test description was: 24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and saved task
+  
+00:05 +0 -2: 24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop
+══╡ EXCEPTION CAUGHT BY FOUNDATION LIBRARY ╞════════════════════════════════════════════════════════
+The following assertion was thrown while dispatching notifications for DiaryController:
+setState() or markNeedsBuild() called during build.
+This DiaryReader widget cannot be marked as needing to build because the framework is already in the
+process of building widgets. A widget can be marked as needing to be built during the build phase
+only if one of its ancestors is currently building. This exception is allowed because the framework
+builds parent widgets before children, which means a dirty descendant will always be built.
+Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was:
+  StatefulElement#3eae3(DEFUNCT)
+The widget which was currently being built when the offending call was made was:
+  StatelessElement#cede2(DEFUNCT)
+
+When the exception was thrown, this was the stack:
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:5386:9)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:5398:6)
+#2      State.setState (package:flutter/src/widgets/framework.dart:1221:15)
+#3      _DiaryReaderState.diaryChanged (package:sulfi_hypnotherapy/ui/diary_reader.dart:57:5)
+#4      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:435:24)
+#5      DiaryController.notifyListeners (package:sulfi_hypnotherapy/services/diary_controller.dart:27:25)
+#6      DiaryController.sync (package:sulfi_hypnotherapy/services/diary_controller.dart:359:7)
+#7      _DiaryScreenState.initState (package:sulfi_hypnotherapy/ui/diary_screen.dart:39:17)
+#8      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5963:55)
+#9      ComponentElement.mount (package:flutter/src/widgets/framework.dart:5806:5)
+...     Normal element mounting (260 frames)
+#269    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+#270    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7277:36)
+#271    Element.updateChild (package:flutter/src/widgets/framework.dart:4072:18)
+#272    Element.updateChildren (package:flutter/src/widgets/framework.dart:4268:32)
+#273    MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7308:17)
+#274    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#275    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#276    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#277    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#278    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#279    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#280    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#281    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#282    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#283    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#284    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#285    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#286    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#287    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#288    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#289    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#290    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#291    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#292    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#293    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#294    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#295    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#296    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#297    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#298    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#299    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#300    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#301    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#302    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#303    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#304    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#305    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#306    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#307    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#308    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#309    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#310    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#311    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#312    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#313    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#314    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#315    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#316    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#317    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#318    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#319    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#320    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#321    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#322    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#323    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#324    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#325    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#326    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#327    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#328    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#329    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#330    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#331    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#334    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#335    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#336    WidgetTester.pump.<anonymous closure> (package:flutter_test/src/widget_tester.dart:652:53)
+#339    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#340    WidgetTester.pump (package:flutter_test/src/widget_tester.dart:652:27)
+#341    io15 (file:///dev/shm/sulfi24/test/support/task15_harness.dart:20:13)
+<asynchronous suspension>
+#342    main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:231:9)
+<asynchronous suspension>
+#343    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#344    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+The DiaryController sending notification was:
+  Instance of 'DiaryController'
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Главная-контекст": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:235:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 235
+The test description was:
+  24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (2) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:07 +0 -3: 24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop [E]
+  Test failed. See exception logs above.
+  The test description was: 24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop
+  
+00:07 +0 -3: 24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'diary-next-post'>]: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:265:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 265
+The test description was:
+  24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +0 -4: 24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter [E]
+  Test failed. See exception logs above.
+  The test description was: 24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter
+  
+00:09 +0 -4: 24 RED→GREEN root deep-link reader system Back has deterministic journal fallback
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TypeWidgetFinder:<Found 0 widgets with type "DiaryScreen": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:306:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 306
+The test description was:
+  24 RED→GREEN root deep-link reader system Back has deterministic journal fallback
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:10 +0 -5: 24 RED→GREEN root deep-link reader system Back has deterministic journal fallback [E]
+  Test failed. See exception logs above.
+  The test description was: 24 RED→GREEN root deep-link reader system Back has deterministic journal fallback
+  
+00:10 +0 -5: 24 in-post next-page preserves publication ID and route; post controls remain distinct
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Название post-0": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///dev/shm/sulfi24/test/task24_navigation_test.dart:340:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///dev/shm/sulfi24/test/task24_navigation_test.dart line 340
+The test description was:
+  24 in-post next-page preserves publication ID and route; post controls remain distinct
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:12 +0 -6: 24 in-post next-page preserves publication ID and route; post controls remain distinct [E]
+  Test failed. See exception logs above.
+  The test description was: 24 in-post next-page preserves publication ID and route; post controls remain distinct
+  
+00:12 +0 -6: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN CLIENT queue overlay 10 taps has one route; system Back restores exact parent and saved task
+  /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN MASTER queue overlay 10 taps has one route; system Back restores exact parent and saved task
+  /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN next-post replaces ten siblings; Back restores original journal filter
+  /dev/shm/sulfi24/test/task24_navigation_test.dart: 24 RED→GREEN reader -> journal replaces reader, Back returns home without reader loop
+  ... and 2 more
