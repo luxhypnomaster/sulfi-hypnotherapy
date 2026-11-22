@@ -1,0 +1,40 @@
+{
+  "task": 23,
+  "date": "2026-11-21",
+  "files": [
+    {
+      "file": "00_START_HERE.md",
+      "sha256": "54fe801f5eeeb5862d36327c894a1d9a69388a518bb1fd8b6c4368b78b0deabe",
+      "bytes": 1888
+    },
+    {
+      "file": "01_TASK.md",
+      "sha256": "ee0648d3cbd4d48f45e27ea3fcaf9171110e083e14122975072a9f3a0a8a51b3",
+      "bytes": 3952
+    },
+    {
+      "file": "02_COORDINATION.md",
+      "sha256": "cd29b61d94dafc54325e7db2c298f7d3ede40bfd9cb24bdee572b07574e3a77b",
+      "bytes": 1098
+    },
+    {
+      "file": "03_ACCEPTANCE.csv",
+      "sha256": "44413b3b3bf2673d69b8b06fe4129abbd0efbd0ee4c08b70258635bb54566c88",
+      "bytes": 2070
+    },
+    {
+      "file": "04_SOURCES.md",
+      "sha256": "67cb773835722f46625913c9fce86ab1dcf3783303c02aed6e24c954831b8d4e",
+      "bytes": 930
+    },
+    {
+      "file": "05_CODEX_COMMAND.txt",
+      "sha256": "566f7d5435bd2700b7f837a0f40312c1ae9e1890ead6fbb255f85773836e0c49",
+      "bytes": 905
+    }
+  ],
+  "entry_count": 6,
+  "scope": "parallel isolated track, no production mutation",
+  "revision": "v1.1 — owner defers APK/native build",
+  "manifest_note": "OWNER PRIO: NO APK BUILD, release, emulator, or device testing until pending development assignments complete. Native toolchain READ-ONLY analysis & QA plans only."
+}

@@ -1,0 +1,21 @@
+test_id;priority;expected;method;pass_level
+T23-001;P0;read-only actual git/DB baseline + exact source SHA;audit;SOURCE
+T23-002;P0;upgrade old local SQLite/sidecars: owned user tracks visible or precise blocker;fixture integration;TEST
+T23-003;P0;offline cold start: personal drafts visible without Google;widget/integration;TEST
+T23-004;P0;corruption handler never triggers automatic destructive cleanup;negative test;TEST
+T23-005;P0;unknown-owned media is quarantined and never silently GC deleted;negative test;TEST
+T23-006;P0;same account data source alias verified without mixing other owners;fixture integration;TEST
+T23-007;P0;A→B account swap blocks private overlays without deleting A assets;unit/integration;TEST
+T23-008;P0;history/session exact manifest remains unchanged after update;fixture comparison;TEST
+T23-009;P0;template/module/audio content survives restart/reinstall-as-update;fixture/integration;TEST
+T23-010;P1;selected capsule export includes only expected owned materials and deps;fixture integration;TEST
+T23-011;P1;capsule import dry-run rejects corrupt/tampered zip without partial visible writes;negative integration;TEST
+T23-012;P1;legacy capsule round trip backward-compatible or documented blocker;fixture compare;TEST
+T23-013;P0;ARM Flutter bundle never conflated with native APK / signer;artifact audit;SOURCE
+T23-014;P0;repeatable Gradle build command version pin and no key leakage;script dry-run;TEST
+T23-015;P0;existing applicationIds and signing fingerprint policy preserved;source gate;SOURCE
+T23-016;P0;versionCode increases if actual release candidate produced, no Android downgrade;build/manifest;TEST
+T23-017;P0;native build deferred by owner; report previous CI billing 0steps without new run;read-only status;SOURCE
+T23-018;P1;native instrumentation / two phones explicitly DEFERRED_BY_OWNER to later release;QA report;REPORT
+T23-019;P0;verified source↔test↔requirements and draft PR provenance;handoff;REPORT
+T23-020;P0;no server/HEAD/rating/Codex21/22 overwrite, no main merge;diff audit;SOURCE
