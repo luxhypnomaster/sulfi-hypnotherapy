@@ -1,0 +1,39 @@
+{
+  "source": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde",
+  "pr": 54,
+  "reportPackageArtifactsVerified": 22,
+  "additionalIndexesVerified": 2,
+  "totalDelivered": 24,
+  "indexes": [
+    {
+      "name": "DELIVERY_22.md",
+      "bytes": 6847,
+      "sha256": "9d3f6f27b8e210641c4104fbee91b31da12c1f266e478698296270c7fa206a16",
+      "id": "1PcBCsKs8YObYLiXnRmAlsLeTRqOjVJX0",
+      "url": "https://docs.google.com/document/d/1PcBCsKs8YObYLiXnRmAlsLeTRqOjVJX0/edit?usp=drivesdk&ouid=111638930277954985481&rtpof=true&sd=true",
+      "metadataVerified": true,
+      "downloadSHA256": "9d3f6f27b8e210641c4104fbee91b31da12c1f266e478698296270c7fa206a16",
+      "downloadBytes": 6847,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:20:48.796742+00:00"
+    },
+    {
+      "name": "DRIVE_READBACK_22.json",
+      "bytes": 14164,
+      "sha256": "00247050e09c40f3f9cb80e975a900e4bb04c212d69433831dbc08e60ca21455",
+      "id": "1eh9Kfo-i_Q8dvOpiUu6_RBWTQ-8n3rUj",
+      "url": "https://drive.google.com/file/d/1eh9Kfo-i_Q8dvOpiUu6_RBWTQ-8n3rUj/view?usp=drivesdk",
+      "metadataVerified": true,
+      "downloadSHA256": "00247050e09c40f3f9cb80e975a900e4bb04c212d69433831dbc08e60ca21455",
+      "downloadBytes": 14164,
+      "rawReadback": "PASS",
+      "checkedAt": "2026-11-22T11:20:48.796742+00:00"
+    }
+  ],
+  "allRawReadbacks": "PASS",
+  "native": "DEFERRED_BY_OWNER",
+  "apkBuilt": false,
+  "mainUnchanged": true,
+  "productionWrites": false,
+  "evidenceFrozenCommit": "c713f2f3fd21c68d6eab9cb8551dc462b9e08487"
+}
