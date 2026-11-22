@@ -390,23 +390,17 @@ class _AlchemistStoreScreenState extends State<AlchemistStoreScreen> {
               const DropdownMenuItem(value: null, child: Text('Все материалы')),
               const DropdownMenuItem(
                 value: 'collection',
-                child: const Text('Сборки'),
+                child: Text('Сборки'),
               ),
               const DropdownMenuItem(
                 value: 'package',
-                child: const Text('ZIP-пакеты'),
+                child: Text('ZIP-пакеты'),
               ),
-              const DropdownMenuItem(
-                value: 'track',
-                child: const Text('Треки'),
-              ),
-              const DropdownMenuItem(
-                value: 'module',
-                child: const Text('Модули'),
-              ),
+              const DropdownMenuItem(value: 'track', child: Text('Треки')),
+              const DropdownMenuItem(value: 'module', child: Text('Модули')),
               const DropdownMenuItem(
                 value: 'template',
-                child: const Text('Программы'),
+                child: Text('Программы'),
               ),
               const DropdownMenuItem(value: 'session', child: Text('Сессии')),
               if (widget.controller.project22 != null)
