@@ -1,0 +1,156 @@
+[
+  {
+    "name": "ACCEPTANCE_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/ACCEPTANCE_22.md",
+    "bytes": 9417,
+    "sha256": "180882c49ee2975bf9a31cb5209858bf332739986bbb109ce153000c6db0c736",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "CHANGES_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/CHANGES_22.md",
+    "bytes": 4243,
+    "sha256": "0196f7b0834e5fc1457cc1f070ef2b415743c29493cba5bdb61f98819f53d187",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "CODEX_EFFICIENCY_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/CODEX_EFFICIENCY_22.md",
+    "bytes": 2919,
+    "sha256": "fc8b81103ff7fa24bb10f7aa69040d7bbe2e6c1ae90d6c998931862f144ff410",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "COVERAGE_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/COVERAGE_22.md",
+    "bytes": 2346,
+    "sha256": "8770f4d50da91fcfd7dea0fdbba9bae433369c062587141391a602886847b533",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "ISSUES_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/ISSUES_22.md",
+    "bytes": 4446,
+    "sha256": "a776f8bf14099a63cd76e0dd38bf06d48f2f0eb79e3eb6d3056a56c92086814e",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "OWNER_QA_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/OWNER_QA_22.md",
+    "bytes": 3760,
+    "sha256": "b1f567de0ef024085b5f7e6c8b945cb3b507823bba7403c9edabfd4b0f6939de",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "PROGRESS.md",
+    "local": "/dev/shm/sulfi22/reports/task22/PROGRESS.md",
+    "bytes": 5399,
+    "sha256": "388e29bbe0572d9cf38c2e234dc530ad8addcf9d85dee8214a10f93625b66251",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "RATINGS_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/RATINGS_22.md",
+    "bytes": 4852,
+    "sha256": "86173238d3dd646afa461a0b4564658f3dfb4b9f45b3278afaee7b995e34f8af",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "REPLAY_AND_PERFORMANCE_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/REPLAY_AND_PERFORMANCE_22.md",
+    "bytes": 3004,
+    "sha256": "d97ea187b53f00551b4857d3cf65715b7fa94c663b7b067ec59029c1f08e97fe",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "RESULT_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/RESULT_22.md",
+    "bytes": 5449,
+    "sha256": "5fb189ce0f7dfdd7d8a533b0e26718c561290568099d039fc9686e9532101972",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "SERVER_BASELINE_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/SERVER_BASELINE_22.md",
+    "bytes": 6016,
+    "sha256": "9f1bc0f04dc433ccd397506ea06161f8fbc0fbf13d28db9b35d21bd32398e7f1",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "TESTS_22.md",
+    "local": "/dev/shm/sulfi22/reports/task22/TESTS_22.md",
+    "bytes": 6528,
+    "sha256": "7a58dae2d2d9de1305c77fc990d3e8c5ec5d3fe6e1dce77028158268cd12a8e5",
+    "mime": "text/markdown"
+  },
+  {
+    "name": "ACCEPTANCE_22.csv",
+    "local": "/dev/shm/sulfi22/reports/task22/ACCEPTANCE_22.csv",
+    "bytes": 14355,
+    "sha256": "aaba7baf294445ee7722920bbdf8197f8df2138330b81a86fc8477c0a87fa02c",
+    "mime": "text/csv"
+  },
+  {
+    "name": "ARCHIVE_INTEGRITY_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/ARCHIVE_INTEGRITY_22.json",
+    "bytes": 426,
+    "sha256": "8783934e4d9eb14901e29d74411be6925238fc4bef57451734217ca85bb6a4cf",
+    "mime": "application/json"
+  },
+  {
+    "name": "SOURCE_PURITY_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/SOURCE_PURITY_22.json",
+    "bytes": 648,
+    "sha256": "f24545f828f858006930306cc878ab1de0c7c67c56cbb7eeac27c4f56cf032d8",
+    "mime": "application/json"
+  },
+  {
+    "name": "CHECKPOINT_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/CHECKPOINT_22.json",
+    "bytes": 1208,
+    "sha256": "bf77f0f78373c40dc948af6c5aa7562cab27d50e3a03dc3ca26ccae62d4fd585",
+    "mime": "application/json"
+  },
+  {
+    "name": "LIVE_READONLY_HEALTH_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/LIVE_READONLY_HEALTH_22.json",
+    "bytes": 814,
+    "sha256": "b01cf9e5aa525f2ab8926ce6faa78a7079d596d6801f5dcbda586ce37aa79dd9",
+    "mime": "application/json"
+  },
+  {
+    "name": "SCRIPT_METADATA_READBACK_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/SCRIPT_METADATA_READBACK_22.json",
+    "bytes": 493,
+    "sha256": "8b730b49aac812adf3999ec475da8c989f9dd7d41a3283f9029f5ec4021919b2",
+    "mime": "application/json"
+  },
+  {
+    "name": "MANIFEST_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/MANIFEST_22.json",
+    "bytes": 6057,
+    "sha256": "08d5c71f3d654af107ec9a90b840a8c5bda9cba70eeddd7c245680a778ade446",
+    "mime": "application/json"
+  },
+  {
+    "name": "EVIDENCE_SCOPE_22.json",
+    "local": "/dev/shm/sulfi22/reports/task22/EVIDENCE_SCOPE_22.json",
+    "bytes": 470,
+    "sha256": "b4bb78cd5270e5a31042b77b1e83c68fb100f0e2057d952ac74948f6590d32c8",
+    "mime": "application/json"
+  },
+  {
+    "name": "EVIDENCE_22.zip",
+    "local": "/dev/shm/sulfi22/reports/task22/EVIDENCE_22.zip",
+    "bytes": 205532,
+    "sha256": "54575ed0a60ba6fd67449196d5e170ea4f2c0a78c1c8a091191c776852eaa273",
+    "mime": "application/zip"
+  },
+  {
+    "name": "task22-admin-seven-sections.png",
+    "local": "/dev/shm/sulfi22/reports/task22/screens/task22-admin-seven-sections.png",
+    "bytes": 128070,
+    "sha256": "bbb7d6f1d0dfecfe95f1e2c621f6256b5e067e6ed703d3aa11304df948a8bd99",
+    "mime": "image/png"
+  }
+]

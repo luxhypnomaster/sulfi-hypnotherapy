@@ -1,0 +1,24 @@
+✔ 22 server jobs actual durable idempotency, cold readback, lease fencing, incident redaction/quarantine (16.416931ms)
+✔ 22 portable encrypted complete backup independent restore, tamper/keys/private destination gates (7.609651ms)
+✔ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (3.293879ms)
+✔ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (11.663563ms)
+✔ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (40.913536ms)
+✔ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (31.399849ms)
+✔ 22 actual full SQLite/database roles/ratings/media encrypted restoration and cold readback (16.644711ms)
+✔ 22 Google bridge verifies before decode, stable legacy subject binding and no email/role auto-link (1.276057ms)
+✔ 22 policy stable immutable identity, exact public hash and changed parameters same version rejected (10.828974ms)
+✔ 22 only exposed course program gets context; five consumer direct votes keep professional null and weighted uncalibrated (8.300107ms)
+✔ 22 existing catalog/head plus durable course publish and batch jobs commit one exact receipt, no media copy (27.998483ms)
+✔ 22 seven real admin summaries/unknown quotas, role denied, scoped identities and normalized categories (5.631517ms)
+✔ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (6.310996ms)
+✔ 22 private metadata does not become public and listing never includes diary/private payloads (5.195947ms)
+✔ 22 exact target type/revision and legacy author ownership persist in server jobs (5.898557ms)
+✔ 22 uploaded backup and verified isolated restore are independent persisted history statuses (6.472257ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 398.779775

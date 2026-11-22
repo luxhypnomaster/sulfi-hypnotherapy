@@ -1,0 +1,555 @@
+00:00 +0: loading /dev/shm/sulfi22/test/task22_priority_test.dart
+00:00 +0: /dev/shm/sulfi22/test/task22_priority_test.dart: 22 real metadata HTTP overtakes pending15MiB at dispatch boundary; active task/file checkpoint preserved
+00:02 +1: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 seven real admin rows at9:16; quotas unknown, semantic errors, statistics single panel, CLIENT denied
+00:03 +2: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 seven real admin rows at9:16; quotas unknown, semantic errors, statistics single panel, CLIENT denied
+00:03 +3: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 seven real admin rows at9:16; quotas unknown, semantic errors, statistics single panel, CLIENT denied
+00:03 +4: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 seven real admin rows at9:16; quotas unknown, semantic errors, statistics single panel, CLIENT denied
+00:04 +5: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 seven real admin rows at9:16; quotas unknown, semantic errors, statistics single panel, CLIENT denied
+00:04 +6: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 optional feedback saves locally with no default consent, skip preserves completed history
+00:05 +7: /dev/shm/sulfi22/test/task22_runtime_test.dart: 22 six real runtime intents one overview; equal revision zero extra snapshot; owner isolation/cold cache
+00:05 +8: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 actual course editor local draft and one exact server receipt on repeated publish
+00:06 +9: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 actual course editor local draft and one exact server receipt on repeated publish
+00:06 +10: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 actual course editor local draft and one exact server receipt on repeated publish
+00:07 +11: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 actual course editor local draft and one exact server receipt on repeated publish
+00:08 +12: /dev/shm/sulfi22/test/workspace_screen_test.dart: home has one navigation row and opening it does not create a history record
+00:09 +13: /dev/shm/sulfi22/test/workspace_screen_test.dart: home has one navigation row and opening it does not create a history record
+00:09 +14: /dev/shm/sulfi22/test/task22_widgets_test.dart: 22 actual metadata batch UI persists intent and confirms one server receipt without changing audio revision
+00:11 +15: /dev/shm/sulfi22/test/workspace_screen_test.dart: small phone keeps start and navigation visible and returns from clock through structure
+00:12 +16: /dev/shm/sulfi22/test/v4_ui_test.dart: V4 editor shows ten types and explicitly creates repeat phase instances
+00:13 +17: /dev/shm/sulfi22/test/v4_ui_test.dart: V4 editor shows ten types and explicitly creates repeat phase instances
+00:14 +18: /dev/shm/sulfi22/test/v4_ui_test.dart: V4 editor shows ten types and explicitly creates repeat phase instances
+00:14 +19: /dev/shm/sulfi22/test/v4_ui_test.dart: V4 editor shows ten types and explicitly creates repeat phase instances
+00:14 +20: /dev/shm/sulfi22/test/v4_ui_test.dart: V4 editor shows ten types and explicitly creates repeat phase instances
+00:15 +21: /dev/shm/sulfi22/test/workspace_screen_test.dart: structure imports a selection from real library UI with zero initial delay
+00:15 +22: /dev/shm/sulfi22/test/v4_ui_test.dart: recorder exposes central start, disabled empty preview/save and correct bottom order
+00:16 +23: /dev/shm/sulfi22/test/v4_ui_test.dart: recorder exposes central start, disabled empty preview/save and correct bottom order
+00:16 +24: /dev/shm/sulfi22/test/workspace_screen_test.dart: closing clock editor discards only pending pause edit
+00:16 +25: /dev/shm/sulfi22/test/v4_ui_test.dart: thirty tracks scroll inside main while template and CTA stay fixed
+00:16 +26: /dev/shm/sulfi22/test/v4_ui_test.dart: thirty tracks scroll inside main while template and CTA stay fixed
+00:17 +27: /dev/shm/sulfi22/test/workspace_screen_test.dart: 25 blocks scroll, groups collapse, and menu reorder keeps attached delay
+00:17 +28: /dev/shm/sulfi22/test/workspace_screen_test.dart: 25 blocks scroll, groups collapse, and menu reorder keeps attached delay
+00:18 +29: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:18 +30: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:18 +31: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:18 +32: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:18 +33: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:18 +34: /dev/shm/sulfi22/test/workspace_screen_test.dart: switching modified draft can cancel without losing changes
+00:19 +35: /dev/shm/sulfi22/test/v4_models_recording_test.dart: real SQLite upgrade from v2 archives original payloads, keeps file bytes and IDs, runs only once
+00:19 +36: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +37: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +38: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +39: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +40: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +41: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +42: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +43: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +44: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +45: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +46: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +47: /dev/shm/sulfi22/test/workspace_screen_test.dart: home and structure adapt to a narrow short screen with large text
+00:19 +48: /dev/shm/sulfi22/test/workspace_screen_test.dart: optional workspace visual artifacts
+00:20 +49: /dev/shm/sulfi22/test/v42_migration_test.dart: G01 P05: SQLite v3 to v4 adds diary only; audio bytes, catalog, draft, template, frozen history/events identical
+00:20 +50: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:22 +51: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:22 +52: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:22 +53: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:22 +54: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:22 +55: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:23 +56: /dev/shm/sulfi22/test/v42_interactions_test.dart: A01 A02 A03 A04 R02: ten rows; row adds repeatedly, play does not add
+00:25 +57: /dev/shm/sulfi22/test/v42_diary_test.dart: D01 D02 D07: normal reader sees publications only, no author controls
+00:25 +58: /dev/shm/sulfi22/test/v42_interactions_test.dart: A05 R02 R03: personal origin and suggestions category combine without phase restriction
+00:25 +59: /dev/shm/sulfi22/test/v42_diary_test.dart: D03 D04 D06: reader and preview use same pagination; metadata only first page
+00:26 +60: /dev/shm/sulfi22/test/v42_interactions_test.dart: E01 E04 E05 E06: invariant collapse control; compact actions and fixed footer
+00:27 +61: /dev/shm/sulfi22/test/v42_diary_test.dart: D05 D06: author editor autosaves text; real diary renders
+00:29 +62: /dev/shm/sulfi22/test/v42_interactions_test.dart: E02 E03: real long press reorders mixed child elements and phases, retains IDs/delays
+00:30 +63: /dev/shm/sulfi22/test/v42_diary_test.dart: D10 H01: home author message opens its publication, four main navigation actions remain
+00:30 +64: /dev/shm/sulfi22/test/v42_interactions_test.dart: P04: module drag interleaves tracks and pause in one persisted sequence
+00:31 +65: /dev/shm/sulfi22/test/v42_interactions_test.dart: T01 T02: seven templates visible, selecting row applies without starting session
+00:31 +66: /dev/shm/sulfi22/test/v42_completion_test.dart: L08: confirmed stop opens history highlighting saved Interrupted run
+00:31 +67: /dev/shm/sulfi22/test/v42_completion_test.dart: L08: confirmed stop opens history highlighting saved Interrupted run
+00:32 +68: /dev/shm/sulfi22/test/v42_completion_test.dart: L08: confirmed stop opens history highlighting saved Interrupted run
+00:35 +69: /dev/shm/sulfi22/test/v42_completion_test.dart: L08: confirmed stop opens history highlighting saved Interrupted run
+00:37 +70: /dev/shm/sulfi22/test/v41_player_test.dart: P12 P13 P14 P16 P24: phase expansion and only scale scrolls; paused never starts sound
+00:37 +71: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:38 +72: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:38 +73: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:39 +74: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:39 +75: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:40 +76: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:40 +77: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:41 +78: /dev/shm/sulfi22/test/v42_completion_test.dart: L09: natural finish opens history with Completed run and actual events
+00:41 +79: /dev/shm/sulfi22/test/v41_player_test.dart: P27: indefinite work disables fake extension while allowing manual finish
+00:41 +80: /dev/shm/sulfi22/test/v41_player_test.dart: Task4 counters stay on right, flask percent on left and watch time below its control
+00:41 +81: /dev/shm/sulfi22/test/v41_player_test.dart: Task4 naturally completed phase is green and collapsed; seek-to-end still completes
+00:42 +82: /dev/shm/sulfi22/test/v41_player_test.dart: Task4 manually skipped phase stays incomplete and expanded
+00:42 +83: /dev/shm/sulfi22/test/task6_history_test.dart: six histories, separate multimedia, deletion gaps and clean capsule restore remain idempotent
+00:43 +84: /dev/shm/sulfi22/test/task6_history_test.dart: six histories, separate multimedia, deletion gaps and clean capsule restore remain idempotent
+00:43 +85: /dev/shm/sulfi22/test/task6_history_test.dart: six histories, separate multimedia, deletion gaps and clean capsule restore remain idempotent
+00:43 +86: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=false
+00:43 +87: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=false
+00:43 +88: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=false
+00:43 +89: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=false
+00:43 +90: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=false
+00:43 +91: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(360.0, 800.0) scale=1.3 long=true
+00:44 +92: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(412.0, 915.0) scale=1.0 long=false
+00:44 +93: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(412.0, 915.0) scale=1.0 long=true
+00:44 +94: /dev/shm/sulfi22/test/v41_player_test.dart: Task12 Size(412.0, 915.0) scale=1.3 long=false
+00:44 +95: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:45 +96: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:45 +97: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:45 +98: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:45 +99: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:46 +100: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:46 +101: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:46 +102: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:46 +103: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:47 +104: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:48 +105: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:48 +106: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:51 +107: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:51 +108: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:51 +109: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:52 +110: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:52 +111: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:52 +112: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:52 +113: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:52 +114: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:53 +115: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:53 +116: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:53 +117: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:53 +118: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:54 +119: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 three export menus invoke the existing system save dialog
+00:54 +120: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:55 +121: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:55 +122: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:55 +123: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:55 +124: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:55 +125: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 semantic module and template styles revert after Undo in actual editor and Home
+00:56 +126: /dev/shm/sulfi22/test/task4_ui_test.dart: one shared preview on home: two files, pause, seek, close and row state
+01:00 +127: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 catalog cards, exact install and diary installed/unavailable actions are real
+01:01 +128: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 catalog cards, exact install and diary installed/unavailable actions are real
+01:03 +129: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 catalog cards, exact install and diary installed/unavailable actions are real
+01:04 +130: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 catalog cards, exact install and diary installed/unavailable actions are real
+01:05 +131: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 catalog cards, exact install and diary installed/unavailable actions are real
+01:06 +132: /dev/shm/sulfi22/test/task4_ui_test.dart: approved recorder fields and icon controls stay visible; real capture service reaches finished state
+01:07 +133: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 320.0 1.0
+01:07 +134: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 320.0 1.0
+01:08 +135: /dev/shm/sulfi22/test/task4_ui_test.dart: history missing audio offers Close/Rebuild and preserves immutable source plus catalog
+01:09 +136: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 320.0 1.3
+01:10 +137: /dev/shm/sulfi22/test/task4_ui_test.dart: diary audio offers record/pick; cancel adds no block; successful recording persists in original draft
+01:11 +138: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 320.0 1.6
+01:12 +139: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 320.0 1.6
+01:12 +140: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:13 +141: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:13 +142: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +143: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +144: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +145: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +146: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +147: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.0
+01:14 +148: /dev/shm/sulfi22/test/task4_identity_test.dart: missing or replaced audio blocks exact replay; rebuild requires manual replacement/removal
+01:14 +149: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.3
+01:14 +150: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.3
+01:14 +151: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.3
+01:14 +152: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.3
+01:16 +153: /dev/shm/sulfi22/test/task4_capsule_test.dart: Task14 selective track roundtrip and idempotence without private records
+01:16 +154: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.6
+01:17 +155: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.6
+01:17 +156: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.6
+01:17 +157: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.6
+01:18 +158: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 360.0 1.6
+01:18 +159: /dev/shm/sulfi22/test/task4_capsule_test.dart: Task14 catalog cancel, commit failure, retry and corrupt staged source leave no partial content
+01:18 +160: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:19 +161: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:19 +162: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:19 +163: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:19 +164: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:20 +165: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.0
+01:20 +166: /dev/shm/sulfi22/test/task4_capsule_test.dart: merging equal session numbers preserves both histories and remains idempotent
+01:20 +167: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:20 +168: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:20 +169: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:20 +170: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +171: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +172: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +173: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +174: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +175: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +176: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:21 +177: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.3
+01:22 +178: /dev/shm/sulfi22/test/task4_capsule_test.dart: rejects traversal without touching destination
+01:22 +179: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:22 +180: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:22 +181: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:22 +182: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:22 +183: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:22 +184: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:23 +185: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:23 +186: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:23 +187: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:23 +188: /dev/shm/sulfi22/test/task5_ui_test.dart: Task14 history Home stack 412.0 1.6
+01:23 +189: /dev/shm/sulfi22/test/task5_ui_test.dart: Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution
+01:27 +190: /dev/shm/sulfi22/test/task5_ui_test.dart: Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution
+01:29 +191: /dev/shm/sulfi22/test/task5_ui_test.dart: Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution
+01:31 +192: /dev/shm/sulfi22/test/task5_ui_test.dart: Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution
+01:32 +193: /dev/shm/sulfi22/test/task5_ui_test.dart: Diary actual record route uses attachment form; empty name, save, reopen and capsule retain audio/text without library pollution
+01:35 +194: /dev/shm/sulfi22/test/task21_ui_runtime_test.dart: 21 real runtime cached catalog stays visible while metadata HEAD offline
+01:36 +195: /dev/shm/sulfi22/test/task5_ui_test.dart: selected run opens exact detail with note above fully expanded hierarchy; back shows History and creates no duplicates
+01:38 +196: /dev/shm/sulfi22/test/task21_ui_runtime_test.dart: 21 settings UI publishes only through verified capability and real sandbox receipt
+01:38 +197: /dev/shm/sulfi22/test/task5_ui_test.dart: history editor opens temporary direct steps, cancel leaves current/template/history intact
+01:40 +198: /dev/shm/sulfi22/test/task5_ui_test.dart: history editor opens temporary direct steps, cancel leaves current/template/history intact
+01:40 +199: /dev/shm/sulfi22/test/task21_runtime_test.dart: 21 STAGING MASTER draft -> prepare/commit -> CLIENT verified separate config; lost response no duplicate
+01:40 +200: /dev/shm/sulfi22/test/task5_ui_test.dart: restart restores exact pending detail; explicit repeat starts one NEW run and returns to its detail
+01:41 +201: /dev/shm/sulfi22/test/task5_ui_test.dart: restart restores exact pending detail; explicit repeat starts one NEW run and returns to its detail
+01:41 +202: /dev/shm/sulfi22/test/task5_ui_test.dart: restart restores exact pending detail; explicit repeat starts one NEW run and returns to its detail
+01:41 +203: /dev/shm/sulfi22/test/task5_ui_test.dart: restart restores exact pending detail; explicit repeat starts one NEW run and returns to its detail
+01:43 +204: /dev/shm/sulfi22/test/task5_ui_test.dart: restart restores exact pending detail; explicit repeat starts one NEW run and returns to its detail
+01:43 +205: /dev/shm/sulfi22/test/task21_receipt_recovery_test.dart: 21 cold settings after lost commit response and applied refresh recover original receipt without new revision (concurrent=true)
+01:43 +206: /dev/shm/sulfi22/test/task5_ui_test.dart: history module completion aggregates frozen children and never current catalogue contents
+01:44 +207: /dev/shm/sulfi22/test/task21_queue_test.dart: 21 control metadata overtakes waiting files, never preempts active file or alters its bytes/owner
+01:44 +208: /dev/shm/sulfi22/test/task5_ui_test.dart: Task6 history picture is attached to exact run, opens and deletes with confirmation without changing snapshot
+01:47 +209: /dev/shm/sulfi22/test/task21_preview_test.dart: 21 selected draft static preview reuses exact HOME9:16 geometry, no save/read/rotation/remote/media effects
+01:50 +210: /dev/shm/sulfi22/test/task5_ui_test.dart: Task6 one preview survives library navigation and closes globally
+01:50 +211: /dev/shm/sulfi22/test/task21_preview_test.dart: 21 existing full reader preview remains reachable from same editor
+01:52 +212: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:53 +213: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:53 +214: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:53 +215: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:53 +216: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:53 +217: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +218: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +219: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +220: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +221: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +222: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +223: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:55 +224: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:56 +225: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:56 +226: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:56 +227: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 multipage text is marked only at last rendered page end
+01:56 +228: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 reader fixture ready
+01:57 +229: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 explicit audio mark verified
+T20 independent link view ready
+01:58 +230: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+01:58 +231: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+01:58 +232: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+01:58 +233: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 reader own-audio manual mark without listening; ContentLink never invokes media downloader
+T20 link no-download verified
+01:58 +234: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 banner fake clock3/7, exact slot geometry, play uses shared preview and no read, revoke immediate
+01:59 +235: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 banner fake clock3/7, exact slot geometry, play uses shared preview and no read, revoke immediate
+02:00 +236: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:00 +237: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +238: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +239: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +240: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +241: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +242: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +243: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +244: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:01 +245: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:02 +245: /dev/shm/sulfi22/test/task18_performance_test.dart: 18 measured 1/15/50MiB actual TCP upload verification and checked download
+  Skip: Opt-in measured benchmark, not repeated in every unit CI
+02:02 +245 ~1: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:03 +246 ~1: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:03 +247 ~1: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 MASTER board sticker and two tabs; CLIENT route denied and sticker absent
+02:04 +248 ~1: /dev/shm/sulfi22/test/task20_widget_test.dart: 20 actual HOME 9:16 portrait/board/navigation unchanged through splash and entry
+T20 HOME prepare complete
+T20 HOME before capture
+T20 HOME after capture
+02:05 +249 ~1: /dev/shm/sulfi22/test/task18_download_test.dart: 18 download survives interruption; validates saved prefix and truncates only unconfirmed tail
+02:05 +250 ~1: /dev/shm/sulfi22/test/task18_download_test.dart: 18 corrupt saved chunk stops before network/installation and preserves diagnostic bytes
+02:05 +251 ~1: /dev/shm/sulfi22/test/task18_download_test.dart: 18 no server chunk support is explicit compatibility failure, no full-file fallback
+02:05 +252 ~1: /dev/shm/sulfi22/test/task18_download_test.dart: 18 wrong final receipt cannot mark download successful; retry reuses checked bytes
+02:06 +253 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 new category resolves existing case/whitespace while legacy IDs stay unchanged
+02:06 +254 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 verification is not 0/0 upload; pause causes and permission waits remain distinct
+02:06 +255 ~1: /dev/shm/sulfi22/test/task17_root_cause_test.dart: 17 G0 lifecycle before dispatch: zero attempts is not a user pause; same owner resume dispatches
+02:06 +256 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:06 +257 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:08 +258 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:08 +259 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:09 +260 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:09 +261 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 catalog autosave keeps active field, selection and composing input; editable author default persists
+02:09 +262 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+02:10 +263 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+02:11 +264 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+02:11 +265 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+02:12 +266 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 mandatory preview requires every page, not jumping to last; no reader status writes
+02:13 +267 ~1: /dev/shm/sulfi22/test/task17_catalog_session_test.dart: 17 G0 catalog API constructed before login must see later shared login and explicit logout
+02:13 +268 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 five editor taps open one review; enqueue failure preserves editor and exact local draft
+02:14 +269 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 five editor taps open one review; enqueue failure preserves editor and exact local draft
+02:14 +270 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 five editor taps open one review; enqueue failure preserves editor and exact local draft
+02:14 +271 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 five editor taps open one review; enqueue failure preserves editor and exact local draft
+02:14 +272 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 five editor taps open one review; enqueue failure preserves editor and exact local draft
+02:15 +273 ~1: /dev/shm/sulfi22/test/task16v_legacy_draft_visibility_test.dart: 16V legacy APK24 draft scope is readable only by same verified MASTER without row/media rewrite
+02:16 +274 ~1: /dev/shm/sulfi22/test/task17_ui_test.dart: 17 authoritative published author row is not Draft while reader feed cache has not refreshed
+02:16 +275 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: genuine fresh install succeeds, later missing DB with marker fails closed
+02:17 +276 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: missing DB with inherited audio does not create empty library or clean media
+02:17 +277 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: missing DB with WAL/journal evidence never creates or removes files
+02:17 +278 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: corrupt header leaves original DB, sidecars and private media byte-identical
+02:17 +279 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: zero byte DB is not treated as first install
+02:17 +280 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: valid SQLite with missing required table fails before RW bootstrap
+02:17 +281 ~1: /dev/shm/sulfi22/test/task16g_storage_test.dart: invalid JSON graph is not silently filtered into empty UI
+02:17 +282 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+02:17 +283 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+02:17 +284 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+02:18 +285 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+02:18 +286 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: legacy template ID/wire/capsule graph roundtrips unchanged as program
+02:19 +287 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: program tab label in MASTER leaves legacy rows untouched
+02:19 +288 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: program tab label in MASTER leaves legacy rows untouched
+02:20 +289 ~1: /dev/shm/sulfi22/test/task16g_programs_test.dart: program tab label in MASTER leaves legacy rows untouched
+02:20 +290 ~1: /dev/shm/sulfi22/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+02:21 +291 ~1: /dev/shm/sulfi22/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+02:22 +292 ~1: /dev/shm/sulfi22/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+02:24 +293 ~1: /dev/shm/sulfi22/test/task16b_queue_catalog_test.dart: G3 actual card deduplicates, restores cover and metadata, category multiselect renders
+02:24 +294 ~1: /dev/shm/sulfi22/test/task16b_auth_transport_test.dart: G1 server-rejected cached token stops showing authenticated without erasing identity or drafts
+02:25 +295 ~1: /dev/shm/sulfi22/test/task16b_auth_transport_test.dart: G1-G2 DNS/abort/5xx safely retry keyed writes, never unknown unsafe POST; sanitized telemetry
+02:25 +296 ~1: /dev/shm/sulfi22/test/task16b_auth_transport_test.dart: G1-G2 retry cannot send old task after account switch during backoff; 401 refresh is bounded
+02:26 +297 ~1: /dev/shm/sulfi22/test/task16b_announcement_e2e_test.dart: G3 catalog-before-diary: failure keeps local draft; exact 3-track announce reuses committed bytes, selective client install
+02:29 +298 ~1: /dev/shm/sulfi22/test/task16a_transfer_test.dart: catalog reflects existing verified login and logout instead of showing a second login
+02:29 +299 ~1: /dev/shm/sulfi22/test/task16a_transfer_test.dart: capsule retains official provenance, exact revisions and client rights; malformed metadata cannot grant MASTER
+02:30 +300 ~1: /dev/shm/sulfi22/test/task16a_transfer_test.dart: capsule retains official provenance, exact revisions and client rights; malformed metadata cannot grant MASTER
+02:30 +301 ~1: /dev/shm/sulfi22/test/task16a_transfer_test.dart: capsule retains official provenance, exact revisions and client rights; malformed metadata cannot grant MASTER
+02:30 +302 ~1: /dev/shm/sulfi22/test/task16a_auth_test.dart: official catalog provenance survives reload without changing canonical revisions; personal copy remains editable and local export needs no API
+02:31 +303 ~1: /dev/shm/sulfi22/test/task16_transport_test.dart: new GAS envelope follows content redirect without forwarding owner identity
+02:31 +304 ~1: /dev/shm/sulfi22/test/task16_transport_test.dart: logical deny, HTML and credential redirect fail closed
+02:31 +305 ~1: /dev/shm/sulfi22/test/task16_reader_scope_test.dart: logout immediately hides an already open restricted reader without deleting the cached record
+02:32 +305 ~2: /dev/shm/sulfi22/test/task16_reader_scope_test.dart: logout immediately hides an already open restricted reader without deleting the cached record
+02:33 +306 ~2: /dev/shm/sulfi22/test/task16_reader_scope_test.dart: logout immediately hides an already open restricted reader without deleting the cached record
+02:34 +307 ~2: /dev/shm/sulfi22/test/task16_http_test.dart: Drive wait has bounded timeout; redirect and response size stay guarded
+02:34 +308 ~2: /dev/shm/sulfi22/test/task16_http_test.dart: Drive wait has bounded timeout; redirect and response size stay guarded
+02:35 +309 ~2: /dev/shm/sulfi22/test/task16_catalog_ui_test.dart: offline publication card saves edited annotation at 200% font with keyboard; client never sees author editor
+02:41 +310 ~2: /dev/shm/sulfi22/test/task16_catalog_integration_test.dart: local cross-language author → production JS domain → client selective install, metadata-only retry and revoke
+02:42 +311 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:44 +312 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:44 +313 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:45 +314 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:47 +315 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:49 +316 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:50 +317 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:50 +318 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.0
+02:53 +319 ~2: /dev/shm/sulfi22/test/task15_export_test.dart: G2 visible Import ZIP routes through shared catalog into empty profile and existing preview
+02:58 +320 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+02:59 +321 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+02:59 +322 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+02:59 +323 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+02:59 +324 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+03:00 +325 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+03:00 +326 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.3
+03:00 +327 ~2: /dev/shm/sulfi22/test/task15_diary_test.dart: DAY reader opens unread, last real page confirmation removes Home only; preview has no effects
+03:03 +328 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.6
+03:05 +329 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 320.0 scale 1.6
+03:06 +330 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 360.0 scale 1.0
+03:13 +331 ~2: /dev/shm/sulfi22/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry
+03:18 +332 ~2: /dev/shm/sulfi22/test/task15_crash_test.dart: G3 real subprocess SIGKILL before commit, reopen, reconcile and retry
+03:22 +333 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 360.0 scale 1.6
+03:24 +334 ~2: /dev/shm/sulfi22/test/task15_crash_test.dart: G3 real subprocess SIGKILL after commit, reopen, reconcile and retry
+03:31 +335 ~2: /dev/shm/sulfi22/test/task15_crash_test.dart: G3 real subprocess SIGKILL after commit, reopen, reconcile and retry
+03:36 +336 ~2: /dev/shm/sulfi22/test/task15_crash_test.dart: G3 real subprocess SIGKILL after commit, reopen, reconcile and retry
+03:37 +337 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 412.0 scale 1.6
+03:38 +338 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 shared shield safe area 412.0 scale 1.6
+03:42 +339 ~2: /dev/shm/sulfi22/test/task15_client_test.dart: CLI independent stores author -> immutable fake provider -> client media/read/exact install/player; reannounce/expiry/private isolation
+03:44 +340 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 module marker belongs to A, separate yellow label; template marker and Undo
+03:44 +341 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 module marker belongs to A, separate yellow label; template marker and Undo
+03:44 +342 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 client edition shield cannot grant author mode
+03:44 +343 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 client edition shield cannot grant author mode
+03:44 +344 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 client edition shield cannot grant author mode
+03:44 +345 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 client edition shield cannot grant author mode
+03:45 +346 ~2: /dev/shm/sulfi22/test/task15_ui_test.dart: G1 client edition shield cannot grant author mode
+03:46 +347 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: default section metadata and zero delays survive reopening independently of the template
+03:46 +348 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: displaying default sections preserves legacy group fingerprints and saved plans
+03:46 +349 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: new audio chooses its stage by category without sorting playback order
+03:47 +350 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v42 P05: legacy indefinite Silence can complete manually without changing snapshot
+03:47 +351 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v42 P05: legacy indefinite Silence can complete manually without changing snapshot
+03:47 +352 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v42 P05: legacy indefinite Silence can complete manually without changing snapshot
+03:47 +353 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v42 P05: legacy indefinite Silence can complete manually without changing snapshot
+03:47 +354 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v42 P05: legacy indefinite Silence can complete manually without changing snapshot
+03:47 +355 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: queued rapid changes keep newest delay, topic and order after reopening
+03:47 +356 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 forecast includes pre-delay, silence, work and audio without double counting
+03:47 +357 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 forecast includes pre-delay, silence, work and audio without double counting
+03:47 +358 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 forecast includes pre-delay, silence, work and audio without double counting
+03:47 +359 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: deleting source template does not delete the independent draft
+03:47 +360 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 liquid is inverse progress at 25 and 75 percent
+03:47 +361 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: numbers are assigned atomically on start and never reused after history deletion
+03:47 +362 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 audio seek is bounded, journaled and preserves paused media controls
+03:47 +363 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 audio seek is bounded, journaled and preserves paused media controls
+03:47 +364 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: renaming and notes do not alter the execution snapshot
+03:47 +365 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 repeated modules, direct interval, phase boundaries and double navigation preserve paused
+03:48 +366 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 repeated modules, direct interval, phase boundaries and double navigation preserve paused
+03:48 +367 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: referenced asset deletion is blocked without losing audio bytes
+03:48 +368 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 completed occurrences persist, then clear for replay rather than using list index
+03:48 +369 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 completed occurrences persist, then clear for replay rather than using list index
+03:48 +370 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 legacy next preserves paused silence and seek is unavailable
+03:48 +371 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 legacy next preserves paused silence and seek is unavailable
+03:48 +372 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: pause rejects negative/over-limit values and persists individual seconds
+03:48 +373 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 unknown work stays unknown and extension updates only effective forecast
+03:48 +374 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: immutable snapshot lists cannot be edited through aliases
+03:48 +375 ~2: /dev/shm/sulfi22/test/session_storage_test.dart: v1 to v2 migration preserves original metadata, IDs and private audio
+03:48 +376 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 backward navigation increases remaining forecast without changing actual elapsed
+03:48 +377 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 repeated exit commands are idempotent
+03:48 +378 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: v41 zero-duration completion has valid full progress and immutable execution IDs
+03:48 +379 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: early exit plays the entire subsequent exit phase and stores skipped IDs
+03:49 +380 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: early exit retains leading silence in the selected Exit phase
+03:49 +381 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: media panel pause and play control silence without starting another run
+03:49 +382 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: first pre-delay runs before any audio and session numbering starts only on explicit start
+03:49 +383 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: repeated ticks cannot skip or duplicate a block
+03:49 +384 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: pausing a pre-delay freezes remaining and elapsed time
+03:49 +385 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: audio pause and resume preserve playhead and do not reload the file
+03:49 +386 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: audio completion advances once into timed silence and ends truthfully
+03:49 +387 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: (setUpAll)
+03:49 +387 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: free work can be extended without changing frozen plan or source draft
+03:49 +388 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: free work can be extended without changing frozen plan or source draft
+03:49 +389 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: free work can be extended without changing frozen plan or source draft
+03:49 +390 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: free work can be extended without changing frozen plan or source draft
+03:49 +391 ~2: /dev/shm/sulfi22/test/session_engine_test.dart: free work can be extended without changing frozen plan or source draft
+03:49 +392 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:49 +393 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:50 +394 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:50 +395 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:50 +396 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:50 +397 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:50 +398 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: both wheels update before pointer release; seconds naturally cross a minute
+03:51 +399 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: horizontal movement, eye, background and arrow taps cannot change time
+03:51 +400 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: small movements accumulate; cancellation and next touch do not reuse residue
+03:51 +401 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: (setUpAll)
+03:51 +401 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: metal texture moves continuously between numerical detents
+03:51 +402 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: reference sums are 2:12, 4:57, 1:06 and 8:15; disabled and empty phases use execution rules
+03:51 +403 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: reference sums are 2:12, 4:57, 1:06 and 8:15; disabled and empty phases use execution rules
+03:52 +404 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: detents use logical finger travel at pixel ratio 3.0
+03:52 +405 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: milliseconds accumulate before formatting, delays counted once, legacy unknown keeps minimum
+03:52 +406 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: whole visible wheel surface accepts a vertical drag
+03:52 +407 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: isolated edit changes sums before Apply; source/cache/templates unchanged until one explicit commit
+03:52 +408 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: accepted detents request haptics; stopped wheels do not
+03:52 +409 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: discard and cancel child reload do not save current plan; stage reload refreshes metadata only
+03:52 +410 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: discard and cancel child reload do not save current plan; stage reload refreshes metadata only
+03:52 +411 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: accessible increase/decrease changes seconds without visible extra controls
+03:52 +412 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: active frozen run is not interrupted by opening or reinitializing an editor
+03:52 +413 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: safe area and large text keep actions visible at Size(360.0, 640.0)
+03:52 +414 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: parent change causes a visible conflict; newer topic and pending edit survive
+03:52 +415 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: safe area and large text keep actions visible at Size(320.0, 600.0)
+03:52 +416 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real SQLite write refusal retains previous plan and pending edit; retry succeeds
+03:52 +417 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: safe area and large text keep actions visible at Size(412.0, 915.0)
+03:52 +418 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: two copies of a module stay independent; updating definition affects future inserts only
+03:53 +419 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: pre-track Apply, reopen, reset/cancel, reset/apply and system back preserve the correct object
+03:53 +420 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: pre-track Apply, reopen, reset/cancel, reset/apply and system back preserve the correct object
+03:53 +421 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: pre-track Apply, reopen, reset/cancel, reset/apply and system back preserve the correct object
+03:53 +422 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: pre-track Apply, reopen, reset/cancel, reset/apply and system back preserve the correct object
+03:53 +423 ~2: /dev/shm/sulfi22/test/pause_final_test.dart: pre-track Apply, reopen, reset/cancel, reset/apply and system back preserve the correct object
+03:53 +424 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only
+03:57 +425 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only
+03:58 +426 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only
+03:59 +427 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: four footer controls, exact sums on expanded/collapsed phases, 45 seconds updates pending only
+03:59 +428 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:00 +429 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:01 +430 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:01 +431 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:01 +432 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +433 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +434 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +435 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +436 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +437 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +438 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +439 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +440 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +441 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:02 +442 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:03 +443 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: system Back offers Apply, discard or stay; discard keeps source and media
+04:03 +444 ~2: /dev/shm/sulfi22/test/library_service_test.dart: reset removes all imported data without touching external files
+04:03 +445 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module definition cancel preserves catalogue; Save changes refreshes linked instances
+04:03 +446 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module definition cancel preserves catalogue; Save changes refreshes linked instances
+04:05 +447 ~2: /dev/shm/sulfi22/test/library_screen_test.dart: Russian empty library and three library sections
+04:06 +448 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real item drag changes order only after Apply
+04:07 +449 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real item drag changes order only after Apply
+04:08 +450 ~2: /dev/shm/sulfi22/test/library_screen_test.dart: import allows editing title and persists on save
+04:08 +451 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module instance Apply changes only selected copy, definition and root remain separate
+04:09 +452 ~2: /dev/shm/sulfi22/test/library_screen_test.dart: empty title stays in editor; cancel discards imported bytes
+04:09 +453 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: catalogue version conflict preserves external definition and local pending module
+04:09 +454 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: catalogue version conflict preserves external definition and local pending module
+04:10 +455 ~2: /dev/shm/sulfi22/test/library_screen_test.dart: invalid import shows readable error
+04:10 +456 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:11 +457 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:12 +458 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:12 +459 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:13 +460 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:14 +461 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:14 +462 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:14 +463 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: audio picker keeps exact module parent and repeated selection across return/Apply
+04:14 +464 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:15 +465 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:15 +466 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:15 +467 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:15 +468 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +469 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +470 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +471 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +472 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +473 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:16 +474 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +475 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +476 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +477 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +478 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +479 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +480 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +481 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +482 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +483 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +484 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +485 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: template replacement warns and cancels; chosen plan remains staged until Apply
+04:17 +486 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: pagination retains exact Unicode including CRLF, whitespace and long words across 50+ pages
+04:18 +487 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:18 +488 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:19 +489 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:19 +490 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:19 +491 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:19 +492 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: real drag moves whole phases and module copies, preserving descendants
+04:20 +493 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: save error retains editor values, retry persists; short message grows and has no newline limit
+04:22 +494 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: held drag autoscrolls a long module without escaping its parent
+04:22 +495 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: reader has green active buttons, grey disabled, both active on middle page; preview matches
+04:22 +496 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: safe 360dp and 200 percent fonts keep all four actions and final add reachable
+04:23 +497 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: safe 360dp and 200 percent fonts keep all four actions and final add reachable
+04:23 +498 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: author journal search/date disables drag; reader controls absent; delete needs confirmation
+04:24 +499 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: author journal search/date disables drag; reader controls absent; delete needs confirmation
+04:24 +500 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 insert after module and after track keeps repeated audio, pauses and exact parents until Apply
+04:25 +501 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 insert after module and after track keeps repeated audio, pauses and exact parents until Apply
+04:27 +502 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 insert after module and after track keeps repeated audio, pauses and exact parents until Apply
+04:27 +503 ~2: /dev/shm/sulfi22/test/diary_multimedia_test.dart: render real Flutter editor/reader/journals/sticker for review, synthetic content only
+04:28 +504 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 phase insertion and four footer actions preserve template and explicit current-plan commit
+04:29 +505 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 long-press moves module past a direct pause without losing nesting, IDs or playback order
+04:30 +506 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 long-press moves module past a direct pause without losing nesting, IDs or playback order
+04:30 +507 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 long-press moves module past a direct pause without losing nesting, IDs or playback order
+04:30 +508 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 long-press moves module past a direct pause without losing nesting, IDs or playback order
+04:30 +509 ~2: /dev/shm/sulfi22/test/diary_google_publishing_test.dart: offline server preserves verified local author workspace but grants no cloud permission
+04:30 +510 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 container removal confirms and leaves source, catalogue and audio intact until Apply
+04:30 +511 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 container removal confirms and leaves source, catalogue and audio intact until Apply
+04:30 +512 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 container removal confirms and leaves source, catalogue and audio intact until Apply
+04:30 +513 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 container removal confirms and leaves source, catalogue and audio intact until Apply
+04:30 +514 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task2 container removal confirms and leaves source, catalogue and audio intact until Apply
+04:31 +515 ~2: /dev/shm/sulfi22/test/diary_google_publishing_test.dart: one app shows Google author login but no editor or raw-token field to a reader
+04:33 +516 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: catalogue create fills definition, saves once, survives restart and inserts full independent copies
+04:34 +517 ~2: /dev/shm/sulfi22/test/diary_google_publishing_test.dart: backgrounding during cloud save cannot overwrite its confirmed version with stale autosave
+04:35 +518 ~2: /dev/shm/sulfi22/test/diary_google_publishing_test.dart: backgrounding during cloud save cannot overwrite its confirmed version with stale autosave
+04:35 +519 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +520 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +521 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +522 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +523 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +524 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +525 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +526 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +527 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +528 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +529 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:35 +530 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: module save validates name and contents; old empty definition opens editor instead of inserting empty
+04:36 +531 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: new module SQLite refusal retains fields and composition; explicit retry saves one definition
+04:37 +532 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: existing filled session module can explicitly save its edited composition to catalogue without overwriting the original
+04:38 +533 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: templates and modules tabs retain template actions and expose one module creation action
+04:38 +534 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: approved home composition has live data, left diary tab, portrait-only crop and fixed full template
+04:39 +535 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: home controls and full template remain accessible at narrow, landscape and 200 percent text sizes
+04:39 +536 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: working structure screenshots use the reference data, not a baked mockup
+04:41 +537 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task3 home gives long topic two lines and keeps number and date adjacent
+04:41 +538 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: task3 home start follows playable plan and empty structure keeps four compact actions
+04:41 +539 ~2: /dev/shm/sulfi22/test/mvp_structure_test.dart: (tearDownAll)
+04:41 +539 ~2: All tests passed!

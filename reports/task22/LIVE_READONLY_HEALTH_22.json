@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-11-22T11:08:07.633505+00:00",
+  "operation": "GET health (read-only)",
+  "scriptMatchesHistorical": true,
+  "historicalVersion": 6,
+  "administrativeVersionReadback": false,
+  "authenticatedAPI": "NOT_RUN",
+  "storageWrites": false,
+  "http": 200,
+  "contentType": "application/json; charset=utf-8",
+  "bodySHA256": "33bc146a6280a7e27b58481ab307116302061d4dc6d669e8a091e0c70e90aefc",
+  "bodyBytes": 696,
+  "json": true,
+  "ok": true,
+  "status": 200,
+  "errorCode": null,
+  "capabilities": {
+    "name": "Сервер Проекта Алхимик",
+    "schemaVersion": 1,
+    "authorizationPolicyVersion": 2,
+    "sourceSha": "1a0cf8e5a60144075eec793767953586bfa319a2",
+    "fullSourceReady": true,
+    "mediaTransferReady": true,
+    "chunkBytes": 262144,
+    "liveVerified": false
+  }
+}

@@ -1,0 +1,11 @@
+# Последние подтверждённые дефекты и исправления №22
+
+1. Повтор принятого feedback после withdrawal раньше снова требовал нынешний доступ к материалу. Теперь verified same-owner request сначала сверяет immutable prior receipt и payload digest. Different payload→409. Старый receipt не уменьшает local serverSequence и не отменяет более новое revoke. Node+real loopback Flutter regression: final-receipt-server-target/final-receipt-flutter-target; окончательные full logs отдельно.
+2. Ранее overview считывал все records на каждый запрос. Derived SQLite cache с change-version triggers на committed records/feedback/jobs/roles/backup меняет сводку только после релевантной записи. Controlled counter: три последовательных unchanged overview → один records scan; после metadata write → ровно второй scan; CLIENT403 без скана. Persistent cache/time/source, no hidden quota estimates. Это измерение количества обращений в Node SQLite, не benchmark скорости live GAS/сети.
+3. Upload+decrypt раньше мог называться restoreVerified. Теперь нужен независимый actual isolated database/files/manifest proof; отдельный history test различает upload-only и restore-verified. Full candidate SQLite/media restore выполняется фактически. Production Drive adapter/backup gate не получен.
+4. Policy document hash раньше мог меняться от createdBy при обычном recompute. Теперь stable immutable policy registry и точная ссылка weighted.policyHash=head.policyHash. Same policyId/configVersion with different parameters conflict. Rollback recomputes current consented evidence, не resurrects revoked reviews.
+5. В transient workspace часть поздних дополнений не была committed до environment replacement. Восстановление с f8ba3bd и текущие тесты выполнены заново, Git checkpoint-период сокращён. Старые потерянные логи не включены в итоги.
+
+Крупные live/native проверки не запускались, цифры пользовательской квоты/скорости production не выдуманы. CI billing не обходился.
+
+6. Wire JSON из persisted derived cache менял порядок metric keys; summary.take(3) скрывал Storage. Explicit presentation priority исправляет KPI-проекцию независимо от canonical object order. Тест не ослаблен; final target13 и полный539PASS/2SKIP подтверждают.

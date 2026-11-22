@@ -1,0 +1,12 @@
+{
+  "source": "a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde",
+  "reportsOnly": true,
+  "includedFileCountBeforeManifest": 37,
+  "secretPatternScan": "PASS",
+  "privateSourceIncluded": false,
+  "databaseOrMediaBytesIncluded": false,
+  "apkIncluded": false,
+  "screenshot": "Flutter synthetic fixture, not physical Android",
+  "folderInheritedSharing": "anyone:writer unchanged",
+  "credentialScanLimit": "Known credential patterns + explicit allowlist; no user data read."
+}

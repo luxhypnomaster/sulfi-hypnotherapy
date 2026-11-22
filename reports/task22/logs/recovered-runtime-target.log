@@ -1,0 +1,26 @@
+00:00 +0: loading /dev/shm/sulfi22/test/task22_runtime_test.dart
+test/task22_runtime_test.dart:24:13: Error: Method not found: 'SessionSnapshot'.
+  snapshot: SessionSnapshot(
+            ^^^^^^^^^^^^^^^
+test/task22_runtime_test.dart:22:3: Error: No named parameter with the name 'createdAt'.
+  createdAt: DateTime(2026),
+  ^^^^^^^^^
+lib/models/session_plan.dart:476:3: Context: Found this candidate, but the arguments don't match.
+  SessionRun({
+  ^^^^^^^^^^
+00:00 +0 -1: loading /dev/shm/sulfi22/test/task22_runtime_test.dart [E]
+  Failed to load "/dev/shm/sulfi22/test/task22_runtime_test.dart":
+  Compilation failed for testPath=/dev/shm/sulfi22/test/task22_runtime_test.dart: test/task22_runtime_test.dart:24:13: Error: Method not found: 'SessionSnapshot'.
+    snapshot: SessionSnapshot(
+              ^^^^^^^^^^^^^^^
+  test/task22_runtime_test.dart:22:3: Error: No named parameter with the name 'createdAt'.
+    createdAt: DateTime(2026),
+    ^^^^^^^^^
+  lib/models/session_plan.dart:476:3: Context: Found this candidate, but the arguments don't match.
+    SessionRun({
+    ^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /dev/shm/sulfi22/test/task22_runtime_test.dart: loading /dev/shm/sulfi22/test/task22_runtime_test.dart

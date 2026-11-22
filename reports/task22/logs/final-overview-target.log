@@ -1,0 +1,25 @@
+✔ 22 server jobs actual durable idempotency, cold readback, lease fencing, incident redaction/quarantine (12.338881ms)
+✔ 22 portable encrypted complete backup independent restore, tamper/keys/private destination gates (8.65276ms)
+✔ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (4.159475ms)
+✔ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (36.092792ms)
+✔ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (53.296134ms)
+✔ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (46.471204ms)
+✔ 22 actual full SQLite/database roles/ratings/media encrypted restoration and cold readback (16.618194ms)
+✔ 22 Google bridge verifies before decode, stable legacy subject binding and no email/role auto-link (1.20667ms)
+✔ 22 policy stable immutable identity, exact public hash and changed parameters same version rejected (8.587482ms)
+✔ 22 only exposed course program gets context; five consumer direct votes keep professional null and weighted uncalibrated (5.248627ms)
+✔ 22 existing catalog/head plus durable course publish and batch jobs commit one exact receipt, no media copy (54.399844ms)
+✔ 22 seven real admin summaries/unknown quotas, role denied, scoped identities and normalized categories (11.672204ms)
+✔ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (23.236695ms)
+✔ 22 private metadata does not become public and listing never includes diary/private payloads (9.380514ms)
+✔ 22 exact target type/revision and legacy author ownership persist in server jobs (9.109359ms)
+✔ 22 uploaded backup and verified isolated restore are independent persisted history statuses (9.341851ms)
+✔ 22 unchanged admin overview uses persistent derived cache, counters invalidate only on relevant writes (5.862298ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 680.655731

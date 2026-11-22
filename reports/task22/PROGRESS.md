@@ -14,3 +14,12 @@ Environment restart cleared /dev/shm after f8ba3bd; tracked source/checkpoints s
 
 ## G4–G5 восстановлены и расширены
 Курс-редактор с drag/order, отдельными локальными черновиками и exact operationResult/hash; CLIENT readiness/hash/receipt, frozen execution binding, последовательный курсор и отдельный добровольный course review. Существующие installer/queue18/engine переиспользуются. Seven-section UI с unknown-квотами, scoped lastGood/403 handling; metadata batch UI с persisted intent, parent/archive category fields. После восстановления 12 новых Flutter PASS, затем отдельные UI/runtime8 PASS после пакетного UI; Node14 PASS. Готовится окончательная полная регрессия. Live adapter/official rematerialization/category merge/backup schedule не заявлены завершёнными.
+
+## G6 итоговая фиксация
+Draft PR #54: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/54 (base PR52, не main). Report folder: https://drive.google.com/drive/folders/1xYICmox_IY9Z5CRSIqjPJFyGuN4nk9fB . Source52ea01c включает final receipt safety и cached overview; новые17Node +13Flutter tests. Full Flutter на54c1932:539PASS/2SKIP; после receipt fix9113800 повторный полный прогон. Последнее изменение Dart после9113800 — только formatter metadata_runtime, окончательные адресные проверки ещё обязательны. Итоговые результаты/хэши указываются в TESTS/CHECKPOINT. Production gates остались BLOCKED, native/APK DEFERRED_BY_OWNER. Upload/readback отчётов готовится; старые документы не удаляются.
+
+## Final local proof / delivery freeze
+Final code a5a4c771ab3f9fc9030d46fd6bb41a6a11ea1dde. Full Flutter539PASS/2SKIP/0FAIL; Node79PASS (same server bytes as52ea01c), legacy24PASS; all22 target13PASS, CLIENT define1PASS, analyze clean, format26/0. Latest UI bug was canonical key-order dependence, fixed without weakening test. Fresh readonly GET health200/JSON, no new admin-version/private-ACL proof; full live gates closed. Native/APK DEFERRED_BY_OWNER. Task22 overall PARTIAL;47 criteria PASS_LOCAL,7PARTIAL,2BLOCKED_LIVE,2DEFERRED_BY_OWNER. Delivery evidence/hash readback follows, no more app/server edits after code freeze.
+
+## Frozen report package
+Кодовый source и тестовые доказательства заморожены. Доставка вынесена в отдельные DELIVERY_22/DRIVE_READBACK_22, чтобы не менять хэши замороженного пакета; окончательные ссылки проверяются после raw download. Main/live/ACL/signing/personal data без изменений.
