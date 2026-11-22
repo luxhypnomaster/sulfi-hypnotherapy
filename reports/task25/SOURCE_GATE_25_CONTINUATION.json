@@ -1,0 +1,42 @@
+{
+  "status": "PASS_SOURCE",
+  "sourceSHA": "5790139b0c2dc45363434451aa951b14b496d8fc",
+  "basePR56": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+  "runtimeFilesChecked": 335,
+  "nativePinsChecked": 31,
+  "drift": [],
+  "nativeDrift": [],
+  "unexpectedRuntimeFiles": [],
+  "dependencyAncestry": {
+    "task21": true,
+    "task22_code": true,
+    "task23_code": true,
+    "task24_code": true,
+    "pr56": true
+  },
+  "nativeAPK": "BLOCKED_NOT_EXECUTED_BY_THIS_READ_ONLY_TOOL",
+  "ownerDevice": "NOT_RUN",
+  "serverProduction": "NOT_RUN",
+  "experimentalFlags": "unchanged reviewed source; default OFF",
+  "inspectionToolCodeSourceSHA": "5790139b0c2dc45363434451aa951b14b496d8fc",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "workflowActivation": "NOT_ACTIVATED_REVIEW_ONLY",
+  "realCertificateInspection": "BLOCKED_OWNER_AND_UNPROTECTED_MAIN_NOT_RUN",
+  "mainProtected": false,
+  "newCertificate": "NOT_CREATED",
+  "changesSincePriorCheckpoint": [
+    "reports/task25/MAIN_TRUST_BOUNDARY_25.json",
+    "reports/task25/RESUME_INPUT_25.json",
+    "reports/task25/SIGNING_INSPECT_DRYRUN_25.json",
+    "reports/task25/SIGNING_INSPECT_LINT_25.json",
+    "reports/task25/SIGNING_INSPECT_MAIN_PROPOSAL_25.diff",
+    "reports/task25/logs/python25_resume.log",
+    "reports/task25/logs/signing_inspect25.log",
+    "reports/task25/logs/signing_unprotected_RED_25.log",
+    "reports/task25/logs/signing_workflow_actionlint25.log",
+    "scripts/task25/review_only/sulfi-signing-inspect25.yml",
+    "scripts/task25/signing_inspect.py",
+    "scripts/task25/test_signing_inspect.py",
+    "scripts/task25/test_signing_workflow.py"
+  ]
+}
