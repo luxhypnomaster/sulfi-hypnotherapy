@@ -1,0 +1,14 @@
+............................................../opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py:1625: UserWarning: Duplicate name: 'emulator/emulator'
+  return self._open_to_write(zinfo, force_zip64=force_zip64)
+.........................................................
+----------------------------------------------------------------------
+Ran 103 tests in 0.638s
+
+OK
+{"status": "METADATA_EXTRACTED", "records": 1, "noRawDumpPublished": true}
+{"status": "NO_MINIDUMP_FOUND", "records": 0, "noRawDumpPublished": true}
+{"status": "NO_MINIDUMP_FOUND", "records": 0, "noRawDumpPublished": true}
+PASS_REAL_HOST_PC_CONTROL_BEFORE_ANY_EMULATOR_ACTION
+HOST_PC_DIAGNOSTIC_READY_SELFTEST_PASS_NO_RAW_DEBUGGER_OUTPUT
+{"status": "NO_MONITORED_HOST_SIGSEGV", "records": 0, "noRawKernelLog": true}
+{"status": "KERNEL_METADATA_UNAVAILABLE", "records": 0, "noRawKernelLog": true}

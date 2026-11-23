@@ -34,7 +34,11 @@ class ModuleTest(unittest.TestCase):
         for forbidden in ['bt full','read_memory','info registers','info locals','info args','generate-core-file','environ[']:
             self.assertNotIn(forbidden,p.GDB_SCRIPT.replace("os.environ['TASK25_PC_HELPER_DIRECTORY']",'FIXED').replace("os.environ['TASK25_PC_RESULT']",'FIXED'))
         self.assertIn("gdb.parse_and_eval('$pc')",p.GDB_SCRIPT)
-        self.assertIn('handle SIGSEGV stop noprint pass',p.GDB_SCRIPT)
+        self.assertIn('handle SIGSEGV stop print pass',p.GDB_SCRIPT)
+        self.assertNotIn('handle SIGSEGV stop noprint',p.GDB_SCRIPT)
+        self.assertIn('set logging file /dev/null',p.GDB_SCRIPT)
+        self.assertIn('set logging redirect on',p.GDB_SCRIPT)
+        self.assertIn("gdb.parse_and_eval('$_exitsignal')",p.GDB_SCRIPT)
         self.assertIn("gdb.execute(command, to_string=True)",p.GDB_SCRIPT)
 
 
