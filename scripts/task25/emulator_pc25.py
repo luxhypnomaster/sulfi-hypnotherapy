@@ -4,6 +4,7 @@
 The debugger reads registers and executable mappings only. No guest memory,
 stack unwinding, environment, raw debugger transcript or core is published.
 """
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -51,6 +52,9 @@ set follow-fork-mode parent
 set follow-exec-mode same
 set detach-on-fork on
 handle SIGPIPE nostop noprint pass
+handle SIGUSR1 nostop noprint pass
+handle SIGUSR2 nostop noprint pass
+handle SIGALRM nostop noprint pass
 handle SIGSEGV stop noprint pass
 python
 import gdb, json, os, sys
@@ -86,6 +90,7 @@ try:
             break
         if stopped['signal'] != 'SIGSEGV':
             report['status'] = 'UNEXPECTED_DEBUGGER_STOP_NO_PASS'
+            report['unexpectedSignal'] = stopped['signal']
             save()
             break
         pc = int(gdb.parse_and_eval('$pc'))
@@ -108,16 +113,29 @@ end
 '''
 
 
-def prepare():
-    root = qa_guard()
-    enabled = os.environ.get('TASK25_PC_DIAGNOSTIC', 'false')
-    if enabled == 'false':
-        return
-    if enabled != 'true':
-        raise GateError('EXPLICIT_PC_DIAGNOSTIC_REQUIRED')
+def gdb_path():
     gdb = shutil.which('gdb')
     if gdb != '/usr/bin/gdb':
-        raise GateError('PREINSTALLED_HOST_GDB_UNAVAILABLE_NO_INSTALL_OR_BLIND_RUN')
+        raise GateError('HOST_GDB_UNAVAILABLE_STOP_BEFORE_EMULATOR_ACTION')
+    return gdb
+
+
+def fingerprint(gdb):
+    with open(gdb, 'rb') as f:
+        return hashlib.file_digest(f, 'sha256').hexdigest()
+
+
+def control_valid(value, gdb):
+    return (value.get('status') == 'PASS_REAL_PC_HOST_CONTROL'
+            and value.get('gdbSHA256') == fingerprint(gdb)
+            and value.get('scriptSHA256') == hashlib.sha256(GDB_SCRIPT.encode()).hexdigest())
+
+
+def host_preflight():
+    root = qa_guard()
+    if os.environ.get('TASK25_PC_DIAGNOSTIC') != 'true':
+        raise GateError('EXPLICIT_PC_DIAGNOSTIC_REQUIRED')
+    gdb = gdb_path()
     out = root / 'task25-native-evidence/forensics'
     out.mkdir(parents=True, exist_ok=True)
     script = root / 'task25-pc.gdb'
@@ -126,12 +144,40 @@ def prepare():
                TASK25_PC_RESULT=str(out / 'PC_SELFTEST_25.json'))
     run = subprocess.run([gdb, '--batch', '--nx', '--return-child-result',
                           '-iex', 'set auto-load off', '-iex', 'set startup-with-shell off',
-                          '--command', str(script), '--args', '/bin/sh', '-c', 'kill -SEGV $$'],
+                          '--command', str(script), '--args', '/bin/sh', '-c',
+                          'trap "" USR1 USR2; kill -USR1 $$; kill -USR2 $$; kill -SEGV $$'],
                          env=env, capture_output=True, timeout=30)
     result = json.loads((out / 'PC_SELFTEST_25.json').read_text())
     if not (result.get('terminatedWithSIGSEGV') is True and result.get('signals')
             and result['signals'][0].get('status') == 'EXECUTABLE_INSTRUCTION_MODULE'):
         raise GateError('GDB_PC_CONTROL_FAILED_NO_ANDROID_RUN')
+    control = {'status':'PASS_REAL_PC_HOST_CONTROL', 'selftestExit':run.returncode,
+               'gdbSHA256':fingerprint(gdb),
+               'scriptSHA256':hashlib.sha256(GDB_SCRIPT.encode()).hexdigest()}
+    write(root / 'task25-pc-host-ready.json', control)
+    write(out / 'PC_HOST_CONTROL_25.json', control)
+    print('PASS_REAL_HOST_PC_CONTROL_BEFORE_ANY_EMULATOR_ACTION')
+
+
+def prepare():
+    root = qa_guard()
+    enabled = os.environ.get('TASK25_PC_DIAGNOSTIC', 'false')
+    if enabled == 'false':
+        return
+    if enabled != 'true':
+        raise GateError('EXPLICIT_PC_DIAGNOSTIC_REQUIRED')
+    gdb = gdb_path()
+    ready = root / 'task25-pc-host-ready.json'
+    if not ready.is_file() or ready.is_symlink():
+        raise GateError('REAL_HOST_PC_CONTROL_RECEIPT_REQUIRED')
+    control = json.loads(ready.read_text())
+    if not control_valid(control, gdb):
+        raise GateError('REAL_HOST_PC_CONTROL_RECEIPT_DRIFT')
+    out = root / 'task25-native-evidence/forensics'
+    script = root / 'task25-pc.gdb'
+    if script.is_symlink() or script.read_text() != GDB_SCRIPT:
+        raise GateError('REVIEWED_GDB_SCRIPT_DRIFT')
+    env = dict(os.environ, TASK25_PC_HELPER_DIRECTORY=str(Path(__file__).resolve().parent))
     target = Path(os.environ['ANDROID_HOME']) / 'emulator/emulator.task17-real'
     saved = target.with_name('emulator.task25-pc-target')
     if target.is_symlink() or not target.is_file() or saved.exists():
@@ -150,6 +196,13 @@ def prepare():
     write(out / 'PC_DIAGNOSTIC_SETUP_25.json', {
         'status':'CONTROLLED_GDB_PC_SELFTEST_PASS_DIAGNOSTIC_ONLY',
         'debugger':'/usr/bin/gdb', 'normalSignalsPassed':True,
-        'selftestExit':run.returncode, 'applicationOrDataModified':False,
+        'selftestExit':control['selftestExit'], 'applicationOrDataModified':False,
         'signingOrDeliveryEnabled':False})
     print('HOST_PC_DIAGNOSTIC_READY_SELFTEST_PASS_NO_RAW_DEBUGGER_OUTPUT')
+
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[1:] != ['--host-preflight']:
+        raise GateError('EXPLICIT_HOST_PREFLIGHT_ONLY')
+    host_preflight()
