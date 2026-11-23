@@ -8,7 +8,7 @@ Appsource737ea741636e9abe7c20353d9d5b8301cf44a5bb. Свежий read-only source
 
 ## Новые локальные проверки
 
-- Текущая QA-tools группа:103PASS,0FAIL; actionlint1.7.12PASS. Промежуточные91/100/102 — перекрывающиеся наборы, не складывать.
+- Текущая QA-tools группа:110PASS,0FAIL; actionlint1.7.12PASS. Промежуточные91/100/102/103/108 — перекрывающиеся наборы, не складывать.
 - ZIP-тесты: размер/hash/CRC, traversal/дубликаты/symlink/special-files, обязательные vendor files/version, безопасный install/restore lifecycle, отказ signing-context, строгая readiness.
 - Hostmetadata: только разрешённые PID/module/fileoffset, недоступность dmesg, отсутствие сырых дампов/лога ядра/памяти/стека, diagnostic defaultOFF и невозможность доставки/API36 из diagnostic mode.
 - Host-control: регистрPC/executable maps без absolute ASLRадресов; false/missing/mismatched receipt failclosed. Реальный локальный Pythoncontrol (не mock): SIGUSR1/2 игнорируются, SIGSEGV даёт exit-11, stdout/stderr пусты, core отключён. Это Linux-процесс, не Android и не Google.
@@ -28,3 +28,5 @@ Appsource737ea741636e9abe7c20353d9d5b8301cf44a5bb. Свежий read-only source
 Обе APK29 неоднократно независимо скачаны и проверены apksigner/aapt/SHA/ZIP/package/version/ABI/config/permissions; новые run readback используют те же неизменные bytes. Подпись сама по себе не доказывает безопасное обновление.
 
 Физические устройства, настоящий Google-вход двух аккаунтов, OEMблокировка/долгий live background transfer29, микрофон/акустическое прослушивание, native image/video diary attachments — NOT_RUN. Частичные №22/23, неизменённый production Diary17patch и первоначальный owner24→25 UNKNOWN сохранены в ISSUES.
+
+Run12 отдельно подтверждён:17/17MASTER35PASS, GDBcontrolSIG11/PCmodulelibc реальныйPASS;actualQEMUexit0/signals[].14rawnativeAndroidsnapshotкопий×15SQLiteтаблиц independentlyread-only/hash/integrity/schemaPASS. Не полныйдопускпары; rawБДнепубликуются. Текущий полныйrun13 45218835360 используетновыйstricterhostObserverproof; завершениеещёожидается.

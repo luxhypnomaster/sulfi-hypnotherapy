@@ -1,0 +1,13 @@
+{
+  "status": "PASS_SAME_CHECKPOINT_SHM_WORKCOPY",
+  "sourceCheckpoint": "741f8963e6d56cd061495ccdd7e2f50e394e7633",
+  "previousWorkspace": "/dev/shm/sulfi25-resume",
+  "activeWorkspace": "/dev/shm/sulfi25-final",
+  "originalWorkspaceUnchanged": true,
+  "sharedObjectsReadOnly": true,
+  "newGitObjectsWrittenToSHM": true,
+  "reviewedIgnoredFilesRestored": [
+    "android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
+  ],
+  "noUserDataMovedOrDeleted": true
+}
