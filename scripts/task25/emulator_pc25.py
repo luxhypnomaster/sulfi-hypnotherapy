@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import time
 
 from candidate25 import GateError, write
 from emulator_sdk25 import qa_guard
@@ -75,6 +76,7 @@ sys.path.insert(0, os.environ['TASK25_PC_HELPER_DIRECTORY'])
 from emulator_pc25 import instruction_module
 out = Path(os.environ['TASK25_PC_RESULT'])
 report = {'schema':1, 'status':'DEBUGGER_STARTED', 'signals':[],
+          'avdLaunch':os.environ.get('TASK25_PC_AVD_LAUNCH') == 'true',
           'terminatedWithSIGSEGV':False, 'exitCode':None,
           'guestMemoryRead':False, 'stackUnwound':False,
           'rawDebuggerTranscriptPublished':False, 'corePublished':False}
@@ -159,6 +161,7 @@ def host_preflight():
     control_script = root / 'task25-pc-control.py'
     control_script.write_text(CONTROL_SCRIPT)
     env = dict(os.environ, TASK25_PC_HELPER_DIRECTORY=str(Path(__file__).resolve().parent),
+               TASK25_PC_AVD_LAUNCH='false',
                TASK25_PC_RESULT=str(out / 'PC_SELFTEST_25.json'))
     run = subprocess.run([gdb, '--batch', '--nx', '--return-child-result',
                           '-iex', 'set auto-load off', '-iex', 'set startup-with-shell off',
@@ -202,8 +205,12 @@ def prepare():
     target.rename(saved)
     env['TASK25_PC_RESULT'] = str(out / 'PC_FAULT_MODULE_25.json')
     wrapper = ('#!/usr/bin/python3\nimport os,sys\n'
+               + "avd = '-avd' in sys.argv[1:]\n"
+               + "os.environ['TASK25_PC_AVD_LAUNCH']='true' if avd else 'false'\n"
+               + 'if avd:\n    with open(%r,"x") as marker: marker.write("1")\n' % str(root / 'task25-observed-avd-launch.marker')
                + ''.join('os.environ[%r]=%r\n' % (k, env[k]) for k in
                          ['TASK25_PC_HELPER_DIRECTORY', 'TASK25_PC_RESULT'])
+               + 'if not avd: os.environ["TASK25_PC_RESULT"]=%r\n' % str(out / 'PC_UTILITY_25.json')
                + 'os.execv(%r,%r+sys.argv[1:])\n' %
                (gdb, [gdb, '--batch', '--nx', '--return-child-result',
                       '-iex', 'set auto-load off', '-iex', 'set startup-with-shell off',
@@ -218,8 +225,61 @@ def prepare():
     print('HOST_PC_DIAGNOSTIC_READY_SELFTEST_PASS_NO_RAW_DEBUGGER_OUTPUT')
 
 
+def read_finished_pc(path):
+    """Bounded read-only completion wait, never retry a native action."""
+    value = {}
+    for attempt in range(40):
+        try:
+            value = json.loads(path.read_text())
+        except (OSError, ValueError):
+            value = {}
+        if value.get('signals') or value.get('status') not in {None, 'DEBUGGER_STARTED', 'SIGNAL_PC_CAPTURED_NOT_YET_FATAL'}:
+            return value
+        if attempt < 39:
+            time.sleep(0.25)
+    return value
+
+
+def verify_terminal():
+    """Extra full-QA gate. A debugger can never recover a failed native test."""
+    root = qa_guard()
+    out = root / 'task25-native-evidence'
+    marker = root / 'task25-observed-avd-launch.marker'
+    pc_path = out / 'forensics/PC_FAULT_MODULE_25.json'
+    report_path = out / 'NATIVE_UPGRADE_25.json'
+    ready = root / 'task25-pc-host-ready.json'
+    for path in [marker, pc_path, report_path, ready]:
+        if path.is_symlink() or not path.is_file():
+            raise GateError('OBSERVED_NATIVE_TERMINAL_EVIDENCE_MISSING')
+    pc = read_finished_pc(pc_path)
+    control = json.loads(ready.read_text())
+    if not (marker.read_text() == '1' and control_valid(control, gdb_path())
+            and pc.get('status') == 'INFERIOR_EXITED' and pc.get('avdLaunch') is True
+            and type(pc.get('exitCode')) is int and pc['exitCode'] == 0 and pc.get('terminationSignal') is None
+            and pc.get('terminatedWithSIGSEGV') is False and pc.get('signals') == []
+            and all(pc.get(k) is False for k in ['guestMemoryRead','stackUnwound',
+                                                'rawDebuggerTranscriptPublished','corePublished'])):
+        raise GateError('HOST_TERMINAL_NOT_CLEAN_NO_NATIVE_DELIVERY')
+    report = json.loads(report_path.read_text())
+    if not report.get('cases') or not all(c.get('status') == 'PASS' for c in report['cases']):
+        raise GateError('ORIGINAL_NATIVE_CASES_NOT_ALL_PASS')
+    proof = {'status':'PASS_CLEAN_OBSERVED_QEMU_EXIT','avdLaunchCount':1,
+             'hostExitCode':0,'hostSIGSEGVCount':0,'signalPolicy':'PASS_ORIGINAL_SIGNALS',
+             'restarts':0,'selftest':'PASS_REAL_PC_HOST_CONTROL',
+             'observerScriptSHA256':control['scriptSHA256'],
+             'gdbSHA256':control['gdbSHA256'],
+             'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL'}
+    report['hostObserver'] = proof  # Only add proof; never change cases/data inventories.
+    write(report_path, report)
+    write(out / 'forensics/PC_CLEAN_EXIT_GATE_25.json', proof)
+    print('PASS_CLEAN_OBSERVED_QEMU_EXIT_ORIGINAL_NATIVE_CASES_UNCHANGED')
+
+
 if __name__ == '__main__':
     import sys
-    if sys.argv[1:] != ['--host-preflight']:
-        raise GateError('EXPLICIT_HOST_PREFLIGHT_ONLY')
-    host_preflight()
+    if sys.argv[1:] == ['--host-preflight']:
+        host_preflight()
+    elif sys.argv[1:] == ['--verify-terminal']:
+        verify_terminal()
+    else:
+        raise GateError('EXPLICIT_HOST_OPERATION_REQUIRED')
