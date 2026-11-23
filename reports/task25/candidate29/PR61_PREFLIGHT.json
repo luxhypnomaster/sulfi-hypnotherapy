@@ -1,0 +1,16 @@
+{
+  "status": "PASS_THREE_REVIEWED_OPERATIONAL_FILES",
+  "PR": 61,
+  "head": "671aa7899111f7e0b87b8a87fd732788982848b5",
+  "mainBefore": "d222d775e0e289b2e7304110b7c8185f7ac6f730",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "a7813da2f79727d9e30bbf5366af3db05342efd167a2205166dc08f4137b8044",
+    ".github/workflows/sulfi-candidates25-verify.yml": "aead2187e5298d30cb3a65b2c51c1295282533b0fef36b4273343f0070a6b470",
+    "scripts/task25/candidate25.py": "198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91"
+  },
+  "onlyWriteCapabilityJob": "baseline_GET_only_no_app_no_signing_no_repo_mutation",
+  "nativeHelperChanged": false
+}
