@@ -1,0 +1,11 @@
+{
+  "status": "PASS_EXACT_ONE_WORKFLOW_PR63_MAIN_READBACK",
+  "mainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "PR": 63,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "9c796a48db38a41930777a56debe0e1044424c8b3497157d89212f838be6c016"
+  },
+  "SDKVersionAndSHARequireBoth": true,
+  "appServerOAuthKeyUnchanged": true
+}

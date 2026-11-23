@@ -1,0 +1,13 @@
+{
+  "status": "PASS_ONE_WORKFLOW_OFFICIAL_SDK_TAG_FIX",
+  "PR": 63,
+  "head": "fcfdb3aee8bd2b9b7891df61eff053b0579b1cf6",
+  "mainBefore": "cd145140074e237ebf1cf1cba11f62a309492bde",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "9c796a48db38a41930777a56debe0e1044424c8b3497157d89212f838be6c016"
+  },
+  "appServerHelperPermissionsKeyChanged": false
+}
