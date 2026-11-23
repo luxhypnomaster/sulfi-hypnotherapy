@@ -300,6 +300,19 @@ class Workflows(unittest.TestCase):
             emulator=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))
             self.assertIn('-accel on',emulator['with']['emulator-options'])
 
+    def test_exit_forensics_and_same_logical_frame_without_failing_other_edition(self):
+        for name in ['native34','native36']:
+            job=self.ws[1]['jobs'][name];steps=job['steps']
+            self.assertFalse(job['strategy']['fail-fast'])
+            emu=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))
+            self.assertEqual(emu['env']['TASK17_PROCESS_FORENSIC'],'true')
+            self.assertIn('--prepare-profile',emu['with']['pre-emulator-launch-script'])
+            self.assertIn('-skin 720x1280 -dpi-device 280',emu['with']['emulator-options'])
+            collect=next(s for s in steps if s.get('name','').startswith('Copy safe emulator'))
+            self.assertEqual(collect['if'],'always()')
+            self.assertIn('UNEXPECTED_FORENSIC_CONTENT_REFUSED',collect['run'])
+            self.assertNotIn('crash-37',str(collect))
+
     def test_supplement_is_insert_only_and_cannot_reset_original_database(self):
         for required in ['EMULATOR_ONLY','APP_OWNED_EXISTING_DB_ONLY','SCHEMA9_REQUIRED','NO_UNRELATED_SETTINGS',
                          'NO_UNRELATED_PUBLIC_CACHE','NO_OTHER_TABLES','insertOrThrow','CONTROLLED_NATIVE25_SUPPLEMENT_NOT_GOOGLE']:

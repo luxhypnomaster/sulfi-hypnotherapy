@@ -72,6 +72,32 @@ def open_public_cache(ui):
     ui.shot("offline-public-reader")
     return {"cachePreservedAndReadableOffline": True, "Google": "NOT_RUN", "source": "supplemental synthetic public cache"}
 
+
+def configure_display(path):
+    """Disposable AVD framebuffer; logical UI remains the tested720x1280/280."""
+    path = Path(path)
+    if path.is_symlink() or not path.is_file():
+        raise GateError("EXISTING_DISPOSABLE_AVD_CONFIG_REQUIRED")
+    config = dict(line.split("=", 1) for line in path.read_text().splitlines() if "=" in line)
+    if config.get("disk.dataPartition.size", "").strip() not in {"3G", "3072M", "3221225472"}:
+        raise GateError("DISPOSABLE_AVD_PARTITION_NOT_PINNED")
+    before = {k: config.get(k) for k in ["hw.lcd.width", "hw.lcd.height", "hw.lcd.density"]}
+    config.update({"hw.lcd.width": "720", "hw.lcd.height": "1280", "hw.lcd.density": "280",
+                   "skin.name": "720x1280", "skin.path": "_no_skin"})
+    path.write_text("\n".join(k + "=" + v for k, v in config.items()) + "\n")
+    return {"status": "PASS_DISPOSABLE_PHYSICAL_FRAMEBUFFER_CONFIGURED", "before": before,
+            "after": {k: config[k] for k in before}, "applicationOrDatabaseChanged": False}
+
+
+def prepare_profile(root):
+    source = Path(os.environ["GITHUB_WORKSPACE"]) / "appsource"
+    if command(["git", "rev-parse", "HEAD"], cwd=source).strip() != SOURCE:
+        raise GateError("PINNED_PRE_EMULATOR_SOURCE_REQUIRED")
+    command(["python3", str(source / "scripts/task17/pre_emulator.py")], live=True)
+    receipt = configure_display(Path.home() / ".android/avd/test.avd/config.ini")
+    write(root / "task25-native-evidence/SDK_PROFILE_25.json", receipt)
+    print("TASK25_PHYSICAL720x1280_DENSITY280_WITH_EXISTING_PINNED_EMULATOR_AND_EXIT_MONITOR")
+
 FIXTURE_JAVA = r'''
 package org.alchemist.qa25;
 import android.database.sqlite.SQLiteDatabase;
@@ -124,10 +150,16 @@ public final class Fixture {
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--edition", choices=IDS, required=True)
-    p.add_argument("--api", type=int, choices=[34, 36], required=True)
+    p.add_argument("--edition", choices=IDS)
+    p.add_argument("--api", type=int, choices=[34, 36])
+    p.add_argument("--prepare-profile", action="store_true")
     args = p.parse_args()
     root = guard()
+    if args.prepare_profile:
+        prepare_profile(root)
+        return 0
+    if args.edition is None or args.api is None:
+        p.error("--edition and --api required for native QA")
     source = Path(os.environ["GITHUB_WORKSPACE"]) / "appsource"
     if command(["git", "rev-parse", "HEAD"], cwd=source).strip() != SOURCE:
         raise GateError("PINNED_UI_ROUTINES_REQUIRED")
@@ -141,6 +173,12 @@ def main():
     ready = Path(os.environ["GITHUB_WORKSPACE"]) / ".task17-sdk-ready.json"
     if not ready.exists() or json.loads(ready.read_text())["version"] != "37.2.12":
         raise GateError("PINNED_EMULATOR_PREHOOK_NOT_CONFIRMED")
+    profile = root / "task25-native-evidence/SDK_PROFILE_25.json"
+    if not profile.exists() or json.loads(profile.read_text())["status"] != "PASS_DISPOSABLE_PHYSICAL_FRAMEBUFFER_CONFIGURED":
+        raise GateError("PHYSICAL_FRAMEBUFFER_PREHOOK_NOT_CONFIRMED")
+    physical = command(["adb", "shell", "wm", "size"]).strip()
+    if "Physical size: 720x1280" not in physical:
+        raise GateError("PHYSICAL_FRAMEBUFFER_SIZE_NOT_APPLIED:" + physical)
     os.environ["TASK18_BASELINE"] = "27"  # Import functions only, never run legacy main.
     spec = importlib.util.spec_from_file_location("reviewed_ui18", source / "scripts/task18/native_upgrade.py")
     m = importlib.util.module_from_spec(spec)

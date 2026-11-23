@@ -1,0 +1,13 @@
+{
+  "status": "PASS_AST_IDENTICAL_DATA_GATES",
+  "functions": {
+    "install": true,
+    "supplement": true,
+    "capsule": true,
+    "before": true,
+    "compare": true,
+    "upgrade": true,
+    "case": true
+  },
+  "physicalSizeGuard": "ADDED_STRICT_ACTUAL_SIZE_CHECK_NOT_RELAXED"
+}

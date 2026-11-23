@@ -1,0 +1,16 @@
+{
+  "run": 45107294363,
+  "status": "BLOCKED_ADB_CONNECTION_CLOSED_DURING_OLD28_UI_BEFORE_UPDATE",
+  "clientBaselineCasesPASS": 5,
+  "clientUpdate29": "NOT_RUN",
+  "master": "CANCELLED_FAIL_FAST",
+  "KVMActualOpenAndVMCreate": "PASS_BOTH",
+  "captureAfterFailure": "ALSO_FAILED",
+  "confirmedCause": "UNKNOWN_TRANSPORT_OR_EMULATOR_EXIT_NEEDS_PROCESS_EVIDENCE",
+  "nextHypothesis": "physical1080x1920 framebuffer remains despite logical720x1280; reduce physical to same tested720x1280 and enable existing pinned process termination/resource monitor; do not restart a dead emulator or weaken data checks",
+  "APKBytesAppSigningUnchanged": true,
+  "source": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "ownerDevice": "NOT_TOUCHED",
+  "localToolTests": 55,
+  "nativeFinalGate": "BLOCKED_UNTIL_REAL_RESULTS"
+}

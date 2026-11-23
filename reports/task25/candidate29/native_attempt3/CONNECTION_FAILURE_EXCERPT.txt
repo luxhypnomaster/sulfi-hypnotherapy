@@ -1,0 +1,14 @@
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:43:35.2191197Z NATIVE18_START=install_actual28
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:44:00.7243905Z NATIVE18_CASE={"case": "install_actual28", "status": "PASS", "details": {"baseline": 28, "newKey": false, "helperAPK": false, "uninstall": false}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:44:03.4552955Z NATIVE18_START=ui_audio_1
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:44:48.2279231Z NATIVE18_CASE={"case": "ui_audio_1", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI same title"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:44:48.2279875Z NATIVE18_START=ui_audio_2
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:45:28.1201080Z NATIVE18_CASE={"case": "ui_audio_2", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI same title"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:45:28.1201733Z NATIVE18_START=ui_audio_3
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:46:05.7233593Z NATIVE18_CASE={"case": "ui_audio_3", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI third track"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:46:05.7234238Z NATIVE18_START=ui_module_three_tracks
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:46:49.9664189Z NATIVE18_CASE={"case": "ui_module_three_tracks", "status": "PASS", "details": {"title": "QA25 Elman three tracks", "UI_dependencies": ["UI same title", "UI same title", "UI third track"], "pauseAdded": false, "committedID": "c6d3ea71c5c1e00cf0f08a7228934268", "storedItemCount": 3, "SQLReadbackOnly": true}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:46:49.9665374Z NATIVE18_START=ui_module_pause
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:47:53.0284376Z NATIVE18_CASE={"case": "ui_module_pause", "status": "BLOCKED", "reason": "ADB_FAILED:('shell', 'rm', '-f', '/sdcard/qa25-window.xml'):error: closed\n"}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:47:53.2191884Z     raise GateError("NATIVE_CASE_BLOCKED_" + name)
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:47:53.2192191Z candidate25.GateError: NATIVE_CASE_BLOCKED_ui_module_pause

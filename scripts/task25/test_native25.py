@@ -81,4 +81,25 @@ class ReaderTest(unittest.TestCase):
         self.assertNotIn('Автор',ui.calls)
 
 
+class PhysicalProfileTest(unittest.TestCase):
+    def test_profile_reduces_only_render_frame_and_preserves_partition(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/'config.ini'
+            p.write_text('hw.lcd.width=1080\nhw.lcd.height=1920\nhw.lcd.density=420\ndisk.dataPartition.size=3G\nuntouched=value\n')
+            result=n.configure_display(p)
+            self.assertEqual(result['before']['hw.lcd.width'],'1080')
+            self.assertEqual(result['after'],{'hw.lcd.width':'720','hw.lcd.height':'1280','hw.lcd.density':'280'})
+            self.assertIn('disk.dataPartition.size=3G',p.read_text())
+            self.assertIn('untouched=value',p.read_text())
+            self.assertFalse(result['applicationOrDatabaseChanged'])
+
+    def test_unknown_partition_or_symlink_refused_before_write(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/'config.ini';p.write_text('disk.dataPartition.size=100G\n')
+            with self.assertRaises(GateError):n.configure_display(p)
+            self.assertEqual(p.read_text(),'disk.dataPartition.size=100G\n')
+            link=Path(td)/'link.ini';link.symlink_to(p)
+            with self.assertRaises(GateError):n.configure_display(link)
+
+
 if __name__=='__main__':unittest.main(verbosity=2)
