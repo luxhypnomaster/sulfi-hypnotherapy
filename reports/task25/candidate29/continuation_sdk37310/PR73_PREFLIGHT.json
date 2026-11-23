@@ -1,0 +1,15 @@
+{
+  "status": "PASS_EXACT_TWO_OPERATIONAL_FILES",
+  "PR": 73,
+  "head": "fd6a9b101ac02330e99b0be0298e59e5dd963d16",
+  "mainBefore": "3b5f6c2dcb05b4dd8dc37621c6db059c4dcb51fa",
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "1bd1d89474a8af6d66f8e7870790662f7f9224950a548be9f1eecc5176c5fa66",
+    "scripts/task25/emulator_pc25.py": "2738da1f9dceac4015bdb3cec3801caec37e89a16c0b46ae7344cf01c367a74b"
+  },
+  "localTests": 103,
+  "realLocalHostSignalReturn": -11,
+  "ownerClassicReadbackReused": true,
+  "productionAppDataKeyChanges": false
+}

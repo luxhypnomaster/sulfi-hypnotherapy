@@ -1,0 +1,10 @@
+{
+  "status": "PASS_REVIEWED_MAIN_FILES",
+  "PR": 73,
+  "main": "405f727335244404a67417fe146e35f74410d3bc",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "1bd1d89474a8af6d66f8e7870790662f7f9224950a548be9f1eecc5176c5fa66",
+    "scripts/task25/emulator_pc25.py": "2738da1f9dceac4015bdb3cec3801caec37e89a16c0b46ae7344cf01c367a74b"
+  },
+  "noNewBuildSigningProduction": true
+}
