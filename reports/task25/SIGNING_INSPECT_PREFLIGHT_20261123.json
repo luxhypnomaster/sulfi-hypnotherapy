@@ -1,0 +1,64 @@
+{
+  "atUTC": "2026-11-23T01:20:33.509088+00:00",
+  "status": "BLOCKED_PREFLIGHT_PROTECTION_RULE_READ",
+  "authorizedScope": {
+    "mainPaths": [
+      ".github/workflows/sulfi-signing-inspect25.yml",
+      "scripts/task25/signing_inspect.py"
+    ],
+    "manualInspectMaxAttempts": 1,
+    "APKBuildSigning": false,
+    "changeProtectionSettings": false,
+    "mergePR51Through57": false
+  },
+  "main": {
+    "SHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+    "protected": true,
+    "defaultBranch": "main",
+    "repository": "luxhypnomaster/sulfi-hypnotherapy",
+    "visibility": "public"
+  },
+  "approvedSourceSHA": "5790139b0c2dc45363434451aa951b14b496d8fc",
+  "approvedBytes": {
+    "scriptSHA256": "510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c",
+    "workflowSHA256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492",
+    "patchSHA256": "deaeed856500d2f2f35a6ed5bd101a1364db2ff1af83e341393f06aa63d0daba",
+    "matchLocalAndPinnedGitSource": "PASS"
+  },
+  "partialProtectionReadback": {
+    "enabled": true,
+    "requiredStatusChecks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    },
+    "activeBranchRulesets": [],
+    "warning": "Branch protected flag is authoritative, but does not expose complete classic review/admin/restriction requirements"
+  },
+  "blockedReads": [
+    {
+      "operation": "GET /repos/luxhypnomaster/sulfi-hypnotherapy/branches/main/protection",
+      "HTTP": 403,
+      "message": "Resource not accessible by integration"
+    },
+    {
+      "operation": "GraphQL repository.defaultBranchRef.branchProtectionRule",
+      "code": "FORBIDDEN",
+      "message": "Resource not accessible by integration"
+    }
+  ],
+  "unknownRequiredGuards": [
+    "isAdminEnforced",
+    "requiredApprovingReviews",
+    "requiredStatusChecksFull",
+    "pushRestrictions",
+    "commitSignatureRequirement",
+    "branchLock"
+  ],
+  "mainWriteAttempts": 0,
+  "workflowDispatchAttempts": 0,
+  "actualSecretOrKeyRead": false,
+  "APKs": "NOT_BUILT",
+  "protectionSettingsChanged": false,
+  "nextAction": "Obtain Administration read-only access through an available supported GitHub integration, or owner read-only full main protection-rule export. Do not request plaintext tokens/keys; do not change protection rules. Re-run only this preflight, then use existing authorization if gates pass."
+}
