@@ -247,6 +247,15 @@ class Workflows(unittest.TestCase):
                     if 'android-actions/setup-android@' in step.get('uses', ''):
                         self.assertEqual(step.get('with', {}).get('packages'), 'platform-tools')
 
+    def test_flutter_has_real_version_tag_and_exact_sha_before_execution(self):
+        steps=self.ws[0]['jobs']['build']['steps']
+        sdk=next(s for s in steps if s.get('with',{}).get('repository')=='flutter/flutter')
+        self.assertEqual(sdk['with']['ref'],'3.47.9')
+        verify=next(s for s in steps if s.get('name')=='Use the exact tested Flutter framework')
+        self.assertIn('c197ca5199e9ee5661e865596c9c07294dfab51c',verify['run'])
+        self.assertIn('rev-parse HEAD',verify['run'])
+        self.assertLess(steps.index(verify),steps.index(next(s for s in steps if 'Build both unsigned' in s.get('name',''))))
+
     def test_trusted_helper_pins_match_current_bytes(self):
         for w in self.ws:
             for job in w['jobs'].values():

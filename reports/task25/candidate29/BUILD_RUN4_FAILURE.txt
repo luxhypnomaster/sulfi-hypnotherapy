@@ -1,0 +1,4 @@
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:54:57.3839304Z The current Flutter SDK version is 0.0.0-unknown.
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:54:57.3840628Z Because sulfi_hypnotherapy requires Flutter SDK version >=3.47.9, version solving failed.
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:54:57.4052707Z Failed to update packages.
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:54:57.4132170Z CANDIDATE25_BLOCKED: Command '['flutter', 'pub', 'get', '--enforce-lockfile']' returned non-zero exit status 1.
