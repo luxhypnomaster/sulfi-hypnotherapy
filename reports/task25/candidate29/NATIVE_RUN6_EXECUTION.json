@@ -1,5 +1,5 @@
 {
-  "status": "FULL_FOUR_GATES_RUNNING",
+  "status": "COMPLETED_FAILURE_HOST_QEMU_CLIENT_OLD28",
   "runId": 45164078203,
   "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45164078203",
   "driverMainSHA": "740898208fe610cd0f0678513e1f4f4d7d9ae04b",
@@ -14,5 +14,10 @@
   "APIImageChanged": false,
   "reason": "Confirmed reader->author observer defect17thMastercase; all data assertions ASTidentical;75tooltestsPASS",
   "physicalGoogle": "NOT_RUN",
-  "ownerDevice": "NOT_TOUCHED"
+  "ownerDevice": "NOT_TOUCHED",
+  "master34": "17_PASS_COMPLETE",
+  "client34": "5_PASS_1_BLOCKED_QEMU_SIGSEGV_BEFORE_UPDATE",
+  "api36": "NOT_RUN",
+  "delivery": "SKIPPED",
+  "nextHypothesis": "Official AOSP35/36 with same P0 cases; PR69"
 }

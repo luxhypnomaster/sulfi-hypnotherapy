@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "PR": 69,
+  "main": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "2580a49dd86ba367ba88401aa4e49ebe3cd021f16661be1e4fb755a00321d292",
+    "scripts/task25/native25.py": "ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2"
+  },
+  "previousMaster34FullNativeJob": "PASS17",
+  "noAppOrSigningChange": true
+}

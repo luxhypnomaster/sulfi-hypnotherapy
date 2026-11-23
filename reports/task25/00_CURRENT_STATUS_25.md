@@ -1,9 +1,11 @@
-# №25 — актуально: пара29 собрана, испытания PARTIAL
+# №25 — текущий результат кандидата29
 
-Две actual APK29 подписаны прежним ключом и независимо проверены. CLIENT полностью прошёл native update28→29 на Android14,15casesPASS. MASTER проверка заблокирована: QEMU SIGSEGV на старой28, до обновления. API36 обеих редакций NOT_RUN. **Пока ничего не устанавливать на телефон.**
+**Пара собрана и независимо проверена. Полная выдача пока ожидает Android-гейтов.**
 
-[Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Сборка45103325755](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) · [Native45157723278](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45157723278) · [Диагностика MASTER45161085603](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45161085603) · [ОтчётыDrive](https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn).
+MASTER прошёл17 native проверок обновления28→29 на API34, CLIENT —15. SQLite/медиа/модули/программа/история/настройки сохранились; MASTER подтвердил локальный черновик после обновления. Разные Google API34 прогоны также выявили host QEMU SIGSEGV на старой28, до29; это не скрывается и не объявляется исправленным.
 
-Источникприложений737ea741636e9abe7c20353d9d5b8301cf44a5bb. Runtime unchanged;70QAtoolPASS, прежние574Flutter/2SKIP и114Node сохранены. AppstackPR51–57 неmerged. Только узкие authorized operational-mainPR, безproduction/GAS/OAuth/ACL/key/userdatachanges.
+Сейчас идёт последний полный набор: обе редакции на официальных AOSP API35/API36, [run45166539406](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406). Те же APK, тот же полный P0 dataset, без rebuild/resign. Доставка требует все4PASS. [Актуальная точка продолжения](candidate29/RESUME_CURRENT_25.md).
 
-Подробности: RESULT_25, TESTS_25, NATIVE_UPGRADE_25, APK_INFO_25/APK_READBACK_25,55criteriaACCEPTANCE. Исходные отчёты сохранены отдельно. Реальные Google/физические телефоны NOT_RUN; историческийowner24→25 UNKNOWN.
+[Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Сборка45103325755](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) · [ОтчётыDrive](https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn).
+
+Код приложений737ea741636e9abe7c20353d9d5b8301cf44a5bb, без изменений после574Flutter/2SKIP/114Node;76QA-tool tests PASS. Сервер/GAS6/OAuth/ACL/ключ/данные не менялись. App PR51–57 unmerged, main только узкие operational PR. Реальные Google/телефоны NOT_RUN, установленная версия владельцаUNKNOWN. Пока не устанавливать/не удалять приложение. Итоговая партия Drive ещё готовится; промежуточные отчёты не равны native/physicalPASS.

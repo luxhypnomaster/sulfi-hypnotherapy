@@ -167,7 +167,7 @@ public final class Fixture {
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--edition", choices=IDS)
-    p.add_argument("--api", type=int, choices=[34, 36])
+    p.add_argument("--api", type=int, choices=[34, 35, 36])
     p.add_argument("--prepare-profile", action="store_true")
     args = p.parse_args()
     root = guard()

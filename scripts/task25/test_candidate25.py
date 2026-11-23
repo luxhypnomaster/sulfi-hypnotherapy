@@ -280,15 +280,16 @@ class Workflows(unittest.TestCase):
 
     def test_native_and_delivery_require_both_editions_and_both_apis(self):
         qa=self.ws[1]
-        for api in [34,36]:
+        for api in [35,36]:
             j=qa['jobs']['native'+str(api)]
-            expected='${{ fromJSON(inputs.diagnostic_master_only && \'["master"]\' || \'["master","client"]\') }}' if api==34 else ['master','client']
+            expected='${{ fromJSON(inputs.diagnostic_master_only && \'["master"]\' || \'["master","client"]\') }}' if api==35 else ['master','client']
             self.assertEqual(j['strategy']['matrix']['edition'],expected)
             emulator=next(s for s in j['steps'] if 'emulator-runner@' in s.get('uses',''))
             self.assertEqual(emulator['env']['TASK17_EMULATOR_PIN'],'37.2.12')
             self.assertEqual(emulator['with']['api-level'],api)
-        self.assertEqual(qa['jobs']['native36']['needs'],'native34')
-        self.assertEqual(qa['jobs']['delivery']['needs'],['native34','native36'])
+            self.assertEqual(emulator['with']['target'],'default')
+        self.assertEqual(qa['jobs']['native36']['needs'],'native35')
+        self.assertEqual(qa['jobs']['delivery']['needs'],['native35','native36'])
         self.assertNotIn('continue-on-error',str(qa))
 
     def test_diagnostic_master_mode_cannot_run_api36_or_deliver_testers(self):
@@ -297,7 +298,7 @@ class Workflows(unittest.TestCase):
         self.assertEqual(option['type'],'boolean');self.assertIs(option['default'],False)
         for name in ['native36','delivery']:
             self.assertTrue(qa['jobs'][name]['if'].endswith(' && !inputs.diagnostic_master_only'))
-        for name in ['native34','native36']:
+        for name in ['native35','native36']:
             steps=qa['jobs'][name]['steps']
             extract=next(s for s in steps if s.get('name','').startswith('Extract bounded host'))
             self.assertEqual(extract['if'],'always()')
@@ -305,8 +306,20 @@ class Workflows(unittest.TestCase):
             self.assertLess(steps.index(extract),steps.index(upload))
             self.assertNotIn('*.dmp',str(upload));self.assertNotIn('/tmp/android-runner',str(upload))
 
+    def test_native_success_is_not_automatic_owner_phone_authorization(self):
+        import ast
+        steps=self.ws[1]['jobs']['delivery']['steps']
+        mark=next(s for s in steps if s.get('name')=='Record gates before any tester artifact')
+        code='\n'.join(mark['run'].splitlines()[1:-1])
+        node=next(n for n in ast.walk(ast.parse(code)) if isinstance(n,ast.Call) and ast.unparse(n.func)=='m.update')
+        values={k.arg:ast.literal_eval(k.value) for k in node.keywords}
+        self.assertIs(values['safeForOwnerInstall'],False)
+        self.assertIs(values['candidateForAuthorizedPhoneQA'],True)
+        self.assertEqual(values['ownerInstalledVersion'],'UNKNOWN')
+        self.assertEqual(values['physicalPhones'],'NOT_RUN')
+
     def test_kvm_open_and_vm_capability_preflight_precedes_heavy_downloads(self):
-        for name in ['native34','native36']:
+        for name in ['native35','native36']:
             steps=self.ws[1]['jobs'][name]['steps']
             kvm=next(s for s in steps if s.get('name','').startswith('Enable KVM'))
             for required in ['udevadm settle','chmod 0666 /dev/kvm','fcntl.ioctl','0xAE00','0xAE01']:
@@ -317,7 +330,7 @@ class Workflows(unittest.TestCase):
             self.assertIn('-accel on',emulator['with']['emulator-options'])
 
     def test_exit_forensics_and_same_logical_frame_without_failing_other_edition(self):
-        for name in ['native34','native36']:
+        for name in ['native35','native36']:
             job=self.ws[1]['jobs'][name];steps=job['steps']
             self.assertFalse(job['strategy']['fail-fast'])
             emu=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))

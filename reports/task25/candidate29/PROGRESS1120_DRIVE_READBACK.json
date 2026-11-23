@@ -1,0 +1,9 @@
+{
+  "status": "PASS_UPLOAD_RAW_SHA_SIZE_PARENT_READBACK",
+  "id": "1tZdsaoq9gzul4xI2JXh-jRgofcFRMVPP",
+  "parent": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "size": 3354,
+  "sha256": "6667b16692f9e85ebb923dee94fdb1e0979327134821f35dee91ae47cb286254",
+  "scope": "INTERMEDIATE_PROGRESS_FULL_NATIVE6_RUNNING_NOT_FINAL",
+  "noAPKUploaded": true
+}

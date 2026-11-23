@@ -1,0 +1,27 @@
+{
+  "status": "PASS_SCOPED_BINARY_CONTENTS",
+  "applicationSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "pair": [
+    {
+      "edition": "master",
+      "status": "PASS_SCOPED_APK_CONTENT_SCAN",
+      "scannedUncompressedBytes": 274785956,
+      "sourceAssetFilesHashMatched": 13,
+      "embeddedUserAudioVideoFiles": [],
+      "forbiddenPrivateFiles": [],
+      "secretValuePatternFindings": []
+    },
+    {
+      "edition": "client",
+      "status": "PASS_SCOPED_APK_CONTENT_SCAN",
+      "scannedUncompressedBytes": 274786076,
+      "sourceAssetFilesHashMatched": 13,
+      "embeddedUserAudioVideoFiles": [],
+      "forbiddenPrivateFiles": [],
+      "secretValuePatternFindings": []
+    }
+  ],
+  "scope": "Actual APK ZIP entries, packaged source assets and common credential/private-file patterns; not exhaustive unknown-secret or all Git history proof",
+  "personalDatabasesExamined": false,
+  "rawDumpPublished": false
+}

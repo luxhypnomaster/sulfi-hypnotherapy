@@ -154,6 +154,11 @@ class MasterEditorTest(unittest.TestCase):
         self.assertEqual(ast.unparse(binding.body[0]),'original_editor = m.open_diary_editor')
         self.assertEqual(ast.unparse(binding.body[1]),'m.open_diary_editor = lambda: open_master_editor(m, original_editor)')
         main.body.remove(binding)
+        api_option=next(x for x in main.body if isinstance(x,ast.Expr)
+                        and isinstance(x.value,ast.Call) and any(isinstance(a,ast.Constant) and a.value=='--api' for a in x.value.args))
+        choice=next(k for k in api_option.value.keywords if k.arg=='choices')
+        self.assertEqual(ast.literal_eval(choice.value),[34,35,36])
+        choice.value=ast.List(elts=[ast.Constant(value=34),ast.Constant(value=36)],ctx=ast.Load())
         self.assertEqual(ast.dump(old),ast.dump(new))
 
 

@@ -1,0 +1,15 @@
+{
+  "status": "PASS_EXACT_TWO_QA_FILES",
+  "PR": 69,
+  "mainBefore": "740898208fe610cd0f0678513e1f4f4d7d9ae04b",
+  "protected": true,
+  "head": "4d9909c4475ef885c88eb530bb093bee2d3e6287",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "2580a49dd86ba367ba88401aa4e49ebe3cd021f16661be1e4fb755a00321d292",
+    "scripts/task25/native25.py": "ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2"
+  },
+  "scope": "AOSP35/36 full UI preservation cases; API34 failures retained",
+  "allOriginalDataAssertions": "AST_IDENTICAL_EXCEPT_ALLOWED_CLI35_AND_MASTER_OBSERVER_BINDING",
+  "signingOrApplicationCodeChanged": false,
+  "phoneInstallationAuthorized": false
+}

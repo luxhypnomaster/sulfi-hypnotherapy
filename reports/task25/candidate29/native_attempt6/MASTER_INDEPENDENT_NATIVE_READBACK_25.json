@@ -1,0 +1,7 @@
+{
+  "edition": "master",
+  "api": 34,
+  "status": "PASS_CONTROLLED_NATIVE",
+  "cases": 17,
+  "errors": []
+}

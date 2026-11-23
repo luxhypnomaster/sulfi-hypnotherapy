@@ -15,7 +15,7 @@ BASE_CASES = {'install_actual28', 'ui_audio_1', 'ui_audio_2', 'ui_audio_3',
               'native_queue_cache_settings_supplement', 'ui_capsule_export',
               'beforeBaseline', 'normal_install_r_28_to29', 'UI_after29_and_native_audio',
               'cold_restart29', 'offline_diary_reader29'}
-REQUIRED_NATIVE_SCOPES = {('master',34),('client',34),('master',36),('client',36)}
+REQUIRED_NATIVE_SCOPES = {('master',35),('client',35),('master',36),('client',36)}
 
 
 def inspect(report, driver_sha):
@@ -23,7 +23,7 @@ def inspect(report, driver_sha):
     def require(ok, code):
         if not ok: errors.append(code)
     edition, api = report.get('edition'), report.get('api')
-    require(edition in ('master', 'client') and api in (34, 36), 'EDITION_API_SCOPE')
+    require(edition in ('master', 'client') and api in (34, 35, 36), 'EDITION_API_SCOPE')
     require(report.get('applicationSourceSHA') == SOURCE, 'APPLICATION_SOURCE')
     require(report.get('driverMainSHA') == driver_sha, 'TRUSTED_DRIVER_SOURCE')
     require(report.get('baseline') == 28 and report.get('candidate') == CODE, 'VERSION_SCOPE')
