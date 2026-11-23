@@ -148,8 +148,24 @@ class MasterEditorTest(unittest.TestCase):
     def test_all_original_p0_assertions_and_cases_are_structurally_identical(self):
         old=ast.parse(subprocess.check_output(['git','show','f7c82b4:scripts/task25/native25.py'],text=True))
         new=ast.parse(Path(n.__file__).read_text())
-        new.body=[x for x in new.body if not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor']
+        new.body=[x for x in new.body if (not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor')
+                  and (not isinstance(x,ast.Import) or ast.unparse(x)!='import emulator_sdk25 as sdk25')]
+        prepare=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='prepare_profile')
+        setup=next(x for x in prepare.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='sdk_receipt')
+        self.assertEqual(ast.unparse(setup.value),'sdk25.install()');prepare.body.remove(setup)
+        ready=next(x for x in prepare.body if isinstance(x,ast.Expr) and ast.unparse(x.value)=='sdk25.record_ready(sdk_receipt)')
+        prepare.body.remove(ready)
         main=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='main')
+        readiness=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=='not sdk25.ready_valid(ready)')
+        oldmain=next(x for x in old.body if isinstance(x,ast.FunctionDef) and x.name=='main')
+        oldready=next(x for x in oldmain.body if isinstance(x,ast.If) and any(isinstance(a,ast.Constant) and a.value=='PINNED_EMULATOR_PREHOOK_NOT_CONFIRMED' for a in ast.walk(x)))
+        self.assertEqual(ast.dump(ast.Module(body=readiness.body,type_ignores=[])),ast.dump(ast.Module(body=oldready.body,type_ignores=[])))
+        readiness.test=oldready.test
+        report=next(x for x in main.body if isinstance(x,ast.FunctionDef) and x.name=='report')
+        payload=report.body[0].value.args[1]
+        for name,value in [('emulatorVersion','sdk25.VERSION'),('emulatorArchiveSHA256','sdk25.SHA256')]:
+            i=next(i for i,k in enumerate(payload.keys) if isinstance(k,ast.Constant) and k.value==name)
+            self.assertEqual(ast.unparse(payload.values[i]),value);payload.keys.pop(i);payload.values.pop(i)
         binding=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=="args.edition == 'master'")
         self.assertEqual(ast.unparse(binding.body[0]),'original_editor = m.open_diary_editor')
         self.assertEqual(ast.unparse(binding.body[1]),'m.open_diary_editor = lambda: open_master_editor(m, original_editor)')

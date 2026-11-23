@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from candidate25 import SOURCE, CODE
+from emulator_sdk25 import VERSION as SDK_VERSION, SHA256 as SDK_SHA256
 
 TABLES = ('audio_assets', 'module_definitions', 'session_templates', 'current_draft',
           'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings',
@@ -18,7 +19,7 @@ BASE_CASES = {'install_actual28', 'ui_audio_1', 'ui_audio_2', 'ui_audio_3',
 REQUIRED_NATIVE_SCOPES = {('master',35),('client',35),('master',36),('client',36)}
 
 
-def inspect(report, driver_sha):
+def inspect(report, driver_sha, current_sdk=False):
     errors = []
     def require(ok, code):
         if not ok: errors.append(code)
@@ -26,6 +27,9 @@ def inspect(report, driver_sha):
     require(edition in ('master', 'client') and api in (34, 35, 36), 'EDITION_API_SCOPE')
     require(report.get('applicationSourceSHA') == SOURCE, 'APPLICATION_SOURCE')
     require(report.get('driverMainSHA') == driver_sha, 'TRUSTED_DRIVER_SOURCE')
+    if current_sdk:
+        require(report.get('emulatorVersion') == SDK_VERSION, 'SDK_VERSION_PIN')
+        require(report.get('emulatorArchiveSHA256') == SDK_SHA256, 'SDK_ARCHIVE_PIN')
     require(report.get('baseline') == 28 and report.get('candidate') == CODE, 'VERSION_SCOPE')
     require(report.get('ownerPhone') == 'NOT_TOUCHED' and report.get('realGoogle') == 'NOT_RUN', 'NO_OWNER_OR_GOOGLE_PASS_CLAIM')
     require(report.get('uninstallClearDowngrade') is False and report.get('newKeysGenerated') is False, 'NO_DESTRUCTIVE_OR_NEW_KEY_ACTIONS')
@@ -63,7 +67,7 @@ def inspect(report, driver_sha):
 
 
 def validate(reports, driver_sha):
-    values = [inspect(r, driver_sha) for r in reports]
+    values = [inspect(r, driver_sha, current_sdk=True) for r in reports]
     dimensions = [(r['edition'], r['api']) for r in values]
     complete = len(dimensions) == 4 and set(dimensions) == REQUIRED_NATIVE_SCOPES
     passed = complete and all(r['status'] == 'PASS_CONTROLLED_NATIVE' for r in values)
