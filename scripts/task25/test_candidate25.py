@@ -289,6 +289,17 @@ class Workflows(unittest.TestCase):
         self.assertEqual(qa['jobs']['delivery']['needs'],['native34','native36'])
         self.assertNotIn('continue-on-error',str(qa))
 
+    def test_kvm_open_and_vm_capability_preflight_precedes_heavy_downloads(self):
+        for name in ['native34','native36']:
+            steps=self.ws[1]['jobs'][name]['steps']
+            kvm=next(s for s in steps if s.get('name','').startswith('Enable KVM'))
+            for required in ['udevadm settle','chmod 0666 /dev/kvm','fcntl.ioctl','0xAE00','0xAE01']:
+                self.assertIn(required,kvm['run'])
+            downloads=next(s for s in steps if 'Independently download' in s.get('name',''))
+            self.assertLess(steps.index(kvm),steps.index(downloads))
+            emulator=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))
+            self.assertIn('-accel on',emulator['with']['emulator-options'])
+
     def test_supplement_is_insert_only_and_cannot_reset_original_database(self):
         for required in ['EMULATOR_ONLY','APP_OWNED_EXISTING_DB_ONLY','SCHEMA9_REQUIRED','NO_UNRELATED_SETTINGS',
                          'NO_UNRELATED_PUBLIC_CACHE','NO_OTHER_TABLES','insertOrThrow','CONTROLLED_NATIVE25_SUPPLEMENT_NOT_GOOGLE']:
