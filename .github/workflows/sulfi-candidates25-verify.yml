@@ -12,7 +12,7 @@ name: Task25 independent APK readback and disposable upgrade safety
         required: true
         type: string
       diagnostic_master_only:
-        description: MASTER API34 crash metadata only; disables API36 and all tester delivery
+        description: MASTER API35 crash metadata only; disables API36 and all tester delivery
         type: boolean
         default: false
         required: false
@@ -106,7 +106,7 @@ jobs:
         include-hidden-files: false
         overwrite: false
     needs: trust
-  native34:
+  native35:
     if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
       == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
@@ -130,7 +130,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -193,8 +193,8 @@ jobs:
         TASK17_EMULATOR_PIN: 37.2.12
         TASK17_PROCESS_FORENSIC: 'true'
       with:
-        api-level: 34
-        target: google_apis
+        api-level: 35
+        target: default
         arch: x86_64
         avd-name: test
         profile: pixel_2
@@ -207,7 +207,7 @@ jobs:
         emulator-options: -accel on -skin 720x1280 -dpi-device 280 -no-window -gpu swiftshader -no-snapshot -noaudio
           -no-boot-anim -camera-back none -camera-front none -feature -Vulkan
         pre-emulator-launch-script: python3 trusted/scripts/task25/native25.py --prepare-profile
-        script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 34
+        script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 35
     - name: Copy safe emulator exit diagnostics only; no guest memory
       if: always()
       run: |-
@@ -235,7 +235,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
-        name: native25-api34-${{ matrix.edition }}-${{ github.run_id }}
+        name: native25-api35-${{ matrix.edition }}-${{ github.run_id }}
         path: |-
           ${{ runner.temp }}/task25-native-evidence/
           ${{ runner.temp }}/SIGNED_PAIR_INDEPENDENT_READBACK_25.json
@@ -274,7 +274,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -338,7 +338,7 @@ jobs:
         TASK17_PROCESS_FORENSIC: 'true'
       with:
         api-level: 36
-        target: google_apis
+        target: default
         arch: x86_64
         avd-name: test
         profile: pixel_2
@@ -388,7 +388,7 @@ jobs:
         retention-days: 14
         include-hidden-files: false
         overwrite: false
-    needs: native34
+    needs: native35
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -443,7 +443,7 @@ jobs:
         python3 - <<'PYCODE'
         import json,os,pathlib
         p=pathlib.Path(os.environ['RUNNER_TEMP'])/'task25-signed-quarantine/signed-manifest.json'
-        m=json.loads(p.read_text());m.update(nativeSafety='PASS_NATIVE_UI28_TO29_MASTER_CLIENT_API34_API36',physicalPhones='NOT_RUN',safeForOwnerInstall='CANDIDATE_FOR_AUTHORIZED_PHONE_QA_ONLY')
+        m=json.loads(p.read_text());m.update(nativeSafety='PASS_NATIVE_UI28_TO29_MASTER_CLIENT_API35_API36',physicalPhones='NOT_RUN',safeForOwnerInstall=False,candidateForAuthorizedPhoneQA=True,ownerInstalledVersion='UNKNOWN',nativePlatform='AOSP(default) x86_64 API35/API36; Google NOT_RUN',knownAPI34EmulatorIssue='Host QEMU SIGSEGV on old28 before update; not claimed resolved')
         p.write_text(json.dumps(m,indent=2)+'\n')
         PYCODE
     - name: Deliver verified MASTER candidate
@@ -477,5 +477,5 @@ jobs:
         include-hidden-files: false
         overwrite: false
     needs:
-    - native34
+    - native35
     - native36
