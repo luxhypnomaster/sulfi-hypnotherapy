@@ -129,6 +129,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
     - name: Verify original signed APK28 and derive unchanged public configuration
@@ -191,6 +193,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
     - name: Download exact current-run unsigned artifact as data

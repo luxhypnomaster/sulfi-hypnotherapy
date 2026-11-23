@@ -1,0 +1,2 @@
+build	Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407	2026-11-23T02:32:55.3793875Z [command]/usr/local/lib/android/sdk/cmdline-tools/16.0/bin/sdkmanager tools
+build	Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407	2026-11-23T02:32:56.3237165Z Warning: Failed to find package 'tools'

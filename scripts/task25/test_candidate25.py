@@ -183,6 +183,13 @@ class Workflows(unittest.TestCase):
                     if 'checkout@' in step.get('uses',''):
                         self.assertFalse(step['with']['persist-credentials'])
 
+    def test_sdk_action_never_requests_removed_tools_package(self):
+        for w in self.ws:
+            for job in w['jobs'].values():
+                for step in job['steps']:
+                    if 'android-actions/setup-android@' in step.get('uses', ''):
+                        self.assertEqual(step.get('with', {}).get('packages'), 'platform-tools')
+
     def test_trusted_helper_pins_match_current_bytes(self):
         for w in self.ws:
             for job in w['jobs'].values():

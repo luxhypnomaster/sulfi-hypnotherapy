@@ -76,6 +76,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
     - name: Independently download and verify signed APK bytes and public identity
@@ -144,6 +146,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
     - name: Independently download and verify signed APK bytes and public identity
@@ -247,6 +251,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
     - name: Independently download and verify signed APK bytes and public identity
@@ -339,6 +345,8 @@ jobs:
         distribution: temurin
         java-version: '21'
     - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      with:
+        packages: platform-tools
     - name: Install exact Android compiler tools
       run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
     - name: Independently download and verify signed APK bytes and public identity
