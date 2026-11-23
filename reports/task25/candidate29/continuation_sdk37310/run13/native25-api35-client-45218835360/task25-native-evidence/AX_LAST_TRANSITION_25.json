@@ -1,0 +1,11 @@
+{
+  "readOnly": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "ERROR: could not get idle state.\n"
+    }
+  ]
+}

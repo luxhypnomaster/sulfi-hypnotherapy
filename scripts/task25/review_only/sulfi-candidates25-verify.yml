@@ -127,12 +127,13 @@ jobs:
           scripts/task25/emulator_fault25.py
           scripts/task25/emulator_sdk25.py
           scripts/task25/emulator_pc25.py
+          scripts/task25/android_graphics25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'fc35b3c98d612a6e7b2d28a3a5ef6ea06fc93f540afd5d093fe04987d61ce068'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'f94f0e0bdf6984ff64a2b1bd7d0b593354503eb3bb51e0a16d58a1b1a6cd2733', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'c131703e5827f9caddf4b659d6a1d1754ea67c348a7ab58dd3b85935b413f8f9', 'android_graphics25.py': 'f58982062016d85f6a79ae1d19d139db485019cd0eaa9e2d935a93985c05c79e'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -201,6 +202,7 @@ jobs:
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
         TASK17_EMULATOR_PIN: 37.3.10
+        TASK25_SOFTWARE_GRAPHICS: 'true'
         TASK17_PROCESS_FORENSIC: 'true'
         TASK25_PC_DIAGNOSTIC: 'true'
       with:
@@ -287,12 +289,13 @@ jobs:
           scripts/task25/emulator_fault25.py
           scripts/task25/emulator_sdk25.py
           scripts/task25/emulator_pc25.py
+          scripts/task25/android_graphics25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'fc35b3c98d612a6e7b2d28a3a5ef6ea06fc93f540afd5d093fe04987d61ce068'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'f94f0e0bdf6984ff64a2b1bd7d0b593354503eb3bb51e0a16d58a1b1a6cd2733', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'c131703e5827f9caddf4b659d6a1d1754ea67c348a7ab58dd3b85935b413f8f9', 'android_graphics25.py': 'f58982062016d85f6a79ae1d19d139db485019cd0eaa9e2d935a93985c05c79e'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -361,6 +364,7 @@ jobs:
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
         TASK17_EMULATOR_PIN: 37.3.10
+        TASK25_SOFTWARE_GRAPHICS: 'true'
         TASK17_PROCESS_FORENSIC: 'true'
         TASK25_PC_DIAGNOSTIC: 'true'
       with:

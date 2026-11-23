@@ -15,6 +15,7 @@ import time
 
 from candidate25 import GateError, write
 from emulator_sdk25 import qa_guard
+import android_graphics25 as graphics25
 
 CONTROL_SCRIPT = '''import os, signal, resource
 resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
@@ -263,6 +264,7 @@ def verify_terminal():
     report = json.loads(report_path.read_text())
     if not report.get('cases') or not all(c.get('status') == 'PASS' for c in report['cases']):
         raise GateError('ORIGINAL_NATIVE_CASES_NOT_ALL_PASS')
+    graphics = graphics25.request_proof(root, graphics25.IDS[report['edition']])
     proof = {'status':'PASS_CLEAN_OBSERVED_QEMU_EXIT','avdLaunchCount':1,
              'hostExitCode':0,'hostSIGSEGVCount':0,'signalPolicy':'PASS_ORIGINAL_SIGNALS',
              'restarts':0,'selftest':'PASS_REAL_PC_HOST_CONTROL',
@@ -270,6 +272,7 @@ def verify_terminal():
              'gdbSHA256':control['gdbSHA256'],
              'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL'}
     report['hostObserver'] = proof  # Only add proof; never change cases/data inventories.
+    report['graphicsRequest'] = graphics
     write(report_path, report)
     write(out / 'forensics/PC_CLEAN_EXIT_GATE_25.json', proof)
     print('PASS_CLEAN_OBSERVED_QEMU_EXIT_ORIGINAL_NATIVE_CASES_UNCHANGED')

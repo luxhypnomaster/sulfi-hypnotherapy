@@ -1,0 +1,14 @@
+{
+  "status": "PASS_DISPOSABLE_PHYSICAL_FRAMEBUFFER_CONFIGURED",
+  "before": {
+    "hw.lcd.width": "720",
+    "hw.lcd.height": "1280",
+    "hw.lcd.density": "280"
+  },
+  "after": {
+    "hw.lcd.width": "720",
+    "hw.lcd.height": "1280",
+    "hw.lcd.density": "280"
+  },
+  "applicationOrDatabaseChanged": false
+}

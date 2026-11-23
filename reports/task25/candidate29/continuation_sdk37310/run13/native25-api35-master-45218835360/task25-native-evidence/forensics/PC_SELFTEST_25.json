@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "FATAL_SIGSEGV_PC_CAPTURED",
+  "signals": [
+    {
+      "status": "EXECUTABLE_INSTRUCTION_MODULE",
+      "module": "libc.so.6",
+      "instructionFileOffset": "0x4553b",
+      "signal": "SIGSEGV"
+    }
+  ],
+  "avdLaunch": false,
+  "terminatedWithSIGSEGV": true,
+  "exitCode": null,
+  "guestMemoryRead": false,
+  "stackUnwound": false,
+  "rawDebuggerTranscriptPublished": false,
+  "corePublished": false,
+  "terminationSignal": 11
+}

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "INFERIOR_EXITED",
+  "signals": [],
+  "avdLaunch": false,
+  "terminatedWithSIGSEGV": false,
+  "exitCode": 0,
+  "guestMemoryRead": false,
+  "stackUnwound": false,
+  "rawDebuggerTranscriptPublished": false,
+  "corePublished": false,
+  "terminationSignal": null
+}

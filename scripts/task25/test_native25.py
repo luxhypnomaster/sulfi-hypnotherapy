@@ -149,7 +149,7 @@ class MasterEditorTest(unittest.TestCase):
         old=ast.parse(subprocess.check_output(['git','show','f7c82b4:scripts/task25/native25.py'],text=True))
         new=ast.parse(Path(n.__file__).read_text())
         new.body=[x for x in new.body if (not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor')
-                  and (not isinstance(x,ast.Import) or ast.unparse(x) not in {'import emulator_sdk25 as sdk25','import emulator_pc25 as pc25'})]
+                  and (not isinstance(x,ast.Import) or ast.unparse(x) not in {'import emulator_sdk25 as sdk25','import emulator_pc25 as pc25','import android_graphics25 as graphics25'})]
         prepare=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='prepare_profile')
         setup=next(x for x in prepare.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='sdk_receipt')
         self.assertEqual(ast.unparse(setup.value),'sdk25.install()');prepare.body.remove(setup)
@@ -160,6 +160,9 @@ class MasterEditorTest(unittest.TestCase):
         main=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='main')
         readiness=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=='not sdk25.ready_valid(ready)')
         oldmain=next(x for x in old.body if isinstance(x,ast.FunctionDef) and x.name=='main')
+        graphics=next(x for x in main.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='m.adb')
+        self.assertEqual(ast.unparse(graphics.value),'graphics25.observed_software_adb(m.adb, m.PKG, out)')
+        main.body.remove(graphics)
         oldready=next(x for x in oldmain.body if isinstance(x,ast.If) and any(isinstance(a,ast.Constant) and a.value=='PINNED_EMULATOR_PREHOOK_NOT_CONFIRMED' for a in ast.walk(x)))
         self.assertEqual(ast.dump(ast.Module(body=readiness.body,type_ignores=[])),ast.dump(ast.Module(body=oldready.body,type_ignores=[])))
         readiness.test=oldready.test
