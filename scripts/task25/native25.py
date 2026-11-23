@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write, redact
 import emulator_sdk25 as sdk25
 import emulator_pc25 as pc25
+import android_graphics25 as graphics25
 
 
 def accessibility_snapshot(adb, out, actions, run=None):
@@ -225,6 +226,7 @@ def main():
             "newKeysGenerated": False, "cases": m.CASES, "actions": m.ACTIONS, "inventories": m.inventories,
         })
     m.report = report
+    m.adb = graphics25.observed_software_adb(m.adb, m.PKG, out)
 
     def tree():
         return accessibility_snapshot(m.adb, out, m.ACTIONS)
