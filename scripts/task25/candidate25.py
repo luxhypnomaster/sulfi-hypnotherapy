@@ -252,13 +252,22 @@ def build(root):
     source = app_dir()
     config = baselines(root)
     pins = json.loads((source / "scripts/task23/native_source_pins.json").read_text())
+    generated = "android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
     for p, sha in pins["files"].items():
+        if p == generated and not (source / p).exists():
+            continue  # Git-ignored output; checked strictly AFTER locked pub get.
+        if not (source / p).is_file():
+            raise GateError("MISSING_REVIEWED_NATIVE_SOURCE_" + p)
         if digest(source / p) != sha:
             raise GateError("NATIVE_SOURCE_PIN_DRIFT_" + p)
     default_key = Path.home() / ".android/debug.keystore"
     before_key = (default_key.stat().st_size, default_key.stat().st_mtime_ns) if default_key.exists() else None
-    patch = unsigned_patch(source / "android/app/build.gradle.kts")
     command(["flutter", "pub", "get", "--enforce-lockfile"], cwd=source, live=True)
+    # Check every pin, including generated registration, before any Gradle task.
+    for p, sha in pins["files"].items():
+        if not (source / p).is_file() or digest(source / p) != sha:
+            raise GateError("NATIVE_SOURCE_PIN_DRIFT_AFTER_PUB_GET_" + p)
+    patch = unsigned_patch(source / "android/app/build.gradle.kts")
     output = root / "task25-unsigned"
     output.mkdir()
     records = []

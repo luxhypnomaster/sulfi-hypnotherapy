@@ -63,7 +63,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -124,7 +124,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -229,7 +229,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -332,7 +332,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
