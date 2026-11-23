@@ -263,6 +263,7 @@ class Workflows(unittest.TestCase):
                     if 'Verify reviewed trusted helper' in step.get('name',''):
                         self.assertIn(c.digest(ROOT/'scripts/task25/candidate25.py'),step['run'])
                         if 'native25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/native25.py'),step['run'])
+                        if 'emulator_fault25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_fault25.py'),step['run'])
 
     def test_embedded_python_compiles_and_no_key_generation_or_deploy(self):
         for p,w in zip(self.paths,self.ws):
@@ -281,13 +282,28 @@ class Workflows(unittest.TestCase):
         qa=self.ws[1]
         for api in [34,36]:
             j=qa['jobs']['native'+str(api)]
-            self.assertEqual(j['strategy']['matrix']['edition'],['master','client'])
+            expected='${{ fromJSON(inputs.diagnostic_master_only && \'["master"]\' || \'["master","client"]\') }}' if api==34 else ['master','client']
+            self.assertEqual(j['strategy']['matrix']['edition'],expected)
             emulator=next(s for s in j['steps'] if 'emulator-runner@' in s.get('uses',''))
             self.assertEqual(emulator['env']['TASK17_EMULATOR_PIN'],'37.2.12')
             self.assertEqual(emulator['with']['api-level'],api)
         self.assertEqual(qa['jobs']['native36']['needs'],'native34')
         self.assertEqual(qa['jobs']['delivery']['needs'],['native34','native36'])
         self.assertNotIn('continue-on-error',str(qa))
+
+    def test_diagnostic_master_mode_cannot_run_api36_or_deliver_testers(self):
+        qa=self.ws[1]
+        option=qa['on']['workflow_dispatch']['inputs']['diagnostic_master_only']
+        self.assertEqual(option['type'],'boolean');self.assertIs(option['default'],False)
+        for name in ['native36','delivery']:
+            self.assertTrue(qa['jobs'][name]['if'].endswith(' && !inputs.diagnostic_master_only'))
+        for name in ['native34','native36']:
+            steps=qa['jobs'][name]['steps']
+            extract=next(s for s in steps if s.get('name','').startswith('Extract bounded host'))
+            self.assertEqual(extract['if'],'always()')
+            upload=next(s for s in steps if s.get('name','')=='Preserve native evidence on success or failure')
+            self.assertLess(steps.index(extract),steps.index(upload))
+            self.assertNotIn('*.dmp',str(upload));self.assertNotIn('/tmp/android-runner',str(upload))
 
     def test_kvm_open_and_vm_capability_preflight_precedes_heavy_downloads(self):
         for name in ['native34','native36']:
