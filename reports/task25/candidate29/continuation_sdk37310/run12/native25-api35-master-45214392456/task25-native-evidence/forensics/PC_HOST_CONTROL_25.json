@@ -1,0 +1,6 @@
+{
+  "status": "PASS_REAL_PC_HOST_CONTROL",
+  "selftestExit": 255,
+  "gdbSHA256": "3832cc070ae1716e322105d3b39fb398695e5f031c9d39224cf227a8c2b889f6",
+  "scriptSHA256": "a9573f2056a83936d5ac50ac8956f2ff00aad2ef99ee755e56b537e4e2921349"
+}

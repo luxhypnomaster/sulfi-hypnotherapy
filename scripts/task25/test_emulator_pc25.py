@@ -98,3 +98,51 @@ class LifecycleTest(unittest.TestCase):
             self.assertTrue(p.control_valid(receipt,'unused'))
             for key in receipt:
                 self.assertFalse(p.control_valid(dict(receipt,**{key:'wrong'}),'unused'))
+
+
+class TerminalTest(unittest.TestCase):
+    def fixture(self, td):
+        root=Path(td);out=root/'task25-native-evidence';(out/'forensics').mkdir(parents=True)
+        (root/'task25-observed-avd-launch.marker').write_text('1')
+        (root/'task25-pc-host-ready.json').write_text('{}')
+        report={'cases':[{'case':'UNCHANGED_ORIGINAL_CASE','status':'PASS'}],
+                'inventories':{'before':{'oldRow':'EXACT_OLD_VALUE'}}}
+        (out/'NATIVE_UPGRADE_25.json').write_text(json.dumps(report))
+        pc={'status':'INFERIOR_EXITED','avdLaunch':True,'exitCode':0,'terminationSignal':None,
+            'terminatedWithSIGSEGV':False,'signals':[],'guestMemoryRead':False,
+            'stackUnwound':False,'rawDebuggerTranscriptPublished':False,'corePublished':False}
+        return out,report,pc
+
+    def test_terminal_proof_adds_only_metadata_never_changes_original_native_data(self):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True):
+            out,original,pc=self.fixture(td)
+            (Path(td)/'task25-pc-host-ready.json').write_text(json.dumps({'scriptSHA256':'a'*64,'gdbSHA256':'b'*64}))
+            (out/'forensics/PC_FAULT_MODULE_25.json').write_text(json.dumps(pc))
+            p.verify_terminal()
+            actual=json.loads((out/'NATIVE_UPGRADE_25.json').read_text())
+            proof=actual.pop('hostObserver');self.assertEqual(actual,original)
+            self.assertEqual(proof['hostExitCode'],0);self.assertEqual(proof['restarts'],0)
+            self.assertEqual(proof['scope'],'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL')
+
+    def test_any_signal_fatal_unknown_exit_unobserved_launch_or_memory_read_blocks(self):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True):
+            out,original,pc=self.fixture(td)
+            for key,bad in [('status','DEBUGGER_STARTED'),('avdLaunch',False),('exitCode',None),
+                            ('exitCode',255),('exitCode',False),('terminationSignal',11),('terminatedWithSIGSEGV',True),
+                            ('signals',[{'signal':'SIGSEGV'}]),('guestMemoryRead',True),
+                            ('stackUnwound',True),('rawDebuggerTranscriptPublished',True),('corePublished',True)]:
+                with self.subTest(key=key,value=bad):
+                    (out/'forensics/PC_FAULT_MODULE_25.json').write_text(json.dumps(dict(pc,**{key:bad})))
+                    with self.assertRaisesRegex(GateError,'TERMINAL_NOT_CLEAN'):p.verify_terminal()
+                    self.assertEqual(json.loads((out/'NATIVE_UPGRADE_25.json').read_text()),original)
+
+    def test_missing_or_restarted_marker_and_failed_native_case_cannot_be_certified(self):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True):
+            out,original,pc=self.fixture(td);(out/'forensics/PC_FAULT_MODULE_25.json').write_text(json.dumps(pc))
+            marker=Path(td)/'task25-observed-avd-launch.marker';marker.write_text('2')
+            with self.assertRaisesRegex(GateError,'TERMINAL_NOT_CLEAN'):p.verify_terminal()
+            marker.unlink()
+            with self.assertRaisesRegex(GateError,'EVIDENCE_MISSING'):p.verify_terminal()
+            marker.write_text('1');original['cases'][0]['status']='BLOCKED'
+            (out/'NATIVE_UPGRADE_25.json').write_text(json.dumps(original))
+            with self.assertRaisesRegex(GateError,'NATIVE_CASES_NOT_ALL_PASS'):p.verify_terminal()

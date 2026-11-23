@@ -1,0 +1,129 @@
+{
+  "status": "PASS_INDEPENDENT_ACTUAL_ANDROID_SNAPSHOT_COPIES",
+  "nativeScope": {
+    "edition": "master",
+    "api": 35,
+    "status": "PASS_CONTROLLED_NATIVE",
+    "cases": 17,
+    "errors": []
+  },
+  "inventories": [
+    {
+      "inventory": "after-ui-import-task16v-1.wav",
+      "archiveSHA256": "a54a092c6e88429a4ddd57f39a2c2fef80afe6fdc8043b9abf3839ad48913455",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 9,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-import-task16v-2.wav",
+      "archiveSHA256": "9bac36e4716637d8d53f1d2acab8eb87cdcabbef6c84a6ad05d46b94c5312aa9",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 10,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-import-task16v-3.wav",
+      "archiveSHA256": "6a058a281ad5bb22ddb217cdceddf5bc5ac500dd93f4c3ce7c881c2e0e725f2f",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-module-elman",
+      "archiveSHA256": "67b026aaf82ecb2624b29ea39e7b2fdfc6e7c816236963cf4ffea7dd53bfcb0d",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-module-pause",
+      "archiveSHA256": "fca8efe42f6b11913b0c3435aae7e239bf3a5d175977bf08e021b240bff3ee73",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-history24",
+      "archiveSHA256": "da6dd8144f768538056320773bbdf5dc4665f3350624f8dc794803cfbda6b7e2",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "native_local_draft",
+      "archiveSHA256": "1d5e7d4d2d4d963239fc3f509d5223e3388c73a5bedf17c87de155bf202aa924",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "native_local_draft_cold",
+      "archiveSHA256": "1d5e7d4d2d4d963239fc3f509d5223e3388c73a5bedf17c87de155bf202aa924",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "before-supplement",
+      "archiveSHA256": "7dbb2e1de47b04a3b7d17580c7a0db7be2b4220421983f065af154bc47e0ca40",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "supplement-confirmed",
+      "archiveSHA256": "6d38adcdfeb3d00c2527569030f7c5c621b649c0c84bdfd134cc766ea3dbb2f4",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-capsule",
+      "archiveSHA256": "6d38adcdfeb3d00c2527569030f7c5c621b649c0c84bdfd134cc766ea3dbb2f4",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "beforeBaseline",
+      "archiveSHA256": "6d38adcdfeb3d00c2527569030f7c5c621b649c0c84bdfd134cc766ea3dbb2f4",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "afterCandidate",
+      "archiveSHA256": "abfabc3cfa32a7f030c2e8901ab1d3cba613e6ee0f5079af3e33fb4655523808",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "coldCandidate",
+      "archiveSHA256": "abfabc3cfa32a7f030c2e8901ab1d3cba613e6ee0f5079af3e33fb4655523808",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    }
+  ],
+  "rawArtifactsPublished": false,
+  "originalArchivesChanged": false,
+  "externalSAFCapsuleRaw": "NOT_INCLUDED_IN_PRIVATE_TAR_REPORT_SHA_COMPARISON_ONLY",
+  "realGoogle": "NOT_RUN",
+  "physicalPhone": "NOT_RUN"
+}

@@ -288,7 +288,7 @@ class Workflows(unittest.TestCase):
             self.assertEqual(j['strategy']['matrix']['edition'],expected)
             emulator=next(s for s in j['steps'] if 'emulator-runner@' in s.get('uses',''))
             self.assertEqual(emulator['env']['TASK17_EMULATOR_PIN'],'37.3.10')
-            self.assertEqual(emulator['env']['TASK25_PC_DIAGNOSTIC'],"${{ inputs.diagnostic_master_only && 'true' || 'false' }}")
+            self.assertEqual(emulator['env']['TASK25_PC_DIAGNOSTIC'],'true')
             self.assertEqual(emulator['with']['api-level'],api)
             self.assertEqual(emulator['with']['target'],'default')
         self.assertEqual(qa['jobs']['native36']['needs'],'native35')
@@ -305,15 +305,20 @@ class Workflows(unittest.TestCase):
             steps=qa['jobs'][name]['steps']
             control=next(s for s in steps if s.get('name','').startswith('Install public Ubuntu debugger'))
             emulator=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))
-            self.assertEqual(control['if'],'inputs.diagnostic_master_only')
+            self.assertNotIn('if',control)  # Full four-gate QA gets the same proven observer.
             self.assertEqual(control['env']['TASK25_PC_DIAGNOSTIC'],'true')
             self.assertIn('AllowUnauthenticated=false',control['run'])
             self.assertIn('--host-preflight',control['run'])
             self.assertLess(steps.index(control),steps.index(emulator))
+            terminal=next(s for s in steps if s.get('name','').startswith('Require clean observed host exit'))
+            self.assertNotIn('if',terminal)  # Success-only by default; never ignores failure.
+            self.assertIn('--verify-terminal',terminal['run'])
+            self.assertGreater(steps.index(terminal),steps.index(emulator))
             extract=next(s for s in steps if s.get('name','').startswith('Extract bounded host'))
             self.assertEqual(extract['if'],'always()')
             upload=next(s for s in steps if s.get('name','')=='Preserve native evidence on success or failure')
             self.assertLess(steps.index(extract),steps.index(upload))
+            self.assertLess(steps.index(terminal),steps.index(upload))
             self.assertNotIn('*.dmp',str(upload));self.assertNotIn('/tmp/android-runner',str(upload))
 
     def test_native_success_is_not_automatic_owner_phone_authorization(self):

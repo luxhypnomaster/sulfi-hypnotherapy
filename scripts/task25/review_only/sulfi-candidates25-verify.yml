@@ -132,7 +132,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '9df3b02c5f827602bf5505261407168781a97d84499663605f7c55f32342bc50'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '676d1f38b5470f09aa474c5081406443f4c2bd99c8598bc78b77695fb22d5516'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -141,7 +141,6 @@ jobs:
     - name: Validate trusted workflow context
       run: python3 trusted/scripts/task25/candidate25.py trust
     - name: Install public Ubuntu debugger and prove host PC control before Android
-      if: inputs.diagnostic_master_only
       env:
         TASK25_PC_DIAGNOSTIC: 'true'
       run: |-
@@ -203,7 +202,7 @@ jobs:
       env:
         TASK17_EMULATOR_PIN: 37.3.10
         TASK17_PROCESS_FORENSIC: 'true'
-        TASK25_PC_DIAGNOSTIC: ${{ inputs.diagnostic_master_only && 'true' || 'false' }}
+        TASK25_PC_DIAGNOSTIC: 'true'
       with:
         api-level: 35
         target: default
@@ -220,6 +219,8 @@ jobs:
           -no-boot-anim -camera-back none -camera-front none -feature -Vulkan
         pre-emulator-launch-script: python3 trusted/scripts/task25/native25.py --prepare-profile
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 35
+    - name: Require clean observed host exit after all original native checks
+      run: python3 trusted/scripts/task25/emulator_pc25.py --verify-terminal
     - name: Copy safe emulator exit diagnostics only; no guest memory
       if: always()
       run: |-
@@ -291,7 +292,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '9df3b02c5f827602bf5505261407168781a97d84499663605f7c55f32342bc50'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '676d1f38b5470f09aa474c5081406443f4c2bd99c8598bc78b77695fb22d5516'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -300,7 +301,6 @@ jobs:
     - name: Validate trusted workflow context
       run: python3 trusted/scripts/task25/candidate25.py trust
     - name: Install public Ubuntu debugger and prove host PC control before Android
-      if: inputs.diagnostic_master_only
       env:
         TASK25_PC_DIAGNOSTIC: 'true'
       run: |-
@@ -362,7 +362,7 @@ jobs:
       env:
         TASK17_EMULATOR_PIN: 37.3.10
         TASK17_PROCESS_FORENSIC: 'true'
-        TASK25_PC_DIAGNOSTIC: ${{ inputs.diagnostic_master_only && 'true' || 'false' }}
+        TASK25_PC_DIAGNOSTIC: 'true'
       with:
         api-level: 36
         target: default
@@ -379,6 +379,8 @@ jobs:
           -no-boot-anim -camera-back none -camera-front none -feature -Vulkan
         pre-emulator-launch-script: python3 trusted/scripts/task25/native25.py --prepare-profile
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 36
+    - name: Require clean observed host exit after all original native checks
+      run: python3 trusted/scripts/task25/emulator_pc25.py --verify-terminal
     - name: Copy safe emulator exit diagnostics only; no guest memory
       if: always()
       run: |-

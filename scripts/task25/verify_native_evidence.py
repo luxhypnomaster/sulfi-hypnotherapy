@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Independent read-only delivery gate over actual native artifacts, never OWNER QA."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
 from candidate25 import SOURCE, CODE
 from emulator_sdk25 import VERSION as SDK_VERSION, SHA256 as SDK_SHA256
+from emulator_pc25 import GDB_SCRIPT
 
 TABLES = ('audio_assets', 'module_definitions', 'session_templates', 'current_draft',
           'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings',
@@ -30,6 +32,13 @@ def inspect(report, driver_sha, current_sdk=False):
     if current_sdk:
         require(report.get('emulatorVersion') == SDK_VERSION, 'SDK_VERSION_PIN')
         require(report.get('emulatorArchiveSHA256') == SDK_SHA256, 'SDK_ARCHIVE_PIN')
+        proof=report.get('hostObserver',{})
+        required={'status':'PASS_CLEAN_OBSERVED_QEMU_EXIT','avdLaunchCount':1,
+                  'hostExitCode':0,'hostSIGSEGVCount':0,'restarts':0,
+                  'signalPolicy':'PASS_ORIGINAL_SIGNALS','selftest':'PASS_REAL_PC_HOST_CONTROL',
+                  'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL',
+                  'observerScriptSHA256':hashlib.sha256(GDB_SCRIPT.encode()).hexdigest()}
+        require(all(proof.get(k)==v and type(proof.get(k)) is type(v) for k,v in required.items()),'CLEAN_BOUND_HOST_OBSERVER_PROOF')
     require(report.get('baseline') == 28 and report.get('candidate') == CODE, 'VERSION_SCOPE')
     require(report.get('ownerPhone') == 'NOT_TOUCHED' and report.get('realGoogle') == 'NOT_RUN', 'NO_OWNER_OR_GOOGLE_PASS_CLAIM')
     require(report.get('uninstallClearDowngrade') is False and report.get('newKeysGenerated') is False, 'NO_DESTRUCTIVE_OR_NEW_KEY_ACTIONS')

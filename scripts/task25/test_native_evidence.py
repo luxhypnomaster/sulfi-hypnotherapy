@@ -58,5 +58,27 @@ class ActualFailedArtifactTest(unittest.TestCase):
         self.assertEqual(result['status'],'BLOCKED')
         self.assertIn('EXACT_OLD_ROWS_afterCandidate_content_revisions',result['errors'])
 
+    def test_actual_successful_diagnostic_master_cannot_be_relabelled_as_full_observed_gate(self):
+        p=ROOT/'reports/task25/candidate29/continuation_sdk37310/run12/native25-api35-master-45214392456/task25-native-evidence/NATIVE_UPGRADE_25.json'
+        report=json.loads(p.read_text())
+        self.assertEqual(inspect(report,report['driverMainSHA'])['status'],'PASS_CONTROLLED_NATIVE')
+        result=inspect(report,report['driverMainSHA'],current_sdk=True)
+        self.assertIn('CLEAN_BOUND_HOST_OBSERVER_PROOF',result['errors'])
+
+    def test_full_proof_rejects_restart_signal_missing_or_unbound_script(self):
+        from emulator_pc25 import GDB_SCRIPT
+        import hashlib
+        p=ROOT/'reports/task25/candidate29/continuation_sdk37310/run12/native25-api35-master-45214392456/task25-native-evidence/NATIVE_UPGRADE_25.json'
+        report=json.loads(p.read_text())
+        proof={'status':'PASS_CLEAN_OBSERVED_QEMU_EXIT','avdLaunchCount':1,'hostExitCode':0,
+               'hostSIGSEGVCount':0,'restarts':0,'signalPolicy':'PASS_ORIGINAL_SIGNALS',
+               'selftest':'PASS_REAL_PC_HOST_CONTROL','scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL',
+               'observerScriptSHA256':hashlib.sha256(GDB_SCRIPT.encode()).hexdigest()}
+        report['hostObserver']=proof
+        self.assertNotIn('CLEAN_BOUND_HOST_OBSERVER_PROOF',inspect(report,report['driverMainSHA'],current_sdk=True)['errors'])
+        for key in proof:
+            report['hostObserver']=dict(proof,**{key:'UNTRUSTED_OR_MISSING'})
+            self.assertIn('CLEAN_BOUND_HOST_OBSERVER_PROOF',inspect(report,report['driverMainSHA'],current_sdk=True)['errors'])
+
 
 if __name__=='__main__':unittest.main(verbosity=2)
