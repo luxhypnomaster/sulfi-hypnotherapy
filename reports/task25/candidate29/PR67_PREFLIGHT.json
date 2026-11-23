@@ -1,0 +1,16 @@
+{
+  "status": "PASS_EXACT_TWO_OPERATIONAL_FILES",
+  "PR": 67,
+  "head": "37e58d33a2711486b380b2148c179906df64d9ce",
+  "mainBefore": "cd8cf33789150d6c169c52906149a43f05a0b1cb",
+  "protected": true,
+  "mergeable": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "054575033d814b0dafecfc3b410ae54ba9e026c88c7510cd5c29912312c1096e",
+    "scripts/task25/emulator_fault25.py": "994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f"
+  },
+  "signingOrAppSourceChanged": false,
+  "rawDumpUpload": false,
+  "diagnosticTesterDelivery": "FORBIDDEN",
+  "ownerRuleReadbackReused": true
+}

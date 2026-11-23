@@ -1,3 +1,14 @@
+# №25 — кандидат29, native safety не завершена
+
+- [x] Интеграционный исходник737ea741:574Flutter/2SKIP,114Node, исходные53Python; analyze/format и335/31source pins.
+- [x] Защищённая раздельная build/sign pipeline, существующий cert; две actual APK29 и независимый binary readback.
+- [x] CLIENT API34 normal28→29/cold/native playback:15PASS; точные строки SQLite и медиа сохранены.
+- [x] Подтверждён SIGSEGV фактического QEMU процесса MASTER на old28; независимый delivery validator остаётся fail-closed.
+- [x] Узкий безопасный crash-metadata инструмент,68QA-tool tests, отдельная диагностика MASTER без повторного CLIENT и без выдачи APK.
+- [ ] Полная native сохранность MASTER и обеих editions API36 — BLOCKED/NOT_RUN; см. актуальные отчёты25.
+- [ ] Разрешённая выдача пары после всех4гейтов, owner installed-version readback, отдельная приёмка на двух реальных телефонах.
+- [ ] Live Google и незавершённые21–23 production-возможности остаются открытыми, новые флагиOFF.
+
 # №25 — интеграция (отдельная ветка, без merge/deploy)
 
 - [x] Проверить 11 файлов официального пакета, манифест и 55 критериев; ancestry PR51→52→54→55→56.

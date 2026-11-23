@@ -1,9 +1,13 @@
-# №25 — финальная контрольная точка
+# №25 — текущая контрольная точка
 
-Код `737ea741636e9abe7c20353d9d5b8301cf44a5bb`, draft PR57 https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57, от PR56d0a6d9a. Source/local integration завершена, общий результат PARTIAL. Runtime335/native31 pins unchanged, all parent PRs draft/unmerged.
+2026-11-23: source737ea741636e9abe7c20353d9d5b8301cf44a5bb, draftPR57/feat/task25-integration-native-gates, app PR51–57 unmerged. Runtime335/native31 unchanged; Flutter574/2SKIP,Node114,originalPython53; QAtool68PASS. Full suites/build/signing не повторять без новых оснований.
 
-Final Flutter574PASS/2SKIP, CLIENTdefine1, Node114, Python53, analyze/format/source/typecompilePASS. LiveGoogle/native/signing/device/production22 неPASS. Без новых APK, main/GAS6/OAuth/ACL/signing/userdata untouched.
+Signedpair29 реальная: run45103325755 SUCCESS; обеAPK independentSHA/apksigner/aapt/config/permissions PASS. Cert0b743568... прежний. Actualbytes в quarantine artifact14786149620 до2026-11-26. Не перестраивать/переподписывать.
 
-Drive https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn . Upload IDs/independent hashes: DELIVERY/DRIVE_READBACK. Первый batch13files ужеreadbackPASS. Итоговая доставка фиксируется отдельно после этого source freeze. Reports-only commits не требуют ещё одного full Flutter run.
+Run45157723278: CLIENT API34 все15PASS, MASTER5PASS затем old28QEMU SIGSEGV до29. ОбаAPI36NOT_RUN, deliveryBLOCKED. Phone/GoogleNOT_RUN, installedversionUNKNOWN.
 
-При возобновлении не повторять G0/full suites/один runner probe45048084597. Сначала читать RESULT/ISSUES/APK_BLOCKER/SAFE_NATIVE_PLAN/55criteria. Следом только устранение signing+native blockers в отдельно доверенной среде, owner-approval на mainинструмент при необходимости. Не запускать pinned24 workflow или dual-apk безlivegate. Никакого uninstall/clear/downgrade/сменыkey. Не выдавать старые APK за№25.
+Active diagnostic-only run45161085603, main3a45c202798307f1fc2593c9b883f2fbe6394951, ordinaryPR67 exact2QAfiles, protectedmain hashesreadbackPASS. MASTER34only; no secrets/build/sign/delivery. Await terminal evidence, download once viaGitHubplugin andproviderdigest, inspect metadataJSON (no rawdump). Если no dump — UNKNOWN, stopsamehypothesis. При фактическом модуле новая evidence-based гипотеза, прежние renderer trials17 не повторятьслепо. Не выдавать диагностическийSUCCESS за4nativegates.
+
+Worktree /dev/shm/sulfi25-resume; appAPKs /dev/shm/task25-candidate29-restored. SHM может очиститься послеenvironment restart; Gitcommits сохраняются. Ранее неработающий direct workspace GitHub artifact download не повторять, connectorfile_url употреблятьбезпечати. LocalKVM/keyнет. HeavyfilesSHM, rootпочтизаполнен.
+
+Drive existing1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn; исходные отчёты сохранить; текущиеRESULT/TESTS/matrix55/delivery нужно завершить после terminaldiagnostic, загрузить новымиdatedfilesиrawSHA/parentreadback. Пока APKdelivery/ownerinstall BLOCKED. GAS6/OAuth/ACL/signingkey/personaldata untouched. Older24→25UNKNOWN,22/23 livegaps сохранены.

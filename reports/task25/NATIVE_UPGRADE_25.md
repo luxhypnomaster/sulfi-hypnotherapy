@@ -1,16 +1,21 @@
-# №25 — native normal-upgrade
+# №25 — настоящие native-проверки, точные границы
 
-**Обе редакции: BLOCKED_ENV; фактических установок0.** API34/35/36/min24 NOT_RUN. Физический Android/настоящая Google-пара NOT_RUN. Локальный Flutter FFI тест не является Android sqlite/WAL, PackageManager или звуковым выводом.
+Используются реальные исторические signed APK28 (источник de408f1cae08fce16069a701d147a0b1064053ba) и новые signed APK29 (737ea741636e9abe7c20353d9d5b8301cf44a5bb), одинаковые cert/packages, не helper APK. Только одноразовые GitHub-hosted Android эмуляторы, не телефон владельца.
 
-|Редакция|Историческая baseline|Новая signed APK|UI dataset в старой APK|install-r|Cold/IDs/SHA/queue|
-|---|---|---|---|---|---|
-|MASTER|28: исторический source de408f1cae08fce16069a701d147a0b1064053ba, подпись по №18|BLOCKED|NOT_RUN|NOT_RUN|NOT_RUN|
-|CLIENT|28, отдельный .clienttest package, тот же исторический cert|BLOCKED|NOT_RUN|NOT_RUN|NOT_RUN|
+|Прогон|Факт|Причина следующего шага|
+|---|---|---|
+|45104377872|CLIENT12PASS включая реальный install-r28→29; затем transient AX observation BLOCKED. MASTER10PASS до fail-fast cancel|Последующий XML/screenshot подтвердил живой player; ограниченный свежий read-only AX retry, без повторных действий|
+|45106402826|Ошибка доступа KVM до запуска Android; native NOT_RUN|Проверка реального FD/API12/createVM, udev settle/chmod до загрузок; аппаратное ускорение обязательно|
+|45107294363|Оба KVM PASS. CLIENT потерял ADB на старой28 при паузе; MASTER отменён|Добавить фактический monitor выхода QEMU, сохранить обе edition, уменьшить физический framebuffer без изменения logical frame/DB assertions|
+|45157723278|CLIENT API34 все15PASS; MASTER5PASS, затем QEMU exit-11/SIGSEGV до29|Нужен faulting module; памяти/сигнала wrapper/OOM kill недостаточно для вывода о причине|
+|45161085603|MASTER-only диагностика, статус в отдельном native_attempt5|Только exception/code module offsets, без дампа памяти; выдача APK запрещена в diagnostic mode|
 
-Прежние №17/18 native receipts не переименованы в №25. Историческая подписанная baseline доступна по прежним материалам, но её194MB не скачивались без пригодной native-среды; проверка downloaded baseline cert в этом этапе NOT_RUN. Внезапный пустой scope/SQLite телефона24→25 остаётся UNKNOWN, не заявлен исправленным.
+## Полный CLIENT API34 PASS — run45157723278
 
-Причины: нет emulator/KVM/signer; текущий trusted default-branch signing workflow не умеет брать новый approved source. Никаких бесполезных emulator installations, повторов0steps или авто-debug-keystore. SDK36 source/type checks отдельно PASS_READ_ONLY/PASS_TYPE_COMPILE в ANDROID_AUDIT_25, не nativePASS.
+Через UI APK28 созданы3разных синтетических WAV (включая одинаковые названия), модуль3трека, второй модуль с паузой, программа/template, current draft, history (interrupted), capsule через SAF. Supplemental queue/cache/settings созданы insert-only в настоящей Android SQLite отдельно от UI и НЕ являются реальным Google/сервером. Реальный PackageManager install-r28→29 и cold restart29 сохранили все проверяемые строки9таблиц и точные SHA старых медиа/капсулы; SQLite integrity ok/schema9; модули/аудио видны в UI, native preview observed, synthetic public diary читается офлайн. Независимый validator повторно проверил отчёт —15casesPASS.
 
-Будущая disposable fixture обязательно через UI baseline:3реальных synthetic AAC, модуль с паузами, программа/templateIDs, current draft, offline-local diary+media, frozen history+checkpoint, pending/USER_PAUSED transfer, capsule. Supplementary queue injection, если необходима, отмечается отдельно и не заменяет UI-created контент. До/после normal install-r без удаления: counts/IDs/revision refs/bytes SHA/SQLite integrity/paths/queue checkpoints и owner isolation. Сначала обе редакции, затем независимая выдача.
+MASTER run4 остановился на открытии редактора паузы old28. Monitor фактического qemu child3287: SIGSEGV,291.23sec, wrapper signals[], oom/oom_kill0 до/после, MemAvailable~14GB. Это доказывает прекращение работы host emulator, но не точный faulting module и не исправность миграции MASTER. При нехватке native evidence нельзя заменить gate FFI-тестом, создать состояние только SQL или пропустить паузу.
 
-Запрещены действия на телефоне владельца, uninstall, clear, downgrade, импорт/перезапись настоящих материалов. План не является выполненным тестом.
+API36 обоих приложений NOT_RUN. Нужны все4 gates (MASTER/CLIENT × API34/36); независимый validator `verify_native_evidence.py` сейчас возвращает BLOCKED_NATIVE_DELIVERY. Старые результаты17/18 не переименовываются в25.
+
+Реальные Google-аккаунты, физически услышанный звук, запись/разрешения на телефоне, actual owner installed version, полный29 background-transfer/live receipt и двухтелефонная приёмка — NOT_RUN. Старый случай24→25 UNKNOWN. Данные телефона не извлекались, uninstall/clear/downgrade не выполнялись. Сырые Crashpad/guest memory в отчёты не передаются.

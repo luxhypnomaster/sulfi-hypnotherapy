@@ -1,15 +1,9 @@
-# Задание №25 — актуальное состояние
+# №25 — актуально: пара29 собрана, испытания PARTIAL
 
-**PARTIAL. Новых APK пока нет. Ничего устанавливать не нужно.**
+Две actual APK29 подписаны прежним ключом и независимо проверены. CLIENT полностью прошёл native update28→29 на Android14,15casesPASS. MASTER проверка заблокирована: QEMU SIGSEGV на старой28, до обновления. API36 обеих редакций NOT_RUN. **Пока ничего не устанавливать на телефон.**
 
-[Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Продолжение](https://drive.google.com/file/d/1PrRDwyJIN3B0ds8sa66vUuEq7kKuqo8T/view) · [Точный запрос отдельного разрешения](https://drive.google.com/file/d/1h7ah7EqutKj10NgQcjjF-7Ex2CiUrG1A/view) · [Полный diff двух файлов](https://drive.google.com/file/d/1b-TfgutIkesEuMQ__-ReVqFNisyTf45g/view).
+[Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Сборка45103325755](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) · [Native45157723278](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45157723278) · [Диагностика MASTER45161085603](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45161085603) · [ОтчётыDrive](https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn).
 
-Код приложения сохранён: ранее574FlutterPASS/2SKIP,114NodePASS. Продолжение подготовило неактивный инструмент для проверки публичного сертификата прежнего keystore. Дополнительно23controlledPythonPASS,actionlintPASS,проверено применение/отменаdiff на отдельнойкопииmain. Настоящийkeystoreнеиспользовался,новыйсертификатнесоздавался.
+Источникприложений737ea741636e9abe7c20353d9d5b8301cf44a5bb. Runtime unchanged;68QAtoolPASS, прежние574Flutter/2SKIP и114Node сохранены. AppstackPR51–57 неmerged. Только узкие authorized operational-mainPR, безproduction/GAS/OAuth/ACL/key/userdatachanges.
 
-Важныйфакт: GitHubmainprotected=false. Инструмент теперь явноотказывает до secretjob на такойветке. Два файла НЕ перенесены вmain, workflow НЕ запускался. Измененияmain/защиты/ACL/signing не разрешены текущейкомандой и не выполнялись.
-
-Для продолжения нужен отдельно согласованный защищённый запуск/среда. Готовыйузкийdiff позволяетreview,нонеразрешаетизменятьнастройкизащиты. Дажеmatchingpubliccert неравен провереннойподписиAPK:посленегопотребуютсяprotectedbuild,nativeобычноеобновлениеMASTER/CLIENTибинарныйreadback. ДоэтихPASSAPKвыдачиздесьнет.
-
-Матрица55:43PASSназаявленныхуровнях,1ALREADY_DONE,7BLOCKED,3PARTIAL,1NOT_RUN. Google/двафизическихтелефона/production22 неPASS. Main/GAS6/OAuth/данныеприложениясохранены. Старыйowner24→25UNKNOWNнеобъявленисправленным.
-
-Источник инструмента5790139b0c2dc45363434451aa951b14b496d8fc; sourceприложения737ea741636e9abe7c20353d9d5b8301cf44a5bb. Исходные29отчётныхфайловосталисьнапреднихместах;дополнениеразмещенорядом,снеизменённымиправами.
+Подробности: RESULT_25, TESTS_25, NATIVE_UPGRADE_25, APK_INFO_25/APK_READBACK_25,55criteriaACCEPTANCE. Исходные отчёты сохранены отдельно. Реальные Google/физические телефоны NOT_RUN; историческийowner24→25 UNKNOWN.

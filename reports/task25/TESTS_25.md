@@ -31,6 +31,16 @@ Node total114, Python total53. Targeted tests входят в/пересекаю
 
 Полный suite заново проверил schema6/7/8→9 и9→9, corrupted/alternate/missing path, WAL/SHM/journal copy recovery, capsule hashes/manifest/owner/cancel/concurrency, unknown staging preservation, frozen history/program refs, existing auth/retry/queue logic, catalog cache/HEAD/CAS/receipt,3ratings/NOT_CALIBRATED, courses exact refs, F038/K025/026/027/029/030/037,9:16 и client editing boundaries. Никакого нового runtime defect не воспроизведено; runtime fixes0. Названия старых тестов RED→GREEN — исторические regressions №23/24, не новые RED-прогоны №25.
 
-**Не выполнено:** Gradle/native Kotlin tests, APK/AAB build, apksigner/aapt нового APK, Android emulator/install-r/микрофон/звук/OS background, реальные Google MASTER/CLIENT, owner phones, production server22/backup/restore. KVM/emulator/signing отсутствуют, старый CI source непригоден. Bundled standalone Kotlin compiler диагностирован двумя разными classpath гипотезами; missing dependencies, дальнейших установок/повторов нет. Это BLOCKED_ENV, не regressionFAIL и не nativePASS.
+## Продолжение: реальные APK и native
 
-Runner probe https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45048084597 проверяет **main server-only**, не Flutter source25. Старый billing0steps сегодня не повторился. Production deployment не выполнялся. Специального CI текущего source с секретами не запускали.
+Защищённая сборка45103325755 SUCCESS; actual Flutter/Gradle build обеих editions, unsigned credential-free; подпись отдельной trusted-main job. Независимый apksigner/aapt/package/version/SHA/CRC/SDK/ABI/config/permissions PASS (APK_INFO/APK_READBACK, candidate29/).
+
+`PYTHONPATH=scripts/task25 python3 -m unittest discover -s scripts/task25 -p 'test*.py'`: **68 PASS**,2026-11-23; отдельный текущий инструментальный набор, не складывать с53исходного baseline как уникальные все-project tests. `actionlint1.7.12 -shellcheck= -pyflakes=` verify workflow PASS, официальный бинарник проверен по provider SHA. Embedded Python compilations и credential/context restrictions покрыты controlled tests.
+
+Native45157723278: CLIENT34 **15PASS**, MASTER34 **5PASS+1BLOCKED** (old28 QEMU SIGSEGV), API36bothNOT_RUN, deliverySKIPPED. Actual controlled Android evidence независимо прочитаны и проверены дополнительным fail-closed validator: CLIENT PASS, completeFourGates false, pair BLOCKED_NATIVE_DELIVERY. Это не успешная Android-приёмка пары.
+
+Все68tools tests включают8synthetic minidump parser tests, отсутствие чтения memory payload, bounded metadata, отказ некорректных offsets, symlink skip, корректный NO_MINIDUMP_FOUND; они не заменяют native root cause. Run45161085603 — отдельная secret-free MASTER-only diagnosis. Его terminal output фиксируется отдельно.
+
+Flutter574/Node114 целиком заново не повторялись после report/tool-only правок: protected runtime335/native31 unchanged. Среда после остановки восстановлена в /dev/shm/sulfi25-resume; прежние APK exact bytes проверены без rebuild/resign.
+
+**NOT_RUN:** реальные Google/users/физические телефоны, фактически услышанный звук, реальная запись, новый29OS-kill transfer receipt, API36, min24/35native и production22/livebackup. Исторические native17/18 и source compile не названы current25nativePASS. Оригинальный owner24→25causeUNKNOWN. Никаких действий на телефоне владельца.
