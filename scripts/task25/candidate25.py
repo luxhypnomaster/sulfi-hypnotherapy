@@ -126,7 +126,13 @@ def fetch(url, output=None, *, limit=1024 ** 3, accept="application/vnd.github+j
                 raise GateError("JSON_SIZE_LIMIT")
             return json.loads(raw)
     except urllib.error.HTTPError as e:
-        raise GateError(f"DOWNLOAD_HTTP_{e.code}") from None
+        try:
+            reason = json.loads(e.read(8192)).get("message", "")
+            reason = redact(reason) if isinstance(reason, str) else ""
+        except (ValueError, UnicodeError):
+            reason = ""
+        host = urllib.parse.urlsplit(e.url).hostname or "unknown"
+        raise GateError(f"DOWNLOAD_HTTP_{e.code} host={host}" + (": " + reason if reason else "")) from None
     except urllib.error.URLError as e:
         raise GateError("DOWNLOAD_NETWORK_" + type(e.reason).__name__) from None
 
@@ -369,9 +375,18 @@ def signed_data(root, run):
           "nativeSafety": "PENDING", "physicalPhones": "NOT_RUN"})
 
 
+def baseline_data(root, run):
+    same_run = str(run) == os.environ.get("GITHUB_RUN_ID")
+    artifact(root, run, f"baseline25-{run}", ["master28.apk", "client28.apk", "public-config.json"],
+             "task25-baseline", require_complete=not same_run)
+    # Never trust the artifact manifest for historical bytes: original external
+    # asset sizes/SHA/signatures and public configuration are independently checked.
+    baselines(root)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("action", choices=["trust", "credentials", "baseline", "build", "unsigned-data", "sign", "signed-data"])
+    p.add_argument("action", choices=["trust", "credentials", "baseline", "baseline-data", "build", "unsigned-data", "sign", "signed-data"])
     p.add_argument("--run", type=int)
     args = p.parse_args()
     root = guard()
@@ -387,6 +402,8 @@ def main():
             print("IMMUTABLE_BASELINES_AND_LEGACY_PUBLIC_CONFIG_VERIFIED")
         elif args.action == "build":
             build(root)
+        elif args.action == "baseline-data":
+            baseline_data(root, args.run or int(os.environ["GITHUB_RUN_ID"]))
         elif args.action == "unsigned-data":
             artifact(root, os.environ["GITHUB_RUN_ID"], f"unsigned25-{os.environ['GITHUB_RUN_ID']}",
                      ["master29-unsigned.apk", "client29-unsigned.apk", "unsigned-manifest.json"], "task25-unsigned", require_complete=False)
