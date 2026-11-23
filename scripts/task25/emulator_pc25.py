@@ -55,6 +55,9 @@ def instruction_module(maps, pc):
 GDB_SCRIPT = r'''
 set pagination off
 set confirm off
+set logging file /dev/null
+set logging redirect on
+set logging enabled on
 set print thread-events off
 set disable-randomization off
 set follow-fork-mode parent
@@ -64,7 +67,7 @@ handle SIGPIPE nostop noprint pass
 handle SIGUSR1 nostop noprint pass
 handle SIGUSR2 nostop noprint pass
 handle SIGALRM nostop noprint pass
-handle SIGSEGV stop noprint pass
+handle SIGSEGV stop print pass
 python
 import gdb, json, os, sys
 from pathlib import Path
@@ -91,9 +94,13 @@ try:
         stopped['signal'] = None
         transcript = gdb.execute(command, to_string=True)
         command = 'continue'
-        if 'terminated with signal SIGSEGV' in transcript:
-            report['terminatedWithSIGSEGV'] = True
         if gdb.selected_inferior().pid == 0:
+            try:
+                exit_signal = int(gdb.parse_and_eval('$_exitsignal'))
+            except (gdb.error, TypeError, ValueError):
+                exit_signal = None
+            report['terminationSignal'] = exit_signal
+            report['terminatedWithSIGSEGV'] = exit_signal == 11
             report['status'] = 'FATAL_SIGSEGV_PC_CAPTURED' if report['terminatedWithSIGSEGV'] else 'INFERIOR_EXITED'
             save()
             break

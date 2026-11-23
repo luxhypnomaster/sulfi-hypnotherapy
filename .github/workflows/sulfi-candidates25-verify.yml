@@ -132,7 +132,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '2738da1f9dceac4015bdb3cec3801caec37e89a16c0b46ae7344cf01c367a74b'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '9df3b02c5f827602bf5505261407168781a97d84499663605f7c55f32342bc50'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -291,7 +291,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '2738da1f9dceac4015bdb3cec3801caec37e89a16c0b46ae7344cf01c367a74b'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': '9df3b02c5f827602bf5505261407168781a97d84499663605f7c55f32342bc50'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
