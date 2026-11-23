@@ -1,3 +1,5 @@
+> Актуальное продолжение23.11.2026: [DELIVERY — новые результаты](candidate29/continuation_sdk37310/DELIVERY_CONTINUATION_25.md). Полный native-допуск пары остаётся **BLOCKED**; ниже сохранён исторический срез доSDK37.3.10. [Текущая сводка](00_CURRENT_STATUS_25.md).
+
 # №25 — итоговая доставка кандидата29, 23.11.2026
 
 Результат PARTIAL / BLOCKED_FULL_NATIVE_DELIVERY. Две actual signed APK29 существуют, но остаются quarantine и не загружены на Drive/не выданы для установки. Это доставка отчётов и доказательств, не релиз APK.

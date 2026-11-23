@@ -1,3 +1,5 @@
+> Актуальное продолжение23.11.2026: [TESTS — новые результаты](candidate29/continuation_sdk37310/TESTS_CONTINUATION_25.md). Полный native-допуск пары остаётся **BLOCKED**; ниже сохранён исторический срез доSDK37.3.10. [Текущая сводка](00_CURRENT_STATUS_25.md).
+
 # Проверки №25 — фактические результаты
 
 Код: `737ea741636e9abe7c20353d9d5b8301cf44a5bb`, runtime tree равен PR56/d0417027. Отчётные commits после него не меняют lib/android/server/third_party/.github/test/scripts. Локальные команды выполнялись в /dev/shm/sulfi25, Flutter3.47.9/Dart3.13.7/JDK21/Node24/Python3.12. Временные DB/медиа синтетические; cleanup удалял только собственные temp fixtures.

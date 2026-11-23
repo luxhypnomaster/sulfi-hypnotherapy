@@ -1,3 +1,5 @@
+> Актуальное продолжение23.11.2026: [CHANGES — новые результаты](candidate29/continuation_sdk37310/CHANGES_CONTINUATION_25.md). Полный native-допуск пары остаётся **BLOCKED**; ниже сохранён исторический срез доSDK37.3.10. [Текущая сводка](00_CURRENT_STATUS_25.md).
+
 # Изменения №25
 
 App source `737ea741636e9abe7c20353d9d5b8301cf44a5bb` сохранён. После source freeze новых runtime-изменений0; кодовый checkpoint QA `5977584cfeb14d3f3222d49e45729f76fff35f47`. Изменений путей, SQLite schema/API, ключа, серверных прав и работающих подсистем нет.

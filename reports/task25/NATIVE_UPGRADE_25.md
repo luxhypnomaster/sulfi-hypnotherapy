@@ -1,3 +1,5 @@
+> Актуальное продолжение23.11.2026: [TESTS — новые результаты](candidate29/continuation_sdk37310/TESTS_CONTINUATION_25.md). Полный native-допуск пары остаётся **BLOCKED**; ниже сохранён исторический срез доSDK37.3.10. [Текущая сводка](00_CURRENT_STATUS_25.md).
+
 # Native update №25 — доказательства и границы
 
 Обе actual APK28/29 имеют прежние cert/applicationId;29>28, target36/min24/3ABI. Только одноразовые GitHub-hosted Android, без owner device, uninstall, clear или downgrade.

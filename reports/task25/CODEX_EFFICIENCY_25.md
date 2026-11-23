@@ -1,3 +1,5 @@
+> Актуальное продолжение23.11.2026: [CODEX_EFFICIENCY — новые результаты](candidate29/continuation_sdk37310/CODEX_EFFICIENCY_CONTINUATION_25.md). Полный native-допуск пары остаётся **BLOCKED**; ниже сохранён исторический срез доSDK37.3.10. [Текущая сводка](00_CURRENT_STATUS_25.md).
+
 # №25 — экономия и основания реальных запусков
 
 Приложения frozen737ea741636e9abe7c20353d9d5b8301cf44a5bb. Нет выдуманных процентов квоты. Full Flutter574/2SKIP,Node114,исходныеPython53 не повторялись после tool/report-only правок; актуальный QA-tools набор76PASS, actionlintPASS. Группы45/68/70/75/76 перекрываются и не суммируются.

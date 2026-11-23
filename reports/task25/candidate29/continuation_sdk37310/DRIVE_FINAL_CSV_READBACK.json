@@ -1,0 +1,13 @@
+{
+  "id": "1L6x8f3pBHMNnKRTtgNZI56uMLjvq13A2",
+  "name": "ACCEPTANCE_CONTINUATION_25.csv",
+  "bytes": 12274,
+  "sha256": "b766aa2517e4db266449cfdc0b8abb81cadb22b73d85cdbcc5a90632d0338af1",
+  "status": "PASS_LF_FINAL_RAW_SHA_SIZE_PARENT",
+  "rows": 55,
+  "scopedPASS": 51,
+  "PARTIAL": 3,
+  "ALREADY_DONE": 1,
+  "globalOutcome": "BLOCKED_FULL_NATIVE_PAIR",
+  "lineEndingNormalizationOnly": true
+}
