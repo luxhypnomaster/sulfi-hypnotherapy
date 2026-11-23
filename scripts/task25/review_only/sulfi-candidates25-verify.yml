@@ -63,7 +63,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a'}
+        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -124,7 +124,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -154,8 +154,8 @@ jobs:
       run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Read and verify immutable signed baseline28 only
-      run: python3 trusted/scripts/task25/candidate25.py baseline
+    - name: Read and verify immutable signed baseline28 artifact without draft write capability
+      run: python3 trusted/scripts/task25/candidate25.py baseline-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Enable KVM on disposable GitHub hosted runner
@@ -229,7 +229,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -259,8 +259,8 @@ jobs:
       run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Read and verify immutable signed baseline28 only
-      run: python3 trusted/scripts/task25/candidate25.py baseline
+    - name: Read and verify immutable signed baseline28 artifact without draft write capability
+      run: python3 trusted/scripts/task25/candidate25.py baseline-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Enable KVM on disposable GitHub hosted runner
@@ -332,7 +332,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a'}
+        pins={'candidate25.py': '198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'

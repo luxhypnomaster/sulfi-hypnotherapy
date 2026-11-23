@@ -1,0 +1,12 @@
+{
+  "run": 45101058374,
+  "status": "BLOCKED_BASELINE_DOWNLOAD_HTTP403",
+  "SDK_SETUP": "PASS_AFTER_PR60",
+  "buildAPK": "NOT_RUN",
+  "sign": "SKIPPED",
+  "artifact": 14785691688,
+  "hypothesis": "contents:read token cannot read immutable draft-release28 assets; owner-authenticated read comparison and isolated GET-only main job with required draft-read capability",
+  "officialSource": "https://docs.github.com/en/rest/releases/releases#get-a-release",
+  "documentedFact": "Only users with push access receive draft listings",
+  "next": "isolate draft capability to baseline data job; build/sign/native remain contents:read; no release or ACL writes"
+}

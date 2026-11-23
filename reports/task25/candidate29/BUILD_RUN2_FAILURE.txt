@@ -1,0 +1,2 @@
+build	Verify original signed APK28 and derive unchanged public configuration	2026-11-23T02:36:42.2648130Z CANDIDATE25_BLOCKED: DOWNLOAD_HTTP_403
+build	Verify original signed APK28 and derive unchanged public configuration	2026-11-23T02:36:42.2745165Z ##[error]Process completed with exit code 1.

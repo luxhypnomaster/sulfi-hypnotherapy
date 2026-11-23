@@ -12,6 +12,7 @@ import tempfile
 import unittest
 from unittest import mock
 import urllib.request
+import urllib.error
 import zipfile
 
 import yaml
@@ -69,6 +70,15 @@ class TrustAndTransport(unittest.TestCase):
             with self.assertRaisesRegex(c.GateError, 'UNAPPROVED_API_ENDPOINT'):
                 c.fetch('https://attacker.example/steal')
             opener.assert_not_called()
+
+    def test_http_denial_preserves_origin_and_message_without_bearer(self):
+        endpoint=f'https://api.github.com/repos/{c.REPO}/releases/assets/752461821'
+        error=urllib.error.HTTPError(endpoint,403,'Forbidden',{},io.BytesIO(b'{"message":"Resource not accessible by integration"}'))
+        with mock.patch.dict(os.environ,{'GH_TOKEN':'controlled-token'},clear=True), mock.patch.object(c.urllib.request,'build_opener') as opener:
+            opener.return_value.open.side_effect=error
+            with self.assertRaisesRegex(c.GateError,'DOWNLOAD_HTTP_403 host=api.github.com: Resource not accessible') as e:
+                c.fetch(endpoint)
+            self.assertNotIn('controlled-token',str(e.exception))
 
     def test_build_never_accepts_signing_bindings(self):
         with tempfile.TemporaryDirectory() as td:
@@ -148,14 +158,36 @@ class Workflows(unittest.TestCase):
             self.assertEqual(set(w['on']), {'workflow_dispatch'})
             self.assertEqual(w['permissions'], {})
             self.assertFalse(w['concurrency']['cancel-in-progress'])
-            for job in w['jobs'].values():
+            for name, job in w['jobs'].items():
                 for clause in ["github.ref == 'refs/heads/main'", "github.ref_protected == true",
                                "github.actor == 'luxhypnomaster'", "github.triggering_actor == 'luxhypnomaster'",
                                "github.event_name == 'workflow_dispatch'", "github.repository == 'luxhypnomaster/sulfi-hypnotherapy'"]:
                     self.assertIn(clause,job['if'])
                 self.assertNotIn('||',job['if'])
-                self.assertNotIn('write',job['permissions'].values())
+                if w is self.ws[0] and name == 'baseline':
+                    self.assertEqual(job['permissions'], {'contents': 'write'})
+                else:
+                    self.assertNotIn('write',job['permissions'].values())
                 self.assertNotIn('environment',job)
+
+    def test_draft_capability_is_only_in_get_only_trusted_data_job(self):
+        w=self.ws[0];job=w['jobs']['baseline']
+        self.assertNotIn('appsource',str(job))
+        self.assertNotIn('secrets.',str(job))
+        self.assertNotIn('flutter',str(job))
+        self.assertEqual(job['needs'],'credentials')
+        download=next(s for s in job['steps'] if 'Read immutable draft' in s.get('name',''))
+        self.assertEqual(download['run'],'python3 trusted/scripts/task25/candidate25.py baseline')
+        self.assertEqual(set(download['env']),{'GH_TOKEN'})
+        self.assertEqual(w['jobs']['build']['needs'],'baseline')
+        for name in ['build','sign']:
+            self.assertEqual(w['jobs'][name]['permissions']['contents'],'read')
+        import ast
+        tree=ast.parse((ROOT/'scripts/task25/candidate25.py').read_text())
+        func=next(f for f in tree.body if isinstance(f,ast.FunctionDef) and f.name=='fetch')
+        requests=[x for x in ast.walk(func) if isinstance(x,ast.Call) and ast.unparse(x.func)=='urllib.request.Request']
+        self.assertEqual(len(requests),1)
+        self.assertFalse(any(k.arg in ['data','method'] for k in requests[0].keywords))
 
     def test_signing_environment_never_reaches_app_or_native_jobs(self):
         build,qa=self.ws
