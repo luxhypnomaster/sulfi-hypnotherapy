@@ -1,32 +1,21 @@
-# №25 — проверки продолжения
+# №25 — фактические проверки продолжения
 
-## Неизменная база приложений
+Приложения `737ea741636e9abe7c20353d9d5b8301cf44a5bb` неизменны. QA-код `bf9818624b2a652724850d5d35d7e941ac82421f`. 335protected и31nativepins PASS; lib/android/server/third_party/assets совпадают с замороженной сборкой. Окончательный текущий набор QA-инструментов:115PASS/0FAIL, actionlintPASS. Пять новых snapshot-reader тестов включают реальнуюSQLite/WAL, несоответствие строк/файловыхSHA, traversal/ссылки, границы controlled-report и реальные .wav имена снимков.
 
-Appsource737ea741636e9abe7c20353d9d5b8301cf44a5bb. Свежий read-only source gate подтвердил335 protectedfiles,31nativepins и ancestry всех зависимостей. Деревья lib/android/server/third_party/assets совпадают с замороженной сборкой. PR51/52/54/55/56/57 OPEN DRAFT UNMERGED.
+Ранее574FlutterPASS/2SKIP, CLIENTdefine1PASS,114NodePASS и53исходныхPythonPASS подтверждены на тех же runtime bytes и сейчас не повторялись. SKIPlive/performance остаютсяSKIP. Промежуточные91/100/102/103/108/110/120 не являются дополнительными уникальными тестами;120 включает позже отвергнутый software-prototype.
 
-Ранее выполненные574FlutterPASS/2SKIP, CLIENTdefine1PASS,114NodePASS,53исходныхPythonPASS, analyze/format и фактический dual build остаются доказательствами этих же runtime bytes. После только QA/report изменений они не запускались заново. SKIP/live gaps не превращены в PASS.
-
-## Новые локальные проверки
-
-- Текущая QA-tools группа:110PASS,0FAIL; actionlint1.7.12PASS. Промежуточные91/100/102/103/108 — перекрывающиеся наборы, не складывать.
-- ZIP-тесты: размер/hash/CRC, traversal/дубликаты/symlink/special-files, обязательные vendor files/version, безопасный install/restore lifecycle, отказ signing-context, строгая readiness.
-- Hostmetadata: только разрешённые PID/module/fileoffset, недоступность dmesg, отсутствие сырых дампов/лога ядра/памяти/стека, diagnostic defaultOFF и невозможность доставки/API36 из diagnostic mode.
-- Host-control: регистрPC/executable maps без absolute ASLRадресов; false/missing/mismatched receipt failclosed. Реальный локальный Pythoncontrol (не mock): SIGUSR1/2 игнорируются, SIGSEGV даёт exit-11, stdout/stderr пусты, core отключён. Это Linux-процесс, не Android и не Google.
-- Strong AST comparison сохраняет исходные P0 assertions/cases/Javafixture после явных разрешённых инфраструктурных отличий.
-
-## Фактические CI-прогоны
-
-|Run|Результат и граница доказательства|
+|Run|Результат|
 |---|---|
-|45207789337|Полный35/36 запрос; обе actual SDK37.3.10 receipts PASS; подпись/байты29 PASS. MASTER35 и CLIENT35: по5 раннихPASS, hostQEMUSIGSEGV на pause старой28 до upgrade. НетOOM/cancel;36/deliverySKIPPED. Independent validatorBLOCKED.|
-|45210761918|GDB отсутствует. Fixture не начат; upstream action boot-нулAndroid, strong readiness остановил install. QEMUexit0. Не считать nativePASS или повтором fatal.|
-|45212351651|GDB установлен, host-control exit127. Обязательный внешнийpreflight заблокировал все Androidшаги.|
-|45213411298|Control прошёл до fatal, но GDBpolicy ошибочно подавляла stop (noprint→nostop). AndroidSKIPPED. Ошибка инструмента подтверждена официальной документацией.|
+|45207789337|Реальный pinnedSDK37.3.10 в обоих35jobs; MASTER/CLIENT по5 раннихPASS, затемQEMU hostSIGSEGV вold28pause. Оба36/deliverySKIPPED.|
+|45210761918|Наhost нетGDB. Fixture не установлен; upstreamactionboot после failedprehook, strongreadiness остановил тест. QEMUexit0.|
+|45212351651|GDBустановлен, hostcontrol exit127; Android полностьюSKIPPED.|
+|45213411298|Controlfatalбезstop: noprint отменялstop; AndroidSKIPPED. Исправлено по официальнойдокументации.|
+|45214392456|MASTER35 17/17PASS, реальныйGDBcontrolPASS, actualQEMUexit0/signals[]. Независимо14 rawsnapshot×15таблиц/всеprivatefileSHA/schema9/integrityok. Single-diagnostic, не полный допуск.|
+|45218835360|CLIENT35 15/15PASS+strict hostgate; независимо12 rawsnapshot×15таблиц. MASTER5PASS+BLOCKED наold28pause, GDBSIGSEGV+resumeerror. API36/deliverySKIPPED.|
+|software/run14|NOT_DISPATCHED: source/DEXpreflight доказал неприменимость Intentflags кcached AudioService engine; PR76closedunmerged.|
 
-Окончательный диагностический результат добавляется отдельным RUN12_RESULT после терминального readback, а не по зелёному предварительному step. Ранее полные MASTER34/35по17PASS и CLIENT34 15PASS сохранены; они не подменяют четыре обязательных гейта одной допущенной пары.
+Каждый использованный artifactZIP независимо скачан черезGitHubconnector, сверены providerSHA/размер/CRC. APK29 также проверены независимо отsigningjob: apksigner/aapt/SHA/ZIP/package/version/SDK/ABI/config/permissions. Не выдавать криптографическийPASS за доказанную сохранность на телефоне.
 
-Обе APK29 неоднократно независимо скачаны и проверены apksigner/aapt/SHA/ZIP/package/version/ABI/config/permissions; новые run readback используют те же неизменные bytes. Подпись сама по себе не доказывает безопасное обновление.
+Снимкисозданы настоящей UIAPK28; supplementaryqueue/cache/settings вставлены только в synthetic AndroidSQLite и явно не являются Google/serverE2E. Reader открывает копии сmode=ro и сохраняет входныеtar. ВнешнийSAFZIP отсутствует вprivate-tar — только нативнаяSHA-сверка, без заявления независимогоrawчтения.
 
-Физические устройства, настоящий Google-вход двух аккаунтов, OEMблокировка/долгий live background transfer29, микрофон/акустическое прослушивание, native image/video diary attachments — NOT_RUN. Частичные №22/23, неизменённый production Diary17patch и первоначальный owner24→25 UNKNOWN сохранены в ISSUES.
-
-Run12 отдельно подтверждён:17/17MASTER35PASS, GDBcontrolSIG11/PCmodulelibc реальныйPASS;actualQEMUexit0/signals[].14rawnativeAndroidsnapshotкопий×15SQLiteтаблиц independentlyread-only/hash/integrity/schemaPASS. Не полныйдопускпары; rawБДнепубликуются. Текущий полныйrun13 45218835360 используетновыйstricterhostObserverproof; завершениеещёожидается.
+OWNER_PHONE, два настоящих Google-аккаунта, физическое прослушивание/микрофон, OEMlockscreen/livebackground29, native image/video diary attachments — NOT_RUN. Старыйowner24→25 rootcauseUNKNOWN. Производственные ограничения22/23 и неприменённый Diary17patch сохранены.
