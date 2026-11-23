@@ -2,7 +2,7 @@
 
 |ID / уровень|Факт|Статус / следующий безопасный шаг|
 |---|---|---|
-|P0-NATIVE25|MASTER34 QEMU SIGSEGV на old28, до обновления; CLIENT34 полный15PASS|BLOCKED_NATIVE. Метаданные аварии из MASTER-only run45161085603; без новой гипотезы не повторять. После устранения нужны все4гейта34/36, никаких пропусков паузы/SQLite/media assertions|
+|P0-NATIVE25|MASTER34 run5 normal/cold/update dataPASS16, final UIobserverBLOCKED; CLIENT34 полный15PASS|BLOCKED_NATIVE. Run5 QEMUexit0/no dump; observer reader→author подтверждёнXML и исправленPR68. Actual nativeGREEN ожидается; AOSP35 не применён. После устранения нужны все4гейта34/36, никаких пропусков паузы/SQLite/media assertions|
 |P0-SIGN25|Trusted build/sign45103325755 и обе независимые подписи PASS|RESOLVED_FOR_BINARY_ONLY, key прежний. Не означает native/physical готовности|
 |P0-ID25|Code29>baseline28, package/cert совпадают; actual installed version владельца UNKNOWN|OWNER_INSTALL_BLOCKED до native PASS и readback версии/отдельного согласия. Не применять downgrade|
 |P0-OWNER-HISTORY|Случай исчезновения owner MASTER24→25 не исследован на физической базе|UNKNOWN/PARTIAL, не объявлен исправленным. Личные материалы/устройство не трогали|

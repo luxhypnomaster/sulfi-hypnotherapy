@@ -1,6 +1,6 @@
 # №25 — реальные повторы и основания
 
-Приложения frozen737ea741636e9abe7c20353d9d5b8301cf44a5bb. Нет заявлений о процентах квоты. Полный итоговый Flutter574/2SKIP,Node114,Python53 исходной интеграции повторно не запускались после tool/report-only changes. Текущие инструменты68PythonPASS, actionlintPASS. Исходный compare baseline571→final574 был оправдан3новыми integration tests.
+Приложения frozen737ea741636e9abe7c20353d9d5b8301cf44a5bb. Нет заявлений о процентах квоты. Полный итоговый Flutter574/2SKIP,Node114,Python53 исходной интеграции повторно не запускались после tool/report-only changes. Текущие инструменты70PythonPASS, actionlintPASS. Исходный compare baseline571→final574 был оправдан3новыми integration tests.
 
 |Run|Тип|Новый факт / исправление перед повтором|
 |---|---|---|
@@ -18,4 +18,10 @@
 
 На main перенесены лишь отдельно проверенные operational files через обычные PR58–67. Parent app PR51–57 не объединялись. Secret-bearing job не исполняет feature app code; диагностический workflow вообще без signing secrets. Не повторялись закрытые Administration API/secret-list403, старый0stepsbilling, local emulator installation безKVM, production E2E ради отчётности. Состояние remote/артефактов проверялось read-only.
 
-Локальный repeat45→68 оправдан расширением охвата всем QA-tool suite;68 включает45, складывать их нельзя. Успешный CLIENT API34 не запускать заново ради диагностики MASTER. Реальный модуль аварии UNKNOWN до metadata; swangle/lavapipe17 уже неудачны, наугад не повторять.
+Локальный repeat45→68 оправдан расширением охвата всем QA-tool suite;70 включает45, складывать их нельзя. Успешный CLIENT API34 не запускать заново ради диагностики MASTER. Реальный модуль аварии UNKNOWN до metadata; swangle/lavapipe17 уже неудачны, наугад не повторять.
+
+## Новая evidence после diagnostic5
+
+MASTER34 действительно прошёл normal28→29, exactrows/media/cold/nativeaudio/publicreader,16PASS;17-йcaseBLOCKED из-за сохранённого reader-mode в тесте. QEMU нормальноexit0, no minidump. AOSP35 гипотеза рассмотрена, подтверждено совпадение pause-code27/28, но НЕ применялась: текущая evidence дала более узкий observer defect. Одиннадцать минут прогона не скрыты как новый QEMUcrash.
+
+Обычный узкийPR68:2QAfiles, новый observer existinglist/author navigation MASTER-only, все originalP0 AST-identical.75toolsPASS и actionlintPASS. Полный native-only run6 повторяет прежние34/36 для actualGREEN нового observer и4gates; никакого rebuild/signing.69/70/74 промежуточные группы — подмножества, не суммировать.

@@ -10,7 +10,7 @@
 |Сборка MASTER/CLIENT29|PASS_BINARY: обе реально собраны и подписаны существующим ключом, run45103325755 SUCCESS|
 |Независимая проверка бинарников|PASS: исходник, SHA, размер, cert, applicationId, version29, ABI, SDK, права; повторный readback после перезапуска среды|
 |NATIVE_CANDIDATE_CLIENT|API34 CONTROLLED PASS15, включая normal install-r28→29, точные строки/медиа, cold restart и native playback|
-|NATIVE_CANDIDATE_MASTER|BLOCKED: QEMU SIGSEGV на старой28 до установки29; это не доказанный дефект миграции|
+|NATIVE_CANDIDATE_MASTER|PARTIAL: новый MASTER34 прогон подтвердил normal update/cold/строки/медиа;16PASS, последний editor observer BLOCKED, исправление QA ожидает полный прогон|
 |Оба API36|NOT_RUN: обязательный API34 gate не пройден; критерии не ослаблены|
 |SERVER_PROD_READY|false для новых функций21/22; GAS6 сохранён, новые флаги OFF|
 |OWNER_DEVICE / REAL_GOOGLE|NOT_RUN, телефоны не затронуты; реальный установленный versionCode UNKNOWN|
@@ -21,3 +21,5 @@
 Новый узкий PR67 добавил безопасное чтение только кода исключения/исполняемого модуля аварии и режим MASTER-only без выдачи APK; production/signing не затронуты. Диагностический run45161085603 проверяется отдельно. Его успех сам по себе не является четырьмя native PASS или разрешением на выдачу.
 
 Без merge всего стека, production deploy, нового ключа, изменения OAuth/ACL или действий с личными данными. Исторический owner24→25 остаётся UNKNOWN. Ограничения22/23 перечислены в ISSUES.
+
+Продолжение: diagnostic45161085603 завершён, MASTER34normal/cold сохранностьPASS. Единственный remainingcase — helper искал NewEntry внутри publicreader; actualXML/independent15-table readback подтверждают observerпричину. QEMU exit0, NO_MINIDUMP_FOUND; это не новый SIGSEGV. УзкийPR68 исправляет только QA navigation, не приложение. AOSP35 change НЕ применён. Ожидается full34/36 nativeGREEN, ownerinstall пока запрещён.

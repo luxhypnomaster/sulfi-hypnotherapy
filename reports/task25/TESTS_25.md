@@ -35,12 +35,14 @@ Node total114, Python total53. Targeted tests входят в/пересекаю
 
 Защищённая сборка45103325755 SUCCESS; actual Flutter/Gradle build обеих editions, unsigned credential-free; подпись отдельной trusted-main job. Независимый apksigner/aapt/package/version/SHA/CRC/SDK/ABI/config/permissions PASS (APK_INFO/APK_READBACK, candidate29/).
 
-`PYTHONPATH=scripts/task25 python3 -m unittest discover -s scripts/task25 -p 'test*.py'`: **68 PASS**,2026-11-23; отдельный текущий инструментальный набор, не складывать с53исходного baseline как уникальные все-project tests. `actionlint1.7.12 -shellcheck= -pyflakes=` verify workflow PASS, официальный бинарник проверен по provider SHA. Embedded Python compilations и credential/context restrictions покрыты controlled tests.
+`PYTHONPATH=scripts/task25 python3 -m unittest discover -s scripts/task25 -p 'test*.py'`: **70 PASS**,2026-11-23; отдельный текущий инструментальный набор, не складывать с53исходного baseline как уникальные все-project tests. `actionlint1.7.12 -shellcheck= -pyflakes=` verify workflow PASS, официальный бинарник проверен по provider SHA. Embedded Python compilations и credential/context restrictions покрыты controlled tests.
 
 Native45157723278: CLIENT34 **15PASS**, MASTER34 **5PASS+1BLOCKED** (old28 QEMU SIGSEGV), API36bothNOT_RUN, deliverySKIPPED. Actual controlled Android evidence независимо прочитаны и проверены дополнительным fail-closed validator: CLIENT PASS, completeFourGates false, pair BLOCKED_NATIVE_DELIVERY. Это не успешная Android-приёмка пары.
 
-Все68tools tests включают8synthetic minidump parser tests, отсутствие чтения memory payload, bounded metadata, отказ некорректных offsets, symlink skip, корректный NO_MINIDUMP_FOUND; они не заменяют native root cause. Run45161085603 — отдельная secret-free MASTER-only diagnosis. Его terminal output фиксируется отдельно.
+Все70tools tests включают8synthetic minidump parser tests, отсутствие чтения memory payload, bounded metadata, отказ некорректных offsets, symlink skip, корректный NO_MINIDUMP_FOUND; они не заменяют native root cause. Run45161085603 — отдельная secret-free MASTER-only diagnosis. Его terminal output фиксируется отдельно.
 
 Flutter574/Node114 целиком заново не повторялись после report/tool-only правок: protected runtime335/native31 unchanged. Среда после остановки восстановлена в /dev/shm/sulfi25-resume; прежние APK exact bytes проверены без rebuild/resign.
 
 **NOT_RUN:** реальные Google/users/физические телефоны, фактически услышанный звук, реальная запись, новый29OS-kill transfer receipt, API36, min24/35native и production22/livebackup. Исторические native17/18 и source compile не названы current25nativePASS. Оригинальный owner24→25causeUNKNOWN. Никаких действий на телефоне владельца.
+
+Дополнительные2tests используют завершённый CLIENT34 артефакт: exact old content_revisions PASS и удаление ревизии из копии отчёта → BLOCKED, несмотря на исходные casePASS. Никакая настоящая база не изменялась. Независимо проверяются15таблиц; пустые таблицы не выдаются за проверку непустых image/attachment fixtures. Native diary-image attachment fixture пока NOT_RUN.70 включает прежние68, не складывать счётчики.
