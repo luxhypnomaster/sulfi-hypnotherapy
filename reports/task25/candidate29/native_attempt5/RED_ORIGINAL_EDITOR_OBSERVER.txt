@@ -1,0 +1,29 @@
+test_actual_reader_failure_requires_return_to_list_and_author_before_editor (test_native25.MasterEditorTest.test_actual_reader_failure_requires_return_to_list_and_author_before_editor) ... FAIL
+
+======================================================================
+FAIL: test_actual_reader_failure_requires_return_to_list_and_author_before_editor (test_native25.MasterEditorTest.test_actual_reader_failure_requires_return_to_list_and_author_before_editor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25-resume/scripts/task25/test_native25.py", line 128, in test_actual_reader_failure_requires_return_to_list_and_author_before_editor
+    n.open_master_editor(ui,original)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<stdin>", line 8, in <lambda>
+  File "/dev/shm/sulfi25-resume/scripts/task25/test_native25.py", line 127, in original
+    def original():self.assertIn('Новая запись',ui.tree());ui.calls.append('original_ready_and_persistence_checks')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Новая запись' not found in ['К списку записей', 'Controlled offline text']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+
+EXPECTED_CONTROLLED_RED; native failure separately recorded in45161085603. No app/device data modified.

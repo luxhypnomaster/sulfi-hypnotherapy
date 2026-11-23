@@ -1,5 +1,6 @@
 """Read-only driver regressions; no Google identity or emulator result claims."""
 from pathlib import Path
+import ast
 import subprocess
 import tempfile
 import unittest
@@ -100,6 +101,60 @@ class PhysicalProfileTest(unittest.TestCase):
             self.assertEqual(p.read_text(),'disk.dataPartition.size=100G\n')
             link=Path(td)/'link.ini';link.symlink_to(p)
             with self.assertRaises(GateError):n.configure_display(link)
+
+
+class MasterEditorTest(unittest.TestCase):
+    def ui(self, state):
+        class UI:
+            def __init__(self):self.state=state;self.calls=[]
+            def label(self,node):return node
+            def tree(self):
+                return {'reader':['К списку записей','Controlled offline text'],
+                        'public':['Автор','Читатель'],
+                        'author':['Автор','Читатель','Новая запись'],
+                        'local_public':['Мои записи','Читатель'],
+                        'client':['Controlled offline text']}[self.state]
+            def click(self,label,exact=False):
+                self.calls.append(label)
+                if label=='К списку записей' and self.state=='reader':self.state='public'
+                elif label=='Автор' and self.state=='public':self.state='author'
+                elif label=='Мои записи' and self.state=='local_public':self.state='author'
+                else:raise AssertionError('INVALID_UI_TRANSITION')
+        return UI()
+
+    def test_actual_reader_failure_requires_return_to_list_and_author_before_editor(self):
+        failure=Path(__file__).resolve().parents[2]/'reports/task25/candidate29/native_attempt5/failure-ui_master_local_diary29.xml'
+        self.assertIn('К списку записей',failure.read_text())
+        ui=self.ui('reader')
+        def original():self.assertIn('Новая запись',ui.tree());ui.calls.append('original_ready_and_persistence_checks')
+        n.open_master_editor(ui,original)
+        self.assertEqual(ui.calls,['К списку записей','Автор','original_ready_and_persistence_checks'])
+
+    def test_already_author_has_no_extra_navigation(self):
+        ui=self.ui('author');n.open_master_editor(ui,lambda:ui.calls.append('original'))
+        self.assertEqual(ui.calls,['original'])
+
+    def test_existing_local_notes_mode_is_an_observed_view_not_a_new_role(self):
+        ui=self.ui('local_public')
+        n.open_master_editor(ui,lambda:self.assertIn('Новая запись',ui.tree()))
+        self.assertEqual(ui.calls,['Мои записи'])
+
+    def test_missing_author_does_not_invent_a_role_or_success(self):
+        ui=self.ui('client')
+        def original():raise GateError('ORIGINAL_EDITOR_NOT_READY')
+        with self.assertRaisesRegex(GateError,'ORIGINAL_EDITOR_NOT_READY'):n.open_master_editor(ui,original)
+        self.assertEqual(ui.calls,[])
+
+    def test_all_original_p0_assertions_and_cases_are_structurally_identical(self):
+        old=ast.parse(subprocess.check_output(['git','show','f7c82b4:scripts/task25/native25.py'],text=True))
+        new=ast.parse(Path(n.__file__).read_text())
+        new.body=[x for x in new.body if not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor']
+        main=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='main')
+        binding=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=="args.edition == 'master'")
+        self.assertEqual(ast.unparse(binding.body[0]),'original_editor = m.open_diary_editor')
+        self.assertEqual(ast.unparse(binding.body[1]),'m.open_diary_editor = lambda: open_master_editor(m, original_editor)')
+        main.body.remove(binding)
+        self.assertEqual(ast.dump(old),ast.dump(new))
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

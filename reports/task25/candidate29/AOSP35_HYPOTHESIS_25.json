@@ -1,0 +1,23 @@
+{
+  "status": "PASS_OLD27_TO28_PAUSE_RENDERER_BYTES_IDENTICAL",
+  "comparison": {
+    "lib/ui/pause_clock_art.dart": {
+      "old27sha": "70d2d54fc683eb9cd4d5dbc0a02e7e14a86ab7a049d5217ba490e6265cb119c0",
+      "baseline28sha": "70d2d54fc683eb9cd4d5dbc0a02e7e14a86ab7a049d5217ba490e6265cb119c0",
+      "identical": true
+    },
+    "lib/ui/pause_editor.dart": {
+      "old27sha": "33cbef67d6c5b84c0e8e6e0d1fc67dcaf7c7ddc0bd0deb7381e5eb2e0a7178db",
+      "baseline28sha": "33cbef67d6c5b84c0e8e6e0d1fc67dcaf7c7ddc0bd0deb7381e5eb2e0a7178db",
+      "identical": true
+    },
+    "lib/ui/pause_time_picker.dart": {
+      "old27sha": "0753a9bb069aaa000caa2d4dc0d9b559665c82483264b366fc0583b6949c2df4",
+      "baseline28sha": "0753a9bb069aaa000caa2d4dc0d9b559665c82483264b366fc0583b6949c2df4",
+      "identical": true
+    }
+  },
+  "hypothesis": "Historical successful officialAOSP35 MASTER27\u219228 UI pause route is applicable to same pause artwork/renderer bytes in old28; does not prove MASTER28\u219229 without new native test",
+  "historicalNative35Run": 43764129343,
+  "newNativePASS": false
+}

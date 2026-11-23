@@ -43,5 +43,20 @@ class ActualFailedArtifactTest(unittest.TestCase):
         self.assertIn('APPLICATION_SOURCE',result['errors'])
         self.assertIn('NO_OWNER_OR_GOOGLE_PASS_CLAIM',result['errors'])
 
+    def test_actual_completed_client34_preserves_existing_revision_rows_too(self):
+        p=ROOT/'reports/task25/candidate29/native_attempt4/client-NATIVE_UPGRADE_25.json'
+        report=json.loads(p.read_text())
+        self.assertGreaterEqual(len(report['inventories']['beforeBaseline']['rows']['content_revisions']),3)
+        result=inspect(report,report['driverMainSHA'])
+        self.assertEqual(result['status'],'PASS_CONTROLLED_NATIVE',result['errors'])
+
+    def test_native_pass_labels_cannot_hide_a_lost_revision(self):
+        p=ROOT/'reports/task25/candidate29/native_attempt4/client-NATIVE_UPGRADE_25.json'
+        report=json.loads(p.read_text())
+        report['inventories']['afterCandidate']['rows']['content_revisions'].pop(0)
+        result=inspect(report,report['driverMainSHA'])
+        self.assertEqual(result['status'],'BLOCKED')
+        self.assertIn('EXACT_OLD_ROWS_afterCandidate_content_revisions',result['errors'])
+
 
 if __name__=='__main__':unittest.main(verbosity=2)

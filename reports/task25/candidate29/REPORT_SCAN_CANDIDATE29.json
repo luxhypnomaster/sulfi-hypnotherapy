@@ -1,0 +1,7 @@
+{
+  "status": "PASS_SCOPED_REPORT_SECRET_PATTERN_SCAN",
+  "files": 197,
+  "matches": [],
+  "scope": "current Task25 textual reports only; not all Git history or a proof against arbitrary unknown credentials",
+  "rawDumpsOrPersonalDatabasesIncluded": false
+}

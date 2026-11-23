@@ -5,7 +5,7 @@
   "sourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
   "buildMainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
   "buildRun": 45103325755,
-  "qaRun": 45104377872,
+  "qaRun": 45157723278,
   "pair": [
     {
       "edition": "master",
@@ -63,5 +63,6 @@
   "ownerPhysicalQA": "NOT_RUN",
   "ownerInstalledVersion": "UNKNOWN",
   "ownerInstallRecommendation": false,
-  "APKDelivery": "WAIT_NATIVE_GATE_DO_NOT_INSTALL_QUARANTINE"
+  "APKDelivery": "WAIT_NATIVE_GATE_DO_NOT_INSTALL_QUARANTINE",
+  "nativeGate": "CLIENT34_PASS_MASTER34_BLOCKED_API36_NOT_RUN"
 }

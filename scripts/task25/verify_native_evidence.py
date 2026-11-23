@@ -7,12 +7,15 @@ from pathlib import Path
 from candidate25 import SOURCE, CODE
 
 TABLES = ('audio_assets', 'module_definitions', 'session_templates', 'current_draft',
-          'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings')
+          'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings',
+          'content_revisions', 'history_attachments', 'capsule_imports',
+          'legacy_v2_documents', 'diary_sync', 'diary_removed')
 BASE_CASES = {'install_actual28', 'ui_audio_1', 'ui_audio_2', 'ui_audio_3',
               'ui_module_three_tracks', 'ui_module_pause', 'ui_program', 'ui_history',
               'native_queue_cache_settings_supplement', 'ui_capsule_export',
               'beforeBaseline', 'normal_install_r_28_to29', 'UI_after29_and_native_audio',
               'cold_restart29', 'offline_diary_reader29'}
+REQUIRED_NATIVE_SCOPES = {('master',34),('client',34),('master',36),('client',36)}
 
 
 def inspect(report, driver_sha):
@@ -62,11 +65,12 @@ def inspect(report, driver_sha):
 def validate(reports, driver_sha):
     values = [inspect(r, driver_sha) for r in reports]
     dimensions = [(r['edition'], r['api']) for r in values]
-    complete = len(dimensions) == 4 and set(dimensions) == {('master',34),('client',34),('master',36),('client',36)}
+    complete = len(dimensions) == 4 and set(dimensions) == REQUIRED_NATIVE_SCOPES
     passed = complete and all(r['status'] == 'PASS_CONTROLLED_NATIVE' for r in values)
     return {'status':'PASS_FOUR_NATIVE_DELIVERY_GATES' if passed else 'BLOCKED_NATIVE_DELIVERY',
             'scope':'CONTROLLED_ANDROID_EMULATORS_ONLY', 'ownerPhone':'NOT_RUN', 'realGoogle':'NOT_RUN',
             'applicationSourceSHA':SOURCE, 'driverMainSHA':driver_sha, 'completeFourGates':complete,
+            'requiredScopes':sorted(REQUIRED_NATIVE_SCOPES),
             'totalCases':sum(r['cases'] for r in values), 'reports':values}
 
 

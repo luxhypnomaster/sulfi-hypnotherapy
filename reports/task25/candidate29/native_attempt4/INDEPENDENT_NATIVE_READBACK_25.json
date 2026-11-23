@@ -9,6 +9,13 @@
   "totalCases": 21,
   "reports": [
     {
+      "edition": "client",
+      "api": 34,
+      "status": "PASS_CONTROLLED_NATIVE",
+      "cases": 15,
+      "errors": []
+    },
+    {
       "edition": "master",
       "api": 34,
       "status": "BLOCKED",
@@ -40,6 +47,12 @@
         "TABLE_PRESENT_afterCandidate_diary_author",
         "TABLE_PRESENT_afterCandidate_diary_public",
         "TABLE_PRESENT_afterCandidate_app_settings",
+        "TABLE_PRESENT_afterCandidate_content_revisions",
+        "TABLE_PRESENT_afterCandidate_history_attachments",
+        "TABLE_PRESENT_afterCandidate_capsule_imports",
+        "TABLE_PRESENT_afterCandidate_legacy_v2_documents",
+        "TABLE_PRESENT_afterCandidate_diary_sync",
+        "TABLE_PRESENT_afterCandidate_diary_removed",
         "ACTUAL29_coldCandidate",
         "SQLITE_INTEGRITY_coldCandidate",
         "TABLE_PRESENT_coldCandidate_audio_assets",
@@ -50,15 +63,14 @@
         "TABLE_PRESENT_coldCandidate_run_events",
         "TABLE_PRESENT_coldCandidate_diary_author",
         "TABLE_PRESENT_coldCandidate_diary_public",
-        "TABLE_PRESENT_coldCandidate_app_settings"
+        "TABLE_PRESENT_coldCandidate_app_settings",
+        "TABLE_PRESENT_coldCandidate_content_revisions",
+        "TABLE_PRESENT_coldCandidate_history_attachments",
+        "TABLE_PRESENT_coldCandidate_capsule_imports",
+        "TABLE_PRESENT_coldCandidate_legacy_v2_documents",
+        "TABLE_PRESENT_coldCandidate_diary_sync",
+        "TABLE_PRESENT_coldCandidate_diary_removed"
       ]
-    },
-    {
-      "edition": "client",
-      "api": 34,
-      "status": "PASS_CONTROLLED_NATIVE",
-      "cases": 15,
-      "errors": []
     }
   ]
 }
