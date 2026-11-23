@@ -50,10 +50,14 @@
   "privateSigningUsable": "CONFIRMED_BY_TWO_ACTUAL_SIGNATURES",
   "temporaryStore": "REMOVED",
   "safeForOwnerInstall": false,
-  "nativeSafety": "BLOCKED_MASTER34_API36_PENDING",
+  "nativeSafety": "PARTIAL_INDIVIDUAL_API34_35_PASSES_FULL_MATRIX_BLOCKED",
   "GooglePhysicalQA": "NOT_RUN",
-  "status": "ACTUAL_SIGNED_PAIR_QUARANTINED",
+  "status": "ACTUAL_SIGNED_PAIR_QUARANTINED_BLOCKED_NATIVE_DELIVERY",
   "artifactId": 14786149620,
   "artifactExpiresAt": "2026-11-26T03:09:31Z",
-  "buildURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755"
+  "buildURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755",
+  "latestQARun": 45166539406,
+  "qaMainSHA": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "ownerInstalledVersion": "UNKNOWN",
+  "APKDriveUpload": "NOT_PERFORMED_NO_SAFETY_GATE_PASS"
 }

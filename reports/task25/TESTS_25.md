@@ -31,18 +31,17 @@ Node total114, Python total53. Targeted tests входят в/пересекаю
 
 Полный suite заново проверил schema6/7/8→9 и9→9, corrupted/alternate/missing path, WAL/SHM/journal copy recovery, capsule hashes/manifest/owner/cancel/concurrency, unknown staging preservation, frozen history/program refs, existing auth/retry/queue logic, catalog cache/HEAD/CAS/receipt,3ratings/NOT_CALIBRATED, courses exact refs, F038/K025/026/027/029/030/037,9:16 и client editing boundaries. Никакого нового runtime defect не воспроизведено; runtime fixes0. Названия старых тестов RED→GREEN — исторические regressions №23/24, не новые RED-прогоны №25.
 
-## Продолжение: реальные APK и native
+## Реальные build/native и новые QA проверки
 
-Защищённая сборка45103325755 SUCCESS; actual Flutter/Gradle build обеих editions, unsigned credential-free; подпись отдельной trusted-main job. Независимый apksigner/aapt/package/version/SHA/CRC/SDK/ABI/config/permissions PASS (APK_INFO/APK_READBACK, candidate29/).
+- Код приложений `737ea741636e9abe7c20353d9d5b8301cf44a5bb`; текущие инструменты `5977584cfeb14d3f3222d49e45729f76fff35f47`. App335/native31 pins повторно PASS без drift; full Flutter574/2SKIP и Node114 относятся к этим неизменным runtime bytes.
+- Build45103325755 SUCCESS: actual Gradle/Flutter MASTER+CLIENT, прежняя подпись. Отдельный independent readback после перезапуска Cloud: apksigner/aapt/ZIP/SHA/size/package/version/ABI/config/permissions PASS.
+- `PYTHONPATH=scripts/task25 python3 -m unittest discover -s scripts/task25 -p 'test*.py'`:76 PASS. Это текущая перекрывающаяся группа QA-tools; не складывать с историческими53 или промежуточными45/68/70/75 как уникальные тесты.
+- `actionlint1.7.12 -shellcheck= -pyflakes=`: PASS. SHA официального архива инструмента проверен.
+- MASTER API34:45164078203,17/17 PASS. CLIENT API34:45157723278,15/15 PASS. MASTER AOSP35:45166539406,17/17 PASS. CLIENT AOSP35:5PASS+1BLOCKED, actual host SIGSEGV before29. Обе API36 NOT_RUN вследствие обязательного dependency gate. Delivery SKIPPED.
+- Artifact provider SHA/CRC и независимый validator15таблиц подтвердили реальные native результаты. Полная матрица требуемых4гейтов35/36 **BLOCKED_NATIVE_DELIVERY**. Нельзя заменить её2старшими PASS из разных driver runs.
+- Actual failure XML reader→editor, controlled RED replay и native GREEN подтверждают fix тестового observer. Strict AST-test проверяет все исходные assertions/Java fixture/case sequence, исключая только MASTER navigation binding и CLI35 allowlist.
+- Actual APKcontent scan: по274785956/274786076 распакованныхбайт,13approved assets hash-match в каждой APK; нет bundled user audio/video/SQLite/keystore/env, распространённых token/private-key patterns. Это scoped audit, не математическая гарантия отсутствия неизвестного секрета или fullGit-history audit.
 
-`PYTHONPATH=scripts/task25 python3 -m unittest discover -s scripts/task25 -p 'test*.py'`: **70 PASS**,2026-11-23; отдельный текущий инструментальный набор, не складывать с53исходного baseline как уникальные все-project tests. `actionlint1.7.12 -shellcheck= -pyflakes=` verify workflow PASS, официальный бинарник проверен по provider SHA. Embedded Python compilations и credential/context restrictions покрыты controlled tests.
+Native dataset создан UI old28:3distinct WAV,2modules(onepause),program,currentdraft,history,MASTER local text draft,SAF capsule. Queue/cache/settings — отдельный insert-only native SQLite supplement, явно НЕ Google/server. Сравниваются15stored-data таблиц и старые media/capsule SHA до/после normal update/cold; пустые attachment tables не доказывают тест непустых изображений.
 
-Native45157723278: CLIENT34 **15PASS**, MASTER34 **5PASS+1BLOCKED** (old28 QEMU SIGSEGV), API36bothNOT_RUN, deliverySKIPPED. Actual controlled Android evidence независимо прочитаны и проверены дополнительным fail-closed validator: CLIENT PASS, completeFourGates false, pair BLOCKED_NATIVE_DELIVERY. Это не успешная Android-приёмка пары.
-
-Все70tools tests включают8synthetic minidump parser tests, отсутствие чтения memory payload, bounded metadata, отказ некорректных offsets, symlink skip, корректный NO_MINIDUMP_FOUND; они не заменяют native root cause. Run45161085603 — отдельная secret-free MASTER-only diagnosis. Его terminal output фиксируется отдельно.
-
-Flutter574/Node114 целиком заново не повторялись после report/tool-only правок: protected runtime335/native31 unchanged. Среда после остановки восстановлена в /dev/shm/sulfi25-resume; прежние APK exact bytes проверены без rebuild/resign.
-
-**NOT_RUN:** реальные Google/users/физические телефоны, фактически услышанный звук, реальная запись, новый29OS-kill transfer receipt, API36, min24/35native и production22/livebackup. Исторические native17/18 и source compile не названы current25nativePASS. Оригинальный owner24→25causeUNKNOWN. Никаких действий на телефоне владельца.
-
-Дополнительные2tests используют завершённый CLIENT34 артефакт: exact old content_revisions PASS и удаление ревизии из копии отчёта → BLOCKED, несмотря на исходные casePASS. Никакая настоящая база не изменялась. Независимо проверяются15таблиц; пустые таблицы не выдаются за проверку непустых image/attachment fixtures. Native diary-image attachment fixture пока NOT_RUN.70 включает прежние68, не складывать счётчики.
+**NOT_RUN:** настоящий Google/роль/refresh/публикация двух пользователей, owner phones/ARM OEM/физически услышанный звук/микрофон/native diary image-video attachment, actual29live OS-kill transfer receipt; API36 и min24/35CLIENTfull. Исторический owner24→25UNKNOWN. Старые17/18native receipts не переименованы в25. Действия с устройством/данными владельца отсутствуют.

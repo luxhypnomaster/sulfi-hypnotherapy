@@ -36,5 +36,6 @@
   "newBuildOrSigning": false,
   "nativeDeliveryGate": "BLOCKED_NATIVE_DELIVERY",
   "ownerDevice": "NOT_TOUCHED",
-  "nativeReadback": "candidate29/native_attempt4/INDEPENDENT_NATIVE_READBACK_25.json"
+  "nativeReadback": "candidate29/native_attempt7/INDEPENDENT_NATIVE_READBACK_25.json",
+  "contentScan": "candidate29/APK_CONTENT_SCAN_25.json"
 }

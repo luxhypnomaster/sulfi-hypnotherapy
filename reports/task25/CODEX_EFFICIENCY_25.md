@@ -1,27 +1,25 @@
-# №25 — реальные повторы и основания
+# №25 — экономия и основания реальных запусков
 
-Приложения frozen737ea741636e9abe7c20353d9d5b8301cf44a5bb. Нет заявлений о процентах квоты. Полный итоговый Flutter574/2SKIP,Node114,Python53 исходной интеграции повторно не запускались после tool/report-only changes. Текущие инструменты70PythonPASS, actionlintPASS. Исходный compare baseline571→final574 был оправдан3новыми integration tests.
+Приложения frozen737ea741636e9abe7c20353d9d5b8301cf44a5bb. Нет выдуманных процентов квоты. Full Flutter574/2SKIP,Node114,исходныеPython53 не повторялись после tool/report-only правок; актуальный QA-tools набор76PASS, actionlintPASS. Группы45/68/70/75/76 перекрываются и не суммируются.
 
-|Run|Тип|Новый факт / исправление перед повтором|
+|Run|Назначение / результат|Основание следующего шага|
 |---|---|---|
-|45096588062|Certificate inspect|Один разрешённый public cert inspect PASS, не повторялся|
-|45100730089|Build attempt1|Default setup-android tools obsolete; точный platform-tools исправленPR60|
-|45101058374|Build attempt2|GET draft asset403; отдельный trusted GET-only baseline job capabilitiesPR61; app/sign jobs read-only|
-|45101750589|Build attempt3|Ignored GeneratedPluginRegistrant отсутствует до pubget;PR62 генерирует locked deps, все31pin остаются mandatory; clean checkout воспроизведён локально|
-|45102506987|Build attempt4|Шаллоу FlutterSHA безtag даёт0.0.0unknown;PR63 официальныйtag3.47.9+exactSHA, не spoof version|
-|45103325755|Build/sign attempt5|SUCCESS, две actualsignedAPK. После этого ни rebuild, ни resign|
-|45104377872|Native attempt1|CLIENT12PASS, actualupdate; transientAXдоказан healthyXML/screenshot;PR64 freshreadretry max3 без повторных UIactions + existingMasterReader|
-|45106402826|Native attempt2|KVM permission race доAndroid;PR65 realFD/API12/createVM/udev settle доheavy downloads|
-|45107294363|Native attempt3|KVM PASS, ADBclosed old28; новый monitor фактическогоchildexit, independent editions/failfastfalse, smaller physical framebuffer с тем же logicalframePR66|
-|45157723278|Native attempt4|CLIENT15PASS; MASTER QEMU SIGSEGV; нетOOMkill/wrapper signals. Renderer/address UNKNOWN|
-|45161085603|Diagnostic attempt5|PR67 bounded exception/module metadata; MASTER-only без repeatedCLIENT/36/delivery; не signing/build. Не повторять при NO_MINIDUMP_FOUND без новой evidence/hypothesis|
+|45096588062|Разрешённый public certificate inspect SUCCESS|Не повторялся; owner independent JSON подтверждён, actual signatures позже проверены|
+|45100730089|Build1 obsolete SDK tools|PR60 platform-tools fixed|
+|45101058374|Build2 draft asset GET403|PR61 isolated trusted baseline GET-only job; app/sign read-only|
+|45101750589|Build3 ignored generated registrant checked too early|PR62 locked pubget then all31pins, реальная clean checkout repro|
+|45102506987|Build4 Flutter shallow SHA lacked version tag|PR63 official3.47.9tag+exactSHA, no version spoof/upgrade|
+|45103325755|Build5 actual unsigned+existing-key sign обеих APK SUCCESS|После него rebuild/resign0|
+|45104377872|Native1 CLIENT12PASS включая update, transient AX BLOCKED; MASTER cancel|PR64 bounded fresh read-only AX и existing MasterReader, реальный healthy subsequent XML|
+|45106402826|Native2 KVM race before Android|PR65 udevsettle+realFD/API12/createVM before heavy downloads|
+|45107294363|Native3 ADB lost old28pause, no exit evidence|PR66 actual childmonitor, physical720 same logicalframe, failfastfalse preserves independent edition|
+|45157723278|Native4 CLIENT34full15PASS, MASTER old28SIGSEGV|PR67 bounded safe crashmetadata; dedicated MASTER-only diagnostic, no duplicate CLIENT|
+|45161085603|Native5 MASTER16PASS: actual update/cold/dataPASS, last editor observerBLOCKED; QEMUexit0/no dump|PR68 existing reader→list→author QA navigation; controlledRED+strictAST; no appBack/rolechanges|
+|45164078203|Native6 MASTER34full17PASS; CLIENT old28SIGSEGV/no dump|PR69 last AOSP35/36 platform hypothesis from successful18 +identical pause27/28 bytes|
+|45166539406|Native7 MASTER35full17PASS, CLIENT old28SIGSEGV/no dump;36/deliverySKIPPED|STOP. No further same-platform/renderer experiments, no rebuild/signing|
 
-На main перенесены лишь отдельно проверенные operational files через обычные PR58–67. Parent app PR51–57 не объединялись. Secret-bearing job не исполняет feature app code; диагностический workflow вообще без signing secrets. Не повторялись закрытые Administration API/secret-list403, старый0stepsbilling, local emulator installation безKVM, production E2E ради отчётности. Состояние remote/артефактов проверялось read-only.
+Почему новый набор35/36 не выдаётся за14PASS: canonical25 asksAPI34/35/36whereavailable, исходный P0dataset/assertions/Javafixture/actualAPKbytes неизменны, CLI только добавляет35. Старые14failures сохранены, полный допуск всё равноBLOCKED. Scope-specific14PASS не подменил текущие4requiredgates.
 
-Локальный repeat45→68 оправдан расширением охвата всем QA-tool suite;70 включает45, складывать их нельзя. Успешный CLIENT API34 не запускать заново ради диагностики MASTER. Реальный модуль аварии UNKNOWN до metadata; swangle/lavapipe17 уже неудачны, наугад не повторять.
+Не повторялись закрытые Administration/secret-list403, старый0stepsbilling, local emulator installation безKVM, production E2E ради отчёта. Не выполнялись swangle/lavapipe, уже неудачные в17. Safe metadata не нашла dump — faultfunctionUNKNOWN, не новая выдуманная rootcause. Main: только обычные narrowoperationalPR58–69, actual base/head/hash/protection readback, не adminbypass claim. App PR51–57 не объединялись. Credentials не попадали app/Gradle/QA-коду.
 
-## Новая evidence после diagnostic5
-
-MASTER34 действительно прошёл normal28→29, exactrows/media/cold/nativeaudio/publicreader,16PASS;17-йcaseBLOCKED из-за сохранённого reader-mode в тесте. QEMU нормальноexit0, no minidump. AOSP35 гипотеза рассмотрена, подтверждено совпадение pause-code27/28, но НЕ применялась: текущая evidence дала более узкий observer defect. Одиннадцать минут прогона не скрыты как новый QEMUcrash.
-
-Обычный узкийPR68:2QAfiles, новый observer existinglist/author navigation MASTER-only, все originalP0 AST-identical.75toolsPASS и actionlintPASS. Полный native-only run6 повторяет прежние34/36 для actualGREEN нового observer и4gates; никакого rebuild/signing.69/70/74 промежуточные группы — подмножества, не суммировать.
+Дополнительный actual APKcontent scan выполнен streaming, без распаковки личных данных/новых fullCI. Документы/матрица/целостность доставки проверяются отдельно; это не повод повторять574Flutter/Node114. После завершения native7 active CI нет.

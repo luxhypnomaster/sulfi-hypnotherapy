@@ -1,0 +1,9 @@
+{
+  "status": "OPEN_INHERITED_TASK17_GAP",
+  "evidence": "reports/task17/ISSUES_17.md",
+  "knownBehavior": "GAS6 Diary.js rejects nonempty message without blocks",
+  "productionPatchAppliedByTask25": false,
+  "productionChangeAuthorized": false,
+  "freshLiveAuthHealth": "NOT_RUN",
+  "scope": "Documented inherited issue, not a new live failure or APK data-loss cause"
+}

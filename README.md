@@ -1,8 +1,8 @@
-# №25 — интеграция и проверка сохранности
+# №25 — реальные APK29, native delivery BLOCKED
 
-[Текущий результат](reports/task25/00_CURRENT_STATUS_25.md) · [Контрольная точка](reports/task25/PROGRESS.md) · [55 критериев](reports/task25/ACCEPTANCE_25.csv) · [Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57).
+[Итог](reports/task25/RESULT_25.md) · [55 критериев](reports/task25/ACCEPTANCE_25.csv) · [Причина блокировки](reports/task25/ROOT_CAUSE_25.md) · [DraftPR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57).
 
-Две APK 0.4.21+29 реально собраны и подписаны прежним ключом; подписи, пакеты и SHA независимо проверены. CLIENT прошёл обычное обновление28→29 на Android14,15 проверок. MASTER пока BLOCKED: QEMU SIGSEGV на старой28 до обновления; API36 не выполнен. **Пара остаётся в quarantine, установку на телефон пока не рекомендовать.** Код приложений737ea741 сохранён, цепочка PR51–57 не объединена; production-флаги OFF. Детали и ограничения — в отчётах, старые результаты не удалены.
+Две подписанные APK0.4.21+29 реально созданы прежним ключом; независимые binary проверкиPASS. CLIENT14полный15PASS; MASTER14/15полные17PASS сохранности при обычном28→29. ПоследнийCLIENT35 hostQEMU SIGSEGV настарой28, API36/deliverySKIPPED. **Пару для телефона пока не выдавать.** Код приложений737ea741 сохранён; PR51–57неmerged, production-флагиOFF, Google/physicalQA NOT_RUN. Детали, точныеSHA играницыпроверок — вотчётах.
 
 # №21 — runtime каталога и витрины · кандидат, без production-переключения
 

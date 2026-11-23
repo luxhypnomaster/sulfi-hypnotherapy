@@ -1,0 +1,60 @@
+{
+  "status": "PASS_FINAL_DRAFT_STACK_AND_MAIN_BOUNDARY",
+  "at": "2026-11-23T11:53:10.342034+00:00",
+  "main": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "protected": true,
+  "PRs": [
+    {
+      "number": 51,
+      "head": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+      "base": "feat/task19-auth-stage01",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 52,
+      "head": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+      "base": "feat/task20-catalog-vitrine",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 54,
+      "head": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+      "base": "feat/task21-runtime-sandbox",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 55,
+      "head": "85fa5321c043ef97b43cb30a88a0909e7edf66f2",
+      "base": "feat/task22-server-ratings-admin",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 56,
+      "head": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+      "base": "feat/task23-data-integrity-native-qa",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 57,
+      "head": "5977584cfeb14d3f3222d49e45729f76fff35f47",
+      "base": "feat/task24-local-ux-navigation",
+      "state": "open",
+      "draft": true,
+      "merged": false
+    }
+  ],
+  "applicationSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "codeResult": "5977584cfeb14d3f3222d49e45729f76fff35f47",
+  "runtimeDiffFromBuiltSource": [],
+  "productionChange": "NONE_BY_THIS_TASK"
+}

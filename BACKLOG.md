@@ -1,13 +1,13 @@
-# №25 — кандидат29, native safety не завершена
+# №25 — текущий итог кандидата29
 
-- [x] Интеграционный исходник737ea741:574Flutter/2SKIP,114Node, исходные53Python; analyze/format и335/31source pins.
-- [x] Защищённая раздельная build/sign pipeline, существующий cert; две actual APK29 и независимый binary readback.
-- [x] CLIENT API34 normal28→29/cold/native playback:15PASS; точные строки SQLite и медиа сохранены.
-- [x] Подтверждён SIGSEGV фактического QEMU процесса MASTER на old28; независимый delivery validator остаётся fail-closed.
-- [x] Узкий безопасный crash-metadata инструмент,68QA-tool tests, отдельная диагностика MASTER без повторного CLIENT и без выдачи APK.
-- [ ] Полная native сохранность MASTER и обеих editions API36 — BLOCKED/NOT_RUN; см. актуальные отчёты25.
-- [ ] Разрешённая выдача пары после всех4гейтов, owner installed-version readback, отдельная приёмка на двух реальных телефонах.
-- [ ] Live Google и незавершённые21–23 production-возможности остаются открытыми, новые флагиOFF.
+- [x] Frozen source737ea741,574Flutter/2SKIP/114Node,source335/native31pins; текущиеQAtools76PASS.
+- [x] Две реальные APK29, прежняя подпись/IDs, independentSHA/aapt/apksigner/config/content scans.
+- [x] Полные native update/cold/data scopes:CLIENT14(15PASS),MASTER14/15(17PASS).
+- [x] QA reader→author observer исправлен и nativeGREEN подтверждён; appBack не изменялся.
+- [x] Последний AOSP35/36 trial завершён:CLIENT old28 QEMUSIGSEGV,36/deliverySKIPPED; no blind reruns.
+- [ ] BLOCKED: стабильная isolated native среда иполный4scope gate35/36; не выдавать APK доPASS.
+- [ ] Owner installed-version readback/отдельное phoneQAсогласие/два реальных Google-пользователя.
+- [ ] Исторический24→25UNKNOWN,Diary17productionpatch и22/23livegaps остаются открытыми.
 
 # №25 — интеграция (отдельная ветка, без merge/deploy)
 

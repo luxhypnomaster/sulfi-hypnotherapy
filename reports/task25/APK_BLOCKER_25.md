@@ -1,11 +1,9 @@
-# №25 — APK существуют, безопасная выдача пары BLOCKED
+# APK29 реально получены; допуск пары BLOCKED
 
-Прежний блокер доверенной подписи устранён. Run45103325755 SUCCESS реально создал две APK29 прежним ключом. Независимые апksigner/aapt/SHA/ZIP/ABI/config/permissions проверки PASS; файлы не фиктивные. Сводки: APK_INFO_25.json / APK_READBACK_25.json.
+Build45103325755 SUCCESS, обе signed APK0.4.21+29 по194184164байта. Существующий cert0b743568...; packageMASTER ru.sulfi.sulfi_hypnotherapy, CLIENT .clienttest; SHA и подробности APK_INFO/APK_READBACK. Независимые signatures/identity/CRC/ABI/config/permissions/content scan PASS. Signing blocker устранён, новый key не создавался.
 
-Текущий блокер — native safety MASTER, не сертификат. Run45157723278: CLIENT API34 все15PASS, MASTER5PASS затем процесс QEMU SIGSEGV на old28 до установки29. API36 обеих редакций и delivery пропущены по обязательному gate. Нет доказательства полной сохранности MASTER28→29; выдача пары и рекомендация обновить телефон запрещены.
+Блокер сейчас — полный native gate. Отдельные полные обновления прошли MASTER14/15 и CLIENT14; последний CLIENT35 host QEMU умерSIGSEGV на old28 pause до29. ОбаAPI36 и deliverySKIPPED. Несколько успешных scope-specific доказательств не выданы за полный PASS пары. Телефон владельца/GoogleNOT_RUN, installedversionUNKNOWN.
 
-Quarantine artifact14786149620 успешной сборки45103325755, истекает2026-11-26 03:09:31UTC. Это не ссылка на одобренную установку. Диагностические повторы используют те же bytes, не новую подпись/сертификат. Если storage потребует продления — сохранить exact verified bytes разрешённым приватным способом; не делать публичный release и не выдавать quarantine за готовый продукт.
+APK остаются в quarantine artifact14786149620 успешного build45103325755; ZIP220085411bytes, SHA fbc5d58f4b20e62137c078356b99703160302ebec89d1fc7e3ff7819a32ef3f7. Retention до2026-11-26 03:09:31UTC. Это техническое доказательство существования файлов, **не ссылка на разрешённую установку**. APK на Drive не отправлялись, tester artifact не создавался, publicrelease/tag нет. Автоматически старые artifacts не удалялись.
 
-Следующий технический шаг: bounded host crash metadata из отдельного MASTER-only run45161085603. Не менять renderer наугад: swangle/lavapipe ранее уже не прошли. Без новой подтверждённой гипотезы не повторять тот же аварийный прогон. Если инфраструктурную причину не удаётся безопасно устранить, итог остаётся BLOCKED_NATIVE, без опасной APK.
-
-После успешных всех4native gates нужен readback фактической версии/подписи установленного приложения и отдельное разрешение владельца на Android QA. Никаких uninstall/clear/downgrade/import личных материалов.
+Root cause модуля QEMUUNKNOWN, не «APK29сломаладанные». Нужна работающая изолированная native среда/новая evidence-based диагностика; повторять ту же падающую конфигурацию запрещено. После all4PASS — заново independent readback exact bytes, закрытая выдача, owner installed-version/package check и отдельное согласие на phoneQA. До этого ничего не устанавливать/удалять/обнулять/понижать.

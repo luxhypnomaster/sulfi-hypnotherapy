@@ -1,16 +1,16 @@
-# Изменения №25 — кандидат29 и инструменты QA
+# Изменения №25
 
-Код приложений остаётся737ea741636e9abe7c20353d9d5b8301cf44a5bb; результаты21–24 сохранены в зависимой цепочке PR. Нового воспроизводимого runtime-дефекта не установлено, изменений модели/путей/SQLite/schema/API/ролей0.
+App source `737ea741636e9abe7c20353d9d5b8301cf44a5bb` сохранён. После source freeze новых runtime-изменений0; кодовый checkpoint QA `5977584cfeb14d3f3222d49e45729f76fff35f47`. Изменений путей, SQLite schema/API, ключа, серверных прав и работающих подсистем нет.
 
-|Область|Изменение|Проверка|
+|Область|Что сделано|Доказательство|
 |---|---|---|
-|Trusted main operations|Узкие PR58–67; только signing inspect/build/verify helpers/workflows, через обычные PR на protected main|Exact base/head/file hash readback, branch-rule owner readback reused; закрытые Admin API не повторялись|
-|Build/sign|Из frozen source отдельные unsigned MASTER/CLIENT, debug signer отключён проверенным overlay; отдельная fresh-main job использует прежний key|Actual run45103325755, обе подписи и binary readback|
-|QA transport|Provider SHA+ZIP CRC+точный состав; baseline28 как данные, независимо проверенные cert/IDs/версии|Signed pair independently restored после environment restart; без повторной сборки|
-|Native harness|Strict generated31pins после locked pubget, официальный Flutter tag+exactSHA; свежие AX snapshots, existing reader mode, реальный KVM capability; host exit monitor и physical720/density280|Python70PASS/actionlint; actual CLIENT34native15PASS; MASTER crash честноBLOCKED|
-|Crash metadata|Новый bounded parser только exception/IP→module relative offset, без memory/stack streams/raw dumps; MASTER-only scope не может запускать delivery|8synthetic format tests входят в70; diagnostic run отдельно, не physicalPASS|
-|Отчёты|55criterion matrix обновлена, binary identity отделена от native/owner/live; исходные отчёты сохранены|History directory, Git commits, новые dated supplements в той же Drive folder|
+|Build/sign|Credential-free build frozen source, проверенный overlay отключает default debug signer; отдельная fresh-main signing job с прежним key|Actual build45103325755, independent signatures/SHA|
+|Trusted operations|Узкие обычные PR58–69 на protected main; app-стек PR51–57 не merged|Exact base/head/remote file hash readbacks; owner rule readback reused, без закрытых Admin API|
+|Native observer|Свежие read-only AX snapshots; existing MASTER reader mode; переход reader→journal→author перед original editor helper|Actual failure XML, controlled RED, MASTER34/35 по17nativePASS; app Back не изменялся|
+|Infrastructure checks|Actual KVM FD/API12/createVM, pinned emulator37.2.12, exit monitor, physical720/density280, независимые editions|Host SIGSEGV/normal exit/counters различаются; все исходные data assertions сохранены|
+|Crash diagnostics|Bounded exception/module metadata parser, без raw dump/memory/stack; NO_MINIDUMP_FOUND не переименован в root cause|8 synthetic parser tests в составе76; реальные metadata receipts|
+|Последний platform attempt|AOSP35/36 по прежним evidence18; CLI добавляет35, все P0 assertions AST-identical|MASTER35PASS, CLIENT35hostFAIL; дальнейшие blind retries остановлены|
+|Независимая квалификация|Verifier не доверяет casePASS:15 таблиц, media SHA, actual versions/driver/source/cold; все4 scopes обязательны|Реальный CLIENT14 PASS; потеря revision в копии отчёта отвергается; actual run7 BLOCKED|
+|Phone authorization|Native success не выставляет safeForOwnerInstall=true; owner version и physical QA отдельные|Policy regression, manifest false/UNKNOWN/NOT_RUN|
 
-Native/profile/diagnostic исправления не ослабляют P0 assertions. Приложение APK29 не менялось и не переподписывалось после успешной сборки. Production GAS6, OAuth/ACL, server code, действующие публикации/данные, старыеAPK и ключ подписи сохранены. Live-only dual-apk workflow и его server gate byte-identical, не запускались/не обходились. Offline QA — отдельный разрешённый защищённый путь; новые server21/22/Auth19 флагиOFF.
-
-Исторические RED→GREEN и неудачные операции с обоснованием — `candidate29/*RED*`, `*GREEN*`, native_attempt*/ и CODEX_EFFICIENCY_25.md. Тесты парсера не объявляются обнаружением причины в настоящем dump.
+Последовательность неудач/исправлений и run IDs — CODEX_EFFICIENCY_25 и candidate29/. Полные Flutter/Node suites после report/tool-only changes не повторялись. Actual APK bytes не менялись, не пересобирались и не переподписывались после успешного build. Main server-only production gate и прежние APK сохранены.

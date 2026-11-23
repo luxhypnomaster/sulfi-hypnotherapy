@@ -1,25 +1,24 @@
-# №25 — подписанная пара29, приёмка PARTIAL
+# №25 — итог продолжения 23.11.2026
 
-Состояние 2026-11-23. Исходный отчёт сохранён в `history_before_candidate29/`, материалы Google Drive не удалялись.
+**PARTIAL / BLOCKED_FULL_NATIVE_DELIVERY. Две настоящие подписанные APK29 существуют, но пара не допущена к установке на телефон владельца.**
 
-Код приложений: **737ea741636e9abe7c20353d9d5b8301cf44a5bb**. Ветка `feat/task25-integration-native-gates`, [draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57), база — проверенный PR56d0a6d9a6. PR51/52/54/55/56/57 остаются OPEN DRAFT UNMERGED. Изменений runtime335/native31 после проверенного исходника нет. Новые commits — инструменты QA и отчёты.
+Код приложений: `737ea741636e9abe7c20353d9d5b8301cf44a5bb`. Код инструментов и сохранённый результат: `5977584cfeb14d3f3222d49e45729f76fff35f47`. Доверенная QA main: `e5b91a7e2a68c345dda12a64d079fdc1d6d365b7`. [Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) остаётся открытым, база PR56; весь app-стек PR51–57 не объединён. Runtime335/native31 без drift; production-флаги21/22/Auth19 OFF.
 
-|Область|Фактический результат|
+|Уровень|Результат|
 |---|---|
-|INTEGRATION_READY|PASS_SOURCE_LOCAL:574Flutter PASS/2SKIP,114Node,53Python исходной интеграции; analyzer/format/pins PASS|
-|Сборка MASTER/CLIENT29|PASS_BINARY: обе реально собраны и подписаны существующим ключом, run45103325755 SUCCESS|
-|Независимая проверка бинарников|PASS: исходник, SHA, размер, cert, applicationId, version29, ABI, SDK, права; повторный readback после перезапуска среды|
-|NATIVE_CANDIDATE_CLIENT|API34 CONTROLLED PASS15, включая normal install-r28→29, точные строки/медиа, cold restart и native playback|
-|NATIVE_CANDIDATE_MASTER|PARTIAL: новый MASTER34 прогон подтвердил normal update/cold/строки/медиа;16PASS, последний editor observer BLOCKED, исправление QA ожидает полный прогон|
-|Оба API36|NOT_RUN: обязательный API34 gate не пройден; критерии не ослаблены|
-|SERVER_PROD_READY|false для новых функций21/22; GAS6 сохранён, новые флаги OFF|
-|OWNER_DEVICE / REAL_GOOGLE|NOT_RUN, телефоны не затронуты; реальный установленный versionCode UNKNOWN|
-|Выдача пары для телефона|BLOCKED. APK находятся в quarantine; установка владельцу не рекомендуется|
+|INTEGRATION_READY|PASS_SOURCE_LOCAL:574 Flutter PASS/2SKIP,114 Node, исходные53 Python; analyzer/format/pins PASS|
+|NATIVE_CANDIDATE_MASTER|Actual signed binary PASS; полные controlled update API34 иAPI35: по17PASS; не физическая приёмка|
+|NATIVE_CANDIDATE_CLIENT|Actual signed binary PASS; полный controlled update API34:15PASS; AOSP35 прогон BLOCKED до29|
+|Полный native допуск пары|BLOCKED: CLIENT host QEMU SIGSEGV на старой28; обе API36 и delivery пропущены обязательным gate|
+|Новые инструменты QA|76 controlled tests PASS, actionlint PASS; новый observer исправлен с RED replay и native GREEN|
+|SERVER_PROD_READY|false для новых возможностей21/22; production не менялся; сохраняется отдельный Diary17 gap|
+|OWNER_DEVICE / REAL_GOOGLE|NOT_RUN; фактическая установленная версия UNKNOWN; устройства не затронуты|
+|Выдача APK для установки|BLOCKED; файлы остаются quarantine, APK на Drive не загружались|
 
-[Реальная сборка](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755), [native run4](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45157723278). Существующий cert `0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6`, оба APK `0.4.21+29`, min24/target36. Подробности — APK_INFO/APK_READBACK и NATIVE_UPGRADE.
+[Build45103325755 SUCCESS](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) реально создал обе APK `0.4.21+29`, прежние applicationId и cert `0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6`. Независимо проверены подписи, SHA, ZIP CRC, размер, версии, SDK/ABI/config и права. Оба APK по194184164байта. Подробности и полные SHA — APK_INFO/APK_READBACK. Новый ключ не создавался; signing credentials не попадали к app/Gradle-коду.
 
-Новый узкий PR67 добавил безопасное чтение только кода исключения/исполняемого модуля аварии и режим MASTER-only без выдачи APK; production/signing не затронуты. Диагностический run45161085603 проверяется отдельно. Его успех сам по себе не является четырьмя native PASS или разрешением на выдачу.
+Последний [run45166539406](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406): MASTER35 полный17PASS; CLIENT35 пятьPASS, затем сам QEMU завершился SIGSEGV при паузе в old28 до установки29. Independent15-table readback подтверждает MASTER PASS и общий BLOCKED_NATIVE_DELIVERY. OOM-kill и внешний cancel не наблюдались; faulting module UNKNOWN, minidump не появился. Переход на ранее применявшиеся AOSP35/36 не устранил нестабильность CLIENT. Новых одинаковых запусков нет.
 
-Без merge всего стека, production deploy, нового ключа, изменения OAuth/ACL или действий с личными данными. Исторический owner24→25 остаётся UNKNOWN. Ограничения22/23 перечислены в ISSUES.
+Ранее CLIENT34 полный15PASS (45157723278) и MASTER34 полный17PASS (45164078203) подтвердили реальное обычное install-r28→29, SQLite/media/revisions, модули, программу, историю, настройки, cold restart; MASTER также локальный черновик. Эти доказательства не подменяют незавершённый полный gate35/36 и проверку телефона владельца. Текстовый diary fixture не равен native image/video attachment test.
 
-Продолжение: diagnostic45161085603 завершён, MASTER34normal/cold сохранностьPASS. Единственный remainingcase — helper искал NewEntry внутри publicreader; actualXML/independent15-table readback подтверждают observerпричину. QEMU exit0, NO_MINIDUMP_FOUND; это не новый SIGSEGV. УзкийPR68 исправляет только QA navigation, не приложение. AOSP35 change НЕ применён. Ожидается full34/36 nativeGREEN, ownerinstall пока запрещён.
+Старый owner24→25 остаётся UNKNOWN; live Google/OS-transfer29/двухтелефонная приёмка и ограничения22/23 открыты. Ни main app-merge, ни production deploy, ни OAuth/ACL/key/userdata change, ни public release не выполнялись. Исходные отчёты сохранены. 55 критериев перечислены в ACCEPTANCE с точными уровнями; большое число local/binary PASS не означает релизную готовность.

@@ -1,22 +1,22 @@
-# №25 — оставшиеся проблемы после реальной сборки29
+# Открытые вопросы №25
 
-|ID / уровень|Факт|Статус / следующий безопасный шаг|
+|ID / уровень|Факт / статус|Следующий безопасный шаг|
 |---|---|---|
-|P0-NATIVE25|MASTER34 run5 normal/cold/update dataPASS16, final UIobserverBLOCKED; CLIENT34 полный15PASS|BLOCKED_NATIVE. Run5 QEMUexit0/no dump; observer reader→author подтверждёнXML и исправленPR68. Actual nativeGREEN ожидается; AOSP35 не применён. После устранения нужны все4гейта34/36, никаких пропусков паузы/SQLite/media assertions|
-|P0-SIGN25|Trusted build/sign45103325755 и обе независимые подписи PASS|RESOLVED_FOR_BINARY_ONLY, key прежний. Не означает native/physical готовности|
-|P0-ID25|Code29>baseline28, package/cert совпадают; actual installed version владельца UNKNOWN|OWNER_INSTALL_BLOCKED до native PASS и readback версии/отдельного согласия. Не применять downgrade|
-|P0-OWNER-HISTORY|Случай исчезновения owner MASTER24→25 не исследован на физической базе|UNKNOWN/PARTIAL, не объявлен исправленным. Личные материалы/устройство не трогали|
-|P1-LIVE22|Production21/22 adapter/private full backup/restore не доказаны|BLOCKED_LIVE; флагиOFF, GAS6 не менять|
-|P1-IAM22|Настоящие Google MASTER/CLIENT/refresh/роль/два телефона не испытаны|NOT_RUN_LIVE/OWNER, controlled identity не OAuth PASS, Testing не обходить|
-|P1-BG29|Полная реальная background отправка/скачивание/OS recovery29 с живыми server receipts не испытана|PARTIAL. Local logic и CLIENT persistence проверены; прежние18 evidence не переименовывать в29|
-|P1-REV22|Automatic revision rematerialization/module→program apply неполны|PARTIAL, exact refs/frozen history/immutable blobs сохраняются|
-|P1-TAX22|Full merge/reclassification categories отсутствует|PARTIAL, данные не удалять/обнулять|
-|P1-BACKUP22|Большое real video/ScriptProperties streaming/production-shaped private restore не доказаны|PARTIAL/BLOCKED_LIVE, не активировать|
-|P1-ADMIN22|Backup schedule/settings/full role/moderation dashboard неполны|PARTIAL, не выдавать placeholder за finished|
-|P1-POLICY22|Weighted coefficients не утверждены;>1000target batching неполон|OPEN/PARTIAL, NOT_CALIBRATED/null, веса не выбирать|
-|P2-COURSE22|Утверждённого Rubedo artwork нет|PARTIAL, оставить safe missing-asset state|
-|P1-DELIVERY25|Quarantine artifact истекает26ноября; For_Codex наследует anyone:writer, repoPUBLIC|Не менять ACL/видимость; только sanitized reports, без raw dumps/keys/private data. Пока нет nativePASS — не выдавать APK как проверенную. SHA readback моментный, не гарантия будущей неизменности|
+|P0-NATIVE25|BLOCKED_FULL_NATIVE_DELIVERY. Последний CLIENT35 QEMU SIGSEGV на old28, до29; обеAPI36NOT_RUN|Точный новый fault-module/SDK evidence либо подтверждённая стабильная disposable среда; затем неизменный полный dataset. Без новой гипотезы не повторять|
+|P0-SIGN25|RESOLVED_BINARY: actual signed pair29, cert/package/SHA/source/config независимоPASS|Не менять key, не пересобирать/переподписывать эти bytes ради отчётности|
+|P0-ID25|29>baseline28; owner installed version/package/cert readback UNKNOWN|Перед phoneQA нужен readback версии и отдельное согласие; сейчас не устанавливать|
+|P0-OWNER24_25|Исторический missing-data case UNKNOWN|Не объявлять восстановленным/исправленным; личную базу не трогали|
+|P1-DIARY17|GAS6 rejects nonempty message withoutblocks; approved-tool inspect не равен production apply|BLOCKED_OWNER_SERVER_CHANGE, в25patch/deploy/rollbackнеразрешены и не выполнялись|
+|P1-LIVE21_22|Production adapter/private backup/restore/rollback не доказаны|BLOCKED_LIVE; новыефлагиOFF, локальные controlled tests не productionPASS|
+|P1-IAM|Настоящие Google MASTER/CLIENT/refresh/роль/два телефона NOT_RUN|Отдельная ручная приёмка после native допуска, без обхода Testing|
+|P1-BG29|Local logic/persistence PASS, полный live29 OS-kill-transfer receipt NOT_RUN|Не переименовывать historical18backgroundPASS в29|
+|P1-REV22|Audio revision rematerialization/module→program apply неполны|PARTIAL, exact refs/frozen history сохраняются|
+|P1-TAX22|Полный category merge/reclassification workflow отсутствует|PARTIAL, не удалять/обнулять/создавать новые дубли|
+|P1-BACKUP_ADMIN22|Большое real video/streaming/private restore и полный schedule/roles/moderation dashboard не доказаны|PARTIAL/BLOCKED_LIVE, не активировать|
+|P1-POLICY22|Weighted numeric policy не утверждена,>1000targets batching неполон|OPEN, NOT_CALIBRATED/null, коэффициенты не назначать|
+|P2-COURSE22|Rubedo approved artwork отсутствует|PARTIAL, safe missing-asset state|
+|P1-DELIVERY25|Quarantine expires26ноября; For_Codex inheritedanyonewriter, repoPUBLIC|Сохранить ACL/visibility. Только sanitized reports; APK не выдавать до gate. SHAreadback моментный, не гарантия вечной неизменности|
 
-Подтверждён новый инфраструктурный факт — QEMU SIGSEGV, а не дефект миграции APK29. Приложение unchanged. Избыточных повторных Flutter suites/build/signing после успешного source freeze нет. Старые неудачные renderer эксперименты17 не повторять наугад. Если диагностический дамп отсутствует — module UNKNOWN, не выдумывать место падения и не перезапускать ту же гипотезу.
+Новых подтверждённых app source/data-loss дефектов не найдено. Это не утверждение отсутствия всех ошибок на Android. Доступность runner/KVM и две actual подписи доказаны; они не снимают QEMU/owner/live blockers. Native diary-image/video attachment, ARM/OEM/микрофон/реальный звук иGoogleфизическиNOT_RUN. Исходные отчёты сохранены, новых одинаковых CI-запусков после AOSP7 нет.
 
-Владельцу сейчас не нужны новые Google consent/пароли/ключ/компьютер, и не нужно удалять приложение. Работа с телефоном и production не является решением инфраструктурного gate без отдельного разрешения.
+Ни production GAS6/old diary, ни OAuth/ACL, ключ, старыеAPK, user data, repo visibility или protection не изменялись. Main содержит лишь отдельно проверенные operational PR58–69; appPR51–57 draft/unmerged. Следующий шаг engineering-only, от владельца не требуется компьютер или повторная авторизация.

@@ -1,0 +1,9 @@
+# Root cause №25 — три отдельных вопроса
+
+1. **Подтверждён host QEMU SIGSEGV**, не потеря SQLite: несколько GUI-прогонов old28 при открытии часов теряют ADB; child реальноexit-11, без wrapper cancel/oomkill, до установки29. Повторено CLIENT на Google API34 и AOSP35; MASTER14 встречал тот же сбой. Точный faulting module/function UNKNOWN: Crashpad не создал minidump. Ни vendor fix, ни отсутствие ошибок APK29 этим не доказаны. Последний run45166539406/client137665199430, child3168,246.17seconds, independent metadata и provider hashes сохранены.
+2. **Подтверждён и исправлен QA observer defect**:45161085603/MASTER16PASS, последний шаг искал NewEntry внутри public reader. Actual XML содержит existing list button, QEMUexit0. Новый observer выбирает existing list и Author/MyNotes, затем запускает original readiness/persistence assertions. Actual MASTER17PASS на34/35 доказывает GREEN. Приложение/Back/роли не менялись.
+3. **Старый случай владельца24→25 остаётся UNKNOWN.** Код/фикстуры25 не объявляются его расследованием или восстановлением. Настоящая база не извлекалась и не менялась.
+
+Цепочка build-infra исправлений (obsolete SDK tools, draft-read permissions, generated registrant ordering, Flutter tag metadata, KVM race) отдельна от нового QEMU crash; все run IDs и узкие PR в CODEX_EFFICIENCY. Последняя AOSP попытка не сняла host instability; без новой доказанной гипотезы новых full runs нет.
+
+Следующий инженерный шаг: в отдельно reviewed read-only диагностике получить host kernel/SDK fault-module metadata на disposable runner либо подтвердить другую стабильную среду; не публиковать память/stack/raw dump. Затем тот же полный UI-created old28→exact signed29 набор для обеих editions, API36 и independent delivery gate. APK не пересобирать и ключ не менять, пока доступны исходные exact bytes. Этот план не представлен как выполненный тест или разрешение на production/device actions.

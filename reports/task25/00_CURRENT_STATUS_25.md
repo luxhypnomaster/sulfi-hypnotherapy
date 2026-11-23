@@ -1,11 +1,11 @@
-# №25 — текущий результат кандидата29
+# №25 — итог: APK29 собраны, выдача пары BLOCKED
 
-**Пара собрана и независимо проверена. Полная выдача пока ожидает Android-гейтов.**
+Две APK0.4.21+29 реально собраны прежним ключом и независимо проверены по подписи, SHA, пакетам, версиям, SDK/ABI/правам и содержимому. Обычное обновление28→29 с сохранением данных подтвердили CLIENT наAPI34(15PASS), MASTER наAPI34 иAOSP35(по17PASS).
 
-MASTER прошёл17 native проверок обновления28→29 на API34, CLIENT —15. SQLite/медиа/модули/программа/история/настройки сохранились; MASTER подтвердил локальный черновик после обновления. Разные Google API34 прогоны также выявили host QEMU SIGSEGV на старой28, до29; это не скрывается и не объявляется исправленным.
+**Полный допуск пары не получен.** В последнем [run45166539406](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406) сам QEMU уCLIENT упалSIGSEGV в паузе старойAPK28, до29. API36 и выдача корректноSKIPPED. Последняя AOSP-попытка не сняла инфраструктурный блокер; новых слепых повторов нет. **Пока не устанавливать эту пару на телефон.**
 
-Сейчас идёт последний полный набор: обе редакции на официальных AOSP API35/API36, [run45166539406](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406). Те же APK, тот же полный P0 dataset, без rebuild/resign. Доставка требует все4PASS. [Актуальная точка продолжения](candidate29/RESUME_CURRENT_25.md).
+[DraftPR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Реальная сборка](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) · [Папка отчётов](https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn).
 
-[Draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57) · [Сборка45103325755](https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755) · [ОтчётыDrive](https://drive.google.com/drive/folders/1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn).
+Источник приложений737ea741636e9abe7c20353d9d5b8301cf44a5bb; код QA5977584cfeb14d3f3222d49e45729f76fff35f47. Runtime не менялся:574FlutterPASS/2SKIP,114Node;76QAtoolsPASS. Mainappstackнеmerged, productionGAS/OAuth/ACL/key/userdata не менялись. Реальные Google/телефоныNOT_RUN, установленная версияUNKNOWN, owner24→25causeUNKNOWN. APK остаютсяquarantine, наDrive не выкладывались.
 
-Код приложений737ea741636e9abe7c20353d9d5b8301cf44a5bb, без изменений после574Flutter/2SKIP/114Node;76QA-tool tests PASS. Сервер/GAS6/OAuth/ACL/ключ/данные не менялись. App PR51–57 unmerged, main только узкие operational PR. Реальные Google/телефоны NOT_RUN, установленная версия владельцаUNKNOWN. Пока не устанавливать/не удалять приложение. Итоговая партия Drive ещё готовится; промежуточные отчёты не равны native/physicalPASS.
+Текущие RESULT,CHANGES,TESTS,ISSUES,ROOT_CAUSE,NATIVE_UPGRADE,55критериев ACCEPTANCE и binaryINFO/READBACK — отдельная датированная партия в этой папке. Исходные отчёты сохранены. Итоговые ID/размеры/SHA и независимое скачивание подтверждаются DELIVERY; текущий файл не является разрешением на установку.

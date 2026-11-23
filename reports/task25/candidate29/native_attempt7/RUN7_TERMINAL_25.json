@@ -1,0 +1,48 @@
+{
+  "status": "BLOCKED_FULL_NATIVE_PAIR",
+  "run": 45166539406,
+  "main": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406",
+  "jobs": [
+    {
+      "id": 137664837591,
+      "name": "trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 137664889601,
+      "name": "readback",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 137665199430,
+      "name": "native35 (client)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 137665199507,
+      "name": "native35 (master)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 137671132326,
+      "name": "native36",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137671134554,
+      "name": "delivery",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "nextDispatch": "NOT_AUTHOMATIC_NO_BLIND_REPEAT",
+  "signingBuildOrAppChanges": false,
+  "ownerPhone": "NOT_TOUCHED",
+  "Google": "NOT_RUN"
+}
