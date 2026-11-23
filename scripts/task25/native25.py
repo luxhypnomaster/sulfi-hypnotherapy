@@ -23,7 +23,54 @@ import io
 import zipfile
 import xml.etree.ElementTree as ET
 
-from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write
+from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write, redact
+
+
+def accessibility_snapshot(adb, out, actions, run=None):
+    """Observe a fresh tree across bounded UI transitions; never retry a tap.
+
+    A playback position event can interrupt platform uiautomator's idle wait.
+    A dead emulator is a separate failure and is never restarted here.
+    """
+    run = run or subprocess.run
+    diagnostics = []
+    for attempt in range(1, 4):
+        adb("shell", "rm", "-f", "/sdcard/qa25-window.xml")
+        try:
+            p = run(["adb", "shell", "uiautomator", "dump", "/sdcard/qa25-window.xml"],
+                    capture_output=True, text=True, timeout=55)
+            detail = {"attempt": attempt, "returncode": p.returncode,
+                      "stdout": redact(p.stdout[-500:]), "stderr": redact(p.stderr[-500:])}
+            xml = adb("exec-out", "cat", "/sdcard/qa25-window.xml", check=False)
+            nodes = list(ET.fromstring(xml).iter("node")) if "<hierarchy" in xml else []
+            if p.returncode == 0 and nodes:
+                (out / "latest-window.xml").write_text(xml)
+                if diagnostics:
+                    actions.append({"action": "read_only_accessibility_transition_recovered",
+                                    "attempts": attempt, "failures": diagnostics,
+                                    "repeatedUIActions": False})
+                return nodes
+        except (subprocess.TimeoutExpired, ET.ParseError) as error:
+            detail = {"attempt": attempt, "error": type(error).__name__}
+        diagnostics.append(detail)
+        write(out / "AX_LAST_TRANSITION_25.json", {"readOnly": True, "attempts": diagnostics})
+        if adb("get-state", check=False).strip() != "device":
+            raise GateError("EMULATOR_CONNECTION_LOST_NO_RETRY")
+        if attempt < 3:
+            time.sleep(0.5 * attempt)
+    raise GateError("NATIVE_ACCESSIBILITY_DUMP_UNAVAILABLE_AFTER_3_FRESH_READS:" + json.dumps(diagnostics))
+
+
+def open_public_cache(ui):
+    ui.home()
+    ui.click("Дневник")
+    if any(ui.label(node) == "Читатель" for node in ui.tree()):
+        ui.click("Читатель", exact=True)  # Existing MASTER reader mode; no role change.
+    ui.click("QA25 cached public diary")
+    assert any("CONTROLLED_NATIVE25_PUBLIC_CACHE_NOT_GOOGLE" in ui.label(node)
+               or "Controlled offline text" in ui.label(node) for node in ui.tree()), "OFFLINE_READER_NOT_RENDERED"
+    ui.shot("offline-public-reader")
+    return {"cachePreservedAndReadableOffline": True, "Google": "NOT_RUN", "source": "supplemental synthetic public cache"}
 
 FIXTURE_JAVA = r'''
 package org.alchemist.qa25;
@@ -120,14 +167,7 @@ def main():
     m.report = report
 
     def tree():
-        # Platform uiautomator uses existing system identity. No helper APK/key.
-        m.adb("shell", "rm", "-f", "/sdcard/qa25-window.xml")
-        raw = m.adb("shell", "uiautomator", "dump", "/sdcard/qa25-window.xml", check=False)
-        xml = m.adb("exec-out", "cat", "/sdcard/qa25-window.xml", check=False)
-        if "<hierarchy" not in xml:
-            raise AssertionError("NATIVE_ACCESSIBILITY_DUMP_UNAVAILABLE:" + raw[-500:])
-        (out / "latest-window.xml").write_text(xml)
-        return list(ET.fromstring(xml).iter("node"))
+        return accessibility_snapshot(m.adb, out, m.ACTIONS)
     m.tree = tree
 
     def install():
@@ -243,10 +283,7 @@ def main():
         return compare("afterCandidate")
 
     def reader():
-        m.home(); m.click("Дневник"); m.click("QA25 cached public diary")
-        assert any("CONTROLLED_NATIVE25_PUBLIC_CACHE_NOT_GOOGLE" in m.label(n) or "Controlled offline text" in m.label(n) for n in m.tree()), "OFFLINE_READER_NOT_RENDERED"
-        m.shot("offline-public-reader")
-        return {"cachePreservedAndReadableOffline": True, "Google": "NOT_RUN", "source": "supplemental synthetic public cache"}
+        return open_public_cache(m)
 
     def case(name, fn):
         m.case(name, fn)
