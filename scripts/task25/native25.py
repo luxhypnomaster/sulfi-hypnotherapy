@@ -24,6 +24,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write, redact
+import emulator_sdk25 as sdk25
 
 
 def accessibility_snapshot(adb, out, actions, run=None):
@@ -109,9 +110,11 @@ def prepare_profile(root):
     source = Path(os.environ["GITHUB_WORKSPACE"]) / "appsource"
     if command(["git", "rev-parse", "HEAD"], cwd=source).strip() != SOURCE:
         raise GateError("PINNED_PRE_EMULATOR_SOURCE_REQUIRED")
+    sdk_receipt = sdk25.install()
     command(["python3", str(source / "scripts/task17/pre_emulator.py")], live=True)
     receipt = configure_display(Path.home() / ".android/avd/test.avd/config.ini")
     write(root / "task25-native-evidence/SDK_PROFILE_25.json", receipt)
+    sdk25.record_ready(sdk_receipt)
     print("TASK25_PHYSICAL720x1280_DENSITY280_WITH_EXISTING_PINNED_EMULATOR_AND_EXIT_MONITOR")
 
 FIXTURE_JAVA = r'''
@@ -187,7 +190,7 @@ def main():
     if command(["adb", "shell", "getprop", "ro.kernel.qemu"]).strip() != "1" or int(command(["adb", "shell", "getprop", "ro.build.version.sdk"]).strip()) != args.api:
         raise GateError("DISPOSABLE_API_MATRIX_MISMATCH")
     ready = Path(os.environ["GITHUB_WORKSPACE"]) / ".task17-sdk-ready.json"
-    if not ready.exists() or json.loads(ready.read_text())["version"] != "37.2.12":
+    if not sdk25.ready_valid(ready):
         raise GateError("PINNED_EMULATOR_PREHOOK_NOT_CONFIRMED")
     profile = root / "task25-native-evidence/SDK_PROFILE_25.json"
     if not profile.exists() or json.loads(profile.read_text())["status"] != "PASS_DISPOSABLE_PHYSICAL_FRAMEBUFFER_CONFIGURED":
@@ -214,6 +217,7 @@ def main():
         write(out / "NATIVE_UPGRADE_25.json", {
             "edition": args.edition, "api": args.api, "baseline": 28, "candidate": CODE,
             "applicationSourceSHA": SOURCE, "driverMainSHA": os.environ["GITHUB_SHA"],
+            "emulatorVersion": sdk25.VERSION, "emulatorArchiveSHA256": sdk25.SHA256,
             "fixture": "tracks/modules/program/history/MASTER-local-draft/capsule via APK28 UI; queue/public-cache/network-policy supplemental Android SQLite, explicitly NOT Google",
             "ownerPhone": "NOT_TOUCHED", "realGoogle": "NOT_RUN", "uninstallClearDowngrade": False,
             "newKeysGenerated": False, "cases": m.CASES, "actions": m.ACTIONS, "inventories": m.inventories,

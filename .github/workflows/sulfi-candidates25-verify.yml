@@ -125,12 +125,13 @@ jobs:
           scripts/task25/candidate25.py
           scripts/task25/native25.py
           scripts/task25/emulator_fault25.py
+          scripts/task25/emulator_sdk25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'e8740d039b42937b08384f274ad1867402cad308546e7a83d7fa9c847bf8e133', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -190,7 +191,7 @@ jobs:
     - name: Native UI-created APK28 to APK29 preservation gate
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
-        TASK17_EMULATOR_PIN: 37.2.12
+        TASK17_EMULATOR_PIN: 37.3.10
         TASK17_PROCESS_FORENSIC: 'true'
       with:
         api-level: 35
@@ -231,6 +232,9 @@ jobs:
     - name: Extract bounded host exception module metadata; never upload raw dumps
       if: always()
       run: python3 trusted/scripts/task25/emulator_fault25.py
+    - name: Collect safe monitored QEMU kernel module metadata only
+      if: always()
+      run: python3 trusted/scripts/task25/emulator_sdk25.py host-fault
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -269,12 +273,13 @@ jobs:
           scripts/task25/candidate25.py
           scripts/task25/native25.py
           scripts/task25/emulator_fault25.py
+          scripts/task25/emulator_sdk25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'ce5493f6b29eef48b794927db58c09f10b5b970a73be370536e8678f5faff2b2', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'e8740d039b42937b08384f274ad1867402cad308546e7a83d7fa9c847bf8e133', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -334,7 +339,7 @@ jobs:
     - name: Native UI-created APK28 to APK29 preservation gate
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
-        TASK17_EMULATOR_PIN: 37.2.12
+        TASK17_EMULATOR_PIN: 37.3.10
         TASK17_PROCESS_FORENSIC: 'true'
       with:
         api-level: 36
@@ -375,6 +380,9 @@ jobs:
     - name: Extract bounded host exception module metadata; never upload raw dumps
       if: always()
       run: python3 trusted/scripts/task25/emulator_fault25.py
+    - name: Collect safe monitored QEMU kernel module metadata only
+      if: always()
+      run: python3 trusted/scripts/task25/emulator_sdk25.py host-fault
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
