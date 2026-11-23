@@ -1,0 +1,10 @@
+{
+  "status": "PASS_FINAL_DELIVERY_RECEIPT_OWN_RAW_SHA_SIZE_PARENT",
+  "id": "1Wzy_Jzz3mSQXURZmH1zZhJ-gIJC8_cpd",
+  "bytes": 8725,
+  "sha256": "b0466245dc379a7de52d02c0653594a2feb9491711260a62d78f32fabaf7b6a4",
+  "parent": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "currentReportFilesVerifiedIncludingReceipt": 20,
+  "nativePair": "BLOCKED_NATIVE_DELIVERY",
+  "APKUploaded": false
+}

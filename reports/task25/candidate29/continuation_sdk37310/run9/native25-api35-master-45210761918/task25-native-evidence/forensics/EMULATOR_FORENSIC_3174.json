@@ -1,0 +1,526 @@
+{
+  "childPid": 3175,
+  "observedChildNames": [
+    "Name:\temulator.task17",
+    "Name:\tqemu-system-x86"
+  ],
+  "sampleCount": 31,
+  "schema": 1,
+  "avdLaunch": true,
+  "exitCode": 0,
+  "signal": null,
+  "wrapperReceivedSignals": [],
+  "before": {
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+    "memory.current": "5119516672",
+    "memory.max": "max",
+    "memory.peak": "6417723392",
+    "MemAvailable": "14867372 kB"
+  },
+  "after": {
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+    "memory.current": "5682978816",
+    "memory.max": "max",
+    "memory.peak": "8885874688",
+    "MemAvailable": "14997140 kB"
+  },
+  "durationSeconds": 31.02,
+  "samples": [
+    {
+      "seconds": 0.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5119516672",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14867372 kB"
+      },
+      "childStatus": [
+        "Name:\temulator.task17",
+        "State:\tR (running)",
+        "VmHWM:\t     544 kB",
+        "VmRSS:\t     544 kB"
+      ]
+    },
+    {
+      "seconds": 1.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5301084160",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14785416 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  185772 kB",
+        "VmRSS:\t  185772 kB"
+      ]
+    },
+    {
+      "seconds": 2.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5456764928",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14644976 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  337068 kB",
+        "VmRSS:\t  337068 kB"
+      ]
+    },
+    {
+      "seconds": 3.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5465153536",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14644848 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  345292 kB",
+        "VmRSS:\t  345292 kB"
+      ]
+    },
+    {
+      "seconds": 4.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5471444992",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14650260 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  351436 kB",
+        "VmRSS:\t  351436 kB"
+      ]
+    },
+    {
+      "seconds": 5.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5476405248",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14654828 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  355748 kB",
+        "VmRSS:\t  355748 kB"
+      ]
+    },
+    {
+      "seconds": 6.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5476544512",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14669144 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  355812 kB",
+        "VmRSS:\t  355812 kB"
+      ]
+    },
+    {
+      "seconds": 7.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5487030272",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14671464 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  366120 kB",
+        "VmRSS:\t  366120 kB"
+      ]
+    },
+    {
+      "seconds": 8.0,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "5674459136",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14502208 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  542492 kB",
+        "VmRSS:\t  542492 kB"
+      ]
+    },
+    {
+      "seconds": 9.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "6347055104",
+        "memory.max": "max",
+        "memory.peak": "6417723392",
+        "MemAvailable": "14050900 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t  997316 kB",
+        "VmRSS:\t  997316 kB"
+      ]
+    },
+    {
+      "seconds": 10.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "6738214912",
+        "memory.max": "max",
+        "memory.peak": "6738214912",
+        "MemAvailable": "13792188 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 1267652 kB",
+        "VmRSS:\t 1267652 kB"
+      ]
+    },
+    {
+      "seconds": 11.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "6924558336",
+        "memory.max": "max",
+        "memory.peak": "6924558336",
+        "MemAvailable": "13757976 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 1302472 kB",
+        "VmRSS:\t 1302472 kB"
+      ]
+    },
+    {
+      "seconds": 12.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7163109376",
+        "memory.max": "max",
+        "memory.peak": "7163371520",
+        "MemAvailable": "13518836 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 1534508 kB",
+        "VmRSS:\t 1534508 kB"
+      ]
+    },
+    {
+      "seconds": 13.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7356026880",
+        "memory.max": "max",
+        "memory.peak": "7356026880",
+        "MemAvailable": "13334016 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 1724316 kB",
+        "VmRSS:\t 1724316 kB"
+      ]
+    },
+    {
+      "seconds": 14.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7495917568",
+        "memory.max": "max",
+        "memory.peak": "7495925760",
+        "MemAvailable": "13200488 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 1859660 kB",
+        "VmRSS:\t 1859660 kB"
+      ]
+    },
+    {
+      "seconds": 15.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7651188736",
+        "memory.max": "max",
+        "memory.peak": "7651188736",
+        "MemAvailable": "13050816 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2011268 kB",
+        "VmRSS:\t 2011268 kB"
+      ]
+    },
+    {
+      "seconds": 16.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7740571648",
+        "memory.max": "max",
+        "memory.peak": "7740571648",
+        "MemAvailable": "12957144 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2097060 kB",
+        "VmRSS:\t 2097060 kB"
+      ]
+    },
+    {
+      "seconds": 17.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7898083328",
+        "memory.max": "max",
+        "memory.peak": "7898083328",
+        "MemAvailable": "12812012 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2248568 kB",
+        "VmRSS:\t 2248568 kB"
+      ]
+    },
+    {
+      "seconds": 18.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7928492032",
+        "memory.max": "max",
+        "memory.peak": "7928492032",
+        "MemAvailable": "12788192 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2276996 kB",
+        "VmRSS:\t 2276996 kB"
+      ]
+    },
+    {
+      "seconds": 19.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "7942995968",
+        "memory.max": "max",
+        "memory.peak": "7942995968",
+        "MemAvailable": "12780020 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2289804 kB",
+        "VmRSS:\t 2289804 kB"
+      ]
+    },
+    {
+      "seconds": 20.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8109064192",
+        "memory.max": "max",
+        "memory.peak": "8109064192",
+        "MemAvailable": "12627780 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2450636 kB",
+        "VmRSS:\t 2450636 kB"
+      ]
+    },
+    {
+      "seconds": 21.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8274780160",
+        "memory.max": "max",
+        "memory.peak": "8274780160",
+        "MemAvailable": "12468092 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2611348 kB",
+        "VmRSS:\t 2611348 kB"
+      ]
+    },
+    {
+      "seconds": 22.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8446328832",
+        "memory.max": "max",
+        "memory.peak": "8446328832",
+        "MemAvailable": "12295840 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2776112 kB",
+        "VmRSS:\t 2776112 kB"
+      ]
+    },
+    {
+      "seconds": 23.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8611921920",
+        "memory.max": "max",
+        "memory.peak": "8611921920",
+        "MemAvailable": "12135988 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 2936956 kB",
+        "VmRSS:\t 2936956 kB"
+      ]
+    },
+    {
+      "seconds": 24.01,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8786202624",
+        "memory.max": "max",
+        "memory.peak": "8786206720",
+        "MemAvailable": "11965944 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3105336 kB",
+        "VmRSS:\t 3105336 kB"
+      ]
+    },
+    {
+      "seconds": 25.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8793399296",
+        "memory.max": "max",
+        "memory.peak": "8796430336",
+        "MemAvailable": "11951152 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3110652 kB",
+        "VmRSS:\t 3110652 kB"
+      ]
+    },
+    {
+      "seconds": 26.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8833773568",
+        "memory.max": "max",
+        "memory.peak": "8836657152",
+        "MemAvailable": "11915728 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3142504 kB",
+        "VmRSS:\t 3142504 kB"
+      ]
+    },
+    {
+      "seconds": 27.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8837455872",
+        "memory.max": "max",
+        "memory.peak": "8839393280",
+        "MemAvailable": "11911056 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3142648 kB",
+        "VmRSS:\t 3142648 kB"
+      ]
+    },
+    {
+      "seconds": 28.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8852103168",
+        "memory.max": "max",
+        "memory.peak": "8852103168",
+        "MemAvailable": "11911488 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3155084 kB",
+        "VmRSS:\t 3155084 kB"
+      ]
+    },
+    {
+      "seconds": 29.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "8877613056",
+        "memory.max": "max",
+        "memory.peak": "8885874688",
+        "MemAvailable": "11879592 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3167924 kB",
+        "VmRSS:\t 3167924 kB"
+      ]
+    },
+    {
+      "seconds": 30.02,
+      "host": {
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "memory.current": "6180356096",
+        "memory.max": "max",
+        "memory.peak": "8885874688",
+        "MemAvailable": "14506768 kB"
+      },
+      "childStatus": [
+        "Name:\tqemu-system-x86",
+        "State:\tS (sleeping)",
+        "VmHWM:\t 3167504 kB",
+        "VmRSS:\t  542100 kB"
+      ]
+    }
+  ]
+}

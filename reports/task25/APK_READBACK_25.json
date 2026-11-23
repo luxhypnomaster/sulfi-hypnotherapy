@@ -1,0 +1,41 @@
+{
+  "status": "PASS_RESTORED_ACTUAL_APK_BYTES_AND_SIGNATURES_AFTER_ENVIRONMENT_RESTART",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "buildRun": 45103325755,
+  "buildMainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "pair": [
+    {
+      "edition": "master",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 29,
+      "versionName": "0.4.21",
+      "size": 194184164,
+      "sha256": "032b58e96d6f05ce00d0c0d58ee61e0be8bf4c5d7963b13183dce6b3762cccac",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "minSdk": 24,
+      "targetSdk": 36,
+      "debuggable": true,
+      "ZIP_CRC": "PASS",
+      "signed": true
+    },
+    {
+      "edition": "client",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 29,
+      "versionName": "0.4.21",
+      "size": 194184164,
+      "sha256": "3c2f52611a4da326593f3523f47f856f948fdfe93e5ec67b66120be2c1720933",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "minSdk": 24,
+      "targetSdk": 36,
+      "debuggable": true,
+      "ZIP_CRC": "PASS",
+      "signed": true
+    }
+  ],
+  "newBuildOrSigning": false,
+  "nativeDeliveryGate": "BLOCKED_NATIVE_DELIVERY",
+  "ownerDevice": "NOT_TOUCHED",
+  "nativeReadback": "candidate29/native_attempt7/INDEPENDENT_NATIVE_READBACK_25.json",
+  "contentScan": "candidate29/APK_CONTENT_SCAN_25.json"
+}

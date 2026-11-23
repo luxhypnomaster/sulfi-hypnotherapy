@@ -1,0 +1,25 @@
+# №25 — продолжение с контрольной точки14fb674, PARTIAL
+
+На22.11.2026 повторная команда владельца обработана как продолжение существующего №25/PR57. Не создан второй PR/сервер/задача. Official ZIP повторно скачан:19023B, SHA256 cc1264a1afba03ff7ebb781702106d1162fdab16b6f9c9ba3b2b41ff36bba4b9, CRC и все11rawfiles совпадают с ранее полностью прочитанными. PR51/52/54/55/56 снова OPEN DRAFT UNMERGED, те же HEAD. Mainb88637a не изменён. RESUME_INPUT_25 фиксирует readback.
+
+Приложение остаётся на проверенном source737ea741636e9abe7c20353d9d5b8301cf44a5bb /runtime PR56. Новый **инструмент**: source`5790139b0c2dc45363434451aa951b14b496d8fc`, [draft PR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57). Все335protected runtime и31native/config pins unchanged. Флаги metadata/project22defaultOFF.
+
+Добавлено реально исполняемое, но **не активированное** средство: read-only проверка публичного сертификата прежнего encrypted keystore. Это устраняет пробел в предыдущем плане: теперь есть полный узкий diff и проверяемый порядок действий для отдельного owner review, а не только общая рекомендация. На main ничего не перенесено, workflows не запускались.
+
+- scripts/task25/signing_inspect.py: строгий owner/manual/main guard до чтения credentials;3существующих repository secrets, временный store600/каталог700; keytool list/exportcert с passwordenv, проверка PrivateKeyEntry и прежнего публичного SHA; cleanup; небольшой publicJSON. Нет build/sign/private-key export/Google/Drive/server или доступа к данным приложения.
+- scripts/task25/review_only/sulfi-signing-inspect25.yml: не находится в .github/workflows и не dispatchable. Owner+triggering owner+main+workflow_dispatch+явнаяconfirmation, immutable action commits, sparse trustedmaincheckout, tool SHA доcredentials, минимальныйcontents:read, secretstep ровноодин, metadata-onlyartifact, cleanupalways. Не просит keypassword/CLASPRC, не обходит dual-apk.
+- Для будущего размещения в main подготовлен полный diff ровно2новых файлов: SIGNING_INSPECT_MAIN_PROPOSAL_25.diff. SHA256`deaeed856500d2f2f35a6ed5bd101a1364db2ff1af83e341393f06aa63d0daba`. Проверены apply--check/apply/reverse на изолированном архиве реальногоmain; исходные файлы побайтово сохранены. Это не реальная правкаmain.
+
+Проверки: **23PythonPASS** (19новых +4существующих source-gate); controlled subprocess/canary, **не настоящий ключ**. Actionlintv1.7.12PASS, официальный бинарник+checksums+GitHub asset digests сверены. YAML/expressions/action-schema lint и6структурных security tests не равны GitHub execution. Никакого нового сертификата даже для тестов не создавалось; используются помеченные синтетические bytes, subprocessподменён только в тестах.
+
+Предыдущие574FlutterPASS/2SKIP/0FAIL,114Node и53Python остаются исходными проверенными результатами. Полные Flutter/Node не повторялись: ни одна строка app/server/native/testsFlutter/lock не менялась. Новый targeted23 перекрывается с прежними4; нельзя складывать53+23 как76уникальных. Подробности TESTS_25_CONTINUATION.
+
+**Гейты не переименованы вPASS:** реальные GitHub Secrets/сертификат NOT_RUN, private keypassword/signing usable NOT_PROVEN, APKs0, nativeupgradeBLOCKED, реальныеGoogle/телефоныNOT_RUN, production22BLOCKED_LIVE. Приглашение повторить №25 не является разрешением менятьmain. Матрица55 дополнена в отдельном ACCEPTANCE_25_CONTINUATION.csv:43PASS по заявленным уровням,1ALREADY_DONE,7BLOCKED,3PARTIAL,1NOT_RUN — без изменения уже сохранённых оригинальных отчётов.
+
+Конкретный следующий шаг требует отдельного решения владельца: принять **ровно2файла inspect-инструмента** вmain и один ручной read-onlyinspect. Ни signing/build/deploy, ни перенос всегоPR57/стека, ни APKвыдача этим не разрешаются. Даже будущий matching publiccert не докажет keypassword/Android update; для реальной пары последуют отдельные protected build/native gates. С телефона нужно только согласование; keystore/пароли/ПК/ручной перенос не требуются.
+
+## Подтверждённый дополнительный trust gate
+
+Read-only GitHub branches/main вернул protected=false для b88637a. Настройки ветки не менялись. Это отдельный BLOCKED, а не основание передать credentials незащищённому запуску. В первоначальном неактивном предложении8b4254f не было явной проверки этого поля. Негативный тест на unprotectedmain дал настоящий RED (1FAIL: InspectError notraised), затем добавлены secret-free trustjob, job-level ref_protected/needs guards и повторная проверка в Python до чтения credentials. Итог23GREEN. Это исправление **инструмента**, не новая причина старого owner24→25 инцидента и не изменение приложения.
+
+Публичный trustjob без tokenpermissions/checkout/секретов завершится явнымBLOCKED на незащищённой main. Inspectjob вообще не планируется, пока protectedref иtrustsuccess не подтверждены. Такое состояние нельзя считать PASS по одному зелёному GitHubrun; нужен фактическийpublicreceipt. Отдельное разрешение на два файла само по себе не разрешает менять защитуmain/ACL и не снимает этотgate. Потребуется отдельно согласованный защищённый способ запуска/среда. Ничего не активировано и сертификат не читался.

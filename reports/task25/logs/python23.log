@@ -1,0 +1,18 @@
+test_changed_source_cleans_only_exclusively_created_derivative (test_preservation.PreservationTest.test_changed_source_cleans_only_exclusively_created_derivative) ... ok
+test_checksum_missing_extra_or_corrupt_file_rejected_before_writes (test_preservation.PreservationTest.test_checksum_missing_extra_or_corrupt_file_rejected_before_writes) ... ok
+test_corrupt_sqlite_preserved_and_no_snapshot_created (test_preservation.PreservationTest.test_corrupt_sqlite_preserved_and_no_snapshot_created) ... ok
+test_dry_run_never_creates_destination_and_requires_explicit_copy (test_preservation.PreservationTest.test_dry_run_never_creates_destination_and_requires_explicit_copy) ... ok
+test_live_wal_copy_captures_rows_without_source_sqlite_write (test_preservation.PreservationTest.test_live_wal_copy_captures_rows_without_source_sqlite_write) ... ok
+test_no_overwrite_no_nested_dest_no_symlinks (test_preservation.PreservationTest.test_no_overwrite_no_nested_dest_no_symlinks) ... ok
+test_roundtrip_retains_every_byte_and_unknown_file_without_source_changes (test_preservation.PreservationTest.test_roundtrip_retains_every_byte_and_unknown_file_without_source_changes) ... ok
+test_traversal_in_manifest_refused_even_when_rehashed (test_preservation.PreservationTest.test_traversal_in_manifest_refused_even_when_rehashed) ... ok
+test_wrong_owner_or_unpinned_manifest_does_not_write (test_preservation.PreservationTest.test_wrong_owner_or_unpinned_manifest_does_not_write) ... ok
+test_cli_execute_refused_before_any_build (test_release_plan.ReleasePlanTest.test_cli_execute_refused_before_any_build) ... ok
+test_downgrade_reused_code_and_nonexact_source_rejected (test_release_plan.ReleasePlanTest.test_downgrade_reused_code_and_nonexact_source_rejected) ... ok
+test_native_drift_not_silently_rebaselined (test_release_plan.ReleasePlanTest.test_native_drift_not_silently_rebaselined) ... ok
+test_plan_has_both_unchanged_ids_pins_and_no_execution (test_release_plan.ReleasePlanTest.test_plan_has_both_unchanged_ids_pins_and_no_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.080s
+
+OK

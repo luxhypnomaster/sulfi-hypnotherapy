@@ -1,0 +1,59 @@
+{
+  "task": "25",
+  "version": "1.0",
+  "created": "2026-11-22",
+  "purpose": "integration+P0+test-apk-gates",
+  "criteriaCount": 55,
+  "files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 3873,
+      "sha256": "2be045d0c5a19bca43f5cb0bd9e34061efa3a0003e42a47a041643fdf684cfe9"
+    },
+    {
+      "path": "01_ARCHITECTURAL_PREFLIGHT.md",
+      "bytes": 4387,
+      "sha256": "e99892996cdb7f0a8ab3354da8e07cefc987180682397d7a3cbf683ac3630821"
+    },
+    {
+      "path": "02_GIT_INTEGRATION.md",
+      "bytes": 2362,
+      "sha256": "3e5ee27b505e3cabf18d338d6e471931a1a25cbf6767b4e625c239e11757e4ef"
+    },
+    {
+      "path": "03_DATA_P0.md",
+      "bytes": 2869,
+      "sha256": "0755b345a874f8ac20eed84106e58e57ca491c14637dc174059a31579d11ef12"
+    },
+    {
+      "path": "04_NATIVE_CI_AND_DELIVERY.md",
+      "bytes": 5635,
+      "sha256": "63cf65f344dcf43773da66e0ba1e09c31993b4fad1910929e1aeeb504665d338"
+    },
+    {
+      "path": "05_APP_QA_AND_GAPS.md",
+      "bytes": 2587,
+      "sha256": "0528c814aa6110e5836e765a0b84ffa4ecc41426c2ecc65a7f2910677af53a88"
+    },
+    {
+      "path": "06_PERMISSIONS_SECURITY.md",
+      "bytes": 1732,
+      "sha256": "ffc66e75045c89e58ec421165e910ba8e539e0edc6ce272731411c550bea5a92"
+    },
+    {
+      "path": "07_REPORTING.md",
+      "bytes": 2014,
+      "sha256": "a1e16289d777a7230c0afd5d2f6ba924053974b34d0a901879ecf848aa1f8a13"
+    },
+    {
+      "path": "08_ACCEPTANCE_25.csv",
+      "bytes": 4335,
+      "sha256": "e2ac1248eabbf6f57d86a2adea80431f47b321ecd8acf7ac0c7be1ff1ddd811f"
+    },
+    {
+      "path": "09_CODEX_COMMAND.txt",
+      "bytes": 2180,
+      "sha256": "6bd7a761ceb3683c9ecbafe4a15fc305a1970af3f07414edb4157e71edc2cd24"
+    }
+  ]
+}

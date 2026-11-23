@@ -1,0 +1,7 @@
+Выполни Задание №25 v1.0. Официальный архив Задание_25.zip берётся из папки проекта «Алхимик»/For_Codex (ссылка в сообщении владельца). Проверить SHA/ZIP/manifest и прочитать ВСЕ вложения; только они определяют точный scope.
+
+Repo: https://github.com/luxhypnomaster/sulfi-hypnotherapy . Актуальный draft PR56 https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/56, который включает stacked PR55→54→52→51. Не считать main обновлённым. Работать в отдельной ветке от verified PR56 HEAD и создать draft PR без merge.
+
+Приоритет сначала integration + P0 data safety/release gates; затем, ТОЛЬКО если безопасно и фактически доступны прежний ключ подписи, окружение и CI, собрать две независимые TEST APK MASTER/CLIENT с прежним cert и возрастающим versionCode. Не обходить production-gate старого workflow, не активировать candidate server/ratings, не менять GAS/OAuth/ACL/signing/main/user data. При отсутствии prerequisites не подменять native доказательства Flutter unit и не выпускать неподходящие APK.
+
+Все 55 критериев в 08_ACCEPTANCE_25.csv с реальными evidence. Выполни автономно независимые безопасные lanes до отчёта. Результаты размести в For_Codex/Отчёты — Задание 25 и Git draft PR. Закрой этап честными статусами, даже если production live, старые owner data или нативные проверки останутся BLOCKED. Избегай повторов runner billing0steps без новой причины. Не объявляй телефонную/production приёмку, не запускай принудительную установку.

@@ -1,0 +1,16 @@
+{
+  "status": "PASS_SCANNED_SCOPE_ONLY",
+  "filesScanned": 46,
+  "hits": [],
+  "scope": "new Task25 sources/reports/logs, not all historical Git or absent APK",
+  "neverUploaded": [
+    "credentials",
+    "keystore",
+    "real user SQLite",
+    "personal media",
+    "APK bytes"
+  ],
+  "inheritedDriveAnyoneWriter": "unchanged, point-in-time SHA only",
+  "gitMain": "unchanged fromb88637a",
+  "privateSourceOrTokenScan": "no matched literal credential/private-key patterns; not exhaustive security certification"
+}

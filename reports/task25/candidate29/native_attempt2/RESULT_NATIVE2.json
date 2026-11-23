@@ -1,0 +1,14 @@
+{
+  "run": 45106402826,
+  "status": "BLOCKED_RUNNER_KVM_ACCESS_BEFORE_EMULATOR",
+  "master": "FAILED_KVM_SETUP",
+  "client": "CANCELLED_FAIL_FAST",
+  "emulatorStarted": false,
+  "AndroidTests": "NOT_RUN",
+  "APKsChangedOrResigned": false,
+  "newHypothesis": "udev-trigger is asynchronous; prior script had no settle/mode/fd diagnostic. Explicit settle/chmod on verified disposable char device and real KVM_GET_API_VERSION/KVM_CREATE_VM detect actual capability, before heavy downloads",
+  "fix": "one verification workflow only; -accel on mandatory; no software or assertion fallback",
+  "localTests": 52,
+  "nativeGREEN": "PENDING",
+  "ownerDevice": "NOT_TOUCHED"
+}

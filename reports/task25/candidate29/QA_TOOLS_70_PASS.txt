@@ -1,0 +1,8 @@
+......................................................................
+----------------------------------------------------------------------
+Ran 70 tests in 0.535s
+
+OK
+{"status": "METADATA_EXTRACTED", "records": 1, "noRawDumpPublished": true}
+{"status": "NO_MINIDUMP_FOUND", "records": 0, "noRawDumpPublished": true}
+{"status": "NO_MINIDUMP_FOUND", "records": 0, "noRawDumpPublished": true}

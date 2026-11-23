@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "name": "DELIVERY_25_CONTINUATION.md",
+      "id": "1HchvWIcHYFhCuuEsz2io_N-Qp2qYR3bg",
+      "size": 5325,
+      "sha256": "cd099bac0b0b97da775d322c1c5933549e7dddae9908f8126cb36794e49a1c5b",
+      "downloadSHA256": "cd099bac0b0b97da775d322c1c5933549e7dddae9908f8126cb36794e49a1c5b",
+      "parents": [
+        "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "00_CURRENT_STATUS_25.md",
+      "id": "16jdkfkYRw-NdN8M8ZAlbrZ01yvSFuw_3",
+      "size": 2720,
+      "sha256": "38ac32b960f4d054d1d66e9745186680afc2231a753e8c52fe7ca767d26cdfda",
+      "downloadSHA256": "38ac32b960f4d054d1d66e9745186680afc2231a753e8c52fe7ca767d26cdfda",
+      "parents": [
+        "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "scope": "Two supplementary indexes; separate receipt prevents circular selfhash; no original report overwritten"
+}

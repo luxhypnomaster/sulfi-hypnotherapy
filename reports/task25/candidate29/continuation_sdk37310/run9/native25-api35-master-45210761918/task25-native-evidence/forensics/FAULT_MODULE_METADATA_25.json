@@ -1,0 +1,7 @@
+{
+  "status": "NO_MINIDUMP_FOUND",
+  "records": [],
+  "noDumpCopied": true,
+  "noMemoryOrStackStreamsDecoded": true,
+  "diagnosis": "Instruction module metadata is evidence, not proof of an application migration defect."
+}

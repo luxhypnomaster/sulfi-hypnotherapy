@@ -1,0 +1,22 @@
+{
+  "tag": "v1.7.12",
+  "assets": [
+    {
+      "name": "actionlint_1.7.12_checksums.txt",
+      "size": 1130,
+      "browser_download_url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_checksums.txt",
+      "digest": "sha256:433028cf0ba3c42163ea1a668dedce30fcdbe84fe912b1a5e288c006eab8a4f5"
+    },
+    {
+      "name": "actionlint_1.7.12_linux_amd64.tar.gz",
+      "size": 2353908,
+      "browser_download_url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz",
+      "digest": "sha256:8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+    }
+  ],
+  "status": "PASS_ACTIONLINT",
+  "exitCode": 0,
+  "binarySHA256": "c872d6db8c6bf83a8eaa704fc93999f027d55dffbc63b8a6abdccb47df5f4cd4",
+  "limits": "Static YAML/expressions/actions/schema lint only; not actual GitHub dispatch. External shellcheck/pyflakes disabled; embedded Python compiled in6 controlled workflow tests.",
+  "workflowSHA256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492"
+}

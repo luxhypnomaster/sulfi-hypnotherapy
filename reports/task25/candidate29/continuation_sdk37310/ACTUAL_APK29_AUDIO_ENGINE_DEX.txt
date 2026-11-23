@@ -1,0 +1,63 @@
+Class #8            -
+  Class descriptor  : 'Lcom/ryanheise/audioservice/AudioServiceActivity;'
+  Access flags      : 0x0001 (PUBLIC)
+  Superclass        : 'Lio/flutter/embedding/android/FlutterActivity;'
+  Interfaces        -
+  Static fields     -
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/ryanheise/audioservice/AudioServiceActivity;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10001 (PUBLIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+005c74:                                        |[005c74] com.ryanheise.audioservice.AudioServiceActivity.<init>:()V
+005c84: 7010 4502 0000                         |0000: invoke-direct {v0}, Lio/flutter/embedding/android/FlutterActivity;.<init>:()V // method@0245
+005c8a: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=10
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/ryanheise/audioservice/AudioServiceActivity;
+
+  Virtual methods   -
+    #0              : (in Lcom/ryanheise/audioservice/AudioServiceActivity;)
+      name          : 'provideFlutterEngine'
+      type          : '(Landroid/content/Context;)Lio/flutter/embedding/engine/FlutterEngine;'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 1
+      insns size    : 5 16-bit code units
+005c58:                                        |[005c58] com.ryanheise.audioservice.AudioServiceActivity.provideFlutterEngine:(Landroid/content/Context;)Lio/flutter/embedding/engine/FlutterEngine;
+005c68: 7110 1f02 0200                         |0000: invoke-static {v2}, Lcom/ryanheise/audioservice/AudioServicePlugin;.getFlutterEngine:(Landroid/content/Context;)Lio/flutter/embedding/engine/FlutterEngine; // method@021f
+005c6e: 0c00                                   |0003: move-result-object v0
+005c70: 1100                                   |0004: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=13
+      locals        :
+        0x0000 - 0x0005 reg=1 this Lcom/ryanheise/audioservice/AudioServiceActivity;
+        0x0000 - 0x0005 reg=2 context Landroid/content/Context;
+
+  source_file_idx   : 118 (AudioServiceActivity.java)
+
+
+
+0082ea: 6202 8c00                              |0007: sget-object v2, Lcom/ryanheise/audioservice/AudioServicePlugin;.flutterEngineId:Ljava/lang/String; // field@008c
+0082ee: 6e20 5102 2100                         |0009: invoke-virtual {v1, v2}, Lio/flutter/embedding/engine/FlutterEngineCache;.get:(Ljava/lang/String;)Lio/flutter/embedding/engine/FlutterEngine; // method@0251
+0082f4: 0c01                                   |000c: move-result-object v1
+0082f6: 3901 d000                              |000d: if-nez v1, 00dd // +00d0
+0082fa: 2202 7e00                              |000f: new-instance v2, Lio/flutter/embedding/engine/FlutterEngine; // type@007e
+0082fe: 6e10 1700 0700                         |0011: invoke-virtual {v7}, Landroid/content/Context;.getApplicationContext:()Landroid/content/Context; // method@0017
+008304: 0c03                                   |0014: move-result-object v3
+008306: 7020 4d02 3200                         |0015: invoke-direct {v2, v3}, Lio/flutter/embedding/engine/FlutterEngine;.<init>:(Landroid/content/Context;)V // method@024d
+00830c: 0721                                   |0018: move-object v1, v2
+00830e: 1202                                   |0019: const/4 v2, #int 0 // #0
+008310: 2073 7c00                              |001a: instance-of v3, v7, Lio/flutter/embedding/android/FlutterActivity; // type@007c
+008314: 3803 5000                              |001c: if-eqz v3, 006c // +0050

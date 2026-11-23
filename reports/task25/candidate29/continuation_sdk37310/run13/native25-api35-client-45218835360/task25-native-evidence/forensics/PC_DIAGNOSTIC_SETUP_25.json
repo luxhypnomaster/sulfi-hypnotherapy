@@ -1,0 +1,8 @@
+{
+  "status": "CONTROLLED_GDB_PC_SELFTEST_PASS_DIAGNOSTIC_ONLY",
+  "debugger": "/usr/bin/gdb",
+  "normalSignalsPassed": true,
+  "selftestExit": 255,
+  "applicationOrDataModified": false,
+  "signingOrDeliveryEnabled": false
+}

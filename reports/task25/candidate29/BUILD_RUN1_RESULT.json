@@ -1,0 +1,11 @@
+{
+  "run": 45100730089,
+  "status": "FAIL_INFRA_SDK_DEFAULT_TOOLS_REMOVED",
+  "trust": "PASS",
+  "existingFourBindings": "PASS_PRESENCE_ONLY",
+  "buildAPK": "NOT_RUN",
+  "sign": "SKIPPED",
+  "artifacts": 0,
+  "fix": "explicit packages platform-tools; new regression test RED then GREEN41; actionlint PASS",
+  "reasonToRetry": "Changed failed SDK package configuration, not a blind rerun"
+}

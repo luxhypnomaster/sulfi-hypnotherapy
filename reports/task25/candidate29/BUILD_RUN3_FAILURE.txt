@@ -1,0 +1,2 @@
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:45:33.9075077Z CANDIDATE25_BLOCKED: FileNotFoundError
+build	Build both unsigned candidates with no signing credentials or scoped token	2026-11-23T02:45:33.9168474Z ##[error]Process completed with exit code 1.

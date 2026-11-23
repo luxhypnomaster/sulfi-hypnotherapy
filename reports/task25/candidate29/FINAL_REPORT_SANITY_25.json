@@ -1,0 +1,10 @@
+{
+  "status": "PASS_SCOPED_REPORT_SANITY",
+  "textFilesScanned": 248,
+  "commonCredentialPatternFindings": [],
+  "allJSONParse": true,
+  "original55CriteriaVerbatim": true,
+  "codeDiffAfter597": [],
+  "APKFilesInReports": false,
+  "personalDatabasesExamined": false
+}

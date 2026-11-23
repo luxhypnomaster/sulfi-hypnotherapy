@@ -1,0 +1,9 @@
+# Correction to initial security review: draft-release baseline capability
+
+Initial PR59/60 build could not read private draft assets with the default contents:read GITHUB_TOKEN (45101058374 HTTP403, before compilation/signing). Original bytes separately downloaded with existing owner-authorized GitHub access and independently validated: BASELINE_LOCAL_READBACK.json PASS. No Google/signing credentials involved.
+
+PR61 is limited to candidate25.py and its two workflows. Dedicated baseline job alone requests contents:write because GitHub documents push access for draft visibility. This capability is not passed to application code: no app checkout, Gradle/Flutter, signing bindings or application execution in this job. Only reviewed main helper performs explicit HTTP GET to fixed repository/pinned release asset IDs, verifies old file size/SHA before aapt/apksigner, and uploads immutable data artifact. No repository/release/ACL changes are performed. Signed APK28 remains an unpublished existing draft asset.
+
+Build and native jobs download baseline artifact with actions:read and contents:read, independently enforce original SHA/signatures/public configuration, and remove their scoped token before executing app/native QA. Sign job remains a separate fresh runner with contents:read and no app code execution. Four signing bindings remain step-scoped; none passed to the baseline job. No environment secret, new key, public release, deployment or owner-device operation.
+
+43 Task25 tests PASS, including the sole GET-only capability exception, HTTP403 response-host/message preservation with bearer/query redaction, original source/config/pin gates and immutable artifact handling. Actionlint PASS. Android upgrade remains NOT_RUN until actual native workflow evidence; no policy test is presented as a live permission success. The next protected run is the first actual test of this access hypothesis.

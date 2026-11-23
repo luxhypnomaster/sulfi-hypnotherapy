@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "DEBUGGER_DIAGNOSTIC_ERROR_NO_PASS",
+  "signals": [
+    {
+      "status": "EXECUTABLE_MODULE_NOT_ALLOWLISTED",
+      "signal": "SIGSEGV"
+    }
+  ],
+  "avdLaunch": true,
+  "terminatedWithSIGSEGV": false,
+  "exitCode": null,
+  "guestMemoryRead": false,
+  "stackUnwound": false,
+  "rawDebuggerTranscriptPublished": false,
+  "corePublished": false,
+  "errorType": "error"
+}

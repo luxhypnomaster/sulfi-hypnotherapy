@@ -1,0 +1,16 @@
+{
+  "status": "PASS_MAIN_OPERATIONAL_PATHS_ONLY",
+  "before": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "after": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "files": [
+    ".github/workflows/sulfi-candidates25-build.yml",
+    ".github/workflows/sulfi-candidates25-verify.yml",
+    ".github/workflows/sulfi-signing-inspect25.yml",
+    "scripts/task25/candidate25.py",
+    "scripts/task25/emulator_fault25.py",
+    "scripts/task25/native25.py",
+    "scripts/task25/signing_inspect.py"
+  ],
+  "applicationServerOAuthSigningKeyChanged": false,
+  "appPRsMerged": false
+}

@@ -1,0 +1,23 @@
+{
+  "url": "https://developer.android.com/google/play/requirements/target-sdk",
+  "readAtUTC": "2026-11-22",
+  "downloadSHA256": "81b06795e19ab14b59101a8798c8364eb8d07e0eb11b710ca7760e80908502db",
+  "currentRequirement": "Google Play mobile new apps and updates: Android16/API36 from2026-08-31; existing apps API35 for discoverability. Not a store submission.",
+  "sourceTargetSdk": 36,
+  "sourceCompileSdk": 36,
+  "minSdk": 24,
+  "toolchainSource": "scripts/task23/native_source_pins.json + installed Flutter gradle defaults",
+  "status": "PASS_READ_ONLY_REQUIREMENT_REVIEW_NOT_APK_MANIFEST",
+  "additionalOfficialSources": [
+    {
+      "url": "https://developer.android.com/develop/background-work/services/fgs/service-types",
+      "sha256": "5104cf3a8d1e9d2c28cd48a55b6161aaeb596ddd13d5b73bd3b941ffd4cc8659",
+      "review": "mediaPlayback and dataSync need matching foreground-service permissions and OS limits; no claim of indefinite background execution."
+    },
+    {
+      "url": "https://developer.android.com/identity/data/autobackup",
+      "sha256": "03ac3fb395daf4f2090b1dee21a54cfe9437b6b659605a0976b40998df51daf1",
+      "review": "allowBackup=false alone may not disable OEM device-to-device transfer on Android12+. Existing extraction rules exclude root/file/database/sharedpref/external for both cloud-backup and device-transfer. This is not a user backup or native upgrade proof."
+    }
+  ]
+}

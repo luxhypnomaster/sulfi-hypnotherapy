@@ -1,0 +1,68 @@
+{
+  "status": "REAL_SIGNED_QUARANTINED_PAIR_PENDING_NATIVE_SAFETY",
+  "versionName": "0.4.21",
+  "versionCode": 29,
+  "sourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "buildMainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "buildRun": 45103325755,
+  "qaRun": 45157723278,
+  "pair": [
+    {
+      "edition": "master",
+      "package": "ru.sulfi.sulfi_hypnotherapy",
+      "versionCode": 29,
+      "versionName": "0.4.21",
+      "size": 194184164,
+      "sha256": "032b58e96d6f05ce00d0c0d58ee61e0be8bf4c5d7963b13183dce6b3762cccac",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "minSdk": 24,
+      "targetSdk": 36,
+      "debuggable": true,
+      "ZIP_CRC": "PASS",
+      "signed": true,
+      "nativeAbis": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ]
+    },
+    {
+      "edition": "client",
+      "package": "ru.sulfi.sulfi_hypnotherapy.clienttest",
+      "versionCode": 29,
+      "versionName": "0.4.21",
+      "size": 194184164,
+      "sha256": "3c2f52611a4da326593f3523f47f856f948fdfe93e5ec67b66120be2c1720933",
+      "certificateSHA256": "0b7435682d27200e630d5837d40457fa64e905d8c43c4ea692c7e1a2d810afc6",
+      "minSdk": 24,
+      "targetSdk": 36,
+      "debuggable": true,
+      "ZIP_CRC": "PASS",
+      "signed": true,
+      "nativeAbis": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ]
+    }
+  ],
+  "defaultDebugKeyGenerated": false,
+  "signingKey": "EXISTING_UNCHANGED_CERTIFICATE_AND_ACTUAL_TWO_SIGNATURES_VERIFIED",
+  "nativeBuildOverlay": {
+    "path": "android/app/build.gradle.kts",
+    "beforeSHA256": "f1fe33736d6d5943151611d6135940d6e20b483d77e672e528fb185905c534d4",
+    "afterSHA256": "17c670d4d16d7b6f08babb6467977746062f382310656a0b8bc129aa4762b40c",
+    "purpose": "disable default debug signing in credential-free build only"
+  },
+  "featureFlags": {
+    "metadataV1": false,
+    "project22": false,
+    "Auth19": false
+  },
+  "serverProductionReady": false,
+  "ownerPhysicalQA": "NOT_RUN",
+  "ownerInstalledVersion": "UNKNOWN",
+  "ownerInstallRecommendation": false,
+  "APKDelivery": "WAIT_NATIVE_GATE_DO_NOT_INSTALL_QUARANTINE",
+  "nativeGate": "CLIENT34_PASS_MASTER34_BLOCKED_API36_NOT_RUN"
+}

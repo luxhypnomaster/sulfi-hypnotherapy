@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-23T02:44:35.460402+00:00",
+  "run": 45101750589,
+  "baselineJob": 137454026522,
+  "status": "PASS_ACTUAL_PROTECTED_MAIN_GET_ONLY_DRAFT_ASSET_READ_AND_VERIFICATION",
+  "hypothesisConfirmed": "isolated contents:write GET-only draft baseline reader succeeded; previous contents:read HTTP403",
+  "artifacts": [
+    {
+      "id": 14785349415,
+      "name": "baseline25-45101750589",
+      "size_in_bytes": 219530924,
+      "digest": "sha256:f4b9e528fccef59892179f68c9cd2602d42e4a949e555f3e63d0d8dfe42432b4",
+      "expired": false
+    }
+  ],
+  "newAPK": "PENDING_UNSIGNED_BUILD",
+  "newSigning": "NOT_YET_RUN",
+  "oldReleasePublished": false,
+  "GoogleSigningCredentialsInBaselineJob": false
+}

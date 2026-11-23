@@ -1,0 +1,16 @@
+{
+  "status": "RUNNING_OFFICIAL_TAG_AND_EXACT_SDK_SHA",
+  "mainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "PR": 63,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "9c796a48db38a41930777a56debe0e1044424c8b3497157d89212f838be6c016"
+  },
+  "SDKVersionAndSHARequireBoth": true,
+  "appServerOAuthKeyUnchanged": true,
+  "intent": "NEW_ATTEMPT_WITH_OFFICIAL_TAG_AND_STRICT_SDK_IDENTITY",
+  "oldRun": 45102506987,
+  "runId": 45103325755,
+  "at": "2026-11-23T02:59:50.970931+00:00",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755"
+}

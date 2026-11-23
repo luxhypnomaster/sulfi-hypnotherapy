@@ -1,0 +1,11 @@
+{
+  "readOnly": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "returncode": 255,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

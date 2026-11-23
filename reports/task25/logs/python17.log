@@ -1,0 +1,22 @@
+test_complete_controlled_gate (test_delivery_gate.DeliveryGate.test_complete_controlled_gate) ... ok
+test_existing_assets_not_overwritten (test_delivery_gate.DeliveryGate.test_existing_assets_not_overwritten) ... ok
+test_failed_build_denied (test_delivery_gate.DeliveryGate.test_failed_build_denied) ... ok
+test_failed_native_denied (test_delivery_gate.DeliveryGate.test_failed_native_denied) ... ok
+test_master26_failure_denied (test_delivery_gate.DeliveryGate.test_master26_failure_denied) ... ok
+test_missing_native_denied (test_delivery_gate.DeliveryGate.test_missing_native_denied) ... ok
+test_pending_ci_denied (test_delivery_gate.DeliveryGate.test_pending_ci_denied) ... ok
+test_public_release_denied (test_delivery_gate.DeliveryGate.test_public_release_denied) ... ok
+test_public_repo_denied (test_delivery_gate.DeliveryGate.test_public_repo_denied) ... ok
+test_untested_runtime_denied (test_delivery_gate.DeliveryGate.test_untested_runtime_denied) ... ok
+test_wrong_native_driver_denied (test_delivery_gate.DeliveryGate.test_wrong_native_driver_denied) ... ok
+test_exit_code (test_monitor_emulator.Monitor.test_exit_code) ... ok
+test_real_signal (test_monitor_emulator.Monitor.test_real_signal) ... ok
+test_success (test_monitor_emulator.Monitor.test_success) ... ok
+test_actual_journal_cannot_be_editor (test_native_navigation.Navigation.test_actual_journal_cannot_be_editor) ... ok
+test_actual_launcher_windows_and_app_negative (test_native_navigation.Navigation.test_actual_launcher_windows_and_app_negative) ... ok
+test_transient_empty_tree_then_actual_named_program (test_native_navigation.Navigation.test_transient_empty_tree_then_actual_named_program) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.067s
+
+OK

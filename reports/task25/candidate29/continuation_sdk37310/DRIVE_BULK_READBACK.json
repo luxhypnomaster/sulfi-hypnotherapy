@@ -1,0 +1,96 @@
+{
+  "status": "PASS_ELEVEN_RAW_FILES_AND_232_ZIP_ENTRIES",
+  "files": [
+    {
+      "id": "1lCv2lwtKEucuypKO-E9n_FLZBOUcwECT",
+      "name": "RESULT_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 5359,
+      "sha256": "cd50811923c47d40cab785fed8d42083fa1c3878fdfc7ea6ac9321a267c46289",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1lCv2lwtKEucuypKO-E9n_FLZBOUcwECT/view"
+    },
+    {
+      "id": "1UGnbBaVR5AEqXTr3LuoE6wOYHf1g4L5k",
+      "name": "CHANGES_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 3506,
+      "sha256": "2c294c0d78f6ecf56a34e059454ed59b6ad1a80c3a2dea68ea74a16a85acb5d1",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1UGnbBaVR5AEqXTr3LuoE6wOYHf1g4L5k/view"
+    },
+    {
+      "id": "1bOvoli2HxQWfoeq3Z3LKeX7vRb2vevl9",
+      "name": "TESTS_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 3673,
+      "sha256": "975b87c41772be944e0729689b816505280ea3b57b33930196ecc03be0e1554b",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1bOvoli2HxQWfoeq3Z3LKeX7vRb2vevl9/view"
+    },
+    {
+      "id": "1a-I6tDLAz3sSSNDzsqpkjrePKfUH97ny",
+      "name": "ISSUES_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 3400,
+      "sha256": "478b9aae92e9f248c63b8de2363a8be601c3e578ff0dedfd852c43b8b1a3ec35",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1a-I6tDLAz3sSSNDzsqpkjrePKfUH97ny/view"
+    },
+    {
+      "id": "1uDF34Pbwqc_pX5jePdP--P9B1Ixd-X6d",
+      "name": "ROOT_CAUSE_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 3008,
+      "sha256": "623b6916be8c6231ff157e3b24d6a9de2157be20b6cb014af5703f12fb4fb292",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1uDF34Pbwqc_pX5jePdP--P9B1Ixd-X6d/view"
+    },
+    {
+      "id": "1ZBWu4xkD8AFwWNu7ta4h2h0VSNEwuaj8",
+      "name": "OWNER_QA_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 2505,
+      "sha256": "de24b10d5856f2f08c444cdc11795af3eb362fe52fd2ffcabf6ef93cbfbf3a5c",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1ZBWu4xkD8AFwWNu7ta4h2h0VSNEwuaj8/view"
+    },
+    {
+      "id": "1jbsWNh5zyVdUpJjS7M6ukCLsxpoiU9Ya",
+      "name": "CODEX_EFFICIENCY_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 2786,
+      "sha256": "18d8a77a711fd993068eac7fb255bb1dd2fa4f2da2d999692a53c94ec2bcd28b",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1jbsWNh5zyVdUpJjS7M6ukCLsxpoiU9Ya/view"
+    },
+    {
+      "id": "19L8smTL694kukKuBQX4ZR_fWCr0cemjp",
+      "name": "DEPENDENCIES_CONTINUATION_25_SDK37310_20261123.md",
+      "bytes": 1653,
+      "sha256": "f77eee9e01be56ba4d9a8574b53f2544508bac62b0fba71303d6154855f3b288",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/19L8smTL694kukKuBQX4ZR_fWCr0cemjp/view"
+    },
+    {
+      "id": "1L6x8f3pBHMNnKRTtgNZI56uMLjvq13A2",
+      "name": "ACCEPTANCE_CONTINUATION_25_SDK37310_20261123.csv",
+      "bytes": 12307,
+      "sha256": "881f6819686ac7ff2ce3cb94bc26360dc63bc3a8adc22eab7d531329ade093fe",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1L6x8f3pBHMNnKRTtgNZI56uMLjvq13A2/view"
+    },
+    {
+      "id": "12PQs2iF29e0UvZ198uoo0Fmtw9Ph-gPH",
+      "name": "EVIDENCE_CONTINUATION25_20261123.zip",
+      "bytes": 6583419,
+      "sha256": "4aeb0fbf29ed69126e56aab20e4ab7649c8ae648b62277b4ae6039d132cd06ef",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/12PQs2iF29e0UvZ198uoo0Fmtw9Ph-gPH/view"
+    },
+    {
+      "id": "1BgqyvfLEiXUgeJw6T-nM-rjRrPufWUjJ",
+      "name": "EVIDENCE_MANIFEST_CONTINUATION25_20261123.json",
+      "bytes": 57752,
+      "sha256": "cb06debb8e3b94a7f068d91089cdc5c8dfb82a2931dfbf46116477e1cf31d0a9",
+      "status": "PASS_RAW_SHA_SIZE_PARENT",
+      "url": "https://drive.google.com/file/d/1BgqyvfLEiXUgeJw6T-nM-rjRrPufWUjJ/view"
+    }
+  ],
+  "archiveEntries": 232,
+  "noAPKOrRawPrivateDataUploaded": true,
+  "ACLChanged": false
+}

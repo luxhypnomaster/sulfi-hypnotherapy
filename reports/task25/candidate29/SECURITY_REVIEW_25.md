@@ -1,0 +1,15 @@
+# Candidate29 secure pipeline review
+
+Application source frozen at 737ea741636e9abe7c20353d9d5b8301cf44a5bb. No application, database, server or OAuth changes. Full application regression already applies to these exact bytes (574 Flutter PASS /2 SKIP; CLIENT1; Node114; Python53). Tooling changes tested separately; no repeated whole-stack CI.
+
+Proposed main transfer: exactly two manual workflows and two pure-stdlib helpers. No PR51–57 merge. Main before 9bed10c8c72c5a07aefea06df8032e15d83005f7, protected=true; owner classic-rule readback reused, no closed Administration API queries. Any main change uses a separate ordinary PR, never direct push or protection bypass.
+
+Unsigned build has no signing bindings. Exact frozen app source and public baseline APK28 are checked; one recorded build-only overlay disables default debug signing, avoiding a new key. The signer is a fresh runner executing only reviewed main helper, aapt/zipalign/apksigner; it treats APKs as data and never checks out or runs app/Gradle code. Four existing repository secrets are bound only to credential-presence or signing steps, after protected-main/owner/triggering-owner/manual/context and helper-SHA gates. No GAS token, environment secret, OAuth change or server call.
+
+All third-party actions, Flutter framework, source and baseline artifacts pinned. Minimal read-only GITHUB_TOKEN scoped to download steps, not signing or app execution. Bearer stripped on cross-host redirects. Download HTTP/network errors preserved without signed URLs or credentials. Key temporary directory0700/file0600, environment password options, prior certificate check, finally cleanup. No key creation, import or replacement. Signer must produce two actual valid signatures before privateSigningUsable can PASS.
+
+Signed output quarantined, not a tester release. Independent workflow re-downloads exact bytes and validates certificate, package, version, CRC, alignment, compiled public configuration and absence of controlled transfer probe. Native gates API34 then API36 cover both editions. Built-in uiautomator and unsigned app_process DEX avoid generating an instrumentation key. Supplementary queue/public-cache/settings rows are explicitly controlled native SQLite, never real Google identity. Personal tracks/modules/program/history/MASTER local diary and capsule use actual APK28 UI. No uninstall, clear or downgrade. Production dual-apk gate remains intact and unused.
+
+Native PASS requires exact original records/media SHA, SQLite integrity/schema, UI visibility, native audio playback and cold restart. Final candidate artifacts only after all native jobs PASS; physical sound/Google/two-device/owner installed-version state remain NOT_RUN. Phone installation requires owner permission and newer compatible version. Historical owner24→25 root cause remains UNKNOWN.
+
+Local checks: 17 new tests +23 existing Task25 tests PASS (40 total); actionlint1.7.12 PASS; Java17 source compilation and d8 API24/Android36 PASS. These are preparation evidence, not APK or Android runtime PASS.

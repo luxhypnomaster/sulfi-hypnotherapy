@@ -1,0 +1,58 @@
+{
+  "at": "2026-11-23T10:42:59.689606+00:00",
+  "status": "PASS_CURRENT_DRAFT_CHAIN_AND_UNCHANGED_APPLICATION_RUNTIME",
+  "applicationSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "PRs": [
+    {
+      "number": 51,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "a7c29a7b478b6c3b001d70d3158b4a65d57b3c50",
+      "base": "feat/task19-auth-stage01"
+    },
+    {
+      "number": 52,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "40b7c59e67921f456c3c5a4e943bd40f7232f336",
+      "base": "feat/task20-catalog-vitrine"
+    },
+    {
+      "number": 54,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+      "base": "feat/task21-runtime-sandbox"
+    },
+    {
+      "number": 55,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "85fa5321c043ef97b43cb30a88a0909e7edf66f2",
+      "base": "feat/task22-server-ratings-admin"
+    },
+    {
+      "number": 56,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "d0a6d9a6daaeca215992e0b771a2332502ecee41",
+      "base": "feat/task23-data-integrity-native-qa"
+    },
+    {
+      "number": 57,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "3a36f4c1186d18fb1ee541cb36a5d9901f4bc0f8",
+      "base": "feat/task24-local-ux-navigation"
+    }
+  ],
+  "runtimeDiffFromBuiltSource": [],
+  "noAppStackMerge": true,
+  "nativeQA": "RUNNING45157723278"
+}

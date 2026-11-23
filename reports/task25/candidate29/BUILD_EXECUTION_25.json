@@ -1,0 +1,13 @@
+{
+  "timestampUTC": "2026-11-23T02:31:44.325422+00:00",
+  "intent": "ONE_PROTECTED_CANDIDATE_BUILD_FROM_EXACT_MAIN",
+  "mainSHA": "6cae2ded9168570f11cc528add28074a8c325fb5",
+  "workflow": "sulfi-candidates25-build.yml",
+  "sourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "confirmation": "BUILD_EXISTING_KEY_CANDIDATES_NO_DEPLOY",
+  "noServerDeployment": true,
+  "noNewKey": true,
+  "runId": 45100730089,
+  "runURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45100730089",
+  "status": "DISPATCHED_NOT_YET_PASS"
+}

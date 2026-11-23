@@ -1,0 +1,12 @@
+{
+  "status": "PASS_REVIEWED_DIAGNOSTIC_MAIN",
+  "main": "1d9cf32b6f079df242547b344e41913769fd17f8",
+  "PR": 71,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "5973850ba52a03c8cbfe1b229554278e38a3bbcd4fd4e62b3d786348a5e0c711",
+    "scripts/task25/emulator_pc25.py": "3ee0f5157490e7b46d612c228aca86707650508440e55a85ad5da7165c1faacb",
+    "scripts/task25/native25.py": "c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655"
+  },
+  "existingArtifactsUnexpired": true,
+  "noBuildOrSigning": true
+}

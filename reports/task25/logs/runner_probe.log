@@ -1,0 +1,434 @@
+verify	Set up job	﻿2026-11-22T17:12:03.6335465Z Current runner version: '2.338.2'
+verify	Set up job	2026-11-22T17:12:03.6361702Z ##[group]Runner Image Provisioner
+verify	Set up job	2026-11-22T17:12:03.6362535Z Hosted Compute Agent
+verify	Set up job	2026-11-22T17:12:03.6363048Z Version: 20261111.635
+verify	Set up job	2026-11-22T17:12:03.6363670Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+verify	Set up job	2026-11-22T17:12:03.6364327Z Build Date: 2026-11-11T01:49:01Z
+verify	Set up job	2026-11-22T17:12:03.6364961Z Worker ID: {f1344825-9f2a-41c6-9b33-1ce5a4db32da}
+verify	Set up job	2026-11-22T17:12:03.6365726Z Region: westus3
+verify	Set up job	2026-11-22T17:12:03.6366293Z Cloud: Azure
+verify	Set up job	2026-11-22T17:12:03.6367005Z ##[endgroup]
+verify	Set up job	2026-11-22T17:12:03.6368439Z ##[group]Operating System
+verify	Set up job	2026-11-22T17:12:03.6369074Z Ubuntu
+verify	Set up job	2026-11-22T17:12:03.6369564Z 24.04.5
+verify	Set up job	2026-11-22T17:12:03.6370027Z LTS
+verify	Set up job	2026-11-22T17:12:03.6370522Z ##[endgroup]
+verify	Set up job	2026-11-22T17:12:03.6371025Z ##[group]Runner Image
+verify	Set up job	2026-11-22T17:12:03.6371582Z Image: ubuntu-24.04
+verify	Set up job	2026-11-22T17:12:03.6372129Z Version: 20261116.376.1
+verify	Set up job	2026-11-22T17:12:03.6373112Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261116.376/images/ubuntu/Ubuntu2404-Readme.md
+verify	Set up job	2026-11-22T17:12:03.6374656Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261116.376
+verify	Set up job	2026-11-22T17:12:03.6375529Z ##[endgroup]
+verify	Set up job	2026-11-22T17:12:03.6376607Z ##[group]GITHUB_TOKEN Permissions
+verify	Set up job	2026-11-22T17:12:03.6378648Z Contents: read
+verify	Set up job	2026-11-22T17:12:03.6379307Z Metadata: read
+verify	Set up job	2026-11-22T17:12:03.6379834Z ##[endgroup]
+verify	Set up job	2026-11-22T17:12:03.6381908Z Secret source: Actions
+verify	Set up job	2026-11-22T17:12:03.6382735Z Cache mode: write
+verify	Set up job	2026-11-22T17:12:03.6383375Z Prepare workflow directory
+verify	Set up job	2026-11-22T17:12:03.6758775Z Prepare all required actions
+verify	Set up job	2026-11-22T17:12:03.6806804Z Getting action download info
+verify	Set up job	2026-11-22T17:12:03.9870144Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+verify	Set up job	2026-11-22T17:12:04.1070699Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+verify	Set up job	2026-11-22T17:12:04.2701996Z Complete job name: verify
+verify	Run actions/checkout@v4	﻿2026-11-22T17:12:04.3515790Z ##[group]Run actions/checkout@v4
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3517380Z with:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3518006Z   persist-credentials: false
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3518643Z   repository: luxhypnomaster/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3522303Z   token: ***
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3522808Z   ssh-strict: true
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3523289Z   ssh-user: git
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3523735Z   clean: true
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3524298Z   sparse-checkout-cone-mode: true
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3524876Z   fetch-depth: 1
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3525367Z   fetch-tags: false
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3525845Z   show-progress: true
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3526316Z   lfs: false
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3526797Z   submodules: false
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3527388Z   set-safe-directory: true
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3527927Z   allow-unsafe-pr-checkout: false
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.3528814Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7161828Z Syncing repository: luxhypnomaster/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7165324Z ##[group]Getting Git version info
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7166791Z Working directory is '/home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy'
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7169071Z [command]/usr/bin/git version
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7268990Z git version 2.56.1
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7291570Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7321806Z Temporarily overriding HOME='/home/runner/work/_temp/9b14c22c-00e3-41b4-927b-22a824b58205' before making global git config changes
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7325157Z Adding repository directory to the temporary git global config as a safe directory
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7327619Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7402364Z Deleting the contents of '/home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy'
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7413154Z ##[group]Initializing the repository
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7419289Z [command]/usr/bin/git init /home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7545955Z hint: Using 'master' as the name for the initial branch. This default branch name
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7548107Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7549056Z hint: to use in all of your new repositories, which will suppress this warning,
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7549785Z hint: call:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7550225Z hint:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7550942Z hint: 	git config --global init.defaultBranch <name>
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7552045Z hint:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7554232Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7555753Z hint: 'development'. The just-created branch can be renamed via this command:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7557055Z hint:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7557713Z hint: 	git branch -m <name>
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7558411Z hint:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7559358Z hint: Disable this message with "git config set advice.defaultBranchName false"
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7561212Z Initialized empty Git repository in /home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy/.git/
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7565627Z [command]/usr/bin/git remote add origin https://github.com/luxhypnomaster/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7618749Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7620161Z ##[group]Disabling automatic garbage collection
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7621614Z [command]/usr/bin/git config --local gc.auto 0
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7657283Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7658613Z ##[group]Setting up auth
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7664386Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.7701865Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8038671Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8094873Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8279572Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8314299Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8504103Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8541813Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8542695Z ##[group]Fetching the repository
+verify	Run actions/checkout@v4	2026-11-22T17:12:04.8555795Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b88637a105b2182c7b836311ebb3de7ad037b08f:refs/remotes/origin/main
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4193843Z From https://github.com/luxhypnomaster/sulfi-hypnotherapy
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4196009Z  * [new ref]         b88637a105b2182c7b836311ebb3de7ad037b08f -> origin/main
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4208483Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4209993Z ##[group]Determining the checkout info
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4211000Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4211521Z [command]/usr/bin/git sparse-checkout disable
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4268981Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4303579Z ##[group]Checking out the ref
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4310009Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4422461Z Switched to a new branch 'main'
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4425736Z branch 'main' set up to track 'origin/main'.
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4435294Z ##[endgroup]
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4474885Z [command]/usr/bin/git log -1 --format=%H
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4500259Z b88637a105b2182c7b836311ebb3de7ad037b08f
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4510924Z ##[group]Removing auth
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4514538Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4546758Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4736522Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4762883Z http.https://github.com/.extraheader
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4768798Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4800289Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.4988688Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.5018856Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+verify	Run actions/checkout@v4	2026-11-22T17:12:05.5201179Z ##[endgroup]
+verify	Run actions/setup-node@v4	﻿2026-11-22T17:12:05.5521760Z ##[group]Run actions/setup-node@v4
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5522725Z with:
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5523339Z   node-version: 22
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5524025Z   always-auth: false
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5524746Z   check-latest: false
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5532859Z   token: ***
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.5533507Z ##[endgroup]
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.7021070Z (node:2401) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.7025154Z (Use `node --trace-deprecation ...` to show where the warning was created)
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.7028736Z Found in cache @ /opt/hostedtoolcache/node/22.23.5/x64
+verify	Run actions/setup-node@v4	2026-11-22T17:12:05.7032116Z ##[group]Environment details
+verify	Run actions/setup-node@v4	2026-11-22T17:12:06.1066201Z node: v22.23.5
+verify	Run actions/setup-node@v4	2026-11-22T17:12:06.1067695Z npm: 10.9.9
+verify	Run actions/setup-node@v4	2026-11-22T17:12:06.1068538Z yarn: 1.22.22
+verify	Run actions/setup-node@v4	2026-11-22T17:12:06.1070276Z ##[endgroup]
+verify	Run node --test server/alchemist/test/*.test.mjs	﻿2026-11-22T17:12:06.1203496Z ##[group]Run node --test server/alchemist/test/*.test.mjs
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.1204675Z [36;1mnode --test server/alchemist/test/*.test.mjs[0m
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.1232026Z shell: /usr/bin/bash -e {0}
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.1232935Z ##[endgroup]
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.1884373Z TAP version 13
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2412894Z # Subtest: crash before atomic head publication leaves both item AND receipt invisible; commit/reopen consistent
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2434313Z ok 1 - crash before atomic head publication leaves both item AND receipt invisible; commit/reopen consistent
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2437054Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2438994Z   duration_ms: 5.296088
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2440073Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2440984Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2442228Z # Subtest: media/checkpoint writes do not invalidate catalog pagination revision
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2443662Z ok 2 - media/checkpoint writes do not invalidate catalog pagination revision
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2444771Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2445673Z   duration_ms: 0.758464
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2447114Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2448681Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2548526Z # Subtest: 16-A candidate delivery is a private draft only; public repo, foreign package and final-release tags are refused
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2559059Z ok 3 - 16-A candidate delivery is a private draft only; public repo, foreign package and final-release tags are refused
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2561546Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2563062Z   duration_ms: 1.115758
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2564645Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.2566187Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3325473Z # Subtest: actual production RSA verifier rejects forged signature and live registry revocation
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3333246Z ok 4 - actual production RSA verifier rejects forged signature and live registry revocation
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3335454Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3337762Z   duration_ms: 90.534796
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3339641Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3341042Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3470061Z # Subtest: verified subject grants never trust requested role; wrong audience/issuer/expiry/signature denied
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3476580Z ok 5 - verified subject grants never trust requested role; wrong audience/issuer/expiry/signature denied
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3479582Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3480927Z   duration_ms: 7.155552
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3482386Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3483705Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3485499Z # Subtest: 16A exact Web audience overrides legacy CI list and all non-owner grant roles
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3488042Z ok 6 - 16A exact Web audience overrides legacy CI list and all non-owner grant roles
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3489635Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3490871Z   duration_ms: 2.32579
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3492129Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3493291Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3495238Z # Subtest: bootstrap binds only signed configured CI owner, immutable owner and no property reset on replay
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3524282Z ok 7 - bootstrap binds only signed configured CI owner, immutable owner and no property reset on replay
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3526378Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3527805Z   duration_ms: 3.412032
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3529078Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3530283Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3532319Z # Subtest: bootstrap reports bounded stage code without leaking raw Google error, token or private locator
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3534972Z ok 8 - bootstrap reports bounded stage code without leaking raw Google error, token or private locator
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3536795Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3538076Z   duration_ms: 2.630145
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3539337Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.3540508Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5577021Z # Subtest: 16-A connected APK gate rejects missing endpoint, mismatched Web audience, old or incompletely bootstrapped server
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5619000Z ok 9 - 16-A connected APK gate rejects missing endpoint, mismatched Web audience, old or incompletely bootstrapped server
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5648644Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5678658Z   duration_ms: 197.642528
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5685258Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5700898Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5799544Z # Subtest: five publication kinds, annotation metadata-only, grants and selective exact dependency plan
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5809052Z ok 10 - five publication kinds, annotation metadata-only, grants and selective exact dependency plan
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5811237Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5812628Z   duration_ms: 10.375159
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5814056Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5815377Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5817413Z # Subtest: idempotence, stale etag, missing/corrupt/private dependency, cursor consistency
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5820008Z ok 11 - idempotence, stale etag, missing/corrupt/private dependency, cursor consistency
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5821933Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5823360Z   duration_ms: 2.071355
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5824770Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5826148Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5828278Z # Subtest: storage bootstrap exact tree replay and unsafe/ambiguous ACL fail closed
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5830787Z ok 12 - storage bootstrap exact tree replay and unsafe/ambiguous ACL fail closed
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5832614Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5834044Z   duration_ms: 1.263553
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5835476Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5836803Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5839301Z # Subtest: existing lawful OAuth refresh supplies missing or expired CI ID token without another owner login
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5842148Z ok 13 - existing lawful OAuth refresh supplies missing or expired CI ID token without another owner login
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5844199Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5845590Z   duration_ms: 1.511023
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5847194Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5848665Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5850892Z # Subtest: missing refreshed identity, wrong account, unverified email and rejected signature fail closed
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5853791Z ok 14 - missing refreshed identity, wrong account, unverified email and rejected signature fail closed
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5855868Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5857412Z   duration_ms: 1.20326
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5858860Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5860254Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5863278Z # Subtest: pin recovered project ID and freshly observed private ACL; never discover/create through incomplete Drive.file listing
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5866588Z ok 15 - pin recovered project ID and freshly observed private ACL; never discover/create through incomplete Drive.file listing
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5868878Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5870244Z   duration_ms: 1.176102
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5871685Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5873014Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5875197Z # Subtest: missing OAuth and untrusted branch never create cloud project or write credentials
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5878052Z ok 16 - missing OAuth and untrusted branch never create cloud project or write credentials
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5880007Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5881379Z   duration_ms: 107.037644
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5882958Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5884410Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5886776Z # Subtest: create-once/readback/versioned deploy/bootstrap replay checkpoint, retry updates existing deployment
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5890037Z ok 17 - create-once/readback/versioned deploy/bootstrap replay checkpoint, retry updates existing deployment
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5892054Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5893394Z   duration_ms: 3.295292
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5894890Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5896245Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5898268Z # Subtest: wrong/duplicate/old/unclaimed project and source mismatch never deploy
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5900941Z ok 18 - wrong/duplicate/old/unclaimed project and source mismatch never deploy
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5902877Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5904235Z   duration_ms: 2.751878
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5905717Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5907209Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5909276Z # Subtest: crash after creation leaves one unclaimed project; retry fails closed instead of creating duplicate
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5912207Z ok 19 - crash after creation leaves one unclaimed project; retry fails closed instead of creating duplicate
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5914711Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5916131Z   duration_ms: 0.529421
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5917831Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5919217Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5921218Z # Subtest: storage count/replay/security failures never claim live E2E
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5923487Z ok 20 - storage count/replay/security failures never claim live E2E
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5925437Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5926824Z   duration_ms: 0.671828
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5928440Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.5929835Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6651045Z # Subtest: diary private draft, immutable public snapshot, idempotent retry, quiet edit/reannounce/close and private working revision
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6654871Z ok 21 - diary private draft, immutable public snapshot, idempotent retry, quiet edit/reannounce/close and private working revision
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6657296Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6658943Z   duration_ms: 11.975317
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6660561Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6661938Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6672805Z # Subtest: 16-A: diary links require published exact typed roots; they never grant withdrawn assets or convert voice attachments into tracks
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6709523Z ok 22 - 16-A: diary links require published exact typed roots; they never grant withdrawn assets or convert voice attachments into tracks
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6725498Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6727339Z   duration_ms: 26.674433
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6729017Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6730646Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6733368Z # Subtest: 16-A legacy v4 diary grants are filtered on read without deleting content; real voice attachments stay readable
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6736599Z ok 23 - 16-A legacy v4 diary grants are filtered on read without deleting content; real voice attachments stay readable
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6739340Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6740674Z   duration_ms: 3.015347
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6742100Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6743512Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6799584Z # Subtest: effective blob/index file ACL is checked even when its parent stays private
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6810627Z ok 24 - effective blob/index file ACL is checked even when its parent stays private
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6812744Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6814181Z   duration_ms: 3.096568
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6815637Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6817188Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6819438Z # Subtest: actual GAS folder adapter uses metadata/null/options signature and verifies/reuses all41 folders
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6822280Z ok 25 - actual GAS folder adapter uses metadata/null/options signature and verifies/reuses all41 folders
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6824263Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6825662Z   duration_ms: 6.537057
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6828120Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.6829610Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7710076Z # Subtest: actual GAS adapter uses private resumable PUT and bounded authenticated ranges, serializable verification
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7712772Z ok 26 - actual GAS adapter uses private resumable PUT and bounded authenticated ranges, serializable verification
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7714036Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7714676Z   duration_ms: 66.200815
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7715356Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7715970Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7768646Z # Subtest: preallocated Drive file ID recovers final PUT lost response without second byte write
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7786706Z ok 27 - preallocated Drive file ID recovers final PUT lost response without second byte write
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7789354Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7798606Z   duration_ms: 2.441322
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7799242Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7799669Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7966585Z # Subtest: production identity never reaches arbitrary PR/fork/ref or changed Flutter source/dependency lock
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.7988945Z ok 28 - production identity never reaches arbitrary PR/fork/ref or changed Flutter source/dependency lock
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8018056Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8021166Z   duration_ms: 50.578694
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8021927Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8022524Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8023989Z # Subtest: actual container magic allowlist rejects MIME spoof, executable, truncated image and wrong container
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8025921Z ok 29 - actual container magic allowlist rejects MIME spoof, executable, truncated image and wrong container
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8027457Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8028077Z   duration_ms: 1.46217
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8030253Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:06.8030893Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6604282Z # Subtest: owner grant registry, immediate revoke, immutable owner and redacted bounded audit
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6606390Z ok 30 - owner grant registry, immediate revoke, immutable owner and redacted bounded audit
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6607929Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6608639Z   duration_ms: 838.046782
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6609704Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6610284Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6611015Z # Subtest: per-subject sync conflict/replay isolation and outbox receipts
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6637396Z ok 31 - per-subject sync conflict/replay isolation and outbox receipts
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6637988Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6638205Z   duration_ms: 3.859052
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6638426Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6638629Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6639083Z # Subtest: public tombstones expose no private payload and snapshot pagination detects changes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6639746Z ok 32 - public tombstones expose no private payload and snapshot pagination detects changes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6640150Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6640334Z   duration_ms: 5.575837
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6640546Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6640732Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6766519Z # Subtest: UNIT ONLY: two server-derived subjects verify real core permission paths, no public probe or PII output
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6768024Z ok 33 - UNIT ONLY: two server-derived subjects verify real core permission paths, no public probe or PII output
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6782583Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6787669Z   duration_ms: 13.752671
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6788091Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6788854Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6789408Z # Subtest: UNIT ONLY: legacy author grants cannot be issued; immutable owner survives
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6790043Z ok 34 - UNIT ONLY: legacy author grants cannot be issued; immutable owner survives
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6790410Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6790608Z   duration_ms: 2.069461
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6790842Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6791123Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6791628Z # Subtest: two explicitly requested QA candidates are private draft only, not an accepted/public release
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6792369Z ok 35 - two explicitly requested QA candidates are private draft only, not an accepted/public release
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6792793Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6792986Z   duration_ms: 1.698958
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6793205Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6793392Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6793966Z # Subtest: real transaction store links media to publications, persists replay, revokes each chunk on withdrawal
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6794739Z ok 36 - real transaction store links media to publications, persists replay, revokes each chunk on withdrawal
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6795191Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6795377Z   duration_ms: 12.982478
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6795595Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6795777Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6796317Z # Subtest: reader grants never authorize republication of foreign private bytes; source withdrawal revokes foreign links
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6797534Z ok 37 - reader grants never authorize republication of foreign private bytes; source withdrawal revokes foreign links
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6798236Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6798423Z   duration_ms: 19.36791
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6798635Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6798825Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6799374Z # Subtest: indexed ACL and catalog ignore thousands of transfer receipts; cover grants and complete manifests survive reopen
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6800397Z ok 38 - indexed ACL and catalog ignore thousands of transfer receipts; cover grants and complete manifests survive reopen
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6800876Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6801065Z   duration_ms: 190.804547
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6801284Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6801489Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6801963Z # Subtest: complete explicit permission ACL is authoritative; Files.shared summary grants no permission
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6802686Z ok 39 - complete explicit permission ACL is authoritative; Files.shared summary grants no permission
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6803108Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6803287Z   duration_ms: 1.347476
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6803498Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6803691Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6804121Z # Subtest: all permission pages are read; hidden later page grant or cursor loop never passes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6804757Z ok 40 - all permission pages are read; hidden later page grant or cursor loop never passes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6805234Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6805444Z   duration_ms: 1.069365
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6805689Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6805924Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6806481Z # Subtest: stream SHA equals native SHA across padding boundaries, megabytes and process checkpoint resumes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6807528Z ok 41 - stream SHA equals native SHA across padding boundaries, megabytes and process checkpoint resumes
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6808014Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6808236Z   duration_ms: 214.999793
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6808489Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6808719Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6809244Z # Subtest: multi-chunk video resume/retry, exact hash, per-range revocation, never leak private location
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6810033Z ok 42 - multi-chunk video resume/retry, exact hash, per-range revocation, never leak private location
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6810496Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6810749Z   duration_ms: 11.497795
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6811082Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6811307Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6811764Z # Subtest: wrong actor, misalignment, corrupt final hash, incomplete transfer reject
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6812424Z ok 43 - wrong actor, misalignment, corrupt final hash, incomplete transfer reject
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6813010Z   ---
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6813250Z   duration_ms: 2.676069
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6813495Z   type: 'test'
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6813726Z   ...
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6813948Z 1..43
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6814149Z # tests 43
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6814362Z # suites 0
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6814569Z # pass 43
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6814779Z # fail 0
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6814998Z # cancelled 0
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6815219Z # skipped 0
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6815431Z # todo 0
+verify	Run node --test server/alchemist/test/*.test.mjs	2026-11-22T17:12:07.6815631Z # duration_ms 1512.687691
+verify	Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"	﻿2026-11-22T17:12:07.6892111Z ##[group]Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"
+verify	Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"	2026-11-22T17:12:07.6892777Z [36;1mnode scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"[0m
+verify	Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"	2026-11-22T17:12:07.6909683Z shell: /usr/bin/bash -e {0}
+verify	Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"	2026-11-22T17:12:07.6909953Z ##[endgroup]
+verify	Run node scripts/alchemist/build.mjs "$RUNNER_TEMP/alchemist-gas"	2026-11-22T17:12:07.7315130Z GAS source assembled; source gate=true; no cloud operations
+verify	Deploy must fail closed without OAuth	﻿2026-11-22T17:12:07.7377322Z ##[group]Run set +e
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7377613Z [36;1mset +e[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7377933Z [36;1mnode scripts/alchemist/deploy.mjs > "$RUNNER_TEMP/no-auth.txt" 2>&1[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7378305Z [36;1mresult=$?[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7378512Z [36;1mset -e[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7378720Z [36;1mtest "$result" -eq 78[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7379038Z [36;1mgrep -q GITHUB_SECRET_MISSING "$RUNNER_TEMP/no-auth.txt"[0m
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7393468Z shell: /usr/bin/bash -e {0}
+verify	Deploy must fail closed without OAuth	2026-11-22T17:12:07.7393762Z ##[endgroup]
+verify	Post Run actions/setup-node@v4	﻿2026-11-22T17:12:07.7894719Z Post job cleanup.
+verify	Post Run actions/setup-node@v4	2026-11-22T17:12:07.9218059Z (node:2692) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+verify	Post Run actions/setup-node@v4	2026-11-22T17:12:07.9219623Z (Use `node --trace-deprecation ...` to show where the warning was created)
+verify	Post Run actions/checkout@v4	﻿2026-11-22T17:12:07.9616528Z Post job cleanup.
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0518289Z [command]/usr/bin/git version
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0550214Z git version 2.56.1
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0588643Z Temporarily overriding HOME='/home/runner/work/_temp/b11f7798-ff61-431e-bc89-1dd87746104b' before making global git config changes
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0590351Z Adding repository directory to the temporary git global config as a safe directory
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0593733Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sulfi-hypnotherapy/sulfi-hypnotherapy
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0656459Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0695594Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0910345Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.0944998Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.1164665Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+verify	Post Run actions/checkout@v4	2026-11-22T17:12:08.1198624Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+verify	Complete job	﻿2026-11-22T17:12:08.1561244Z Cleaning up orphan processes
+verify	Complete job	2026-11-22T17:12:08.1919864Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

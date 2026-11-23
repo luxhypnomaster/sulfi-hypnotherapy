@@ -1,0 +1,11 @@
+{
+  "observedAtUTC": "2026-11-22T21:02:53.517428+00:00",
+  "source": "GitHub branches/main API, read-only",
+  "mainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "protected": false,
+  "configuredSigningSecretsInCloud": false,
+  "policy": "Task25 requires trusted protected default branch; no changes to branch protection or main allowed without separate approval",
+  "newGuard": "Secrets-free trust job fails visibly on unprotected main; inspect job requires trust success+github.ref_protected=true, tool checks GITHUB_REF_PROTECTED again before credentials",
+  "workflowExecution": "NOT_RUN_BLOCKED_OWNER_AND_TRUST_BOUNDARY",
+  "APKs": "NOT_BUILT"
+}

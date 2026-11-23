@@ -1,0 +1,10 @@
+{
+  "status": "PASS_OFFICIAL_STABLE_ARCHIVE_PROVIDER_SIZE_SHA1_ZIP_CRC",
+  "version": "37.3.10",
+  "build": 16970787,
+  "bytes": 350068887,
+  "sha1": "5f7314368fc6c05c937f6991bb4106214dc389e7",
+  "sha256": "a4405349d8a9c52136ab7861e5331dc40e85574bd91cb8889a298a2ff4c52e26",
+  "sourceProperties": "Pkg.UserSrc=false\nPkg.Revision=37.3.10\nPkg.Path=emulator\nPkg.Desc=Android Emulator\nPkg.BuildId=16970787",
+  "symlinks": []
+}

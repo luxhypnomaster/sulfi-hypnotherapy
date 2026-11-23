@@ -1,0 +1,19 @@
+{
+  "status": "PASS_LOCAL_BASELINE_BYTE_CERT_PACKAGE_CONFIG_READBACK",
+  "source": "EXISTING_IMMUTABLE_DRAFT_RELEASE_ASSETS",
+  "GoogleOrSigningCredentialsUsed": false,
+  "pair": {
+    "master": {
+      "size": 193900724,
+      "sha256": "2bec82df8b75dcc6b8e6b49faf5f4244627003c137c2ded25b844d611cdd4d6e"
+    },
+    "client": {
+      "size": 193900756,
+      "sha256": "637195c8eb9771208be822fcfbef586023240c658072eb5c4edcbc3176026051"
+    }
+  },
+  "publicConfig": {
+    "endpoint": "https://script.google.com/macros/s/AKfycbzw36cEXSHVgfRxSl7k-6c2yV4uyPapqb-zndib8AlbHxhFCstXqxoqvqTMJvlHTT5zEg/exec",
+    "webClientId": "325102995568-07pk1fcqvfnkp27kkmv7ple39enin31d.apps.googleusercontent.com"
+  }
+}

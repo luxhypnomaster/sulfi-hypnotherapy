@@ -1,0 +1,16 @@
+...............F......
+======================================================================
+FAIL: test_flutter_has_real_version_tag_and_exact_sha_before_execution (test_candidate25.Workflows.test_flutter_has_real_version_tag_and_exact_sha_before_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25/scripts/task25/test_candidate25.py", line 253, in test_flutter_has_real_version_tag_and_exact_sha_before_execution
+    self.assertEqual(sdk['with']['ref'],'3.47.9')
+AssertionError: 'c197ca5199e9ee5661e865596c9c07294dfab51c' != '3.47.9'
+- c197ca5199e9ee5661e865596c9c07294dfab51c
++ 3.47.9
+
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.403s
+
+FAILED (failures=1)

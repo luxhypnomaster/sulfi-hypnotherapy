@@ -1,0 +1,10 @@
+{
+  "status": "PASS_REJECTED_BEFORE_MAIN_OR_CI",
+  "PR": 76,
+  "state": "closed",
+  "merged": false,
+  "main": "ef32862e07f5da07b610d29c721677b27ce1704e",
+  "protected": true,
+  "nativeRun14": "NOT_DISPATCHED",
+  "noAPKChanged": true
+}

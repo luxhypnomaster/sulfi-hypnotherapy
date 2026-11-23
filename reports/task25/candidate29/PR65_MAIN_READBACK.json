@@ -1,0 +1,11 @@
+{
+  "status": "PASS_ONE_WORKFLOW_PR65_MAIN_READBACK",
+  "mainSHA": "1fa87a621e625915cb2ff1199b0dde7699da70ae",
+  "PR": 65,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "57a03e0203f73b3e9015eb771258db9733a170664df7c942a04f32eedb59ad75"
+  },
+  "APKBytesSourceSignerUnchanged": true,
+  "realKVMCapabilityRequiredBeforeDownloads": true
+}

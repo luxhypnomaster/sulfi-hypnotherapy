@@ -1,0 +1,17 @@
+{
+  "run": 45102506987,
+  "status": "BLOCKED_SDK_VERSION_METADATA_UNKNOWN",
+  "reason": "Shallow official Flutter commit checkout lacked release tag metadata; Flutter reports0.0.0-unknown and refuses unchanged app >=3.47.9 constraint",
+  "appDependenciesChanged": false,
+  "SDKBootstrapDependencies": "Flutter tool bootstrapped its own dependencies; not101 app upgrades",
+  "appCompiler": "NOT_RUN",
+  "sign": "SKIPPED",
+  "fix": "Checkout official tag3.47.9; BEFORE any Flutter execution verify exact c197ca5199e9ee5661e865596c9c07294dfab51c; assert actual SDK/framework/engine/Dart versions",
+  "tagAPIReadback": {
+    "tag": "3.47.9",
+    "sha": "c197ca5199e9ee5661e865596c9c07294dfab51c",
+    "type": "commit"
+  },
+  "noVersionSpoofOrSDKUpgrade": true,
+  "regression": "RED invalid SDK ref then GREEN45 tests and actionlint"
+}

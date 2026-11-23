@@ -1,0 +1,31 @@
+{
+  "status": "PASS_EXISTING_APK28_METADATA_READ_ONLY",
+  "pair": [
+    {
+      "edition": "master",
+      "packageBadging": "name='ru.sulfi.sulfi_hypnotherapy' versionCode='28' versionName='0.4.20' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "nativeAbis": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "minSdk": "24",
+      "targetSdk": "36",
+      "debuggable": true
+    },
+    {
+      "edition": "client",
+      "packageBadging": "name='ru.sulfi.sulfi_hypnotherapy.clienttest' versionCode='28' versionName='0.4.20' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "nativeAbis": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "minSdk": "24",
+      "targetSdk": "36",
+      "debuggable": true
+    }
+  ],
+  "ownerInstalledVersion": "UNKNOWN_NO_DEVICE_CONNECTED",
+  "compatibilityRule": "candidate must retain package,certificate,minSdk and supported ABIs; versionCode29 must exceed actually installed code; no clear/uninstall/downgrade"
+}

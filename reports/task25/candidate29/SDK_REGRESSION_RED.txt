@@ -1,0 +1,13 @@
+..............F...
+======================================================================
+FAIL: test_sdk_action_never_requests_removed_tools_package (test_candidate25.Workflows.test_sdk_action_never_requests_removed_tools_package)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25/scripts/task25/test_candidate25.py", line 191, in test_sdk_action_never_requests_removed_tools_package
+    self.assertEqual(step.get('with', {}).get('packages'), 'platform-tools')
+AssertionError: None != 'platform-tools'
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.257s
+
+FAILED (failures=1)

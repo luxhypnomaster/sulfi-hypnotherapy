@@ -1,0 +1,11 @@
+{
+  "status": "PASS_LOCAL_EVIDENCE_CRC_MANIFEST_SHA",
+  "name": "EVIDENCE_CANDIDATE29_20261123.zip",
+  "bytes": 8609641,
+  "sha256": "4a2f84c7288b8354bf1c676876fb353922aa31f5fddcd910250159baa6a77a93",
+  "manifestSHA256": "cdf0eafe4f63c9ecddbf897aa779352c90bb3531b073b3718c2d7fee687182c7",
+  "entries": 206,
+  "APKs": false,
+  "rawDump": false,
+  "personalDatabase": false
+}

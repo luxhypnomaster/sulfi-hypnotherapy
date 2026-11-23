@@ -1,0 +1,9 @@
+{
+  "status": "PASS_CURRENT_STATUS_UPLOAD_RAW_SHA_SIZE_PARENT",
+  "id": "18Ps-eOftJvn2R-8Ib5vkATeAbotvdGkR",
+  "parent": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "sha256": "a26b7010d96d637b9e384c846af0580db5ea6aa55627fdcfa1d0a1d8761918c0",
+  "size": 2085,
+  "at": "2026-11-23T11:38Z",
+  "stage": "AOSP35/36 RUNNING"
+}

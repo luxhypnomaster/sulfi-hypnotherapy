@@ -1,0 +1,13 @@
+{
+  "status": "PASS_STRUCTURAL_AST_TEST",
+  "baselineHelperCommit": "f7c82b4",
+  "newHelperSHA256": "0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596",
+  "allowedChanges": [
+    "new navigation observer function",
+    "MASTER-only binding before original open_diary_editor"
+  ],
+  "applicationSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "originalMainAndCaseAssertionsStructurallyIdentical": true,
+  "APIImageChangeApplied": false,
+  "nativeGreen": "PENDING"
+}

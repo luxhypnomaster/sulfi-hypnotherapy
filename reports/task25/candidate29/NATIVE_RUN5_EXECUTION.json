@@ -1,0 +1,20 @@
+{
+  "status": "COMPLETED_FAILURE_ONE_QA_NAVIGATION_OBSERVER",
+  "runId": 45161085603,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45161085603",
+  "driverMainSHA": "3a45c202798307f1fc2593c9b883f2fbe6394951",
+  "buildRun": 45103325755,
+  "edition": "master",
+  "api": 34,
+  "diagnostic_master_only": true,
+  "buildOrSigning": false,
+  "testerDeliveryForbidden": true,
+  "hypothesis": "Obtain faulting code module or NO_MINIDUMP_FOUND; no renderer change or blind repeat",
+  "actualNativeMaster34": "16PASS_1BLOCKED",
+  "normalUpgrade": "PASS_EXACT_ROWS_AND_MEDIA",
+  "coldRestart": "PASS",
+  "QEMU": "NORMAL_EXIT0_AFTER_CLEANUP",
+  "minidump": "NO_MINIDUMP_FOUND",
+  "newHypothesis": "Existing reader must return to journal/author mode before editor",
+  "imageChange": "CONSIDERED_NOT_APPLIED"
+}

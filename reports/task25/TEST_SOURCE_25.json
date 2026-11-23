@@ -1,0 +1,14 @@
+{
+  "codeSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "reportOnlyHeadWhileSuiteRan": "5871ff7cb4d304b5bc465c7ce7d0fd81bbccf608",
+  "runtimeUnchanged": true,
+  "testsAndScriptsSHA256": {
+    "test/task25_integration_test.dart": "04c7918b29e5510b9fc032daddcb8b55b855b5a8910279008bf0f0d9544fa84c",
+    "scripts/task25/source_gate.py": "3f4a39f18bb8520f335f927d17a405dbebbf6248989e7b38b6aa8e12e1504133",
+    "scripts/task25/test_source_gate.py": "aeea32afae4080163457b0badf914577526d135cbf602defa037934918ee1720",
+    "pubspec.lock": "0c4f3196d6847d53b7a6fb2eef02e060add418b5ed56ef3d6b5e3f26466f12d5",
+    "pubspec.yaml": "43688ca049186a2255d07e5fcdca027b21ef0fd9d6e4f32a9061701c888b056b"
+  },
+  "finalResult": "574PASS_2SKIP_0FAIL",
+  "testCountsOverlap": "targeted runs overlap fullsuite, not added twice"
+}

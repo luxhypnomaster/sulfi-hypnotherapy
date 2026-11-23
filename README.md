@@ -1,3 +1,9 @@
+# №25 — реальные APK29, native delivery BLOCKED
+
+[Итог](reports/task25/RESULT_25.md) · [55 критериев](reports/task25/ACCEPTANCE_25.csv) · [Причина блокировки](reports/task25/ROOT_CAUSE_25.md) · [DraftPR57](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/57).
+
+Две подписанные APK0.4.21+29 реально созданы прежним ключом; независимые binary проверкиPASS. CLIENT14полный15PASS; MASTER14/15полные17PASS сохранности при обычном28→29. ПоследнийCLIENT35 hostQEMU SIGSEGV настарой28, API36/deliverySKIPPED. **Пару для телефона пока не выдавать.** Код приложений737ea741 сохранён; PR51–57неmerged, production-флагиOFF, Google/physicalQA NOT_RUN. Детали, точныеSHA играницыпроверок — вотчётах.
+
 # №21 — runtime каталога и витрины · кандидат, без production-переключения
 
 [Результат](reports/task21/RESULT_21.md) · [Матрица28](reports/task21/ACCEPTANCE_21.csv) · [draft PR52](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/52) · [Контрольная точка](reports/task21/PROGRESS.md) · [Контракт](reports/task21/CONTRACT_21.md) · [Аудит](reports/task21/G0_AUDIT_21.md).

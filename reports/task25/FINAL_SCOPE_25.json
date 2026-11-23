@@ -1,0 +1,19 @@
+{
+  "status": "PASS_FINAL_SCOPE",
+  "runtimeFiles": 335,
+  "nativePins": 31,
+  "codeSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "codeToCurrentHEAD": "reports/task25 only",
+  "allParentAncestry": {
+    "task21": true,
+    "task22_code": true,
+    "task23_code": true,
+    "task24_code": true,
+    "pr56": true
+  },
+  "DriveFilesIndependentlyDownloaded": 29,
+  "matrixCriteria": 55,
+  "nativeAPKsProduced": 0,
+  "ownerDevice": "NOT_RUN",
+  "production": "UNCHANGED_NO_DEPLOY"
+}

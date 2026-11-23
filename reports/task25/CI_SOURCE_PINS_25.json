@@ -1,0 +1,19 @@
+{
+  "main": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "integrationSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "mainWorkflowsInspected": [
+    {
+      "path": ".github/workflows/alchemist-server-checks.yml",
+      "mainSHA256": "63e60c160b3bee03e3403b9fc62efffc8fcdba6c96650fdf7dde1a780b1a45b6",
+      "source": "b88637a105b2182c7b836311ebb3de7ad037b08f"
+    },
+    {
+      "path": ".github/workflows/alchemist-qa-pair.yml",
+      "mainSHA256": "48d1684454cd0769cc6df94aeafe084d4eb556cd26fd235bf267bbe3ec5889d1",
+      "source": "b88637a105b2182c7b836311ebb3de7ad037b08f"
+    }
+  ],
+  "secretInventory": "BLOCKED_403_NAME_ONLY_REQUEST",
+  "trustedSigning": "NOT_DEMONSTRATED",
+  "probe": "PASS_RUNNER_AVAILABILITY_ONLY"
+}

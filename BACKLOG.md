@@ -1,3 +1,23 @@
+# №25 — текущий итог кандидата29
+
+- [x] Frozen source737ea741,574Flutter/2SKIP/114Node,source335/native31pins; текущиеQAtools76PASS.
+- [x] Две реальные APK29, прежняя подпись/IDs, independentSHA/aapt/apksigner/config/content scans.
+- [x] Полные native update/cold/data scopes:CLIENT14(15PASS),MASTER14/15(17PASS).
+- [x] QA reader→author observer исправлен и nativeGREEN подтверждён; appBack не изменялся.
+- [x] Последний AOSP35/36 trial завершён:CLIENT old28 QEMUSIGSEGV,36/deliverySKIPPED; no blind reruns.
+- [ ] BLOCKED: стабильная isolated native среда иполный4scope gate35/36; не выдавать APK доPASS.
+- [ ] Owner installed-version readback/отдельное phoneQAсогласие/два реальных Google-пользователя.
+- [ ] Исторический24→25UNKNOWN,Diary17productionpatch и22/23livegaps остаются открытыми.
+
+# №25 — интеграция (отдельная ветка, без merge/deploy)
+
+- [x] Проверить 11 файлов официального пакета, манифест и 55 критериев; ancestry PR51→52→54→55→56.
+- [x] Добавить сквозную локальную проверку программы MASTER→CLIENT, трёх файлов, истории, холодного открытия и ручной паузы очереди.
+- [x] Проверить доступный candidate backend при выключенных флагах обеих редакций.
+- [x] Read-only source gate: неизменность всех runtime/native/signing/production источников, отказ при подмене и symlink.
+- [ ] Подтверждённая защищённая signing job для актуального immutable SHA и Android normal-update на синтетических native-данных.
+- [ ] Независимая проверка реально собранных APK, затем отдельная приёмка владельцем. Пока выдача запрещена.
+
 # №19 — только G0–G1
 
 - [x] Проверены SHA/CRC/manifest6файлов, actualGit/APK28provenance; отдельный worktree/ветка от363a024.

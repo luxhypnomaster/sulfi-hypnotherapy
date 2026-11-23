@@ -1,0 +1,69 @@
+{
+  "files": [
+    {
+      "name": "SIGNING_INSPECT_PR_TRANSFER_20261123.json",
+      "id": "1F1VtPMJP-pN7d_QiEAT9IsyMK32LnR5t",
+      "size": 1224,
+      "sha256": "9c29af48e883abe20ff220a4213bed99157986c942e6ebba7c89742a7e3530d4",
+      "downloadSHA256": "9c29af48e883abe20ff220a4213bed99157986c942e6ebba7c89742a7e3530d4",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_PR58_READBACK_20261123.json",
+      "id": "1Qtc18bbNbQmo3HwERalXnBOspCf7sYU-",
+      "size": 1193,
+      "sha256": "47f8281c1643e2ea26bd121a10b067fc143e4020135f9aa27e8290295215829f",
+      "downloadSHA256": "47f8281c1643e2ea26bd121a10b067fc143e4020135f9aa27e8290295215829f",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_MAIN_READBACK_20261123.json",
+      "id": "16m140zWp-nnfOifir8Ejs3BqmY84RHg0",
+      "size": 1384,
+      "sha256": "5e7944b241a4ef90e287e32aa6cfde608773d62f3f0c8d7831daee663d01bc26",
+      "downloadSHA256": "5e7944b241a4ef90e287e32aa6cfde608773d62f3f0c8d7831daee663d01bc26",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_EXECUTION_20261123.json",
+      "id": "1XvJFuhlbWvBjBbXmhORZO5_vptfGDreD",
+      "size": 3265,
+      "sha256": "4cdb962451f4881075e661dfe1b668bad7a30af419677c7072dd9eb99a1453bf",
+      "downloadSHA256": "4cdb962451f4881075e661dfe1b668bad7a30af419677c7072dd9eb99a1453bf",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_ARTIFACT_BLOCKER_20261123.json",
+      "id": "1e37rgidrJnhEcll-tTfocJ7FgiV_U8nX",
+      "size": 1467,
+      "sha256": "f0d90f765b0a0a11e121eaabc665ccc151d3c53c829cf403e509f9f67e2fa641",
+      "downloadSHA256": "f0d90f765b0a0a11e121eaabc665ccc151d3c53c829cf403e509f9f67e2fa641",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_RESULT_PR58_20261123.md",
+      "id": "1ri6M5pNaEFVGPz3IhwpE-EfcXUSRz9SO",
+      "size": 5261,
+      "sha256": "00613a2546bf5de3d5a72d65899a5a5e0dd996d96b21f36762ee22f57b67b4a2",
+      "downloadSHA256": "00613a2546bf5de3d5a72d65899a5a5e0dd996d96b21f36762ee22f57b67b4a2",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    },
+    {
+      "name": "SIGNING_INSPECT_PR58_CHECKPOINT_20261123.md",
+      "id": "1WahUntg9IiVa-lOesaPd9f-zFiTDlyxh",
+      "size": 1359,
+      "sha256": "fa8192c82cb75a19987859726229fa6ea5d37c16dd9f81de7ee5567738d6519b",
+      "downloadSHA256": "fa8192c82cb75a19987859726229fa6ea5d37c16dd9f81de7ee5567738d6519b",
+      "status": "PASS_REPORT_RAW_READBACK",
+      "scope": "report delivery, not GitHub public certificate artifact download"
+    }
+  ],
+  "folder": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "scope": "Main PR58 and one-shot inspect evidence, followed by stop at GitHub artifact-download obstacle; this receipt verifies Drive reports only"
+}

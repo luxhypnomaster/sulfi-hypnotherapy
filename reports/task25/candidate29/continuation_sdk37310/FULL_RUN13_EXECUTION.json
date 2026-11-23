@@ -1,0 +1,15 @@
+{
+  "run": 45218835360,
+  "driverMainSHA": "ef32862e07f5da07b610d29c721677b27ce1704e",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "buildRun": 45103325755,
+  "diagnostic_master_only": false,
+  "nativeScopes": [
+    "master35",
+    "client35",
+    "master36",
+    "client36"
+  ],
+  "additionalGate": "clean observed QEMU exit0,zeroSIGSEGV,oneAVD,noRestart,bound real hostcontrol",
+  "rebuildOrResign": false
+}

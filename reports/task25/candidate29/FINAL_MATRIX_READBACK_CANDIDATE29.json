@@ -1,0 +1,11 @@
+{
+  "status": "PASS_FINAL_MATRIX_RAW_BYTES_PARENT_SIZE",
+  "id": "1Mnkf8ReOeaPHEWG9tWLuQ1bIYlTZEaiV",
+  "size": 11921,
+  "sha256": "d07a2e506b5675b9721c27bd34a6f20c745c2ac36656da61261472b8827c543f",
+  "criteria": 55,
+  "scopedPASS": 51,
+  "PARTIAL": 3,
+  "ALREADY_DONE": 1,
+  "nativePair": "BLOCKED"
+}

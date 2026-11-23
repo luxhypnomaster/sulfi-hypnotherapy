@@ -1,0 +1,14 @@
+{
+  "status": "PASS_ONE_WORKFLOW_KVM_CAPABILITY_FIX",
+  "PR": 65,
+  "head": "688650a400cc0025f027f8b761c57a547ccf3ab8",
+  "mainBefore": "ef216597d6df04a67310189a84f58978224ce11f",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "57a03e0203f73b3e9015eb771258db9733a170664df7c942a04f32eedb59ad75"
+  },
+  "APKAppSourceSigningOrDataAssertionsChanged": false,
+  "actualHardwareAccelerationMandatory": true
+}

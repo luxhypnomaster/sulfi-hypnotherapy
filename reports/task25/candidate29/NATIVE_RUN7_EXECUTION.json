@@ -1,0 +1,23 @@
+{
+  "status": "COMPLETED_BLOCKED_NATIVE_DELIVERY",
+  "runId": 45166539406,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45166539406",
+  "driverMainSHA": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "buildRun": 45103325755,
+  "rebuildOrResign": false,
+  "APIs": [
+    35,
+    36
+  ],
+  "systemImage": "AOSP(default)",
+  "allOriginalDataAssertions": "AST_IDENTICAL",
+  "physicalGoogle": "NOT_RUN",
+  "ownerDevice": "NOT_TOUCHED",
+  "noBlindRetryOnFailure": true,
+  "master35": "17_PASS_COMPLETE",
+  "client35": "5_PASS_1_BLOCKED_HOST_QEMU_SIGSEGV_BEFORE29",
+  "api36": "SKIPPED_BY_REQUIRED_DEPENDENCY",
+  "delivery": "SKIPPED",
+  "newRuns": "STOP_NO_BLIND_RETRIES"
+}

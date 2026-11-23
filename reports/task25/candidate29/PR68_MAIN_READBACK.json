@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "main": "740898208fe610cd0f0678513e1f4f4d7d9ae04b",
+  "PR": 68,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "ea4971744a757191a869070b31739d5a632867b11f2e55c2d42f88994ab9530e",
+    "scripts/task25/native25.py": "0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596"
+  },
+  "newAppOrSigning": false
+}

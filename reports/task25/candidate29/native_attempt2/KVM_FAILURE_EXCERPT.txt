@@ -1,0 +1,18 @@
+native34 (master)	Enable KVM on disposable GitHub hosted runner	﻿2026-11-23T03:32:28.1779442Z ##[group]Run test -e /dev/kvm
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1779781Z [36;1mtest -e /dev/kvm[0m
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1780298Z [36;1mecho 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules[0m
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1780865Z [36;1msudo udevadm control --reload-rules[0m
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1781188Z [36;1msudo udevadm trigger --name-match=kvm[0m
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1781500Z [36;1mtest -r /dev/kvm && test -w /dev/kvm[0m
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1800273Z shell: /usr/bin/bash -e {0}
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1800537Z env:
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1800855Z   CANDIDATE25_WORKFLOW: .github/workflows/sulfi-candidates25-verify.yml
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1801318Z   CANDIDATE25_CONFIRMATION: VERIFY_DISPOSABLE_ANDROID_ONLY
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1801657Z   CANDIDATE25_BUILD_RUN: 45103325755
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1802224Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1802719Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1803678Z   ANDROID_HOME: /usr/local/lib/android/sdk
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1803996Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1804287Z ##[endgroup]
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.1920840Z KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"
+native34 (master)	Enable KVM on disposable GitHub hosted runner	2026-11-23T03:32:28.2322739Z ##[error]Process completed with exit code 1.

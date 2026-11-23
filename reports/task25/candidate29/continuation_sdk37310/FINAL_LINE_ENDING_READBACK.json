@@ -1,0 +1,20 @@
+{
+  "status": "PASS_FINAL_CSV_AND_DELIVERY_RAW_BYTES",
+  "records": [
+    {
+      "id": "1L6x8f3pBHMNnKRTtgNZI56uMLjvq13A2",
+      "name": "ACCEPTANCE_CONTINUATION_25.csv",
+      "bytes": 12274,
+      "sha256": "b766aa2517e4db266449cfdc0b8abb81cadb22b73d85cdbcc5a90632d0338af1",
+      "status": "PASS_LF_FINAL_RAW_SHA_SIZE_PARENT"
+    },
+    {
+      "id": "1UjWtCbOdxjlRLHqAaWO_3wnq_3fItBYZ",
+      "name": "DELIVERY_CONTINUATION_25.md",
+      "bytes": 4303,
+      "sha256": "d9ca824098fef377c1bac9ceb95fc4fc5511d37477d4ae3e817227bffa49f142",
+      "status": "PASS_LF_FINAL_RAW_SHA_SIZE_PARENT"
+    }
+  ],
+  "semanticCriteriaUnchanged": true
+}

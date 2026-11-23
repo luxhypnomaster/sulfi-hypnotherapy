@@ -1,0 +1,19 @@
+{
+  "status": "RUNNING_SPECIFIC_DRAFT_READ_CAPABILITY_HYPOTHESIS",
+  "mainSHA": "84c8f8bce502fee32515729b7f03fdd276420e49",
+  "PR": 61,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "a7813da2f79727d9e30bbf5366af3db05342efd167a2205166dc08f4137b8044",
+    ".github/workflows/sulfi-candidates25-verify.yml": "aead2187e5298d30cb3a65b2c51c1295282533b0fef36b4273343f0070a6b470",
+    "scripts/task25/candidate25.py": "198f4d9d62bb0712b3ff38031e6af0373e16095bd67689ffa93ac1f056022f91"
+  },
+  "appServerOAuthKeyUnchanged": true,
+  "draftPublication": false,
+  "purpose": "GET-only baseline reader; no new signing credentials",
+  "intent": "NEW_BUILD_AFTER_ISOLATED_DRAFT_READ_CAPABILITY_FIX",
+  "oldRun": 45101058374,
+  "runId": 45101750589,
+  "at": "2026-11-23T02:42:37.007429+00:00",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45101750589"
+}

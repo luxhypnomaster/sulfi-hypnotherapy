@@ -1,0 +1,17 @@
+{
+  "status": "PASS_DISPOSABLE_MAIN_COPY_ONLY",
+  "baseMainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "patchSHA256": "deaeed856500d2f2f35a6ed5bd101a1364db2ff1af83e341393f06aa63d0daba",
+  "changedPaths": [
+    ".github/workflows/sulfi-signing-inspect25.yml",
+    "scripts/task25/signing_inspect.py"
+  ],
+  "applyCheck": "PASS",
+  "appliedInDisposableCopy": "PASS_EXACT_BYTES_ONLY_TWO_NEW_PATHS",
+  "reverseApplyInCopy": "PASS_ALL_ORIGINAL_FILE_HASHES",
+  "realMainChanged": false,
+  "mainProtection": "OBSERVED_FALSE_NO_CHANGE_ALLOWED",
+  "workflowDispatched": false,
+  "realCertificateInspection": "NOT_RUN",
+  "APKs": "NOT_BUILT"
+}

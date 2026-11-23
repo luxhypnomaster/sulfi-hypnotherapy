@@ -1,0 +1,11 @@
+{
+  "appSource": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "nativeHelperSHA256": "78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b",
+  "nativeHelperExpected": "78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b",
+  "frozenHistoricalHarness": "scripts/task18/native_upgrade.py",
+  "diagnosticChangesOnly": [
+    "workflow scope",
+    "metadata parser"
+  ],
+  "newAppRuntimePatch": false
+}

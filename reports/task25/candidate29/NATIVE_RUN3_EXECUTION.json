@@ -1,0 +1,17 @@
+{
+  "status": "RUNNING_NATIVE_ONLY_REAL_KVM_PREFLIGHT_PASSED_BOTH_EDITIONS",
+  "mainSHA": "1fa87a621e625915cb2ff1199b0dde7699da70ae",
+  "PR": 65,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "57a03e0203f73b3e9015eb771258db9733a170664df7c942a04f32eedb59ad75"
+  },
+  "APKBytesSourceSignerUnchanged": true,
+  "realKVMCapabilityRequiredBeforeDownloads": true,
+  "intent": "NATIVE_ONLY_SAME_APKS_AFTER_EARLY_REAL_KVM_CAPABILITY_FIX",
+  "oldQARun": 45106402826,
+  "buildRun": 45103325755,
+  "runId": 45107294363,
+  "at": "2026-11-23T03:39:43.226680+00:00",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45107294363"
+}

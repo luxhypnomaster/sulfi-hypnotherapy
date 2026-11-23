@@ -1,0 +1,106 @@
+{
+  "status": "PASS_INDEPENDENT_ANDROID_SNAPSHOT_COPIES",
+  "inventories": [
+    {
+      "inventory": "after-ui-import-task16v-1.wav",
+      "archiveSHA256": "f4e67284d95de205a46120331974aba56ff114a6d2c0c2cee5aca68e605583d8",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 9,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-import-task16v-2.wav",
+      "archiveSHA256": "5cc308a968a7f3bdf11ad4f6f7e05a7b0487c1959c17df59ef2c7b92187382b7",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 10,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-import-task16v-3.wav",
+      "archiveSHA256": "e0787122d44446226c64c002256f6ac7d80a86d69d8c5bc07f8a4b96edb6b145",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-module-elman",
+      "archiveSHA256": "82efdc42cbd0ddcccfd482c421866436ecd7cb40db6d148c6aa92b0e619e404b",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-module-pause",
+      "archiveSHA256": "a0f563d2e02235274d11f6302c101101b8cbea41ac4bb32353a0cd7f63e2acae",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-history24",
+      "archiveSHA256": "7d1d0d9d29d798f27806dd5cdc8b8006575d77b74e9e37c2928896217ea72207",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "before-supplement",
+      "archiveSHA256": "933c86f4d97284bb4a26bd03842be17ca2489401d75c499f3546bf604e3bce76",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 11,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "supplement-confirmed",
+      "archiveSHA256": "c443163b08a992e48fc9daee4a7e103c7bc26c4ad2fd45702166e06d1e4236db",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "after-ui-capsule",
+      "archiveSHA256": "c443163b08a992e48fc9daee4a7e103c7bc26c4ad2fd45702166e06d1e4236db",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "beforeBaseline",
+      "archiveSHA256": "c443163b08a992e48fc9daee4a7e103c7bc26c4ad2fd45702166e06d1e4236db",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "afterCandidate",
+      "archiveSHA256": "3fe6f1f8b652d75687d5ae7b498fd1eae1ecd28b6dbc0b8e84e1ed819adf4af1",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    },
+    {
+      "inventory": "coldCandidate",
+      "archiveSHA256": "3fe6f1f8b652d75687d5ae7b498fd1eae1ecd28b6dbc0b8e84e1ed819adf4af1",
+      "nativeTablesIndependentlyRead": 15,
+      "privateFilesHashed": 13,
+      "integrity": "ok",
+      "schema": 9
+    }
+  ],
+  "originalArchivesChanged": false,
+  "rawPrivateDataPublished": false,
+  "externalSAFCapsule": "NOT_IN_PRIVATE_TAR_REPORT_SHA_ONLY",
+  "physicalPhone": "NOT_RUN",
+  "realGoogle": "NOT_RUN"
+}

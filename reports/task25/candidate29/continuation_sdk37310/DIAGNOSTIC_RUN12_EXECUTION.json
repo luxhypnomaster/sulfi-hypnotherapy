@@ -1,0 +1,9 @@
+{
+  "run": 45214392456,
+  "driverMainSHA": "4a11ad9dabf5beb4bb7a87015fc8a05b1d165387",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "mode": "diagnostic_master_only=true",
+  "noAPKDelivery": true,
+  "buildRun": 45103325755,
+  "reason": "documented GDB noprint-implies-nostop corrected; real $_exitsignal, raw logging/dev/null"
+}

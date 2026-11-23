@@ -1,0 +1,9 @@
+{
+  "run": 45213411298,
+  "driverMainSHA": "405f727335244404a67417fe146e35f74410d3bc",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "mode": "diagnostic_master_only=true",
+  "noAPKDelivery": true,
+  "buildRun": 45103325755,
+  "reason": "fix actual exit127 control launch with tested fixed Python file, no shell-c"
+}
