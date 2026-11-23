@@ -1,0 +1,12 @@
+{
+  "status": "PASS_REVIEWED_MAIN_FILES",
+  "PR": 75,
+  "main": "ef32862e07f5da07b610d29c721677b27ce1704e",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "c62d0253df19558b0b696e0bf1b2017a4654af23a859fd0d3ae1113fe800c292",
+    "scripts/task25/emulator_pc25.py": "fc35b3c98d612a6e7b2d28a3a5ef6ea06fc93f540afd5d093fe04987d61ce068"
+  },
+  "allFourNativeScopesRequired": true,
+  "additionalHostCleanExitGate": true,
+  "signingBuildProductionChanged": false
+}
