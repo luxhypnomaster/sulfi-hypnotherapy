@@ -1,0 +1,12 @@
+{
+  "intent": "ONE_SECRET_FREE_NATIVE_VERIFY_API34_THEN36_MASTER_CLIENT",
+  "buildRun": 45103325755,
+  "at": "2026-11-23T03:10:20.262666+00:00",
+  "driverMainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "noSigning": true,
+  "noOwnerDevice": true,
+  "runId": 45104377872,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45104377872",
+  "independentReadback": "PASS_ACTUAL_SEPARATE_GITHUB_JOB",
+  "native": "API34_MASTER_CLIENT_RUNNING"
+}

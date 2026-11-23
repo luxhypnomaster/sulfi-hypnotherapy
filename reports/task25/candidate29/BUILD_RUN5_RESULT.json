@@ -1,0 +1,32 @@
+{
+  "status": "PASS_ACTUAL_UNSIGNED_BUILD_AND_EXISTING_KEY_SIGN_PAIR",
+  "run": 45103325755,
+  "source": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "mainSHA": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "runURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45103325755",
+  "artifacts": [
+    {
+      "id": 14787016271,
+      "name": "unsigned25-45103325755",
+      "size_in_bytes": 219972113,
+      "digest": "sha256:fc7c271569bdf2e07df94fb7e081d23fad78d1c66d258348f593415302c5ef03"
+    },
+    {
+      "id": 14786715479,
+      "name": "baseline25-45103325755",
+      "size_in_bytes": 219530924,
+      "digest": "sha256:7d33df8a1c8238f9198f05af82c0c5324b49a623b59771f362d71ac3b4f6b053"
+    },
+    {
+      "id": 14786149620,
+      "name": "quarantine25-45103325755",
+      "size_in_bytes": 220085411,
+      "digest": "sha256:fbc5d58f4b20e62137c078356b99703160302ebec89d1fc7e3ff7819a32ef3f7"
+    }
+  ],
+  "signingCredentialsInGradle": false,
+  "newKey": false,
+  "nativeSafety": "PENDING",
+  "ownerDevice": "NOT_RUN",
+  "recommendedForOwnerInstall": false
+}
