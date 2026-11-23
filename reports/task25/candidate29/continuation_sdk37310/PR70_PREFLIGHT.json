@@ -1,0 +1,17 @@
+{
+  "status": "PASS_EXACT_THREE_OPERATIONAL_FILES",
+  "PR": 70,
+  "head": "aabc63b2f6376679a9a0f873ad81de4398e735b8",
+  "mainBefore": "e5b91a7e2a68c345dda12a64d079fdc1d6d365b7",
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "b20d629e6e25c7930e71c0a83369e4f9de1b0db4f416b72c216bf9ee4e8f423c",
+    "scripts/task25/native25.py": "e8740d039b42937b08384f274ad1867402cad308546e7a83d7fa9c847bf8e133",
+    "scripts/task25/emulator_sdk25.py": "a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286"
+  },
+  "SDK": "37.3.10 official stable",
+  "allP0DataAssertions": "AST_IDENTICAL",
+  "signingAppServerOAuthACLChanged": false,
+  "ownerClassicRuleReadbackReused": true,
+  "localTests": 91
+}

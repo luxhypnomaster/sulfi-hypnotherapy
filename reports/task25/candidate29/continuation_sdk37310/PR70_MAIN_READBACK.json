@@ -1,0 +1,15 @@
+{
+  "status": "PASS_MAIN_EXACT_HASHES_AND_EXISTING_SIGNED_ARTIFACT",
+  "main": "d74a19394bfaeb886c3558e460ca5193e43eaa41",
+  "protected": true,
+  "PR": 70,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "b20d629e6e25c7930e71c0a83369e4f9de1b0db4f416b72c216bf9ee4e8f423c",
+    "scripts/task25/native25.py": "e8740d039b42937b08384f274ad1867402cad308546e7a83d7fa9c847bf8e133",
+    "scripts/task25/emulator_sdk25.py": "a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286"
+  },
+  "quarantine": 14786149620,
+  "quarantineExpires": "2026-11-26T03:09:31Z",
+  "noNewSigningBuild": true,
+  "at": "2026-11-23T15:40:06.361210+00:00"
+}
