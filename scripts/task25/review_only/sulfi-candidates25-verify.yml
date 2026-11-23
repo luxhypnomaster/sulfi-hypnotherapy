@@ -1,0 +1,388 @@
+name: Task25 independent APK readback and disposable upgrade safety
+'on':
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: VERIFY_DISPOSABLE_ANDROID_ONLY
+        required: true
+        type: string
+        default: ''
+      build_run:
+        description: Successful Task25 main build run ID; same APK bytes, no signing here
+        required: true
+        type: string
+permissions: {}
+concurrency:
+  group: task25-candidate-native-qa
+  cancel-in-progress: false
+env:
+  CANDIDATE25_WORKFLOW: .github/workflows/sulfi-candidates25-verify.yml
+  CANDIDATE25_CONFIRMATION: ${{ inputs.confirmation }}
+  CANDIDATE25_BUILD_RUN: ${{ inputs.build_run }}
+jobs:
+  trust:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions: {}
+    steps:
+    - name: Reject untrusted dispatch before any checkout or secret
+      run: |-
+        python3 - <<'PYCODE'
+        import os
+        expected={'GITHUB_REPOSITORY':'luxhypnomaster/sulfi-hypnotherapy','GITHUB_EVENT_NAME':'workflow_dispatch','GITHUB_REF':'refs/heads/main','GITHUB_REF_PROTECTED':'true','GITHUB_ACTOR':'luxhypnomaster','GITHUB_TRIGGERING_ACTOR':'luxhypnomaster','CANDIDATE25_CONFIRMATION':'VERIFY_DISPOSABLE_ANDROID_ONLY'}
+        assert all(os.environ.get(k)==v for k,v in expected.items()), 'OWNER_PROTECTED_MAIN_REQUIRED'
+        print('TRUST_BOUNDARY_PASS_NO_SECRETS')
+        PYCODE
+    - name: Validate numeric run input without shell interpolation
+      run: |-
+        python3 - <<'PYCODE'
+        import os,re
+        assert re.fullmatch(r'[1-9][0-9]{5,17}',os.environ['CANDIDATE25_BUILD_RUN']), 'NUMERIC_BUILD_RUN_REQUIRED'
+        PYCODE
+  readback:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: ${{ github.sha }}
+        path: trusted
+        persist-credentials: false
+        sparse-checkout: scripts/task25/candidate25.py
+        sparse-checkout-cone-mode: false
+    - name: Verify reviewed trusted helper hashes before use
+      run: |-
+        python3 - <<'PYCODE'
+        import hashlib,pathlib
+        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a'}
+        for name,expected in pins.items():
+         p=pathlib.Path('trusted/scripts/task25')/name
+         assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+        print('REVIEWED_TRUSTED_HELPERS_PASS')
+        PYCODE
+    - name: Validate trusted workflow context
+      run: python3 trusted/scripts/task25/candidate25.py trust
+    - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+      with:
+        distribution: temurin
+        java-version: '21'
+    - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+    - name: Install exact Android compiler tools
+      run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+    - name: Independently download and verify signed APK bytes and public identity
+      run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: pair25-readback-${{ github.run_id }}
+        path: ${{ runner.temp }}/SIGNED_PAIR_INDEPENDENT_READBACK_25.json
+        if-no-files-found: error
+        retention-days: 14
+    - name: Preserve public blocker evidence
+      if: failure()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: pair25-readback-blocker-${{ github.run_id }}-${{ github.run_attempt }}
+        path: ${{ runner.temp }}/CANDIDATE25_BLOCKER.json
+        if-no-files-found: warn
+        retention-days: 14
+        include-hidden-files: false
+        overwrite: false
+    needs: trust
+  native34:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: ${{ github.sha }}
+        path: trusted
+        persist-credentials: false
+        sparse-checkout: |-
+          scripts/task25/candidate25.py
+          scripts/task25/native25.py
+        sparse-checkout-cone-mode: false
+    - name: Verify reviewed trusted helper hashes before use
+      run: |-
+        python3 - <<'PYCODE'
+        import hashlib,pathlib
+        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        for name,expected in pins.items():
+         p=pathlib.Path('trusted/scripts/task25')/name
+         assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+        print('REVIEWED_TRUSTED_HELPERS_PASS')
+        PYCODE
+    - name: Validate trusted workflow context
+      run: python3 trusted/scripts/task25/candidate25.py trust
+    - name: Free unused hosted-runner tools only (no project or remote data)
+      run: |-
+        sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/swift /opt/hostedtoolcache/CodeQL
+        df -h "$RUNNER_TEMP"
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: 737ea741636e9abe7c20353d9d5b8301cf44a5bb
+        path: appsource
+        persist-credentials: false
+    - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+      with:
+        distribution: temurin
+        java-version: '21'
+    - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+    - name: Install exact Android compiler tools
+      run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+    - name: Independently download and verify signed APK bytes and public identity
+      run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - name: Read and verify immutable signed baseline28 only
+      run: python3 trusted/scripts/task25/candidate25.py baseline
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - name: Enable KVM on disposable GitHub hosted runner
+      run: |-
+        test -e /dev/kvm
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+        test -r /dev/kvm && test -w /dev/kvm
+    - name: Native UI-created APK28 to APK29 preservation gate
+      uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+      env:
+        TASK17_EMULATOR_PIN: 37.2.12
+      with:
+        api-level: 34
+        target: google_apis
+        arch: x86_64
+        avd-name: test
+        profile: pixel_2
+        disk-size: 3G
+        ram-size: 2048M
+        cores: 2
+        force-avd-creation: true
+        disable-animations: true
+        emulator-boot-timeout: 300
+        emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front
+          none -feature -Vulkan
+        pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
+        script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 34
+    - name: Preserve native evidence on success or failure
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: native25-api34-${{ matrix.edition }}-${{ github.run_id }}
+        path: |-
+          ${{ runner.temp }}/task25-native-evidence/
+          ${{ runner.temp }}/SIGNED_PAIR_INDEPENDENT_READBACK_25.json
+          ${{ runner.temp }}/CANDIDATE25_BLOCKER.json
+        if-no-files-found: warn
+        retention-days: 14
+        include-hidden-files: false
+        overwrite: false
+    needs: readback
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        edition:
+        - master
+        - client
+  native36:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: ${{ github.sha }}
+        path: trusted
+        persist-credentials: false
+        sparse-checkout: |-
+          scripts/task25/candidate25.py
+          scripts/task25/native25.py
+        sparse-checkout-cone-mode: false
+    - name: Verify reviewed trusted helper hashes before use
+      run: |-
+        python3 - <<'PYCODE'
+        import hashlib,pathlib
+        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a', 'native25.py': '210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a'}
+        for name,expected in pins.items():
+         p=pathlib.Path('trusted/scripts/task25')/name
+         assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+        print('REVIEWED_TRUSTED_HELPERS_PASS')
+        PYCODE
+    - name: Validate trusted workflow context
+      run: python3 trusted/scripts/task25/candidate25.py trust
+    - name: Free unused hosted-runner tools only (no project or remote data)
+      run: |-
+        sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/swift /opt/hostedtoolcache/CodeQL
+        df -h "$RUNNER_TEMP"
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: 737ea741636e9abe7c20353d9d5b8301cf44a5bb
+        path: appsource
+        persist-credentials: false
+    - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+      with:
+        distribution: temurin
+        java-version: '21'
+    - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+    - name: Install exact Android compiler tools
+      run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+    - name: Independently download and verify signed APK bytes and public identity
+      run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - name: Read and verify immutable signed baseline28 only
+      run: python3 trusted/scripts/task25/candidate25.py baseline
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - name: Enable KVM on disposable GitHub hosted runner
+      run: |-
+        test -e /dev/kvm
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+        test -r /dev/kvm && test -w /dev/kvm
+    - name: Native UI-created APK28 to APK29 preservation gate
+      uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+      env:
+        TASK17_EMULATOR_PIN: 37.2.12
+      with:
+        api-level: 36
+        target: google_apis
+        arch: x86_64
+        avd-name: test
+        profile: pixel_2
+        disk-size: 3G
+        ram-size: 2048M
+        cores: 2
+        force-avd-creation: true
+        disable-animations: true
+        emulator-boot-timeout: 300
+        emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front
+          none -feature -Vulkan
+        pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
+        script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 36
+    - name: Preserve native evidence on success or failure
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: native25-api36-${{ matrix.edition }}-${{ github.run_id }}
+        path: |-
+          ${{ runner.temp }}/task25-native-evidence/
+          ${{ runner.temp }}/SIGNED_PAIR_INDEPENDENT_READBACK_25.json
+          ${{ runner.temp }}/CANDIDATE25_BLOCKER.json
+        if-no-files-found: warn
+        retention-days: 14
+        include-hidden-files: false
+        overwrite: false
+    needs: native34
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        edition:
+        - master
+        - client
+  delivery:
+    if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: ${{ github.sha }}
+        path: trusted
+        persist-credentials: false
+        sparse-checkout: scripts/task25/candidate25.py
+        sparse-checkout-cone-mode: false
+    - name: Verify reviewed trusted helper hashes before use
+      run: |-
+        python3 - <<'PYCODE'
+        import hashlib,pathlib
+        pins={'candidate25.py': '1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a'}
+        for name,expected in pins.items():
+         p=pathlib.Path('trusted/scripts/task25')/name
+         assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+        print('REVIEWED_TRUSTED_HELPERS_PASS')
+        PYCODE
+    - name: Validate trusted workflow context
+      run: python3 trusted/scripts/task25/candidate25.py trust
+    - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+      with:
+        distribution: temurin
+        java-version: '21'
+    - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+    - name: Install exact Android compiler tools
+      run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+    - name: Independently download and verify signed APK bytes and public identity
+      run: python3 trusted/scripts/task25/candidate25.py signed-data --run "$CANDIDATE25_BUILD_RUN"
+      env:
+        GH_TOKEN: ${{ github.token }}
+    - name: Record gates before any tester artifact
+      run: |-
+        python3 - <<'PYCODE'
+        import json,os,pathlib
+        p=pathlib.Path(os.environ['RUNNER_TEMP'])/'task25-signed-quarantine/signed-manifest.json'
+        m=json.loads(p.read_text());m.update(nativeSafety='PASS_NATIVE_UI28_TO29_MASTER_CLIENT_API34_API36',physicalPhones='NOT_RUN',safeForOwnerInstall='CANDIDATE_FOR_AUTHORIZED_PHONE_QA_ONLY')
+        p.write_text(json.dumps(m,indent=2)+'\n')
+        PYCODE
+    - name: Deliver verified MASTER candidate
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: Alchemist-MASTER29-verified-${{ github.run_id }}
+        path: |-
+          ${{ runner.temp }}/task25-signed-quarantine/master29.apk
+          ${{ runner.temp }}/task25-signed-quarantine/signed-manifest.json
+        if-no-files-found: error
+        retention-days: 14
+        overwrite: false
+    - name: Deliver verified CLIENT candidate
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: Alchemist-CLIENT29-verified-${{ github.run_id }}
+        path: |-
+          ${{ runner.temp }}/task25-signed-quarantine/client29.apk
+          ${{ runner.temp }}/task25-signed-quarantine/signed-manifest.json
+        if-no-files-found: error
+        retention-days: 14
+        overwrite: false
+    - name: Preserve public blocker evidence
+      if: failure()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: delivery25-blocker-${{ github.run_id }}-${{ github.run_attempt }}
+        path: ${{ runner.temp }}/CANDIDATE25_BLOCKER.json
+        if-no-files-found: warn
+        retention-days: 14
+        include-hidden-files: false
+        overwrite: false
+    needs:
+    - native34
+    - native36
