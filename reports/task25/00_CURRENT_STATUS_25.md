@@ -9,3 +9,6 @@
 Источник приложений737ea741636e9abe7c20353d9d5b8301cf44a5bb; код QA5977584cfeb14d3f3222d49e45729f76fff35f47. Runtime не менялся:574FlutterPASS/2SKIP,114Node;76QAtoolsPASS. Mainappstackнеmerged, productionGAS/OAuth/ACL/key/userdata не менялись. Реальные Google/телефоныNOT_RUN, установленная версияUNKNOWN, owner24→25causeUNKNOWN. APK остаютсяquarantine, наDrive не выкладывались.
 
 Текущие RESULT,CHANGES,TESTS,ISSUES,ROOT_CAUSE,NATIVE_UPGRADE,55критериев ACCEPTANCE и binaryINFO/READBACK — отдельная датированная партия в этой папке. Исходные отчёты сохранены. Итоговые ID/размеры/SHA и независимое скачивание подтверждаются DELIVERY; текущий файл не является разрешением на установку.
+
+Доставка проверена:17 материалов, final CSV revision,206вложений archive сSHA/CRC. 51scopedPASS,3PARTIAL,1ALREADY_DONE; fullnativepairBLOCKED.
+[Итоговый RESULT](https://docs.google.com/document/d/1RKZdFGbSqEDb9eHYz0pj77UTRg8UZNZ4/edit) · [DELIVERY и контрольные суммы](https://drive.google.com/file/d/1Y6aCQSRcpjRbGYoK_ckMxagnVAleqyYE/view)
