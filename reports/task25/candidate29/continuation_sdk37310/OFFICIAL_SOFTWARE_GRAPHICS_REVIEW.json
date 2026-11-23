@@ -1,0 +1,21 @@
+{
+  "source": "Official Flutter3.47.9",
+  "frameworkSHA": "c197ca5199e9ee5661e865596c9c07294dfab51c",
+  "files": {
+    "packages/flutter_tools/lib/src/commands/run.dart": "ee1b2953fdbac926746f4ab8e16fc46a974b6fb00c71da3a5c2c4394e042fe87",
+    "packages/flutter_tools/lib/src/android/android_device.dart": "98f27092e3b573ec356bdc4f02e88bbd1e85d42dccfd8d9dbaa856c556abd3ab",
+    "engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/FlutterShellArgs.java": "13f270e63f0c40cc6d96bbccc41d82c3f7a9224bacac9e1fa2f5f8bd13ddf9b1",
+    "engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterActivity.java": "452a78b19d185a58db2b0dae0d55c3fffffdfe0ef42334b3adccaa3575fd3426",
+    "engine/src/flutter/shell/platform/android/flutter_main.cc": "a7c7013f352e7a06648d83704b3d821fa1cc867f9e6c4bfef31e4555c41bd4c6"
+  },
+  "officialCLIQuote": "Enable rendering using the Skia software backend. This is useful when testing Flutter on emulators.",
+  "deprecatedButPresent": true,
+  "ImpellerMustBeDisabled": true,
+  "AndroidIntentExtras": {
+    "enable-software-rendering": true,
+    "enable-impeller": false
+  },
+  "APKOrProductSourceChanged": false,
+  "runtimeEngineStateReadback": "NOT_AVAILABLE_NO_CLAIM",
+  "scope": "one justified supported test-profile trial; preserve all original UI/data assertions; default GPU/physical NOT_RUN"
+}
