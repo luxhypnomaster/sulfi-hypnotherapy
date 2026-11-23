@@ -265,6 +265,7 @@ class Workflows(unittest.TestCase):
                         if 'native25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/native25.py'),step['run'])
                         if 'emulator_fault25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_fault25.py'),step['run'])
                         if 'emulator_sdk25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_sdk25.py'),step['run'])
+                        if 'emulator_pc25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_pc25.py'),step['run'])
 
     def test_embedded_python_compiles_and_no_key_generation_or_deploy(self):
         for p,w in zip(self.paths,self.ws):
@@ -287,6 +288,7 @@ class Workflows(unittest.TestCase):
             self.assertEqual(j['strategy']['matrix']['edition'],expected)
             emulator=next(s for s in j['steps'] if 'emulator-runner@' in s.get('uses',''))
             self.assertEqual(emulator['env']['TASK17_EMULATOR_PIN'],'37.3.10')
+            self.assertEqual(emulator['env']['TASK25_PC_DIAGNOSTIC'],"${{ inputs.diagnostic_master_only && 'true' || 'false' }}")
             self.assertEqual(emulator['with']['api-level'],api)
             self.assertEqual(emulator['with']['target'],'default')
         self.assertEqual(qa['jobs']['native36']['needs'],'native35')

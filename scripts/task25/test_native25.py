@@ -149,12 +149,14 @@ class MasterEditorTest(unittest.TestCase):
         old=ast.parse(subprocess.check_output(['git','show','f7c82b4:scripts/task25/native25.py'],text=True))
         new=ast.parse(Path(n.__file__).read_text())
         new.body=[x for x in new.body if (not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor')
-                  and (not isinstance(x,ast.Import) or ast.unparse(x)!='import emulator_sdk25 as sdk25')]
+                  and (not isinstance(x,ast.Import) or ast.unparse(x) not in {'import emulator_sdk25 as sdk25','import emulator_pc25 as pc25'})]
         prepare=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='prepare_profile')
         setup=next(x for x in prepare.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='sdk_receipt')
         self.assertEqual(ast.unparse(setup.value),'sdk25.install()');prepare.body.remove(setup)
         ready=next(x for x in prepare.body if isinstance(x,ast.Expr) and ast.unparse(x.value)=='sdk25.record_ready(sdk_receipt)')
         prepare.body.remove(ready)
+        pc=next(x for x in prepare.body if isinstance(x,ast.Expr) and ast.unparse(x.value)=='pc25.prepare()')
+        prepare.body.remove(pc)
         main=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='main')
         readiness=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=='not sdk25.ready_valid(ready)')
         oldmain=next(x for x in old.body if isinstance(x,ast.FunctionDef) and x.name=='main')
