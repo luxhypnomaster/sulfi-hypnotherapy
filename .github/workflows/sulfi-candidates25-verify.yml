@@ -124,7 +124,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '16de92f7474b213d2cd48be5726e24734e9ff5254f0f2a42d873741d8ba65b9c'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -185,6 +185,7 @@ jobs:
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
         TASK17_EMULATOR_PIN: 37.2.12
+        TASK17_PROCESS_FORENSIC: 'true'
       with:
         api-level: 34
         target: google_apis
@@ -197,10 +198,30 @@ jobs:
         force-avd-creation: true
         disable-animations: true
         emulator-boot-timeout: 300
-        emulator-options: -accel on -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back
-          none -camera-front none -feature -Vulkan
-        pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
+        emulator-options: -accel on -skin 720x1280 -dpi-device 280 -no-window -gpu swiftshader -no-snapshot -noaudio
+          -no-boot-anim -camera-back none -camera-front none -feature -Vulkan
+        pre-emulator-launch-script: python3 trusted/scripts/task25/native25.py --prepare-profile
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 34
+    - name: Copy safe emulator exit diagnostics only; no guest memory
+      if: always()
+      run: |-
+        python3 - <<'PYCODE'
+        import json,os,pathlib,time
+        source=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-forensics'
+        out=pathlib.Path(os.environ['RUNNER_TEMP'])/'task25-native-evidence/forensics'
+        out.mkdir(parents=True,exist_ok=True)
+        for _ in range(10):
+         files=list(source.glob('EMULATOR_FORENSIC_*.json'))
+         if any(json.loads(path.read_text()).get('avdLaunch') for path in files):break
+         time.sleep(1)
+        for path in files:
+         value=json.loads(path.read_text())
+         allowed={'childPid','observedChildNames','sampleCount','schema','avdLaunch','exitCode','signal','wrapperReceivedSignals','before','after','durationSeconds','samples'}
+         assert set(value)<=allowed, 'UNEXPECTED_FORENSIC_CONTENT_REFUSED'
+         (out/path.name).write_text(json.dumps(value,indent=2)+chr(10))
+        if not files:(out/'NO_EXIT_RECORD.json').write_text(json.dumps({'status':'EXIT_RECORD_NOT_AVAILABLE','noGuestMemoryRead':True}))
+        print('SAFE_HOST_EXIT_DIAGNOSTIC_RECORDS='+str(len(files)))
+        PYCODE
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -216,7 +237,7 @@ jobs:
         overwrite: false
     needs: readback
     strategy:
-      fail-fast: true
+      fail-fast: false
       max-parallel: 2
       matrix:
         edition:
@@ -245,7 +266,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '16de92f7474b213d2cd48be5726e24734e9ff5254f0f2a42d873741d8ba65b9c'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -306,6 +327,7 @@ jobs:
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
         TASK17_EMULATOR_PIN: 37.2.12
+        TASK17_PROCESS_FORENSIC: 'true'
       with:
         api-level: 36
         target: google_apis
@@ -318,10 +340,30 @@ jobs:
         force-avd-creation: true
         disable-animations: true
         emulator-boot-timeout: 300
-        emulator-options: -accel on -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back
-          none -camera-front none -feature -Vulkan
-        pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
+        emulator-options: -accel on -skin 720x1280 -dpi-device 280 -no-window -gpu swiftshader -no-snapshot -noaudio
+          -no-boot-anim -camera-back none -camera-front none -feature -Vulkan
+        pre-emulator-launch-script: python3 trusted/scripts/task25/native25.py --prepare-profile
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 36
+    - name: Copy safe emulator exit diagnostics only; no guest memory
+      if: always()
+      run: |-
+        python3 - <<'PYCODE'
+        import json,os,pathlib,time
+        source=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'.task17-forensics'
+        out=pathlib.Path(os.environ['RUNNER_TEMP'])/'task25-native-evidence/forensics'
+        out.mkdir(parents=True,exist_ok=True)
+        for _ in range(10):
+         files=list(source.glob('EMULATOR_FORENSIC_*.json'))
+         if any(json.loads(path.read_text()).get('avdLaunch') for path in files):break
+         time.sleep(1)
+        for path in files:
+         value=json.loads(path.read_text())
+         allowed={'childPid','observedChildNames','sampleCount','schema','avdLaunch','exitCode','signal','wrapperReceivedSignals','before','after','durationSeconds','samples'}
+         assert set(value)<=allowed, 'UNEXPECTED_FORENSIC_CONTENT_REFUSED'
+         (out/path.name).write_text(json.dumps(value,indent=2)+chr(10))
+        if not files:(out/'NO_EXIT_RECORD.json').write_text(json.dumps({'status':'EXIT_RECORD_NOT_AVAILABLE','noGuestMemoryRead':True}))
+        print('SAFE_HOST_EXIT_DIAGNOSTIC_RECORDS='+str(len(files)))
+        PYCODE
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -337,7 +379,7 @@ jobs:
         overwrite: false
     needs: native34
     strategy:
-      fail-fast: true
+      fail-fast: false
       max-parallel: 2
       matrix:
         edition:
