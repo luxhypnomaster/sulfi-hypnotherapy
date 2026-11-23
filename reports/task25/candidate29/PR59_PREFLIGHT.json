@@ -1,0 +1,20 @@
+{
+  "status": "PASS_EXACT_FOUR_FILE_REMOTE_READBACK",
+  "PR": 59,
+  "head": "99d85c20b6b9534c0ee8630f0f4e1b3bf7290d70",
+  "mainBefore": "9bed10c8c72c5a07aefea06df8032e15d83005f7",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "changedFiles": 4,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "b5970d9b0c4d8d807d06eeee16e46167dce8243ba4bc05915a56e56961baf93f",
+    ".github/workflows/sulfi-candidates25-verify.yml": "4019e7dd466e6e7139b8b15c3945da8da36019278dd775b3ee655fec04196254",
+    "scripts/task25/candidate25.py": "1218938034f746fbd56bf9c43b77a2235df510cfe2e10494443ec6c30fbe9b6a",
+    "scripts/task25/native25.py": "210f362175174cfada8b3e35da322c733c97b2584a1b49cb5a3143ab6605293a"
+  },
+  "mainModified": false,
+  "credentialsRead": false,
+  "serverChanged": false,
+  "oldInspectRepeated": false
+}
