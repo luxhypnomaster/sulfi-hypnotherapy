@@ -212,7 +212,7 @@ jobs:
         out.mkdir(parents=True,exist_ok=True)
         for _ in range(10):
          files=list(source.glob('EMULATOR_FORENSIC_*.json'))
-         if files:break
+         if any(json.loads(path.read_text()).get('avdLaunch') for path in files):break
          time.sleep(1)
         for path in files:
          value=json.loads(path.read_text())
@@ -354,7 +354,7 @@ jobs:
         out.mkdir(parents=True,exist_ok=True)
         for _ in range(10):
          files=list(source.glob('EMULATOR_FORENSIC_*.json'))
-         if files:break
+         if any(json.loads(path.read_text()).get('avdLaunch') for path in files):break
          time.sleep(1)
         for path in files:
          value=json.loads(path.read_text())
