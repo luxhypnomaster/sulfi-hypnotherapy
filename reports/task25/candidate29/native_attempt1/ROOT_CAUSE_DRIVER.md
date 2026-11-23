@@ -1,0 +1,9 @@
+# Actual native attempt45104377872, driver-only failure
+
+CLIENT API34:12 casesPASS, including UI-created3WAV/2modules/1program/history, supplemental explicitly controlled queue/cache/settings, UI capsule and normal install-r28→29 exact SQLite rows/media/settings/hash preservation with integrityOK. Next UI_after29_and_native_audio case BLOCKED on missing accessibility dump. Last action was preview UI third track; its nativeAudioActive assertion completed before home() requested another tree. Failure screenshot shows running29 library with all3 tracks and preview0:11/0:12. The independent diagnostic shot's subsequent XML succeeded and includes the end-of-preview controls0:12. Emulator/process did not terminate. This proves a transient observation failure across real playback state, not missing data or a justified emulator restart.
+
+MASTER:10 casesPASS, including offline UI-created local diary28; cancelled by matrix fail-fast before its update. API36/delivery skipped. No physical/Google PASS, no APK release.
+
+Minimal correction: at most3 fresh read-only dumps, delete stale device XML each time, preserve stdout/stderr/returncode diagnostics, stop immediately if ADB device lost. Never repeat clicks/typing/install or reuse stale output. All SQLite/media/UI/audio assertions unchanged.51 Task25 tests PASS including transient snapshot/stale/malformed/disconnected regressions. Also select existing MASTER Reader chip before public-cache check, as confirmed by DiaryScreen readerMode=false default; no role/account change.
+
+Native rerun is justified by this new observation hypothesis and reuses EXACT signed build45103325755 APK bytes. No new app source, signing, rebuild, key, server, OAuth or data actions. Actual native GREEN is still pending; local driver tests are not Android PASS.

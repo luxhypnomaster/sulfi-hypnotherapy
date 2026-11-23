@@ -1,0 +1,28 @@
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:13:45.7213535Z NATIVE18_START=install_actual28
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:14:11.6666767Z NATIVE18_CASE={"case": "install_actual28", "status": "PASS", "details": {"baseline": 28, "newKey": false, "helperAPK": false, "uninstall": false}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:14:15.3050890Z NATIVE18_START=ui_audio_1
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:15:01.1488796Z NATIVE18_CASE={"case": "ui_audio_1", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI same title"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:15:01.1489915Z NATIVE18_START=ui_audio_2
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:15:47.1883624Z NATIVE18_CASE={"case": "ui_audio_2", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI same title"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:15:47.1885246Z NATIVE18_START=ui_audio_3
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:16:26.3750926Z NATIVE18_CASE={"case": "ui_audio_3", "status": "PASS", "details": {"createdBy": "UI_system_picker", "title": "UI third track"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:16:26.3752040Z NATIVE18_START=ui_module_three_tracks
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:17:10.8888373Z NATIVE18_CASE={"case": "ui_module_three_tracks", "status": "PASS", "details": {"title": "QA25 Elman three tracks", "UI_dependencies": ["UI same title", "UI same title", "UI third track"], "pauseAdded": false, "committedID": "f1eb5f79346e9f0e022e6637b6ce7725", "storedItemCount": 3, "SQLReadbackOnly": true}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:17:10.8890600Z NATIVE18_START=ui_module_pause
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:18:00.0320148Z NATIVE18_CASE={"case": "ui_module_pause", "status": "PASS", "details": {"title": "UI timed module", "UI_dependencies": ["UI third track"], "pauseAdded": true, "committedID": "3dbafae42f6cf4ac18bc130a793449ed", "storedItemCount": 2, "SQLReadbackOnly": true}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:18:00.0321241Z NATIVE18_START=ui_program
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:18:43.7987121Z NATIVE18_CASE={"case": "ui_program", "status": "PASS", "details": {"createdBy": "native_UI_structure_and_template", "containsModule": true}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:18:43.7988077Z NATIVE18_START=ui_history
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:19:11.7879828Z NATIVE18_CASE={"case": "ui_history", "status": "PASS", "details": {"createdBy": "UI_session_then_disposable_force_stop", "nativeAudioObserved": true, "physicalHeardSound": "NOT_RUN", "runs": 1, "statuses": ["interrupted"]}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:19:11.7881390Z NATIVE18_START=native_queue_cache_settings_supplement
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:19:33.5637189Z NATIVE18_CASE={"case": "native_queue_cache_settings_supplement", "status": "PASS", "details": {"source": "supplemental native Android SQLite, not UI/Google/server", "rows": 7, "originalDatabaseReplaced": false}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:19:33.5638190Z NATIVE18_START=ui_capsule_export
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:03.1998787Z NATIVE18_CASE={"case": "ui_capsule_export", "status": "PASS", "details": {"createdBy": "APK28_UI_SAF_EXPORT", "sha256": "46e23bf7166e423c8a3744c381d1021bda0e25c8e4c34dc0d95f0ac69bbf8de1"}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:03.2000381Z NATIVE18_START=beforeBaseline
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:11.6318444Z NATIVE18_CASE={"case": "beforeBaseline", "status": "PASS", "details": {"UIAudio": 3, "modules": 2, "programs": 1, "history": 1, "nativeDiaryCache": true}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:11.6319407Z NATIVE18_START=normal_install_r_28_to29
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:24.4432658Z NATIVE18_CASE={"case": "normal_install_r_28_to29", "status": "PASS", "details": {"exactRowsAndMedia": true, "settingsQueueDiary": true, "SQLiteIntegrity": "ok", "versionCode": 29}}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:24.4434627Z NATIVE18_START=UI_after29_and_native_audio
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:57.8971488Z NATIVE18_CASE={"case": "UI_after29_and_native_audio", "status": "BLOCKED", "reason": "NATIVE_ACCESSIBILITY_DUMP_UNAVAILABLE:"}
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:57.9647092Z     raise GateError("NATIVE_CASE_BLOCKED_" + name)
+native34 (client)	Native UI-created APK28 to APK29 preservation gate	2026-11-23T03:20:57.9648023Z candidate25.GateError: NATIVE_CASE_BLOCKED_UI_after29_and_native_audio
