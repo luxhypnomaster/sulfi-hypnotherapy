@@ -1,0 +1,25 @@
+test_all_actions_and_source_checkouts_are_pinned (test_candidate25.Workflows.test_all_actions_and_source_checkouts_are_pinned) ... ok
+test_draft_capability_is_only_in_get_only_trusted_data_job (test_candidate25.Workflows.test_draft_capability_is_only_in_get_only_trusted_data_job) ... ok
+test_embedded_python_compiles_and_no_key_generation_or_deploy (test_candidate25.Workflows.test_embedded_python_compiles_and_no_key_generation_or_deploy) ... ok
+test_exit_forensics_and_same_logical_frame_without_failing_other_edition (test_candidate25.Workflows.test_exit_forensics_and_same_logical_frame_without_failing_other_edition) ... ok
+test_flutter_has_real_version_tag_and_exact_sha_before_execution (test_candidate25.Workflows.test_flutter_has_real_version_tag_and_exact_sha_before_execution) ... ok
+test_kvm_open_and_vm_capability_preflight_precedes_heavy_downloads (test_candidate25.Workflows.test_kvm_open_and_vm_capability_preflight_precedes_heavy_downloads) ... ok
+test_manual_owner_main_only_and_least_privilege (test_candidate25.Workflows.test_manual_owner_main_only_and_least_privilege) ... ok
+test_native_and_delivery_require_both_editions_and_both_apis (test_candidate25.Workflows.test_native_and_delivery_require_both_editions_and_both_apis) ... ok
+test_sdk_action_never_requests_removed_tools_package (test_candidate25.Workflows.test_sdk_action_never_requests_removed_tools_package) ... ok
+test_signing_environment_never_reaches_app_or_native_jobs (test_candidate25.Workflows.test_signing_environment_never_reaches_app_or_native_jobs) ... ok
+test_supplement_is_insert_only_and_cannot_reset_original_database (test_candidate25.Workflows.test_supplement_is_insert_only_and_cannot_reset_original_database) ... ok
+test_trusted_helper_pins_match_current_bytes (test_candidate25.Workflows.test_trusted_helper_pins_match_current_bytes) ... ok
+test_profile_reduces_only_render_frame_and_preserves_partition (test_native25.PhysicalProfileTest.test_profile_reduces_only_render_frame_and_preserves_partition) ... ok
+test_unknown_partition_or_symlink_refused_before_write (test_native25.PhysicalProfileTest.test_unknown_partition_or_symlink_refused_before_write) ... ok
+test_client_does_not_receive_an_author_mode_or_role (test_native25.ReaderTest.test_client_does_not_receive_an_author_mode_or_role) ... ok
+test_master_switches_existing_reader_view_before_public_entry (test_native25.ReaderTest.test_master_switches_existing_reader_view_before_public_entry) ... ok
+test_disconnected_emulator_stops_before_retry (test_native25.SnapshotTest.test_disconnected_emulator_stops_before_retry) ... ok
+test_malformed_transition_tree_is_not_accepted (test_native25.SnapshotTest.test_malformed_transition_tree_is_not_accepted) ... ok
+test_stale_last_xml_is_never_used_when_three_fresh_reads_fail (test_native25.SnapshotTest.test_stale_last_xml_is_never_used_when_three_fresh_reads_fail) ... ok
+test_transient_idle_failure_recovers_with_only_fresh_read (test_native25.SnapshotTest.test_transient_idle_failure_recovers_with_only_fresh_read) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.547s
+
+OK

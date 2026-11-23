@@ -1,0 +1,18 @@
+{
+  "status": "PASS_FRESH_RESUME_PR66_EXACT_TWO_FILE_READBACK",
+  "timestampUTC": "2026-11-23T10:35:12.561964+00:00",
+  "PR": 66,
+  "head": "7bf046be271b5a0d23c05d4ad7e44cae27f2e8d3",
+  "mainBefore": "1fa87a621e625915cb2ff1199b0dde7699da70ae",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "934edb5a76e922d80f04eb079180c164de3ca253ff0036214985144b62c2d6c0",
+    "scripts/task25/native25.py": "78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b"
+  },
+  "samePreviouslyTested55ToolingBytes": true,
+  "freshResumeTargetedTests": 20,
+  "appCodeOrAPKSigningChanged": false,
+  "note": "No C0/full Flutter repeat; previous test evidence applies to identical source"
+}
