@@ -1,0 +1,8 @@
+{
+  "status": "PASS_EXACT_SDK_FIX_MAIN_READBACK",
+  "mainSHA": "d222d775e0e289b2e7304110b7c8185f7ac6f730",
+  "PR": 60,
+  "protected": true,
+  "helperHashesUnchanged": true,
+  "appServerOAuthKeyUnchanged": true
+}

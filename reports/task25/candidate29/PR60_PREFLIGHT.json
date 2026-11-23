@@ -1,0 +1,9 @@
+{
+  "status": "PASS_TWO_WORKFLOW_EXACT_TWELVE_ADDED_LINES",
+  "PR": 60,
+  "head": "a81d196b67befc74eb56d98f0eb96e976f49a839",
+  "mainBefore": "6cae2ded9168570f11cc528add28074a8c325fb5",
+  "mergeable": true,
+  "mergeableState": "clean",
+  "appOrHelperOrSecretChanges": false
+}

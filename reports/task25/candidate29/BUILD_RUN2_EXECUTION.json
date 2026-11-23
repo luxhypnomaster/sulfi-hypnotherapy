@@ -1,0 +1,13 @@
+{
+  "status": "DISPATCHED_AFTER_SDK_FIX",
+  "mainSHA": "d222d775e0e289b2e7304110b7c8185f7ac6f730",
+  "PR": 60,
+  "protected": true,
+  "helperHashesUnchanged": true,
+  "appServerOAuthKeyUnchanged": true,
+  "intent": "NEW_BUILD_AFTER_CORRECTED_SDK_PACKAGE_HYPOTHESIS",
+  "oldRun": 45100730089,
+  "runId": 45101058374,
+  "at": "2026-11-23T02:35:11.956113+00:00",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45101058374"
+}
