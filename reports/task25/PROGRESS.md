@@ -1,11 +1,9 @@
-# №25 — активное продолжение SDK37.3.10
+# №25 — контрольная точка диагностического прогона9
 
-Уже запущен новый полныйnative run45207789337, main d74a19394bfaeb886c3558e460ca5193e43eaa41, SDK37.3.10 exactofficiala440SHA. Не дублировать. Новая документированная SIGSEGVfix гипотеза из stable release19ноября, не повтор старого37.2.12. PR70 ровно3QAфайла черезprotectedmain сremotehashreadback.
+Запущен45210761918, довереннаяmain1d9cf32b6f079df242547b344e41913769fd17f8 после обычного узкогоPR71(3QAфайла). ДиагностикаMASTER35, доставка/AP36выключены. Не дублировать. ПредустановленныйGDBдолженпройтиSIGSEGVконтроль доAndroid. ТолькоPCрегистры иexecutablesmaps→basename/offset, без памяти/стека/core/rawlogs. Все исходныеP0проверки сохранены, 100localtests/actionlintPASS.
 
-Appsource737ea741, sameactualsignedAPK29 build45103325755; rebuild/resign0.91tooltests/actionlintPASS, originalP0 ASTsame except infra metadata/readiness. Нет app/server/DB/ACL/OAuth/key/userdatachanges. Полныеsource574Flutter/2SKIP и114Node не повторять безruntimechanges.
+Предыдущийполныйrun8(45207789337)законченFAILURE: обоихQEMUубилSIGSEGVещёвAPK28приui_module_pause, передобновлением. По5раннихPASS. РеальнаяSDK37.3.10сверенаa440SHA, ноисправлениепроблемынеподтверждено. НикакогоOOM/cancel/minidump, kernelmetadataнедоступна. ОбаAPI36/deliverySKIPPED. ТочноеместопаденияUNKNOWN.
 
-Дождатьсяactual35both→36both→delivery. TrustedSDKinstaller expected actualversion gate, namespace/hash/rollback validated. NewreportSDK fingerprint иindependentverifiercurrentSDKrequired; no oldreceipt substitutions. Kernelmetadata fallback read-onlymonitoredPID/moduleoffset only; rawmemory/stack/kernelnotpublished. PhysicalGoogle/ownerNOT_RUN, ownerversionsUNKNOWN.
+Appsource737ea741иобеподписанныеAPK29build45103325755неизменны;пересборки/переподписи0. Гейтывыпускапо-прежнемуBLOCKED, телефонныеверсииUNKNOWN, реальныеGoogle/телефоныNOT_RUN. ИсторическиеMASTER35/34полныеPASSсохраняютсякакscopedдоказательства,незаменяют4гейтаодногопроверенногопрогона.
 
-Еслиall4PASS: independentlydownload4nativeJSON/providerSHA/CRC, verifier --driver-sha d74a1939..., сохраниall64cases иточныеbytes/signatures. Затем privateAPKdelivery сprivacyreadback доupload, noACLchanges; reports вexistingTask25folder1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn. Еслиfailure — exact terminal step/logs/artifact beforeanynextaction; нестарыйblindretry.
-
-Worktree/dev/shm/sulfi25-resume, localAPKs/dev/shm/task25-candidate29-restored, officialSDKarchive/dev/shm/task25-next-diagnostic. Root12MBfree heavyfilesSHM. Currentenvironment running, no localKVM/signing credentials. GHAonlypublicstandardrunners; env-uGH_TOKEN gh. No closedAdminAPI. Existingrootfinalreports describe prior blockedcycle and preserved; newcurrentcontinuation isthisfile.
+Материалыreports/task25/candidate29/continuation_sdk37310;worktree/dev/shm/sulfi25-resume;root12MBfree,heavyfilesтолькоSHM. ЛокальногоKVM/gdbнет, неустанавливатьэмуляторздесь. Следующеедействие—терминальныеjoblogs/artifactsrun9;PCметаданныеприфатальномSIGSEGVлиботочныйновыйblocker. Неповторятьпрогонвслепую. СтарыеAPK/сервер/ownerdata/историянетронуты.
