@@ -1,0 +1,12 @@
+{
+  "run": 45212351651,
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45212351651",
+  "driverMainSHA": "3b5f6c2dcb05b4dd8dc37621c6db059c4dcb51fa",
+  "applicationSourceSHA": "737ea741636e9abe7c20353d9d5b8301cf44a5bb",
+  "buildRun": 45103325755,
+  "mode": "diagnostic_master_only=true",
+  "purpose": "resolve confirmed missing GDB prerequisite before actual PC-only observation",
+  "hostControlBeforeEmulatorAction": true,
+  "APKDelivery": "DISABLED",
+  "productionChanged": false
+}
