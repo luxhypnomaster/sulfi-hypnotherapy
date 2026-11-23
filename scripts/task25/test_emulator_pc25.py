@@ -47,9 +47,9 @@ class LifecycleTest(unittest.TestCase):
         with mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true'},clear=True):
             with self.assertRaises(GateError):p.prepare()
 
-    def test_unavailable_preinstalled_gdb_stops_no_install(self):
+    def test_unavailable_gdb_stops_before_any_emulator_action(self):
         with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true'}),mock.patch.object(p.shutil,'which',return_value=None),mock.patch.object(p.subprocess,'run') as run:
-            with self.assertRaisesRegex(GateError,'GDB_UNAVAILABLE'):p.prepare()
+            with self.assertRaisesRegex(GateError,'GDB_UNAVAILABLE'):p.host_preflight()
             run.assert_not_called()
 
     def test_failed_control_never_wraps_android_binary(self):
@@ -58,17 +58,30 @@ class LifecycleTest(unittest.TestCase):
                 Path(kwargs['env']['TASK25_PC_RESULT']).write_text(json.dumps({'terminatedWithSIGSEGV':False,'signals':[]}))
                 return subprocess.CompletedProcess(args,1)
             with mock.patch.object(p.subprocess,'run',side_effect=fake):
-                with self.assertRaisesRegex(GateError,'PC_CONTROL_FAILED'):p.prepare()
+                with self.assertRaisesRegex(GateError,'PC_CONTROL_FAILED'):p.host_preflight()
 
     def test_passing_control_wraps_exact_disposable_binary_only(self):
-        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true','ANDROID_HOME':td+'/sdk'}),mock.patch.object(p.shutil,'which',return_value='/usr/bin/gdb'):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true','ANDROID_HOME':td+'/sdk'}),mock.patch.object(p.shutil,'which',return_value='/usr/bin/gdb'),mock.patch.object(p,'fingerprint',return_value='a'*64):
             binary=Path(td)/'sdk/emulator/emulator.task17-real';binary.parent.mkdir(parents=True);binary.write_bytes(b'EXACT_VERIFIED_SDK_BYTES')
             def fake(*args,**kwargs):
                 Path(kwargs['env']['TASK25_PC_RESULT']).write_text(json.dumps({'terminatedWithSIGSEGV':True,'signals':[{'status':'EXECUTABLE_INSTRUCTION_MODULE'}]}))
                 return subprocess.CompletedProcess(args,255)
-            with mock.patch.object(p.subprocess,'run',side_effect=fake):p.prepare()
+            with mock.patch.object(p.subprocess,'run',side_effect=fake):p.host_preflight()
+            p.prepare()
             self.assertEqual(binary.with_name('emulator.task25-pc-target').read_bytes(),b'EXACT_VERIFIED_SDK_BYTES')
             self.assertIn("'--return-child-result'",binary.read_text())
             compile(binary.read_text(),str(binary),'exec')
             setup=json.loads((Path(td)/'task25-native-evidence/forensics/PC_DIAGNOSTIC_SETUP_25.json').read_text())
             self.assertFalse(setup['signingOrDeliveryEnabled'])
+
+    def test_missing_control_receipt_cannot_wrap_sdk(self):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true'}),mock.patch.object(p.shutil,'which',return_value='/usr/bin/gdb'):
+            with self.assertRaisesRegex(GateError,'CONTROL_RECEIPT_REQUIRED'):p.prepare()
+
+    def test_control_bound_to_actual_gdb_and_script_bytes(self):
+        with mock.patch.object(p,'fingerprint',return_value='a'*64):
+            import hashlib
+            receipt={'status':'PASS_REAL_PC_HOST_CONTROL','gdbSHA256':'a'*64,'scriptSHA256':hashlib.sha256(p.GDB_SCRIPT.encode()).hexdigest()}
+            self.assertTrue(p.control_valid(receipt,'unused'))
+            for key in receipt:
+                self.assertFalse(p.control_valid(dict(receipt,**{key:'wrong'}),'unused'))

@@ -303,6 +303,13 @@ class Workflows(unittest.TestCase):
             self.assertTrue(qa['jobs'][name]['if'].endswith(' && !inputs.diagnostic_master_only'))
         for name in ['native35','native36']:
             steps=qa['jobs'][name]['steps']
+            control=next(s for s in steps if s.get('name','').startswith('Install public Ubuntu debugger'))
+            emulator=next(s for s in steps if 'emulator-runner@' in s.get('uses',''))
+            self.assertEqual(control['if'],'inputs.diagnostic_master_only')
+            self.assertEqual(control['env']['TASK25_PC_DIAGNOSTIC'],'true')
+            self.assertIn('AllowUnauthenticated=false',control['run'])
+            self.assertIn('--host-preflight',control['run'])
+            self.assertLess(steps.index(control),steps.index(emulator))
             extract=next(s for s in steps if s.get('name','').startswith('Extract bounded host'))
             self.assertEqual(extract['if'],'always()')
             upload=next(s for s in steps if s.get('name','')=='Preserve native evidence on success or failure')
