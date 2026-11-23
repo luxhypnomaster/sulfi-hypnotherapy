@@ -1,0 +1,26 @@
+{
+  "status": "REJECTED_NOT_MERGED_NOT_EXECUTED",
+  "PR": 76,
+  "prototypeCommit": "244fe4544980b6b81bb0a130e6e609d7a9f6de9d",
+  "reason": "AudioServiceActivity cached host-provided engine bypasses Activity FlutterShellArgs; confirmed in actual signed APK29 DEX",
+  "nativeRun14": "NOT_DISPATCHED",
+  "signedAPKChanged": false,
+  "mainUnchangedByPR76": true,
+  "pluginVersion": "0.18.19",
+  "pluginSourceSHA256": {
+    "AudioServiceActivity.java": "4bf3674ac3484a8d9d9ae5690692849368fd14fbbf4998ee458e6f642ee039f8",
+    "AudioServicePlugin.java": "afd40121a51d32ac4aed3b8142897e62460b57524df0ecdd0bfc97313262b1e0"
+  },
+  "proposalFileSHA256": {
+    "scripts/task25/android_graphics25.py": "f58982062016d85f6a79ae1d19d139db485019cd0eaa9e2d935a93985c05c79e",
+    "scripts/task25/test_android_graphics25.py": "140707ff1cacf3e48810420aa5f87b0d3f2772b19e0788fcc018a43bac414337",
+    "scripts/task25/native25.py": "f94f0e0bdf6984ff64a2b1bd7d0b593354503eb3bb51e0a16d58a1b1a6cd2733",
+    "scripts/task25/emulator_pc25.py": "c131703e5827f9caddf4b659d6a1d1754ea67c348a7ab58dd3b85935b413f8f9",
+    "scripts/task25/verify_native_evidence.py": "35b799093dabef1684812b9e9e6d6dcc144e3033d7c612081b5d7551f40e6482",
+    "scripts/task25/review_only/sulfi-candidates25-verify.yml": "0a0b9130b71e840f6a7205450ae722c9cd5e44f09f0c45820a51573b69614e39",
+    "scripts/task25/test_candidate25.py": "88686cdf87b68a23403a802d6cce8f49639de6c64763a4d2d88b44b05ba2bb53",
+    "scripts/task25/test_emulator_pc25.py": "d9a839d463f9d32c0a64d95859e3ef36b9d245f129f00361d6cbb4060e201dd7",
+    "scripts/task25/test_native25.py": "c0a402231071d6bea27187e8dac3038aa5e7e715e42414ebbe1fdbad5d0c0067",
+    "scripts/task25/test_native_evidence.py": "5e280a266bdca59afe979508603998ac337b7c00f5074b55e1c5c5d15df68bc9"
+  }
+}

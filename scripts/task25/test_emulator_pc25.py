@@ -121,7 +121,7 @@ class TerminalTest(unittest.TestCase):
         root=Path(td);out=root/'task25-native-evidence';(out/'forensics').mkdir(parents=True)
         (root/'task25-observed-avd-launch.marker').write_text('1')
         (root/'task25-pc-host-ready.json').write_text('{}')
-        report={'edition':'master','cases':[{'case':'UNCHANGED_ORIGINAL_CASE','status':'PASS'}],
+        report={'cases':[{'case':'UNCHANGED_ORIGINAL_CASE','status':'PASS'}],
                 'inventories':{'before':{'oldRow':'EXACT_OLD_VALUE'}}}
         (out/'NATIVE_UPGRADE_25.json').write_text(json.dumps(report))
         pc={'status':'INFERIOR_EXITED','avdLaunch':True,'exitCode':0,'terminationSignal':None,
@@ -130,13 +130,13 @@ class TerminalTest(unittest.TestCase):
         return out,report,pc
 
     def test_terminal_proof_adds_only_metadata_never_changes_original_native_data(self):
-        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True),mock.patch.object(p.graphics25,'request_proof',return_value={'mode':'CONTROLLED_UNIT_ONLY'}):
+        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True):
             out,original,pc=self.fixture(td)
             (Path(td)/'task25-pc-host-ready.json').write_text(json.dumps({'scriptSHA256':'a'*64,'gdbSHA256':'b'*64}))
             (out/'forensics/PC_FAULT_MODULE_25.json').write_text(json.dumps(pc))
             p.verify_terminal()
             actual=json.loads((out/'NATIVE_UPGRADE_25.json').read_text())
-            proof=actual.pop('hostObserver');self.assertEqual(actual.pop('graphicsRequest'),{'mode':'CONTROLLED_UNIT_ONLY'});self.assertEqual(actual,original)
+            proof=actual.pop('hostObserver');self.assertEqual(actual,original)
             self.assertEqual(proof['hostExitCode'],0);self.assertEqual(proof['restarts'],0)
             self.assertEqual(proof['scope'],'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL')
 

@@ -64,7 +64,6 @@ class ActualFailedArtifactTest(unittest.TestCase):
         self.assertEqual(inspect(report,report['driverMainSHA'])['status'],'PASS_CONTROLLED_NATIVE')
         result=inspect(report,report['driverMainSHA'],current_sdk=True)
         self.assertIn('CLEAN_BOUND_HOST_OBSERVER_PROOF',result['errors'])
-        self.assertIn('OFFICIAL_GRAPHICS_REQUEST_PROFILE',result['errors'])
 
     def test_full_proof_rejects_restart_signal_missing_or_unbound_script(self):
         from emulator_pc25 import GDB_SCRIPT

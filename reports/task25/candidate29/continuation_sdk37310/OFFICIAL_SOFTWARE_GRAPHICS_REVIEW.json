@@ -17,5 +17,8 @@
   },
   "APKOrProductSourceChanged": false,
   "runtimeEngineStateReadback": "NOT_AVAILABLE_NO_CLAIM",
-  "scope": "one justified supported test-profile trial; preserve all original UI/data assertions; default GPU/physical NOT_RUN"
+  "scope": "one justified supported test-profile trial; preserve all original UI/data assertions; default GPU/physical NOT_RUN",
+  "applicabilityToActualSulfi": "REJECTED_CACHED_AUDIO_SERVICE_ENGINE",
+  "nativeTrialExecuted": false,
+  "authoritativeProof": "ACTUAL_APK29_AUDIO_ENGINE_DEX.txt; rejected_proposal76/DISPOSITION.json"
 }

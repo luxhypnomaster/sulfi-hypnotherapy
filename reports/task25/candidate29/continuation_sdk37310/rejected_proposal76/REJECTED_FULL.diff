@@ -1,0 +1,365 @@
+diff --git a/scripts/task25/android_graphics25.py b/scripts/task25/android_graphics25.py
+new file mode 100644
+index 0000000..e103b10
+--- /dev/null
++++ b/scripts/task25/android_graphics25.py
+@@ -0,0 +1,76 @@
++#!/usr/bin/env python3
++"""Official Flutter emulator-only launch flags; no APK/data/UI substitution.
++
++Records acknowledged launch requests, NOT an invented runtime backend readback.
++The pinned Flutter CLI/embedding supports these extras; physical GPU remains QA.
++"""
++import json
++import os
++from pathlib import Path
++import re
++
++from candidate25 import IDS, GateError, write
++from emulator_sdk25 import qa_guard
++
++MODE = 'REQUESTED_OFFICIAL_SKIA_SOFTWARE_IMPELLER_OFF'
++READBACK = 'NOT_READ_BACK_NO_BACKEND_CLAIM'
++FLAGS = ('--ez','enable-software-rendering','true','--ez','enable-impeller','false')
++RECEIPT = 'FLUTTER_GRAPHICS_REQUEST_25.json'
++
++
++def observed_software_adb(original, package, out):
++    enabled = os.environ.get('TASK25_SOFTWARE_GRAPHICS', 'false')
++    if enabled == 'false':
++        return original
++    if enabled != 'true':
++        raise GateError('EXPLICIT_SOFTWARE_TEST_PROFILE_REQUIRED')
++    root = qa_guard()
++    if package not in IDS.values() or Path(out) != root / 'task25-native-evidence':
++        raise GateError('EXACT_CONTROLLED_PACKAGE_AND_OUTPUT_REQUIRED')
++    if original('shell','getprop','ro.kernel.qemu').strip() != '1':
++        raise GateError('SOFTWARE_PROFILE_DISPOSABLE_EMULATOR_ONLY')
++    out = Path(out)
++    out.mkdir(exist_ok=True)
++    receipt = out / RECEIPT
++    if receipt.exists():
++        raise GateError('FRESH_GRAPHICS_REQUEST_RECEIPT_REQUIRED')
++    proof = {'mode':MODE,'package':package,'engineStateReadback':READBACK,
++             'APKChanged':False,'originalUIAndDataChecksRetained':True,'launches':[]}
++    expected = ('shell','am','start','-W','-n',package+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
++
++    def adb(*args, **kwargs):
++        if args != expected:
++            return original(*args, **kwargs)
++        result = original(*args, *FLAGS, **kwargs)  # Exactly one original launch.
++        if not isinstance(result,str) or not re.search(r'\bStatus:\s*ok\b',result):
++            raise GateError('OFFICIAL_GRAPHICS_LAUNCH_NOT_ACKNOWLEDGED')
++        package_info = original('shell','dumpsys','package',package)
++        version = re.search(r'\bversionCode=(28|29)\b',package_info)
++        if not version:
++            raise GateError('EXACT_NATIVE28_OR29_GRAPHICS_SCOPE_REQUIRED')
++        proof['launches'].append({'versionCode':int(version[1]),'flags':list(FLAGS),
++                                  'amStartAcknowledged':True})
++        write(receipt, proof)
++        return result
++    return adb
++
++
++def request_proof(root, package):
++    path = Path(root) / 'task25-native-evidence' / RECEIPT
++    if path.is_symlink() or not path.is_file():
++        raise GateError('OFFICIAL_GRAPHICS_REQUEST_RECEIPT_REQUIRED')
++    proof = json.loads(path.read_text())
++    if not valid_proof(proof,package):
++        raise GateError('OFFICIAL_GRAPHICS_REQUEST_RECEIPT_INVALID')
++    return proof
++
++
++def valid_proof(proof,package):
++    launches = proof.get('launches',[])
++    return (proof.get('mode') == MODE and proof.get('package') == package and package in IDS.values()
++            and proof.get('engineStateReadback') == READBACK and proof.get('APKChanged') is False
++            and proof.get('originalUIAndDataChecksRetained') is True
++            and len(launches) >= 4
++            and all(type(r.get('versionCode')) is int and r['versionCode'] in {28,29}
++                    and r.get('flags') == list(FLAGS) and r.get('amStartAcknowledged') is True for r in launches)
++            and all(sum(r.get('versionCode')==v for r in launches)>=2 for v in [28,29]))
+diff --git a/scripts/task25/emulator_pc25.py b/scripts/task25/emulator_pc25.py
+index 92b3107..82fc932 100644
+--- a/scripts/task25/emulator_pc25.py
++++ b/scripts/task25/emulator_pc25.py
+@@ -15,6 +15,7 @@ import time
+ 
+ from candidate25 import GateError, write
+ from emulator_sdk25 import qa_guard
++import android_graphics25 as graphics25
+ 
+ CONTROL_SCRIPT = '''import os, signal, resource
+ resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+@@ -263,6 +264,7 @@ def verify_terminal():
+     report = json.loads(report_path.read_text())
+     if not report.get('cases') or not all(c.get('status') == 'PASS' for c in report['cases']):
+         raise GateError('ORIGINAL_NATIVE_CASES_NOT_ALL_PASS')
++    graphics = graphics25.request_proof(root, graphics25.IDS[report['edition']])
+     proof = {'status':'PASS_CLEAN_OBSERVED_QEMU_EXIT','avdLaunchCount':1,
+              'hostExitCode':0,'hostSIGSEGVCount':0,'signalPolicy':'PASS_ORIGINAL_SIGNALS',
+              'restarts':0,'selftest':'PASS_REAL_PC_HOST_CONTROL',
+@@ -270,6 +272,7 @@ def verify_terminal():
+              'gdbSHA256':control['gdbSHA256'],
+              'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL'}
+     report['hostObserver'] = proof  # Only add proof; never change cases/data inventories.
++    report['graphicsRequest'] = graphics
+     write(report_path, report)
+     write(out / 'forensics/PC_CLEAN_EXIT_GATE_25.json', proof)
+     print('PASS_CLEAN_OBSERVED_QEMU_EXIT_ORIGINAL_NATIVE_CASES_UNCHANGED')
+diff --git a/scripts/task25/native25.py b/scripts/task25/native25.py
+index 890d088..dd9b71f 100644
+--- a/scripts/task25/native25.py
++++ b/scripts/task25/native25.py
+@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
+ from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write, redact
+ import emulator_sdk25 as sdk25
+ import emulator_pc25 as pc25
++import android_graphics25 as graphics25
+ 
+ 
+ def accessibility_snapshot(adb, out, actions, run=None):
+@@ -225,6 +226,7 @@ def main():
+             "newKeysGenerated": False, "cases": m.CASES, "actions": m.ACTIONS, "inventories": m.inventories,
+         })
+     m.report = report
++    m.adb = graphics25.observed_software_adb(m.adb, m.PKG, out)
+ 
+     def tree():
+         return accessibility_snapshot(m.adb, out, m.ACTIONS)
+diff --git a/scripts/task25/review_only/sulfi-candidates25-verify.yml b/scripts/task25/review_only/sulfi-candidates25-verify.yml
+index f88e7ee..d824daf 100644
+--- a/scripts/task25/review_only/sulfi-candidates25-verify.yml
++++ b/scripts/task25/review_only/sulfi-candidates25-verify.yml
+@@ -127,12 +127,13 @@ jobs:
+           scripts/task25/emulator_fault25.py
+           scripts/task25/emulator_sdk25.py
+           scripts/task25/emulator_pc25.py
++          scripts/task25/android_graphics25.py
+         sparse-checkout-cone-mode: false
+     - name: Verify reviewed trusted helper hashes before use
+       run: |-
+         python3 - <<'PYCODE'
+         import hashlib,pathlib
+-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'fc35b3c98d612a6e7b2d28a3a5ef6ea06fc93f540afd5d093fe04987d61ce068'}
++        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'f94f0e0bdf6984ff64a2b1bd7d0b593354503eb3bb51e0a16d58a1b1a6cd2733', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'c131703e5827f9caddf4b659d6a1d1754ea67c348a7ab58dd3b85935b413f8f9', 'android_graphics25.py': 'f58982062016d85f6a79ae1d19d139db485019cd0eaa9e2d935a93985c05c79e'}
+         for name,expected in pins.items():
+          p=pathlib.Path('trusted/scripts/task25')/name
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+@@ -201,6 +202,7 @@ jobs:
+       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+       env:
+         TASK17_EMULATOR_PIN: 37.3.10
++        TASK25_SOFTWARE_GRAPHICS: 'true'
+         TASK17_PROCESS_FORENSIC: 'true'
+         TASK25_PC_DIAGNOSTIC: 'true'
+       with:
+@@ -287,12 +289,13 @@ jobs:
+           scripts/task25/emulator_fault25.py
+           scripts/task25/emulator_sdk25.py
+           scripts/task25/emulator_pc25.py
++          scripts/task25/android_graphics25.py
+         sparse-checkout-cone-mode: false
+     - name: Verify reviewed trusted helper hashes before use
+       run: |-
+         python3 - <<'PYCODE'
+         import hashlib,pathlib
+-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'c6cf50a786b31c0316e9ff862cd9f78dcbac5181f518252fd476279a4d324655', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'fc35b3c98d612a6e7b2d28a3a5ef6ea06fc93f540afd5d093fe04987d61ce068'}
++        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': 'f94f0e0bdf6984ff64a2b1bd7d0b593354503eb3bb51e0a16d58a1b1a6cd2733', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f', 'emulator_sdk25.py': 'a86c68e41a0447b9d2185cbea9555ac0bea95e9fdad3d68ef8b0e53aef7b3286', 'emulator_pc25.py': 'c131703e5827f9caddf4b659d6a1d1754ea67c348a7ab58dd3b85935b413f8f9', 'android_graphics25.py': 'f58982062016d85f6a79ae1d19d139db485019cd0eaa9e2d935a93985c05c79e'}
+         for name,expected in pins.items():
+          p=pathlib.Path('trusted/scripts/task25')/name
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
+@@ -361,6 +364,7 @@ jobs:
+       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+       env:
+         TASK17_EMULATOR_PIN: 37.3.10
++        TASK25_SOFTWARE_GRAPHICS: 'true'
+         TASK17_PROCESS_FORENSIC: 'true'
+         TASK25_PC_DIAGNOSTIC: 'true'
+       with:
+diff --git a/scripts/task25/test_android_graphics25.py b/scripts/task25/test_android_graphics25.py
+new file mode 100644
+index 0000000..5f1ece8
+--- /dev/null
++++ b/scripts/task25/test_android_graphics25.py
+@@ -0,0 +1,74 @@
++"""Official launch-request boundary tests. No fake runtime renderer/phone PASS."""
++import copy
++import json
++import os
++from pathlib import Path
++import tempfile
++import unittest
++from unittest import mock
++
++import android_graphics25 as g
++from candidate25 import GateError,IDS,QA_WORKFLOW
++from test_candidate25 import trusted
++
++
++class OfficialLaunchTest(unittest.TestCase):
++    def fake(self, *, qemu='1',ack='Status: ok',versions=None):
++        calls=[];codes=iter(versions or [28,28,29,29])
++        def adb(*args,**kwargs):
++            calls.append((args,kwargs))
++            if args==('shell','getprop','ro.kernel.qemu'):return qemu
++            if args[:4]==('shell','am','start','-W'):return ack
++            if args[:3]==('shell','dumpsys','package'):return 'versionCode='+str(next(codes))
++            return b'UNCHANGED_BINARY'
++        return adb,calls
++
++    def test_default_off_does_not_query_or_change_any_command(self):
++        original,calls=self.fake()
++        with mock.patch.dict(os.environ,{},clear=True):
++            self.assertIs(g.observed_software_adb(original,IDS['master'],Path('/unused')),original)
++        self.assertEqual(calls,[])
++
++    def test_untrusted_or_physical_device_is_rejected_before_launch(self):
++        original,calls=self.fake()
++        with mock.patch.dict(os.environ,{'TASK25_SOFTWARE_GRAPHICS':'true'},clear=True):
++            with self.assertRaises(GateError):g.observed_software_adb(original,IDS['master'],Path('/unused'))
++        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_SOFTWARE_GRAPHICS':'true'}):
++            original,calls=self.fake(qemu='0')
++            with self.assertRaisesRegex(GateError,'DISPOSABLE_EMULATOR_ONLY'):
++                g.observed_software_adb(original,IDS['master'],Path(td)/'task25-native-evidence')
++            self.assertEqual(len(calls),1)
++
++    def test_exact_component_only_single_launch_with_official_flags_and_honest_receipt(self):
++        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_SOFTWARE_GRAPHICS':'true'}):
++            original,calls=self.fake();package=IDS['client']
++            adb=g.observed_software_adb(original,package,Path(td)/'task25-native-evidence')
++            exact=('shell','am','start','-W','-n',package+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
++            for _ in range(4):self.assertEqual(adb(*exact),'Status: ok')
++            launches=[args for args,kwargs in calls if args[:4]==('shell','am','start','-W')]
++            self.assertEqual(launches,[exact+g.FLAGS]*4)
++            self.assertEqual(adb('exec-out','run-as',package,'tar',binary=True),b'UNCHANGED_BINARY')
++            self.assertEqual(calls[-1],(('exec-out','run-as',package,'tar'),{'binary':True}))
++            proof=g.request_proof(td,package)
++            self.assertEqual(proof['engineStateReadback'],'NOT_READ_BACK_NO_BACKEND_CLAIM')
++            self.assertFalse(proof['APKChanged'])
++
++    def test_unacknowledged_launch_never_gets_a_success_receipt(self):
++        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_SOFTWARE_GRAPHICS':'true'}):
++            original,calls=self.fake(ack='Error type 3')
++            adb=g.observed_software_adb(original,IDS['master'],Path(td)/'task25-native-evidence')
++            with self.assertRaisesRegex(GateError,'NOT_ACKNOWLEDGED'):
++                adb('shell','am','start','-W','-n',IDS['master']+'/ru.sulfi.sulfi_hypnotherapy.MainActivity')
++            self.assertEqual(len(calls),2)
++            self.assertFalse((Path(td)/'task25-native-evidence'/g.RECEIPT).exists())
++
++    def test_proof_cannot_claim_actual_backend_or_omit_old_new_cold_launches(self):
++        package=IDS['master']
++        proof={'mode':g.MODE,'package':package,'engineStateReadback':g.READBACK,'APKChanged':False,
++               'originalUIAndDataChecksRetained':True,
++               'launches':[{'versionCode':v,'flags':list(g.FLAGS),'amStartAcknowledged':True} for v in [28,28,29,29]]}
++        self.assertTrue(g.valid_proof(proof,package))
++        for key,bad in [('engineStateReadback','PASS'),('APKChanged',True),('package',IDS['client'])]:
++            self.assertFalse(g.valid_proof(dict(proof,**{key:bad}),package))
++        bad=copy.deepcopy(proof);bad['launches'].pop();self.assertFalse(g.valid_proof(bad,package))
++        bad=copy.deepcopy(proof);bad['launches'][0]['flags']=[];self.assertFalse(g.valid_proof(bad,package))
+diff --git a/scripts/task25/test_candidate25.py b/scripts/task25/test_candidate25.py
+index 84dd218..2af2e8b 100644
+--- a/scripts/task25/test_candidate25.py
++++ b/scripts/task25/test_candidate25.py
+@@ -266,6 +266,7 @@ class Workflows(unittest.TestCase):
+                         if 'emulator_fault25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_fault25.py'),step['run'])
+                         if 'emulator_sdk25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_sdk25.py'),step['run'])
+                         if 'emulator_pc25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/emulator_pc25.py'),step['run'])
++                        if 'android_graphics25.py' in step['run']:self.assertIn(c.digest(ROOT/'scripts/task25/android_graphics25.py'),step['run'])
+ 
+     def test_embedded_python_compiles_and_no_key_generation_or_deploy(self):
+         for p,w in zip(self.paths,self.ws):
+@@ -289,6 +290,7 @@ class Workflows(unittest.TestCase):
+             emulator=next(s for s in j['steps'] if 'emulator-runner@' in s.get('uses',''))
+             self.assertEqual(emulator['env']['TASK17_EMULATOR_PIN'],'37.3.10')
+             self.assertEqual(emulator['env']['TASK25_PC_DIAGNOSTIC'],'true')
++            self.assertEqual(emulator['env']['TASK25_SOFTWARE_GRAPHICS'],'true')
+             self.assertEqual(emulator['with']['api-level'],api)
+             self.assertEqual(emulator['with']['target'],'default')
+         self.assertEqual(qa['jobs']['native36']['needs'],'native35')
+diff --git a/scripts/task25/test_emulator_pc25.py b/scripts/task25/test_emulator_pc25.py
+index 915012a..f6ab678 100644
+--- a/scripts/task25/test_emulator_pc25.py
++++ b/scripts/task25/test_emulator_pc25.py
+@@ -121,7 +121,7 @@ class TerminalTest(unittest.TestCase):
+         root=Path(td);out=root/'task25-native-evidence';(out/'forensics').mkdir(parents=True)
+         (root/'task25-observed-avd-launch.marker').write_text('1')
+         (root/'task25-pc-host-ready.json').write_text('{}')
+-        report={'cases':[{'case':'UNCHANGED_ORIGINAL_CASE','status':'PASS'}],
++        report={'edition':'master','cases':[{'case':'UNCHANGED_ORIGINAL_CASE','status':'PASS'}],
+                 'inventories':{'before':{'oldRow':'EXACT_OLD_VALUE'}}}
+         (out/'NATIVE_UPGRADE_25.json').write_text(json.dumps(report))
+         pc={'status':'INFERIOR_EXITED','avdLaunch':True,'exitCode':0,'terminationSignal':None,
+@@ -130,13 +130,13 @@ class TerminalTest(unittest.TestCase):
+         return out,report,pc
+ 
+     def test_terminal_proof_adds_only_metadata_never_changes_original_native_data(self):
+-        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True):
++        with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p,'gdb_path',return_value='/usr/bin/gdb'),mock.patch.object(p,'control_valid',return_value=True),mock.patch.object(p.graphics25,'request_proof',return_value={'mode':'CONTROLLED_UNIT_ONLY'}):
+             out,original,pc=self.fixture(td)
+             (Path(td)/'task25-pc-host-ready.json').write_text(json.dumps({'scriptSHA256':'a'*64,'gdbSHA256':'b'*64}))
+             (out/'forensics/PC_FAULT_MODULE_25.json').write_text(json.dumps(pc))
+             p.verify_terminal()
+             actual=json.loads((out/'NATIVE_UPGRADE_25.json').read_text())
+-            proof=actual.pop('hostObserver');self.assertEqual(actual,original)
++            proof=actual.pop('hostObserver');self.assertEqual(actual.pop('graphicsRequest'),{'mode':'CONTROLLED_UNIT_ONLY'});self.assertEqual(actual,original)
+             self.assertEqual(proof['hostExitCode'],0);self.assertEqual(proof['restarts'],0)
+             self.assertEqual(proof['scope'],'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL')
+ 
+diff --git a/scripts/task25/test_native25.py b/scripts/task25/test_native25.py
+index 99b3d15..2e430fe 100644
+--- a/scripts/task25/test_native25.py
++++ b/scripts/task25/test_native25.py
+@@ -149,7 +149,7 @@ class MasterEditorTest(unittest.TestCase):
+         old=ast.parse(subprocess.check_output(['git','show','f7c82b4:scripts/task25/native25.py'],text=True))
+         new=ast.parse(Path(n.__file__).read_text())
+         new.body=[x for x in new.body if (not isinstance(x,ast.FunctionDef) or x.name!='open_master_editor')
+-                  and (not isinstance(x,ast.Import) or ast.unparse(x) not in {'import emulator_sdk25 as sdk25','import emulator_pc25 as pc25'})]
++                  and (not isinstance(x,ast.Import) or ast.unparse(x) not in {'import emulator_sdk25 as sdk25','import emulator_pc25 as pc25','import android_graphics25 as graphics25'})]
+         prepare=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='prepare_profile')
+         setup=next(x for x in prepare.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='sdk_receipt')
+         self.assertEqual(ast.unparse(setup.value),'sdk25.install()');prepare.body.remove(setup)
+@@ -160,6 +160,9 @@ class MasterEditorTest(unittest.TestCase):
+         main=next(x for x in new.body if isinstance(x,ast.FunctionDef) and x.name=='main')
+         readiness=next(x for x in main.body if isinstance(x,ast.If) and ast.unparse(x.test)=='not sdk25.ready_valid(ready)')
+         oldmain=next(x for x in old.body if isinstance(x,ast.FunctionDef) and x.name=='main')
++        graphics=next(x for x in main.body if isinstance(x,ast.Assign) and ast.unparse(x.targets[0])=='m.adb')
++        self.assertEqual(ast.unparse(graphics.value),'graphics25.observed_software_adb(m.adb, m.PKG, out)')
++        main.body.remove(graphics)
+         oldready=next(x for x in oldmain.body if isinstance(x,ast.If) and any(isinstance(a,ast.Constant) and a.value=='PINNED_EMULATOR_PREHOOK_NOT_CONFIRMED' for a in ast.walk(x)))
+         self.assertEqual(ast.dump(ast.Module(body=readiness.body,type_ignores=[])),ast.dump(ast.Module(body=oldready.body,type_ignores=[])))
+         readiness.test=oldready.test
+diff --git a/scripts/task25/test_native_evidence.py b/scripts/task25/test_native_evidence.py
+index e4f9d1f..724720a 100644
+--- a/scripts/task25/test_native_evidence.py
++++ b/scripts/task25/test_native_evidence.py
+@@ -64,6 +64,7 @@ class ActualFailedArtifactTest(unittest.TestCase):
+         self.assertEqual(inspect(report,report['driverMainSHA'])['status'],'PASS_CONTROLLED_NATIVE')
+         result=inspect(report,report['driverMainSHA'],current_sdk=True)
+         self.assertIn('CLEAN_BOUND_HOST_OBSERVER_PROOF',result['errors'])
++        self.assertIn('OFFICIAL_GRAPHICS_REQUEST_PROFILE',result['errors'])
+ 
+     def test_full_proof_rejects_restart_signal_missing_or_unbound_script(self):
+         from emulator_pc25 import GDB_SCRIPT
+diff --git a/scripts/task25/verify_native_evidence.py b/scripts/task25/verify_native_evidence.py
+index 3962727..87eb33c 100644
+--- a/scripts/task25/verify_native_evidence.py
++++ b/scripts/task25/verify_native_evidence.py
+@@ -8,6 +8,8 @@ from pathlib import Path
+ from candidate25 import SOURCE, CODE
+ from emulator_sdk25 import VERSION as SDK_VERSION, SHA256 as SDK_SHA256
+ from emulator_pc25 import GDB_SCRIPT
++from android_graphics25 import valid_proof as graphics_proof_valid
++from candidate25 import IDS
+ 
+ TABLES = ('audio_assets', 'module_definitions', 'session_templates', 'current_draft',
+           'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings',
+@@ -39,6 +41,7 @@ def inspect(report, driver_sha, current_sdk=False):
+                   'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL',
+                   'observerScriptSHA256':hashlib.sha256(GDB_SCRIPT.encode()).hexdigest()}
+         require(all(proof.get(k)==v and type(proof.get(k)) is type(v) for k,v in required.items()),'CLEAN_BOUND_HOST_OBSERVER_PROOF')
++        require(graphics_proof_valid(report.get('graphicsRequest',{}),IDS.get(edition)), 'OFFICIAL_GRAPHICS_REQUEST_PROFILE')
+     require(report.get('baseline') == 28 and report.get('candidate') == CODE, 'VERSION_SCOPE')
+     require(report.get('ownerPhone') == 'NOT_TOUCHED' and report.get('realGoogle') == 'NOT_RUN', 'NO_OWNER_OR_GOOGLE_PASS_CLAIM')
+     require(report.get('uninstallClearDowngrade') is False and report.get('newKeysGenerated') is False, 'NO_DESTRUCTIVE_OR_NEW_KEY_ACTIONS')

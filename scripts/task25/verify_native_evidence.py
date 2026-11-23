@@ -8,8 +8,6 @@ from pathlib import Path
 from candidate25 import SOURCE, CODE
 from emulator_sdk25 import VERSION as SDK_VERSION, SHA256 as SDK_SHA256
 from emulator_pc25 import GDB_SCRIPT
-from android_graphics25 import valid_proof as graphics_proof_valid
-from candidate25 import IDS
 
 TABLES = ('audio_assets', 'module_definitions', 'session_templates', 'current_draft',
           'session_runs', 'run_events', 'diary_author', 'diary_public', 'app_settings',
@@ -41,7 +39,6 @@ def inspect(report, driver_sha, current_sdk=False):
                   'scope':'HOST_OBSERVED_CONTROLLED_ANDROID_NOT_PHYSICAL',
                   'observerScriptSHA256':hashlib.sha256(GDB_SCRIPT.encode()).hexdigest()}
         require(all(proof.get(k)==v and type(proof.get(k)) is type(v) for k,v in required.items()),'CLEAN_BOUND_HOST_OBSERVER_PROOF')
-        require(graphics_proof_valid(report.get('graphicsRequest',{}),IDS.get(edition)), 'OFFICIAL_GRAPHICS_REQUEST_PROFILE')
     require(report.get('baseline') == 28 and report.get('candidate') == CODE, 'VERSION_SCOPE')
     require(report.get('ownerPhone') == 'NOT_TOUCHED' and report.get('realGoogle') == 'NOT_RUN', 'NO_OWNER_OR_GOOGLE_PASS_CLAIM')
     require(report.get('uninstallClearDowngrade') is False and report.get('newKeysGenerated') is False, 'NO_DESTRUCTIVE_OR_NEW_KEY_ACTIONS')

@@ -1,0 +1,16 @@
+{
+  "status": "PASS_PUBLIC_COMPILED_CODE_READONLY",
+  "APK_SHA256": "032b58e96d6f05ce00d0c0d58ee61e0be8bf4c5d7963b13183dce6b3762cccac",
+  "dexFiles": [
+    {
+      "file": "classes16.dex",
+      "sha256": "237c69f1de0474f5095587ffd800e64774a52ba9947cdf81fd2580e9b5a0ee13"
+    },
+    {
+      "file": "classes5.dex",
+      "sha256": "199c7f7e7520481d778d6a19237090ea1b5e7ffa93cf9fae0aa108942c8a204e"
+    }
+  ],
+  "APKModified": false,
+  "privateUserDataRead": false
+}
