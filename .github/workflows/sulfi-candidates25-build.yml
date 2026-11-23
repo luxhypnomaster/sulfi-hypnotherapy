@@ -179,11 +179,12 @@ jobs:
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       with:
         repository: flutter/flutter
-        ref: c197ca5199e9ee5661e865596c9c07294dfab51c
+        ref: 3.47.9
         path: flutter-sdk
         persist-credentials: false
     - name: Use the exact tested Flutter framework
       run: |-
+        test "$(git -C flutter-sdk rev-parse HEAD)" = c197ca5199e9ee5661e865596c9c07294dfab51c
         git -C flutter-sdk switch --create stable
         echo "$GITHUB_WORKSPACE/flutter-sdk/bin" >> "$GITHUB_PATH"
     - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
@@ -199,6 +200,17 @@ jobs:
       run: python3 trusted/scripts/task25/candidate25.py baseline-data
       env:
         GH_TOKEN: ${{ github.token }}
+    - name: Verify actual pinned Flutter version before application dependencies
+      run: |-
+        flutter --version
+        flutter --version --machine > "$RUNNER_TEMP/sdk25-machine.json"
+        python3 - <<'PYCODE'
+        import os,json,pathlib
+        v=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'sdk25-machine.json').read_text())
+        expected={'frameworkVersion':'3.47.9','frameworkRevision':'c197ca5199e9ee5661e865596c9c07294dfab51c','engineRevision':'89c39edfdfae2949f6806e4a315c0c08522238b7','dartSdkVersion':'3.13.7'}
+        assert all(v.get(k)==value for k,value in expected.items()), 'SDK_VERSION_OR_REVISION_MISMATCH_STOP'
+        print(json.dumps({k:v[k] for k in expected}))
+        PYCODE
     - name: Build both unsigned candidates with no signing credentials or scoped token
       run: python3 trusted/scripts/task25/candidate25.py build
     - name: Handoff unsigned APK data only
