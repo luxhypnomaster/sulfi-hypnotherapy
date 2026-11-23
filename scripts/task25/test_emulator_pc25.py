@@ -39,6 +39,13 @@ class ModuleTest(unittest.TestCase):
 
 
 class LifecycleTest(unittest.TestCase):
+    def test_real_control_program_passes_usr_signals_then_actual_sigsegv_no_shell(self):
+        with tempfile.TemporaryDirectory() as td:
+            f=Path(td)/'control.py';f.write_text(p.CONTROL_SCRIPT)
+            run=subprocess.run(['/usr/bin/python3',str(f)],capture_output=True,timeout=10)
+            self.assertEqual(run.returncode,-11)
+            self.assertEqual(run.stdout,b'');self.assertEqual(run.stderr,b'')
+
     def test_default_off_never_launches_or_changes_sdk(self):
         with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.object(p.subprocess,'run') as run,mock.patch.object(p.shutil,'which') as which:
             self.assertIsNone(p.prepare());run.assert_not_called();which.assert_not_called()
@@ -55,6 +62,8 @@ class LifecycleTest(unittest.TestCase):
     def test_failed_control_never_wraps_android_binary(self):
         with tempfile.TemporaryDirectory() as td,trusted(td,QA_WORKFLOW),mock.patch.dict(os.environ,{'TASK25_PC_DIAGNOSTIC':'true'}),mock.patch.object(p.shutil,'which',return_value='/usr/bin/gdb'):
             def fake(*args,**kwargs):
+                self.assertNotIn('-c',args[0])
+                self.assertEqual(Path(args[0][-1]).read_text(),p.CONTROL_SCRIPT)
                 Path(kwargs['env']['TASK25_PC_RESULT']).write_text(json.dumps({'terminatedWithSIGSEGV':False,'signals':[]}))
                 return subprocess.CompletedProcess(args,1)
             with mock.patch.object(p.subprocess,'run',side_effect=fake):
