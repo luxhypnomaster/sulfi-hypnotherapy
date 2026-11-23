@@ -101,6 +101,22 @@ class LifecycleTest(unittest.TestCase):
 
 
 class TerminalTest(unittest.TestCase):
+    def test_readonly_completion_transition_never_replays_or_restarts_native_test(self):
+        path=mock.Mock()
+        path.read_text.side_effect=['{','{"status":"DEBUGGER_STARTED"}','{"status":"INFERIOR_EXITED","exitCode":0}']
+        with mock.patch.object(p.time,'sleep') as sleep:
+            self.assertEqual(p.read_finished_pc(path)['exitCode'],0)
+            self.assertEqual(sleep.call_count,2)
+
+    def test_signal_or_unknown_terminal_not_retried_and_incomplete_is_bounded(self):
+        path=mock.Mock();path.read_text.return_value='{"status":"DEBUGGER_STARTED"}'
+        with mock.patch.object(p.time,'sleep') as sleep:
+            self.assertEqual(p.read_finished_pc(path)['status'],'DEBUGGER_STARTED')
+            self.assertEqual(path.read_text.call_count,40);self.assertEqual(sleep.call_count,39)
+        path=mock.Mock();path.read_text.return_value='{"status":"SIGNAL_PC_CAPTURED_NOT_YET_FATAL","signals":[11]}'
+        with mock.patch.object(p.time,'sleep') as sleep:
+            self.assertEqual(p.read_finished_pc(path)['signals'],[11]);sleep.assert_not_called()
+
     def fixture(self, td):
         root=Path(td);out=root/'task25-native-evidence';(out/'forensics').mkdir(parents=True)
         (root/'task25-observed-avd-launch.marker').write_text('1')

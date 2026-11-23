@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import time
 
 from candidate25 import GateError, write
 from emulator_sdk25 import qa_guard
@@ -224,6 +225,21 @@ def prepare():
     print('HOST_PC_DIAGNOSTIC_READY_SELFTEST_PASS_NO_RAW_DEBUGGER_OUTPUT')
 
 
+def read_finished_pc(path):
+    """Bounded read-only completion wait, never retry a native action."""
+    value = {}
+    for attempt in range(40):
+        try:
+            value = json.loads(path.read_text())
+        except (OSError, ValueError):
+            value = {}
+        if value.get('signals') or value.get('status') not in {None, 'DEBUGGER_STARTED', 'SIGNAL_PC_CAPTURED_NOT_YET_FATAL'}:
+            return value
+        if attempt < 39:
+            time.sleep(0.25)
+    return value
+
+
 def verify_terminal():
     """Extra full-QA gate. A debugger can never recover a failed native test."""
     root = qa_guard()
@@ -235,7 +251,7 @@ def verify_terminal():
     for path in [marker, pc_path, report_path, ready]:
         if path.is_symlink() or not path.is_file():
             raise GateError('OBSERVED_NATIVE_TERMINAL_EVIDENCE_MISSING')
-    pc = json.loads(pc_path.read_text())
+    pc = read_finished_pc(pc_path)
     control = json.loads(ready.read_text())
     if not (marker.read_text() == '1' and control_valid(control, gdb_path())
             and pc.get('status') == 'INFERIOR_EXITED' and pc.get('avdLaunch') is True
