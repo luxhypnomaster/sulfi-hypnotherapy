@@ -1,0 +1,26 @@
+{
+  "baseMainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "toolBranch": "ops/task25-signing-inspect-main",
+  "headSHA": "1674929bbe6a728da29b96b78d71a8bd71a003ec",
+  "diffPaths": [
+    ".github/workflows/sulfi-signing-inspect25.yml",
+    "scripts/task25/signing_inspect.py"
+  ],
+  "fileSHA256": {
+    ".github/workflows/sulfi-signing-inspect25.yml": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492",
+    "scripts/task25/signing_inspect.py": "510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c"
+  },
+  "requirePR": true,
+  "protectionDetailsSource": "owner UI readback",
+  "adminBypass": "not disproven; not used; ordinary PR path only",
+  "mainWrites": "ONLY_TWO_APPROVED_ADDITIONS_VIA_PR58",
+  "manualDispatches": 0,
+  "PR": 58,
+  "PRURL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/58",
+  "mergeAttemptCount": 1,
+  "mergeMethod": "ordinary squash merge API, expected head pinned, no bypass requested",
+  "mergeAttemptStartedUTC": "2026-11-23T01:45:58.578044+00:00",
+  "ownerAuthorization": "existing explicit two-file transfer grant plus latest ordinary PR-path instruction",
+  "mergeResult": "MERGED",
+  "mergedMainSHA": "9bed10c8c72c5a07aefea06df8032e15d83005f7"
+}

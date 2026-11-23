@@ -1,0 +1,33 @@
+{
+  "atUTC": "2026-11-23T01:45:31.187627+00:00",
+  "PR": 58,
+  "URL": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/58",
+  "headSHA": "1674929bbe6a728da29b96b78d71a8bd71a003ec",
+  "baseSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "mainProtected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "files": [
+    {
+      "path": ".github/workflows/sulfi-signing-inspect25.yml",
+      "blobSHA": "f8fda278a85624c9a93c6a800327dc383b1ec48b",
+      "sha256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492",
+      "status": "PASS_GITHUB_BLOB_READBACK"
+    },
+    {
+      "path": "scripts/task25/signing_inspect.py",
+      "blobSHA": "8c2bd80e4c9f2d8ea444f23e9ae9d764daa9f81d",
+      "sha256": "510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c",
+      "status": "PASS_GITHUB_BLOB_READBACK"
+    }
+  ],
+  "checkRuns": [],
+  "statusContexts": [],
+  "reviews": [],
+  "ruleDetailsSource": "explicit owner UI readback; no Administration API accessed",
+  "reviewApprovalsRequired": false,
+  "requiredStatusChecks": false,
+  "adminBypassRequested": false,
+  "mainWritePath": "ordinary separate PR58 merge only",
+  "manualDispatchAttempts": 0
+}

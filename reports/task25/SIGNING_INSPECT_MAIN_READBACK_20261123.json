@@ -1,0 +1,34 @@
+{
+  "atUTC": "2026-11-23T01:46:46.283997+00:00",
+  "PR": 58,
+  "merged": true,
+  "mergeMethod": "ordinary squash merge API, expected PRhead matched, no bypass requested",
+  "mainSHA": "9bed10c8c72c5a07aefea06df8032e15d83005f7",
+  "previousMainSHA": "b88637a105b2182c7b836311ebb3de7ad037b08f",
+  "protected": true,
+  "fileCount": 2,
+  "files": [
+    {
+      "path": ".github/workflows/sulfi-signing-inspect25.yml",
+      "blobSHA": "f8fda278a85624c9a93c6a800327dc383b1ec48b",
+      "sha256": "da29cff50622ffe74cc589c06c720f0ccd630978c1a6251bb2f0f94da5698492",
+      "status": "PASS_MERGED_MAIN_GITHUB_READBACK"
+    },
+    {
+      "path": "scripts/task25/signing_inspect.py",
+      "blobSHA": "8c2bd80e4c9f2d8ea444f23e9ae9d764daa9f81d",
+      "sha256": "510d010cd4f14e959fbcc4b30939dcf497ffa2483d01fcb24bada1546119fd9c",
+      "status": "PASS_MERGED_MAIN_GITHUB_READBACK"
+    }
+  ],
+  "workflow": {
+    "id": 427303426,
+    "name": "Task25 existing public certificate inspect only",
+    "path": ".github/workflows/sulfi-signing-inspect25.yml",
+    "state": "active",
+    "html_url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/blob/main/.github/workflows/sulfi-signing-inspect25.yml"
+  },
+  "requiredPR": "satisfied byPR58; owner readback approvalsOFF/checksOFF",
+  "adminBypass": "possibility acknowledged, no override operation requested or used",
+  "manualDispatches": 0
+}
