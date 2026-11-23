@@ -1,0 +1,30 @@
+{
+  "folder": "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn",
+  "status": "BLOCKED_PREFLIGHT_PROTECTION_RULE_READ",
+  "mainWriteAttempts": 0,
+  "manualDispatchAttempts": 0,
+  "files": [
+    {
+      "name": "SIGNING_INSPECT_PREFLIGHT_20261123.json",
+      "id": "1A1Nbe85_szogL4vrmD50CsrkseqqY56T",
+      "size": 2373,
+      "sha256": "36171dd55f6f09e3e8d02744c87962bf6945ea7525a9ff43b9d6e6b657acf471",
+      "downloadSHA256": "36171dd55f6f09e3e8d02744c87962bf6945ea7525a9ff43b9d6e6b657acf471",
+      "parents": [
+        "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      ],
+      "status": "PASS_RAW_READBACK"
+    },
+    {
+      "name": "SIGNING_INSPECT_BLOCKER_20261123.md",
+      "id": "1C7LEjrbeCh55IHZ2-JbwhhFk_RfpRy2s",
+      "size": 4881,
+      "sha256": "975e08be8494b104c8b4f4259b51360e01417e256940e93a0f595eda14af4233",
+      "downloadSHA256": "975e08be8494b104c8b4f4259b51360e01417e256940e93a0f595eda14af4233",
+      "parents": [
+        "1o5g7O5jm5yw2URWVCIhEJrbP40ddMPwn"
+      ],
+      "status": "PASS_RAW_READBACK"
+    }
+  ]
+}
