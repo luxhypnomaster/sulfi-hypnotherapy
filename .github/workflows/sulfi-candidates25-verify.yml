@@ -11,6 +11,11 @@ name: Task25 independent APK readback and disposable upgrade safety
         description: Successful Task25 main build run ID; same APK bytes, no signing here
         required: true
         type: string
+      diagnostic_master_only:
+        description: MASTER API34 crash metadata only; disables API36 and all tester delivery
+        type: boolean
+        default: false
+        required: false
 permissions: {}
 concurrency:
   group: task25-candidate-native-qa
@@ -119,12 +124,13 @@ jobs:
         sparse-checkout: |-
           scripts/task25/candidate25.py
           scripts/task25/native25.py
+          scripts/task25/emulator_fault25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -222,6 +228,9 @@ jobs:
         if not files:(out/'NO_EXIT_RECORD.json').write_text(json.dumps({'status':'EXIT_RECORD_NOT_AVAILABLE','noGuestMemoryRead':True}))
         print('SAFE_HOST_EXIT_DIAGNOSTIC_RECORDS='+str(len(files)))
         PYCODE
+    - name: Extract bounded host exception module metadata; never upload raw dumps
+      if: always()
+      run: python3 trusted/scripts/task25/emulator_fault25.py
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -240,13 +249,11 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        edition:
-        - master
-        - client
+        edition: ${{ fromJSON(inputs.diagnostic_master_only && '["master"]' || '["master","client"]') }}
   native36:
     if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
-      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY' && !inputs.diagnostic_master_only
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     permissions:
@@ -261,12 +268,13 @@ jobs:
         sparse-checkout: |-
           scripts/task25/candidate25.py
           scripts/task25/native25.py
+          scripts/task25/emulator_fault25.py
         sparse-checkout-cone-mode: false
     - name: Verify reviewed trusted helper hashes before use
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -364,6 +372,9 @@ jobs:
         if not files:(out/'NO_EXIT_RECORD.json').write_text(json.dumps({'status':'EXIT_RECORD_NOT_AVAILABLE','noGuestMemoryRead':True}))
         print('SAFE_HOST_EXIT_DIAGNOSTIC_RECORDS='+str(len(files)))
         PYCODE
+    - name: Extract bounded host exception module metadata; never upload raw dumps
+      if: always()
+      run: python3 trusted/scripts/task25/emulator_fault25.py
     - name: Preserve native evidence on success or failure
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -388,7 +399,7 @@ jobs:
   delivery:
     if: github.repository == 'luxhypnomaster/sulfi-hypnotherapy' && github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/main' && github.ref_protected == true && github.actor == 'luxhypnomaster' && github.triggering_actor
-      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY'
+      == 'luxhypnomaster' && inputs.confirmation == 'VERIFY_DISPOSABLE_ANDROID_ONLY' && !inputs.diagnostic_master_only
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
