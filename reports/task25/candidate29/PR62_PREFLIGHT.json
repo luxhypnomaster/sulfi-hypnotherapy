@@ -1,0 +1,17 @@
+{
+  "status": "PASS_THREE_FILES_CLEAN_CHECKOUT_FIX",
+  "PR": 62,
+  "head": "5bc764b3d2acf133da34bfec7967ca25194db400",
+  "mainBefore": "84c8f8bce502fee32515729b7f03fdd276420e49",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-build.yml": "2a7df2eae76c208d8e7e9c240e52bb0db89a5ea6d61787c93fd60d9806b58f81",
+    ".github/workflows/sulfi-candidates25-verify.yml": "e04c43e926f6d4f9962418719306c0adbf3094bdd309d8c49336058dc888cbf6",
+    "scripts/task25/candidate25.py": "fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83"
+  },
+  "permissionsChanged": false,
+  "pinsChanged": false,
+  "appOrServerOrSigningChanged": false
+}
