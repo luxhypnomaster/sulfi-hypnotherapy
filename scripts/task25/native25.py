@@ -73,6 +73,22 @@ def open_public_cache(ui):
     return {"cachePreservedAndReadableOffline": True, "Google": "NOT_RUN", "source": "supplemental synthetic public cache"}
 
 
+def open_master_editor(ui, original_editor):
+    """Leave the existing reader and select existing author mode before typing.
+
+    Navigation observation only; no app Back changes, role changes or SQL writes.
+    The original editor readiness and exact persisted-field assertions still run.
+    """
+    labels = [ui.label(node) for node in ui.tree()]
+    if "К списку записей" in labels:
+        ui.click("К списку записей", exact=True)
+        labels = [ui.label(node) for node in ui.tree()]
+    author_view = next((label for label in ("Автор", "Мои записи") if label in labels), None)
+    if "Новая запись" not in labels and author_view is not None:
+        ui.click(author_view, exact=True)
+    return original_editor()
+
+
 def configure_display(path):
     """Disposable AVD framebuffer; logical UI remains the tested720x1280/280."""
     path = Path(path)
@@ -207,6 +223,9 @@ def main():
     def tree():
         return accessibility_snapshot(m.adb, out, m.ACTIONS)
     m.tree = tree
+    if args.edition == "master":
+        original_editor = m.open_diary_editor
+        m.open_diary_editor = lambda: open_master_editor(m, original_editor)
 
     def install():
         if m.adb("shell", "pm", "path", m.PKG, check=False).strip():

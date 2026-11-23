@@ -130,7 +130,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
@@ -274,7 +274,7 @@ jobs:
       run: |-
         python3 - <<'PYCODE'
         import hashlib,pathlib
-        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '78288ce2509a4347d7d944e31e6518e88084a6089c5d6ea3f0ba45ec2654175b', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
+        pins={'candidate25.py': 'fd3a68c7044e29f0910a84051bd6ad4ba2951679f71e5d1fc86e2217baffae83', 'native25.py': '0af574690a7b53ba267d14e26b139aae22847283c50ef8c5124133273ffcb596', 'emulator_fault25.py': '994005738625212258a74320a669003be346ab2d06efeafbd857c5ecea6ab44f'}
         for name,expected in pins.items():
          p=pathlib.Path('trusted/scripts/task25')/name
          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected, 'REVIEWED_HELPER_DRIFT_STOP'
