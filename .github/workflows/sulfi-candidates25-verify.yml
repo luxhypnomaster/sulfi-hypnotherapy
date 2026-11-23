@@ -132,6 +132,29 @@ jobs:
         PYCODE
     - name: Validate trusted workflow context
       run: python3 trusted/scripts/task25/candidate25.py trust
+    - name: Enable KVM on disposable GitHub hosted runner with actual VM capability check
+      run: |-
+        test -c /dev/kvm
+        stat -c 'KVM before: mode=%a uid=%u gid=%g' /dev/kvm
+        id
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+        sudo udevadm settle --timeout=10
+        sudo chmod 0666 /dev/kvm
+        stat -c 'KVM after: mode=%a uid=%u gid=%g' /dev/kvm
+        python3 - <<'PYCODE'
+        import os,fcntl
+        fd=os.open('/dev/kvm',os.O_RDWR|os.O_CLOEXEC)
+        try:
+         version=fcntl.ioctl(fd,0xAE00,0)
+         assert version==12, 'KVM_API_VERSION_UNSUPPORTED'
+         vm=fcntl.ioctl(fd,0xAE01,0)
+         os.close(vm)
+         print('PASS_REAL_KVM_OPEN_API12_EMPTY_VM_CREATE_CLOSE_NO_EMULATOR_YET')
+        finally:
+         os.close(fd)
+        PYCODE
     - name: Free unused hosted-runner tools only (no project or remote data)
       run: |-
         sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/swift /opt/hostedtoolcache/CodeQL
@@ -158,13 +181,6 @@ jobs:
       run: python3 trusted/scripts/task25/candidate25.py baseline-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Enable KVM on disposable GitHub hosted runner
-      run: |-
-        test -e /dev/kvm
-        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
-        sudo udevadm control --reload-rules
-        sudo udevadm trigger --name-match=kvm
-        test -r /dev/kvm && test -w /dev/kvm
     - name: Native UI-created APK28 to APK29 preservation gate
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
@@ -181,8 +197,8 @@ jobs:
         force-avd-creation: true
         disable-animations: true
         emulator-boot-timeout: 300
-        emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front
-          none -feature -Vulkan
+        emulator-options: -accel on -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back
+          none -camera-front none -feature -Vulkan
         pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 34
     - name: Preserve native evidence on success or failure
@@ -237,6 +253,29 @@ jobs:
         PYCODE
     - name: Validate trusted workflow context
       run: python3 trusted/scripts/task25/candidate25.py trust
+    - name: Enable KVM on disposable GitHub hosted runner with actual VM capability check
+      run: |-
+        test -c /dev/kvm
+        stat -c 'KVM before: mode=%a uid=%u gid=%g' /dev/kvm
+        id
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+        sudo udevadm settle --timeout=10
+        sudo chmod 0666 /dev/kvm
+        stat -c 'KVM after: mode=%a uid=%u gid=%g' /dev/kvm
+        python3 - <<'PYCODE'
+        import os,fcntl
+        fd=os.open('/dev/kvm',os.O_RDWR|os.O_CLOEXEC)
+        try:
+         version=fcntl.ioctl(fd,0xAE00,0)
+         assert version==12, 'KVM_API_VERSION_UNSUPPORTED'
+         vm=fcntl.ioctl(fd,0xAE01,0)
+         os.close(vm)
+         print('PASS_REAL_KVM_OPEN_API12_EMPTY_VM_CREATE_CLOSE_NO_EMULATOR_YET')
+        finally:
+         os.close(fd)
+        PYCODE
     - name: Free unused hosted-runner tools only (no project or remote data)
       run: |-
         sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/swift /opt/hostedtoolcache/CodeQL
@@ -263,13 +302,6 @@ jobs:
       run: python3 trusted/scripts/task25/candidate25.py baseline-data --run "$CANDIDATE25_BUILD_RUN"
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Enable KVM on disposable GitHub hosted runner
-      run: |-
-        test -e /dev/kvm
-        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-task25-kvm.rules
-        sudo udevadm control --reload-rules
-        sudo udevadm trigger --name-match=kvm
-        test -r /dev/kvm && test -w /dev/kvm
     - name: Native UI-created APK28 to APK29 preservation gate
       uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
       env:
@@ -286,8 +318,8 @@ jobs:
         force-avd-creation: true
         disable-animations: true
         emulator-boot-timeout: 300
-        emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none -camera-front
-          none -feature -Vulkan
+        emulator-options: -accel on -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back
+          none -camera-front none -feature -Vulkan
         pre-emulator-launch-script: python3 appsource/scripts/task17/pre_emulator.py
         script: python3 trusted/scripts/task25/native25.py --edition "${{ matrix.edition }}" --api 36
     - name: Preserve native evidence on success or failure
