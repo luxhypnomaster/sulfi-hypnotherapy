@@ -1,0 +1,19 @@
+{
+  "status": "RUNNING_CORRECTED_READ_ONLY_UI_OBSERVATION_SAME_APKS",
+  "mainSHA": "ef216597d6df04a67310189a84f58978224ce11f",
+  "PR": 64,
+  "protected": true,
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "9ecacd5dd84f166cd63ef990968b35e51620ae77de630e9482f1cf5cf4a9c310",
+    "scripts/task25/native25.py": "16de92f7474b213d2cd48be5726e24734e9ff5254f0f2a42d873741d8ba65b9c"
+  },
+  "allP0AssertionsASTUnchanged": true,
+  "APKBytesUnchanged": true,
+  "signingOrBuildNotRepeated": true,
+  "intent": "SECRET_FREE_NATIVE_RERUN_AFTER_PROVEN_AX_TRANSITION_FIX",
+  "oldQARun": 45104377872,
+  "buildRun": 45103325755,
+  "runId": 45106402826,
+  "at": "2026-11-23T03:30:39.428318+00:00",
+  "url": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/actions/runs/45106402826"
+}

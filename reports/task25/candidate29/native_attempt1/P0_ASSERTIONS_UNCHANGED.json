@@ -1,0 +1,15 @@
+{
+  "status": "PASS_NATIVE_PRESERVATION_ASSERTIONS_UNCHANGED_AST",
+  "functions": {
+    "install": true,
+    "supplement": true,
+    "capsule": true,
+    "before": true,
+    "compare": true,
+    "upgrade": true,
+    "case": true
+  },
+  "nativeSQLiteJavaFixtureUnchanged": true,
+  "APKBytesUnchanged": true,
+  "realNativeRerun": "PENDING"
+}

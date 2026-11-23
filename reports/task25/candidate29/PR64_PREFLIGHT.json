@@ -1,0 +1,16 @@
+{
+  "status": "PASS_EXACT_TWO_FILES_READ_ONLY_OBSERVATION_FIX",
+  "PR": 64,
+  "head": "f4326e616716499981e37e7c170ab06bcbf6e35b",
+  "mainBefore": "0e1d1950f504f7b0cc826a5308a78239d68ddb48",
+  "protected": true,
+  "mergeable": true,
+  "mergeableState": "clean",
+  "hashes": {
+    ".github/workflows/sulfi-candidates25-verify.yml": "9ecacd5dd84f166cd63ef990968b35e51620ae77de630e9482f1cf5cf4a9c310",
+    "scripts/task25/native25.py": "16de92f7474b213d2cd48be5726e24734e9ff5254f0f2a42d873741d8ba65b9c"
+  },
+  "dataAssertionsSameAST": true,
+  "APKSourceOrBytesChanged": false,
+  "signerOrBuildWorkflowChanged": false
+}
