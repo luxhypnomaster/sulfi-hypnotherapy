@@ -25,6 +25,7 @@ import xml.etree.ElementTree as ET
 
 from candidate25 import CODE, SOURCE, IDS, GateError, guard, command, tools, digest, write, redact
 import emulator_sdk25 as sdk25
+import emulator_pc25 as pc25
 
 
 def accessibility_snapshot(adb, out, actions, run=None):
@@ -114,6 +115,7 @@ def prepare_profile(root):
     command(["python3", str(source / "scripts/task17/pre_emulator.py")], live=True)
     receipt = configure_display(Path.home() / ".android/avd/test.avd/config.ini")
     write(root / "task25-native-evidence/SDK_PROFILE_25.json", receipt)
+    pc25.prepare()  # Explicit diagnostic-only mode; false leaves normal QA unchanged.
     sdk25.record_ready(sdk_receipt)
     print("TASK25_PHYSICAL720x1280_DENSITY280_WITH_EXISTING_PINNED_EMULATOR_AND_EXIT_MONITOR")
 
