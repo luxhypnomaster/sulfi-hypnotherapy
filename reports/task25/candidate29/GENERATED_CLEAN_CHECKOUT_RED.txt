@@ -1,0 +1,40 @@
+......EE..............
+======================================================================
+ERROR: test_clean_checkout_generates_then_verifies_flutter_registrant_before_build (test_candidate25.TrustAndTransport.test_clean_checkout_generates_then_verifies_flutter_registrant_before_build) (bad_generated=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25/scripts/task25/test_candidate25.py", line 125, in test_clean_checkout_generates_then_verifies_flutter_registrant_before_build
+    with self.assertRaises(CompilerReached):c.build(root)
+                                            ^^^^^^^^^^^^^
+  File "/dev/shm/sulfi25/scripts/task25/candidate25.py", line 256, in build
+    if digest(source / p) != sha:
+       ^^^^^^^^^^^^^^^^^^
+  File "/dev/shm/sulfi25/scripts/task25/candidate25.py", line 48, in digest
+    with Path(path).open("rb") as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp1n4oothe/appsource/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java'
+
+======================================================================
+ERROR: test_clean_checkout_generates_then_verifies_flutter_registrant_before_build (test_candidate25.TrustAndTransport.test_clean_checkout_generates_then_verifies_flutter_registrant_before_build) (bad_generated=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/dev/shm/sulfi25/scripts/task25/test_candidate25.py", line 123, in test_clean_checkout_generates_then_verifies_flutter_registrant_before_build
+    c.build(root)
+  File "/dev/shm/sulfi25/scripts/task25/candidate25.py", line 256, in build
+    if digest(source / p) != sha:
+       ^^^^^^^^^^^^^^^^^^
+  File "/dev/shm/sulfi25/scripts/task25/candidate25.py", line 48, in digest
+    with Path(path).open("rb") as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpu3pfl3qq/appsource/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java'
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.316s
+
+FAILED (errors=2)
