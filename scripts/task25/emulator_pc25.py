@@ -15,6 +15,15 @@ import subprocess
 from candidate25 import GateError, write
 from emulator_sdk25 import qa_guard
 
+CONTROL_SCRIPT = '''import os, signal, resource
+resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+signal.signal(signal.SIGUSR1, signal.SIG_IGN)
+signal.signal(signal.SIGUSR2, signal.SIG_IGN)
+os.kill(os.getpid(), signal.SIGUSR1)
+os.kill(os.getpid(), signal.SIGUSR2)
+os.kill(os.getpid(), signal.SIGSEGV)
+'''
+
 
 def instruction_module(maps, pc):
     """Allowlisted public code filename and file offset; omit ASLR addresses."""
@@ -140,12 +149,13 @@ def host_preflight():
     out.mkdir(parents=True, exist_ok=True)
     script = root / 'task25-pc.gdb'
     script.write_text(GDB_SCRIPT)
+    control_script = root / 'task25-pc-control.py'
+    control_script.write_text(CONTROL_SCRIPT)
     env = dict(os.environ, TASK25_PC_HELPER_DIRECTORY=str(Path(__file__).resolve().parent),
                TASK25_PC_RESULT=str(out / 'PC_SELFTEST_25.json'))
     run = subprocess.run([gdb, '--batch', '--nx', '--return-child-result',
                           '-iex', 'set auto-load off', '-iex', 'set startup-with-shell off',
-                          '--command', str(script), '--args', '/bin/sh', '-c',
-                          'trap "" USR1 USR2; kill -USR1 $$; kill -USR2 $$; kill -SEGV $$'],
+                          '--command', str(script), '--args', '/usr/bin/python3', str(control_script)],
                          env=env, capture_output=True, timeout=30)
     result = json.loads((out / 'PC_SELFTEST_25.json').read_text())
     if not (result.get('terminatedWithSIGSEGV') is True and result.get('signals')
