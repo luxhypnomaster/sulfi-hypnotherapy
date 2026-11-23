@@ -1,0 +1,9 @@
+test_cancelled_real_master_baseline_cannot_count_as_upgrade (test_native_evidence.ActualFailedArtifactTest.test_cancelled_real_master_baseline_cannot_count_as_upgrade) ... ok
+test_real_client_update_pass_is_insufficient_when_ui_and_cold_are_incomplete (test_native_evidence.ActualFailedArtifactTest.test_real_client_update_pass_is_insufficient_when_ui_and_cold_are_incomplete) ... ok
+test_tampered_source_or_fake_owner_pass_is_rejected (test_native_evidence.ActualFailedArtifactTest.test_tampered_source_or_fake_owner_pass_is_rejected) ... ok
+test_two_api34_reports_never_satisfy_four_gate_delivery (test_native_evidence.ActualFailedArtifactTest.test_two_api34_reports_never_satisfy_four_gate_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.016s
+
+OK
