@@ -1,3 +1,19 @@
+# Актуальные ограничения после развёртывания
+
+RESOLVED: токен, выбор target на Hobby (узкое разрешение владельца), создание постоянных ресурсов, native SQL connect из ONREZA, HTTPS минимум, curated provider-side Git build. Не требовать новый токен/Pro/ПК.
+
+1. KVset принимает более старую прикладную ревизию. Глобальный порядок/CAS не доказан. HEAD/publisher закрыты; sensitive ACL должен оставаться SQL-authoritative. Нужен отдельный доказанный fenced writer либо immutable projection + SQL current pointer; не заменять CAS get+set или одним TTL.
+2. Полные live identity/schema/session/grants/outbox/HEAD не включены; SELECT1 не доказательство миграции и всей авторизации. Локальные тесты не подменяют эту приёмку.
+3. Глобальный сон Compute не подтверждён административным state readback. Конфигурация idle60s и отсутствие кода вызова Compute из Function не равны наблюдению всех процессов. SQL stopped подтверждена.
+4. provider sourceSha256/snapshotHash не равны plain-file SHA256; канонизация и независимый readback bytes не установлены. Не объявлять checksum PASS. Git/source pin/entrypoint/фактическое поведение подтверждены; это не полная независимая проверка artifact bytes.
+5. SourceV2 direct QUIC transfer из Codex завершился deadline; точная сетевая причина не установлена. Git remote build работает. Незавершённая исходная CLI deployment сохраняется; не создавать дубликаты проекта/SQL и не удалять запись ради красивого отчёта.
+6. Actual monetary Usage/credit/reconciliation и panel comparison неизвестны. Отсутствие денежного API не было препятствием trial. Перехода Pro/платежей не было; расход не приравнивается 0.
+7. Rollback возвращает snapshot конфигурации и новый composition identity; нельзя проверять только старый environment releaseId. Проверять observed deployment/member, expectedGeneration и закрытие диагностики. Штатное 300s наблюдение не обходить.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Новый подтверждённый blocker: Custom STAGING требует Pro
 
 Authenticatedcapabilities: allowedfalse/requiredPlanPRO/currentPlanHOBBY; registryonlyProduction; officialdryENVIRONMENT_NOT_FOUND. Не обходить selector и не повышатьтариф. Предложениеточного scoped исключения находитсяв OWNER_DECISION_STAGING_26A.md. Доразрешенияникакого deployment.

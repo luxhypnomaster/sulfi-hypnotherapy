@@ -8,3 +8,5 @@ evidence26a/*.txt whitespace=-blank-at-eol
 evidence26live/*.log whitespace=-blank-at-eol
 
 evidence26staging/*.log whitespace=-blank-at-eol
+
+evidence26approved/*.log whitespace=-blank-at-eol

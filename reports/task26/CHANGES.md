@@ -1,3 +1,16 @@
+# Выполненные изменения разрешённого продолжения
+
+- Scoped owner exception в stagingTargetPlan: только совпавшие workspace/project, Hobby, logicalEnvironment=staging; без глобального fallback на Production или upgrade.
+- Native probe для настоящего HTTP runtime: фиксированный SELECT1 и ограниченный KV опыт; отдельная capability, в config только SHA256, expiry≤1200s, auth до bindings, byte cap512, fail-closed. Произвольный SQL/публикация/регистрация отсутствуют.
+- Исправлены реальные ошибки Edge Rules: schemaVersion EDGE_RULE_SET_V1 и terminal override. Official CLI regression проверяет обе Functions и все 3 правила.
+- Curated Git source branch того же репозитория,27 файлов, pin к проверенному source; официальный remote Git build обходит недоступный прямой SourceV2 transfer из Codex без альтернативного сервера.
+- Привязана уже существующая SQL к тому же Service/environment, Functions default; DB URI auto-inject=false. Compute CPU250millicores/idle60s, SQL0.25CU/suspend60s.
+- Диагностические результаты, rollback/restore и конечное состояние фиксируются раздельно; никакие Android/GAS6/main/signing/Google OAuth/пользовательские данные не менялись.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Изменения нового продолжения
 
 - Документированные registry/capabilities readback и официальный nrzdeploydry без publishing. Настоящее ограничение Hobby→CustomPro сохранено безсекретов.

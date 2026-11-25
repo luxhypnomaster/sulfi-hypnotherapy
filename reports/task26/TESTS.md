@@ -1,3 +1,29 @@
+# Окончательный readback разрешённого продолжения
+
+25.11.2026 19:34UTC: повторный deploy, откат официальным CLI и возврат завершены. Наблюдается второй Git deployment, FINISHED/SUCCEEDED/activeEverywhere=true. Проверены health200 и закрытая диагностика 403. SQL observed/desiredstopped. Один Service,3deploymentrecords (незавершённая исходная CLI +2Git); откат не создавал новый build. Новые composition IDs после активации отличаются от исходных retainedrelease IDs — проверены фактически обслуживающие deployment/member.
+
+Итоговая матрица 22:8PASS/14PARTIAL. Все 69 кодовых testsPASS. Native SQL из ONREZA PASS, KVolder-overwrite доказан. HEAD/publisher закрыты; live authority/migrations/auth/outbox/HEAD и глобальный Compute sleep не объявляютсяпройденными. Plain-fileSHA256 и provider snapshotHash — неподтверждённые разные домены; независимой byte-integrity проверки нет.
+
+19:35UTC GETworkspace снова подтвердил HOBBY/ACTIVE/тотже periodEnd. Денежныеполя не предоставлены; стоимость/остаток/reconciliation неизвестны. Токеновыйпроцесс закрыт; секреты не вошли в Git/ZIP/отчёты. Private паспорт обновляется отдельно, owner-only.
+
+---
+
+# Проверки разрешённого STAGING
+
+Полный финальный кодовый suite:69PASS/0FAIL/0SKIP,44427.763439ms. Команда: P22_NRZ_BIN=<проверенныйCLI0.54.0> XDG_CACHE_HOME=<taskcache> npm test из server/alchemist/onreza26. Лог evidence26approved/approved-native-http-full-tests.log. Предыдущий69PASS до HTTP guard — исторический, не прибавлять повторно.
+
+LIVE HTTPS: health200/2430ms; метод405/938ms; маршрут404/1067ms; native без capability401/1081ms; SELECT1 из активной Function200/4137ms; KV порядок200/2631ms. Native SQL writes0. KV counters1/2, older overwrite2→1, cleanuptrue/TTL60. Runtime logs подтвердили Function name; SQL stopped до/после KV.
+
+mode=off: запрос со старой правильной capability403/1566ms. После rollback старый snapshot временно снова допустил capability до expiry (фиксированная неизвестная операция422, SQL/KV не вызываются). Поэтому финальная проверка закрытия обязательна; её факт в конечных событиях, не заменять предположением.
+
+Первый manual rollback POST получил400validation; официальный CLI0.54.0 с finishObservationEarly=false принят. Прямой POST не повторялся вслепую. Разница serializer/актуального API не объявляется установленной причиной без полного contract proof.
+
+Не выдавать за PASS: глобальный сон всех Compute; cold/warm на основании одной задержки; денежный Usage; авторизацию Google; физические Android; полный live SQL authority/outbox/HEAD; plain-byte source checksum по непрозрачному snapshotHash. SourceSha256 не совпал с raw-file SHA256 — канонизация остаётся OPEN.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Финальная проверка после actual-topology/target исправлений
 
 `P22_NRZ_BIN=<verified CLI0.54.0> XDG_CACHE_HOME=<taskcache> npm test`:65PASS/0FAIL/0SKIP,47778.984681ms. Лог evidence26staging/full-stage-target-tests.log. Включены PGliteengine и real localFunctions runtime/CLIbuild. Не cloudSQL/Google/телефон PASS.

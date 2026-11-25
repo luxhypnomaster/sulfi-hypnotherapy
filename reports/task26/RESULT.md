@@ -1,3 +1,38 @@
+# Окончательный readback разрешённого продолжения
+
+25.11.2026 19:34UTC: повторный deploy, откат официальным CLI и возврат завершены. Наблюдается второй Git deployment, FINISHED/SUCCEEDED/activeEverywhere=true. Проверены health200 и закрытая диагностика 403. SQL observed/desiredstopped. Один Service,3deploymentrecords (незавершённая исходная CLI +2Git); откат не создавал новый build. Новые composition IDs после активации отличаются от исходных retainedrelease IDs — проверены фактически обслуживающие deployment/member.
+
+Итоговая матрица 22:8PASS/14PARTIAL. Все 69 кодовых testsPASS. Native SQL из ONREZA PASS, KVolder-overwrite доказан. HEAD/publisher закрыты; live authority/migrations/auth/outbox/HEAD и глобальный Compute sleep не объявляютсяпройденными. Plain-fileSHA256 и provider snapshotHash — неподтверждённые разные домены; независимой byte-integrity проверки нет.
+
+19:35UTC GETworkspace снова подтвердил HOBBY/ACTIVE/тотже periodEnd. Денежныеполя не предоставлены; стоимость/остаток/reconciliation неизвестны. Токеновыйпроцесс закрыт; секреты не вошли в Git/ZIP/отчёты. Private паспорт обновляется отдельно, owner-only.
+
+---
+
+# №26/26-А: минимальный STAGING работает; полная приёмка PARTIAL
+
+Разрешение владельца на стандартный Production slot **только отдельного protocol22-staging** применено. Тариф Hobby, прежние project/service/SQL IDs, действующий GAS6/main/Android/№25 сохранены. Pro, карточные платежи, новые OAuth-разрешения и ACL не включались.
+
+Развёрнут настоящий минимальный сервер через официальный provider-side Git build: исходный код `1ad664552af20ec06e2e077f2aea051e243165e4`, серверная ветка deploy/task26-hobby-context, её commit `eb7056dab8f104402e28dd6972d15c8629766ba2`. Контекст27 файлов, без Android/тестовых пользовательских данных/секретов. Сервис один, Compute слой protocol22-api, PostgreSQL0.25CU/idle60s,2Functions и synthetic26:task26: namespace. Node24.19.0 запрошен; фактическая версия runtime отдельно не измерялась.
+
+LIVE доказательства:
+- HTTPS health200, неверный метод405, неизвестный маршрут404; неавторизованный native probe401.
+- Function из активного релиза выполнила фиксированный SELECT1: PASS_NATIVE_SQL_READ, writes0, nativeReleaseBound=true. Прежний отказ TCP из Codex не означал неисправность БД; точный внешний сетевой участок не установлен.
+- KV: после revision2 записана revision1, чтение вернуло1. Встроенный monotonic revision fence для обычного set отсутствует в этом опыте. Incr вернул1/2; это не доказательство глобального CAS. Ключи удалены адресно, TTL60. SQL подтверждена stopped до и после KV; глобальный сон Compute не доказан.
+- Диагностика защищена отдельной случайной capability в памяти; у ONREZA только её SHA256 в secret config, срок≤1200s, операции фиксированы. После mode=off прежняя capability получила403. Rollback может восстановить старый snapshot временного окна; независимый expiry остаётся обязательной защитой. Финальный статус проверяется в NATIVE_PUBLIC_EVENTS.json, без скрытия этого эффекта.
+- Повторный Git deploy в тот же service LIVE. Откат и возврат через официальный CLI наблюдаются отдельно, без finish-observation-early; платформа использует штатное300s Blue/Green окно. Точные конечные результаты добавлены в DELIVERY_APPROVED_26A.json/доказательства, а не предполагаются заранее.
+
+69Node tests PASS/0FAIL/0SKIP, включая реальный локальный provider runtime/Edge Rules. Это не Android/Google/полный P22 E2E. Managed migrations, stable UID/session restore, role revocation, outbox/HEAD пока подтверждены локальным PostgreSQL engine и fake fencedKV, не перенесены в live SQL. HEAD/publisher остаются закрытыми: обычный KVset не даёт нужного порядка.
+
+Первый CLI SourceV2 deploy остановился на прямой QUIC transfer после успешного admission. Слепой повтор не выполнялся; штатный Git путь заработал. Старая незавершённая CLI-запись сохраняется, не выдаётся за успешный выпуск и не удалялась.
+
+Отдельное ограничение provenance: provider sourceSha256 равен snapshotHash, но не plain-file SHA256. Канонизация не подтверждена, поэтому независимую побайтовую проверку deployed Functions не объявляем PASS. Подтверждены Git commit, source pin, имена/entrypoints, однофайловые snapshots и фактическое поведение.
+
+Draft PR77: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77 . Отчёты: https://drive.google.com/drive/folders/1h0KUMDdr6eh86QZF00SRHd7GaxxoFylE . Адрес/точные IDs находятся в отдельном owner-only паспорте. Полная матрица22 не закрыта; APK и переключение приложений не выполнялись.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Актуальное продолжение: подтверждён Hobby/Custom blocker
 
 25.11.2026,18:28UTC. Реестр окружений того же project проверен через документированный GET registry. Есть только Production/PRODUCTION/participating=true. Административные capabilities явно возвращают createCustomEnvironment.allowed=false, requiredPlanPRO/currentPlanHOBBY. Это фактическое тарифное ограничение, не отсутствие токена. Единственный официальный dry-run с точными project/service и `--environment staging`, skipbuild/install/no-log-upload завершился ENVIRONMENT_NOT_FOUND. Remote deploy не создавался.

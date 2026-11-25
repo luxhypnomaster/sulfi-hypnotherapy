@@ -1,0 +1,42 @@
+{
+  "servingReadback": {
+    "httpStatus": 200,
+    "at": "2026-11-25T19:34:19.441831+00:00",
+    "bodyBytes": 1421
+  },
+  "sqlReadback": {
+    "httpStatus": 200,
+    "at": "2026-11-25T19:34:19.949360+00:00",
+    "bodyBytes": 8090
+  },
+  "projectReadback": {
+    "httpStatus": 200,
+    "at": "2026-11-25T19:34:20.670629+00:00",
+    "bodyBytes": 4908
+  },
+  "servicesReadback": {
+    "httpStatus": 200,
+    "at": "2026-11-25T19:34:21.171851+00:00",
+    "bodyBytes": 533
+  },
+  "desiredPhase": "FINISHED",
+  "desiredResult": "SUCCEEDED",
+  "activeEverywhere": true,
+  "observedMatchesSecondRelease": false,
+  "observedMatchesFirstRelease": false,
+  "observedMatchesSecondDeployment": true,
+  "observedMatchesFirstDeployment": false,
+  "sqlObservedState": "stopped",
+  "sqlDesiredState": "stopped",
+  "serviceCount": 1,
+  "deploymentRecords": 3,
+  "codeSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+  "curatedCommit": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+  "nativeSql": "PASS",
+  "kvOrdering": "OLDER_OVERWRITE_OBSERVED",
+  "headPublisherEnabled": false,
+  "nativeProbeModeConfigured": "off",
+  "noPaidTierChanges": true,
+  "privatePassportUpdated": true,
+  "computeSleepGloballyVerified": false
+}

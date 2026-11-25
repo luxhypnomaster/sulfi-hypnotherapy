@@ -1,3 +1,15 @@
+# Продолжение без повторной авторизации и нового сервера
+
+Прежний owner exception применён, минимальный STAGING работает на Hobby. Использовать те же private IDs и текущую code/source branch. SQL native SELECT1 PASS; прямой TCP Codex не повторять. Pro/новые OAuth/Android/GAS6/main не нужны.
+
+Следующий существенный шаг — доказать безопасную KV delivery/order схему либо выбрать честный SQL-authoritative fallback без обещания zero-wake. Затем отдельно перенести синтетические schema/identity/session/grants/outbox tests на managed SQL; current live probe только SELECT1. Не активировать default public registration или неподтверждённый HEAD.
+
+Нужны уточнения provider snapshot hash canonicalization и readback Compute sleeping instances, а также фактический денежный billing contract. Эти OPEN не отменяют уже проведённые native SQL/KV/HTTPS проверки, но не позволяют объявлять весь P22 готовым. Действий владельца для токена/ПК сейчас не требуется.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Первый требующий человека шаг
 
 Датьилиотклонитьточное scoped исключениеиз OWNER_DECISION_STAGING_26A.md. На HobbyCustomSTAGING требует Pro,которыйзапрещён. Бесплатныйвариант—толькостандартный Productionslot отдельного stageproject; автоматическине выбран.

@@ -1,0 +1,54 @@
+{
+  "classification": "sanitized observations transcribed from completed operator tool results",
+  "identityAndTarget": "correct prior workspace, OWNER, ACTIVE/HOBBY, same task26 project/service/SQL",
+  "targetVerifiedAt": "2026-11-25T18:52:26.532189Z",
+  "SQLBinding": {
+    "at": "2026-11-25T18:56:22.324640Z",
+    "httpStatus": 200,
+    "functionsDefault": true,
+    "dbURIautoInject": false
+  },
+  "ComputeLimits": {
+    "at": "2026-11-25T18:56:23.001158Z",
+    "httpStatus": 200,
+    "cpuMillis": 250,
+    "idleSeconds": 60
+  },
+  "firstSourceV2": {
+    "codeSHA": "53d9b7e1bdea206235d632c235abe9c6016dddaa",
+    "packagingMs": 30,
+    "admissionMs": 200,
+    "transferAndPublicationFailedMs": 23711,
+    "error": "deadline has elapsed",
+    "artifactPublicationConfirmed": false,
+    "blindRetry": false
+  },
+  "GitSourceLink": {
+    "at": "2026-11-25T19:05:38.096076Z",
+    "httpStatus": 200,
+    "sameService": true,
+    "sourceType": "GIT",
+    "sourceBranch": "deploy/task26-hobby-context",
+    "GitConnectionAutomaticallySelectedByProvider": true,
+    "newOAuthConsentRequested": false,
+    "autoDeployOnCuratedBranch": true,
+    "mainNotTarget": true
+  },
+  "firstGitAdmission": {
+    "at": "2026-11-25T19:06:44.876717Z",
+    "httpStatus": 200,
+    "responseStatus": "PENDING",
+    "singleSelectedExistingService": true
+  },
+  "firstGitServing": {
+    "at": "2026-11-25T19:08:03.864545Z",
+    "httpStatus": 200,
+    "deploymentStatus": "live",
+    "observedMatchesRequestedGitDeployment": true,
+    "desiredPhase": "FINISHED",
+    "desiredResult": "SUCCEEDED",
+    "activeEverywhere": true
+  },
+  "billingAmounts": null,
+  "noProviderIDsOrTokens": true
+}

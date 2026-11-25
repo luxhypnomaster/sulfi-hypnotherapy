@@ -1,26 +1,26 @@
-# Актуальная матрица№26/26-А
+# Итоговая текущая матрица22
 
-4PASSLOCAL/16PARTIAL/2BLOCKED. УровеньLOCAL/LIVEнеподменяетcloud/phonePASS.
+8PASS /14PARTIAL; уровеньLOCAL/LIVE указан в строке. Это не готовность всегоP22 илиAndroid.
 
 |ID|Статус|Уровень|Факт|
 |---|---|---|---|
 |T26-01|PARTIAL|LIVE|Workspace/user API200 HOBBY ACTIVE OWNER; effective read/create/start/stop; full scopes/prices/credit unknown|
 |T26-02|PASS|LOCAL|Base PR54 ff32a0f; draft dependencies audited; only new26 paths|
-|T26-03|PARTIAL|LIVE|One target API Product plus platform SQL-owner Product; one SQL0.25CU suspend60s; remote Compute/Functions/KV NOT_RUN|
-|T26-04|PARTIAL|LOCAL_NATIVE|65Node PASS/0FAIL/0SKIP including official CLI build and local Function runtime; remoteHTTPS NOT_RUN|
-|T26-05|BLOCKED|LIVE|Hobby customEnvironment allowedfalse requiresPRO; registryonlyProduction; explicit staging dry ENVIRONMENT_NOT_FOUND; deploy/redeploy/rollback NOT_RUN|
-|T26-06|PARTIAL|LOCAL_LIVE|Sanitized management readback and local diagnostics; cloud application logs NOT_RUN|
-|T26-07|PARTIAL|LIVE|SQL observed auto-stopped then start running then safe stopped; direct/pooled TCP refused; Compute sleep NOT_RUN|
-|T26-08|PARTIAL|LIVE|Hobby ACTIVE/minimumCU/suspend60/safeStopped verified; no paid actions; actual monetary usage unknown|
-|T26-09|PARTIAL|LIVE|Authorized official APIHTTPS200; native SQL direct/pooled5432 refused; appHTTPS/ownerRF/foreign NOT_RUN|
-|T26-10|PARTIAL|LOCAL_LIVE|Private existingIDs/passport; CLIbuild PASS; savedSQLowner/binding reconciliation fixed; readonlytargetguard blocks paid/fallback|
-|T26-11|PASS|LOCAL|Only new26 paths, no secret values, no production/GAS/Android/main mutations|
-|T26-12|PARTIAL|LOCAL|Local crypto/HTTP/adapter tests PASS; real provider Function/ACL NOT_RUN|
+|T26-03|PASS|LIVE|One existing API Service/Compute, one SQL plus platformSQLowner Product,2Functions and isolated synthetic namespace; target IDs preserved|
+|T26-04|PASS|LIVE|69NodePASS; realHTTPS health200/method405/unknown404/nativeunauth401; official nativeFunction runtime|
+|T26-05|PASS|LIVE|Same-service Gitredeploy, officialCLI rollback first deployment observed withhealth200, restore second observed FINISHED/SUCCEEDED/activeEverywhere; no observation bypass; compose IDs distinct|
+|T26-06|PASS|LIVE|Official runtime logs200;8entries; actual native Function names/statuses sanitized; no secret values exposed|
+|T26-07|PARTIAL|LIVE|Managed SQL internal SELECT1PASS then stopped; KV Function with SQL stopped before/after; Compute global sleep NOT_VERIFIED|
+|T26-08|PARTIAL|LIVE|Hobby/minimumSQL0.25CU/Compute250m/idle60s; bounded tests; actualchargesunknown; no paid-tier/card actions|
+|T26-09|PARTIAL|LIVE|Codex officialAPI and realappHTTPS200; ONREZA nativeSQLPASS; RF/foreign ownerphones NOT_RUN|
+|T26-10|PARTIAL|LOCAL_LIVE|Curated Git/source pins, retained releases/privatepassport/manifest; rawFileSHA != provider snapshotHash; canonicalization OPEN|
+|T26-11|PASS|LOCAL_LIVE|Only task26 source/report paths and minimaldeploybranch; exact scoped staging permission; existing GAS6/main/OAuth/signing/data untouched|
+|T26-12|PARTIAL|LOCAL_LIVE|Local auth/role tests plus live separatecapability401/expiry/off403; full synthetic app session/JWT live NOT_RUN|
 |T26-13|PARTIAL|LOCAL|PGlite actual SQL uniqueness/install binding/idempotency PASS; live NOT_RUN|
 |T26-14|PARTIAL|LOCAL|Current SQL roleVersion/revocation/CLIENT deny PASS; full IAM hierarchy integration OPEN|
-|T26-15|PARTIAL|LOCAL|Actual local SQL durability+fake fencedKV PASS; real noCAS =>ORDERING_NOT_PROVEN|
+|T26-15|PARTIAL|LOCAL_LIVE|Local outbox/fencedfakeKV PASS; realKV acceptsolder revision; safeHEADpublisher stays disabled|
 |T26-16|PARTIAL|LOCAL|Reused dependency verifier+SQL immutable/receipt PASS; real KV/ratings adapter not bound|
-|T26-17|BLOCKED|LIVE|Local no-SQL counters PASS only; real no-wake/BFU/usage NOT_RUN|
+|T26-17|PARTIAL|LIVE|NativeFunction KV experiment200 with SQLstopped before/after; Compute globally asleep and auth/HEADnowake NOT_VERIFIED|
 |T26-18|PASS|LOCAL|Core source boundary, adapters and delayed/out-of-order writes contracts PASS|
 |T26-19|PARTIAL|LIVE|23metrics mapped; plan/subscription/periodEnd VERIFIED_LIVE; workspace monetary fields not in verifiedresponse|
 |T26-20|PARTIAL|LIVE|One actual workspaceGET refresh; schema/metadata/OWNER and effective operations; full token scope/monetary API unverified|

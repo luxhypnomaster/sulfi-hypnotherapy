@@ -1,0 +1,29 @@
+{
+  "task": 26,
+  "logicalEnvironment": "staging",
+  "platformEnvironmentType": "PRODUCTION",
+  "ownerApproval": "2026-11-25 user explicit exception, only existing protocol22-staging",
+  "sourceSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+  "curatedSourceBranch": "deploy/task26-hobby-context",
+  "curatedSourceCommit": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+  "curatedGitFiles": 27,
+  "androidFilesInContext": 0,
+  "secretsInSourceContext": false,
+  "providerIDsInSourceContext": false,
+  "nodeRuntimeRequested": "24.19.0",
+  "installCommand": "npm ci --omit=dev --ignore-scripts --no-audit --no-fund",
+  "buildCommand": "npm run build",
+  "NodeTests": {
+    "pass": 69,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 44427.763439
+  },
+  "managedSQLRead": "PASS_NATIVE_SQL_READ",
+  "SQLWrites": 0,
+  "KVOlderOverwriteObserved": true,
+  "KVHeadPublicationEnabled": false,
+  "productionGASChanged": false,
+  "mainChanged": false,
+  "paidTierChanged": false
+}

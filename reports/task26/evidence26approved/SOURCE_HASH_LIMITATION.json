@@ -1,0 +1,15 @@
+{
+  "classification": "OPEN_PROVIDER_SNAPSHOT_HASH_SEMANTICS",
+  "plainFileSHA256IndependentlyComputed": true,
+  "providerSourceSha256EqualsProviderSnapshotHash": true,
+  "plainFileSHA256EqualsProviderHash": false,
+  "functionEntrypointsMatch": true,
+  "snapshotFileCount": 1,
+  "providerCanonicalizationContractConfirmed": false,
+  "snapshotBytesReadbackAvailableInStudiedAPI": false,
+  "deployedCodeByteIntegrityPASSClaimed": false,
+  "gitCommitAndLocalSourcePinVerified": true,
+  "nativeBehaviorObserved": true,
+  "noCodeTamperingClaim": "Difference of unconfirmed hash domains is not proof of code substitution",
+  "nextAction": "obtain documented source snapshot canonicalization or authorized exact bytes readback; do not guess private endpoints"
+}

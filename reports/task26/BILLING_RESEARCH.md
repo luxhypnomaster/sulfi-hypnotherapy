@@ -1,3 +1,9 @@
+# После настоящих серверных испытаний
+
+25.11.2026 19:35:37UTC: один manual logical refresh,1GETworkspace200,502B. HOBBY/ACTIVE,periodEnd2026-12-25T10:24:18.254Z,NOT_REQUIRED,cancelAtPeriodEndfalse. Денежных полей нет. Нельзя измерить расход или задержку reconciliation по совпадающему plan/end; panel NOT_RUN. Это административный refresh, не постоянный app polling. Факты в evidence26approved/BILLING_AFTER_TRIALS.json.
+
+---
+
 # Обновлённое практическое исследование26-А
 
 Авторизация разрешена и работает. В15:13:16.863917UTC один logical refresh выполнил ровно1GET /v1/workspace →200: HOBBY, ACTIVE, periodEnd2026-12-25T10:24:18.254Z, settlement NOT_REQUIRED, cancelAtPeriodEndfalse. Первичный readback14:50 и последующий совпали по plan/end. Это не доказательство отсутствия расхода и не измерение reconciliation delay.

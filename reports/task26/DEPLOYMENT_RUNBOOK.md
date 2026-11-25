@@ -1,3 +1,18 @@
+# Рабочий путь после owner exception
+
+1. Читать отдельный owner-only паспорт, проверять current workspace/name/Hobby, project protocol22-staging и прежние service/SQL/owner/env IDs. Production разрешён только этому отдельному проекту как logical staging. Никаких новых ресурсов/Pro/ACL/OAuth.
+2. Рабочая source ветка deploy/task26-hobby-context, current immutable commit eb7056dab8f104402e28dd6972d15c8629766ba2, derived from source1ad664552af20ec06e2e077f2aea051e243165e4. Это минимальный контекст 27 файлов того же repo, не Android. Для обновления сначала новые scoped tests/source pin/scan; учесть autoDeploy на этой отдельной ветке, main не является target.
+3. Официальный Git deploy-set: точные project/environment, selected one existing Service, branch+immutable commit, expectedGeneration из serving, UUIDv7 idempotencyKey. API /v1/deployments/set. Не дублировать POST после timeout; reconciliate по commit/service/request. Получать serving observed, не только статус queued/live.
+4. Runtime dependencies npm ci --omit=dev --ignore-scripts из lockfile; build npm run build; Node24.19.0 запрошен. Curated builder/manifest в source branch. CLI Functions check проверяет 2sources/3rules. Root/application hashes в SOURCE_PIN.json; snapshotDigest провайдера пока не plain-file verifier.
+5. SQL binding: тот же Service/ProductEnvironment, ownerProductEnvironment в том же WorkspaceEnvironment и exact provider branch, Functions defaulttrue, auto-injectfalse. SQL start/stop POST без body, verify actual state. Прямой CodexTCP повторять только с новой гипотезой; native Function SELECT1 уже PASS.
+6. Диагностика: случайная отдельная capability только в памяти; в protectedconfig только её SHA256, окно≤1200s. Никакой NRZ_TOKEN в приложении. Fixed operations, namespace+TTL60/address cleanup. Отключить mode, проверить 403 со старой capability. При rollback повторно проверить окно: возвращается старый config snapshot. Секрет/capability не выгружать.
+7. Rollback: официальный nrz rollback --release-id <retained> --environment <exact> --project-id <exact> --service-id <exact> --dir <curated context> --json. По умолчанию finishObservationEarly=false. Не обходить 300s Blue/Green. Проверять observed deployment/member: compositionID может измениться. Для возврата применить сохранённый второй release тем же способом и проверить HTTP/closedmode/SQLstopped.
+8. HEAD/publisher не включать без ordering proof. После теста SQLstopped, Computeidle60s, namespace ключи очищены, native capability уничтожить; сохранить current IDs/releases/URL privately. Финальные факты из NATIVE_PUBLIC_EVENTS.json/DELIVERY_APPROVED_26A.json.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Обязательный target gate перед продолжением
 
 Сначала OWNER_DECISION_STAGING_26A.md: customSTAGING недоступен Hobby(требует Pro),registry только Production. Официальный dryexplicitstaging вернул ENVIRONMENT_NOT_FOUND. До отдельного разрешенияна defaultProductionslot**вданномновомизолированном project** невызывать deploy без selector/--prod инеугадыватьальтернативные POST. Не upgrade.

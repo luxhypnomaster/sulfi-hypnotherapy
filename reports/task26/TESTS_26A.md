@@ -1,3 +1,11 @@
+# Текущий результат
+
+69PASS/0FAIL/0SKIP в финальном кодовом suite. Авторизация существующим токеном работает; настоящий Hobby STAGING развёрнут с отдельным owner exception. Один logical workspace metadata refresh всё ещё не даёт денежных сумм; quota/charges/reconciliation/panel не выдумываются. Admin preflight workspace reads не являются пользовательским BillingAdapter polling. Подробные LIVE результаты и ограничения: TESTS.md, KV_ORDERING_NATIVE_26A.md, evidence26approved/.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
 # Актуальный финальный прогон
 
 65PASS/0FAIL/0SKIP с opt-in официальным CLI,47778.984681ms. Это последнийобщий runtime26suite; прошлые 59PASS и 28 адресных—история,неприбавлять. Новыетестытаргета/реальноймодели SQLowner и evidence в evidence26staging/. Полный scope/границысм.TESTS.md.
