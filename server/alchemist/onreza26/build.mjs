@@ -2,7 +2,7 @@ import {cp,mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 const root=new URL('./',import.meta.url),out=new URL('./dist/',root);
 await mkdir(new URL('.onreza/',out),{recursive:true});
-for(const n of ['core','adapters','sql','compute.mjs','light.nrz-fn.mjs','package.json','package-lock.json','onreza.rules.toml'])await cp(new URL(n,root),new URL('onreza26/'+n,out),{recursive:true});
+for(const n of ['core','adapters','sql','compute.mjs','light.nrz-fn.mjs','native-probe.nrz-fn.mjs','package.json','package-lock.json','onreza.rules.toml'])await cp(new URL(n,root),new URL('onreza26/'+n,out),{recursive:true});
 await cp(new URL('onreza.rules.toml',root),new URL('onreza.rules.toml',out));
 await mkdir(new URL('experimental/',out),{recursive:true});
 const old=new URL('../experimental/catalog_snapshot.cjs',root),data=await readFile(old);

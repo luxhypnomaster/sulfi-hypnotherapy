@@ -18,3 +18,10 @@ test('ambiguous target, wrong workspace/project, missing capability and producti
  assert.equal(stagingTargetPlan({...base,createCustomCapability:null}).status,'STAGING_CAPABILITY_UNVERIFIED');
  assert.equal(stagingTargetPlan({...base,createCustomCapability:{allowed:true}}).status,'CUSTOM_CREATION_REQUIRES_REVIEW');
 });
+test('owner exception selects only the explicitly approved isolated Hobby project',()=>{
+ const approval={ownerAuthorized:true,projectId:base.projectId,workspaceId:base.workspaceId,logicalEnvironment:'staging',observedPlan:'HOBBY'};
+ const p=stagingTargetPlan({...base,dedicatedHobbyApproval:approval});assert.equal(p.status,'OWNER_APPROVED_DEDICATED_HOBBY_STAGING');assert.equal(p.target.logicalEnvironment,'staging');assert.equal(p.target.environmentId,'fixture-production');assert.deepEqual(p.mutations,[]);
+ for(const change of [{projectId:'another'},{workspaceId:'another'},{logicalEnvironment:'production'},{observedPlan:'PRO'}])assert.equal(stagingTargetPlan({...base,dedicatedHobbyApproval:{...approval,...change}}).status,'STOP_APPROVAL_SCOPE_MISMATCH');
+ assert.equal(stagingTargetPlan({...base,environments:[],dedicatedHobbyApproval:approval}).status,'STOP_AMBIGUOUS_APPROVED_DEFAULT');
+ assert.equal(stagingTargetPlan({...base,dedicatedHobbyApproval:{...approval,ownerAuthorized:false}}).target,null);
+});

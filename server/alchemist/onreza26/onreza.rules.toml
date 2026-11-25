@@ -1,10 +1,11 @@
+schemaVersion = "EDGE_RULE_SET_V1"
 # Candidate rules; must pass installed nrz functions check/deploy --dry before live.
 [[rules]]
 id = "staging-light"
 condition.path = { type = "prefix", value = "/_staging/session/check" }
-action = { type = "pipeline", steps = [{ handle = "protocol22-light" }] }
+action = { type = "pipeline", override = true, steps = [{ handle = "protocol22-light" }] }
 
 [[rules]]
 id = "staging-head"
 condition.path = { type = "exact", value = "/_staging/catalog/head" }
-action = { type = "pipeline", steps = [{ handle = "protocol22-light" }] }
+action = { type = "pipeline", override = true, steps = [{ handle = "protocol22-light" }] }

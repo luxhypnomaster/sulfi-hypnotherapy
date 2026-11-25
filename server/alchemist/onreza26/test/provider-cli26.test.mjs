@@ -6,5 +6,5 @@ test('official CLI validates the frozen Compute entry and exact Function runtime
  const built=JSON.parse(execFileSync(cli,['build',root.pathname,'--json'],{env,encoding:'utf8'}));
  assert.equal(built.layers[0].entry,'onreza26/compute.mjs');assert.equal(built.layers[0].target,'COMPUTE');
  const dir=await mkdtemp('/dev/shm/task26-fn-');
- try{await cp(new URL('light.nrz-fn.mjs',root),dir+'/light.nrz-fn.mjs');const loaded=JSON.parse(execFileSync(cli,['functions','check',dir,'--json'],{env,encoding:'utf8'}));assert.equal(loaded.runtime.functionsLoaded,1);assert.equal(loaded.functions[0].name,'protocol22-light');}finally{await rm(dir,{recursive:true});}
+ try{for(const name of ['light.nrz-fn.mjs','native-probe.nrz-fn.mjs','onreza.rules.toml'])await cp(new URL(name,root),dir+'/'+name);const loaded=JSON.parse(execFileSync(cli,['functions','check',dir,'--json'],{env,encoding:'utf8'}));assert.equal(loaded.runtime.functionsLoaded,2);assert.equal(loaded.edgeRules.ruleCount,2);assert.ok(loaded.functions.some(f=>f.name==='protocol22-native-probe'));}finally{await rm(dir,{recursive:true});}
 });
