@@ -68,5 +68,9 @@
   "restore": "PASS_OBSERVED_SECOND_DEPLOYMENT_FINISHED_SUCCEEDED",
   "diagnosticsFinalHTTP": 403,
   "nativeSQLFinalObserved": "stopped",
-  "codeTestsDurationMs": 44427.763439
+  "codeTestsDurationMs": 44427.763439,
+  "reportsSHA": "9247c1739a893a264995fb33eca4afba51143913",
+  "archiveSHA256": "5206041ace737f8f974fef5b9027900e42adf797d91ad0aacfa32b67034bb302",
+  "archiveBytes": 185770,
+  "manifestMembers": 95
 }

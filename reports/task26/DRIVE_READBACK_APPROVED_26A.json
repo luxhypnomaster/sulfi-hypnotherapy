@@ -1,0 +1,166 @@
+{
+  "task": "26/26-A approved isolated Hobby staging",
+  "verifiedAt": "2026-11-25T19:39:57.200Z",
+  "codeSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+  "curatedSourceSHA": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+  "reportsSHA": "9247c1739a893a264995fb33eca4afba51143913",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "filesVerified": 21,
+  "metadataNamesAndSizes": "PASS",
+  "independentZipDownload": "PASS",
+  "zipCRC": "PASS",
+  "zipSHA256": "5206041ace737f8f974fef5b9027900e42adf797d91ad0aacfa32b67034bb302",
+  "manifestMembersVerified": 95,
+  "privatePassportSeparateAndOwnerOnly": true,
+  "credentialProcessClosed": true,
+  "files": [
+    {
+      "name": "RESULT.md",
+      "id": "16Dj7ozaJiBXz63MVV3_oYtEV4QTB0pSp",
+      "path": "/dev/shm/sulfi26/reports/task26/RESULT.md",
+      "size": 23617,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "CHANGES.md",
+      "id": "1xBZoITzumvIsUheBil1z2qgYtUc5OtD2",
+      "path": "/dev/shm/sulfi26/reports/task26/CHANGES.md",
+      "size": 7148,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "TESTS.md",
+      "id": "1qk_Esy5soOfgbFTHiv2jelhdjkYZd_fU",
+      "path": "/dev/shm/sulfi26/reports/task26/TESTS.md",
+      "size": 12431,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ISSUES.md",
+      "id": "1X6EPd9k1RNYMuqe3o0vKNDAwDVsezBda",
+      "path": "/dev/shm/sulfi26/reports/task26/ISSUES.md",
+      "size": 15803,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "DEPLOYMENT_RUNBOOK.md",
+      "id": "1a7qQ4_cGv_7pjsPiCX-DYdwVpkf3O_uQ",
+      "path": "/dev/shm/sulfi26/reports/task26/DEPLOYMENT_RUNBOOK.md",
+      "size": 17842,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "NEXT_STAGE.md",
+      "id": "1S9Spqf-qNxEBGwan1vFisHJ0TejRuEUo",
+      "path": "/dev/shm/sulfi26/reports/task26/NEXT_STAGE.md",
+      "size": 6414,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "OWNER_DECISION_STAGING_26A.md",
+      "id": "1GFPRqj4dGc5SjTmVyADFZtvRwowWFh-R",
+      "path": "/dev/shm/sulfi26/reports/task26/OWNER_DECISION_STAGING_26A.md",
+      "size": 5134,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "RUNTIME_26_APPROVED.md",
+      "id": "11WO0tSvYHDY2cWShvI_xTLWr9L3C4zLe",
+      "path": "/dev/shm/sulfi26/reports/task26/RUNTIME_26_APPROVED.md",
+      "size": 5986,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "KV_ORDERING_NATIVE_26A.md",
+      "id": "1vwiBuUnDLnTM9J3tQAABnr3se7bm9rR7",
+      "path": "/dev/shm/sulfi26/reports/task26/KV_ORDERING_NATIVE_26A.md",
+      "size": 4085,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "PROVIDER_STATE.md",
+      "id": "19lB8k2xAKBV-Y1-hXnjSBBPgvs4qfa4h",
+      "path": "/dev/shm/sulfi26/reports/task26/PROVIDER_STATE.md",
+      "size": 936,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.md",
+      "id": "196tH41pePSosNVdtBxUf8eWvMqvKOLFA",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE.md",
+      "size": 3146,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.csv",
+      "id": "1-NQC_vE1sYEUu0zz0xfXt77W_b29Qbec",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE.csv",
+      "size": 7186,
+      "mime": "text/csv"
+    },
+    {
+      "name": "BILLING_RESEARCH.md",
+      "id": "1oudYlDKF5GVVR9uXrXan7oAYiC56F-J6",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_RESEARCH.md",
+      "size": 26359,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "BILLING_ADAPTER_PROPOSAL_26A.md",
+      "id": "1LauZ6ZjH-V_vJsDKz4iNaEdTl_gZbppM",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_ADAPTER_PROPOSAL_26A.md",
+      "size": 8362,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "BILLING_CAPABILITIES_26A.csv",
+      "id": "1E-tmuU3PzCLW8M9w19luJOY3p4s5xs5O",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_CAPABILITIES_26A.csv",
+      "size": 4451,
+      "mime": "text/csv"
+    },
+    {
+      "name": "ACCEPTANCE_26A.csv",
+      "id": "1Vz9cndobTVN7I4ONYxG3yZannV6ng387",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE_26A.csv",
+      "size": 1392,
+      "mime": "text/csv"
+    },
+    {
+      "name": "CHANGES_26A.md",
+      "id": "1XbF0VXUSwgh0m1qvjL8ImD4Wtn8uhBPi",
+      "path": "/dev/shm/sulfi26/reports/task26/CHANGES_26A.md",
+      "size": 4490,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "TESTS_26A.md",
+      "id": "1fYkzLlzuZoNvE4Wu3KAtWu3PtAC5PRok",
+      "path": "/dev/shm/sulfi26/reports/task26/TESTS_26A.md",
+      "size": 6522,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "DELIVERY_APPROVED_26A.json",
+      "id": "16GHqm-v387NPGyINToqIrdmFos-TxvdY",
+      "path": "/dev/shm/sulfi26/reports/task26/DELIVERY_APPROVED_26A.json",
+      "size": 2478,
+      "mime": "application/json"
+    },
+    {
+      "name": "TASK26_APPROVED_STAGING_EVIDENCE.zip",
+      "id": "1d1miVrL1xCiRu7f5xsXX3xKHm_bmskaD",
+      "path": "/dev/shm/task26-live/TASK26_APPROVED_STAGING_EVIDENCE.zip",
+      "size": 185770,
+      "mime": "application/zip"
+    },
+    {
+      "name": "MANIFEST_APPROVED_26A.json",
+      "id": "1ap5YU6fvhSG1AZDBDljPfmVPKTTDyYpJ",
+      "path": "/dev/shm/task26-live/MANIFEST_APPROVED_26A.json",
+      "size": 17216,
+      "mime": "application/json"
+    }
+  ],
+  "evidenceNotes": "native-two-functions-check.log is an earlier2-rule preflight; final69PASS includes officialCLI validation of2Functions/3rules in test/provider-cli26.test.mjs"
+}
