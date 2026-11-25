@@ -1,3 +1,14 @@
+# Обязательный target gate перед продолжением
+
+Сначала OWNER_DECISION_STAGING_26A.md: customSTAGING недоступен Hobby(требует Pro),registry только Production. Официальный dryexplicitstaging вернул ENVIRONMENT_NOT_FOUND. До отдельного разрешенияна defaultProductionslot**вданномновомизолированном project** невызывать deploy без selector/--prod инеугадыватьальтернативные POST. Не upgrade.
+
+Reconciler теперьпонимает standaloneSQLownerProduct,нобазаещёНЕподключенак Service/runtime. Сохранённые project/service/sql/ownerIDs в owner-only паспорт; no duplicates. SQLstopped подтверждена 18:28. Неиспользовать genericDATABASE_URL для startup миграции.
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
 # Продолжение после подтверждённого live-доступа
 
 1. Использовать существующий private паспорт owner-only, не брать IDs из общедоступной папки отчётов. Один task26 API Product + один автоматически созданный SQL-owner Product/однаSQL; ничего не удалять/переименовывать/создавать заново. Final SQL stopped15:23UTC.

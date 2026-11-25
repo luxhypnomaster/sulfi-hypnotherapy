@@ -1,19 +1,19 @@
-# Актуальная матрица №26/26-А
+# Актуальная матрица№26/26-А
 
-4PASS LOCAL /16PARTIAL /2BLOCKED. PASS не означает cloud/phone PASS; уровень см.в строке. Историческая матрица сохранена в evidence26live/BEFORE_PERMISSION_*.csv.
+4PASSLOCAL/16PARTIAL/2BLOCKED. УровеньLOCAL/LIVEнеподменяетcloud/phonePASS.
 
 |ID|Статус|Уровень|Факт|
 |---|---|---|---|
 |T26-01|PARTIAL|LIVE|Workspace/user API200 HOBBY ACTIVE OWNER; effective read/create/start/stop; full scopes/prices/credit unknown|
 |T26-02|PASS|LOCAL|Base PR54 ff32a0f; draft dependencies audited; only new26 paths|
 |T26-03|PARTIAL|LIVE|One target API Product plus platform SQL-owner Product; one SQL0.25CU suspend60s; remote Compute/Functions/KV NOT_RUN|
-|T26-04|PARTIAL|LOCAL_NATIVE|59Node PASS plus opt-in official CLI build/Function runtime1PASS; app remote HTTPS NOT_RUN|
-|T26-05|BLOCKED|LIVE|No runtime deployed; serving revision/redeploy/rollback NOT_RUN|
+|T26-04|PARTIAL|LOCAL_NATIVE|65Node PASS/0FAIL/0SKIP including official CLI build and local Function runtime; remoteHTTPS NOT_RUN|
+|T26-05|BLOCKED|LIVE|Hobby customEnvironment allowedfalse requiresPRO; registryonlyProduction; explicit staging dry ENVIRONMENT_NOT_FOUND; deploy/redeploy/rollback NOT_RUN|
 |T26-06|PARTIAL|LOCAL_LIVE|Sanitized management readback and local diagnostics; cloud application logs NOT_RUN|
 |T26-07|PARTIAL|LIVE|SQL observed auto-stopped then start running then safe stopped; direct/pooled TCP refused; Compute sleep NOT_RUN|
 |T26-08|PARTIAL|LIVE|Hobby ACTIVE/minimumCU/suspend60/safeStopped verified; no paid actions; actual monetary usage unknown|
 |T26-09|PARTIAL|LIVE|Authorized official APIHTTPS200; native SQL direct/pooled5432 refused; appHTTPS/ownerRF/foreign NOT_RUN|
-|T26-10|PARTIAL|LOCAL_LIVE|ActualIDs private passport saved; frozen-entry CLI build and nativeFunctioncheck PASS; runtime release not deployed|
+|T26-10|PARTIAL|LOCAL_LIVE|Private existingIDs/passport; CLIbuild PASS; savedSQLowner/binding reconciliation fixed; readonlytargetguard blocks paid/fallback|
 |T26-11|PASS|LOCAL|Only new26 paths, no secret values, no production/GAS/Android/main mutations|
 |T26-12|PARTIAL|LOCAL|Local crypto/HTTP/adapter tests PASS; real provider Function/ACL NOT_RUN|
 |T26-13|PARTIAL|LOCAL|PGlite actual SQL uniqueness/install binding/idempotency PASS; live NOT_RUN|

@@ -1,3 +1,22 @@
+# Актуальное продолжение: подтверждён Hobby/Custom blocker
+
+25.11.2026,18:28UTC. Реестр окружений того же project проверен через документированный GET registry. Есть только Production/PRODUCTION/participating=true. Административные capabilities явно возвращают createCustomEnvironment.allowed=false, requiredPlanPRO/currentPlanHOBBY. Это фактическое тарифное ограничение, не отсутствие токена. Единственный официальный dry-run с точными project/service и `--environment staging`, skipbuild/install/no-log-upload завершился ENVIRONMENT_NOT_FOUND. Remote deploy не создавался.
+
+Без платного тарифа и без самостоятельного исключения из запрета production продолжить cloud deploy в именованное CustomSTAGING невозможно. Подготовлен узкий бесплатный вариант изоляции проекта; требуется только отдельное текстовое разрешение владельца на стандартный Production slot **в уже созданном отдельном protocol22-staging**, см.OWNER_DECISION_STAGING_26A.md. Действующий GAS6/production не затрагивается этим предложением; сейчас исключение НЕ применено.
+
+Независимые работы выполнены: read-only target guard запрещает неявный fallback/upgrade; live normalized inventory вернул BLOCKED_CUSTOM_ENVIRONMENT_REQUIRES_PRO/0mutations. Исправлено доказанное несоответствие resource reconciler реальной модели: managedSQL имеет отдельный ownerProduct и имяс underscore, существующая SQL переиспользуется по savedIDs; binding не считается готовым без точной связи project/service/environment. Чужой workspace/неподтверждённый owner отклоняются.
+
+Финальный новый полный Node-прогон с официальным CLI: **65PASS/0FAIL/0SKIP**,47778.984681ms. Предыдущие 59+отдельный CLI и адресные 7 не складываются с 65. ManagedSQLTCP/remoteKV/облачный E2E всё ещё не PASS. SQL снова подтверждена stopped18:28:32UTC; targetAPI1+platformSQLowner1/SQL1; платный тариф/ACL/deploy неизменены. Токеновый процесс закрыт, private паспорт обновлён owner-only.
+
+Общий статус№26/26-А PARTIAL; матрица 22 остаётся 4PASSLOCAL/16PARTIAL/2BLOCKED. Отсутствие expenseAPI само по себе не являлось stop; реальные cloudblockers — тарифный selector, SQLTCP и KVordering.
+
+Проверенный код `6d760615438f0c9caa024af68dd0c2ae07cfb2bf`; прежний livecheckpointc5aa8b7 сохранён. PR77: https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77 .
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
 # №26/26-А — PARTIAL: авторизация снята, постоянные ресурсы сохранены
 
 25.11.2026. Существующий административный токен получен по прямому разрешению владельца через авторизованный Drive и использован только в памяти закрытого процесса. Проверены настоящий workspace Alchemic project, роль OWNER, ACTIVE/HOBBY. Повторный токен, ПК, ротация или ручной перенос не требуются. Полный перечень грантов токена не установлен; перечислены только фактически выполненные операции.

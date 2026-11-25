@@ -1,0 +1,24 @@
+{
+  "task": "26/26-A staging capability continuation",
+  "sourceSHA": "6d760615438f0c9caa024af68dd0c2ae07cfb2bf",
+  "previousSourceSHA": "c5aa8b75d335fbfb66af4bb1622f4b4647f2b378",
+  "branch": "feat/task26-onreza-staging",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "tests": {
+    "pass": 65,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 47778.984681
+  },
+  "acceptance": {
+    "PASS_LOCAL": 4,
+    "PARTIAL": 16,
+    "BLOCKED": 2
+  },
+  "blockingLiveCode": "BLOCKED_CUSTOM_ENVIRONMENT_REQUIRES_PRO",
+  "paidChanges": 0,
+  "remoteDeployments": 0,
+  "finalSQLState": "stopped",
+  "finalSQLAt": "2026-11-25T18:28:32.900884Z",
+  "ownerAction": "scoped decision in OWNER_DECISION_STAGING_26A.md; no new token or PC"
+}

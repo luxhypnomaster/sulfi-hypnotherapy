@@ -1,0 +1,15 @@
+✔ resource reconciliation reuses saved IDs and refuses ambiguity (1.688024ms)
+✔ occupied PostgreSQL quota stops creation, missing resources never provision themselves (0.439743ms)
+✔ actual standalone SQL owner topology reuses saved DB instead of duplicating it (1.155237ms)
+✔ standalone SQL belonging to another workspace or unconfirmed owner cannot be adopted (0.288595ms)
+✔ actual Hobby-shaped capability never falls back to Production or upgrades the plan (1.834021ms)
+✔ existing participating Custom Staging is selected exactly; available but unconnected environment requires a separate reviewed step (0.240502ms)
+✔ ambiguous target, wrong workspace/project, missing capability and production-type disguise fail closed (0.362114ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.897997

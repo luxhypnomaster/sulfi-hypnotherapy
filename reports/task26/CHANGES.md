@@ -1,3 +1,15 @@
+# Изменения нового продолжения
+
+- Документированные registry/capabilities readback и официальный nrzdeploydry без publishing. Настоящее ограничение Hobby→CustomPro сохранено безсекретов.
+- staging_target26.mjs: чистый read-only planner, строгие workspace/project/target/type/participation, noProductionfallback/no tariffchange.
+- resource reconciliation: savedSQLID/underscore имя, отдельныйподтверждённый SQLownerProduct, обязательнаяпроверка Service/environmentbinding; чужие workspace непринимаются. Actual-topologyregressionRED→GREEN.
+- 5 новыхсодержательных tests; финальныйобщий 65PASS с officialCLI. Paid/nativeAndroid/GAS/main неизменялись.
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
 # Изменения текущего продолжения
 
 - Применено обновлённое разрешение26-А и rolling24h правило; первоначальные входные файлы26 сохранены как исторический baseline.

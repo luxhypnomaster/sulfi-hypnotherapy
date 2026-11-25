@@ -1,3 +1,16 @@
+# Финальная проверка после actual-topology/target исправлений
+
+`P22_NRZ_BIN=<verified CLI0.54.0> XDG_CACHE_HOME=<taskcache> npm test`:65PASS/0FAIL/0SKIP,47778.984681ms. Лог evidence26staging/full-stage-target-tests.log. Включены PGliteengine и real localFunctions runtime/CLIbuild. Не cloudSQL/Google/телефон PASS.
+
+Resource-topologyRED:2 старых PASS/2 новых FAIL; после patch7 адресных PASS(4reconcile+3target). Новый targetcomponent до implementation давал missingmodule; невыдаётсязадефектпрежнегопродукта. Новый actual SQLownerregression реальновоспроизводилошибку SAVED_ID_MISMATCH/STOP.
+
+LIVE:registry/capabilities200;официальный dryRUNBLOCKEDENVIRONMENT_NOT_FOUND;normalizedtargetguardBLOCKED_CUSTOM_ENVIRONMENT_REQUIRES_PRO/0mutations;finalSQLstopped18:28. JSON доказательства evidence26staging/STAGING_CAPABILITY_READBACK.json. Повторныйполныйпрогоноправданизменением resourceCORE и 5 новыми tests,неповторомнеудачного native теста.
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
 # Проверки текущего продолжения — фактические границы
 
 | Проверка | Результат | Доказательство |

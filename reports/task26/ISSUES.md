@@ -1,3 +1,14 @@
+# Новый подтверждённый blocker: Custom STAGING требует Pro
+
+Authenticatedcapabilities: allowedfalse/requiredPlanPRO/currentPlanHOBBY; registryonlyProduction; officialdryENVIRONMENT_NOT_FOUND. Не обходить selector и не повышатьтариф. Предложениеточного scoped исключения находитсяв OWNER_DECISION_STAGING_26A.md. Доразрешенияникакого deployment.
+
+SQLTCP проблема не исправлена; чтениестатуса подтверждает stopped18:28UTC. Не повторять прежние running→ECONNREFUSED безновойгипотезы. SQLbinding через Function невозможнопроверитьдоразрешённой runtime цели. Нетподтверждения KVordering; HEADguard остаётся.
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
 # Актуальные препятствия после разрешения владельца
 
 - RESOLVED: доступ к существующему NRZ_TOKEN; identity/HOBBY/OWNER и собственные read/write операции подтверждены. Старые требования нового токена/ротации/ПК ниже исторические и не применяются.
