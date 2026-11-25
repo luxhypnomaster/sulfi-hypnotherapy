@@ -85,3 +85,5 @@ Server IAM проверяется до cache read/refresh, CLIENT/чужой wor
 ## Приёмка
 
 T26-19 PARTIAL; T26-20 PARTIAL; T26-21 BLOCKED; T26-22 PASS LOCAL (контракт/предложения/тесты, без UI и production). Детали в ACCEPTANCE_26A.csv и общей22-строчной ACCEPTANCE. Следующий независимый шаг — предоставить защищённый runtime доступ и подтвердить Hobby/условия; не требуется платный тариф или поиск недокументированных маршрутов.
+
+Кодовый checkpoint26-А: `b57726d8ce3af7138fb8f73257026f6d29c6bb27`; Draft PR77. Старые FILES_SHA256.json/EVIDENCE_26.zip относятся к историческому26; актуальные доказательства дополнения — FILES_SHA256_26A.json/EVIDENCE_26A.zip.

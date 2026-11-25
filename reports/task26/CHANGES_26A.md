@@ -10,3 +10,5 @@
 -16адресных тестов PASS (включая2прежних build checks и изменённые3budget cases); отдельно3targeted budget проверки official enum. Старые36/32 не повторялись. Один precision regression RED→GREEN запрещает Number суммы до вычислений.
 
 Все изменения ограничены docs/task26, reports/task26 и server/alchemist/onreza26. Нет Android, main, GAS6, production, OAuth/ACL/signing/№25 и billing subscription изменений. Не создавались ONREZA ресурсы и копии fork ради измерений. Ключ не искался в Drive/чате/config и не использовался незашифрованно. Нет raw owner identifiers/financial responses в shared evidence.
+
+Кодовый SHA26-А: `b57726d8ce3af7138fb8f73257026f6d29c6bb27`. Следующие коммиты только доставка/отчёты.
