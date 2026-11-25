@@ -1,0 +1,24 @@
+✔ billing absence is not zero; plan summary cannot fabricate credit, start, timezone or usage (4.219167ms)
+✔ partial fork usage retains exact decimal strings, no fake freshness, IDs or workspace balance (0.615078ms)
+✔ derived remainder uses authoritative applied credit plus explicit grant adjustments with exact integers (0.531778ms)
+✔ derived remainder refuses missing, estimate, mixed period/currency/as-of or inconsistent totals (0.483273ms)
+✔ cache authorization occurs before cached read, manual refresh coalesces and no polling (1.781297ms)
+✔ provider failure marks cached values stale; denied credentials never return old financial data (1.057565ms)
+✔ missing protected token or expected workspace causes zero HTTP calls (1.045254ms)
+✔ read-only probe checks observed workspace then user, emits no raw credentials or IDs (38.108333ms)
+✔ workspace mismatch, permission denied, network outage are distinct and never create resources (1.815915ms)
+✔ fork probe reads existing exact product/fork only, with no mutation or general usage claim (4.825102ms)
+✔ credit derivation rejects Number amounts before precision is lost (0.200661ms)
+✔ 26A missing Usage API and unavailable cost estimate do not block otherwise confirmed Hobby trial (0.815533ms)
+✔ 26A ten rubles is advisory; above target warns without promising automatic hard cap (0.143356ms)
+✔ 26A unknown Hobby/payment terms, unauthorized creation, unbounded load or unsafe post-state STOP (0.269236ms)
+✔ curated build is reproducible, excludes Android/GAS/tests/secrets and serves health (195.967963ms)
+✔ CORE is free of provider ctx and environment binding dependencies (5.926749ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 511.230014

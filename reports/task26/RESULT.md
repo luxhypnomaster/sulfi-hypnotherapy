@@ -1,3 +1,23 @@
+# №26/26-А — актуальное продолжение: PARTIAL / authenticated billing BLOCKED_AUTH
+
+Официальное дополнение26-А прочитано полностью; работа продолжается в PR77 / feat/task26-onreza-staging без новых серверов, Android или платного тарифа. BILLING_RESEARCH.md и BILLING_CAPABILITIES_26A.csv содержат исследование23 показателей, официальные routes/schema/help и отрицательные результаты с раздельными DOCUMENTED/BLOCKED_AUTH/NOT_DOCUMENTED.
+
+Реально установлен официальный CLI0.54.0, checksum PASS, help выполнен. Обнаружены GET /v1/workspace (plan/subscription/periodEnd) и fork-scoped GET /v1/product-forks/{productId}/{forkId}/usage. Общий workspace credit/usage/invoices read contract не найден в изученной публичной поверхности; это не доказательство отсутствия такого API вообще. workspace list — local config, не server readback.
+
+NRZ_TOKEN всё ещё отсутствует: авторизованных billing запросов0, фактических сумм/остатков/задержки reconciliation/сверки с панелью нет. Public app/pricing HTTP200 — не вход владельца. Установка CLI сняла один прежний локальный blocker; основная авторизация остаётся.
+
+Подготовлены переносимый BillingAdapter proposal/prototype, operator-only read-only probe, cache/rights/precision/freshness guards. **16 адресных проверок PASS**, отдельно3 повторные бюджетные проверки официального enum HOBBY PASS; старые36/32 не запускались заново. Mock fixtures обозначены CONTROLLED, неLIVE.
+
+Финансовый gate приведён к26-А: отсутствие Usage API/estimate — warning;10₽ ориентир, guaranteedCap=false. При подтверждённых Hobby/no-paid terms, разрешённых минимальных ресурсах, ограниченной нагрузке и безопасном постсостоянии отсутствие read API не останавливает trial review. Реальный provisioning сейчас не выполняется из-за неподтверждённых доступа/тарифа/условий, а не из-за отсутствия Usage API.
+
+Дополнительная приёмка: T26-19 PARTIAL,20PARTIAL,21BLOCKED,22PASS LOCAL. Общая матрица22: **4PASS LOCAL / 11PARTIAL / 7BLOCKED**. Неизменённые предыдущие статусы не означают новых live PASS. GAS6/main/production/OAuth/ACL/signing/Android/№25 не менялись. Продолжается прежняя Draft PR77, без merge/deploy.
+
+Кодовая контрольная точка26-А и ссылки доставки добавляются в DELIVERY_26A.json. Прежние отчёты/ZIP/доказательства сохранены; ниже исторический снимок26 до дополнения. Прежнее условие обязательного10₽ numerical cap отменено26-А.
+
+---
+
+## Исторический результат до26-А (не текущие финансовые условия)
+
 # №26 — PARTIAL LOCAL / LIVE BLOCKED_OWNER
 
 25.11.2026. Архив11961B, SHA256 `cb8a26d5d14f437e5eeca51fe0630828d450f80a3643ab188c1f0a8d029c57f0`; ZIP CRC и6 manifest entries PASS, все7 файлов прочитаны. Профиль ONREZA§11, IAM§9, HEAD/SNAP и остальные связанные источники получены; provenance в INPUT_AUDIT.

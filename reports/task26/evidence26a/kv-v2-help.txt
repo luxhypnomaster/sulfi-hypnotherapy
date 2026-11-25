@@ -1,0 +1,17 @@
+Manage remote binary KV v2 Stores and branches
+
+Usage: nrz kv-v2 [OPTIONS] <COMMAND>
+
+Commands:
+  regions   List regions eligible for a new store or a store's empty branches
+  stores    Manage remote KV Stores
+  branches  Manage empty and copy-on-write branches
+  data      Read and write binary data (UTF-8 input by default; base64 JSON output)
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+      --json                   Machine-readable JSON output [env: NRZ_JSON=]
+      --human                  Force human-readable output; suppresses --json/NRZ_JSON and auto-JSON in non-TTY environments [env: NRZ_HUMAN=]
+      --token <TOKEN>          API token for authentication [env: NRZ_TOKEN=]
+      --workspace <WORKSPACE>  Workspace slug to use [env: NRZ_WORKSPACE=]
+  -h, --help                   Print help

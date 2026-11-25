@@ -1,0 +1,11 @@
+{
+  "source": "ONREZA official CLI v0.54.0 OpenAPI",
+  "fetchedAt": "2026-11-25T13:40:52.232Z",
+  "tokenPresent": false,
+  "status": "BLOCKED_AUTH",
+  "requests": [],
+  "workspace": null,
+  "fork": null,
+  "rawIdentifiersPublished": false,
+  "reason": "NRZ_TOKEN_MISSING"
+}

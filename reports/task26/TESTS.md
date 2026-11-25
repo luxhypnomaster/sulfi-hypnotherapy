@@ -1,3 +1,9 @@
+# Приоритетная запись26-А
+
+Новые адресные результаты — TESTS_26A.md:16PASS, плюс3повторных budget enum checks. Обследованы official CLI/schema/public HTTP; authenticated billing0requests/NRZ_TOKEN_MISSING. Старые36/32не повторялись и ниже сохранены как исторический snapshot, не текущий новый прогон. Financial gate теперь26-А, no Usage API не стоп-фактор сам по себе.
+
+---
+
 # Проверки №26
 
 LOCAL, 25.11.2026, Node24.19.0. Точные timestamps/SHA/summary каждого запуска — TEST_RUNS.json; исходные логи в logs. Матрица всех18 критериев — ACCEPTANCE.csv/ACCEPTANCE.md. Уровни LOCAL/LIVE/OWNER разделены.

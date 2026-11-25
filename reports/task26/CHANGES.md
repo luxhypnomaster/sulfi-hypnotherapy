@@ -1,3 +1,9 @@
+# Продолжение26-А
+
+Актуальное изменение и base — CHANGES_26A.md, code SHA/checkpoint — DELIVERY_26A.json. Та же Draft PR77, без новой ветки/merge/deploy. Ниже сохранён кодовый этап26 до дополнения.
+
+---
+
 # Изменения №26
 
 Отдельная ветка `feat/task26-onreza-staging`, база `ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2`, PR54 `feat/task22-server-ratings-admin`. Кодовый SHA `fa053239d2d8ac91bf9fbaa9158815e20bf67f46`; [Draft PR77](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77), не merge. Последующие коммиты только отчётные, кодовый tree сохраняется.

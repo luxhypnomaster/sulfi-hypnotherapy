@@ -1,3 +1,9 @@
+# Приоритетное изменение26-А
+
+Официальное дополнение26-А заменяет прежнее требование доказанного10₽ cap: это advisory target, не гарантия. Финансовые gates — подтверждённый Hobby/no-paid terms, минимальные разрешённые ресурсы, bounded workload и safe after-test. Отсутствие Usage API само по себе не блокирует trial. CLI0.54.0 теперь доступен в task tmpfs и checksum/help проверены. Auth NRZ_TOKEN остаётся BLOCKED_AUTH. workspace list — local config; для live workspace/plan нужен документированный GET /v1/workspace, а whoami получает /v1/user. Help с подключённым секретом выполнять только в дочернем процессе без NRZ_TOKEN. Последовательность и точные маршруты BILLING_RESEARCH.md / operator probe. Прежний текст ниже — исходный runbook до26-А; условия10₽/обязательного billing API и отсутствия CLI в нём переопределены этим абзацем. Остальные security/ordering/deploy gates сохранены.
+
+---
+
 # Продолжение №26 — безопасный runbook (LIVE НЕ ВЫПОЛНЕН)
 
 ## 0. Восстановить точку

@@ -1,0 +1,25 @@
+Manage managed PostgreSQL databases
+
+Usage: nrz db [OPTIONS] <COMMAND>
+
+Commands:
+  list        List workspace databases (or filter by the selected Product)
+  create      Create a standalone managed database; attach explicitly with db config
+  info        Show database details
+  delete      Delete a database
+  start       Start a stopped database
+  stop        Stop a running database
+  connection  Show connection string
+  query       Execute SQL query
+  branches    Manage database branches
+  config      Show bindings or explicitly bind a Service and ProductEnvironment
+  schema      Show database schema (tables, columns, types)
+  help        Print this message or the help of the given subcommand(s)
+
+Options:
+      --project-id <PROJECT_ID>  Project ID (skip auto-detection)
+      --json                     Machine-readable JSON output [env: NRZ_JSON=]
+      --human                    Force human-readable output; suppresses --json/NRZ_JSON and auto-JSON in non-TTY environments [env: NRZ_HUMAN=]
+      --token <TOKEN>            API token for authentication [env: NRZ_TOKEN=]
+      --workspace <WORKSPACE>    Workspace slug to use [env: NRZ_WORKSPACE=]
+  -h, --help                     Print help

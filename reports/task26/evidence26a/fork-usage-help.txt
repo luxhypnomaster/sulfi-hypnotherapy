@@ -1,0 +1,13 @@
+Read measured costs for the copy and its resources
+
+Usage: nrz fork --product-id <PRODUCT_ID> usage [OPTIONS] <FORK_ID>
+
+Arguments:
+  <FORK_ID>  
+
+Options:
+      --json                   Machine-readable JSON output [env: NRZ_JSON=]
+      --human                  Force human-readable output; suppresses --json/NRZ_JSON and auto-JSON in non-TTY environments [env: NRZ_HUMAN=]
+      --token <TOKEN>          API token for authentication [env: NRZ_TOKEN=]
+      --workspace <WORKSPACE>  Workspace slug to use [env: NRZ_WORKSPACE=]
+  -h, --help                   Print help

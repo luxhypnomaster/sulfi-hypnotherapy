@@ -1,0 +1,44 @@
+ONREZA platform CLI — dev, build, deploy
+
+Usage: nrz [OPTIONS] <COMMAND>
+
+Commands:
+  dev          Start local dev server with platform emulation (KV, Context)
+  build        Validate build output and manifest
+  deploy       Deploy to ONREZA platform
+  deploy-set   Deploy a selected Service set as one Environment composition
+  db           Manage managed PostgreSQL databases
+  kv           Manage local KV store
+  kv-v2        Manage remote binary KV v2 Stores and branches
+  login        Log in to ONREZA platform
+  whoami       Show current user info
+  logout       Log out from ONREZA platform
+  link         Link this directory to an ONREZA project
+  upgrade      Upgrade nrz to the latest version
+  projects     Manage projects
+  services     Manage Product Services
+  fork         Manage disposable copies of a running Product
+  publish      Publish tested Services to a target ProductEnvironment
+  endpoints    Manage Compute endpoint policies, exposure and sharing
+  preview      Manage protected preview URL access
+  config       Inspect effective CLI configuration
+  deployments  List deployments for a project
+  logs         View runtime logs
+  env          Manage environment variables
+  context      Select the execution environment for this checkout
+  domains      Manage custom domains
+  rollback     Rollback a deployment
+  workspace    Manage workspaces
+  init         Initialize project scaffold (optionally create/link on platform)
+  detect       Detect framework, package manager, and project features
+  functions    Manage ONREZA Functions (native-runtime check, ...)
+  rules        Manage Edge Rules authored in onreza.rules.toml
+  help         Print this message or the help of the given subcommand(s)
+
+Options:
+      --json                   Machine-readable JSON output [env: NRZ_JSON=]
+      --human                  Force human-readable output; suppresses --json/NRZ_JSON and auto-JSON in non-TTY environments [env: NRZ_HUMAN=]
+      --token <TOKEN>          API token for authentication [env: NRZ_TOKEN=]
+      --workspace <WORKSPACE>  Workspace slug to use [env: NRZ_WORKSPACE=]
+  -h, --help                   Print help
+  -V, --version                Print version

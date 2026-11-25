@@ -37,3 +37,8 @@ npm start
 `build.mjs` копирует **только** этот runtime и прежний verifier в `dist`, создаёт manifest v2 и build receipt. Android, GAS src, тесты, приватные файлы и dev node_modules не входят. Build воспроизводим по байтам; CLI Functions/manifest preflight ещё NOT_RUN. Полный checkout Android в провайдер не передавать. Runtime dependencies устанавливать из lockfile с `--omit=dev` в curated context перед проверенным deploy.
 
 Не деплоить текущий кандидат, пока не закрыты защищённый доступ, inventory/стоимость/остаточный расход, лимит владельца и доказательство порядка KV. Идентификаторы ресурсов хранить только в закрытом паспорте. Подробный порядок продолжения: `reports/task26/DEPLOYMENT_RUNBOOK.md`.
+
+
+## Дополнение26-А: биллинг и финансовый review
+
+Официальный CLI0.54.0 проверен в task tmpfs, NRZ_TOKEN пока отсутствует. Исследование в reports/task26/BILLING_RESEARCH.md, proposal в BILLING_ADAPTER_PROPOSAL_26A.md. core/billing26a.mjs не mounted в production/UI. Operator-only research/billing_probe26a.mjs использует только подтверждённые GET, без токена0HTTP; actual суммы не придуманы. Финансовый budgetGate обновлён: нет обязательного Usage API или обещания10₽ cap; нужен подтверждённый Hobby/no-paid terms, разрешённый минимальный bounded trial и safe after-test. Старый36/32 результат сохранён исторически, новая адресная группа16PASS (без full SQL replay), плюс3 targeted проверки official HOBBY enum.
