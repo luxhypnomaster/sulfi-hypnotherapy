@@ -1,0 +1,2 @@
+# Provider passport is Drive-only; no privileged resource identities in public Git.
+PROVIDER_STATE.md

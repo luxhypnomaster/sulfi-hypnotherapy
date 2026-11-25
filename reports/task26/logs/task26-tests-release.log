@@ -1,0 +1,48 @@
+
+> alchemist-protocol22-staging26@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ signed JWT with missing scope must not authenticate (5.930205ms)
+✔ HEAD reader must refuse adapter lacking version fence even with injected projection (1.008308ms)
+✔ public synthetic snapshot rejects hidden draft/private fields and non-synthetic IDs (4033.45255ms)
+✔ budget blocks unknown live context and unapproved cap (0.846162ms)
+✔ budget includes residual SQL/storage costs and old tariff (0.152034ms)
+✔ bounded synthetic calculation is not live deployment or bill (0.147069ms)
+✔ curated build is reproducible, excludes Android/GAS/tests/secrets and serves health (161.988409ms)
+✔ CORE is free of provider ctx and environment binding dependencies (5.965859ms)
+✔ resource reconciliation reuses saved IDs and refuses ambiguity (1.205964ms)
+✔ occupied PostgreSQL quota stops creation, missing resources never provision themselves (0.218651ms)
+✔ PostgreSQL engine: repeat migration keeps identities and default roles (3417.98968ms)
+✔ same verified identity and installation recover stable uid; retry is idempotent (1462.917638ms)
+✔ unconfirmed client ID, disallowed registration and installation theft denied (1513.690358ms)
+✔ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1764.975623ms)
+✔ invalid JWT never touches KV or SQL, including fake forwarded identity (1528.780229ms)
+✔ warm basic session check from sealed KV does not call SQL (1428.239801ms)
+✔ KV miss restores existing session from authoritative SQL, never creates identity (1410.974903ms)
+✔ KV outage and tampering fail closed; no automatic SQL retry storm (1956.628012ms)
+✔ TTL bound expires session projection; old KV never grants sensitive role (1732.832357ms)
+✔ changed current role version rejects stale session before publish (1510.075723ms)
+✔ CLIENT cannot publish; direct Compute path never trusts role headers (1812.009236ms)
+✔ verified HEAD wire, publication retry and immutable snapshot (1457.759348ms)
+✔ identical rebuild preserves exact HEAD/revision/hash despite later build timestamp (1351.165757ms)
+✔ missing dependency or unsupported ratings cannot publish a HEAD (1534.840194ms)
+✔ SQL failure between head and outbox rolls back both and receipt (1401.719673ms)
+✔ lost response after SQL commit leaves durable outbox and idempotent receipt (1642.38558ms)
+✔ KV write failure leaves outbox pending; retry succeeds without duplicate HEAD (1347.368561ms)
+✔ outdated events fetch latest authoritative projection; no revision regression (1385.503778ms)
+✔ no CAS or proven writer: publisher STOP, outbox remains recoverable (1529.451511ms)
+✔ invalidation and namespace-only rebuild do not clear other synthetic tenants (1359.529328ms)
+✔ adapter TTL, miss, failure, no-CAS and delayed writes contract (1.196337ms)
+✔ Function portable entry: auth/HEAD match core, no SQL for good or bad requests (1589.335134ms)
+✔ Compute HTTP minimal health, 404/405, bad auth and forged headers no SQL (41.763929ms)
+✔ runtime refuses generic DATABASE_URL and production activation (0.616498ms)
+✔ PostgreSQL persistence: synthetic sessions/HEAD/outbox survive close and reopen (2078.209472ms)
+✔ lost SQL acknowledgement after KV success replays safely with a persistent pending event (1327.015618ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42319.943808

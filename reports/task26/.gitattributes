@@ -1,0 +1,2 @@
+# Keep raw test diagnostics byte-for-byte; Node can emit blank lines with spaces.
+logs/*.log whitespace=-blank-at-eol

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "environment": "staging",
+  "existingVerifierSHA256": "64e555bab12bbacfad726750822e292e7ed0da9e68d521d0317dcec4caf071b3",
+  "functions": "self-contained entry, CLI preflight NOT_RUN",
+  "nativeArtifacts": false
+}

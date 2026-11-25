@@ -1,0 +1,9 @@
+{
+  "time": "2026-11-25T13:08:10.462998+00:00",
+  "url": "https://api.onreza.ru/v1/projects",
+  "method": "GET",
+  "authenticated": false,
+  "httpStatus": 401,
+  "workspaceChecked": false,
+  "resourceWrites": 0
+}

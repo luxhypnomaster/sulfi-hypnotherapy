@@ -1,0 +1,176 @@
+[
+  {
+    "file": "logs/task26-first-test.log",
+    "completedAt": "2026-11-25T13:07:37.125856+00:00",
+    "sha256": "52ba072234c4815f5f28c9724cc534078810be56d119f30b698ccb34c5b4ab90",
+    "summary": {
+      "tests": 12,
+      "pass": 0,
+      "fail": 11,
+      "cancelled": 1,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 25,
+    "passedDiagnosticLines": 0
+  },
+  {
+    "file": "logs/task26-migration-test.log",
+    "completedAt": "2026-11-25T13:07:55.788947+00:00",
+    "sha256": "08e6ddcb75f5c85b10cb6299b48ea72396160059ea28852c48a1f7192668e29a",
+    "summary": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 1
+  },
+  {
+    "file": "logs/task26-tests-round2.log",
+    "completedAt": "2026-11-25T13:09:01.209761+00:00",
+    "sha256": "af10acacca62f63808a7781189da5e3382d2e193747aa145fc881972f08f5b22",
+    "summary": {
+      "tests": 25,
+      "pass": 25,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 25
+  },
+  {
+    "file": "logs/task26-boundaries-red.log",
+    "completedAt": "2026-11-25T13:09:34.600132+00:00",
+    "sha256": "05b1ae6552095ea4617965a05d68f38d0e64a9e696c3c55ef22dc7ff8d64c8e4",
+    "summary": {
+      "tests": 3,
+      "pass": 0,
+      "fail": 3,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 7,
+    "passedDiagnosticLines": 0
+  },
+  {
+    "file": "logs/task26-ordering-red.log",
+    "completedAt": "2026-11-25T13:09:51.487307+00:00",
+    "sha256": "60b7bbe08affd30be59932c7380f82427d721cc861a2f722dec7cf38ab4976c5",
+    "summary": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 3,
+    "passedDiagnosticLines": 0
+  },
+  {
+    "file": "logs/task26-tests-final.log",
+    "completedAt": "2026-11-25T13:10:44.488735+00:00",
+    "sha256": "ded22710a7e378b1439174807340380938f1aeb2e6a7aa5540cb31cf90a7255b",
+    "summary": {
+      "tests": 31,
+      "pass": 31,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 31
+  },
+  {
+    "file": "logs/task26-ack-test.log",
+    "completedAt": "2026-11-25T13:11:06.211692+00:00",
+    "sha256": "8df778d51b617e7de70d5dda71e3c15140d74973925f75da8576d8f2413eb423",
+    "summary": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 1
+  },
+  {
+    "file": "logs/task26-tests-complete.log",
+    "completedAt": "2026-11-25T13:12:24.631863+00:00",
+    "sha256": "77f675d9ecef12af71764069c4bf3f133dc94b3dc34592fea391218945e6f641",
+    "summary": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 34
+  },
+  {
+    "file": "logs/task26-resources-test.log",
+    "completedAt": "2026-11-25T13:12:13.004431+00:00",
+    "sha256": "5ff4147c18fa656c1ead7251af84865735bda9b796bdfcf1676ad0849445c0e3",
+    "summary": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 2
+  },
+  {
+    "file": "logs/task26-final-small.log",
+    "completedAt": "2026-11-25T13:12:34.819362+00:00",
+    "sha256": "710f73ec87bdc31c6a0279eabff99426e24299dbd6bf232fe692131ed3ce3c14",
+    "summary": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 4
+  },
+  {
+    "file": "logs/task26-existing-regression.log",
+    "completedAt": "2026-11-25T13:10:18.381999+00:00",
+    "sha256": "fcb1b03ca21c9fbaec4eb1d64339eaac309e563c3d91494de7540665effb933e",
+    "summary": {
+      "tests": 32,
+      "pass": 32,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 32
+  },
+  {
+    "file": "logs/task26-build.log",
+    "completedAt": "2026-11-25T13:10:35.881151+00:00",
+    "sha256": "33fde40d8bc34141e8cde7aeee971d4ae746f11a98b179cb7b59fc8b8fe94674",
+    "summary": {},
+    "failedDiagnosticLines": 0,
+    "passedDiagnosticLines": 0
+  },
+  {
+    "file": "logs/task26-tests-release.log",
+    "summary": {
+      "tests": 36,
+      "pass": 36,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "completedAt": "2026-11-25T13:18:05.731203+00:00",
+    "sha256": "4ba66b663da61e8221b24f0cbc33484c54aa35ed125f7faa8f12f9cc0abec191"
+  }
+]

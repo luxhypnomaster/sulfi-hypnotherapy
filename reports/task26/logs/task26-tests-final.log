@@ -1,0 +1,43 @@
+
+> alchemist-protocol22-staging26@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ signed JWT with missing scope must not authenticate (2.089844ms)
+✔ HEAD reader must refuse adapter lacking version fence even with injected projection (0.982454ms)
+✔ public synthetic snapshot rejects hidden draft/private fields and non-synthetic IDs (4009.626753ms)
+✔ budget blocks unknown live context and unapproved cap (1.227299ms)
+✔ budget includes residual SQL/storage costs and old tariff (0.237985ms)
+✔ bounded synthetic calculation is not live deployment or bill (0.154655ms)
+✔ PostgreSQL engine: repeat migration keeps identities and default roles (2411.099954ms)
+✔ same verified identity and installation recover stable uid; retry is idempotent (1298.701949ms)
+✔ unconfirmed client ID, disallowed registration and installation theft denied (1551.967954ms)
+✔ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1407.497095ms)
+✔ invalid JWT never touches KV or SQL, including fake forwarded identity (2008.949522ms)
+✔ warm basic session check from sealed KV does not call SQL (1714.290799ms)
+✔ KV miss restores existing session from authoritative SQL, never creates identity (1758.699567ms)
+✔ KV outage and tampering fail closed; no automatic SQL retry storm (1843.149801ms)
+✔ TTL bound expires session projection; old KV never grants sensitive role (1674.906202ms)
+✔ changed current role version rejects stale session before publish (1767.903959ms)
+✔ CLIENT cannot publish; direct Compute path never trusts role headers (1752.800315ms)
+✔ verified HEAD wire, publication retry and immutable snapshot (1497.21592ms)
+✔ identical rebuild preserves exact HEAD/revision/hash despite later build timestamp (1650.566318ms)
+✔ missing dependency or unsupported ratings cannot publish a HEAD (1671.530832ms)
+✔ SQL failure between head and outbox rolls back both and receipt (1288.249073ms)
+✔ lost response after SQL commit leaves durable outbox and idempotent receipt (1271.438833ms)
+✔ KV write failure leaves outbox pending; retry succeeds without duplicate HEAD (1442.107784ms)
+✔ outdated events fetch latest authoritative projection; no revision regression (1348.779875ms)
+✔ no CAS or proven writer: publisher STOP, outbox remains recoverable (1263.18036ms)
+✔ invalidation and namespace-only rebuild do not clear other synthetic tenants (1494.407279ms)
+✔ adapter TTL, miss, failure, no-CAS and delayed writes contract (1.294717ms)
+✔ Function portable entry: auth/HEAD match core, no SQL for good or bad requests (1766.742046ms)
+✔ Compute HTTP minimal health, 404/405, bad auth and forged headers no SQL (41.569583ms)
+✔ runtime refuses generic DATABASE_URL and production activation (0.780075ms)
+✔ PostgreSQL persistence: synthetic sessions/HEAD/outbox survive close and reopen (2158.910261ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40447.623909

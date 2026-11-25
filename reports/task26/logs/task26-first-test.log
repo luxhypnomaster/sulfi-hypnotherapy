@@ -1,0 +1,419 @@
+
+> alchemist-protocol22-staging26@0.1.0 test
+> node --test test/*.test.mjs
+
+✖ PostgreSQL engine: repeat migration keeps identities and default roles (3339.00793ms)
+✖ same verified identity and installation recover stable uid; retry is idempotent (1683.109102ms)
+✖ unconfirmed client ID, disallowed registration and installation theft denied (1671.965969ms)
+✖ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1477.594137ms)
+✖ invalid JWT never touches KV or SQL, including fake forwarded identity (1493.413323ms)
+✖ warm basic session check from sealed KV does not call SQL (1361.203526ms)
+✖ KV miss restores existing session from authoritative SQL, never creates identity (1517.844517ms)
+✖ KV outage and tampering fail closed; no automatic SQL retry storm (1577.1966ms)
+✖ TTL bound expires session projection; old KV never grants sensitive role (1403.574744ms)
+✖ changed current role version rejects stale session before publish (1407.194265ms)
+✖ CLIENT cannot publish; direct Compute path never trusts role headers (1530.399565ms)
+
+Interrupted while running:
+
+⚠ test/staging.test.mjs (test/staging.test.mjs:1:1)
+✖ test/staging.test.mjs (19082.981495ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 0
+ℹ fail 11
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19091.909016
+
+✖ failing tests:
+
+test at test/staging.test.mjs:17:1
+✖ PostgreSQL engine: repeat migration keeps identities and default roles (3339.00793ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:20:1
+✖ same verified identity and installation recover stable uid; retry is idempotent (1683.109102ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:25:1
+✖ unconfirmed client ID, disallowed registration and installation theft denied (1671.965969ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:31:1
+✖ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1477.594137ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:37:1
+✖ invalid JWT never touches KV or SQL, including fake forwarded identity (1493.413323ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:41:1
+✖ warm basic session check from sealed KV does not call SQL (1361.203526ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:45:1
+✖ KV miss restores existing session from authoritative SQL, never creates identity (1517.844517ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:49:1
+✖ KV outage and tampering fail closed; no automatic SQL retry storm (1577.1966ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:55:1
+✖ TTL bound expires session projection; old KV never grants sensitive role (1403.574744ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:63:1
+✖ changed current role version rejects stale session before publish (1407.194265ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:67:1
+✖ CLIENT cannot publish; direct Compute path never trusts role headers (1530.399565ms)
+  error: cannot insert multiple commands into a prepared statement
+      at pe.Oe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:18272)
+      at pe.tt (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:15658)
+      at pe.parse (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-Y6PULSM7.js:1:14332)
+      at q.Pe (file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1759)
+      at file:///dev/shm/sulfi26/server/alchemist/onreza26/node_modules/@electric-sql/pglite/dist/chunk-QCMPLXTY.js:5:1151
+      at wasm://wasm/0241bbbe:wasm-function[11422]:0x565b8b
+      at wasm://wasm/0241bbbe:wasm-function[3764]:0x22c9dc
+      at wasm://wasm/0241bbbe:wasm-function[3805]:0x233356
+      at wasm://wasm/0241bbbe:wasm-function[3815]:0x23358b
+      at wasm://wasm/0241bbbe:wasm-function[10408]:0x5137a4 {
+    length: 123,
+    severity: 'ERROR',
+    code: '42601',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'postgres.c',
+    line: '1588',
+    routine: 'exec_parse_message',
+    query: "-- STAGING synthetic identities only. Never run on GAS, device SQLite or production.\nCREATE SCHEMA IF NOT EXISTS p22_stage26;\nCREATE TABLE IF NOT EXISTS p22_stage26.identities (\n uid text PRIMARY KEY, issuer text NOT NULL, subject text NOT NULL,\n UNIQUE (issuer, subject));\nCREATE TABLE IF NOT EXISTS p22_stage26.authority (\n uid text PRIMARY KEY REFERENCES p22_stage26.identities(uid),\n role text NOT NULL DEFAULT 'CLIENT' CHECK (role IN ('OWNER','ADMIN','AUTHOR','EDITOR','CLIENT')),\n role_version bigint NOT NULL DEFAULT 1 CHECK (role_version > 0),\n can_manage_subordinate_roles boolean NOT NULL DEFAULT false);\nCREATE TABLE IF NOT EXISTS p22_stage26.installations (\n iid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid));\nCREATE TABLE IF NOT EXISTS p22_stage26.sessions (\n sid text PRIMARY KEY, uid text NOT NULL REFERENCES p22_stage26.identities(uid),\n iid text NOT NULL REFERENCES p22_stage26.installations(iid), request_id text NOT NULL,\n expires_at bigint NOT NULL, role_version bigint NOT NULL,\n scopes jsonb NOT NULL, revoked boolean NOT NULL DEFAULT false,\n version bigint NOT NULL DEFAULT 1,\n UNIQUE(uid,iid,request_id));\nCREATE TABLE IF NOT EXISTS p22_stage26.snapshots (\n id text PRIMARY KEY, scope text NOT NULL, sha text NOT NULL, payload jsonb NOT NULL);\nCREATE OR REPLACE FUNCTION p22_stage26.prevent_snapshot_mutation() RETURNS trigger\n LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'IMMUTABLE_SNAPSHOT'; END $$;\nDO $$ BEGIN\n IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='p22_stage26_immutable') THEN\n  CREATE TRIGGER p22_stage26_immutable BEFORE UPDATE OR DELETE ON p22_stage26.snapshots\n   FOR EACH ROW EXECUTE FUNCTION p22_stage26.prevent_snapshot_mutation();\n END IF;\nEND $$;\nCREATE TABLE IF NOT EXISTS p22_stage26.heads (\n scope text PRIMARY KEY, version bigint NOT NULL, content_hash text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.receipts (\n key text PRIMARY KEY, fingerprint text NOT NULL, payload jsonb NOT NULL);\nCREATE TABLE IF NOT EXISTS p22_stage26.outbox (\n id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n key text NOT NULL, version bigint NOT NULL, payload jsonb,\n state text NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','DELIVERED')),\n attempts integer NOT NULL DEFAULT 0, UNIQUE(key,version));\n",
+    params: [],
+    queryOptions: undefined
+  }
+
+test at test/staging.test.mjs:1:1
+✖ test/staging.test.mjs (19082.981495ms)
+  'Promise resolution is still pending but the event loop has already resolved'

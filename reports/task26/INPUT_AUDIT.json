@@ -1,0 +1,80 @@
+{
+  "observedAt": "2026-11-25T13:12:34.859205+00:00",
+  "archiveSHA256": "cb8a26d5d14f437e5eeca51fe0630828d450f80a3643ab188c1f0a8d029c57f0",
+  "archiveBytes": 11961,
+  "zipCRC": "PASS",
+  "manifestEntries": 6,
+  "manifest": "PASS",
+  "sources": [
+    {
+      "source": "adm",
+      "bytes": 167903,
+      "sha256": "a871a8d031718a0d6f0fe82d4ccd8c867f45555876bad6d5eba8ac01ecb7634e"
+    },
+    {
+      "source": "ops",
+      "bytes": 8756,
+      "sha256": "94f4e025cf4b1338eeb6fc6a2033f13d7f484672e51c31f9194f4b51cbec288c"
+    },
+    {
+      "source": "cat",
+      "bytes": 143745,
+      "sha256": "a365b7b165955bafa718e4b63c0b0677e4bd2b82fb6714422accf96bd44543b2"
+    },
+    {
+      "source": "rules",
+      "bytes": 26590,
+      "sha256": "aadd488ff890301af11777b4b2c93a3a4b8b9b3234387ecdf2860dd876bbd09e"
+    },
+    {
+      "source": "state",
+      "bytes": 146825,
+      "sha256": "cb2608afc7e4c7846b51b838780a5914c1ce864b5bc884827118133a1a3faae7"
+    },
+    {
+      "source": "sdd",
+      "bytes": 61376,
+      "sha256": "e39568a19d3626fcb76376fa69d2f45765ccf7afd04fefcb1416101931b10486"
+    },
+    {
+      "source": "task26",
+      "bytes": 20365,
+      "sha256": "ae1d44f363a037cd4dc4f83c4bd11b7a7c75944fdba5a1ed7c1c0f74c7168ca1"
+    },
+    {
+      "source": "sec",
+      "bytes": 19454,
+      "sha256": "3a3afb6ebc7dc8e9c2f4ae73603b41d27b5cac7b9fdd53bc10b3baa79eb33e7f"
+    },
+    {
+      "source": "head",
+      "bytes": 14277,
+      "sha256": "932ae58e2e67a2b47fc5502f7eb8c56336f2bebd9353294f3de9058ebb5b9e0a"
+    },
+    {
+      "source": "snap",
+      "bytes": 12399,
+      "sha256": "67a23d91827f676a4ffa91816378c59a7a606ee4225520ed93a167e2c5374696"
+    },
+    {
+      "source": "iam",
+      "bytes": 15289,
+      "sha256": "aef6ef6ac8889d45890ce8f15cae023b59de97d4bac2dc374627790e6d5f9184"
+    },
+    {
+      "source": "profile",
+      "bytes": 28105,
+      "sha256": "da0710e838f0f7f21a841b3e1639d2ab32161f4afe16307596d8ae9ad0f35c96"
+    }
+  ],
+  "providerDocsURL": "https://docs.onreza.ru/llms-full.txt",
+  "providerDocsSHA256": "5cfb9918037d26c439709d390c4f29ae878205d36760787766191f3959b83aa8",
+  "branch": "feat/task26-onreza-staging",
+  "baseSHA": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+  "basePR": 54,
+  "mainReadbackSHA": "ef32862e07f5da07b610d29c721677b27ce1704e",
+  "pr25ReadbackSHA": "ef9d8949965a98a512f77cbbf1680686de508461",
+  "pr22AncestorOf25": true,
+  "pr25CommitsAheadOf22": 78,
+  "sourceWritesOutsideTask26": 0
+}
