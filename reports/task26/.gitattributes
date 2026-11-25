@@ -4,3 +4,5 @@ logs/*.log whitespace=-blank-at-eol
 # Preserve original CLI/test evidence bytes.
 evidence26a/*.log whitespace=-blank-at-eol
 evidence26a/*.txt whitespace=-blank-at-eol
+
+evidence26live/*.log whitespace=-blank-at-eol

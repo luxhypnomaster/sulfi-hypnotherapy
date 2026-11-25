@@ -1,3 +1,19 @@
+# Продолжение после подтверждённого live-доступа
+
+1. Использовать существующий private паспорт owner-only, не брать IDs из общедоступной папки отчётов. Один task26 API Product + один автоматически созданный SQL-owner Product/однаSQL; ничего не удалять/переименовывать/создавать заново. Final SQL stopped15:23UTC.
+2. Authorize management token только в защищённом процессе, без echo/argv/файлов/логов. Разрешение на существующий токен действует; новые токены/ротация не требуются. Не запускать CLI --help с токеном в env: help может показать env default.
+3. Official CLI0.54.0: `nrz build <project-root> --json`, root содержитonreza.toml сentry onreza26/compute.mjs. Не передаватьdist какroot. `nrz functions check <minimal-one-function-dir> --json` проверяет локальный provider runtime, не cloud deploy. Local regression opt-inP22_NRZ_BIN.
+4. Управление SQL start/stop — документированный POST БЕЗ JSON body. Empty{} получает400. Timeout create не повторять: GET inventory/reconcile existing IDs. ПередSQL probe фактически дождатьсяrunning, после bounded trial stop и readback stopped. Не weakeningTLS.
+5. Сейчас direct/pooled TCP отказалиприrunning; CLI query тоже локальныйTCP. Следующий диагноз только с новой гипотезой (иной разрешённый маршрут/поддерживаемый native binding), не повторять identical probes. Managed migrations ещё не выполнялись.
+6. Не начинать remote HEAD/publisher, пока нет доказательства ordering. Не выдавать Function localcheck заKV/ACL/HTTPS success. У нового проекта default environmentProduction; отдельное named staging не создано. При согласованном будущем deploy сохранять IDs/revision и observed serving readback. Существующиеproduction/GAS6/OAuth не трогать.
+7. Billing auto толькоentry/24h, lastAttempt/successdurable; manualrate-limited.1GETworkspace/refresh. ДенежныйAPI absencewarning, не самостоятельныйstop. Сверку с панелью/reconciliation не придумывать.
+
+На этом продолжении remote deploy/redeploy/rollback не выполнялись. Следовательно нет servingrevision, которую можно безопасно назвать проверенной rollback-точкой. План ниже — историческая подготовка, не действующийrollback run.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # Приоритетное изменение26-А
 
 Официальное дополнение26-А заменяет прежнее требование доказанного10₽ cap: это advisory target, не гарантия. Финансовые gates — подтверждённый Hobby/no-paid terms, минимальные разрешённые ресурсы, bounded workload и safe after-test. Отсутствие Usage API само по себе не блокирует trial. CLI0.54.0 теперь доступен в task tmpfs и checksum/help проверены. Auth NRZ_TOKEN остаётся BLOCKED_AUTH. workspace list — local config; для live workspace/plan нужен документированный GET /v1/workspace, а whoami получает /v1/user. Help с подключённым секретом выполнять только в дочернем процессе без NRZ_TOKEN. Последовательность и точные маршруты BILLING_RESEARCH.md / operator probe. Прежний текст ниже — исходный runbook до26-А; условия10₽/обязательного billing API и отсутствия CLI в нём переопределены этим абзацем. Остальные security/ordering/deploy gates сохранены.

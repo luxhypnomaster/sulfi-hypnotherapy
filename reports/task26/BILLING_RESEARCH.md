@@ -1,3 +1,21 @@
+# Обновлённое практическое исследование26-А
+
+Авторизация разрешена и работает. В15:13:16.863917UTC один logical refresh выполнил ровно1GET /v1/workspace →200: HOBBY, ACTIVE, periodEnd2026-12-25T10:24:18.254Z, settlement NOT_REQUIRED, cancelAtPeriodEndfalse. Первичный readback14:50 и последующий совпали по plan/end. Это не доказательство отсутствия расхода и не измерение reconciliation delay.
+
+Included/applied/remaining credit, gross charges, periodStart и billing timezone отсутствуют в проверенном response. Значения null/UNAVAILABLE, не0. Суммы из fork-specific endpoint нельзя считать полным workspace spend; fork не создавался ради финансовой проверки. Общий monetary endpoint не найден в изученной публичной API/CLI поверхности; отсутствие документации не доказательство отсутствия API вообще. Сверка с авторизованной панелью и реальная задержка денежных показаний NOT_RUN. OWNER и конкретные read/create/start/stop операции доказаны, полный scope token grants не перечислен.
+
+Минимальная последовательность будущего refresh: (1) серверная актуальная проверка billing.read и scope; (2) чтение durable cache/lease; (3) только при разрешённой attempt ровно1upstream GET /v1/workspace для доступного metadata; (4) нормализация и сохранение. GET /v1/user, projects, SQL capability и inventory — административный preflight, не каждый app entry. Пока generic workspace money contract не установлен, нет оснований дополнительно опрашивать каждую DB/ресурс или private панели.
+
+Сохранённое summary читается с0ONREZA management API calls. Но текущая durable PostgreSQL cache может разбудить SQL, а серверный handler — Compute. Получение summary без пробуждения обоих ресурсов не доказано. Будущий Function/KV projection возможен только с актуальным ACL, fail-closed и доказанным порядком; не добавлять insecure browser cache ради экономии.
+
+Актуальная политика supersedes прежний5min proposal: auto исключительно app entry и rolling24h от последней попытки (включая failed/manual), manual bypass24h с min interval/Retry-After, LastGood/lastAttempt/lastSuccess переживают restart, server lease coalesces нескольких ADMIN. Period rollover не обходит окно; cache data изолированы поworkspace/environment/scope/period. Новый UI не реализован. Тесты вTESTS_26A.
+
+Существующий закрытый admin token обработан только в памяти; финансовый файл не содержит токена/credentialURI/providerIDs. Публично-наследуемая папка отчётов не используется для private resource passport. Отсутствие API расходов не останавливало разрешённые bounded server trials: ресурсы созданы, SQL проверена/остановлена; блокер фактически TCP и capability, а не billing authentication.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # №26-А — практическое исследование биллинга ONREZA
 
 25.11.2026. Продолжение PR77 / feat/task26-onreza-staging с checkpoint e7ae471. Основание: https://docs.google.com/document/d/1GdcoDyErb579vKXzFWU3-HRjQMKeCWR1Zpax0IP3Cj0/edit . Android UI, production integration и платные действия не выполнялись.

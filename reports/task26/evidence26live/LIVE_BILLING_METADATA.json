@@ -1,0 +1,23 @@
+{
+  "classification": "LIVE_METADATA_NOT_MONEY",
+  "source": "GET /v1/workspace",
+  "fetchedAt": "2026-11-25T15:13:16.863917Z",
+  "httpStatus": 200,
+  "upstreamRequestsThisLogicalRefresh": 1,
+  "plan": "HOBBY",
+  "subscriptionStatus": "ACTIVE",
+  "currentPeriodEnd": "2026-12-25T10:24:18.254Z",
+  "currentPeriodSettlementMode": "NOT_REQUIRED",
+  "cancelAtPeriodEnd": false,
+  "includedCredit": null,
+  "appliedCredit": null,
+  "remainingCredit": null,
+  "grossCharges": null,
+  "measuredAt": null,
+  "periodStart": null,
+  "periodTimezone": null,
+  "missingAmountsReason": "NOT_PROVIDED_BY_THIS_DOCUMENTED_RESPONSE",
+  "panelComparison": "NOT_RUN",
+  "reconciliationDelay": "NOT_MEASURABLE_WITH_AVAILABLE_METADATA",
+  "doesNotProveZeroSpend": true
+}

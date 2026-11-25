@@ -1,3 +1,26 @@
+# Проверки текущего продолжения — фактические границы
+
+| Проверка | Результат | Доказательство |
+|---|---|---|
+| npm test, весь runtime26 |59PASS /0FAIL /1SKIP,46430.649794ms|evidence26live/full-continuation-tests.log|
+| opt-in P22_NRZ_BIN official CLI test |1PASS /0FAIL /0SKIP|evidence26live/provider-cli-test.log|
+| Предварительный targeted billing24h/billing/budget/build |28PASS /0FAIL /0SKIP,8683.855ms; подмножество полного прогона|evidence26live/billing24-tests.log|
+| Official nrz build, correct root + onreza.toml |PASS; COMPUTE entry onreza26/compute.mjs|evidence26live/nrz-build-frozen-entry.log|
+| Official Function native runtime load |PASS; functionsLoaded1; runtime release runtime-5bf016e0885b4b70c77b9c12ce84c528aa80b531|evidence26live/functions-check.log|
+| Workspace/user/project/SQL API |LIVE200; HOBBY/OWNER, one target project/one SQL|evidence26live/LIVE_CONTROL_PLANE.json|
+| SQL create timeout |READ_ONLY_RECONCILED; one DB, no repeat POST|same|
+| SQL start/idle-stop/safe-stop readback |LIVE running then stopped; SQL-only observation|same|
+| Direct/pooled managed SQL smoke |BLOCKED ECONNREFUSED; checksExecuted=[]; no migrations executed|same|
+| Billing one logical metadata refresh |LIVE200;1GET workspace, metadata only|evidence26live/LIVE_BILLING_METADATA.json|
+| Cloud app HTTPS/deploy/Function invocation/KV ordering |NOT_RUN; fail-closed safety gate|ISSUES.md|
+| Phone RF/foreign, real Google/Android |NOT_RUN; outside26 stage|NEXT_STAGE.md|
+
+PGlite tests verify actual PostgreSQL-engine constraints/close-reopen/atomic claims on synthetic local data. Это не доказательство live managed SQL. Общий тестовый skip связан с явным opt-in CLI, который отдельно запущен и PASS. Предварительные/повторные тесты не суммируются как новые. Raw failed CLI diagnostics сохранены до исправления; nativeSQL данные только санитизированный readback, не вымышленный query PASS.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # Приоритетная запись26-А
 
 Новые адресные результаты — TESTS_26A.md:16PASS, плюс3повторных budget enum checks. Обследованы official CLI/schema/public HTTP; authenticated billing0requests/NRZ_TOKEN_MISSING. Старые36/32не повторялись и ниже сохранены как исторический snapshot, не текущий новый прогон. Financial gate теперь26-А, no Usage API не стоп-фактор сам по себе.

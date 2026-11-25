@@ -1,3 +1,19 @@
+# Актуальные препятствия после разрешения владельца
+
+- RESOLVED: доступ к существующему NRZ_TOKEN; identity/HOBBY/OWNER и собственные read/write операции подтверждены. Старые требования нового токена/ротации/ПК ниже исторические и не применяются.
+- BLOCKED_ENV SQL: после verified running direct271ms и pooled321ms →ECONNREFUSED; обе попытки завершены безопасным stop. Не установлено, блокирует ли provider gateway или исходящий TCP path. TLS/ACL не ослаблять, без бесконечных повторов. Следующий независимый диагноз: сравнить разрешённый маршрут к тому же endpoint либо официальный поддерживаемый SQL binding в изолированном runtime; `nrz db query` не HTTPS bridge. Не раскрывать connection URI и не создавать вторую SQL.
+- BLOCKED_CAPABILITY: нет доказательства монотонной KV-доставки/упорядоченного writer. Нельзя подменить CAS обычными get+set. SQL-mediated delivery требует отдельного доказательства и managed SQL connectivity. HEAD не публиковался.
+- NOT_RUN: Compute remote deploy/redeploy/rollback/sleep, Functions/KV remote binding и Function-only auth/HEAD при подтверждённом сне обоих ресурсов. Публичного HTTPS приложения нет.
+- Реальное default environment имеет имя Production. Task26 проект изолирован от действующего GAS; это не основание произвольно менять serving/ACL или угадывать create-environment API. Отдельное named staging через изученный API/CLI не подтверждено.
+- Monetary accounting: documented workspace response даёт metadata, но не суммы. Actual usage/credit, panel comparison и задержка reconciliation остаются неизвестны. Не называть расход нулевым или остаток250₽.
+- SQL-backed billing LastGood долговечен локально, но может пробудить SQL. Не заявлять no-wake без remote proof и безопасного projection/ACL решения.
+
+Требовать действий владельца для токена сейчас не нужно. Существующие private IDs сохранены; продолжение начинается с них. Никакие личные данные не использовались.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # Текущие препятствия26-А (имеют приоритет над историей ниже)
 
 1. **BLOCKED_AUTH**: NRZ_TOKEN отсутствует в защищённом runtime. Уже установлен и проверен CLI0.54.0; прежнее «CLI отсутствует» более не актуально. Не присылать токен в чат/Drive и не искать его в config/репозитории. Подключить через поддерживаемый защищённый runtime secret, затем ожидаемый workspace ID — приватной настройкой/паспортом. Если интерфейс не предоставляет runtime-secret channel, нужен поддерживаемый безопасный механизм среды, не незашифрованный обход.

@@ -1,0 +1,2 @@
+{"s":"error","p":"error","l":"error","m":"build manifest lacks a COMPUTE layer for the frozen application entry; include the selected primary alongside independent runtime layers","code":"APPLICATION_RUNTIME_INVALID"}
+{"error":"build manifest lacks a COMPUTE layer for the frozen application entry; include the selected primary alongside independent runtime layers","code":"APPLICATION_RUNTIME_INVALID"}

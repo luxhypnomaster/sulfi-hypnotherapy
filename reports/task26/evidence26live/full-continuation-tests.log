@@ -1,0 +1,72 @@
+
+> alchemist-protocol22-staging26@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ reading saved summary never performs automatic network request; only entry may refresh (3.587514ms)
+✔ automatic entry uses a rolling24h boundary, not midnight/calendar-day resets (1.33892ms)
+✔ manual refresh bypasses24h and resets next automatic window; provider limits still apply (1.868968ms)
+✔ failed attempts persist and suppress automatic retry; last successful summary is retained (1.702854ms)
+✔ separate workspace/environment/scope never share summary or refresh gates (2.149412ms)
+✔ period rollover cannot bypass24h and never returns previous period as requested-period data (2.481926ms)
+✔ same-process administrators single-flight across periods without cross-period leakage (0.670742ms)
+✔ provider429 Retry-After applies to manual requests without infinite retries (0.503879ms)
+✔ provider timeout cannot pin single-flight forever and late data cannot overwrite cache (16.563267ms)
+✔ cache metadata and lastGood survive actual PostgreSQL-engine close/reopen (3690.331931ms)
+✔ two server instances coalesce through an atomic PostgreSQL row claim (1184.218314ms)
+✔ new server instance cannot auto-retry persisted failure before24h (1565.213976ms)
+✔ billing absence is not zero; plan summary cannot fabricate credit, start, timezone or usage (1.367641ms)
+✔ partial fork usage retains exact decimal strings, no fake freshness, IDs or workspace balance (0.455208ms)
+✔ derived remainder uses authoritative applied credit plus explicit grant adjustments with exact integers (1.184037ms)
+✔ derived remainder refuses missing, estimate, mixed period/currency/as-of or inconsistent totals (0.241869ms)
+✔ cache authorization occurs before cached read, manual refresh coalesces and no polling (2.548591ms)
+✔ provider failure marks cached values stale; denied credentials never return old financial data (1.645154ms)
+✔ missing protected token or expected workspace causes zero HTTP calls (0.622312ms)
+✔ read-only probe checks observed workspace then user, emits no raw credentials or IDs (18.916028ms)
+✔ workspace mismatch, permission denied, network outage are distinct and never create resources (0.834085ms)
+✔ fork probe reads existing exact product/fork only, with no mutation or general usage claim (1.535261ms)
+✔ credit derivation rejects Number amounts before precision is lost (0.147398ms)
+✔ signed JWT with missing scope must not authenticate (2.081615ms)
+✔ HEAD reader must refuse adapter lacking version fence even with injected projection (1.130172ms)
+✔ public synthetic snapshot rejects hidden draft/private fields and non-synthetic IDs (2374.213386ms)
+✔ 26A missing Usage API and unavailable cost estimate do not block otherwise confirmed Hobby trial (1.281309ms)
+✔ 26A ten rubles is advisory; above target warns without promising automatic hard cap (0.165628ms)
+✔ 26A unknown Hobby/payment terms, unauthorized creation, unbounded load or unsafe post-state STOP (0.307451ms)
+✔ curated build is reproducible, excludes Android/GAS/tests/secrets and serves health (187.531654ms)
+✔ CORE is free of provider ctx and environment binding dependencies (7.049979ms)
+﹣ official CLI validates the frozen Compute entry and exact Function runtime (0.574433ms) # SKIP
+✔ resource reconciliation reuses saved IDs and refuses ambiguity (0.835855ms)
+✔ occupied PostgreSQL quota stops creation, missing resources never provision themselves (0.217373ms)
+✔ PostgreSQL engine: repeat migration keeps identities and default roles (2581.014675ms)
+✔ same verified identity and installation recover stable uid; retry is idempotent (1385.468496ms)
+✔ unconfirmed client ID, disallowed registration and installation theft denied (1460.092103ms)
+✔ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1664.673722ms)
+✔ invalid JWT never touches KV or SQL, including fake forwarded identity (1534.024338ms)
+✔ warm basic session check from sealed KV does not call SQL (1602.227119ms)
+✔ KV miss restores existing session from authoritative SQL, never creates identity (1379.208142ms)
+✔ KV outage and tampering fail closed; no automatic SQL retry storm (1730.148939ms)
+✔ TTL bound expires session projection; old KV never grants sensitive role (1438.760526ms)
+✔ changed current role version rejects stale session before publish (1518.995697ms)
+✔ CLIENT cannot publish; direct Compute path never trusts role headers (1335.467075ms)
+✔ verified HEAD wire, publication retry and immutable snapshot (1849.342483ms)
+✔ identical rebuild preserves exact HEAD/revision/hash despite later build timestamp (1469.483252ms)
+✔ missing dependency or unsupported ratings cannot publish a HEAD (1613.818368ms)
+✔ SQL failure between head and outbox rolls back both and receipt (1277.577233ms)
+✔ lost response after SQL commit leaves durable outbox and idempotent receipt (1665.634985ms)
+✔ KV write failure leaves outbox pending; retry succeeds without duplicate HEAD (1531.036496ms)
+✔ outdated events fetch latest authoritative projection; no revision regression (1318.374033ms)
+✔ no CAS or proven writer: publisher STOP, outbox remains recoverable (1289.610142ms)
+✔ invalidation and namespace-only rebuild do not clear other synthetic tenants (1603.275638ms)
+✔ adapter TTL, miss, failure, no-CAS and delayed writes contract (1.805969ms)
+✔ Function portable entry: auth/HEAD match core, no SQL for good or bad requests (1538.110498ms)
+✔ Compute HTTP minimal health, 404/405, bad auth and forged headers no SQL (43.100344ms)
+✔ runtime refuses generic DATABASE_URL and production activation (1.027091ms)
+✔ PostgreSQL persistence: synthetic sessions/HEAD/outbox survive close and reopen (2191.548309ms)
+✔ lost SQL acknowledgement after KV success replays safely with a persistent pending event (1530.243992ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 59
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 46430.649794

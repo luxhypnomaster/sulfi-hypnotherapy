@@ -1,0 +1,1 @@
+{"runtime":{"runtimeReleaseId":"runtime-5bf016e0885b4b70c77b9c12ce84c528aa80b531","target":"linux-x64","path":"/dev/shm/task26-runtime-cache/nrz/functions-runtime/runtime-5bf016e0885b4b70c77b9c12ce84c528aa80b531/linux-x64/onreza-functions-runtime-linux-x64","functionsLoaded":1},"functions":[{"name":"protocol22-light","entrypoint":"light.nrz-fn.mjs"}]}

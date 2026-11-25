@@ -1,3 +1,5 @@
+> Актуальное продолжение26-А: авторизацияHobby/OWNER подтверждена; project/SQL созданы, SQL оставленаstopped. Remote runtime ещё неразвёрнут: nativeSQLTCP отказ и недоказанныйKV ordering. Official CLI build/nativeFunction load локально PASS. onreza.toml задаёт frozenentry; `nrz build` запускать на projectroot. BillingCache теперь требует явный durable store иautoentry/rolling24h, не старый5min. Отчёты reports/task26/RESULT.md и TESTS_26A.md. Ниже исходноеописание кандидата; историческиеNOT_RUN поCLI заменены указанными проверками.
+
 # №26: изолированный синтетический STAGING-кандидат
 
 Это локально проверяемый bootstrap в существующем `server/alchemist`, не новый production backend и не полный Протокол 22. Live ONREZA пока BLOCKED. GAS6, Android, Auth19 и очередь №18 не подключены и не меняются. Не направлять сюда реальные аккаунты или материалы.

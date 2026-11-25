@@ -1,3 +1,17 @@
+# Актуальный BillingAdapter/cache proposal — durable rolling24h
+
+Реализованный изолированный API `BillingCache.read(actor,binding,{entry,manual})` по умолчанию только читает saved summary. `entry:true` допускает автоматический refresh не чаще1/86400000ms с последней попытки; `manual:true` независим от24h, но не от providerNotBefore/min interval. Авторизация сервера вызывается до cache и single-flight; клиентская роль не доверенный аргумент решения.
+
+PostgresBillingStore использует additive002_billing_cache.sql, атомарный row claim и lease fencing. lastAttempt фиксируется перед запросом, lastSuccess только при успешной нормализации; LastGood не затирается failure,401/403 скрывает финансовые значения. Concurrent процессы не создают duplicate upstream; late response не перезаписывает новыйlease. Время провайдера измерения не подменено fetchedAt. Периоды имеют отдельные snapshots, но общий refresh gate внутриworkspace/env/scope, поэтому period rollover не обходит24h.
+
+MemoryBillingStore явно CONTROLLED_MEMORY_FAKE, без скрытого fallback. PGlite доказывает SQL atomicity и persistence на синтетическом локальном engine. Managed SQL deployment интеграция BLOCKED поECONNREFUSED, поэтому это ещё не live MASTER billing service. No polling, no UI, no production wiring. Backend credentials не передаются Android.
+
+Один минимальный metadata refresh =1GET workspace. Денежные значения остаютсяUNAVAILABLE. Durable saved read требуетSQL: обещание zero-wake отсутствует. Function/KV cache будущего этапа не может ослаблятьbilling ACL/monotonic ordering. Сохранностьсекретов важнее экономии.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # BillingAdapter26-А: предложение контракта для будущего MASTER
 
 Статус DESIGN + LOCAL PROTOTYPE. Не P22 wire migration, не Android UI, не подключение к production. Исходные S-D-ADM-001 REQ-022/TST-010 и provider dependency25.11 сохраняются.

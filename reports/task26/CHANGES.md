@@ -1,3 +1,16 @@
+# Изменения текущего продолжения
+
+- Применено обновлённое разрешение26-А и rolling24h правило; первоначальные входные файлы26 сохранены как исторический baseline.
+- BillingCache требует явный store; durable PostgreSQL adapter и additive002_billing_cache.sql. lastAttempt до upstream, lastSuccess только после success; атомарная lease и fencing completion, отдельные LastGood по period, suppression после failure/restart/manual,401/403 hide,429 Retry-After, bounded timeout, no polling/UI.
+- Добавлены12 policy/PGlite регрессий, официальный opt-in CLI/Function runtime test и безопасный native SQL smoke (URI только env, strict TLS, sanitization). Smoke не выполнил SQL из-за TCP refusal.
+- onreza.toml фиксирует конкретный frozen Compute entry. Исправлена доказанная несовместимость infer-entry в CLI build.
+- Разрешённое provisioning минимальных постоянных ресурсов, timeout reconciliation без duplicate POST, прямой/pooled диагноз и safe stop; private паспорт сохранён отдельно.
+- Только docs/task26, reports/task26, server/alchemist/onreza26. Нет изменений №25, приложений, live GAS, main, signing или ACL.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # Продолжение26-А
 
 Актуальное изменение и base — CHANGES_26A.md, code SHA/checkpoint — DELIVERY_26A.json. Та же Draft PR77, без новой ветки/merge/deploy. Ниже сохранён кодовый этап26 до дополнения.

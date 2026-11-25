@@ -1,0 +1,72 @@
+{
+  "classification": "LIVE_SANITIZED_OBSERVATIONS",
+  "observedDateUTC": "2026-11-25",
+  "workspaceMatched": true,
+  "plan": "HOBBY",
+  "subscription": "ACTIVE",
+  "role": "OWNER",
+  "effectiveOperationsVerified": [
+    "read workspace/user/projects/SQL",
+    "create task26 project",
+    "create minimal task26 SQL",
+    "start/stop own SQL"
+  ],
+  "fullTokenPermissionListVerified": false,
+  "projectCreatedAt": "2026-11-25T14:55:31.931669Z",
+  "targetProjectName": "protocol22-staging",
+  "targetProjectCount": 1,
+  "projectInventoryCount": 2,
+  "platformModel": "one API Product plus one platform-created managed-SQL owner Product",
+  "sqlCount": 1,
+  "sqlName": "protocol22_staging",
+  "sqlCU": 0.25,
+  "sqlSuspendSeconds": 60,
+  "sqlCreateResponse": "TIMEOUT_25S",
+  "createRetryCount": 0,
+  "sqlReconciledAt": "2026-11-25T14:56:21Z",
+  "sqlReconcileResult": "exactly one target ACTIVE",
+  "observedAutoStopAt": "2026-11-25T14:58:13Z",
+  "directProbe": {
+    "confirmedRunningAt": "2026-11-25T15:04:45.777478Z",
+    "result": "ECONNREFUSED",
+    "elapsedMs": 271,
+    "checksExecuted": [],
+    "stopAcceptedAt": "2026-11-25T15:04:48Z"
+  },
+  "pooledProbe": {
+    "confirmedRunningAt": "2026-11-25T15:10:49.802869Z",
+    "result": "ECONNREFUSED",
+    "elapsedMs": 321,
+    "checksExecuted": [],
+    "differentAdvertisedTransport": true,
+    "stopAcceptedAt": "2026-11-25T15:10:52.143285Z"
+  },
+  "finalSQLReadback": {
+    "at": "2026-11-25T15:23:00.499786Z",
+    "httpStatus": 200,
+    "observed": "stopped",
+    "desired": "stopped"
+  },
+  "topologyReadback": {
+    "at": "2026-11-25T15:19:48.120164Z",
+    "httpStatus": 200,
+    "environmentNames": [
+      "Production"
+    ],
+    "explicitStagingCount": 0,
+    "serviceCount": 1
+  },
+  "computeDeployed": false,
+  "functionsDeployed": false,
+  "kvNamespaceDeployed": false,
+  "runtimeHTTPS": null,
+  "paidTierChanges": 0,
+  "cardOrPaymentActions": 0,
+  "actualCost": null,
+  "actualCostReason": "not provided by verified response; do not interpret as zero",
+  "tokenHandling": "authorized Drive raw reference to echo-disabled private process memory; no token file/argv/reports; process closed after final readback",
+  "privatePassport": "owner-only separate Drive file; no credentials",
+  "identifiersPublished": false,
+  "productionModified": false,
+  "nativeSQLRootCause": "TCP connection refused from Codex for direct and pooled endpoints while running; provider-versus-network cause unresolved"
+}

@@ -1,3 +1,17 @@
+# Следующие технические шаги, без повторного токена
+
+1. Продолжать прежнюю branch/PR77 и private IDs. Финальное SQLstopped, HTTP API доступен. Уточнить отказTCP по новой независимой гипотезе, не тратить кредит повторными бессмысленнымиstart.
+2. Доказать реальный упорядоченный KVwriter/SQL-mediated delivery, затем малый защищённый deploy сsynthetic credentials и current ACL. Доэтого HEAD fail-closed.
+3. RemoteHTTPS health/404/405, повторdeploy/rollback observed serving, SQL migration+reconnect, Function-only auth/HEAD при наблюдаемом сне Compute/SQL — ещё не выполнены. Не выдавать локальныйPGlite/runtime заLIVE.
+4. Billing:1GETworkspace/refresh; не существует подтверждённой суммы в этомresponse. Panel comparison/monetary delayed reconciliationNOT_RUN. Cache24h уже реализован/проверенлокально; не нужна переработкаUI.
+5. Проверить deployment packaging/runtime dependency resolution до передачи любогоsecrets провайдеру. НикакихAndroid/GAS6/main/paidtierизменений.
+
+Сейчас нет необходимости просить владельца повторный токен или ПК. Если официальный маршрутSQL окажется недоступен и из provider runtime, нужен точный provider-side диагноз по private IDs, не публичная выкладка credentials.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
 # Следующий безопасный шаг в том же №26
 
 1. Разблокировать protected NRZ_TOKEN, точный workspace и финансовые ограничения; read-only inventory до любых расходов. Не создавать второй проект при возобновлении.
