@@ -23,5 +23,9 @@
   "remoteRuntimeDeployed": false,
   "safeSQLState": "stopped",
   "mainUnchanged": true,
-  "privateIdentifiersInPublicReports": false
+  "privateIdentifiersInPublicReports": false,
+  "reportsSHA": "d459c42f556de71698fe73f7fdee05005cc982b8",
+  "archiveSHA256": "a91135ddc9deffcf9dcf707cafeac1021235e615bd0dd18c7a39ab6698676aea",
+  "archiveBytes": 132965,
+  "manifestMembers": 70
 }
