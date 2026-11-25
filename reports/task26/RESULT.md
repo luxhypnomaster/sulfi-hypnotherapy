@@ -18,3 +18,5 @@ API ONREZA из Codex доступен: один анонимный GET `/v1/pro
 GAS6, production, main, OAuth, signing, Android и ресурсы/ветки/отчёты №25 не изменены. Никаких APK/Gradle/QEMU/сборок Android. №26 нельзя объявлять готовым production или полным Протоколом22.
 
 Следующий шаг владельца: защищённый runtime NRZ_TOKEN после ротации прежнего раскрытого ключа и подтверждение предела до10₽ включённого кредита/0₽ платных обязательств. Затем только read-only inventory, расчёт и новый review гейтов; инструкция в ISSUES и runbook.
+
+Кодовый checkpoint `fa053239d2d8ac91bf9fbaa9158815e20bf67f46`, Draft PR https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77 .

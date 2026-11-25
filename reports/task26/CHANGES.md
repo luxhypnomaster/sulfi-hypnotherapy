@@ -1,6 +1,6 @@
 # Изменения №26
 
-Отдельная ветка `feat/task26-onreza-staging`, база `ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2`, PR54 `feat/task22-server-ratings-admin`. Точный кодовый SHA и ссылка Draft PR — в DELIVERY.json, после checkpoint.
+Отдельная ветка `feat/task26-onreza-staging`, база `ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2`, PR54 `feat/task22-server-ratings-admin`. Кодовый SHA `fa053239d2d8ac91bf9fbaa9158815e20bf67f46`; [Draft PR77](https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77), не merge. Последующие коммиты только отчётные, кодовый tree сохраняется.
 
 PR51→52→54→55→56→57 остаются OPEN DRAFT, не merged. Актуальные SHA PR54 `ff32a0f…`, PR55 `85fa532…`, PR56 `d0a6d9a…`, PR57 `ef9d894…`; GitHub compare подтверждает PR54 — предок PR57, ahead78/behind0. Readback main `ef32862e07f5da07b610d29c721677b27ce1704e`, protected=true; локальный origin/main старее и не использован как доказательство текущего main.
 
