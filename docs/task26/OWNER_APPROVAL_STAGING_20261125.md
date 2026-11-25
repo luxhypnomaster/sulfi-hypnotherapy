@@ -5,3 +5,7 @@
 Использовать прежние ресурсы и существующий токен. Pro, действующий GAS6, main, пользовательские данные и ACL действующих систем не изменять. Это не общее разрешение на production и не разрешение включать небезопасный HEAD/publisher. Точные IDs сверяются с закрытым паспортом; секреты не сохраняются в Git, ZIP или отчётах.
 
 Первый deploy использует выключенный synthetic auth/publish; native SQL/KV probe не имеет Edge Rule и допускает только административный test-invoke с доверенным null releaseId. SQL probe выполняет фиксированный SELECT1. KV probe затрагивает только уникальные ключи synthetic26:task26:native-order:* с TTL60 и адресной очисткой, без HEAD.
+
+## Уточнение диагностического транспорта после проверки API
+
+Admin test-invoke имеет debug bindings (disabled/mock) и не доказывает real KV. Поэтому кандидат заменён ограниченным HTTP probe: отдельная случайная capability только в памяти оператора, в защищённой конфигурации ONREZA только её SHA256, окно максимум1200s, закрытие по expiry до SQL/KV. Внешний запрос без capability отклоняется до bindings. Фиксированные SELECT1 и namespace-only KV опыт сохранены; никаких произвольных SQL или production HEAD. Source V2 из Codex остановился на прямом QUIC transfer; рассматривается штатный provider-side Git build из минимальной отдельной ветки того же репозитория, без Android или секретов.

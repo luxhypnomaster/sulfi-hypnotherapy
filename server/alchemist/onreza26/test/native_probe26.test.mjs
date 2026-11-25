@@ -1,9 +1,12 @@
-import test from 'node:test';import assert from 'node:assert/strict';import fn from '../native-probe.nrz-fn.mjs';
-const ctx=()=>({env:{P22_ENVIRONMENT:'staging',P22_SYNTHETIC_NAMESPACE:'synthetic26:controlled:'},invocation:{releaseId:null}});
-const req=q=>new Request('https://probe.invalid/_staging/native-probe',{method:'POST',body:JSON.stringify(q)});
-test('native probe rejects live releases, wrong stage, methods and arbitrary operations before bindings',async()=>{
- for(const c of [{...ctx(),invocation:{releaseId:'live-release'}},{...ctx(),env:{P22_ENVIRONMENT:'production'}},{...ctx(),invocation:{}}])assert.equal((await fn.fetch(req({operation:'sql-read'}),c)).status,403);
- assert.equal((await fn.fetch(new Request('https://probe.invalid/_staging/native-probe'),ctx())).status,405);
+import test from 'node:test';import assert from 'node:assert/strict';import fn from '../native-probe.nrz-fn.mjs';import{createHash}from'node:crypto';
+const capability='a'.repeat(43),digest=createHash('sha256').update(capability).digest('hex');
+const ctx=()=>({env:{P22_ENVIRONMENT:'staging',P22_SYNTHETIC_NAMESPACE:'synthetic26:controlled:',P22_NATIVE_PROBE_MODE:'diagnostic-window',P22_NATIVE_PROBE_UNTIL:String(Math.floor(Date.now()/1000)+600),P22_NATIVE_PROBE_SHA256:digest},invocation:{releaseId:'controlled-release'}});
+const req=q=>new Request('https://probe.invalid/_staging/native-probe',{method:'POST',headers:{Authorization:'Bearer '+capability},body:JSON.stringify(q)});
+test('native probe denies missing/wrong capability, expired/disabled windows and non-staging before bindings',async()=>{
+ for(const change of [{P22_ENVIRONMENT:'production'},{P22_NATIVE_PROBE_MODE:'off'},{P22_NATIVE_PROBE_UNTIL:'1'},{P22_NATIVE_PROBE_UNTIL:String(Math.floor(Date.now()/1000)+3600)}]){const c=ctx();Object.assign(c.env,change);assert.equal((await fn.fetch(req({operation:'sql-read'}),c)).status,403);}
+ const noAuth=new Request('https://probe.invalid/_staging/native-probe',{method:'POST',body:'{}'});assert.equal((await fn.fetch(noAuth,ctx())).status,401);
+ const wrong=req({operation:'sql-read'});wrong.headers.set('Authorization','Bearer '+'b'.repeat(43));assert.equal((await fn.fetch(wrong,ctx())).status,401);
+ const get=new Request('https://probe.invalid/_staging/native-probe',{headers:{Authorization:'Bearer '+capability}});assert.equal((await fn.fetch(get,ctx())).status,405);
  assert.equal((await fn.fetch(req({operation:'arbitrary-sql',sql:'delete data'}),ctx())).status,422);
 });
 test('SQL probe executes only fixed read and never returns credentials or raw errors',async()=>{

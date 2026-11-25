@@ -9,3 +9,9 @@ action = { type = "pipeline", override = true, steps = [{ handle = "protocol22-l
 id = "staging-head"
 condition.path = { type = "exact", value = "/_staging/catalog/head" }
 action = { type = "pipeline", override = true, steps = [{ handle = "protocol22-light" }] }
+
+# Only a short-lived, separately authenticated fixed diagnostic is exposed here.
+[[rules]]
+id = "staging-native-probe"
+condition.path = { type = "exact", value = "/_staging/native-probe" }
+action = { type = "pipeline", override = true, steps = [{ handle = "protocol22-native-probe" }] }
