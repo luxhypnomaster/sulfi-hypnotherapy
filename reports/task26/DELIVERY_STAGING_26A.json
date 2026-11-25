@@ -20,5 +20,9 @@
   "remoteDeployments": 0,
   "finalSQLState": "stopped",
   "finalSQLAt": "2026-11-25T18:28:32.900884Z",
-  "ownerAction": "scoped decision in OWNER_DECISION_STAGING_26A.md; no new token or PC"
+  "ownerAction": "scoped decision in OWNER_DECISION_STAGING_26A.md; no new token or PC",
+  "reportsSHA": "fd082cc8e37219d953e81a1b3e333e55459e9c5c",
+  "archiveSHA256": "97dcec6cdbf199d171dffb693e6e17af11b33f338e120daf7d24699b5ff049c5",
+  "archiveBytes": 148651,
+  "manifestMembers": 79
 }

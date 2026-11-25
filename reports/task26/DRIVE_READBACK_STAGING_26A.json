@@ -1,0 +1,148 @@
+{
+  "task": "26/26-A staging capability continuation",
+  "verifiedAt": "2026-11-25T18:33:35.352Z",
+  "codeSHA": "6d760615438f0c9caa024af68dd0c2ae07cfb2bf",
+  "reportsSHA": "fd082cc8e37219d953e81a1b3e333e55459e9c5c",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "metadataNamesAndSizes": "PASS",
+  "independentDriveDownload": "PASS",
+  "zipCRC": "PASS",
+  "zipSHA256": "97dcec6cdbf199d171dffb693e6e17af11b33f338e120daf7d24699b5ff049c5",
+  "manifestMembersVerified": 79,
+  "credentialProcessClosed": true,
+  "files": [
+    {
+      "name": "RESULT.md",
+      "id": "16Dj7ozaJiBXz63MVV3_oYtEV4QTB0pSp",
+      "path": "/dev/shm/sulfi26/reports/task26/RESULT.md",
+      "size": 16887,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "CHANGES.md",
+      "id": "1xBZoITzumvIsUheBil1z2qgYtUc5OtD2",
+      "path": "/dev/shm/sulfi26/reports/task26/CHANGES.md",
+      "size": 5427,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "TESTS.md",
+      "id": "1qk_Esy5soOfgbFTHiv2jelhdjkYZd_fU",
+      "path": "/dev/shm/sulfi26/reports/task26/TESTS.md",
+      "size": 8569,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ISSUES.md",
+      "id": "1X6EPd9k1RNYMuqe3o0vKNDAwDVsezBda",
+      "path": "/dev/shm/sulfi26/reports/task26/ISSUES.md",
+      "size": 12890,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "DEPLOYMENT_RUNBOOK.md",
+      "id": "1a7qQ4_cGv_7pjsPiCX-DYdwVpkf3O_uQ",
+      "path": "/dev/shm/sulfi26/reports/task26/DEPLOYMENT_RUNBOOK.md",
+      "size": 14404,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "NEXT_STAGE.md",
+      "id": "1S9Spqf-qNxEBGwan1vFisHJ0TejRuEUo",
+      "path": "/dev/shm/sulfi26/reports/task26/NEXT_STAGE.md",
+      "size": 4924,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "OWNER_DECISION_STAGING_26A.md",
+      "id": "1GFPRqj4dGc5SjTmVyADFZtvRwowWFh-R",
+      "path": "/dev/shm/sulfi26/reports/task26/OWNER_DECISION_STAGING_26A.md",
+      "size": 4332,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "PROVIDER_STATE.md",
+      "id": "19lB8k2xAKBV-Y1-hXnjSBBPgvs4qfa4h",
+      "path": "/dev/shm/sulfi26/reports/task26/PROVIDER_STATE.md",
+      "size": 671,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.md",
+      "id": "196tH41pePSosNVdtBxUf8eWvMqvKOLFA",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE.md",
+      "size": 2854,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.csv",
+      "id": "1-NQC_vE1sYEUu0zz0xfXt77W_b29Qbec",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE.csv",
+      "size": 6365,
+      "mime": "text/csv"
+    },
+    {
+      "name": "BILLING_RESEARCH.md",
+      "id": "1oudYlDKF5GVVR9uXrXan7oAYiC56F-J6",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_RESEARCH.md",
+      "size": 25798,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "BILLING_ADAPTER_PROPOSAL_26A.md",
+      "id": "1LauZ6ZjH-V_vJsDKz4iNaEdTl_gZbppM",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_ADAPTER_PROPOSAL_26A.md",
+      "size": 8362,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "BILLING_CAPABILITIES_26A.csv",
+      "id": "1E-tmuU3PzCLW8M9w19luJOY3p4s5xs5O",
+      "path": "/dev/shm/sulfi26/reports/task26/BILLING_CAPABILITIES_26A.csv",
+      "size": 4451,
+      "mime": "text/csv"
+    },
+    {
+      "name": "ACCEPTANCE_26A.csv",
+      "id": "1Vz9cndobTVN7I4ONYxG3yZannV6ng387",
+      "path": "/dev/shm/sulfi26/reports/task26/ACCEPTANCE_26A.csv",
+      "size": 1392,
+      "mime": "text/csv"
+    },
+    {
+      "name": "CHANGES_26A.md",
+      "id": "1XbF0VXUSwgh0m1qvjL8ImD4Wtn8uhBPi",
+      "path": "/dev/shm/sulfi26/reports/task26/CHANGES_26A.md",
+      "size": 4490,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "TESTS_26A.md",
+      "id": "1fYkzLlzuZoNvE4Wu3KAtWu3PtAC5PRok",
+      "path": "/dev/shm/sulfi26/reports/task26/TESTS_26A.md",
+      "size": 5749,
+      "mime": "text/markdown"
+    },
+    {
+      "name": "DELIVERY_STAGING_26A.json",
+      "id": "15VtCEYC-JVdHj3s_hwUOQynPdMGDz8LA",
+      "path": "/dev/shm/sulfi26/reports/task26/DELIVERY_STAGING_26A.json",
+      "size": 951,
+      "mime": "application/json"
+    },
+    {
+      "name": "TASK26_STAGING_GATES_EVIDENCE.zip",
+      "id": "1gMlmEO-sn0Ojz1ta7emeYR_U63NOnf1T",
+      "path": "/dev/shm/task26-live/TASK26_STAGING_GATES_EVIDENCE.zip",
+      "size": 148651,
+      "mime": "application/zip"
+    },
+    {
+      "name": "MANIFEST_STAGING_26A.json",
+      "id": "1nJPSTeXxriER67CIDbgZ3LAOUZvv6jq5",
+      "path": "/dev/shm/task26-live/MANIFEST_STAGING_26A.json",
+      "size": 14191,
+      "mime": "application/json"
+    }
+  ]
+}
