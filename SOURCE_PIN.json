@@ -1,0 +1,33 @@
+{
+  "task": 26,
+  "logicalEnvironment": "staging",
+  "sourceSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+  "runtimeFiles": {
+    ".gitignore": "05fe7a628802f976b8ae34365446aecda0a7bc06c61dbd4bbc9b7b4f02a08b75",
+    "build.mjs": "834ee50c7e9a09ded89943535d9927cbb83e0817e25a592bbbacb91577e5a2a6",
+    "runtime-manifest.json": "19dbf8ae9e5d23ed22c90bb9cd521e6125f73e2a611b0e7cfa021ecf9a83fbd6",
+    "native-probe.nrz-fn.mjs": "73c7a2b346691a22d05e3fa547eb524b3ae616fbec6171a6b3dda10073aac827",
+    "light.nrz-fn.mjs": "1348fb25d8a9681e113cd4767f6567c92127dc7ac5a95b2c0e57275ae1d78606",
+    "onreza.rules.toml": "54ed3d3a4e6858fa22db37f35b892143062ef1c57d7d3dd1a6bb4e7c1b6f4ffa",
+    "onreza.toml": "efd2fa743ad48518c3d3ff071851564aa2e0e41c3d7dfb9f3bcd2b13fdc9e3ea",
+    "package-lock.json": "3750763d2e6ea4a69a73c79e8f81c5e7ab1c6aec7ed87a6ed7d2081606cc0888",
+    "package.json": "10837a89f61c5cb23587c1944ee889007877a5add6389d473a192d3de2184183",
+    "experimental/catalog_snapshot.cjs": "64e555bab12bbacfad726750822e292e7ed0da9e68d521d0317dcec4caf071b3",
+    "onreza26/package-lock.json": "3750763d2e6ea4a69a73c79e8f81c5e7ab1c6aec7ed87a6ed7d2081606cc0888",
+    "onreza26/package.json": "10837a89f61c5cb23587c1944ee889007877a5add6389d473a192d3de2184183",
+    "onreza26/compute.mjs": "30a4a98e9eb8ee0ed69bb7669c89e6252c97706638210d32ed2b57e0eab5ce0e",
+    "onreza26/sql/001_staging.sql": "d0e5de993d31eae5539f01dfb208430ef6db957add85bb5e92d7fa1be6242e26",
+    "onreza26/sql/002_billing_cache.sql": "dc1b3664c68b7ffc2234c48eb75376500183335f1c9872517b418f1370541076",
+    "onreza26/adapters/kv.mjs": "7054750327354218412df0d282b03127d581cde6ec4c66aad11f86cd51b7571c",
+    "onreza26/adapters/postgres.mjs": "7b4a61a6e9f50afda1dea31db77270185ac4d8315a7deb5ba719f57b869c7c69",
+    "onreza26/adapters/billing_store26.mjs": "fb2636c5d79572fc2fddcf0d3268c6544e2506d6fae4c1e0ada97a60a56a4127",
+    "onreza26/adapters/staging_target26.mjs": "3051fcb2456e880a61b96437b69714cda409ab372796e0c91dc4fdeea00c2c7b",
+    "onreza26/core/security.mjs": "774029d28ddfa48d1de2037e0403d00a3ee83a5a88290e8217ed56f4b2ce7455",
+    "onreza26/core/publisher.mjs": "c91909395255c65ff1e84d818ec363cdadd84b4c92b2c9c5bbfa3ccf29b614a1",
+    "onreza26/core/reader.mjs": "1c7de0ace77f9c785bea2c69dfcfa49e2abf850cf7415c08bc498c5db051d558",
+    "onreza26/core/contracts.mjs": "bcce186523695e5fe6c380735fd1d87c1a9f55870d5847686a03e1ec86bf8df6",
+    "onreza26/core/budget.mjs": "e2dd8db50ffbc9463bc835dbdec99eff86805df9a815346eff32bd1c47aa44e9",
+    "onreza26/core/resources.mjs": "088926324211cc65652473abc7773faaa49228dca6567b21f11b9a985129ef38",
+    "onreza26/core/billing26a.mjs": "175f53c7ad6e6dcf9942f169a8650e7c82999ad6a4b3a1f4689a3da8bea76e36"
+  }
+}

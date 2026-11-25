@@ -1,0 +1,1 @@
+import{cp,mkdir}from'node:fs/promises';await mkdir('dist/.onreza',{recursive:true});for(const n of ['onreza26','experimental'])await cp(n,'dist/'+n,{recursive:true});await cp('onreza.rules.toml','dist/onreza.rules.toml');await cp('runtime-manifest.json','dist/.onreza/manifest.json');
