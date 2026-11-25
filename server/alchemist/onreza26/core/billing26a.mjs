@@ -1,3 +1,4 @@
+import {createHash,randomUUID} from 'node:crypto';
 // Proposal-only portable BillingAdapter contract; not mounted in P22 or Android.
 export const fieldStatuses=Object.freeze(['ACTUAL','ESTIMATE','STALE','UNAVAILABLE','PENDING']);
 export const discoveryStatuses=Object.freeze(['DOCUMENTED','VERIFIED_LIVE','BLOCKED_AUTH','NOT_DOCUMENTED','UNAVAILABLE','PENDING']);
@@ -51,18 +52,44 @@ export function deriveRemainingCredit({grant,grantAdjustments,applied}) {
  return {...publicGrant,value:balance.toString(),derived:true,formula:'periodGrant + grantSpecificAdjustments - appliedIncludedCredit',status:'ACTUAL',reason:null};
 }
 export class BillingCache {
- constructor({adapter,authorize,clock=()=>Date.now(),ttlMs=300000,minRefreshMs=30000}) {Object.assign(this,{adapter,authorize,clock,ttlMs,minRefreshMs});this.cache=new Map();this.pending=new Map();}
- async read(actor,binding,{manual=false}={}) {
-  // Existing server IAM is injected. The cache never trusts APK edition or UI role.
-  await this.authorize(actor,'billing.read',binding);
-  const key=JSON.stringify([binding.workspace,binding.period]);const prior=this.cache.get(key);const age=prior?this.clock()-prior.at:Infinity;
-  if(prior&&age<(manual?this.minRefreshMs:this.ttlMs))return structuredClone(prior.value);
-  if(this.pending.has(key))return structuredClone(await this.pending.get(key));
-  const call=(async()=>{try{const value=await this.adapter.read(binding);this.cache.set(key,{value:structuredClone(value),at:this.clock()});return value;}catch(e){
-   if(e?.status===401||e?.status===403){this.cache.delete(key);return unavailableBilling('PROVIDER_ACCESS_DENIED');}
-   if(!prior)return unavailableBilling('PROVIDER_UNAVAILABLE');
-   const old=structuredClone(prior.value);for(const f of Object.values(old.fields??{}))if(f.value!==null){f.status='STALE';f.reason='REFRESH_FAILED';}return old;
-  }})();
-  this.pending.set(key,call);try{return structuredClone(await call);}finally{this.pending.delete(key);}
+ constructor({adapter,authorize,store,clock=()=>Date.now(),windowMs=86400000,minRefreshMs=30000,leaseMs=60000,providerTimeoutMs=20000}) {
+  if(!store)throw Error('EXPLICIT_BILLING_STORE_REQUIRED');
+  if(windowMs!==86400000||leaseMs<=providerTimeoutMs)throw Error('INVALID_BILLING_POLICY');
+  Object.assign(this,{adapter,authorize,store,clock,windowMs,minRefreshMs,leaseMs,providerTimeoutMs});this.pending=new Map();
+ }
+ key(binding){
+  for(const k of ['workspace','environment','scope','period'])if(typeof binding[k]!=='string'||!binding[k])throw Error('COMPLETE_BINDING_REQUIRED');
+  return createHash('sha256').update(JSON.stringify(['workspace','environment','scope'].map(k=>binding[k]))).digest('hex');
+ }
+ view(row,period,refreshState='CACHED') {
+  const good=row?.lastGood&&Object.hasOwn(row.lastGood,period)?row.lastGood[period]:null;
+  const value=good?structuredClone(good.snapshot):unavailableBilling('NO_SAVED_SUMMARY_FOR_PERIOD');
+  if(row?.accessDenied){const hidden=unavailableBilling('PROVIDER_ACCESS_DENIED');hidden.cache={lastAttemptAt:row.lastAttemptAt,lastSuccessAt:row.lastSuccessAt,refreshState:'ACCESS_DENIED'};return hidden;}
+  if(good&&(row.lastErrorCode||this.clock()-good.successAt>=this.windowMs))for(const field of Object.values(value.fields??{}))if(field.value!==null){field.status='STALE';field.reason=row.lastErrorCode||'AUTO_WINDOW_ELAPSED';}
+  value.cache={lastAttemptAt:row?.lastAttemptAt??null,lastSuccessAt:row?.lastSuccessAt??null,refreshState,providerNotBefore:row?.providerNotBefore??0,lastErrorCode:row?.lastErrorCode??null};return value;
+ }
+ async read(actor,binding,{manual=false,entry=false}={}) {
+  await this.authorize(actor,'billing.read',binding);const key=this.key(binding);
+  if(!manual&&!entry)return this.view(await this.store.read(key),binding.period,'READ_SAVED_ONLY');
+  if(this.pending.has(key)){await this.pending.get(key);return this.view(await this.store.read(key),binding.period,'COALESCED_IN_FLIGHT');}
+  const work=(async()=>{
+   const now=this.clock(),leaseId=randomUUID();
+   const claim=await this.store.claim(key,{leaseId,now,manual,entry,windowMs:this.windowMs,leaseMs:this.leaseMs,minRefreshMs:this.minRefreshMs});
+   if(!claim.acquired)return this.view(claim.state,binding.period,claim.state?.leaseUntil>now?'COALESCED_IN_FLIGHT':'SUPPRESSED_BY_POLICY');
+   try {
+    let timeout;
+    const controller=new AbortController();
+    const timedOut=new Promise((_,reject)=>{timeout=setTimeout(()=>{controller.abort();reject(Error('PROVIDER_TIMEOUT'));},this.providerTimeoutMs);});
+    let value;try{value=await Promise.race([this.adapter.read(binding,{signal:controller.signal}),timedOut]);}finally{clearTimeout(timeout);}
+    if(!value||!value.fields)throw Error('INVALID_BILLING_SNAPSHOT');
+    await this.store.complete(key,leaseId,binding.period,value,this.clock());
+   }catch(e){
+    const denied=e?.status===401||e?.status===403;
+    const retryAfterMs=Number.isSafeInteger(e?.retryAfterMs)&&e.retryAfterMs>0?e.retryAfterMs:0;
+    await this.store.fail(key,leaseId,{now:this.clock(),errorCode:denied?'PROVIDER_ACCESS_DENIED':e?.status===429?'PROVIDER_RATE_LIMIT':'REFRESH_FAILED',accessDenied:denied,retryAfterMs});
+   }
+   return this.view(await this.store.read(key),binding.period,'REFRESH_COMPLETED');
+  })();
+  this.pending.set(key,work);try{return structuredClone(await work);}finally{this.pending.delete(key);}
  }
 }

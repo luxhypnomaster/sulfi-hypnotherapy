@@ -1,6 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {unavailableBilling,normalizeWorkspace,normalizeForkUsage,deriveRemainingCredit,BillingCache} from '../core/billing26a.mjs';
 import {probe} from '../research/billing_probe26a.mjs';
+import {MemoryBillingStore} from '../adapters/billing_store26.mjs';
 const now='2026-11-25T14:00:00Z',later='2026-12-20T00:00:00Z';
 const wid='00000000-0000-4000-8000-000000000001',pid='00000000-0000-4000-8000-000000000002',fid='00000000-0000-4000-8000-000000000003';
 const workspace={id:wid,subscription:{planSlug:'HOBBY',status:'ACTIVE',currentPeriodEnd:later}};
@@ -26,16 +27,16 @@ test('derived remainder refuses missing, estimate, mixed period/currency/as-of o
  const r=deriveRemainingCredit({grant:cell('10'),grantAdjustments:cell('0'),applied:patch});assert.equal(r.value,null);assert.ok(['UNAVAILABLE','PENDING'].includes(r.status));}
 });
 test('cache authorization occurs before cached read, manual refresh coalesces and no polling',async()=>{
- let n=0,time=0;const value=normalizeWorkspace(workspace,{fetchedAt:now}),binding={workspace:'opaque',period:'period'};
- const cache=new BillingCache({authorize:async a=>{if(a!=='verified-admin')throw Error('DENIED');},adapter:{read:async()=>{n++;return value;}},clock:()=>time});
- await Promise.all([cache.read('verified-admin',binding),cache.read('verified-admin',binding)]);assert.equal(n,1);
+ let n=0,time=0;const value=normalizeWorkspace(workspace,{fetchedAt:now}),binding={workspace:'opaque',environment:'staging',scope:'workspace',period:'period'};
+ const cache=new BillingCache({store:new MemoryBillingStore(),authorize:async a=>{if(a!=='verified-admin')throw Error('DENIED');},adapter:{read:async()=>{n++;return value;}},clock:()=>time});
+ await Promise.all([cache.read('verified-admin',binding,{entry:true}),cache.read('verified-admin',binding,{entry:true})]);assert.equal(n,1);
  await assert.rejects(cache.read('client',binding),/DENIED/);await cache.read('verified-admin',binding,{manual:true});assert.equal(n,1);
  time=31000;await Promise.all([cache.read('verified-admin',binding,{manual:true}),cache.read('verified-admin',binding,{manual:true})]);assert.equal(n,2);
 });
 test('provider failure marks cached values stale; denied credentials never return old financial data',async()=>{
- let time=0,deny=false,down=false;const binding={workspace:'opaque',period:'p'};
- const cache=new BillingCache({clock:()=>time,authorize:async()=>{},adapter:{read:async()=>{if(down){const e=Error('no details');e.status=deny?403:503;throw e;}return normalizeWorkspace(workspace,{fetchedAt:now});}}});
- await cache.read('admin',binding);time=400000;down=true;const stale=await cache.read('admin',binding);assert.equal(stale.fields.plan.status,'STALE');deny=true;const denied=await cache.read('admin',binding);assert.equal(denied.fields.plan.value,null);assert.equal(denied.fields.plan.reason,'PROVIDER_ACCESS_DENIED');
+ let time=0,deny=false,down=false;const binding={workspace:'opaque',environment:'staging',scope:'workspace',period:'p'};
+ const cache=new BillingCache({store:new MemoryBillingStore(),clock:()=>time,authorize:async()=>{},adapter:{read:async()=>{if(down){const e=Error('no details');e.status=deny?403:503;throw e;}return normalizeWorkspace(workspace,{fetchedAt:now});}}});
+ await cache.read('admin',binding,{entry:true});time=400000;down=true;const stale=await cache.read('admin',binding,{manual:true});assert.equal(stale.fields.plan.status,'STALE');deny=true;time+=31000;const denied=await cache.read('admin',binding,{manual:true});assert.equal(denied.fields.plan.value,null);assert.equal(denied.fields.plan.reason,'PROVIDER_ACCESS_DENIED');
 });
 test('missing protected token or expected workspace causes zero HTTP calls',async()=>{
  let calls=0;const fetcher=()=>{calls++;};assert.equal((await probe({env:{},fetcher})).status,'BLOCKED_AUTH');assert.equal((await probe({env:{NRZ_TOKEN:'controlled-fixture'},fetcher})).status,'BLOCKED_OWNER');assert.equal(calls,0);
