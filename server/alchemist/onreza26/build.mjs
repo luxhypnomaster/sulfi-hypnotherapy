@@ -1,0 +1,13 @@
+import {cp,mkdir,readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const root=new URL('./',import.meta.url),out=new URL('./dist/',root);
+await mkdir(new URL('.onreza/',out),{recursive:true});
+for(const n of ['core','adapters','sql','compute.mjs','light.nrz-fn.mjs','native-probe.nrz-fn.mjs','package.json','package-lock.json','onreza.rules.toml'])await cp(new URL(n,root),new URL('onreza26/'+n,out),{recursive:true});
+await cp(new URL('onreza.rules.toml',root),new URL('onreza.rules.toml',out));
+await mkdir(new URL('experimental/',out),{recursive:true});
+const old=new URL('../experimental/catalog_snapshot.cjs',root),data=await readFile(old);
+await writeFile(new URL('experimental/catalog_snapshot.cjs',out),data);
+const manifest={version:2,layers:[{name:'protocol22-api',target:'COMPUTE',directory:'.',entry:'onreza26/compute.mjs',runtime:{network:{schemaVersion:'COMPUTE_NETWORK_V1',exposure:'PUBLIC',ports:[{name:'http',protocol:'http',port:3000,binding:'primary'}],readiness:{protocol:'http',port:'http',path:'/healthz'},allowFrom:[]}}}],routes:[{pattern:'^/.*$',layer:'protocol22-api'}]};
+await writeFile(new URL('.onreza/manifest.json',out),JSON.stringify(manifest,null,2));
+await writeFile(new URL('build-receipt.json',out),JSON.stringify({schemaVersion:1,environment:'staging',existingVerifierSHA256:createHash('sha256').update(data).digest('hex'),functions:'self-contained entry, CLI preflight NOT_RUN',nativeArtifacts:false},null,2));
+console.log('Curated context ready; provider CLI preflight still required.');

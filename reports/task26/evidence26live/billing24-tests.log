@@ -1,0 +1,36 @@
+✔ reading saved summary never performs automatic network request; only entry may refresh (4.308681ms)
+✔ automatic entry uses a rolling24h boundary, not midnight/calendar-day resets (1.507458ms)
+✔ manual refresh bypasses24h and resets next automatic window; provider limits still apply (2.889658ms)
+✔ failed attempts persist and suppress automatic retry; last successful summary is retained (2.339666ms)
+✔ separate workspace/environment/scope never share summary or refresh gates (4.758967ms)
+✔ period rollover cannot bypass24h and never returns previous period as requested-period data (5.52097ms)
+✔ same-process administrators single-flight across periods without cross-period leakage (0.720278ms)
+✔ provider429 Retry-After applies to manual requests without infinite retries (0.73451ms)
+✔ provider timeout cannot pin single-flight forever and late data cannot overwrite cache (16.496168ms)
+✔ cache metadata and lastGood survive actual PostgreSQL-engine close/reopen (5333.452214ms)
+✔ two server instances coalesce through an atomic PostgreSQL row claim (1536.154594ms)
+✔ new server instance cannot auto-retry persisted failure before24h (1233.803133ms)
+✔ billing absence is not zero; plan summary cannot fabricate credit, start, timezone or usage (1.218952ms)
+✔ partial fork usage retains exact decimal strings, no fake freshness, IDs or workspace balance (1.186117ms)
+✔ derived remainder uses authoritative applied credit plus explicit grant adjustments with exact integers (0.430417ms)
+✔ derived remainder refuses missing, estimate, mixed period/currency/as-of or inconsistent totals (0.197939ms)
+✔ cache authorization occurs before cached read, manual refresh coalesces and no polling (2.511642ms)
+✔ provider failure marks cached values stale; denied credentials never return old financial data (0.985257ms)
+✔ missing protected token or expected workspace causes zero HTTP calls (0.649677ms)
+✔ read-only probe checks observed workspace then user, emits no raw credentials or IDs (19.838269ms)
+✔ workspace mismatch, permission denied, network outage are distinct and never create resources (0.844138ms)
+✔ fork probe reads existing exact product/fork only, with no mutation or general usage claim (1.136917ms)
+✔ credit derivation rejects Number amounts before precision is lost (0.147695ms)
+✔ 26A missing Usage API and unavailable cost estimate do not block otherwise confirmed Hobby trial (0.947137ms)
+✔ 26A ten rubles is advisory; above target warns without promising automatic hard cap (0.121676ms)
+✔ 26A unknown Hobby/payment terms, unauthorized creation, unbounded load or unsafe post-state STOP (0.210021ms)
+✔ curated build is reproducible, excludes Android/GAS/tests/secrets and serves health (178.398299ms)
+✔ CORE is free of provider ctx and environment binding dependencies (6.697484ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8683.855015

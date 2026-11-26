@@ -1,0 +1,20 @@
+{
+  "source": "GET /v1/workspace",
+  "at": "2026-11-25T19:35:37.176146Z",
+  "httpStatus": 200,
+  "upstreamRequestsThisLogicalManualRefresh": 1,
+  "plan": "HOBBY",
+  "subscription": "ACTIVE",
+  "periodEnd": "2026-12-25T10:24:18.254Z",
+  "settlementMode": "NOT_REQUIRED",
+  "cancelAtPeriodEnd": false,
+  "includedCredit": null,
+  "appliedCredit": null,
+  "remainingCredit": null,
+  "grossCharges": null,
+  "missingReason": "NOT_PROVIDED_BY_THIS_DOCUMENTED_RESPONSE",
+  "measuredAt": null,
+  "panelComparison": "NOT_RUN",
+  "reconciliationDelay": "NOT_MEASURABLE_FROM_METADATA",
+  "zeroCostClaimed": false
+}

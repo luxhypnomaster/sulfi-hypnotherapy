@@ -1,0 +1,11 @@
+# Build output and frozen application entry, verified against CLI0.54.0.
+# No workspace/project/service IDs or credentials in this source file.
+[build]
+command = "npm run build"
+output_directory = "dist"
+
+[deploy]
+runtime = "node"
+entry = "onreza26/compute.mjs"
+args = []
+health_check_path = "/healthz"

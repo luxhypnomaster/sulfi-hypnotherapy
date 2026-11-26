@@ -1,0 +1,11 @@
+✔ actual Hobby-shaped capability never falls back to Production or upgrades the plan (1.623795ms)
+✔ existing participating Custom Staging is selected exactly; available but unconnected environment requires a separate reviewed step (0.217019ms)
+✔ ambiguous target, wrong workspace/project, missing capability and production-type disguise fail closed (0.355508ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 85.108962

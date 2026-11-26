@@ -1,0 +1,22 @@
+[
+  {
+    "url": "https://app.onreza.ru",
+    "status": 200,
+    "finalUrl": "https://app.onreza.ru",
+    "bytes": 3102,
+    "sha256": "13a2791144d596553867b5b2b1251d3012eece67c5125f201e0fd8f68b432c7d",
+    "fetchedAt": "2026-11-25T13:42:45.760314+00:00",
+    "authenticated": false,
+    "billingValuesVerified": false
+  },
+  {
+    "url": "https://onreza.ru/pricing",
+    "status": 200,
+    "finalUrl": "https://onreza.ru/pricing",
+    "bytes": 63864,
+    "sha256": "1ed6fcf16216c57897344b21cefef4a06fd6d896e9c3eae1c8d532e24b6e79cc",
+    "fetchedAt": "2026-11-25T13:42:47.333929+00:00",
+    "authenticated": false,
+    "billingValuesVerified": false
+  }
+]

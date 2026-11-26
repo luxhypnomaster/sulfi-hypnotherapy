@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-25T13:18:36.103205+00:00",
+  "stagedFiles": null,
+  "onlyNewTask26Paths": true,
+  "existingVerifierUnchanged": true,
+  "existingVerifierSHA256": "64e555bab12bbacfad726750822e292e7ed0da9e68d521d0317dcec4caf071b3",
+  "tokenValueOrPrivateKeyPatternFindings": [],
+  "forbiddenAreasModified": [],
+  "productionActions": [],
+  "testScope": "synthetic only; no device or cloud resource writes",
+  "limitations": "Targeted static scan and diff audit; not an exhaustive historical Git secret audit.",
+  "scope": "all added task26 files at checkpoint, including forthcoming report metadata"
+}

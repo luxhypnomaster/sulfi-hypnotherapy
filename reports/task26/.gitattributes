@@ -1,0 +1,12 @@
+# Keep raw test diagnostics byte-for-byte; Node can emit blank lines with spaces.
+logs/*.log whitespace=-blank-at-eol
+
+# Preserve original CLI/test evidence bytes.
+evidence26a/*.log whitespace=-blank-at-eol
+evidence26a/*.txt whitespace=-blank-at-eol
+
+evidence26live/*.log whitespace=-blank-at-eol
+
+evidence26staging/*.log whitespace=-blank-at-eol
+
+evidence26approved/*.log whitespace=-blank-at-eol

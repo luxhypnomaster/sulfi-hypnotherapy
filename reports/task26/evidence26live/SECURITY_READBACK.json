@@ -1,0 +1,15 @@
+{
+  "mainSHA": "ef32862e07f5da07b610d29c721677b27ce1704e",
+  "mainProtected": true,
+  "mainChangedByTask": false,
+  "privatePassportShared": false,
+  "privatePassportPermissions": [
+    "user:owner"
+  ],
+  "tokenStoredInGitOrReports": false,
+  "credentialProcessClosed": true,
+  "sanitizedFilesScanned": 30,
+  "privateProviderIDLeaksFound": 0,
+  "paidPlanOrCardChanges": 0,
+  "actualUsageRUB": null
+}

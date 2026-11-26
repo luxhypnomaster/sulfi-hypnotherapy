@@ -1,0 +1,2 @@
+{"s":"error","p":"error","l":"error","m":"no output directory found in /dev/shm/sulfi26/server/alchemist/onreza26/dist. Expected one of: dist/, .output/, build/, out/, _site/, www/, .vitepress/dist/","code":"MISSING_BUILD_OUTPUT"}
+{"error":"no output directory found in /dev/shm/sulfi26/server/alchemist/onreza26/dist. Expected one of: dist/, .output/, build/, out/, _site/, www/, .vitepress/dist/","code":"MISSING_BUILD_OUTPUT"}

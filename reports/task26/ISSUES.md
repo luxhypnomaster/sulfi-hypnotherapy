@@ -1,0 +1,81 @@
+# Актуальные ограничения после развёртывания
+
+RESOLVED: токен, выбор target на Hobby (узкое разрешение владельца), создание постоянных ресурсов, native SQL connect из ONREZA, HTTPS минимум, curated provider-side Git build. Не требовать новый токен/Pro/ПК.
+
+1. KVset принимает более старую прикладную ревизию. Глобальный порядок/CAS не доказан. HEAD/publisher закрыты; sensitive ACL должен оставаться SQL-authoritative. Нужен отдельный доказанный fenced writer либо immutable projection + SQL current pointer; не заменять CAS get+set или одним TTL.
+2. Полные live identity/schema/session/grants/outbox/HEAD не включены; SELECT1 не доказательство миграции и всей авторизации. Локальные тесты не подменяют эту приёмку.
+3. Глобальный сон Compute не подтверждён административным state readback. Конфигурация idle60s и отсутствие кода вызова Compute из Function не равны наблюдению всех процессов. SQL stopped подтверждена.
+4. provider sourceSha256/snapshotHash не равны plain-file SHA256; канонизация и независимый readback bytes не установлены. Не объявлять checksum PASS. Git/source pin/entrypoint/фактическое поведение подтверждены; это не полная независимая проверка artifact bytes.
+5. SourceV2 direct QUIC transfer из Codex завершился deadline; точная сетевая причина не установлена. Git remote build работает. Незавершённая исходная CLI deployment сохраняется; не создавать дубликаты проекта/SQL и не удалять запись ради красивого отчёта.
+6. Actual monetary Usage/credit/reconciliation и panel comparison неизвестны. Отсутствие денежного API не было препятствием trial. Перехода Pro/платежей не было; расход не приравнивается 0.
+7. Rollback возвращает snapshot конфигурации и новый composition identity; нельзя проверять только старый environment releaseId. Проверять observed deployment/member, expectedGeneration и закрытие диагностики. Штатное 300s наблюдение не обходить.
+
+---
+
+## Предыдущий checkpoint — история, не текущий статус
+
+# Новый подтверждённый blocker: Custom STAGING требует Pro
+
+Authenticatedcapabilities: allowedfalse/requiredPlanPRO/currentPlanHOBBY; registryonlyProduction; officialdryENVIRONMENT_NOT_FOUND. Не обходить selector и не повышатьтариф. Предложениеточного scoped исключения находитсяв OWNER_DECISION_STAGING_26A.md. Доразрешенияникакого deployment.
+
+SQLTCP проблема не исправлена; чтениестатуса подтверждает stopped18:28UTC. Не повторять прежние running→ECONNREFUSED безновойгипотезы. SQLbinding через Function невозможнопроверитьдоразрешённой runtime цели. Нетподтверждения KVordering; HEADguard остаётся.
+
+
+---
+
+## Предыдущий checkpoint, сохранён для истории
+
+# Актуальные препятствия после разрешения владельца
+
+- RESOLVED: доступ к существующему NRZ_TOKEN; identity/HOBBY/OWNER и собственные read/write операции подтверждены. Старые требования нового токена/ротации/ПК ниже исторические и не применяются.
+- BLOCKED_ENV SQL: после verified running direct271ms и pooled321ms →ECONNREFUSED; обе попытки завершены безопасным stop. Не установлено, блокирует ли provider gateway или исходящий TCP path. TLS/ACL не ослаблять, без бесконечных повторов. Следующий независимый диагноз: сравнить разрешённый маршрут к тому же endpoint либо официальный поддерживаемый SQL binding в изолированном runtime; `nrz db query` не HTTPS bridge. Не раскрывать connection URI и не создавать вторую SQL.
+- BLOCKED_CAPABILITY: нет доказательства монотонной KV-доставки/упорядоченного writer. Нельзя подменить CAS обычными get+set. SQL-mediated delivery требует отдельного доказательства и managed SQL connectivity. HEAD не публиковался.
+- NOT_RUN: Compute remote deploy/redeploy/rollback/sleep, Functions/KV remote binding и Function-only auth/HEAD при подтверждённом сне обоих ресурсов. Публичного HTTPS приложения нет.
+- Реальное default environment имеет имя Production. Task26 проект изолирован от действующего GAS; это не основание произвольно менять serving/ACL или угадывать create-environment API. Отдельное named staging через изученный API/CLI не подтверждено.
+- Monetary accounting: documented workspace response даёт metadata, но не суммы. Actual usage/credit, panel comparison и задержка reconciliation остаются неизвестны. Не называть расход нулевым или остаток250₽.
+- SQL-backed billing LastGood долговечен локально, но может пробудить SQL. Не заявлять no-wake без remote proof и безопасного projection/ACL решения.
+
+Требовать действий владельца для токена сейчас не нужно. Существующие private IDs сохранены; продолжение начинается с них. Никакие личные данные не использовались.
+
+---
+
+## Исторический снимок до разрешённого live-доступа (не текущий статус)
+
+# Текущие препятствия26-А (имеют приоритет над историей ниже)
+
+1. **BLOCKED_AUTH**: NRZ_TOKEN отсутствует в защищённом runtime. Уже установлен и проверен CLI0.54.0; прежнее «CLI отсутствует» более не актуально. Не присылать токен в чат/Drive и не искать его в config/репозитории. Подключить через поддерживаемый защищённый runtime secret, затем ожидаемый workspace ID — приватной настройкой/паспортом. Если интерфейс не предоставляет runtime-secret channel, нужен поддерживаемый безопасный механизм среды, не незашифрованный обход.
+2. **Финансовые условия26-А**:10₽ — ориентир, не hard cap; отдельное численное подтверждение10₽ больше не является автоматическим препятствием. Нужно подтвердить именно Hobby, отсутствие платных обязательств, разрешённые минимальные ресурсы, bounded workload и безопасное состояние после теста. Это допускает достоверный owner readback, а не только Usage API. Отсутствие расходов API само по себе не блокирует остальные испытания. Current budgetGate это проверяет адресными тестами.
+3. **Billing research**: source contract workspace plan/fork usage изучен, но общий credit/остаток API NOT_DOCUMENTED в обследованной поверхности, не доказан UNAVAILABLE у провайдера. Реальные численные сведения/свежесть/panel comparison ожидают авторизации; нагрузка ради появления расхода запрещена. Без existing fork не создавать копию ради fork usage.
+4. **Независимый исходный blocker**: доказательство порядка KV/Function pipeline и actual provisioning/sleep/usage ещё не получено; billing research не ослабляет ACL или CAS safety.
+5. **Приватность**: shared отчётная папка по-прежнему anyone-with-link:writer; ACL не меняются. В отчётах нет raw resource/account IDs, credentials или финансовых ответов владельца. Официальная панель https://app.onreza.ru; открытие публичной оболочки не означает сверку владельца.
+
+Операторский read-only probe: server/alchemist/onreza26/research/billing_probe26a.mjs. Без токена делает0HTTP. После безопасного подключения читает только документированные GET и сверяет workspace до дальнейших запросов. 401/403 не запускают login/picker или повышение прав. Подробные сведения BILLING_RESEARCH.md.
+
+---
+## Исторические препятствия26 до дополнения (сохранены для аудита, финансовые правила и CLI заменены выше)
+
+# Препятствия и действия владельца
+
+## BLOCKED_OWNER: защищённый NRZ_TOKEN
+
+Проверено отсутствие переменной по bool, environment_status также не показывает configured secrets. Никаких значений env не печаталось. Резервный файл Drive не является разрешённым secret channel, его не читали.
+
+С телефона:
+1. В ONREZA откройте именно workspace «Alchemic project» → Settings → Tokens. Ранее раскрытый широкий ключ следует отозвать/перевыпустить до использования; новый ключ не присылать в чат и не класть в Drive.
+2. Для первого read-only preflight нужны только разрешения чтения identity/workspace/project/deployment/billing. По актуальной документации доступны `projects.read`, `deployments.read`, `team.read`, `billing.read`; названия/фактические права сверяются CLI и readback. Не выбирать полный доступ по умолчанию. Эти read-only права НЕ разрешают создание ресурсов.
+3. В настройках используемой среды Codex передайте новый ключ как защищённый **runtime secret NRZ_TOKEN**, если такой механизм доступен, и примените изменения к этому чату. Вариант «только setup» не подходит: не копировать его в незашифрованный файл/обычную переменную. Если UI не предлагает защищённый runtime channel, сообщите это; потребуется поддерживаемая настройка vault/network credential, а не обход секретной политики. Не требуется компьютер или ручной перенос кода.
+4. После применения достаточно написать, что секрет подключён; значение не нужно. Повторим только bool и официальные read-only identity/workspace/inventory, сохраняя ту же ветку.
+
+## BLOCKED_OWNER/ENV: финансовый gate
+
+Подтвердите предел **не более10₽ расчётного добавочного расхода из включённого кредита**, платные обязательства0₽. Это ещё не разрешение на неизвестный тариф. После readback необходимо доказать полный upper bound: build, Compute, SQL CU/storage/WAL, Functions, KV, traffic, остаточный расход хранения и момент следующей проверки. Неизвестная ставка/квота/сон/остановка или занятый PostgreSQL слот →STOP, не удалять чужую БД. Hobby credit250₽ в исходном документе — историческое утверждение, не текущий проверенный баланс.
+
+## BLOCKED_ENV: CLI и доказательство доставки KV
+
+CLI `nrz` отсутствует. Официальные docs доступны; реальные commands не выдумываются. Установку конкретного подписанного release из официального ONREZA/nrz-cli и `--help`/Functions preflight нужно выполнить до live в подходящей среде. Текущий root disk почти заполнен, рабочий контекст локально в /dev/shm; безопасный код сохранён Git checkpoint, приложение/№25 для освобождения места не удалялись.
+
+У ONREZA ctx.kv документированы get/set/incr/delete/list, но нет CAS и гарантии consistency/order. До доказанного альтернативного single-writer/SQL-mediated protocol live publisher/HEAD запрещены. Нельзя включить флаг и назвать capability доказанной. SQL-bound Function может быть исследована в том же контуре, но ctx.waitUntil не durable queue и не подтверждает transaction ordering. Текущий no-CAS regression честно проверяет STOP.
+
+## Папка отчётов
+
+У указанной владельцем папки обнаружено anyone-with-link:writer. ACL не менялись. Загружаются только очищенные отчёты, без реальных privileged resource IDs, DB URL и секретов. Когда появятся реальные IDs, закрытый PROVIDER_STATE нужно хранить в отдельно согласованном приватном месте; в публичный Git и эту shared папку его помещать нельзя. Сейчас реальных IDs нет, отчёт содержит только NOT_CREATED/UNKNOWN.

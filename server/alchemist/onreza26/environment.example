@@ -1,0 +1,10 @@
+# Names only. Supply values via protected STAGING runtime, never in Git or chat.
+P22_ENVIRONMENT=staging
+P22_STAGING_SYNTHETIC=disabled
+P22_STAGE26_DATABASE_URL=
+P22_SYNTHETIC_IDENTITY_KEY=
+P22_SYNTHETIC_SESSION_KEY=
+P22_SYNTHETIC_PROJECTION_KEY=
+P22_SYNTHETIC_NAMESPACE=
+PORT=3000
+# NRZ_TOKEN belongs ONLY to protected deploy/preflight runtime, never application.

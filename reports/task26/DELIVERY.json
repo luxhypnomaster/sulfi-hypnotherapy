@@ -1,0 +1,25 @@
+{
+  "task": 26,
+  "codeSHA": "fa053239d2d8ac91bf9fbaa9158815e20bf67f46",
+  "branch": "feat/task26-onreza-staging",
+  "baseSHA": "ff32a0f86b8fe9c5ffe7e75406d8b3291471d9c2",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "reportsFolder": "https://drive.google.com/drive/folders/1h0KUMDdr6eh86QZF00SRHd7GaxxoFylE",
+  "status": "PARTIAL_LOCAL_LIVE_BLOCKED_OWNER",
+  "newTests": {
+    "pass": 36,
+    "fail": 0
+  },
+  "existingRegression": {
+    "pass": 32,
+    "fail": 0
+  },
+  "matrix": {
+    "PASS_LOCAL": 3,
+    "PARTIAL": 9,
+    "BLOCKED": 6
+  },
+  "liveDeployment": false,
+  "providerIDsPublished": false,
+  "createdAt": "2026-11-25T13:19:32.452500+00:00"
+}

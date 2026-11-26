@@ -1,0 +1,6 @@
+# Provider passport is Drive-only; no privileged resource identities in public Git.
+PROVIDER_STATE.md
+
+# Drive delivery copies (bundle includes Drive-only state summary).
+EVIDENCE_26.zip
+FILES_SHA256.json

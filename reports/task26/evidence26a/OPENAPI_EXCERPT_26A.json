@@ -1,0 +1,244 @@
+{
+  "source": "https://github.com/ONREZA/nrz-cli/blob/v0.54.0/api/openapi.json",
+  "paths": {
+    "/v1/projects/": {
+      "get": {
+        "operationId": "getV1Projects",
+        "summary": "List projects",
+        "authentication": [
+          {
+            "sessionCookieAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          },
+          {
+            "bearerApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "pattern": "^[a-z0-9-]+$"
+            }
+          }
+        ],
+        "responseProperties": [
+          "projects",
+          "total"
+        ]
+      }
+    },
+    "/v1/projects/{id}": {
+      "get": {
+        "operationId": "getV1ProjectsById",
+        "summary": "Get project",
+        "authentication": [
+          {
+            "sessionCookieAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          },
+          {
+            "bearerApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "serviceId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responseProperties": [
+          "id",
+          "productId",
+          "workspaceId",
+          "workspaceBindingGeneration",
+          "application",
+          "name",
+          "displayName",
+          "sourceType",
+          "gitUrl",
+          "branch",
+          "frameworkPreset",
+          "installCommand",
+          "installCommandSource",
+          "buildCommand",
+          "buildCommandSource",
+          "outputDirectory",
+          "outputDirectorySource",
+          "buildTimeoutMinutes",
+          "rootDirectory",
+          "includeFilesOutsideRoot",
+          "nodeVersion",
+          "packageManager",
+          "ignoredBuildBehavior",
+          "ignoredBuildFolder",
+          "ignoredBuildCommand",
+          "gitProvider",
+          "gitConnectionId",
+          "gitverseRepoId",
+          "gitverseWebhookId",
+          "autoDeployEnabled",
+          "autoDeployTriggerScope",
+          "prCommentsEnabled",
+          "deploymentStatusEnabled",
+          "commitStatusEnabled",
+          "gitLfsEnabled",
+          "sourceUrl",
+          "forkedFrom",
+          "exposeSystemEnvVars",
+          "concurrentBuildsEnabled",
+          "prioritizeProductionBuilds",
+          "commonBuildCompute",
+          "previewProtectionEnabled",
+          "detectedFramework",
+          "detectedComputeType",
+          "detectionSource",
+          "lastDetectionAt",
+          "sessionTtlSeconds",
+          "deletedAt",
+          "cleanedAt",
+          "createdAt",
+          "updatedAt",
+          "deployments",
+          "envVars",
+          "_count",
+          "hasPreviewPassword"
+        ]
+      }
+    },
+    "/v1/product-forks/{productId}/{forkId}/usage": {
+      "get": {
+        "operationId": "getV1ProductForksByProductIdByForkIdUsage",
+        "summary": "Read measured usage for the copy's exact resource identities",
+        "authentication": [
+          {
+            "sessionCookieAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          },
+          {
+            "bearerApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "forkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responseProperties": [
+          "coverage",
+          "currency",
+          "knownGrossCostCents",
+          "period",
+          "freshness",
+          "lastReconciledAt",
+          "items",
+          "limitations"
+        ]
+      }
+    },
+    "/v1/user": {
+      "get": {
+        "operationId": "getV1User",
+        "summary": "Get current user",
+        "authentication": [
+          {
+            "sessionCookieAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          },
+          {
+            "bearerApiKeyAuth": []
+          }
+        ],
+        "parameters": [],
+        "responseProperties": [
+          "id",
+          "email",
+          "name",
+          "username"
+        ]
+      }
+    },
+    "/v1/workspace": {
+      "get": {
+        "operationId": "getV1Workspace",
+        "summary": "Get workspace info",
+        "authentication": [
+          {
+            "sessionCookieAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          },
+          {
+            "bearerApiKeyAuth": []
+          }
+        ],
+        "parameters": [],
+        "responseProperties": [
+          "id",
+          "slug",
+          "name",
+          "image",
+          "isStarter",
+          "role",
+          "createdAt",
+          "subscription"
+        ]
+      }
+    }
+  }
+}

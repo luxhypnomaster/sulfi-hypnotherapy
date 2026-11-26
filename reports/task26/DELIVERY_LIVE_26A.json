@@ -1,0 +1,31 @@
+{
+  "task": "26/26-A authorized continuation",
+  "sourceSHA": "c5aa8b75d335fbfb66af4bb1622f4b4647f2b378",
+  "previousCheckpoint": "3089b1f0072ab61b78524d04e56352b145b216dd",
+  "branch": "feat/task26-onreza-staging",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "createdAt": "2026-11-25T15:26:13.250108+00:00",
+  "tests": {
+    "fullPass": 59,
+    "fullFail": 0,
+    "fullSkip": 1,
+    "separateOfficialCLIPass": 1,
+    "nativeManagedSQL": "BLOCKED_ECONNREFUSED"
+  },
+  "acceptance": {
+    "PARTIAL": 16,
+    "PASS": 4,
+    "BLOCKED": 2
+  },
+  "authorization": "RESOLVED",
+  "actualMonetaryUsage": null,
+  "paidActions": 0,
+  "remoteRuntimeDeployed": false,
+  "safeSQLState": "stopped",
+  "mainUnchanged": true,
+  "privateIdentifiersInPublicReports": false,
+  "reportsSHA": "d459c42f556de71698fe73f7fdee05005cc982b8",
+  "archiveSHA256": "a91135ddc9deffcf9dcf707cafeac1021235e615bd0dd18c7a39ab6698676aea",
+  "archiveBytes": 132965,
+  "manifestMembers": 70
+}

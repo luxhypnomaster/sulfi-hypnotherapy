@@ -1,0 +1,19 @@
+✔ native probe denies missing/wrong capability, expired/disabled windows and non-staging before bindings (52.667162ms)
+✔ SQL probe executes only fixed read and never returns credentials or raw errors (2.64266ms)
+✔ KV experiment demonstrates an older overwrite without granting HEAD authority; cleanup is namespace-only (1.874056ms)
+✔ CONTROLLED V1/V2/V3, cursor pages, late identicalV1 and bounded sweep retain V2/V3 (16.050519ms)
+✔ CONTROLLED invalid hash/scope and missing object never replace lastGood or get deleted as lastGood (8.466144ms)
+✔ CONTROLLED incomplete/error/cyclic pagination forbids selection and cleanup (5.440343ms)
+✔ CONTROLLED list missing permits only known-key diagnostic and exact cleanup (3.164773ms)
+✔ CONTROLLED noTTL is one isolated fixed record; restart recovery derives keys from run journal (3.124445ms)
+✔ CONTROLLED immutable same-key conflicting bytes abort and current-run cleanup preserves outsider (3.565287ms)
+✔ CONTROLLED high-water rejects lower revision and equal revision/different hash per scope (0.419977ms)
+✔ CONTROLLED run binding/operation deny before KV and incomplete cleanup reports residual labels (1.825774ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 232.458986

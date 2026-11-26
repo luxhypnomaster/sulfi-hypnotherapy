@@ -1,0 +1,11 @@
+✔ 26A missing Usage API and unavailable cost estimate do not block otherwise confirmed Hobby trial (1.125427ms)
+✔ 26A ten rubles is advisory; above target warns without promising automatic hard cap (0.203444ms)
+✔ 26A unknown Hobby/payment terms, unauthorized creation, unbounded load or unsafe post-state STOP (0.433119ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.857779

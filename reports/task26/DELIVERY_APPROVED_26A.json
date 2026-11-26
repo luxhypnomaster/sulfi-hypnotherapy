@@ -1,0 +1,76 @@
+{
+  "task": "26/26-A approved dedicated Hobby staging",
+  "sourceSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+  "curatedSourceSHA": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+  "branch": "feat/task26-onreza-staging",
+  "deploymentBranch": "deploy/task26-hobby-context",
+  "draftPR": "https://github.com/luxhypnomaster/sulfi-hypnotherapy/pull/77",
+  "tests": {
+    "pass": 69,
+    "fail": 0,
+    "skip": 0
+  },
+  "acceptance": {
+    "PARTIAL": 14,
+    "PASS": 8
+  },
+  "nativeSQL": "PASS_NATIVE_SQL_READ",
+  "nativeSQLWrites": 0,
+  "nativeKV": "OLDER_OVERWRITE_OBSERVED",
+  "headPublisherEnabled": false,
+  "paidTierChanges": 0,
+  "actualMonetaryUsage": null,
+  "finalObservation": {
+    "servingReadback": {
+      "httpStatus": 200,
+      "at": "2026-11-25T19:34:19.441831+00:00",
+      "bodyBytes": 1421
+    },
+    "sqlReadback": {
+      "httpStatus": 200,
+      "at": "2026-11-25T19:34:19.949360+00:00",
+      "bodyBytes": 8090
+    },
+    "projectReadback": {
+      "httpStatus": 200,
+      "at": "2026-11-25T19:34:20.670629+00:00",
+      "bodyBytes": 4908
+    },
+    "servicesReadback": {
+      "httpStatus": 200,
+      "at": "2026-11-25T19:34:21.171851+00:00",
+      "bodyBytes": 533
+    },
+    "desiredPhase": "FINISHED",
+    "desiredResult": "SUCCEEDED",
+    "activeEverywhere": true,
+    "observedMatchesSecondRelease": false,
+    "observedMatchesFirstRelease": false,
+    "observedMatchesSecondDeployment": true,
+    "observedMatchesFirstDeployment": false,
+    "sqlObservedState": "stopped",
+    "sqlDesiredState": "stopped",
+    "serviceCount": 1,
+    "deploymentRecords": 3,
+    "codeSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+    "curatedCommit": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+    "nativeSql": "PASS",
+    "kvOrdering": "OLDER_OVERWRITE_OBSERVED",
+    "headPublisherEnabled": false,
+    "nativeProbeModeConfigured": "off",
+    "noPaidTierChanges": true,
+    "privatePassportUpdated": true,
+    "computeSleepGloballyVerified": false
+  },
+  "userDataChanged": false,
+  "credentialProcessClosed": true,
+  "rollback": "PASS_OBSERVED_FIRST_DEPLOYMENT_AND_HTTP_HEALTH",
+  "restore": "PASS_OBSERVED_SECOND_DEPLOYMENT_FINISHED_SUCCEEDED",
+  "diagnosticsFinalHTTP": 403,
+  "nativeSQLFinalObserved": "stopped",
+  "codeTestsDurationMs": 44427.763439,
+  "reportsSHA": "9247c1739a893a264995fb33eca4afba51143913",
+  "archiveSHA256": "5206041ace737f8f974fef5b9027900e42adf797d91ad0aacfa32b67034bb302",
+  "archiveBytes": 185770,
+  "manifestMembers": 95
+}

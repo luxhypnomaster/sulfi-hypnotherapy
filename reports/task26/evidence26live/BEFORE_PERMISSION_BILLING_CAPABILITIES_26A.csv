@@ -1,0 +1,24 @@
+field,source_status,documented_endpoint_or_surface,schema_fields,scope,unit_or_type,live_status,limitations
+plan,DOCUMENTED,/v1/workspace,subscription.planSlug,workspace,enum HOBBY/PRO,BLOCKED_AUTH,No credit fields in this response
+subscription,DOCUMENTED,/v1/workspace,subscription.status/currentPeriodSettlementMode/cancelAtPeriodEnd,workspace,metadata,BLOCKED_AUTH,No invoices or bill amounts implied
+periodEnd,DOCUMENTED,/v1/workspace,subscription.currentPeriodEnd,workspace,date-time|null,BLOCKED_AUTH,No inferred first-of-month start or IANA timezone
+periodStart,NOT_DOCUMENTED,none confirmed,not in workspace schema,workspace,unknown,NOT_RUN,Fork period is a different scope
+periodTimeZone,NOT_DOCUMENTED,none confirmed,not in studied schema,workspace,IANA timezone unknown,NOT_RUN,Date-time offset does not determine billing timezone
+includedCredit,NOT_DOCUMENTED,none confirmed,Usage UI documented only,workspace,currency/minor units unconfirmed,NOT_RUN,Do not reuse historical250RUB as current value
+appliedCredit,NOT_DOCUMENTED,none confirmed,invoice diagnostics described; no read route found,workspace,money,NOT_RUN,No authenticated field or route demonstrated
+remainingCredit,NOT_DOCUMENTED,none confirmed,Usage panel described only,workspace,money,NOT_RUN,Derived only from matching authoritative credit components
+workspaceGrossCharges,NOT_DOCUMENTED,none confirmed,Usage UI documented only,workspace,money,NOT_RUN,Do not substitute fork partial amount
+forecast,NOT_DOCUMENTED,none confirmed,no verified forecasting contract,workspace,estimate only,NOT_RUN,No observed time series
+invoices,NOT_DOCUMENTED,none confirmed,"billing.read describes permission, not endpoint",workspace,invoice diagnostics documented,NOT_RUN,Exact API permission enforcement and schema not verified
+forkKnownGross,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,knownGrossCostCents/currency/coverage,fork,integer-string cents; currency may null,BLOCKED_AUTH,Only PARTIAL or UNAVAILABLE; not workspace total
+forkPeriod,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,period.id/start/end,fork,string/null; timezone not specified,BLOCKED_AUTH,No period selector query; IDs private
+forkFreshness,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,freshness/lastReconciledAt,fork,string/null,BLOCKED_AUTH,Freshness enum and update SLA NOT_DOCUMENTED
+ComputeBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+PostgreSQLBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+FunctionsBFUBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+buildBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+storageBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+trafficBreakdown,DOCUMENTED,/v1/product-forks/{productId}/{forkId}/usage,items[*].moduleKey/meterKey/quantity/unit/grossAmountCents,fork resources,source strings,BLOCKED_AUTH,Generic items container documented; specific meters and completeness NOT_PROVEN
+kvV1Volume,DOCUMENTED,dashboard Usage; no read route confirmed,kv_storage_mb,environment/workspace,"diagnostic volume, not bill line item",BLOCKED_AUTH,Do not extend v1 billing statement to remote KVv2
+workspaceQuotas,NOT_DOCUMENTED,no monetary/quota read route confirmed,pricing/limits UI only,workspace,limits and reset periods unknown,NOT_RUN,Public default quotas != actual workspace conditions
+sqlCapacity,DOCUMENTED,/v1/kaiki/databases/{id},capacity/cuSize/status,resource,CU/state; not cost,BLOCKED_AUTH,Do not publish raw response credentials/IDs; not implemented in billing probe

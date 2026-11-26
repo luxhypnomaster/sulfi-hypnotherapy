@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {budgetGate} from '../core/budget.mjs';
+const state={plan:'Hobby',paidObligationsKopecks:0,financialTermsConfirmed:true,workspaceIdentityVerified:true,observedAt:1000,resourceCreationAuthorized:true,minimalResourcesVerified:true,workload:{maxRequests:5,maxDurationSeconds:60,bounded:true},safeAfterTestVerified:true,usageApiAvailable:false};
+test('26A missing Usage API and unavailable cost estimate do not block otherwise confirmed Hobby trial',()=>{const r=budgetGate(state,1000);assert.equal(r.status,'READY_FOR_CONTROLLED_TRIAL_REVIEW');assert.equal(r.guaranteedCap,false);assert.equal(r.provisions,false);assert.equal(budgetGate({...state,plan:'HOBBY'},1000).status,'READY_FOR_CONTROLLED_TRIAL_REVIEW');assert.ok(r.warnings.includes('ESTIMATE_UNAVAILABLE'));});
+test('26A ten rubles is advisory; above target warns without promising automatic hard cap',()=>{const r=budgetGate({...state,estimatedCostKopecks:1200},1000);assert.equal(r.status,'READY_FOR_CONTROLLED_TRIAL_REVIEW');assert.ok(r.warnings.includes('ABOVE_10RUB_ECONOMY_TARGET_REVIEW'));});
+test('26A unknown Hobby/payment terms, unauthorized creation, unbounded load or unsafe post-state STOP',()=>{
+ for(const patch of [{plan:'PRO'},{paidObligationsKopecks:1},{financialTermsConfirmed:false},{workspaceIdentityVerified:false},{resourceCreationAuthorized:false},{minimalResourcesVerified:false},{workload:{maxRequests:0,maxDurationSeconds:1,bounded:true}},{safeAfterTestVerified:false},{observedAt:0}])assert.equal(budgetGate({...state,...patch},1000).status,'STOP');
+ assert.equal(budgetGate({},1000).status,'STOP');
+});

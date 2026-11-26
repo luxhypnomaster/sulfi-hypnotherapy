@@ -1,0 +1,127 @@
+{
+  "verifiedAt": "2026-11-25T13:21:40.641562+00:00",
+  "folderId": "1h0KUMDdr6eh86QZF00SRHd7GaxxoFylE",
+  "metadataCount": 19,
+  "fileNamesAndSizes": "PASS",
+  "bundleSHA256": "3cbe52d939cbf0f58fd68e6acc142c266d16c4171a9bc07ce7cff1adebeb4929",
+  "independentBundleDownload": "PASS",
+  "zipCRC": "PASS",
+  "manifestMembersVerified": 30,
+  "files": [
+    {
+      "name": "RESULT.md",
+      "id": "16Dj7ozaJiBXz63MVV3_oYtEV4QTB0pSp",
+      "size": "4269",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "CHANGES.md",
+      "id": "1xBZoITzumvIsUheBil1z2qgYtUc5OtD2",
+      "size": "2538",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "TESTS.md",
+      "id": "1qk_Esy5soOfgbFTHiv2jelhdjkYZd_fU",
+      "size": "4423",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ISSUES.md",
+      "id": "1X6EPd9k1RNYMuqe3o0vKNDAwDVsezBda",
+      "size": "5347",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "DEPLOYMENT_RUNBOOK.md",
+      "id": "1a7qQ4_cGv_7pjsPiCX-DYdwVpkf3O_uQ",
+      "size": "8910",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "NEXT_STAGE.md",
+      "id": "1S9Spqf-qNxEBGwan1vFisHJ0TejRuEUo",
+      "size": "2085",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "PROVIDER_STATE.md",
+      "id": "19lB8k2xAKBV-Y1-hXnjSBBPgvs4qfa4h",
+      "size": "1732",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.md",
+      "id": "196tH41pePSosNVdtBxUf8eWvMqvKOLFA",
+      "size": "2353",
+      "mime": "text/markdown"
+    },
+    {
+      "name": "ACCEPTANCE.csv",
+      "id": "1-NQC_vE1sYEUu0zz0xfXt77W_b29Qbec",
+      "size": "4156",
+      "mime": "text/csv"
+    },
+    {
+      "name": "INPUT_AUDIT.json",
+      "id": "1-AUu9FVYMuaEjsXTCSPD9houEIi-_0po",
+      "size": "2448",
+      "mime": "application/json"
+    },
+    {
+      "name": "DIFF_AUDIT.json",
+      "id": "1lSqBkm9ZzOi_z9FJjcJKLaf-D2L4RYkM",
+      "size": "608",
+      "mime": "application/json"
+    },
+    {
+      "name": "TEST_RUNS.json",
+      "id": "10WzqrXmotFr6QlKcIl8lBO0oopEvUnIv",
+      "size": "4668",
+      "mime": "application/json"
+    },
+    {
+      "name": "ACCESS.json",
+      "id": "19pQ53Nz0bgvKsDG0_4wKdfc6MKCxAOij",
+      "size": "90",
+      "mime": "application/json"
+    },
+    {
+      "name": "NETWORK.json",
+      "id": "1GeijVfy-KOSS_yaKhUX6nXG03oM5DkDz",
+      "size": "212",
+      "mime": "application/json"
+    },
+    {
+      "name": "DELIVERY.json",
+      "id": "1c_LSk4wC1sgGmRJ-ggV8Zm0ElBZmkuRF",
+      "size": "690",
+      "mime": "application/json"
+    },
+    {
+      "name": "BUILD_MANIFEST.json",
+      "id": "1GRxNhlS7gqIXR7e-JDRtCffNxHxSBmmM",
+      "size": "743",
+      "mime": "application/json"
+    },
+    {
+      "name": "BUILD_RECEIPT.json",
+      "id": "180TotRUwX-3U8uyaNXOZ7DATtLlvtLl3",
+      "size": "238",
+      "mime": "application/json"
+    },
+    {
+      "name": "FILES_SHA256.json",
+      "id": "1ugYdePNqqitVevg51OTrqOiAHXdfoRgH",
+      "size": "2920",
+      "mime": "application/json"
+    },
+    {
+      "name": "EVIDENCE_26.zip",
+      "id": "18lB4lotCU07XYq38miAObCXA85xl5b3a",
+      "size": "39325",
+      "mime": "application/zip"
+    }
+  ],
+  "limitations": "Per-file name/size readback; complete original report bytes independently verified inside the evidence ZIP. No permissions changed."
+}

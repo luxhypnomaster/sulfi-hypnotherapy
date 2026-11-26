@@ -1,0 +1,805 @@
+[
+  {
+    "operation": "platform_remote_git_status",
+    "result": {
+      "statusReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:07:19.958467+00:00",
+        "bodyBytes": 398
+      },
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:07:20.476513+00:00",
+        "bodyBytes": 857
+      },
+      "status": "smoke_testing",
+      "errorCode": null,
+      "servingObservedKnown": true,
+      "observedMatchesGitDeployment": false,
+      "desiredPhase": "EXECUTING",
+      "desiredResult": null,
+      "activeEverywhere": false,
+      "sourceArtifactPresent": false,
+      "applicationURLKnown": false
+    }
+  },
+  {
+    "operation": "platform_remote_git_status",
+    "result": {
+      "statusReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:08:03.261491+00:00",
+        "bodyBytes": 457
+      },
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:08:03.864545+00:00",
+        "bodyBytes": 1421
+      },
+      "status": "live",
+      "errorCode": null,
+      "servingObservedKnown": true,
+      "observedMatchesGitDeployment": true,
+      "desiredPhase": "FINISHED",
+      "desiredResult": "SUCCEEDED",
+      "activeEverywhere": true,
+      "sourceArtifactPresent": false,
+      "applicationURLKnown": true
+    }
+  },
+  {
+    "operation": "platform_native_http_checks",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:08:30.618771+00:00",
+        "bodyBytes": 1421
+      },
+      "checks": [
+        {
+          "name": "health",
+          "httpStatus": 200,
+          "elapsedMs": 2430,
+          "response": {
+            "status": "ok",
+            "environment": "staging"
+          }
+        },
+        {
+          "name": "health405",
+          "httpStatus": 405,
+          "elapsedMs": 938,
+          "response": {
+            "error": "METHOD_NOT_ALLOWED"
+          }
+        },
+        {
+          "name": "unknown404",
+          "httpStatus": 404,
+          "elapsedMs": 1067,
+          "response": {
+            "error": "NOT_FOUND"
+          }
+        },
+        {
+          "name": "nativeUnauth",
+          "httpStatus": 401,
+          "elapsedMs": 1081,
+          "response": {
+            "error": "DIAGNOSTIC_AUTH_REQUIRED"
+          }
+        },
+        {
+          "name": "nativeSQL",
+          "httpStatus": 200,
+          "elapsedMs": 4137,
+          "response": {
+            "status": "PASS_NATIVE_SQL_READ",
+            "writes": 0,
+            "nativeReleaseBound": true
+          }
+        }
+      ],
+      "sameApprovedProjectService": true,
+      "adminTokenSentToApplication": false,
+      "nativeCapabilityOnlyInMemory": true
+    }
+  },
+  {
+    "operation": "platform_native_http_checks",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:09:50.586161+00:00",
+        "bodyBytes": 1421
+      },
+      "checks": [
+        {
+          "name": "nativeKVOrder",
+          "httpStatus": 200,
+          "elapsedMs": 2631,
+          "response": {
+            "status": "OBSERVATION_ONLY",
+            "readAfterNewer": 2,
+            "readAfterOlder": 1,
+            "olderOverwriteObserved": true,
+            "counterFirst": 1,
+            "counterSecond": 2,
+            "monotonicWriteGuaranteed": false,
+            "headPublicationEnabled": false,
+            "cleanup": true,
+            "ttlSeconds": 60,
+            "nativeReleaseBound": true
+          }
+        }
+      ],
+      "sameApprovedProjectService": true,
+      "adminTokenSentToApplication": false,
+      "nativeCapabilityOnlyInMemory": true
+    }
+  },
+  {
+    "operation": "platform_native_summary",
+    "result": {
+      "sqlReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:15.069262+00:00",
+        "bodyBytes": 8090
+      },
+      "sqlObserved": "stopped",
+      "sqlDesired": "stopped",
+      "logReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:15.817608+00:00",
+        "bodyBytes": 7503
+      },
+      "runtimeLogEntries": 8,
+      "requestEvidence": [
+        {
+          "path": "/_staging/native-probe",
+          "method": "POST",
+          "status": 200,
+          "functionName": "protocol22-native-probe"
+        },
+        {
+          "path": "/_staging/native-probe",
+          "method": "POST",
+          "status": 200,
+          "functionName": "protocol22-native-probe"
+        },
+        {
+          "path": "/_staging/native-probe",
+          "method": "POST",
+          "status": 401,
+          "functionName": "protocol22-native-probe"
+        },
+        {
+          "path": "/_staging/not-a-route",
+          "method": "GET",
+          "status": 404,
+          "functionName": null
+        },
+        {
+          "path": "/healthz",
+          "method": "POST",
+          "status": 405,
+          "functionName": null
+        },
+        {
+          "path": "/healthz",
+          "method": "GET",
+          "status": 200,
+          "functionName": null
+        }
+      ],
+      "computeStopLogMatches": 0,
+      "computeSleepGloballyVerified": false,
+      "releasesReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:16.320177+00:00",
+        "bodyBytes": 780
+      },
+      "releasesShape": {
+        "releases": "list",
+        "compositions": "list",
+        "nextCursor": "NoneType",
+        "nextCompositionCursor": "NoneType"
+      },
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:17.139509+00:00",
+        "bodyBytes": 1421
+      },
+      "firstSafeReleaseSaved": true,
+      "deploymentReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:17.479126+00:00",
+        "bodyBytes": 3453
+      },
+      "gitCommitMatches": true,
+      "sourceArtifactPresent": false,
+      "applicationURLSavedPrivately": true
+    }
+  },
+  {
+    "operation": "platform_close_native_window",
+    "result": {
+      "status": "CLOSURE_CONFIGURATION_SAVED",
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:11:59.940287+00:00",
+        "bodyBytes": 572
+      },
+      "requiresRuntimeVerification": true,
+      "expiresIndependently": true
+    }
+  },
+  {
+    "operation": "platform_native_http_checks",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:12:43.422961+00:00",
+        "bodyBytes": 1409
+      },
+      "checks": [
+        {
+          "name": "nativeClosedWindow",
+          "httpStatus": 403,
+          "elapsedMs": 1566,
+          "response": {
+            "error": "DIAGNOSTIC_WINDOW_CLOSED"
+          }
+        }
+      ],
+      "sameApprovedProjectService": true,
+      "adminTokenSentToApplication": false,
+      "nativeCapabilityOnlyInMemory": true
+    }
+  },
+  {
+    "operation": "platform_safe_redeploy_probe_closed",
+    "result": {
+      "status": "SAFE_REDEPLOY_ADMITTED",
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:13:18.304466+00:00",
+        "bodyBytes": 239
+      },
+      "responseStatus": "PENDING",
+      "sameSourceCommit": true,
+      "sameService": true,
+      "diagnosticModeConfiguredOff": true,
+      "newInfrastructureCreated": false
+    }
+  },
+  {
+    "operation": "platform_remote_git_status",
+    "result": {
+      "statusReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:14:05.553185+00:00",
+        "bodyBytes": 457
+      },
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:14:06.365390+00:00",
+        "bodyBytes": 1409
+      },
+      "status": "live",
+      "errorCode": null,
+      "servingObservedKnown": true,
+      "observedMatchesGitDeployment": true,
+      "desiredPhase": "EXECUTING",
+      "desiredResult": null,
+      "activeEverywhere": true,
+      "sourceArtifactPresent": false,
+      "applicationURLKnown": true
+    }
+  },
+  {
+    "operation": "platform_activate_previous_release",
+    "result": {
+      "status": "STOP_SECOND_RELEASE_NOT_FINISHED"
+    }
+  },
+  {
+    "operation": "platform_observation_policy",
+    "result": {
+      "environmentReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:15:54.903890+00:00",
+        "bodyBytes": 1183
+      },
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:15:55.431427+00:00",
+        "bodyBytes": 1409
+      },
+      "blueGreenEnabled": true,
+      "graceSeconds": 300,
+      "phase": "EXECUTING",
+      "result": null,
+      "activeEverywhere": true,
+      "pendingReasonCode": null,
+      "observedMatchesSecond": true,
+      "noBypass": true
+    }
+  },
+  {
+    "operation": "platform_version_readback",
+    "result": {
+      "functionsReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:16:20.775738+00:00",
+        "bodyBytes": 6576
+      },
+      "releasesReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:16:20.991975+00:00",
+        "bodyBytes": 2184
+      },
+      "functionNames": [
+        "protocol22-light",
+        "protocol22-native-probe"
+      ],
+      "functionsShape": {
+        "functions": {
+          "count": 2,
+          "first": {
+            "id": "str",
+            "name": "str",
+            "createdAt": "str",
+            "updatedAt": "str",
+            "activation": {
+              "id": "str",
+              "status": "str",
+              "pausedReason": "NoneType",
+              "envHash": "str",
+              "circuitBreakerState": {
+                "count": 0,
+                "first": null
+              },
+              "activeRevisionId": "str",
+              "batchId": "str",
+              "createdAt": "str",
+              "updatedAt": "str",
+              "activeRevision": {
+                "id": "str",
+                "sourceSnapshotId": "str",
+                "entrypoint": "str",
+                "sourceSha256": "str",
+                "runtimeConfigHash": "str",
+                "runtimeConfig": "NoneType",
+                "origin": "str",
+                "deploymentId": "str",
+                "createdByUserId": "NoneType",
+                "createdAt": "str",
+                "sourceSnapshot": {
+                  "sourceHash": "str",
+                  "fileCount": "int",
+                  "totalBytes": "int",
+                  "createdByUserId": "NoneType"
+                },
+                "status": "str"
+              }
+            },
+            "triggers": {
+              "count": 0,
+              "first": null
+            },
+            "revisions": {
+              "count": 1,
+              "first": {
+                "id": "str",
+                "sourceSnapshotId": "str",
+                "entrypoint": "str",
+                "sourceSha256": "str",
+                "runtimeConfigHash": "str",
+                "runtimeConfig": "NoneType",
+                "origin": "str",
+                "deploymentId": "str",
+                "createdByUserId": "NoneType",
+                "createdAt": "str",
+                "sourceSnapshot": {
+                  "sourceHash": "str",
+                  "fileCount": "int",
+                  "totalBytes": "int",
+                  "createdByUserId": "NoneType"
+                }
+              }
+            },
+            "invocationSummary": {
+              "lastInvocation": "NoneType",
+              "lastFailure": "NoneType",
+              "last24h": {
+                "invocationCount": "int",
+                "failureCount": "int",
+                "timeoutCount": "int",
+                "coldStartCount": "int",
+                "avgDurationMs": "NoneType"
+              }
+            }
+          }
+        },
+        "publishAttempts": {
+          "count": 3,
+          "first": {
+            "id": "str",
+            "projectId": "str",
+            "environmentId": "str",
+            "deploymentId": "str",
+            "runtimeReleaseId": "str",
+            "operationId": "str",
+            "origin": "str",
+            "status": "str",
+            "failureCategory": "NoneType",
+            "errorCode": "NoneType",
+            "errorMessage": "NoneType",
+            "errorField": "NoneType",
+            "requestedFunctionCount": "int",
+            "edgeRulesRequested": "bool",
+            "functionCount": "int",
+            "edgeRuleSetPublished": "bool",
+            "runtimeReleaseVersion": "int",
+            "warnings": {
+              "count": 0,
+              "first": null
+            },
+            "actorUserId": "str",
+            "createdAt": "str",
+            "completedAt": "str"
+          }
+        }
+      },
+      "releasesShape": {
+        "releases": {
+          "count": 3,
+          "first": {
+            "releaseId": "str",
+            "deploymentId": "str",
+            "createdAt": "str",
+            "contentDigest": {
+              "algorithm": "str",
+              "value": "str"
+            },
+            "sizeBytes": "int"
+          }
+        },
+        "compositions": {
+          "count": 3,
+          "first": {
+            "compositionId": "str",
+            "createdAt": "str",
+            "components": {
+              "count": 1,
+              "first": {
+                "serviceName": "str",
+                "serviceId": "str",
+                "deploymentId": "str",
+                "runtimeReleaseId": "str",
+                "contentDigest": {
+                  "algorithm": "str",
+                  "value": "str"
+                }
+              }
+            }
+          }
+        },
+        "nextCursor": "NoneType",
+        "nextCompositionCursor": "NoneType"
+      }
+    }
+  },
+  {
+    "operation": "platform_verify_active_sources",
+    "result": {
+      "activeFunctions": [
+        {
+          "name": "protocol22-light",
+          "activeSourceSHA256MatchesReviewedFile": false,
+          "sourceFileCount": 1,
+          "activationStatus": "ACTIVE"
+        },
+        {
+          "name": "protocol22-native-probe",
+          "activeSourceSHA256MatchesReviewedFile": false,
+          "sourceFileCount": 1,
+          "activationStatus": "ACTIVE"
+        }
+      ],
+      "retainedFirstSafeRelease": true,
+      "secondReleaseListed": true,
+      "firstContentDigestAvailable": true,
+      "secondContentDigestAvailable": true,
+      "compositionServiceCounts": [
+        1,
+        1,
+        1
+      ],
+      "allCompositionsOnlyApprovedService": true,
+      "privateReleaseIDsSaved": true
+    }
+  },
+  {
+    "operation": "platform_explain_function_hashes",
+    "result": {
+      "hashesAreSourceDigestsNotCredentials": true,
+      "functions": [
+        {
+          "name": "protocol22-light",
+          "entrypointMatches": true,
+          "providerHash": "5fbd93667316497b3826c32c5da1c28ef062c594ebd33b82a16d72574446b704",
+          "snapshotHash": "5fbd93667316497b3826c32c5da1c28ef062c594ebd33b82a16d72574446b704",
+          "expectedRaw": "1348fb25d8a9681e113cd4767f6567c92127dc7ac5a95b2c0e57275ae1d78606",
+          "providerRawLength": 64,
+          "matchingSerialization": [],
+          "origin": "DEPLOYMENT"
+        },
+        {
+          "name": "protocol22-native-probe",
+          "entrypointMatches": true,
+          "providerHash": "279c33959cd59e8ad0469108867093082dde93b2292028c7d6bd5410bbcca4d6",
+          "snapshotHash": "279c33959cd59e8ad0469108867093082dde93b2292028c7d6bd5410bbcca4d6",
+          "expectedRaw": "73c7a2b346691a22d05e3fa547eb524b3ae616fbec6171a6b3dda10073aac827",
+          "providerRawLength": 64,
+          "matchingSerialization": [],
+          "origin": "DEPLOYMENT"
+        }
+      ]
+    }
+  },
+  {
+    "operation": "platform_activate_previous_release",
+    "result": {
+      "status": "ROLLBACK_BLOCKED",
+      "readback": {
+        "httpStatus": 400,
+        "at": "2026-11-25T19:19:53.531628+00:00",
+        "message": "Ошибка валидации данных"
+      },
+      "noBuild": true,
+      "sameCodeSHA": true,
+      "sameService": true,
+      "userDataTouched": false
+    }
+  },
+  {
+    "operation": "platform_rollback_with_official_cli",
+    "result": {
+      "status": "CLI_ROLLBACK_ACCEPTED",
+      "exitCode": 0,
+      "safeError": {
+        "schemaValidationMentioned": false
+      },
+      "finishObservationEarly": false,
+      "retainedTargetUUIDValid": true,
+      "rawOutputPublic": false
+    }
+  },
+  {
+    "operation": "platform_serving_observation",
+    "result": {
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:22:27.169932+00:00",
+        "bodyBytes": 1409
+      },
+      "phase": "EXECUTING",
+      "result": null,
+      "activeEverywhere": true,
+      "known": true,
+      "matchesFirstRelease": false,
+      "matchesSecondRelease": false,
+      "matchesFirstDeployment": true,
+      "matchesSecondDeployment": false
+    }
+  },
+  {
+    "operation": "platform_native_http_checks",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:23:54.108009+00:00",
+        "bodyBytes": 1409
+      },
+      "checks": [
+        {
+          "name": "rollbackHealth",
+          "httpStatus": 200,
+          "elapsedMs": 1359,
+          "response": {
+            "status": "ok",
+            "environment": "staging"
+          }
+        },
+        {
+          "name": "rollbackWindowClosed",
+          "httpStatus": 422,
+          "elapsedMs": 1224,
+          "response": {
+            "error": "FIXED_DIAGNOSTIC_OPERATION_REQUIRED"
+          }
+        }
+      ],
+      "sameApprovedProjectService": true,
+      "adminTokenSentToApplication": false,
+      "nativeCapabilityOnlyInMemory": true
+    }
+  },
+  {
+    "operation": "platform_restore_with_official_cli",
+    "result": {
+      "status": "WAIT_ROLLBACK_OBSERVATION",
+      "phase": "EXECUTING",
+      "firstDeploymentObserved": true
+    }
+  },
+  {
+    "operation": "platform_restore_with_official_cli",
+    "result": {
+      "status": "WAIT_ROLLBACK_OBSERVATION",
+      "phase": "EXECUTING",
+      "firstDeploymentObserved": true
+    }
+  },
+  {
+    "operation": "platform_serving_observation",
+    "result": {
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:27:18.061053+00:00",
+        "bodyBytes": 1421
+      },
+      "phase": "FINISHED",
+      "result": "SUCCEEDED",
+      "activeEverywhere": true,
+      "known": true,
+      "matchesFirstRelease": false,
+      "matchesSecondRelease": false,
+      "matchesFirstDeployment": true,
+      "matchesSecondDeployment": false
+    }
+  },
+  {
+    "operation": "platform_restore_with_official_cli",
+    "result": {
+      "status": "CLI_SECOND_RELEASE_RESTORE_ACCEPTED",
+      "exitCode": 0,
+      "finishObservationEarly": false,
+      "noBuild": true,
+      "sameReviewedCode": true
+    }
+  },
+  {
+    "operation": "platform_serving_observation",
+    "result": {
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:30:20.230373+00:00",
+        "bodyBytes": 1409
+      },
+      "phase": "EXECUTING",
+      "result": null,
+      "activeEverywhere": true,
+      "known": true,
+      "matchesFirstRelease": false,
+      "matchesSecondRelease": false,
+      "matchesFirstDeployment": false,
+      "matchesSecondDeployment": true
+    }
+  },
+  {
+    "operation": "platform_serving_observation",
+    "result": {
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:31:15.295482+00:00",
+        "bodyBytes": 1409
+      },
+      "phase": "EXECUTING",
+      "result": null,
+      "activeEverywhere": true,
+      "known": true,
+      "matchesFirstRelease": false,
+      "matchesSecondRelease": false,
+      "matchesFirstDeployment": false,
+      "matchesSecondDeployment": true
+    }
+  },
+  {
+    "operation": "platform_serving_observation",
+    "result": {
+      "readback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:32:47.857079+00:00",
+        "bodyBytes": 1409
+      },
+      "phase": "EXECUTING",
+      "result": null,
+      "activeEverywhere": true,
+      "known": true,
+      "matchesFirstRelease": false,
+      "matchesSecondRelease": false,
+      "matchesFirstDeployment": false,
+      "matchesSecondDeployment": true
+    }
+  },
+  {
+    "operation": "platform_native_http_checks",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:33:41.788435+00:00",
+        "bodyBytes": 1409
+      },
+      "checks": [
+        {
+          "name": "finalHealth",
+          "httpStatus": 200,
+          "elapsedMs": 1508,
+          "response": {
+            "status": "ok",
+            "environment": "staging"
+          }
+        },
+        {
+          "name": "finalWindowClosed",
+          "httpStatus": 403,
+          "elapsedMs": 1285,
+          "response": {
+            "error": "DIAGNOSTIC_WINDOW_CLOSED"
+          }
+        }
+      ],
+      "sameApprovedProjectService": true,
+      "adminTokenSentToApplication": false,
+      "nativeCapabilityOnlyInMemory": true
+    }
+  },
+  {
+    "operation": "platform_final_export",
+    "result": {
+      "servingReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:34:19.441831+00:00",
+        "bodyBytes": 1421
+      },
+      "sqlReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:34:19.949360+00:00",
+        "bodyBytes": 8090
+      },
+      "projectReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:34:20.670629+00:00",
+        "bodyBytes": 4908
+      },
+      "servicesReadback": {
+        "httpStatus": 200,
+        "at": "2026-11-25T19:34:21.171851+00:00",
+        "bodyBytes": 533
+      },
+      "desiredPhase": "FINISHED",
+      "desiredResult": "SUCCEEDED",
+      "activeEverywhere": true,
+      "observedMatchesSecondRelease": false,
+      "observedMatchesFirstRelease": false,
+      "observedMatchesSecondDeployment": true,
+      "observedMatchesFirstDeployment": false,
+      "sqlObservedState": "stopped",
+      "sqlDesiredState": "stopped",
+      "serviceCount": 1,
+      "deploymentRecords": 3,
+      "codeSHA": "1ad664552af20ec06e2e077f2aea051e243165e4",
+      "curatedCommit": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+      "nativeSql": "PASS",
+      "kvOrdering": "OLDER_OVERWRITE_OBSERVED",
+      "headPublisherEnabled": false,
+      "nativeProbeModeConfigured": "off",
+      "noPaidTierChanges": true,
+      "privatePassportUpdated": true,
+      "computeSleepGloballyVerified": false
+    }
+  }
+]

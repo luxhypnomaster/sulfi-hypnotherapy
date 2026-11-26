@@ -1,0 +1,40 @@
+✔ 21 genuine SQLite immutable persistence, cold reopening and readback guards (23.598743ms)
+✔ 21 actual SQLite rollback between pointer update and receipt, SIGKILL recovery (52.431631ms)
+✔ 21 lost response after durable COMMIT replays same receipt; cross-connection writers CAS (12.277879ms)
+✔ 21 null/expired principal, scope switch, CLIENT write, role hints deny; errors redact secrets (4.368946ms)
+✔ 21 separate config prepare/commit -> CLIENT, no unrelated catalog revision bump (8.430955ms)
+✔ 21 withdrawal/epoch invalidates stale scope, partial/non-atomic storage fail closed (6.540696ms)
+✔ 21 expiry rejects stale HEAD and snapshot without scan or mutation of prior immutable bytes (14.358423ms)
+✔ 21 commit rechecks current principal role after an authorized prepare (8.011935ms)
+✔ 20: cheap equal HEAD never scans; strict public projection no reader/secret leakage (3.661999ms)
+✔ 20: interrupted commit and corrupt readback leave old head and receipt unchanged (3.493341ms)
+✔ 20: idempotent retries and concurrent writers use CAS, no lost update (1.238223ms)
+✔ 20: scopes, CLIENT write, unpublished/withdrawn and private dependency fail closed (1.00398ms)
+✔ 20: 100 items / 20 shared modules, exact old snapshots immutable, one batch one head (8.79077ms)
+✔ 20: versioned vitrine settings approved defaults, 1..60 validation and CLIENT denial (0.516934ms)
+✔ 20: conflicting current revisions cannot publish one logical ID twice (0.2483ms)
+✔ 22 server jobs actual durable idempotency, cold readback, lease fencing, incident redaction/quarantine (11.362201ms)
+✔ 22 portable encrypted complete backup independent restore, tamper/keys/private destination gates (6.138133ms)
+✔ 22 verified identity mapping and owner/lead/ordinary admin hierarchy without email auto-link (2.909534ms)
+✔ 22 feedback consent, 10 retries, correction/retract after withdrawal, no private payload (11.246832ms)
+✔ 22 course/program direct cohorts remain separate; repeated/partial/unknown/unexposed occurrences never multiply votes or reset epochs (29.841856ms)
+✔ 22 three ratings sparse500/pro/author; two immutable policy strategies preview, ACL activation rollback/failure keep lastGood (21.147724ms)
+✔ 22 actual full SQLite/database roles/ratings/media encrypted restoration and cold readback (15.744577ms)
+✔ 22 Google bridge verifies before decode, stable legacy subject binding and no email/role auto-link (0.817518ms)
+✔ 22 policy stable immutable identity, exact public hash and changed parameters same version rejected (7.322193ms)
+✔ 22 only exposed course program gets context; five consumer direct votes keep professional null and weighted uncalibrated (5.037332ms)
+✔ 22 existing catalog/head plus durable course publish and batch jobs commit one exact receipt, no media copy (33.172652ms)
+✔ 22 seven real admin summaries/unknown quotas, role denied, scoped identities and normalized categories (9.259497ms)
+✔ 22 ratings-only revision never touches catalog HEAD/media and public summary contains no raw identity (17.335857ms)
+✔ 22 private metadata does not become public and listing never includes diary/private payloads (9.057852ms)
+✔ 22 exact target type/revision and legacy author ownership persist in server jobs (9.998383ms)
+✔ 22 uploaded backup and verified isolated restore are independent persisted history statuses (12.141011ms)
+✔ 22 unchanged admin overview uses persistent derived cache, counters invalidate only on relevant writes (7.248022ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 744.815626

@@ -1,0 +1,72 @@
+{
+  "recordedAt": "2026-11-25T13:46:24.496315+00:00",
+  "continuationBaseSHA": "e7ae471501b353807b0fac209f86e9fa60f6481d",
+  "cliVersion": "0.54.0",
+  "cliSourceSHA": "b1c31311170bc9834e1d9db7a8345dd4f044f9b3",
+  "cliInstalledInTaskTmpfs": true,
+  "cliChecksumVerified": true,
+  "NRZ_TOKEN_present": false,
+  "authenticatedProviderRequests": 0,
+  "onrezaResourceWrites": 0,
+  "panelCompared": false,
+  "latencyOrReconciliationMeasurement": "NOT_RUN_BLOCKED_AUTH",
+  "testedSources": [
+    {
+      "name": "onreza-full.txt",
+      "bytes": 809734,
+      "sha256": "5cfb9918037d26c439709d390c4f29ae878205d36760787766191f3959b83aa8"
+    },
+    {
+      "name": "api_openapi.json",
+      "bytes": 1577342,
+      "sha256": "07e783e94863089ed1397fdd229f188f661573ed3bc390e1763fe122261135ee"
+    },
+    {
+      "name": "src_cli_workspace_handler.rs",
+      "bytes": 2250,
+      "sha256": "7e3c7b8d9ceaadaeb16486ec0afb3afc62bdd048b33b13a64f2fbed82ad85eda"
+    },
+    {
+      "name": "src_auth_mod.rs",
+      "bytes": 8677,
+      "sha256": "9aab5c27a21698870f546cbe2f5ff9fa52035efdb774db45507cdde44843e227"
+    },
+    {
+      "name": "src_api_product_copy.rs",
+      "bytes": 9402,
+      "sha256": "0db0371430b9ef8c22ed50a3fad2ce0330507843bf0421a4e5d1f7e6ff17c48c"
+    },
+    {
+      "name": "src_api_databases.rs",
+      "bytes": 7653,
+      "sha256": "cb82ac580d6af09664a1ef0708c960c60ce1957451caae1d2c59e2633d44da06"
+    },
+    {
+      "name": "checksums-sha256.txt",
+      "bytes": 440,
+      "sha256": "fb8edfa2f69ea9f003366004d1164856395a1cd5cf0770a0b0e89fa71296d300"
+    },
+    {
+      "name": "release-metadata.json",
+      "bytes": 2848,
+      "sha256": "d001cda138a4ef3f2fb1a634d36c13a6b75361546bcd8a7949295258430dcfb2"
+    }
+  ],
+  "liveValuesVerified": false,
+  "legacy36and32TestsRerun": false,
+  "targetedTests": {
+    "pass": 16,
+    "fail": 0,
+    "includesPreviousBuildChecks": 2
+  },
+  "fieldsNote": "DOCUMENTED != VERIFIED_LIVE; public OpenAPI is CLI surface, not a claimed exhaustive backend API.",
+  "precisionRegression": {
+    "red": 1,
+    "green": "included in16",
+    "reason": "Reject Number amounts before irreversible precision loss"
+  },
+  "budgetEnumTargetedRepeat": {
+    "pass": 3,
+    "newScenario": "Official planSlug HOBBY accepted; no full SQL/auth replay"
+  }
+}

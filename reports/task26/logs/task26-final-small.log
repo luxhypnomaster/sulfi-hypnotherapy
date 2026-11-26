@@ -1,0 +1,12 @@
+✔ curated build is reproducible, excludes Android/GAS/tests/secrets and serves health (159.058901ms)
+✔ CORE is free of provider ctx and environment binding dependencies (6.00347ms)
+✔ resource reconciliation reuses saved IDs and refuses ambiguity (0.830367ms)
+✔ occupied PostgreSQL quota stops creation, missing resources never provision themselves (0.254587ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 310.630689

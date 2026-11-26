@@ -1,0 +1,37 @@
+
+> alchemist-protocol22-staging26@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ PostgreSQL engine: repeat migration keeps identities and default roles (4338.484463ms)
+✔ same verified identity and installation recover stable uid; retry is idempotent (2383.510536ms)
+✔ unconfirmed client ID, disallowed registration and installation theft denied (2751.169087ms)
+✔ valid JWT roundtrip; expired, forged, wrong issuer/aud/scope/future rejected (1984.415347ms)
+✔ invalid JWT never touches KV or SQL, including fake forwarded identity (1613.672926ms)
+✔ warm basic session check from sealed KV does not call SQL (1591.615122ms)
+✔ KV miss restores existing session from authoritative SQL, never creates identity (1934.709159ms)
+✔ KV outage and tampering fail closed; no automatic SQL retry storm (1895.336108ms)
+✔ TTL bound expires session projection; old KV never grants sensitive role (1653.848753ms)
+✔ changed current role version rejects stale session before publish (1613.36697ms)
+✔ CLIENT cannot publish; direct Compute path never trusts role headers (1565.966966ms)
+✔ verified HEAD wire, publication retry and immutable snapshot (1423.988805ms)
+✔ identical rebuild preserves exact HEAD/revision/hash despite later build timestamp (1572.350181ms)
+✔ missing dependency or unsupported ratings cannot publish a HEAD (1692.348784ms)
+✔ SQL failure between head and outbox rolls back both and receipt (1563.481266ms)
+✔ lost response after SQL commit leaves durable outbox and idempotent receipt (1582.698477ms)
+✔ KV write failure leaves outbox pending; retry succeeds without duplicate HEAD (1517.018725ms)
+✔ outdated events fetch latest authoritative projection; no revision regression (1714.369604ms)
+✔ no CAS or proven writer: publisher STOP, outbox remains recoverable (1503.776216ms)
+✔ invalidation and namespace-only rebuild do not clear other synthetic tenants (1603.345832ms)
+✔ adapter TTL, miss, failure, no-CAS and delayed writes contract (2.159659ms)
+✔ Function portable entry: auth/HEAD match core, no SQL for good or bad requests (1448.229452ms)
+✔ Compute HTTP minimal health, 404/405, bad auth and forged headers no SQL (46.488198ms)
+✔ runtime refuses generic DATABASE_URL and production activation (1.252004ms)
+✔ PostgreSQL persistence: synthetic sessions/HEAD/outbox survive close and reopen (2058.505682ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41252.256103

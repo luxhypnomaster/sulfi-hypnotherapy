@@ -1,0 +1,60 @@
+✔ resource reconciliation reuses saved IDs and refuses ambiguity (1.021799ms)
+✔ occupied PostgreSQL quota stops creation, missing resources never provision themselves (0.288823ms)
+✖ actual standalone SQL owner topology reuses saved DB instead of duplicating it (1.300497ms)
+✖ standalone SQL belonging to another workspace or unconfirmed owner cannot be adopted (0.449117ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 96.458328
+
+✖ failing tests:
+
+test at server/alchemist/onreza26/test/resources.test.mjs:14:1
+✖ actual standalone SQL owner topology reuses saved DB instead of duplicating it (1.300497ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'STOP'
+  - 'SQL_BINDING_REQUIRES_REVIEW'
+  
+      at TestContext.<anonymous> (file:///dev/shm/sulfi26/server/alchemist/onreza26/test/resources.test.mjs:17:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'STOP',
+    expected: 'SQL_BINDING_REQUIRES_REVIEW',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at server/alchemist/onreza26/test/resources.test.mjs:21:1
+✖ standalone SQL belonging to another workspace or unconfirmed owner cannot be adopted (0.449117ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'SAVED_ID_MISMATCH'
+  - 'WRONG_PROJECT'
+  
+      at TestContext.<anonymous> (file:///dev/shm/sulfi26/server/alchemist/onreza26/test/resources.test.mjs:24:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'SAVED_ID_MISMATCH',
+    expected: 'WRONG_PROJECT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

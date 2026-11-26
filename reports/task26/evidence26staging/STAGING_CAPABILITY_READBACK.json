@@ -1,0 +1,74 @@
+{
+  "classification": "LIVE_SANITIZED_READBACK",
+  "registry": {
+    "source": "GET /v1/environments/{existingProjectId}/registry",
+    "at": "2026-11-25T18:24:28.138311Z",
+    "httpStatus": 200,
+    "environments": [
+      {
+        "name": "Production",
+        "type": "PRODUCTION",
+        "participating": true
+      }
+    ]
+  },
+  "capabilities": {
+    "source": "GET /v1/environments/{existingProjectId}",
+    "at": "2026-11-25T18:25:15.777670Z",
+    "httpStatus": 200,
+    "createCustomEnvironment": {
+      "allowed": false,
+      "details": {
+        "requiredPlan": "PRO",
+        "currentPlan": "HOBBY"
+      }
+    }
+  },
+  "services": {
+    "source": "GET /v1/projects/{existingProjectId}/services",
+    "at": "2026-11-25T18:25:16.644731Z",
+    "httpStatus": 200,
+    "count": 1,
+    "serviceIdField": "serviceId",
+    "idSavedPrivately": true
+  },
+  "officialCLIDryRun": {
+    "buildSkipped": true,
+    "installSkipped": true,
+    "centralLogUploadDisabled": true,
+    "explicitEnvironment": "staging",
+    "exactExistingServiceSelected": true,
+    "exitCode": 1,
+    "code": "ENVIRONMENT_NOT_FOUND",
+    "runtimeDeployed": false,
+    "rawOutputPublic": false
+  },
+  "targetGuardOnActualNormalizedReadback": {
+    "status": "BLOCKED_CUSTOM_ENVIRONMENT_REQUIRES_PRO",
+    "targetSelected": false,
+    "mutationCount": 0
+  },
+  "finalSQL": {
+    "at": "2026-11-25T18:28:32.900884Z",
+    "httpStatus": 200,
+    "observed": "stopped",
+    "desired": "stopped"
+  },
+  "projectInventory": {
+    "at": "2026-11-25T18:28:34.094133Z",
+    "httpStatus": 200,
+    "products": 2,
+    "targetAPIProducts": 1,
+    "platformSQLownerProducts": 1
+  },
+  "sqlInventory": {
+    "at": "2026-11-25T18:28:34.811017Z",
+    "httpStatus": 200,
+    "count": 1
+  },
+  "paidPlanChanges": 0,
+  "deploymentChanges": 0,
+  "permissionChanges": 0,
+  "credentialProcessClosed": true,
+  "privateIDsPublished": false
+}
