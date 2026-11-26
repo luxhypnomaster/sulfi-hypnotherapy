@@ -10,3 +10,7 @@
 - НоваяденежнаястоимостьPENDING; existingownerUIbaselineизпрофилянеявляетсяновымAPIзамером. БезэкстраполяцийилиугадыванияквотыCodex. Новыересурсы/тарифы/idle не меняются.
 
 ДалееB1: единственныйнеобходимыйcodedeploy существующегоprotectedprobe; отдельныйсинтетическийrunjournal доnativewrite. GuardsреальногоHEAD/reader/publisher неослаблять. Max5keysодновременно/max30nativeHTTP; B4cleanup/closureобязательны.
+
+## B1 — PREPARED, до deploy/записей
+
+Изолированный version-probe добавлен в прежнююFunction; реальные reader/publisher/adapters не изменены.11адресныхCONTROLLED testsPASS, включаяsecurity, cursor/incomplete-list, immutablebytes, lateV1, badhash/scope, high-water иcleanup/recovery. ExactproviderFunctions runtime принял2Functions/3прежнихправила. Полные69/Flutter/Android не запускались. RUN_JOURNAL_26B.json сохраняет8точныхключей(одинзаведомоmissing)до первойзаписи; одновременно≤5. NativeHTTP пока0, codeDeploy пока0. Никакого admin test-invoke/KVv2.

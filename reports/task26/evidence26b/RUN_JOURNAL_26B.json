@@ -1,0 +1,25 @@
+{
+  "task": "26-B",
+  "runId": "9f19eebbb11b917494b7e441",
+  "createdAt": "2026-11-26T19:49:36.200750+00:00",
+  "keys": {
+    "v1": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000001",
+    "v2": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000002",
+    "v3": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000003",
+    "badHash": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000004",
+    "badScope": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000005",
+    "missing": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:public:head:000000000006",
+    "neighbor": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:neighbor:head:000000000999",
+    "noTTL": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:staging:diagnostic:no-ttl"
+  },
+  "prefix": "synthetic26:task26:version-probe:9f19eebbb11b917494b7e441:",
+  "maxSimultaneousKeys": 5,
+  "maxNativeHTTP": 30,
+  "reservedNativeHTTPForCleanupClosure": 3,
+  "temporaryTTLSeconds": 1200,
+  "noTTLAllowedOnlyAfterVerifiedCleanup": true,
+  "writesStarted": false,
+  "cleanup": "NOT_STARTED",
+  "crashRecovery": "reuse this runId with server run binding, fresh memory capability; fixed cleanup only before any new experiment",
+  "containsCredentialsOrProviderIDs": false
+}
