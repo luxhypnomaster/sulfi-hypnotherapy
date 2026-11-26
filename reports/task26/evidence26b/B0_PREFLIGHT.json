@@ -1,0 +1,71 @@
+[
+  {
+    "at": "2026-11-26T19:42:48.390995+00:00",
+    "operation": "preflight",
+    "result": {
+      "status": "B0_READ_ONLY_PASS",
+      "checks": {
+        "project": true,
+        "service": true,
+        "environment": true,
+        "activeDeployment": true,
+        "activeComposition": true,
+        "sql": true,
+        "functions": true
+      },
+      "workspaceReadback": {
+        "at": "2026-11-26T19:42:39.657685+00:00",
+        "httpStatus": 200,
+        "bytes": 502
+      },
+      "projectReadback": {
+        "at": "2026-11-26T19:42:42.790890+00:00",
+        "httpStatus": 200,
+        "bytes": 4908
+      },
+      "serviceReadback": {
+        "at": "2026-11-26T19:42:43.879893+00:00",
+        "httpStatus": 200,
+        "bytes": 533
+      },
+      "environmentReadback": {
+        "at": "2026-11-26T19:42:44.759320+00:00",
+        "httpStatus": 200,
+        "bytes": 1183
+      },
+      "servingReadback": {
+        "at": "2026-11-26T19:42:45.369894+00:00",
+        "httpStatus": 200,
+        "bytes": 1421
+      },
+      "sqlReadback": {
+        "at": "2026-11-26T19:42:46.069671+00:00",
+        "httpStatus": 200,
+        "bytes": 8090
+      },
+      "functionsReadback": {
+        "at": "2026-11-26T19:42:47.557936+00:00",
+        "httpStatus": 200,
+        "bytes": 6571
+      },
+      "plan": "HOBBY",
+      "subscription": "ACTIVE",
+      "settlementMode": "NOT_REQUIRED",
+      "currentPeriodEnd": "2026-12-25T10:24:18.254Z",
+      "phase": "FINISHED",
+      "result": "SUCCEEDED",
+      "activeEverywhere": true,
+      "sqlObserved": "stopped",
+      "sqlDesired": "stopped",
+      "codeSourcePin": "1ad664552af20ec06e2e077f2aea051e243165e4",
+      "curatedSourcePin": "eb7056dab8f104402e28dd6972d15c8629766ba2",
+      "projectBranch": "deploy/task26-hobby-context",
+      "serviceCount": 1,
+      "functionCount": 2,
+      "computeNoWakeCoverage": "UNVERIFIABLE_WITH_KNOWN_DOCUMENTED_READBACK",
+      "sqlCoverage": "CONTROL_PLANE_POINT_OBSERVATION_ONLY",
+      "moneyAPI": "PENDING",
+      "resourceMutations": 0
+    }
+  }
+]
